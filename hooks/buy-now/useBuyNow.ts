@@ -1,12 +1,18 @@
 // hooks/useBuyNow.ts
+import { CREATE_ORDER } from "@/client/payment/payment.mutations";
+import { useMutation } from "@apollo/client";
 import { useState } from "react";
 
 export function useBuyNow() {
-  const [step, setStep] = useState<"address" | "payment" | "summary">("address");
+  const [step, setStep] = useState<"address" | "payment" | "summary">(
+    "address"
+  );
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<any>(null);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+  const [createOrder] = useMutation(CREATE_ORDER);
 
   const handleAddressSaved = (newAddress: any) => {
     setSelectedAddress(newAddress);
@@ -35,9 +41,41 @@ export function useBuyNow() {
 
   const handlePaymentSubmit = async (paymentData: any) => {
     setIsProcessingPayment(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsProcessingPayment(false);
-    setStep("summary");
+    try {
+      // Expect paymentData to include: variantId, quantity, paymentProvider, paymentMethodId?, shippingAddress snapshot
+      const variables = {
+        input: {
+          items: [
+            {
+              variantId: paymentData.variantId,
+              quantity: paymentData.quantity ?? 1,
+            },
+          ],
+          shippingAddress: {
+            line1: selectedAddress?.line1,
+            label: selectedAddress?.label,
+            line2: selectedAddress?.line2 ?? null,
+            city: selectedAddress?.city,
+            state: selectedAddress?.state,
+            postalCode: selectedAddress?.postalCode,
+            country: selectedAddress?.country,
+            phone: selectedAddress?.phone ?? null,
+          },
+          billingAddress: null,
+          shippingMethod: paymentData.shippingMethod ?? "STANDARD",
+          couponCode: paymentData.couponCode ?? null,
+          paymentProvider: paymentData.paymentProvider,
+          // paymentMethodId: paymentData.paymentMethodId ?? null,
+        },
+      } as any;
+
+      await createOrder({ variables });
+      setStep("summary");
+    } catch (e) {
+      console.error("Order creation failed", e);
+    } finally {
+      setIsProcessingPayment(false);
+    }
   };
 
   const handleBackToAddress = () => {

@@ -13,11 +13,11 @@ export function BuyNowSkeleton() {
 
       {/* Steps skeleton */}
       <div className="flex justify-center gap-8 mb-8">
-        {[...Array(3)].map((_, i) => (
+        {[...Array(2)].map((_, i) => (
           <div key={i} className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-full bg-gray-200"></div>
             <div className="w-16 h-4 bg-gray-200 rounded"></div>
-            {i < 2 && <div className="w-16 h-0.5 bg-gray-200"></div>}
+            {i < 1 && <div className="w-16 h-0.5 bg-gray-200"></div>}
           </div>
         ))}
       </div>

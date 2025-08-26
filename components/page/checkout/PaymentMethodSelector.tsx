@@ -195,29 +195,6 @@ export function PaymentMethodSelector({
           </div>
         </div>
       </div>
-
-      {/* Accepted Cards */}
-      <div className="bg-gray-50 rounded-lg p-4">
-        <h4 className="text-sm font-medium text-gray-900 mb-3">We Accept</h4>
-        <div className="flex flex-wrap gap-3">
-          {[
-            "Visa",
-            "MasterCard",
-            "American Express",
-            "RuPay",
-            "Google Pay",
-            "PhonePe",
-            "Paytm",
-          ].map((brand) => (
-            <div
-              key={brand}
-              className="bg-white px-3 py-2 rounded border text-xs font-medium text-gray-700 shadow-sm"
-            >
-              {brand}
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

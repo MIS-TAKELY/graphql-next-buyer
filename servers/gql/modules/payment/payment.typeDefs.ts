@@ -26,4 +26,19 @@ export const paymentTypeDefs = gql`
     order: Order!
     method: PaymentMethod
   }
+
+  type EsewaPaymentResponse {
+    paymentUrl: String!
+  }
+
+  input EsewaVerifyInput {
+    orderId: ID!
+    refId: String!
+    amount: Float!
+  }
+
+  extend type Mutation {
+    initiateEsewaPayment(orderId: ID!): EsewaPaymentResponse!
+    verifyEsewaPayment(input: EsewaVerifyInput!): Payment!
+  }
 `;

@@ -37,4 +37,34 @@ export const orderTypeDefs = gql`
     payments: [Payment]
     shipments: [Shipment]
   }
+
+  input OrderItemInput {
+    variantId: ID!
+    quantity: Int!
+  }
+
+  input AddressSnapshotInput {
+    label : String!
+    line1: String!
+    line2: String
+    city: String!
+    state: String!
+    postalCode: String!
+    country: String!
+    phone: String!
+  }
+
+  input CreateOrderInput {
+    items: [OrderItemInput!]!
+    shippingAddress: AddressSnapshotInput!
+    billingAddress: AddressSnapshotInput
+    shippingMethod: ShippingMethod = STANDARD
+    couponCode: String
+    paymentProvider: String!
+    paymentMethodId: ID
+  }
+
+  extend type Mutation {
+    createOrder(input: CreateOrderInput!): Order!
+  }
 `;

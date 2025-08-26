@@ -4,11 +4,13 @@ import gql from "graphql-tag";
 import { addressResolvers } from "./modules/address/address.resolvers";
 import { addressTypeDefs } from "./modules/address/address.typeDefs";
 import { brandTypeDefs } from "./modules/brand/brand.typedefs";
+import { cartItemResolvers } from "./modules/cartItem/cart.resolvers";
 import { cartItemTypeDefs } from "./modules/cartItem/cartitem.typedefs";
 import { categoryResolvers } from "./modules/category/category.resolvers";
 import { categoryTypeDefs } from "./modules/category/category.typeDefs";
 import { categorySpecificationsTypeDefs } from "./modules/categorySpecification/categorySpecification.typeDefs";
 import { categorySpecificationResolvers } from "./modules/categorySpecification/categorySpecifications.resolvers";
+import { orderResolvers } from "./modules/order/order.resolvers";
 import { orderTypeDefs } from "./modules/order/order.typeDefs";
 import { orderItemTypeDefs } from "./modules/orderItem/orderItem.typeDefs";
 import { paymentTypeDefs } from "./modules/payment/payment.typeDefs";
@@ -23,11 +25,10 @@ import { reviewTypeDefs } from "./modules/review/review.typeDefs";
 import { sellerOrderTypeDefs } from "./modules/sellerOrder/sellerOrder.typeDefs";
 import { sellerOrderItemTypeDefs } from "./modules/sellerOrderItem/sellerOrderItem.typeDefs";
 import { shipmentTypeDefs } from "./modules/shipment/shipment.typeDefs";
+import { userResolvers } from "./modules/user/user.resolvers";
 import { userTypeDefs } from "./modules/user/user.typeDefs";
 import { wishlistTypeDefs } from "./modules/wishlist/wishlist.typeDefs";
 import { wishlistItemTypeDefs } from "./modules/wishlistItem/wishlistItem.typeDefs";
-import { cartItemResolvers } from "./modules/cartItem/cart.resolvers";
-import { userResolvers } from "./modules/user/user.resolvers";
 
 const rootTypeDefs = gql`
   type Query {
@@ -71,7 +72,8 @@ const resolvers = mergeResolvers([
   categorySpecificationResolvers,
   cartItemResolvers,
   userResolvers,
-  addressResolvers
+  addressResolvers,
+  orderResolvers,
 ]);
 
 export const schema = makeExecutableSchema({ typeDefs, resolvers });

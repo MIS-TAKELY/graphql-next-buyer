@@ -1,12 +1,12 @@
 // BuyNowSteps.tsx
 "use client";
-import { Truck, CreditCard, ShieldCheck } from "lucide-react";
+import { CreditCard, Truck } from "lucide-react";
 
 export function BuyNowSteps({ currentStep }: { currentStep: number }) {
   const steps = [
     { id: 1, name: "Shipping", icon: Truck },
     { id: 2, name: "Payment", icon: CreditCard },
-    { id: 3, name: "Review", icon: ShieldCheck },
+    // { id: 3, name: "Review", icon: ShieldCheck },
   ];
 
   return (

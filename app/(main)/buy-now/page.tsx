@@ -4,12 +4,9 @@ import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
 import { GET_PRODUCT_BY_SLUG } from "@/client/product/product.queries";
 import { AddressStep } from "@/components/page/buy-now/AddressStep";
 import { BuyNowHeader } from "@/components/page/buy-now/BuyNowHeader";
-import { PaymentStep } from "@/components/page/buy-now/PaymentStep";
-
-import { BuyNowSkeleton } from "@/components/page/buy-now/BuyNowSkeleton";
 import { BuyNowSteps } from "@/components/page/buy-now/BuyNowSteps";
+import { PaymentStep } from "@/components/page/buy-now/PaymentStep";
 import { OrderSummary } from "@/components/page/checkout/OrderSummary";
-import { Button } from "@/components/ui/button";
 import { useBuyNow } from "@/hooks/buy-now/useBuyNow";
 import { useQuery } from "@apollo/client";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -26,7 +23,6 @@ export default function BuyNowPage() {
     step,
     selectedAddress,
     setSelectedAddress,
-
     showAddressForm,
     selectedPaymentMethod,
     isProcessingPayment,
@@ -50,12 +46,8 @@ export default function BuyNowPage() {
   );
 
   // Query user addresses
-  const { data: addressData, loading: addressLoading } = useQuery(
-    GET_ADDRESS_OF_USER,
-    {
-      skip: false,
-    }
-  );
+  const { data: addressData, loading: addressLoading } =
+    useQuery(GET_ADDRESS_OF_USER);
 
   const product = productData?.getProductBySlug;
   const addresses = addressData?.getAddressOfUser || [];
@@ -63,7 +55,6 @@ export default function BuyNowPage() {
   // Calculate order amount
   const calculateOrderAmount = () => {
     if (!product || !product.variants) return 0;
-
     const defaultVariant =
       product.variants.find((v: any) => v.isDefault) || product.variants[0];
     if (!defaultVariant) return 0;
@@ -85,112 +76,111 @@ export default function BuyNowPage() {
     }
   }, [addresses]);
 
-  if (productLoading) {
-    return <BuyNowSkeleton />;
-  }
-
-  if (!product) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">Product not found</div>
-      </div>
-    );
-  }
-
   return (
     <div className="container mx-auto px-4 py-8">
+      {!productLoading && !product && (
+        <div className="text-center text-red-500">Product not found</div>
+      )}
       <BuyNowHeader
         productSlug={productSlug || ""}
-        productName={product.name}
+        productName={product?.name}
       />
 
       <BuyNowSteps currentStep={currentStep} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* LEFT SIDE: Address & Payment */}
         <div className="lg:col-span-2 space-y-6">
-          {step === "address" && (
-            <AddressStep
-              selectedAddress={selectedAddress}
-              showAddressForm={showAddressForm}
-              addresses={addresses}
-              onAddressSaved={handleAddressSaved}
-              onCancelAddressForm={handleAddressCancel}
-              onUseDefaultAddress={handleUseDefaultAddress}
-              onSelectAddress={handleSelectAddress}
-            />
+          {/* Address section */}
+          {addressLoading ? (
+            <div className="space-y-4">
+              <div className="h-96 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          ) : (
+            step === "address" && (
+              <AddressStep
+                selectedAddress={selectedAddress}
+                showAddressForm={showAddressForm}
+                addresses={addresses}
+                onAddressSaved={handleAddressSaved}
+                onCancelAddressForm={handleAddressCancel}
+                onUseDefaultAddress={handleUseDefaultAddress}
+                onSelectAddress={handleSelectAddress}
+              />
+            )
           )}
 
-          {step === "payment" && (
+          {/* Payment section */}
+          {step === "payment" && product && (
             <PaymentStep
               selectedAddress={selectedAddress}
               selectedPaymentMethod={selectedPaymentMethod}
               orderAmount={orderAmount}
               isProcessingPayment={isProcessingPayment}
               onPaymentMethodSelect={handlePaymentMethodSelect}
-              onPaymentSubmit={handlePaymentSubmit}
+              onPaymentSubmit={(paymentData: any) => {
+                const defaultVariant =
+                  product.variants?.find((v: any) => v.isDefault) ||
+                  product.variants?.[0];
+                handlePaymentSubmit({
+                  ...paymentData,
+                  paymentProvider:
+                    paymentData.method === "CASH_ON_DELIVERY"
+                      ? "COD"
+                      : paymentData.method,
+                  paymentMethodId: selectedPaymentMethod?.id ?? null,
+                  variantId: defaultVariant?.id,
+                  quantity,
+                  shippingMethod: "STANDARD",
+                });
+              }}
               onBackToAddress={handleBackToAddress}
             />
           )}
-
-          {step === "summary" && (
-            <div className="space-y-6">
-              <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                <h2 className="text-2xl font-bold text-green-800 mb-4">
-                  Order Confirmation
-                </h2>
-                <p className="text-green-700 mb-4">
-                  Review your order details and confirm your purchase.
-                </p>
-                <div className="flex gap-3">
-                  <Button variant="outline" onClick={handleBackToPayment}>
-                    Back to Payment
-                  </Button>
-                  <Button className="bg-green-600 hover:bg-green-700">
-                    Place Order
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
+        {/* RIGHT SIDE: Order Summary */}
         <div className="lg:col-span-1">
-          <OrderSummary
-            items={[
-              {
-                id: "1",
-                quantity: quantity,
-                price:
-                  product.variants?.find((v: any) => v.isDefault)?.price ||
-                  product.variants?.[0]?.price ||
-                  0,
-                variant: {
-                  id:
-                    product.variants?.find((v: any) => v.isDefault)?.id ||
-                    product.variants?.[0]?.id ||
-                    "1",
+          {productLoading ? (
+            <div className="h-64 bg-gray-200 rounded animate-pulse"></div>
+          ) : product ? (
+            <OrderSummary
+              items={[
+                {
+                  id: product.id,
+                  quantity,
                   price:
                     product.variants?.find((v: any) => v.isDefault)?.price ||
                     product.variants?.[0]?.price ||
                     0,
-                  attributes:
-                    product.variants?.find((v: any) => v.isDefault)
-                      ?.attributes || product.variants?.[0]?.attributes,
-                  product: {
-                    name: product.name,
-                    images: product.images || [],
+                  variant: {
+                    id:
+                      product.variants?.find((v: any) => v.isDefault)?.id ||
+                      product.variants?.[0]?.id ||
+                      "1",
+                    price:
+                      product.variants?.find((v: any) => v.isDefault)?.price ||
+                      product.variants?.[0]?.price ||
+                      0,
+                    attributes:
+                      product.variants?.find((v: any) => v.isDefault)
+                        ?.attributes || product.variants?.[0]?.attributes,
+                    product: {
+                      name: product.name,
+                      images: product.images || [],
+                    },
                   },
                 },
-              },
-            ]}
-            subtotal={orderAmount - Math.round((orderAmount / 1.18) * 0.18)}
-            shipping={0}
-            tax={Math.round((orderAmount / 1.18) * 0.18)}
-            total={orderAmount}
-            formatPrice={(priceInCents: number) =>
-              `₹${(priceInCents / 100).toLocaleString("en-IN")}`
-            }
-          />
+              ]}
+              subtotal={orderAmount - Math.round((orderAmount / 1.18) * 0.18)}
+              shipping={0}
+              tax={Math.round((orderAmount / 1.18) * 0.18)}
+              total={orderAmount}
+              formatPrice={(priceInCents: number) =>
+                `₹${(priceInCents / 100).toLocaleString("en-IN")}`
+              }
+            />
+          ) : null}
         </div>
       </div>
     </div>

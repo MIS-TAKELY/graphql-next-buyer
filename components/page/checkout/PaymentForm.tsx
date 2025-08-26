@@ -14,6 +14,17 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
+import IMEPay from "@/assets/payments-walltes-logo/IME-Pay.png";
+import Esewa from "@/assets/payments-walltes-logo/esewa.png";
+import Khalti from "@/assets/payments-walltes-logo/khalti.png";
+import Image from "next/image";
+
+const walletLogos: Record<string, any> = {
+  esewa: Esewa,
+  imepay: IMEPay,
+  khalti: Khalti,
+};
+
 interface PaymentMethod {
   id: string;
   type: string;
@@ -437,24 +448,25 @@ export function PaymentForm({
                 Select Wallet Provider *
               </label>
               <div className="grid gap-3">
-                {paymentMethod.providers?.map((provider) => (
-                  <label
-                    key={provider}
-                    className="flex items-center cursor-pointer"
-                  >
-                    <input
-                      type="radio"
-                      name="walletProvider"
-                      value={provider}
-                      checked={formData.walletProvider === provider}
-                      onChange={(e) =>
-                        handleInputChange("walletProvider", e.target.value)
-                      }
-                      className="mr-3"
-                    />
-                    <span className="text-sm font-medium">{provider}</span>
-                  </label>
-                ))}
+                {paymentMethod.providers?.map((provider) => {
+
+                  const key = provider.toLowerCase().replace(/\s+/g, "");
+                  const logo = walletLogos[key];
+
+                  return (
+                    <div key={provider} className="flex items-center space-x-2">
+                      {logo && (
+                        <Image
+                          src={logo}
+                          alt={provider}
+                          height={45}
+                          width={45}
+                        />
+                      )}
+                      <span className="text-sm font-medium">{provider}</span>
+                    </div>
+                  );
+                })}
               </div>
               {errors.walletProvider && (
                 <p className="text-red-500 text-sm mt-1">
@@ -463,7 +475,7 @@ export function PaymentForm({
               )}
             </div>
 
-            {formData.walletProvider && (
+            {/* {formData.walletProvider && (
               <div>
                 <label className="block text-sm font-medium mb-2">
                   Mobile Number *
@@ -494,7 +506,7 @@ export function PaymentForm({
                   </p>
                 )}
               </div>
-            )}
+            )} */}
           </div>
         );
 
@@ -550,7 +562,7 @@ export function PaymentForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {renderPaymentForm()}
+      <div className="my-5">{renderPaymentForm()}</div>
 
       <div className="border-t pt-6">
         <div className="flex items-center justify-between mb-4">

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const CREATE_PAYMENT_METHOD = gql`
   mutation CreatePaymentMethod($input: PaymentMethodInput!) {
@@ -33,44 +33,37 @@ export const PROCESS_PAYMENT = gql`
 `;
 
 export const CREATE_ORDER = gql`
-  mutation CreateOrder($input: OrderInput!) {
+  mutation CreateOrder($input: CreateOrderInput!) {
     createOrder(input: $input) {
       id
-      userId
+      orderNumber
       status
-      totalAmount
-      currency
-      paymentStatus
-      deliveryStatus
-      createdAt
-      orderItems {
+      subtotal
+      tax
+      shippingFee
+      discount
+      total
+      items {
         id
         quantity
-        price
-        productVariant {
+        unitPrice
+        totalPrice
+        variant {
           id
-          product {
-            id
-            name
-          }
         }
       }
-      shippingAddress {
-        fullName
-        streetAddress
-        city
-        state
-        zipCode
-        country
-        phone
-      }
-      payment {
+      payments {
         id
         status
-        transactionId
-        amount
         provider
+        amount
       }
+      shipments {
+        id
+        method
+        status
+      }
+      createdAt
     }
   }
 `;

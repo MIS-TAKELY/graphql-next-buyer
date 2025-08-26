@@ -130,7 +130,7 @@ model User {
   payouts        Payout[]        @relation("SellerPayouts")
   sellerOrders   SellerOrder[]   @relation("SellerOrders")
   wishlists      Wishlist[]
-  discountUsage  DiscountUsage[] @relation("UserDiscountUsage") 
+  discountUsage  DiscountUsage[] @relation("UserDiscountUsage")
 
   @@index([email, role])
   @@map("users")
@@ -435,7 +435,7 @@ model Order {
   payments         Payment[]
   shipments        Shipment[]
   appliedDiscounts AppliedDiscount[] // Add this line
-  discountUsage    DiscountUsage[] 
+  discountUsage    DiscountUsage[]
 
   @@index([buyerId, status])
   @@index([createdAt])
