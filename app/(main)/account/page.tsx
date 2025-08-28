@@ -1,53 +1,11 @@
-"use client";
+export const dynamic = "force-dynamic";
+import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
+import { GET_USER_PROFILE_DETAILS } from "@/client/user/user.queries";
+import AccountClient from "@/components/page/account/AccountClient";
+import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
+import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
 
-import AddressesSection from "@/components/page/account/AddressesSection";
-import NotificationsSection from "@/components/page/account/NotificationsSection";
-import OrdersSection from "@/components/page/account/OrdersSection";
-import PaymentMethodsSection from "@/components/page/account/PaymentMethodsSection";
-import ProfileSection from "@/components/page/account/ProfileSection";
-import SecuritySection from "@/components/page/account/SecuritySection";
-import SettingsSection from "@/components/page/account/SettingsSection";
-import SidebarNav from "@/components/page/account/SidebarNav";
-import WishlistSection from "@/components/page/account/WishlistSection";
-import { useState } from "react";
-interface UserProfile {
-  id: string;
-  email: string;
-  firstName: string | null;
-  lastName: string | null;
-  phone: string | null;
-}
-
-interface Address {
-  id: string;
-  type: "SHIPPING" | "BILLING" | "BUSINESS" | "WAREHOUSE";
-  label: string | null;
-  line1: string;
-  line2: string | null;
-  city: string;
-  state: string;
-  country: string;
-  postalCode: string;
-  phone: string | null;
-  isDefault: boolean;
-}
-
-interface Order {
-  id: string;
-  orderNumber: string;
-  status:
-    | "PENDING"
-    | "CONFIRMED"
-    | "PROCESSING"
-    | "SHIPPED"
-    | "DELIVERED"
-    | "CANCELLED"
-    | "RETURNED";
-  total: number;
-  createdAt: string;
-}
-
-const mockUser: UserProfile = {
+const mockUser = {
   id: "1",
   email: "john.doe@example.com",
   firstName: "John",
@@ -55,91 +13,74 @@ const mockUser: UserProfile = {
   phone: "+1234567890",
 };
 
-const mockAddresses: Address[] = [
-  {
-    id: "1",
-    type: "SHIPPING",
-    label: "Home",
-    line1: "123 Main Street",
-    line2: "Apt 4B",
-    city: "New York",
-    state: "NY",
-    country: "USA",
-    postalCode: "10001",
-    phone: "+1234567890",
-    isDefault: true,
-  },
-  {
-    id: "2",
-    type: "BILLING",
-    label: "Office",
-    line1: "456 Business Ave",
-    line2: null,
-    city: "New York",
-    state: "NY",
-    country: "USA",
-    postalCode: "10002",
-    phone: "+1234567891",
-    isDefault: false,
-  },
-];
+export default async function AccountPage() {
+  let initialData: { addresses?: any[]; userProfile?: any } = {};
 
-const mockOrders: Order[] = [
-  {
-    id: "1",
-    orderNumber: "ORD-001",
-    status: "DELIVERED",
-    total: 299.99,
-    createdAt: "2024-01-15",
-  },
-  {
-    id: "2",
-    orderNumber: "ORD-002",
-    status: "SHIPPED",
-    total: 149.5,
-    createdAt: "2024-01-20",
-  },
-];
+  try {
+    const client = await getServerApolloClient();
 
-export default function AccountPage() {
-  const [activeTab, setActiveTab] = useState("profile");
-  const [user, setUser] = useState(mockUser);
-  const [addresses, setAddresses] = useState(mockAddresses);
-  const [orders] = useState(mockOrders);
+    // Run both queries in parallel
+    const [userProfileRes, addressesRes] = await Promise.all([
+      client.query({
+        query: GET_USER_PROFILE_DETAILS,
+        fetchPolicy: "no-cache",
+        errorPolicy: "all",
+      }),
+      client.query({
+        query: GET_ADDRESS_OF_USER,
+        fetchPolicy: "no-cache",
+        errorPolicy: "all",
+      }),
+    ]);
 
-  const renderActiveSection = () => {
-    switch (activeTab) {
-      case "profile":
-        return <ProfileSection />;
-      case "addresses":
-        return <AddressesSection setAddresses={setAddresses} />;
-      case "orders":
-        return <OrdersSection orders={orders} />;
-      case "wishlist":
-        return <WishlistSection />;
-      case "payment":
-        return <PaymentMethodsSection />;
-      case "notifications":
-        return <NotificationsSection />;
-      case "security":
-        return <SecuritySection />;
-      case "settings":
-        return <SettingsSection />;
-      default:
-        return null;
+    const userProfileDetails = userProfileRes.data;
+    const addressesData = addressesRes.data;
+
+    console.log("user profile details", userProfileDetails);
+    console.log("addressesData", addressesData);
+
+    // Write user profile to cache
+    if (userProfileDetails?.getUserProfileDetails) {
+      client.cache.writeQuery({
+        query: GET_USER_PROFILE_DETAILS,
+        data: userProfileDetails,
+      });
     }
-  };
+
+    // Clean & write addresses to cache
+    if (addressesData?.getAddressOfUser) {
+      const cleanedAddresses = addressesData.getAddressOfUser.map(
+        (addr: any) => {
+          const { __typename, ...clean } = addr;
+          return clean;
+        }
+      );
+
+      client.cache.writeQuery({
+        query: GET_ADDRESS_OF_USER,
+        data: { getAddressOfUser: cleanedAddresses },
+      });
+
+      initialData.addresses = cleanedAddresses;
+    }
+
+    // Keep hydrated user profile
+    if (userProfileDetails?.getUserProfileDetails) {
+      const { __typename, ...cleanProfile } =
+        userProfileDetails.getUserProfileDetails;
+      initialData.userProfile = { getUserProfileDetails: cleanProfile };
+    }
+  } catch (error) {
+    console.error("Server prefetch failed:", error);
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          <SidebarNav
-            user={user}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
-          <div className="flex-1">{renderActiveSection()}</div>
+          <SSRApolloProvider initialData={initialData}>
+            <AccountClient user={mockUser} />
+          </SSRApolloProvider>
         </div>
       </div>
     </div>

@@ -1,6 +1,13 @@
 import { Button } from "@/components/ui/button";
+import { ReactElement } from "react";
 
-type CartStatus = "idle" | "adding" | "removing" | "added" | "removed" | "error";
+type CartStatus =
+  | "idle"
+  | "adding"
+  | "removing"
+  | "added"
+  | "removed"
+  | "error";
 
 interface CartActionsProps {
   productCartData: {
@@ -14,7 +21,7 @@ interface CartActionsProps {
   handleRemove: (e: React.MouseEvent) => void;
   buttonContent: {
     text: string;
-    icon: JSX.Element;
+    icon: ReactElement;
   };
 }
 
@@ -45,7 +52,9 @@ export default function CartActions({
     >
       <span className="flex items-center justify-center gap-2">
         {buttonContent.icon}
-        <span className="transition-all duration-200">{buttonContent.text}</span>
+        <span className="transition-all duration-200">
+          {buttonContent.text}
+        </span>
       </span>
     </Button>
   );

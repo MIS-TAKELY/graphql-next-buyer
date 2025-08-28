@@ -13,7 +13,7 @@ class PerformanceMonitor {
   private metrics: Map<string, PerformanceMetric> = new Map();
 
   start(name: string): void {
-    if (typeof window !== 'undefined' && performance.mark) {
+    if (typeof window !== "undefined" && performance.mark) {
       performance.mark(`${name}-start`);
     }
     this.metrics.set(name, {
@@ -38,13 +38,17 @@ class PerformanceMonitor {
       duration,
     });
 
-    if (typeof window !== 'undefined' && performance.mark && performance.measure) {
+    if (
+      typeof window !== "undefined" &&
+      performance.mark &&
+      performance.measure
+    ) {
       performance.mark(`${name}-end`);
       performance.measure(name, `${name}-start`, `${name}-end`);
     }
 
     // Only log in development
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.log(`🚀 ${name}: ${duration}ms`);
     }
 
@@ -75,11 +79,11 @@ class PerformanceMonitor {
 export const performanceMonitor = new PerformanceMonitor();
 
 // React hook for measuring component render times
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 export function usePerformanceTracking(componentName: string) {
-  const renderCount = useRef(0);
-  const mountTime = useRef<number>();
+  const renderCount = useRef<number>(0);
+  const mountTime = useRef<number | null>(null);
 
   useEffect(() => {
     // Track mount time
@@ -88,7 +92,7 @@ export function usePerformanceTracking(componentName: string) {
 
     return () => {
       // Track unmount time
-      if (mountTime.current) {
+      if (mountTime.current !== null) {
         performanceMonitor.end(`${componentName}-mount`);
       }
     };
@@ -97,8 +101,10 @@ export function usePerformanceTracking(componentName: string) {
   useEffect(() => {
     // Track re-renders
     renderCount.current++;
-    if (process.env.NODE_ENV === 'development' && renderCount.current > 1) {
-      console.log(`🔄 ${componentName} re-rendered ${renderCount.current} times`);
+    if (process.env.NODE_ENV === "development" && renderCount.current > 1) {
+      console.log(
+        `🔄 ${componentName} re-rendered ${renderCount.current} times`
+      );
     }
   });
 
@@ -109,28 +115,29 @@ export function usePerformanceTracking(componentName: string) {
 
 // Web Vitals tracking
 export function trackWebVitals() {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
   // Track First Contentful Paint (FCP)
   new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
-      if (entry.name === 'first-contentful-paint') {
-        console.log('🎨 FCP:', entry.startTime);
+      if (entry.name === "first-contentful-paint") {
+        console.log("🎨 FCP:", entry.startTime);
       }
     }
-  }).observe({ entryTypes: ['paint'] });
+  }).observe({ entryTypes: ["paint"] });
 
   // Track Largest Contentful Paint (LCP)
   new PerformanceObserver((list) => {
     const entries = list.getEntries();
     const lastEntry = entries[entries.length - 1];
-    console.log('📏 LCP:', lastEntry.startTime);
-  }).observe({ entryTypes: ['largest-contentful-paint'] });
+    console.log("📏 LCP:", lastEntry.startTime);
+  }).observe({ entryTypes: ["largest-contentful-paint"] });
 
   // Track First Input Delay (FID)
   new PerformanceObserver((list) => {
-    for (const entry of list.getEntries()) {
-      console.log('👆 FID:', entry.processingStart - entry.startTime);
+    const entries = list.getEntries() as unknown as PerformanceEventTiming[];
+    for (const entry of entries) {
+      console.log("👆 FID:", entry.processingStart - entry.startTime);
     }
-  }).observe({ entryTypes: ['first-input'] });
+  }).observe({ entryTypes: ["first-input"] as any });
 }

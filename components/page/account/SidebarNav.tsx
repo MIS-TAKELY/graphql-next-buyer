@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -16,7 +15,17 @@ import {
 // Reusable SidebarNav component
 // Props: user, activeTab, setActiveTab
 // This can be reused in other dashboard-like pages
-export default function SidebarNav({ user, activeTab, setActiveTab }) {
+interface SidebarNavProps {
+  user: { firstName?: string; lastName?: string; email?: string };
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+}
+
+export default function SidebarNav({
+  user,
+  activeTab,
+  setActiveTab,
+}: SidebarNavProps) {
   const sidebarItems = [
     { id: "profile", label: "Profile", icon: User },
     { id: "addresses", label: "Addresses", icon: MapPin },

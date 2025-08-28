@@ -1,10 +1,39 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-function getStatusColor(status) {
+type OrderStatus =
+  | "PENDING"
+  | "PROCESSING"
+  | "SHIPPED"
+  | "DELIVERED"
+  | "CANCELLED"
+  | string;
+
+function getStatusColor(status: OrderStatus) {
+  switch (status) {
+    case "DELIVERED":
+      return "text-green-600";
+    case "SHIPPED":
+      return "text-blue-600";
+    case "PROCESSING":
+      return "text-yellow-600";
+    case "CANCELLED":
+      return "text-red-600";
+    default:
+      return "text-gray-600";
+  }
 }
 
-export default function OrderItem({ order }) {
+interface OrderItemProps {
+  order: {
+    orderNumber: string | number;
+    createdAt: string | number | Date;
+    total: number;
+    status: OrderStatus;
+  };
+}
+
+export default function OrderItem({ order }: OrderItemProps) {
   return (
     <Card className="border">
       <CardContent className="p-4">

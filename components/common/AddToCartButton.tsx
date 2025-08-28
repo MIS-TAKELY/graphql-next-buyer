@@ -87,7 +87,7 @@ export function AddToCartButton({
 
   // Update optimistic cart items when real cart data changes
   useMemo(() => {
-    setOptimisticCartItems(cartItems);
+    setOptimisticCartItems(new Set<string>(cartItems as Set<string>));
   }, [cartItems]);
 
   // Mutations
@@ -102,7 +102,7 @@ export function AddToCartButton({
       console.error("Add to cart error:", error);
       setStatus("error");
       onError?.(error);
-      setOptimisticCartItems(cartItems);
+      setOptimisticCartItems(new Set<string>(cartItems as Set<string>));
       setTimeout(() => setStatus("idle"), 2000);
     },
   });
@@ -118,7 +118,7 @@ export function AddToCartButton({
       console.error("Remove from cart error:", error);
       setStatus("error");
       onError?.(error);
-      setOptimisticCartItems(cartItems);
+      setOptimisticCartItems(new Set<string>(cartItems as Set<string>));
       setTimeout(() => setStatus("idle"), 2000);
     },
   });

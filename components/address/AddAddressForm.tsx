@@ -150,7 +150,7 @@ const AddAddressForm = React.memo<AddAddressFormProps>(function AddAddressForm({
           submissionData.isDefault = true;
         }
 
-        const result = await submit(submissionData);
+        const result = await submit(submissionData as AddressFormData);
         console.log("Address created successfully:", result);
 
         if (onSave) {

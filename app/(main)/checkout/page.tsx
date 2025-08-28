@@ -6,6 +6,7 @@ import { PaymentForm } from "@/components/page/checkout/PaymentForm";
 import { PaymentMethodSelector } from "@/components/page/checkout/PaymentMethodSelector";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BaseAddress } from "@/types/address";
 import { ArrowLeft, CreditCard, ShieldCheck, Truck } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -44,7 +45,9 @@ const mockOrderItems = [
 
 export default function CheckoutPage() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [shippingAddress, setShippingAddress] = useState(null);
+  const [shippingAddress, setShippingAddress] = useState<BaseAddress | null>(
+    null
+  );
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -62,7 +65,7 @@ export default function CheckoutPage() {
     { id: 3, name: "Review", icon: ShieldCheck },
   ];
 
-  const handleAddressSubmit = (address: any) => {
+  const handleAddressSubmit = (address: BaseAddress) => {
     setShippingAddress(address);
     setCurrentStep(2);
   };
@@ -157,7 +160,10 @@ export default function CheckoutPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <AddAddressForm onSave={handleAddressSubmit} context="buy-now" />
+                <AddAddressForm
+                  onSave={handleAddressSubmit}
+                  context="buy-now"
+                />
               </CardContent>
             </Card>
           )}
@@ -184,11 +190,14 @@ export default function CheckoutPage() {
                 <CardContent>
                   {shippingAddress && (
                     <div className="text-sm space-y-1">
-                      <p className="font-medium">{shippingAddress.fullName}</p>
-                      <p>{shippingAddress.streetAddress}</p>
+                      <p className="font-medium">
+                        {shippingAddress.label || "Shipping Address"}
+                      </p>
+                      <p>{shippingAddress.line1}</p>
+                      {shippingAddress.line2 && <p>{shippingAddress.line2}</p>}
                       <p>
                         {shippingAddress.city}, {shippingAddress.state}{" "}
-                        {shippingAddress.zipCode}
+                        {shippingAddress.postalCode}
                       </p>
                       <p>{shippingAddress.country}</p>
                       <p className="text-gray-600">

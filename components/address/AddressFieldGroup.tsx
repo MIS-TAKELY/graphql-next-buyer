@@ -85,7 +85,7 @@ export const AddressFieldGroup = React.memo<AddressFieldGroupProps>(
             <AddressField
               name="label"
               label="Address Label"
-              value={formData.label}
+              value={formData.label ?? ""}
               onChange={fieldHandlers.label}
               error={errors.label}
               disabled={disabled}
@@ -124,7 +124,7 @@ export const AddressFieldGroup = React.memo<AddressFieldGroupProps>(
           <AddressField
             name="line2"
             label="Address Line 2"
-            value={formData.line2}
+            value={formData.line2 ?? ""}
             onChange={fieldHandlers.line2}
             error={errors.line2}
             disabled={disabled}
@@ -194,7 +194,7 @@ export const AddressFieldGroup = React.memo<AddressFieldGroupProps>(
           <AddressField
             name="phone"
             label="Phone Number"
-            value={formData.phone}
+            value={formData.phone ?? ""}
             onChange={fieldHandlers.phone}
             error={errors.phone}
             disabled={disabled}

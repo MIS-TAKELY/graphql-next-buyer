@@ -72,11 +72,12 @@ const UpdateAddressForm = React.memo<UpdateAddressFormProps>(
       reset,
       focusError,
       getSubmissionData,
-    } = useUpdateAddressForm({
-      mode: "update",
-      initialData: address,
-      validateOnChange: true,
-    });
+    } = useUpdateAddressForm(
+      { id: (address as any).id ?? "", ...(address as any) },
+      {
+        validateOnChange: true,
+      }
+    );
 
     // Mutation hook
     const {
@@ -126,7 +127,7 @@ const UpdateAddressForm = React.memo<UpdateAddressFormProps>(
 
         try {
           const submissionData = getSubmissionData();
-          const result = await submit(submissionData);
+          const result = await submit(submissionData as any);
           console.log("Address updated successfully:", result);
 
           setIsSuccess(true);

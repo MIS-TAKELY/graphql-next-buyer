@@ -39,12 +39,11 @@ function HomePage() {
     loading: productsLoading,
     error: productsError,
   } = useQuery(GET_PRODUCTS, {
-    fetchPolicy: "cache-first", // Use cache first for better performance
+    fetchPolicy: "cache-first",
     errorPolicy: "all",
     notifyOnNetworkStatusChange: false,
   });
 
-  // Use lightweight cart query for better performance
   const { data: myCartItems, loading: cartLoading } = useQuery(
     GET_CART_PRODUCT_IDS,
     {
@@ -54,15 +53,14 @@ function HomePage() {
     }
   );
 
-  // Only log errors in development
   if (process.env.NODE_ENV === "development" && productsError) {
     console.error("Products query error:", productsError);
   }
 
   // Memoize cart product IDs to prevent recreation on each render
-  const cartProductIds = useMemo(() => {
+  const cartProductIds = useMemo<Set<string>>(() => {
     if (!myCartItems?.getMyCart) return new Set<string>();
-    return new Set(
+    return new Set<string>(
       myCartItems.getMyCart.map((item: any) => item.variant.product.id)
     );
   }, [myCartItems?.getMyCart]);

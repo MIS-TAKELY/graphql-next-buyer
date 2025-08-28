@@ -427,8 +427,8 @@ export function PaymentForm({
                     Net Banking
                   </h4>
                   <p className="text-sm text-yellow-700">
-                    You will be redirected to your bank's website to complete
-                    the payment.
+                    You will be redirected to your bank&apos;s website to
+                    complete the payment.
                   </p>
                 </div>
               </div>

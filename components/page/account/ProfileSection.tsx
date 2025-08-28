@@ -1,4 +1,5 @@
 // ./ProfileSection.tsx
+"use client"
 import { UPDATE_USER_PROFILE_DETAILS } from "@/client/user/user.mutations";
 import { GET_USER_PROFILE_DETAILS } from "@/client/user/user.queries";
 import { Button } from "@/components/ui/button";
@@ -21,10 +22,10 @@ export default function ProfileSection() {
     loading: userProfileDetailsLoading,
     error: userProfileDetailsError,
   } = useQuery(GET_USER_PROFILE_DETAILS);
-  if (userProfileDetailsLoading) console.log("Loading user profile");
+  // if (userProfileDetailsLoading) console.log("Loading user profile");
 
-  if (userProfileDetailsError)
-    console.log("User profile error", userProfileDetailsError);
+  // if (userProfileDetailsError)
+  //   console.log("User profile error", userProfileDetailsError);
 
   const [
     updateUserProfileDetails,

@@ -11,9 +11,9 @@ import { OrderSummary } from "@/components/page/checkout/OrderSummary";
 import { useBuyNow } from "@/hooks/buy-now/useBuyNow";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
-export default function BuyNowPage() {
+function BuyNowPageInner() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const searchParams = useSearchParams();
@@ -248,5 +248,15 @@ export default function BuyNowPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BuyNowPage() {
+  return (
+    <Suspense
+      fallback={<div className="container mx-auto px-4 py-8">Loading...</div>}
+    >
+      <BuyNowPageInner />
+    </Suspense>
   );
 }

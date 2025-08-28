@@ -1,6 +1,7 @@
 "use client";
 
 import { GET_PRODUCT_BY_SLUG } from "@/client/product/product.queries";
+import { ProductActions } from "@/components/common/ProductActions";
 import Breadcrumb from "@/components/page/product/Breadcrumb";
 import DeliveryInfo from "@/components/page/product/DeliveryInfo";
 import ProductGallery from "@/components/page/product/ProductGallery";
@@ -11,7 +12,6 @@ import QuantitySelector from "@/components/page/product/QuantitySelector";
 import RelatedProducts from "@/components/page/product/RelatedProducts";
 import SellerInfo from "@/components/page/product/SellerInfo";
 import WishlistShareButtons from "@/components/page/product/WishlistShareButtons";
-import { ProductActions } from "@/components/common/ProductActions";
 import { useQuery } from "@apollo/client";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -330,9 +330,21 @@ export default function ProductPage() {
     setAddedToWishlist(!addedToWishlist);
   };
 
-  const relatedProducts = MOCK_PRODUCTS.filter(
-    (p) => p.id !== slug && p.category === productData?.category
-  ).slice(0, 4);
+  const relatedProducts = useMemo(() => {
+    const filtered = MOCK_PRODUCTS.filter(
+      (p) =>
+        String(p.id) !== String(product?.id) &&
+        p.category === (product as any)?.category
+    ).slice(0, 4);
+    return filtered.map((p) => ({
+      id: String(p.id),
+      title: p.title,
+      image: p.image,
+      rating: p.rating,
+      price: p.price,
+      originalPrice: p.originalPrice,
+    }));
+  }, [product]);
 
   // Handle loading and error states after all hooks have been called
   if (productDataLoading) {
@@ -364,7 +376,7 @@ export default function ProductPage() {
             />
 
             <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
-            
+
             <ProductActions
               productId={product.id || ""}
               productSlug={slug}
@@ -372,20 +384,20 @@ export default function ProductPage() {
               quantity={quantity}
               inStock={inStock}
             />
-            
+
             <WishlistShareButtons
               addedToWishlist={addedToWishlist}
               toggleWishlist={toggleWishlist}
             />
-            
+
             <DeliveryInfo warranty={product.warranty} />
-            
+
             <SellerInfo sellerName={sellerName} />
           </div>
         </div>
 
         <ProductTabs averageRating={averageRating} mockReviews={mockReviews} />
-        
+
         {relatedProducts.length > 0 && (
           <RelatedProducts relatedProducts={relatedProducts} />
         )}

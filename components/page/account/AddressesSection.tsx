@@ -1,3 +1,4 @@
+"use client"
 import { useQuery } from "@apollo/client";
 import { AlertCircle, MapPin, Plus } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
@@ -36,193 +37,181 @@ interface AddressesSectionProps {
   setAddresses?: (addresses: BaseAddress[]) => void;
 }
 
-const AddressesSection = React.memo<AddressesSectionProps>(
-  ({ setAddresses }) => {
-    const [showAddForm, setShowAddForm] = useState(false);
-    const [addresses, setLocalAddresses] = useState<BaseAddress[]>([]);
+const AddressesSection = React.memo<AddressesSectionProps>(() => {
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [addresses, setLocalAddresses] = useState<BaseAddress[]>([]);
 
-    // Query addresses
-    const { data, loading, error, refetch } = useQuery(GET_ADDRESS_OF_USER, {
-      onCompleted: (data) => {
-        const fetchedAddresses = data?.getAddressOfUser || [];
-        setLocalAddresses(fetchedAddresses);
-        setAddresses?.(fetchedAddresses);
-      },
+  // Query addresses
+  const { data, loading, error, refetch } = useQuery(GET_ADDRESS_OF_USER, {
+    onCompleted: (data) => {
+      const fetchedAddresses = data?.getAddressOfUser || [];
+      setLocalAddresses(fetchedAddresses);
+    },
+  });
+
+  // Memoized values
+  const sortedAddresses = useMemo(() => {
+    return [...addresses].sort((a, b) => {
+      // Default addresses first
+      if (a.isDefault && !b.isDefault) return -1;
+      if (!a.isDefault && b.isDefault) return 1;
+      // Then by creation date (newest first)
+      return (
+        new Date(b.createdAt || "").getTime() -
+        new Date(a.createdAt || "").getTime()
+      );
     });
+  }, [addresses]);
 
-    // Memoized values
-    const sortedAddresses = useMemo(() => {
-      return [...addresses].sort((a, b) => {
-        // Default addresses first
-        if (a.isDefault && !b.isDefault) return -1;
-        if (!a.isDefault && b.isDefault) return 1;
-        // Then by creation date (newest first)
-        return (
-          new Date(b.createdAt || "").getTime() -
-          new Date(a.createdAt || "").getTime()
-        );
-      });
-    }, [addresses]);
+  const hasAddresses = useMemo(() => addresses.length > 0, [addresses]);
+  const defaultAddress = useMemo(
+    () => addresses.find((addr) => addr.isDefault),
+    [addresses]
+  );
 
-    const hasAddresses = useMemo(() => addresses.length > 0, [addresses]);
-    const defaultAddress = useMemo(
-      () => addresses.find((addr) => addr.isDefault),
-      [addresses]
-    );
-
-    // Event handlers
-    const handleAddAddress = useCallback(
-      (newAddress: BaseAddress) => {
-        setLocalAddresses((prev) => [newAddress, ...prev]);
-        setAddresses?.([newAddress, ...addresses]);
-        setShowAddForm(false);
-        refetch();
-      },
-      [addresses, setAddresses, refetch]
-    );
-
-    const handleUpdateAddress = useCallback(
-      (updatedAddress: BaseAddress) => {
-        setLocalAddresses((prev) =>
-          prev.map((addr) =>
-            addr.id === updatedAddress.id ? updatedAddress : addr
-          )
-        );
-        setAddresses?.(
-          addresses.map((addr) =>
-            addr.id === updatedAddress.id ? updatedAddress : addr
-          )
-        );
-        refetch();
-      },
-      [addresses, setAddresses, refetch]
-    );
-
-    const handleDeleteAddress = useCallback(
-      (addressId: string) => {
-        setLocalAddresses((prev) =>
-          prev.filter((addr) => addr.id !== addressId)
-        );
-        setAddresses?.(addresses.filter((addr) => addr.id !== addressId));
-        refetch();
-      },
-      [addresses, setAddresses, refetch]
-    );
-
-    const handleShowAddForm = useCallback(() => {
-      setShowAddForm(true);
-    }, []);
-
-    const handleHideAddForm = useCallback(() => {
+  // Event handlers
+  const handleAddAddress = useCallback(
+    (newAddress: BaseAddress) => {
+      setLocalAddresses((prev) => [newAddress, ...prev]);
       setShowAddForm(false);
-    }, []);
+      refetch();
+    },
+    [refetch]
+  );
 
-    if (loading) {
-      return (
-        <div className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                Addresses
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <AddressItemSkeleton />
-                <AddressItemSkeleton />
-                <AddressItemSkeleton />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+  const handleUpdateAddress = useCallback(
+    (updatedAddress: BaseAddress) => {
+      setLocalAddresses((prev) =>
+        prev.map((addr) =>
+          addr.id === updatedAddress.id ? updatedAddress : addr
+        )
       );
-    }
+      refetch();
+    },
+    [refetch]
+  );
 
-    if (error) {
-      return (
-        <Card>
-          <CardContent className="p-6">
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>
-                Failed to load addresses. Please try refreshing the page.
-              </AlertDescription>
-            </Alert>
-          </CardContent>
-        </Card>
-      );
-    }
+  const handleDeleteAddress = useCallback(
+    (addressId: string) => {
+      setLocalAddresses((prev) => prev.filter((addr) => addr.id !== addressId));
+      refetch();
+    },
+    [refetch]
+  );
 
+  const handleShowAddForm = useCallback(() => {
+    setShowAddForm(true);
+  }, []);
+
+  const handleHideAddForm = useCallback(() => {
+    setShowAddForm(false);
+  }, []);
+
+  if (loading) {
     return (
       <div className="space-y-4">
-        {/* Header */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                Addresses
-                {hasAddresses && (
-                  <span className="text-sm font-normal text-muted-foreground">
-                    ({addresses.length})
-                  </span>
-                )}
-              </CardTitle>
-
-              <Button
-                onClick={handleShowAddForm}
-                disabled={showAddForm}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Address
-              </Button>
-            </div>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5" />
+              Addresses
+            </CardTitle>
           </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <AddressItemSkeleton />
+              <AddressItemSkeleton />
+              <AddressItemSkeleton />
+            </div>
+          </CardContent>
         </Card>
-
-        {/* Add Address Form */}
-        {showAddForm && (
-          <AddAddressForm
-            context="profile"
-            onSave={handleAddAddress}
-            onCancel={handleHideAddForm}
-            fetchedFormData={defaultAddress}
-          />
-        )}
-
-        {/* Addresses List */}
-        {hasAddresses ? (
-          <div className="space-y-4">
-            {sortedAddresses.map((address) => (
-              <AddressItem
-                key={address.id}
-                address={address}
-                onSave={handleUpdateAddress}
-                onDelete={handleDeleteAddress}
-              />
-            ))}
-          </div>
-        ) : (
-          <Card>
-            <CardContent className="p-8 text-center">
-              <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-medium mb-2">No addresses yet</h3>
-              <p className="text-muted-foreground mb-4">
-                Add your first address to get started with faster checkout.
-              </p>
-              <Button onClick={handleShowAddForm}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Your First Address
-              </Button>
-            </CardContent>
-          </Card>
-        )}
       </div>
     );
   }
-);
+
+  if (error) {
+    return (
+      <Card>
+        <CardContent className="p-6">
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Failed to load addresses. Please try refreshing the page.
+            </AlertDescription>
+          </Alert>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Header */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5" />
+              Addresses
+              {hasAddresses && (
+                <span className="text-sm font-normal text-muted-foreground">
+                  ({addresses.length})
+                </span>
+              )}
+            </CardTitle>
+
+            <Button
+              onClick={handleShowAddForm}
+              disabled={showAddForm}
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Add Address
+            </Button>
+          </div>
+        </CardHeader>
+      </Card>
+
+      {/* Add Address Form */}
+      {showAddForm && (
+        <AddAddressForm
+          context="profile"
+          onSave={handleAddAddress}
+          onCancel={handleHideAddForm}
+          fetchedFormData={defaultAddress}
+        />
+      )}
+
+      {/* Addresses List */}
+      {hasAddresses ? (
+        <div className="space-y-4">
+          {sortedAddresses.map((address) => (
+            <AddressItem
+              key={address.id}
+              address={address}
+              onSave={handleUpdateAddress}
+              onDelete={handleDeleteAddress}
+            />
+          ))}
+        </div>
+      ) : (
+        <Card>
+          <CardContent className="p-8 text-center">
+            <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium mb-2">No addresses yet</h3>
+            <p className="text-muted-foreground mb-4">
+              Add your first address to get started with faster checkout.
+            </p>
+            <Button onClick={handleShowAddForm}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Your First Address
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+});
 
 AddressesSection.displayName = "AddressesSection";
 

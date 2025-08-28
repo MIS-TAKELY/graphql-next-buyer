@@ -1,16 +1,21 @@
 // Address Types
-export const ADDRESS_TYPES = ["SHIPPING", "BILLING", "BUSINESS", "WAREHOUSE"] as const;
+export const ADDRESS_TYPES = [
+  "SHIPPING",
+  "BILLING",
+  "BUSINESS",
+  "WAREHOUSE",
+] as const;
 export type AddressType = (typeof ADDRESS_TYPES)[number];
 
 // Nepal Provinces
 export const NEPAL_PROVINCES = [
   "Koshi Province",
-  "Madhesh Province", 
+  "Madhesh Province",
   "Bagmati Province",
   "Gandaki Province",
   "Lumbini Province",
   "Karnali Province",
-  "Sudurpashchim Province"
+  "Sudurpashchim Province",
 ] as const;
 export type NepalProvince = (typeof NEPAL_PROVINCES)[number];
 
@@ -33,14 +38,17 @@ export interface BaseAddress {
 }
 
 // Form-specific interfaces
-export interface AddressFormData extends Omit<BaseAddress, 'id' | 'createdAt' | 'updatedAt'> {}
+export interface AddressFormData
+  extends Omit<BaseAddress, "id" | "createdAt" | "updatedAt"> {}
 
 export interface UpdateAddressFormData extends Partial<AddressFormData> {
   id: string;
 }
 
 // Validation error types
-export type AddressValidationErrors = Partial<Record<keyof AddressFormData, string>>;
+export type AddressValidationErrors = Partial<
+  Record<keyof AddressFormData, string>
+>;
 
 // Default form values
 export const getDefaultAddressForm = (): AddressFormData => ({
@@ -62,56 +70,58 @@ export const VALIDATION_RULES = {
     required: false, // Optional in Prisma schema
     minLength: 1,
     maxLength: 50,
-    message: "Address label must be less than 50 characters"
+    message: "Address label must be less than 50 characters",
   },
   line1: {
     required: true,
     minLength: 1,
     maxLength: 100,
-    message: "Address line 1 is required and must be less than 100 characters"
+    message: "Address line 1 is required and must be less than 100 characters",
   },
   line2: {
     required: false,
     maxLength: 100,
-    message: "Address line 2 must be less than 100 characters"
+    message: "Address line 2 must be less than 100 characters",
   },
   city: {
     required: true,
     minLength: 1,
     maxLength: 50,
-    message: "City is required and must be less than 50 characters"
+    message: "City is required and must be less than 50 characters",
   },
   state: {
     required: true,
     minLength: 1,
-    message: "State/Province is required"
+    message: "State/Province is required",
   },
   country: {
     required: true,
     minLength: 1,
-    message: "Country is required"
+    message: "Country is required",
   },
   postalCode: {
     required: true,
     pattern: /^\d{5}$/,
-    message: "Please enter a valid 5-digit postal code"
+    message: "Please enter a valid 5-digit postal code",
   },
   phone: {
     required: false, // Optional in Prisma schema
     pattern: /^(\+977)?9[67-9]\d{8}$/,
     minLength: 10,
-    message: "Please enter a valid Nepal phone number (e.g., 9812345678)"
+    message: "Please enter a valid Nepal phone number (e.g., 9812345678)",
   },
   type: {
     required: true,
     enum: ADDRESS_TYPES,
-    message: "Please select a valid address type"
-  }
+    message: "Please select a valid address type",
+  },
 } as const;
 
 // Validation Functions
+type ValidatedField = keyof typeof VALIDATION_RULES;
+
 export const validateField = (
-  field: keyof AddressFormData,
+  field: ValidatedField,
   value: any
 ): string | null => {
   const rule = VALIDATION_RULES[field];
@@ -155,8 +165,8 @@ export const validateAddressForm = (
 ): AddressValidationErrors => {
   const errors: AddressValidationErrors = {};
 
-  (Object.keys(VALIDATION_RULES) as (keyof AddressFormData)[]).forEach(field => {
-    const error = validateField(field, formData[field]);
+  (Object.keys(VALIDATION_RULES) as ValidatedField[]).forEach((field) => {
+    const error = validateField(field, (formData as any)[field]);
     if (error) {
       errors[field] = error;
     }
@@ -175,9 +185,9 @@ export const formatAddress = (address: BaseAddress): string => {
     address.line1,
     address.line2,
     `${address.city}, ${address.state} ${address.postalCode}`,
-    address.country !== "NP" ? address.country : null
+    address.country !== "NP" ? address.country : null,
   ].filter(Boolean);
-  
+
   return parts.join(", ");
 };
 
@@ -187,16 +197,16 @@ export const formatAddressOneline = (address: BaseAddress): string => {
     address.line2,
     address.city,
     address.state,
-    address.postalCode
+    address.postalCode,
   ].filter(Boolean);
-  
+
   return parts.join(", ");
 };
 
 export const getAddressTypeColor = (type: AddressType): string => {
   const colors = {
     SHIPPING: "bg-blue-100 text-blue-800",
-    BILLING: "bg-green-100 text-green-800", 
+    BILLING: "bg-green-100 text-green-800",
     BUSINESS: "bg-purple-100 text-purple-800",
     WAREHOUSE: "bg-orange-100 text-orange-800",
   };
@@ -207,7 +217,7 @@ export const getAddressTypeIcon = (type: AddressType): string => {
   const icons = {
     SHIPPING: "🚚",
     BILLING: "💳",
-    BUSINESS: "🏢", 
+    BUSINESS: "🏢",
     WAREHOUSE: "🏭",
   };
   return icons[type] || "📍";
@@ -217,7 +227,9 @@ export const getAddressTypeIcon = (type: AddressType): string => {
 export const formatPhoneNumber = (phone: string): string => {
   const cleaned = phone.replace(/\D/g, "");
   if (cleaned.length === 10 && cleaned.startsWith("9")) {
-    return `+977 ${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6)}`;
+    return `+977 ${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(
+      6
+    )}`;
   }
   return phone;
 };

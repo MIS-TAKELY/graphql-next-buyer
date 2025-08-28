@@ -1,8 +1,8 @@
-import ApolloWrapper from "@/lib/apollo-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ApolloWrapper from "@/lib/apollo/apollo-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -1,11 +1,11 @@
-import { useCallback, useMemo } from 'react';
 import {
   AddressFormData,
   AddressValidationErrors,
+  isFormValid,
   validateAddressForm,
   validateField,
-  isFormValid,
-} from '@/types/address';
+} from "@/types/address";
+import { useCallback, useMemo } from "react";
 
 interface UseAddressValidationOptions {
   validateOnChange?: boolean;
@@ -18,9 +18,12 @@ export const useAddressValidation = (
   const { validateOnChange = true } = options;
 
   // Memoized validation functions to prevent re-creation on every render
-  const validateSingleField = useCallback((field: keyof AddressFormData, value: any) => {
-    return validateField(field, value);
-  }, []);
+  const validateSingleField = useCallback(
+    (field: keyof AddressFormData, value: any) => {
+      return validateField(field as any, value);
+    },
+    []
+  );
 
   const validateForm = useCallback((formData: Partial<AddressFormData>) => {
     return validateAddressForm(formData);
@@ -34,7 +37,7 @@ export const useAddressValidation = (
   const getFirstError = useCallback((errors: AddressValidationErrors) => {
     const errorKeys = Object.keys(errors);
     if (errorKeys.length === 0) return null;
-    
+
     const firstKey = errorKeys[0] as keyof AddressFormData;
     return {
       field: firstKey,
@@ -43,51 +46,58 @@ export const useAddressValidation = (
   }, []);
 
   // Focus on first error field helper
-  const focusFirstError = useCallback((errors: AddressValidationErrors) => {
-    const firstError = getFirstError(errors);
-    if (firstError) {
-      const element = document.querySelector(
-        `[name="${firstError.field}"]`
-      ) as HTMLElement;
-      element?.focus();
-      return firstError;
-    }
-    return null;
-  }, [getFirstError]);
+  const focusFirstError = useCallback(
+    (errors: AddressValidationErrors) => {
+      const firstError = getFirstError(errors);
+      if (firstError) {
+        const element = document.querySelector(
+          `[name="${firstError.field}"]`
+        ) as HTMLElement;
+        element?.focus();
+        return firstError;
+      }
+      return null;
+    },
+    [getFirstError]
+  );
 
   // Validate with context-specific rules
-  const validateWithContext = useCallback((
-    formData: Partial<AddressFormData>,
-    context: 'create' | 'update' | 'checkout' = 'create'
-  ) => {
-    const errors = validateForm(formData);
-    
-    // Context-specific validation adjustments
-    if (context === 'checkout') {
-      // For checkout, we might require phone for shipping
-      if (formData.type === 'SHIPPING' && !formData.phone?.trim()) {
-        errors.phone = 'Phone number is required for shipping address';
+  const validateWithContext = useCallback(
+    (
+      formData: Partial<AddressFormData>,
+      context: "create" | "update" | "checkout" = "create"
+    ) => {
+      const errors = validateForm(formData);
+
+      // Context-specific validation adjustments
+      if (context === "checkout") {
+        // For checkout, we might require phone for shipping
+        if (formData.type === "SHIPPING" && !formData.phone?.trim()) {
+          errors.phone = "Phone number is required for shipping address";
+        }
       }
-    }
-    
-    return errors;
-  }, [validateForm]);
+
+      return errors;
+    },
+    [validateForm]
+  );
 
   // Batch validation for multiple fields
-  const validateFields = useCallback((
-    fields: Array<{ field: keyof AddressFormData; value: any }>
-  ) => {
-    const errors: AddressValidationErrors = {};
-    
-    fields.forEach(({ field, value }) => {
-      const error = validateSingleField(field, value);
-      if (error) {
-        errors[field] = error;
-      }
-    });
-    
-    return errors;
-  }, [validateSingleField]);
+  const validateFields = useCallback(
+    (fields: Array<{ field: keyof AddressFormData; value: any }>) => {
+      const errors: AddressValidationErrors = {};
+
+      fields.forEach(({ field, value }) => {
+        const error = validateSingleField(field as any, value);
+        if (error) {
+          errors[field] = error;
+        }
+      });
+
+      return errors;
+    },
+    [validateSingleField]
+  );
 
   return {
     validateSingleField,
@@ -124,9 +134,12 @@ export const useRealtimeValidation = (
 export const useFieldValidation = () => {
   const { validateSingleField } = useAddressValidation();
 
-  const createFieldValidator = useCallback((field: keyof AddressFormData) => {
-    return (value: any) => validateSingleField(field, value);
-  }, [validateSingleField]);
+  const createFieldValidator = useCallback(
+    (field: keyof AddressFormData) => {
+      return (value: any) => validateSingleField(field, value);
+    },
+    [validateSingleField]
+  );
 
   return { createFieldValidator };
 };

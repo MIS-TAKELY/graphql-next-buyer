@@ -1,11 +1,11 @@
+import test from "@/assets/403609db54d2a0d0.webp";
 import electronicsDeal from "@/assets/electronics-deal.jpg";
 import fashionDiscount from "@/assets/fashion-discount.jpg";
 import festivalSale from "@/assets/festival-sale.jpg";
-import test from "@/assets/403609db54d2a0d0.webp"
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState, useCallback, memo } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 
 // Move slides outside component to prevent recreation
 const SLIDES = [
@@ -30,7 +30,7 @@ const SLIDES = [
     subtitle: "Up to 50% Off",
     description: "Trendy fashion for every occasion",
   },
-   {
+  {
     id: 4,
     image: test,
     title: "Fashion Discount",
@@ -40,7 +40,18 @@ const SLIDES = [
 ];
 
 // Memoized slide component
-const Slide = memo(({ slide, isHovered }) => (
+interface SlideProps {
+  slide: {
+    id: number;
+    image: any;
+    title: string;
+    subtitle: string;
+    description: string;
+  };
+  isHovered: boolean;
+}
+
+const Slide = memo(({ slide, isHovered }: SlideProps) => (
   <div className="min-w-full relative">
     <Image
       src={slide.image}
@@ -102,7 +113,7 @@ const Slide = memo(({ slide, isHovered }) => (
   </div>
 ));
 
-Slide.displayName = 'Slide';
+Slide.displayName = "Slide";
 
 export default function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -117,18 +128,18 @@ export default function HeroCarousel() {
     setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
   }, []);
 
-  const goToSlide = useCallback((index) => {
+  const goToSlide = useCallback((index: number) => {
     setCurrentSlide(index);
   }, []);
 
   // Auto-rotate carousel with cleanup
   useEffect(() => {
     if (isHovered) return; // Pause on hover
-    
+
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
     }, 5000);
-    
+
     return () => clearInterval(timer);
   }, [isHovered]);
 

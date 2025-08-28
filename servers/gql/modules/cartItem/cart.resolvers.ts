@@ -11,7 +11,7 @@ export const cartItemResolvers = {
         return await prisma.cartItem.findMany({
           include: {
             user: {
-              select: { id: true, name: true }, // Only select needed fields
+              select: { id: true, firstName: true, lastName: true }, // Only select needed fields
             },
             variant: {
               include: {
@@ -82,11 +82,11 @@ export const cartItemResolvers = {
 
         // Validate inputs
         if (!variantId) {
-          throw new Error("Variant ID is required", "INVALID_INPUT");
+          throw new Error("Variant ID is required");
         }
 
         if (!quantity || quantity < 1) {
-          throw new Error("Quantity must be at least 1", "INVALID_QUANTITY");
+          throw new Error("Quantity must be at least 1");
         }
 
         // Check if variant exists and is available

@@ -144,7 +144,7 @@ export const orderResolvers = {
                 },
                 shipments: {
                   create: {
-                    method: input.shippingMethod,
+                    method: input.shippingMethod as any,
                     status: "PENDING",
                   },
                 },
