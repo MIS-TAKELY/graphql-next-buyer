@@ -78,3 +78,29 @@ export const VALIDATE_PAYMENT = gql`
     }
   }
 `;
+
+export const INITIATE_ESEWA_PAYMENT = gql`
+  mutation InitiateEsewaPayment($orderId: ID!) {
+    initiateEsewaPayment(orderId: $orderId) {
+      paymentUrl
+    }
+  }
+`;
+
+export const VERIFY_ESEWA_PAYMENT = gql`
+  mutation VerifyEsewaPayment($input: EsewaVerifyInput!) {
+    verifyEsewaPayment(input: $input) {
+      id
+      status
+      transactionId
+      amount
+      currency
+      provider
+      createdAt
+      order {
+        id
+        status
+      }
+    }
+  }
+`;

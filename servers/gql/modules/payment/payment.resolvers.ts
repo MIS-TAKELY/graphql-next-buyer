@@ -16,12 +16,21 @@ export const paymentResolvers = {
         },
       });
 
-      const paymentUrl = `https://uat.esewa.com.np/epay/main?q=fu
-      &amt=${order.total}
-      &pid=${payment.id}
-      &scd=EPAYTEST
-      &su=https://your-api.com/esewa/success
-      &fu=https://your-api.com/esewa/failure`;
+      // Use environment variables for test credentials
+      const ESEWA_GATEWAY_URL =
+        process.env.ESEWA_GATEWAY_URL || "https://rc-epay.esewa.com.np";
+      const ESEWA_PRODUCT_CODE = process.env.ESEWA_PRODUCT_CODE || "EPAYTEST";
+      const BACKEND_URI = process.env.BACKEND_URI || "http://localhost:3000";
+
+      // Build callback URLs
+      const su = `${BACKEND_URI}/api/esewa/callback?status=success&pid=${payment.id}&orderId=${order.id}`;
+      const fu = `${BACKEND_URI}/api/esewa/callback?status=failure&pid=${payment.id}&orderId=${order.id}`;
+
+      const paymentUrl = `${ESEWA_GATEWAY_URL}/epay/main?amt=${
+        order.total
+      }&pid=${payment.id}&scd=${ESEWA_PRODUCT_CODE}&su=${encodeURIComponent(
+        su
+      )}&fu=${encodeURIComponent(fu)}`;
 
       return { paymentUrl };
     },
@@ -29,11 +38,16 @@ export const paymentResolvers = {
     verifyEsewaPayment: async (_: any, { input }: any, ctx: any) => {
       const { orderId, refId, amount } = input;
 
-      const verifyRes = await fetch("https://uat.esewa.com.np/epay/transrec", {
+      // Use environment variables for test credentials
+      const ESEWA_GATEWAY_URL =
+        process.env.ESEWA_GATEWAY_URL || "https://rc-epay.esewa.com.np";
+      const ESEWA_PRODUCT_CODE = process.env.ESEWA_PRODUCT_CODE || "EPAYTEST";
+
+      const verifyRes = await fetch(`${ESEWA_GATEWAY_URL}/epay/transrec`, {
         method: "POST",
         body: new URLSearchParams({
           amt: amount.toString(),
-          scd: "EPAYTEST",
+          scd: ESEWA_PRODUCT_CODE,
           pid: orderId,
           rid: refId,
         }),

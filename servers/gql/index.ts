@@ -13,6 +13,7 @@ import { categorySpecificationResolvers } from "./modules/categorySpecification/
 import { orderResolvers } from "./modules/order/order.resolvers";
 import { orderTypeDefs } from "./modules/order/order.typeDefs";
 import { orderItemTypeDefs } from "./modules/orderItem/orderItem.typeDefs";
+import { paymentResolvers } from "./modules/payment/payment.resolvers";
 import { paymentTypeDefs } from "./modules/payment/payment.typeDefs";
 import { paymentMethodTypeDefs } from "./modules/paymentMethod/paymentMethod.typeDefs";
 import { payoutTypeDefs } from "./modules/payout/payout.typeDefs";
@@ -74,6 +75,7 @@ const resolvers = mergeResolvers([
   userResolvers,
   addressResolvers,
   orderResolvers,
+  paymentResolvers,
 ]);
 
 export const schema = makeExecutableSchema({ typeDefs, resolvers });

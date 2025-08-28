@@ -1,5 +1,8 @@
 // hooks/useBuyNow.ts
-import { CREATE_ORDER } from "@/client/payment/payment.mutations";
+import {
+  CREATE_ORDER,
+  INITIATE_ESEWA_PAYMENT,
+} from "@/client/payment/payment.mutations";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
 
@@ -13,6 +16,7 @@ export function useBuyNow() {
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const [createOrder] = useMutation(CREATE_ORDER);
+  const [initiateEsewaPayment] = useMutation(INITIATE_ESEWA_PAYMENT);
 
   const handleAddressSaved = (newAddress: any) => {
     setSelectedAddress(newAddress);
@@ -69,7 +73,30 @@ export function useBuyNow() {
         },
       } as any;
 
-      await createOrder({ variables });
+      const orderResult = await createOrder({ variables });
+      const orderId = orderResult.data?.createOrder?.id;
+
+      if (!orderId) {
+        throw new Error("Failed to create order");
+      }
+
+      // Handle eSewa payment
+      if (paymentData.paymentProvider === "ESEWA") {
+        const esewaResult = await initiateEsewaPayment({
+          variables: { orderId },
+        });
+        const paymentUrl = esewaResult.data?.initiateEsewaPayment?.paymentUrl;
+
+        if (paymentUrl) {
+          // Redirect to eSewa payment gateway
+          window.location.href = paymentUrl;
+          return;
+        } else {
+          throw new Error("Failed to get eSewa payment URL");
+        }
+      }
+
+      // For non-eSewa payments, continue to summary
       setStep("summary");
     } catch (e) {
       console.error("Order creation failed", e);

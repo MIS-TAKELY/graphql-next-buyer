@@ -1,6 +1,7 @@
 "use client";
 
 import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
+import { VERIFY_ESEWA_PAYMENT } from "@/client/payment/payment.mutations";
 import { GET_PRODUCT_BY_SLUG } from "@/client/product/product.queries";
 import { AddressStep } from "@/components/page/buy-now/AddressStep";
 import { BuyNowHeader } from "@/components/page/buy-now/BuyNowHeader";
@@ -8,7 +9,7 @@ import { BuyNowSteps } from "@/components/page/buy-now/BuyNowSteps";
 import { PaymentStep } from "@/components/page/buy-now/PaymentStep";
 import { OrderSummary } from "@/components/page/checkout/OrderSummary";
 import { useBuyNow } from "@/hooks/buy-now/useBuyNow";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -18,6 +19,14 @@ export default function BuyNowPage() {
   const searchParams = useSearchParams();
   const productSlug = searchParams.get("product");
   const quantity = parseInt(searchParams.get("quantity") || "1");
+
+  // eSewa callback parameters
+  const isCallback = searchParams.get("callback") === "true";
+  const callbackStatus = searchParams.get("status");
+  const callbackPid = searchParams.get("pid");
+  const callbackOrderId = searchParams.get("orderId");
+  const callbackRefId = searchParams.get("refId");
+  const callbackAmt = searchParams.get("amt");
 
   const {
     step,
@@ -35,6 +44,8 @@ export default function BuyNowPage() {
     handleBackToAddress,
     handleBackToPayment,
   } = useBuyNow();
+
+  const [verifyEsewaPayment] = useMutation(VERIFY_ESEWA_PAYMENT);
 
   // Query product
   const { data: productData, loading: productLoading } = useQuery(
@@ -67,6 +78,46 @@ export default function BuyNowPage() {
 
   const orderAmount = calculateOrderAmount();
 
+  // Handle eSewa callback
+  useEffect(() => {
+    if (
+      isCallback &&
+      callbackPid &&
+      callbackOrderId &&
+      callbackRefId &&
+      callbackAmt
+    ) {
+      const verifyPayment = async () => {
+        try {
+          await verifyEsewaPayment({
+            variables: {
+              input: {
+                orderId: callbackOrderId,
+                refId: callbackRefId,
+                amount: parseFloat(callbackAmt),
+              },
+            },
+          });
+
+          // Move to summary step on successful verification
+          setCurrentStep(3);
+        } catch (error) {
+          console.error("Failed to verify eSewa payment:", error);
+          // Handle verification failure
+        }
+      };
+
+      verifyPayment();
+    }
+  }, [
+    isCallback,
+    callbackPid,
+    callbackOrderId,
+    callbackRefId,
+    callbackAmt,
+    verifyEsewaPayment,
+  ]);
+
   useEffect(() => {
     if (addresses.length > 0) {
       const defaultAddress = addresses.find((addr: any) => addr.isDefault);
@@ -75,6 +126,17 @@ export default function BuyNowPage() {
       }
     }
   }, [addresses]);
+
+  // Show error if callback failed
+  if (searchParams.get("error")) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center text-red-500">
+          Payment callback failed. Please try again.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -127,6 +189,8 @@ export default function BuyNowPage() {
                   paymentProvider:
                     paymentData.method === "CASH_ON_DELIVERY"
                       ? "COD"
+                      : paymentData.method === "WALLET"
+                      ? "ESEWA"
                       : paymentData.method,
                   paymentMethodId: selectedPaymentMethod?.id ?? null,
                   variantId: defaultVariant?.id,

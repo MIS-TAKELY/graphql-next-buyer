@@ -52,11 +52,8 @@ export function PaymentForm({
     expiryYear: "",
     cvv: "",
     cardHolderName: "",
-    // UPI details
     upiId: "",
-    // Net banking
     bankName: "",
-    // Wallet details
     walletProvider: "",
     walletNumber: "",
   });
@@ -172,7 +169,6 @@ export function PaymentForm({
     e.preventDefault();
 
     if (paymentMethod.type === "CASH_ON_DELIVERY") {
-      // No validation needed for COD
       onSubmit({ method: paymentMethod.type });
       return;
     }
@@ -449,22 +445,39 @@ export function PaymentForm({
               </label>
               <div className="grid gap-3">
                 {paymentMethod.providers?.map((provider) => {
-
                   const key = provider.toLowerCase().replace(/\s+/g, "");
                   const logo = walletLogos[key];
 
                   return (
-                    <div key={provider} className="flex items-center space-x-2">
+                    <label
+                      key={provider}
+                      className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition ${
+                        formData.walletProvider === provider
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-gray-300"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="walletProvider"
+                        value={provider}
+                        checked={formData.walletProvider === provider}
+                        onChange={(e) =>
+                          handleInputChange("walletProvider", e.target.value)
+                        }
+                        className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                      />
+
                       {logo && (
                         <Image
                           src={logo}
                           alt={provider}
-                          height={45}
-                          width={45}
+                          height={40}
+                          width={40}
                         />
                       )}
                       <span className="text-sm font-medium">{provider}</span>
-                    </div>
+                    </label>
                   );
                 })}
               </div>
@@ -475,38 +488,27 @@ export function PaymentForm({
               )}
             </div>
 
-            {/* {formData.walletProvider && (
+            {formData.walletProvider && (
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Mobile Number *
+                  Wallet Number / Phone *
                 </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-3 text-sm text-gray-500">
-                    +91
-                  </span>
-                  <Input
-                    type="tel"
-                    value={formData.walletNumber}
-                    onChange={(e) =>
-                      handleInputChange(
-                        "walletNumber",
-                        e.target.value.replace(/\D/g, "")
-                      )
-                    }
-                    placeholder="9876543210"
-                    maxLength={10}
-                    className={`pl-12 ${
-                      errors.walletNumber ? "border-red-500" : ""
-                    }`}
-                  />
-                </div>
+                <Input
+                  type="text"
+                  value={formData.walletNumber}
+                  onChange={(e) =>
+                    handleInputChange("walletNumber", e.target.value)
+                  }
+                  placeholder="98XXXXXXXX"
+                  className={errors.walletNumber ? "border-red-500" : ""}
+                />
                 {errors.walletNumber && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.walletNumber}
                   </p>
                 )}
               </div>
-            )} */}
+            )}
           </div>
         );
 
