@@ -1,3 +1,5 @@
+"use client"
+
 import test from "@/assets/403609db54d2a0d0.webp";
 import electronicsDeal from "@/assets/electronics-deal.jpg";
 import fashionDiscount from "@/assets/fashion-discount.jpg";

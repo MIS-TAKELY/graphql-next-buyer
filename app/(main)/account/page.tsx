@@ -19,6 +19,7 @@ export default async function AccountPage() {
   try {
     const client = await getServerApolloClient();
 
+    console.time("db-fetch");
     // Run both queries in parallel
     const [userProfileRes, addressesRes] = await Promise.all([
       client.query({
@@ -46,6 +47,8 @@ export default async function AccountPage() {
         data: userProfileDetails,
       });
     }
+
+    console.timeEnd("db-fetch");
 
     // Clean & write addresses to cache
     if (addressesData?.getAddressOfUser) {

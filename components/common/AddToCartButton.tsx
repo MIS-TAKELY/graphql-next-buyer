@@ -1,10 +1,10 @@
 "use client";
 
-import { useCart } from "@/app/(main)/page";
 import { ADD_TO_CART, REMOVE_FROM_CART } from "@/client/cart/cart.mutations";
 import { GET_CART_PRODUCT_IDS } from "@/client/cart/cart.queries";
+import { useCart } from "@/components/page/home/ClientCartProvider"; // Fixed import
 import { Button } from "@/components/ui/button";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { Check, Loader2, ShoppingCart, X } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 
@@ -59,35 +59,15 @@ export function AddToCartButton({
     new Set()
   );
 
-  // Get cart data
-  const { data: cartData, loading: cartLoading } = useQuery(
-    GET_CART_PRODUCT_IDS,
-    {
-      fetchPolicy: "cache-and-network",
-      errorPolicy: "all",
-      notifyOnNetworkStatusChange: false,
-    }
-  );
+  // Get cart data from context
+  const cartCtx = useCart();
+  const cartItems = cartCtx?.cartItems ?? new Set<string>();
+  const cartLoading = !!cartCtx?.loading;
 
-  const cartProductIds = useMemo(() => {
-    if (!cartData?.getMyCart) return new Set<string>();
-    return new Set(
-      cartData.getMyCart.map((item: any) => item.variant.product.id)
-    );
-  }, [cartData?.getMyCart]);
-
-  const cartCtx = useCart?.() as
-    | { cartItems?: Set<string>; loading?: boolean }
-    | undefined;
-
-  const cartItems =
-    cartProductIds.size > 0
-      ? cartProductIds
-      : cartCtx?.cartItems ?? new Set<string>();
-
+  // Remove redundant useQuery since cart data is provided by context
   // Update optimistic cart items when real cart data changes
   useMemo(() => {
-    setOptimisticCartItems(new Set<string>(cartItems as Set<string>));
+    setOptimisticCartItems(new Set<string>(cartItems));
   }, [cartItems]);
 
   // Mutations
@@ -102,7 +82,7 @@ export function AddToCartButton({
       console.error("Add to cart error:", error);
       setStatus("error");
       onError?.(error);
-      setOptimisticCartItems(new Set<string>(cartItems as Set<string>));
+      setOptimisticCartItems(new Set<string>(cartItems));
       setTimeout(() => setStatus("idle"), 2000);
     },
   });
@@ -118,7 +98,7 @@ export function AddToCartButton({
       console.error("Remove from cart error:", error);
       setStatus("error");
       onError?.(error);
-      setOptimisticCartItems(new Set<string>(cartItems as Set<string>));
+      setOptimisticCartItems(new Set<string>(cartItems));
       setTimeout(() => setStatus("idle"), 2000);
     },
   });
@@ -133,19 +113,14 @@ export function AddToCartButton({
     async (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
-
       if (isDisabled) return;
 
-      // Optimistic update
       setOptimisticCartItems((prev) => new Set([...prev, productId]));
       setStatus("adding");
 
       try {
         await addToCart({
-          variables: {
-            variantId: variantId,
-            quantity: quantity,
-          },
+          variables: { variantId, quantity },
         });
       } catch (err) {
         // Error handling is done in onError callback
@@ -158,10 +133,8 @@ export function AddToCartButton({
     async (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
-
       if (isDisabled) return;
 
-      // Optimistic update
       const newSet = new Set(optimisticCartItems);
       newSet.delete(productId);
       setOptimisticCartItems(newSet);
@@ -169,7 +142,7 @@ export function AddToCartButton({
 
       try {
         await removeFromCart({
-          variables: { variantId: variantId },
+          variables: { variantId },
         });
       } catch (err) {
         // Error handling is done in onError callback
