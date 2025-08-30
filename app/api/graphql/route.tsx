@@ -1,7 +1,7 @@
+import { createContext } from "@/servers/gql/context";
 import { createYoga } from "graphql-yoga";
 import type { NextRequest } from "next/server";
 import { schema } from "../../../servers/gql/index";
-import { createContext } from "@/servers/gql/context";
 
 const yoga = createYoga<{
   req: NextRequest;
@@ -15,7 +15,10 @@ const yoga = createYoga<{
   cors: {
     origin:
       process.env.NODE_ENV === "production"
-        ? [process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"]
+        ? [
+            "https://graphql-next-buyer-hmu9c58z1-mailitttome-4974s-projects.vercel.app", // frontend
+            "https://graphql-next-buyer.vercel.app", // API itself (optional, in case of same-origin requests)
+          ]
         : ["http://localhost:3000"],
     credentials: true,
   },

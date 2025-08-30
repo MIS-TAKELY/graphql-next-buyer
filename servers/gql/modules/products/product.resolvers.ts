@@ -12,7 +12,7 @@ export const productResolvers = {
       // 1. Try cache
       const cached = await getCache(cacheKey);
       if (cached) {
-        console.log("⚡ Returning products from Redis");
+        console.log("Returning products from Redis");
         return cached;
       }
 
@@ -35,7 +35,7 @@ export const productResolvers = {
       });
 
       // 3. Store in cache (e.g., TTL = 300s)
-      await setCache(cacheKey, products, 300);
+      await setCache(cacheKey, products, 86400);
 
       return products;
     },
