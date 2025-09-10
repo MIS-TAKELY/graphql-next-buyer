@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.14.0
- * Query Engine version: 717184b7b35ea05dfa71a3236b7af656013e1e49
+ * Prisma Client JS version: 6.15.0
+ * Query Engine version: 85179d7826409ee107a6ba334b5e305ae3fba9fb
  */
 Prisma.prismaVersion = {
-  client: "6.14.0",
-  engine: "717184b7b35ea05dfa71a3236b7af656013e1e49"
+  client: "6.15.0",
+  engine: "85179d7826409ee107a6ba334b5e305ae3fba9fb"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -373,8 +373,27 @@ exports.Prisma.ReviewScalarFieldEnum = {
   productId: 'productId',
   rating: 'rating',
   comment: 'comment',
+  status: 'status',
+  isFeatured: 'isFeatured',
+  helpfulCount: 'helpfulCount',
+  verifiedPurchase: 'verifiedPurchase',
+  orderItemId: 'orderItemId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReviewVoteScalarFieldEnum = {
+  id: 'id',
+  reviewId: 'reviewId',
+  userId: 'userId',
+  vote: 'vote'
+};
+
+exports.Prisma.ReviewMediaScalarFieldEnum = {
+  id: 'id',
+  reviewId: 'reviewId',
+  type: 'type',
+  url: 'url'
 };
 
 exports.Prisma.WishlistScalarFieldEnum = {
@@ -557,6 +576,17 @@ exports.ShipmentStatus = exports.$Enums.ShipmentStatus = {
   LOST: 'LOST'
 };
 
+exports.ReviewStatus = exports.$Enums.ReviewStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.MediaType = exports.$Enums.MediaType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Address: 'Address',
@@ -580,6 +610,8 @@ exports.Prisma.ModelName = {
   Payment: 'Payment',
   Shipment: 'Shipment',
   Review: 'Review',
+  ReviewVote: 'ReviewVote',
+  ReviewMedia: 'ReviewMedia',
   Wishlist: 'Wishlist',
   WishlistItem: 'WishlistItem',
   SellerOrder: 'SellerOrder',

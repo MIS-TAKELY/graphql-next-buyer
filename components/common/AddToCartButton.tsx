@@ -1,26 +1,16 @@
 "use client";
-
-import { ADD_TO_CART, REMOVE_FROM_CART } from "@/client/cart/cart.mutations";
-import { GET_CART_PRODUCT_IDS } from "@/client/cart/cart.queries";
-import { useCart } from "@/components/page/home/ClientCartProvider"; // Fixed import
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@apollo/client";
-import { Check, Loader2, ShoppingCart, X } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCart } from "@/hooks/cart/useCart";
+import { Check, ShoppingCart } from "lucide-react";
+import { useMemo, useState, useTransition } from "react";
 
-type CartStatus =
-  | "idle"
-  | "adding"
-  | "removing"
-  | "added"
-  | "removed"
-  | "error";
+type CartStatus = "idle" | "adding" | "removing" | "error";
 
 interface AddToCartButtonProps {
-  productId: string;
-  variantId: string;
+  productId?: string;
+  variantId?: string;
   quantity?: number;
-  inStock: boolean;
+  inStock?: boolean;
   className?: string;
   size?: "sm" | "default" | "lg";
   variant?:
@@ -44,7 +34,7 @@ export function AddToCartButton({
   quantity = 1,
   inStock,
   className = "",
-  size = "lg",
+  size = "sm",
   variant,
   showIcon = true,
   fullWidth = true,
@@ -53,166 +43,100 @@ export function AddToCartButton({
   onRemoveSuccess,
   onError,
 }: AddToCartButtonProps) {
-  const [status, setStatus] = useState<CartStatus>("idle");
-  const [isHovered, setIsHovered] = useState(false);
-  const [optimisticCartItems, setOptimisticCartItems] = useState<Set<string>>(
-    new Set()
-  );
+  const [optimisticCartItems, setOptimisticCartItems] = useState<Set<string>>(new Set());
+  const [isPending, startTransition] = useTransition();
 
-  // Get cart data from context
-  const cartCtx = useCart();
-  const cartItems = cartCtx?.cartItems ?? new Set<string>();
-  const cartLoading = !!cartCtx?.loading;
+  const {
+    cartItems,
+    cartLoading,
+    adding,
+    removing,
+    addToCart,
+    removeFromCart,
+  } = useCart();
 
-  // Remove redundant useQuery since cart data is provided by context
-  // Update optimistic cart items when real cart data changes
+  // Sync optimistic state with actual cart state
   useMemo(() => {
     setOptimisticCartItems(new Set<string>(cartItems));
   }, [cartItems]);
 
-  // Mutations
-  const [addToCart] = useMutation(ADD_TO_CART, {
-    refetchQueries: [{ query: GET_CART_PRODUCT_IDS }],
-    onCompleted: () => {
-      setStatus("added");
-      onAddSuccess?.();
-      setTimeout(() => setStatus("idle"), 2000);
-    },
-    onError: (error) => {
-      console.error("Add to cart error:", error);
-      setStatus("error");
-      onError?.(error);
-      setOptimisticCartItems(new Set<string>(cartItems));
-      setTimeout(() => setStatus("idle"), 2000);
-    },
-  });
-
-  const [removeFromCart] = useMutation(REMOVE_FROM_CART, {
-    refetchQueries: [{ query: GET_CART_PRODUCT_IDS }],
-    onCompleted: () => {
-      setStatus("removed");
-      onRemoveSuccess?.();
-      setTimeout(() => setStatus("idle"), 2000);
-    },
-    onError: (error) => {
-      console.error("Remove from cart error:", error);
-      setStatus("error");
-      onError?.(error);
-      setOptimisticCartItems(new Set<string>(cartItems));
-      setTimeout(() => setStatus("idle"), 2000);
-    },
-  });
-
-  // Computed values
   const isInCart = optimisticCartItems.has(productId);
-  const isLoading = status === "adding" || status === "removing" || cartLoading;
-  const isDisabled = disabled || !variantId || isLoading || !inStock;
+  const isDisabled = disabled || !variantId || cartLoading;
 
-  // Handlers
-  const handleAdd = useCallback(
-    async (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (isDisabled) return;
+  // Ultra-fast optimistic update
+  const handleClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-      setOptimisticCartItems((prev) => new Set([...prev, productId]));
-      setStatus("adding");
+    if (isDisabled) return;
 
-      try {
-        await addToCart({
-          variables: { variantId, quantity },
+    // Immediate optimistic update using React 18 transitions
+    startTransition(() => {
+      if (isInCart) {
+        setOptimisticCartItems((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(productId!);
+          return newSet;
         });
-      } catch (err) {
-        // Error handling is done in onError callback
-      }
-    },
-    [isDisabled, addToCart, variantId, quantity, productId]
-  );
-
-  const handleRemove = useCallback(
-    async (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (isDisabled) return;
-
-      const newSet = new Set(optimisticCartItems);
-      newSet.delete(productId);
-      setOptimisticCartItems(newSet);
-      setStatus("removing");
-
-      try {
-        await removeFromCart({
-          variables: { variantId },
+      } else {
+        setOptimisticCartItems((prev) => {
+          const newSet = new Set(prev);
+          newSet.add(productId!);
+          return newSet;
         });
-      } catch (err) {
-        // Error handling is done in onError callback
       }
-    },
-    [isDisabled, removeFromCart, variantId, productId, optimisticCartItems]
-  );
+    });
 
-  // Button content based on status
-  const getButtonContent = () => {
-    switch (status) {
-      case "adding":
-        return {
-          text: "Adding...",
-          icon: <Loader2 className="w-5 h-5 animate-spin" />,
-        };
-      case "removing":
-        return {
-          text: "Removing...",
-          icon: <Loader2 className="w-5 h-5 animate-spin" />,
-        };
-      case "added":
-        return { text: "Added!", icon: <Check className="w-5 h-5" /> };
-      case "removed":
-        return { text: "Removed!", icon: <Check className="w-5 h-5" /> };
-      case "error":
-        return { text: "Try again", icon: <X className="w-5 h-5" /> };
-      default:
-        if (isInCart) {
-          return {
-            text: isHovered ? "Remove from Cart" : "In Cart",
-            icon: <Check className="w-5 h-5" />,
-          };
-        }
-        return {
-          text: isDisabled && !inStock ? "Out of Stock" : "Add to Cart",
-          icon: <ShoppingCart className="w-5 h-5" />,
-        };
+    try {
+      if (isInCart) {
+        await removeFromCart(variantId!, productId!);
+        onRemoveSuccess?.();
+      } else {
+        await addToCart(variantId!, productId!);
+        onAddSuccess?.();
+      }
+    } catch (error) {
+      // Revert optimistic update on error
+      setOptimisticCartItems(new Set(cartItems));
+      onError?.(error);
     }
   };
 
-  const buttonContent = getButtonContent();
+  const getButtonText = () => {
+    // Show loading states only for actual network requests
+    if (adding && !isPending) return "Adding...";
+    if (removing && !isPending) return "Removing...";
+    if (cartLoading && cartItems.size === 0) return "Loading...";
+    
+    return isInCart ? "In Cart" : "Add To Cart";
+  };
+
+  const getButtonIcon = () => {
+    if (!showIcon) return null;
+
+    // Show check icon if item is in cart
+    if (isInCart && !adding && !removing) {
+      return <Check className="w-4 h-4" />;
+    }
+
+    return <ShoppingCart className="w-4 h-4" />;
+  };
 
   return (
     <Button
       size={size}
-      variant={variant || (isInCart ? "outline" : "default")}
-      onClick={isInCart ? handleRemove : handleAdd}
+      variant={isInCart ? "outline" : variant || "default"}
+      onClick={handleClick}
       disabled={isDisabled}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className={`transition-all duration-200 transform active:scale-95 ${
-        fullWidth ? "flex-1" : ""
-      } ${
+      className={`w-full transition-all duration-100 active:scale-95 ${className} ${
         isInCart
-          ? "border-gray-500 text-gray-600 hover:bg-red-50 hover:border-red-500 hover:text-red-600"
-          : ""
-      } ${
-        status === "added" ? "bg-green-500 hover:bg-green-600 text-white" : ""
-      } ${
-        status === "removed" ? "bg-gray-500 hover:bg-gray-600 text-white" : ""
-      } ${
-        status === "error" ? "bg-red-500 hover:bg-red-600 text-white" : ""
-      } ${className}`}
+          ? "border-gray-400 text-gray-600 hover:bg-red-50 hover:border-red-500 hover:text-red-600"
+          : "bg-white hover:bg-gray-100 text-black"
+      } ${isPending ? "opacity-90" : ""}`}
     >
-      <span className="flex items-center justify-center gap-2">
-        {showIcon && buttonContent.icon}
-        <span className="transition-all duration-200">
-          {buttonContent.text}
-        </span>
+      <span className="flex items-center justify-center gap-2 min-w-[100px]">
+        {getButtonIcon()}
+        <span>{getButtonText()}</span>
       </span>
     </Button>
   );

@@ -127,6 +127,7 @@ export const GET_PRODUCTS = gql`
     getProducts {
       id
       name
+      description
       slug
       images {
         url

@@ -8,7 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ENUMS (unchanged)
+// ENUMS 
 enum Role {
   BUYER
   SELLER
@@ -73,7 +73,6 @@ enum ShippingMethod {
   SAME_DAY
 }
 
-// New enum for image types
 enum ImageType {
   PRIMARY
   PROMOTIONAL
@@ -108,6 +107,17 @@ enum Gender {
   NOT_TO_SAY
 }
 
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
 model User {
   id        String    @id @default(cuid())
   clerkId   String    @unique
@@ -131,6 +141,7 @@ model User {
   sellerOrders   SellerOrder[]   @relation("SellerOrders")
   wishlists      Wishlist[]
   discountUsage  DiscountUsage[] @relation("UserDiscountUsage")
+  ReviewVote     ReviewVote[]
 
   @@index([email, role])
   @@map("users")
@@ -234,7 +245,6 @@ model Discount {
   @@map("discounts")
 }
 
-// Coupon codes for discounts
 model Coupon {
   id         String       @id @default(cuid())
   code       String       @unique
@@ -251,7 +261,6 @@ model Coupon {
   @@map("coupons")
 }
 
-// Link discounts to specific products
 model ProductDiscount {
   id         String   @id @default(cuid())
   productId  String
@@ -265,7 +274,6 @@ model ProductDiscount {
   @@map("product_discounts")
 }
 
-// Link discounts to categories
 model CategoryDiscount {
   id         String   @id @default(cuid())
   categoryId String
@@ -279,7 +287,6 @@ model CategoryDiscount {
   @@map("category_discounts")
 }
 
-// Track which discounts were applied to orders
 model AppliedDiscount {
   id             String   @id @default(cuid())
   orderId        String
@@ -297,7 +304,6 @@ model AppliedDiscount {
   @@map("applied_discounts")
 }
 
-// Track discount usage for analytics and limits
 model DiscountUsage {
   id         String   @id @default(cuid())
   discountId String
@@ -322,10 +328,9 @@ model Product {
   description String?
   status      ProductStatus @default(DRAFT)
 
-  // Add sale price fields
-  salePrice Decimal?  @db.Money // Direct sale price
-  saleStart DateTime? // Sale period start
-  saleEnd   DateTime? // Sale period end
+  salePrice Decimal?  @db.Money
+  saleStart DateTime?
+  saleEnd   DateTime?
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -344,7 +349,7 @@ model Product {
   productDiscounts ProductDiscount[]
 
   @@index([slug, sellerId])
-  @@index([saleStart, saleEnd]) // For sale queries
+  @@index([saleStart, saleEnd])
   @@map("products")
 }
 
@@ -354,7 +359,7 @@ model ProductVariant {
   sku        String   @unique
   price      Decimal  @db.Money
   stock      Int      @default(0)
-  attributes Json? // Retains comparePrice, costPrice, trackQuantity, weight, dimensions, shippingClass
+  attributes Json?
   isDefault  Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -372,8 +377,8 @@ model ProductVariant {
 model ProductSpecification {
   id        String   @id @default(cuid())
   variantId String
-  key       String // e.g., "ram", "size"
-  value     String // e.g., "8GB", "M"
+  key       String
+  value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -518,20 +523,48 @@ model Shipment {
 }
 
 model Review {
-  id        String   @id @default(cuid())
-  userId    String
-  productId String
-  rating    Int
-  comment   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String       @id @default(cuid())
+  userId           String
+  productId        String
+  rating           Int
+  comment          String?
+  status           ReviewStatus @default(PENDING)
+  isFeatured       Boolean      @default(false) //good reviews seller wants to show at top
+  helpfulCount     Int          @default(0)
+  verifiedPurchase Boolean?     @default(false)
+  orderItemId      String? //to verify wheather reviewer has bought theis product or not or is verified reviewer
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
 
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id])
 
+  media ReviewMedia[]
+  votes ReviewVote[]
+
   @@unique([userId, productId])
   @@index([productId, rating])
-  @@map("reviews")
+}
+
+model ReviewVote {
+  id       String  @id @default(cuid())
+  reviewId String
+  userId   String
+  vote     Boolean
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, userId])
+}
+
+model ReviewMedia {
+  id       String    @id @default(cuid())
+  reviewId String
+  type     MediaType
+  url      String
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 }
 
 model Wishlist {

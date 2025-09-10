@@ -1,6 +1,6 @@
 import { PrismaClient } from "@/app/generated/prisma";
-import { GraphQLContext } from "../../context";
 import { getCache, setCache } from "@/services/redis.services";
+import { GraphQLContext } from "../../context";
 
 const prisma = new PrismaClient();
 
@@ -34,7 +34,6 @@ export const productResolvers = {
         orderBy: { createdAt: "desc" },
       });
 
-      // 3. Store in cache (e.g., TTL = 300s)
       await setCache(cacheKey, products, 86400);
 
       return products;

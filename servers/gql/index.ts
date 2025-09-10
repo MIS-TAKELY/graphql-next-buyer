@@ -30,6 +30,7 @@ import { userResolvers } from "./modules/user/user.resolvers";
 import { userTypeDefs } from "./modules/user/user.typeDefs";
 import { wishlistTypeDefs } from "./modules/wishlist/wishlist.typeDefs";
 import { wishlistItemTypeDefs } from "./modules/wishlistItem/wishlistItem.typeDefs";
+import { reviewResolvers } from "./modules/review/review.resolvers";
 
 const rootTypeDefs = gql`
   type Query {
@@ -76,6 +77,7 @@ const resolvers = mergeResolvers([
   addressResolvers,
   orderResolvers,
   paymentResolvers,
+  reviewResolvers
 ]);
 
 export const schema = makeExecutableSchema({ typeDefs, resolvers });

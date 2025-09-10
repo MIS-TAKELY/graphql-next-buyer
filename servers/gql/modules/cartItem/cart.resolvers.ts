@@ -10,19 +10,25 @@ export const cartItemResolvers = {
         requireAuth(ctx);
         const cacheKey = "carts:all";
 
-        // 1. Try cache
+        // Use cache with longer TTL
         const cached = await getCache(cacheKey);
         if (cached) {
           console.log("⚡ Returning carts from Redis");
           return cached;
         }
 
-        // 2. DB fetch
+        // Simplified query - only essential data
         const carts = await prisma.cartItem.findMany({
-          include: {
+          select: {
+            id: true,
+            quantity: true,
+            userId: true,
+            variantId: true,
+            createdAt: true,
             user: { select: { id: true, firstName: true, lastName: true } },
             variant: {
-              include: {
+              select: {
+                id: true,
                 product: {
                   select: {
                     id: true,
@@ -36,8 +42,8 @@ export const cartItemResolvers = {
           orderBy: { createdAt: "desc" },
         });
 
-        // 3. Cache result
-        await setCache(cacheKey, carts, 60); // TTL 1 min
+        // Cache with longer TTL
+        await setCache(cacheKey, carts, 300); // 5 minutes
         return carts;
       } catch (error: any) {
         console.error("Error fetching carts:", error);
@@ -50,25 +56,29 @@ export const cartItemResolvers = {
         const user = requireAuth(ctx);
         const cacheKey = `carts:user:${user.id}`;
 
-        // 1. Try cache
+        // Use cache
         const cached = await getCache(cacheKey);
         if (cached) {
           console.log("⚡ Returning myCart from Redis");
           return cached;
         }
 
-        // 2. DB fetch
+        // Minimal query for better performance
         const myCart = await prisma.cartItem.findMany({
           where: { userId: user.id },
-          include: {
-            user: { select: { id: true, firstName: true } },
+          select: {
+            id: true,
+            quantity: true,
+            variantId: true,
             variant: {
-              include: {
+              select: {
+                id: true,
                 product: {
                   select: {
                     id: true,
                     name: true,
                     slug: true,
+                    // Only get first image for performance
                     images: { select: { url: true, altText: true }, take: 1 },
                   },
                 },
@@ -78,8 +88,8 @@ export const cartItemResolvers = {
           orderBy: { createdAt: "desc" },
         });
 
-        // 3. Cache result
-        await setCache(cacheKey, myCart, 60);
+        // Cache with reasonable TTL
+        await setCache(cacheKey, myCart, 180); // 3 minutes
         return myCart;
       } catch (error: any) {
         console.error("Error fetching user cart:", error);
@@ -101,10 +111,12 @@ export const cartItemResolvers = {
         if (!quantity || quantity < 1)
           throw new Error("Quantity must be at least 1");
 
-        // Check if variant exists
+        // OPTIMIZATION 1: Check stock and product status in a single query
         const variant = await prisma.productVariant.findUnique({
           where: { id: variantId },
-          include: {
+          select: {
+            id: true,
+            stock: true,
             product: { select: { id: true, name: true, status: true } },
           },
         });
@@ -115,16 +127,33 @@ export const cartItemResolvers = {
         if (variant.product.status !== "ACTIVE")
           throw new Error("Product is not available");
 
-        // Upsert
-        await prisma.cartItem.upsert({
-          where: { userId_variantId: { userId: user.id, variantId } },
-          update: { quantity: { increment: quantity } },
-          create: { userId: user.id, variantId, quantity },
+        // OPTIMIZATION 2: Use transaction for atomicity and speed
+        const result = await prisma.$transaction(async (tx) => {
+          // Upsert the cart item
+          const cartItem = await tx.cartItem.upsert({
+            where: { userId_variantId: { userId: user.id, variantId } },
+            update: { quantity: { increment: quantity } },
+            create: { userId: user.id, variantId, quantity },
+            select: {
+              id: true,
+              quantity: true,
+              variant: {
+                select: {
+                  id: true,
+                  product: { select: { id: true, name: true } },
+                },
+              },
+            },
+          });
+
+          return true;
         });
 
-        // Invalidate caches
-        await delCache("carts:all");
-        await delCache(`carts:user:${user.id}`);
+        // OPTIMIZATION 3: Async cache invalidation (don't wait for it)
+        Promise.all([
+          delCache("carts:all"),
+          delCache(`carts:user:${user.id}`),
+        ]).catch(console.error); // Fire and forget
 
         return true;
       } catch (error: any) {
@@ -132,7 +161,7 @@ export const cartItemResolvers = {
         throw error instanceof Error
           ? error
           : new Error(`Failed to add item to cart: ${error.message}`);
-      }
+        }
     },
 
     removeFromCart: async (
@@ -144,16 +173,23 @@ export const cartItemResolvers = {
         const user = requireAuth(ctx);
         if (!variantId) throw new Error("Variant ID is required");
 
-        const cartItem = await prisma.cartItem.findFirst({
-          where: { variantId, userId: user.id },
+        // OPTIMIZATION: Single query to find and delete
+        const deletedItem = await prisma.cartItem.deleteMany({
+          where: {
+            variantId,
+            userId: user.id,
+          },
         });
-        if (!cartItem) throw new Error("Item not found in cart");
 
-        await prisma.cartItem.delete({ where: { id: cartItem.id } });
+        if (deletedItem.count === 0) {
+          throw new Error("Item not found in cart");
+        }
 
-        // Invalidate caches
-        await delCache("carts:all");
-        await delCache(`carts:user:${user.id}`);
+        // OPTIMIZATION: Async cache invalidation
+        Promise.all([
+          delCache("carts:all"),
+          delCache(`carts:user:${user.id}`),
+        ]).catch(console.error);
 
         return true;
       } catch (error: any) {
@@ -175,16 +211,17 @@ export const cartItemResolvers = {
         if (quantity < 0) throw new Error("Quantity cannot be negative");
 
         if (quantity === 0) {
-          const cartItem = await prisma.cartItem.findFirst({
+          // Delete if quantity is 0
+          await prisma.cartItem.deleteMany({
             where: { variantId, userId: user.id },
           });
-          if (cartItem) {
-            await prisma.cartItem.delete({ where: { id: cartItem.id } });
-          }
         } else {
+          // Check stock first
           const variant = await prisma.productVariant.findUnique({
             where: { id: variantId },
+            select: { stock: true },
           });
+
           if (!variant) throw new Error("Product variant not found");
           if (variant.stock !== null && variant.stock < quantity)
             throw new Error("Insufficient stock available");
@@ -195,9 +232,11 @@ export const cartItemResolvers = {
           });
         }
 
-        // Invalidate caches
-        await delCache("carts:all");
-        await delCache(`carts:user:${user.id}`);
+        // Async cache invalidation
+        Promise.all([
+          delCache("carts:all"),
+          delCache(`carts:user:${user.id}`),
+        ]).catch(console.error);
 
         return true;
       } catch (error: any) {
@@ -214,9 +253,11 @@ export const cartItemResolvers = {
 
         await prisma.cartItem.deleteMany({ where: { userId: user.id } });
 
-        // Invalidate caches
-        await delCache("carts:all");
-        await delCache(`carts:user:${user.id}`);
+        // Async cache invalidation
+        Promise.all([
+          delCache("carts:all"),
+          delCache(`carts:user:${user.id}`),
+        ]).catch(console.error);
 
         return true;
       } catch (error: any) {

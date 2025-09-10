@@ -14,7 +14,6 @@ export const APOLLO_CONFIG = {
     },
   },
 
-  
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -48,7 +47,7 @@ export const APOLLO_DEFAULT_OPTIONS: DefaultOptions = {
     errorPolicy: "all",
   },
   mutate: {
-    fetchPolicy: "no-cache",
+    fetchPolicy: "network-only",
     errorPolicy: "all",
   },
 };
