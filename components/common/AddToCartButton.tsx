@@ -39,6 +39,9 @@ export function AddToCartButton({
   showIcon = true,
   fullWidth = true,
   disabled = false,
+  onAddSuccess,
+  onRemoveSuccess,
+  onError,
 }: AddToCartButtonProps) {
   const [isPending, startTransition] = useTransition();
   const [localStatus, setLocalStatus] = useState<CartStatus>("idle");
@@ -71,14 +74,17 @@ export function AddToCartButton({
           setLocalStatus("removing");
           // This returns immediately - no waiting!
           await removeFromCart(variantId!, productId!);
+          onRemoveSuccess?.();
         } else {
           setLocalStatus("adding");
           // This returns immediately - no waiting!
           await addToCart(variantId!, productId!);
+          onAddSuccess?.();
         }
         setLocalStatus("idle");
       } catch (error) {
         setLocalStatus("error");
+        onError?.(error);
         // Reset error status after a delay
         setTimeout(() => setLocalStatus("idle"), 2000);
       }

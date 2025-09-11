@@ -4,228 +4,141 @@ import { GET_CART_PRODUCT_IDS } from "@/client/cart/cart.queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useCallback, useMemo, useState } from "react";
 
-// Define GraphQL response types (replace with your generated types if using @graphql-codegen)
-interface CartItem {
-  variant?: { product?: { id: string } | null } | null;
-  productId?: string | null;
-  product?: { id: string } | null;
-}
-
-interface GetCartQueryData {
-  getMyCart: CartItem[];
-}
-
-interface CartMutationVariables {
-  variantId: string;
-  productId: string;
-  quantity?: number;
-}
-
-interface CartMutationResponse {
-  success: boolean;
-  // Add other fields returned by your mutations if needed
-}
-
 export const useCart = () => {
-  // State for optimistic cart items and pending operations
-  const [optimisticCartItems, setOptimisticCartItems] = useState<Set<string>>(
-    new Set()
-  );
-  const [pendingOperations, setPendingOperations] = useState<Set<string>>(
-    new Set()
-  );
+  // Local optimistic state - this updates instantly
+  const [cartItems, setCartItems] = useState<Set<string>>(new Set());
+  const [pendingOperations, setPendingOperations] = useState<Set<string>>(new Set());
 
-  // Fetch cart items from server
-  const { data, loading: cartLoading } = useQuery<GetCartQueryData>(
-    GET_CART_PRODUCT_IDS,
-    {
-      fetchPolicy: "cache-and-network",
-      errorPolicy: "all",
-      onCompleted: (data) => {
-        if (data?.getMyCart) {
-          const serverIds = new Set<string>(
-            data.getMyCart
-              .map(
-                (item) =>
-                  item.variant?.product?.id ??
-                  item.productId ??
-                  item.product?.id
-              )
-              .filter((id): id is string => !!id)
-          );
-          setOptimisticCartItems(serverIds);
-        }
-      },
-    }
-  );
+  interface IVariables {
+    productId: string;
+    quantity?: number;
+    variantId: string;
+  }
 
-  // Add to cart mutation
-  const [addToCartMutation, { loading: adding }] = useMutation<
-    CartMutationResponse,
-    CartMutationVariables
-  >(ADD_TO_CART, {
-    onCompleted: (data, { variables }) => {
-      // Fixed: TypeScript now knows 'variables' exists because it's destructured from typed CartMutationVariables
-      if (variables?.productId) {
-        setPendingOperations((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(variables.productId);
-          return newSet;
-        });
-      }
-    },
-    onError: (error, { variables }) => {
-      // Fixed: Same as above
-      console.error("Add to cart error:", error);
-      if (variables?.productId) {
-        setOptimisticCartItems((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(variables.productId);
-          return newSet;
-        });
-        setPendingOperations((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(variables.productId);
-          return newSet;
-        });
+  // Load cart items from server
+  const {
+    data: myCartItemsIds,
+    loading: cartLoading,
+  } = useQuery(GET_CART_PRODUCT_IDS, {
+    fetchPolicy: "cache-and-network",
+    errorPolicy: "all",
+    onCompleted: (data) => {
+      if (data?.getMyCart) {
+        const serverIds = new Set<string>(
+          data.getMyCart
+            .map(
+              (item: any) =>
+                item.variant?.product?.id || item.productId || item.product?.id
+            )
+            .filter(Boolean) as string[]
+        );
+        setCartItems(serverIds);
       }
     },
   });
 
-  // Remove from cart mutation
-  const [removeFromCartMutation, { loading: removing }] = useMutation<
-    CartMutationResponse,
-    CartMutationVariables
-  >(REMOVE_FROM_CART, {
-    onCompleted: (data, { variables }) => {
-      // Fixed: TypeScript now knows 'variables' exists
-      if (variables?.productId) {
-        setPendingOperations((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(variables.productId);
-          return newSet;
-        });
-      }
-    },
-    onError: (error, { variables }) => {
-      // Fixed: Same as above
-      console.error("Remove from cart error:", error);
-      if (variables?.productId) {
-        setOptimisticCartItems((prev) => {
-          const newSet = new Set(prev);
-          newSet.add(variables.productId);
-          return newSet;
-        });
-        setPendingOperations((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(variables.productId);
-          return newSet;
-        });
-      }
-    },
-  });
+  const [addToCartMutation] = useMutation<any, IVariables>(ADD_TO_CART);
+  const [removeFromCartMutation] = useMutation<any, IVariables>(REMOVE_FROM_CART);
 
-  // Memoize server cart items
+  // Server cart items (for fallback/sync)
   const serverCartItems = useMemo<Set<string>>(() => {
-    if (!data?.getMyCart) return new Set();
-    const ids = data.getMyCart
-      .map(
-        (item) =>
-          item.variant?.product?.id ?? item.productId ?? item.product?.id
-      )
-      .filter((id): id is string => !!id);
+    if (!myCartItemsIds?.getMyCart) return new Set();
+    const ids = myCartItemsIds.getMyCart
+      .map((item: any) => {
+        if (item.variant?.product?.id) {
+          return item.variant.product.id;
+        } else if (item.productId) {
+          return item.productId;
+        } else if (item.product?.id) {
+          return item.product.id;
+        }
+        return null;
+      })
+      .filter(Boolean);
 
     return new Set(ids);
-  }, [data?.getMyCart]);
+  }, [myCartItemsIds?.getMyCart]);
 
-  // Add to cart function
+  // Instantly add to cart with optimistic update
   const addToCart = useCallback(
     async (variantId: string, productId: string) => {
-      if (!variantId || !productId) {
-        console.error("Invalid variantId or productId");
-        return Promise.resolve();
-      }
+      // INSTANT optimistic UI update
+      setCartItems((prev) => new Set([...prev, productId]));
+      setPendingOperations((prev) => new Set([...prev, productId]));
 
-      setOptimisticCartItems((prev) => {
-        const newSet = new Set(prev);
-        newSet.add(productId);
-        return newSet;
-      });
-
-      setPendingOperations((prev) => {
-        const newSet = new Set(prev);
-        newSet.add(productId);
-        return newSet;
-      });
-
-      // Fixed: Pass variables explicitly to onCompleted/onError via the mutate options
-      await addToCartMutation({
+      // Fire mutation with inline handlers
+      addToCartMutation({
         variables: { variantId, quantity: 1, productId },
-        onCompleted: (data) => {
-          // Optional: Handle completion here if needed (avoids options destructuring)
-          console.log("Add to cart completed:", data);
+        onCompleted: () => {
+          setPendingOperations((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(productId);
+            return newSet;
+          });
         },
-        onError: (error) => {
-          // Optional: Handle error here if needed
-          console.error("Add to cart failed:", error);
+        onError: () => {
+          console.error("Add to cart error");
+          // Revert optimistic update
+          setCartItems((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(productId);
+            return newSet;
+          });
+          setPendingOperations((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(productId);
+            return newSet;
+          });
         },
-      }).catch((error) => {
-        console.error("Add to cart failed:", error);
-      });
-
-      return Promise.resolve();
+      }).catch(() => {});
     },
     [addToCartMutation]
   );
 
-  // Remove from cart function
+  // Instantly remove from cart with optimistic update
   const removeFromCart = useCallback(
     async (variantId: string, productId: string) => {
-      if (!variantId || !productId) {
-        console.error("Invalid variantId or productId");
-        return Promise.resolve();
-      }
-
-      setOptimisticCartItems((prev) => {
+      // INSTANT optimistic UI update
+      setCartItems((prev) => {
         const newSet = new Set(prev);
         newSet.delete(productId);
         return newSet;
       });
+      setPendingOperations((prev) => new Set([...prev, productId]));
 
-      setPendingOperations((prev) => {
-        const newSet = new Set(prev);
-        newSet.add(productId);
-        return newSet;
-      });
-
-      // Fixed: Pass variables explicitly to onCompleted/onError via the mutate options
-      await removeFromCartMutation({
+      // Fire mutation with inline handlers
+      removeFromCartMutation({
         variables: { variantId, productId },
-        onCompleted: (data) => {
-          // Optional: Handle completion here if needed
-          console.log("Remove from cart completed:", data);
+        onCompleted: () => {
+          setPendingOperations((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(productId);
+            return newSet;
+          });
         },
-        onError: (error) => {
-          // Optional: Handle error here if needed
-          console.error("Remove from cart failed:", error);
+        onError: () => {
+          console.error("Remove from cart error");
+          // Revert optimistic update
+          setCartItems((prev) => new Set([...prev, productId]));
+          setPendingOperations((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(productId);
+            return newSet;
+          });
         },
-      }).catch((error) => {
-        console.error("Remove from cart failed:", error);
-      });
-
-      return Promise.resolve();
+      }).catch(() => {});
     },
     [removeFromCartMutation]
   );
 
   return {
-    cartItems: optimisticCartItems,
-    serverCartItems,
+    cartItems,          // Optimistic cart state
+    serverCartItems,    // Server state for debugging
     cartLoading,
     addToCart,
-    adding: pendingOperations.size > 0,
     removeFromCart,
+    adding: pendingOperations.size > 0,
     removing: pendingOperations.size > 0,
-    pendingOperations,
+    pendingOperations,  // Debugging helper
   };
 };
