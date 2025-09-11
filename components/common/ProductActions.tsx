@@ -38,26 +38,30 @@ export function ProductActions({
 
   return (
     <div className={`flex gap-4 ${className}`}>
-      {showBuyNow && (
-        <BuyNowButton
-          productSlug={productSlug}
-          quantity={quantity}
-          inStock={inStock}
-          onClick={onBuyNowClick}
-        />
-      )}
-      
-      {showAddToCart && (
-        <AddToCartButton
-          productId={productId}
-          variantId={variantId}
-          quantity={quantity}
-          inStock={inStock}
-          onAddSuccess={onAddSuccess}
-          onRemoveSuccess={onRemoveSuccess}
-          onError={onError}
-        />
-      )}
+      <div className="w-[50%]">
+        {showBuyNow && (
+          <BuyNowButton
+            productSlug={productSlug}
+            quantity={quantity}
+            inStock={inStock}
+            onClick={onBuyNowClick}
+          />
+        )}
+      </div>
+
+      <div className="w-[50%]">
+        {showAddToCart && (
+          <AddToCartButton
+            productId={productId}
+            variantId={variantId}
+            quantity={quantity}
+            inStock={inStock}
+            onAddSuccess={onAddSuccess}
+            onRemoveSuccess={onRemoveSuccess}
+            onError={onError}
+          />
+        )}
+      </div>
     </div>
   );
 }

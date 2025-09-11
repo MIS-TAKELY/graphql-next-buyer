@@ -116,40 +116,41 @@ export const cartItemResolvers = {
           where: { id: variantId },
           select: {
             id: true,
-            stock: true,
             product: { select: { id: true, name: true, status: true } },
           },
         });
 
         if (!variant) throw new Error("Product variant not found");
-        if (variant.stock !== null && variant.stock < quantity)
-          throw new Error("Insufficient stock available");
         if (variant.product.status !== "ACTIVE")
           throw new Error("Product is not available");
 
         // OPTIMIZATION 2: Use transaction for atomicity and speed
-        const result = await prisma.$transaction(async (tx) => {
-          // Upsert the cart item
-          const cartItem = await tx.cartItem.upsert({
-            where: { userId_variantId: { userId: user.id, variantId } },
-            update: { quantity: { increment: quantity } },
-            create: { userId: user.id, variantId, quantity },
-            select: {
-              id: true,
-              quantity: true,
-              variant: {
-                select: {
-                  id: true,
-                  product: { select: { id: true, name: true } },
-                },
-              },
-            },
-          });
+        await prisma.$transaction(
+          async (tx) => {
+            // Upsert the cart item
+            await tx.cartItem.upsert({
+              where: { userId_variantId: { userId: user.id, variantId } },
+              update: { quantity: { increment: quantity } },
+              create: { userId: user.id, variantId, quantity },
+              // select: {
+              //   id: true,
+              //   quantity: true,
+              //   variant: {
+              //     select: {
+              //       id: true,
+              //       product: { select: { id: true, name: true } },
+              //     },
+              //   },
+              // },
+            });
 
-          return true;
-        });
-
-        // OPTIMIZATION 3: Async cache invalidation (don't wait for it)
+            return true;
+          },
+          {
+            timeout: 20000,
+            maxWait: 5000,
+          }
+        );
         Promise.all([
           delCache("carts:all"),
           delCache(`carts:user:${user.id}`),
@@ -161,7 +162,7 @@ export const cartItemResolvers = {
         throw error instanceof Error
           ? error
           : new Error(`Failed to add item to cart: ${error.message}`);
-        }
+      }
     },
 
     removeFromCart: async (

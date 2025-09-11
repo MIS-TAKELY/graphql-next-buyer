@@ -1,8 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/cart/useCart";
-import { Check, ShoppingCart } from "lucide-react";
-import { useMemo, useState, useTransition } from "react";
+import { Check, Loader2, ShoppingCart } from "lucide-react";
+import { useState, useTransition } from "react";
 
 type CartStatus = "idle" | "adding" | "removing" | "error";
 
@@ -39,12 +39,9 @@ export function AddToCartButton({
   showIcon = true,
   fullWidth = true,
   disabled = false,
-  onAddSuccess,
-  onRemoveSuccess,
-  onError,
 }: AddToCartButtonProps) {
-  const [optimisticCartItems, setOptimisticCartItems] = useState<Set<string>>(new Set());
   const [isPending, startTransition] = useTransition();
+  const [localStatus, setLocalStatus] = useState<CartStatus>("idle");
 
   const {
     cartItems,
@@ -53,86 +50,100 @@ export function AddToCartButton({
     removing,
     addToCart,
     removeFromCart,
+    pendingOperations,
   } = useCart();
 
-  // Sync optimistic state with actual cart state
-  useMemo(() => {
-    setOptimisticCartItems(new Set<string>(cartItems));
-  }, [cartItems]);
-
-  const isInCart = optimisticCartItems.has(productId);
+  const isInCart = cartItems.has(productId || "");
   const isDisabled = disabled || !variantId || cartLoading;
+  const isPendingOperation = pendingOperations.has(productId || "");
 
-  // Ultra-fast optimistic update
+  // Ultra-fast click handler - updates instantly
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (isDisabled) return;
 
-    // Immediate optimistic update using React 18 transitions
-    startTransition(() => {
-      if (isInCart) {
-        setOptimisticCartItems((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(productId!);
-          return newSet;
-        });
-      } else {
-        setOptimisticCartItems((prev) => {
-          const newSet = new Set(prev);
-          newSet.add(productId!);
-          return newSet;
-        });
+    // Start transition for even smoother UI updates
+    startTransition(async () => {
+      try {
+        if (isInCart) {
+          setLocalStatus("removing");
+          // This returns immediately - no waiting!
+          await removeFromCart(variantId!, productId!);
+        } else {
+          setLocalStatus("adding");
+          // This returns immediately - no waiting!
+          await addToCart(variantId!, productId!);
+        }
+        setLocalStatus("idle");
+      } catch (error) {
+        setLocalStatus("error");
+        // Reset error status after a delay
+        setTimeout(() => setLocalStatus("idle"), 2000);
       }
     });
-
-    try {
-      if (isInCart) {
-        await removeFromCart(variantId!, productId!);
-        onRemoveSuccess?.();
-      } else {
-        await addToCart(variantId!, productId!);
-        onAddSuccess?.();
-      }
-    } catch (error) {
-      // Revert optimistic update on error
-      setOptimisticCartItems(new Set(cartItems));
-      onError?.(error);
-    }
   };
 
   const getButtonText = () => {
-    // Show loading states only for actual network requests
-    if (adding && !isPending) return "Adding...";
-    if (removing && !isPending) return "Removing...";
+    // Show immediate feedback
+    if (localStatus === "adding") return "Adding...";
+    if (localStatus === "removing") return "Removing...";
+    if (localStatus === "error") return "Try Again";
     if (cartLoading && cartItems.size === 0) return "Loading...";
-    
+
     return isInCart ? "In Cart" : "Add To Cart";
   };
 
   const getButtonIcon = () => {
     if (!showIcon) return null;
 
+    // Show spinner for pending operations
+    if (
+      isPendingOperation &&
+      (localStatus === "adding" || localStatus === "removing")
+    ) {
+      return <Loader2 className="w-4 h-4 animate-spin" />;
+    }
+
     // Show check icon if item is in cart
-    if (isInCart && !adding && !removing) {
+    if (isInCart && localStatus !== "removing") {
       return <Check className="w-4 h-4" />;
     }
 
     return <ShoppingCart className="w-4 h-4" />;
   };
 
+  const getButtonVariant = () => {
+    if (localStatus === "error") return "destructive";
+    if (isInCart) return "outline";
+    return variant || "default";
+  };
+
+  const getButtonStyles = () => {
+    let styles = "w-full transition-all duration-75 active:scale-95";
+
+    if (isInCart && localStatus !== "error") {
+      styles +=
+        " border-gray-400 text-gray-600 hover:bg-red-50 hover:border-red-500 hover:text-red-600";
+    } else if (localStatus !== "error") {
+      styles += " bg-white hover:bg-gray-100 text-black";
+    }
+
+    if (isPending) {
+      styles += " opacity-95";
+    }
+
+    return `${styles} ${className}`;
+  };
+
   return (
     <Button
       size={size}
-      variant={isInCart ? "outline" : variant || "default"}
+      variant={getButtonVariant()}
       onClick={handleClick}
       disabled={isDisabled}
-      className={`w-full transition-all duration-100 active:scale-95 ${className} ${
-        isInCart
-          ? "border-gray-400 text-gray-600 hover:bg-red-50 hover:border-red-500 hover:text-red-600"
-          : "bg-white hover:bg-gray-100 text-black"
-      } ${isPending ? "opacity-90" : ""}`}
+      className={getButtonStyles()}
     >
       <span className="flex items-center justify-center gap-2 min-w-[100px]">
         {getButtonIcon()}

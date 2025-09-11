@@ -57,7 +57,7 @@ export function BuyNowButton({
       variant={isDisabled ? "secondary" : variant}
       onClick={handleBuyNow}
       disabled={isDisabled}
-      className={`transition-all duration-200 transform active:scale-95 ${
+      className={`transition-all duration-200 transform w-full active:scale-95 ${
         fullWidth ? "flex-1" : ""
       } ${
         !isDisabled 

@@ -2,22 +2,37 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { AddToCartButton } from "@/components/common";
-import { useCart } from "@/hooks/cart/useCart";
 
-type CartStatus =
-  | "idle"
-  | "adding"
-  | "removing"
-  | "added"
-  | "removed"
-  | "error";
+export interface IImages {
+  altText?: string;
+  url: string;
+}
+
+export interface IReview {
+  rating: number; // Changed to number for better type safety
+}
+
+export interface IVarient {
+  id: string;
+  price: string;
+}
+
+export interface IProduct {
+  description: string;
+  id: string;
+  images: IImages[];
+  name: string;
+  reviews: IReview[];
+  slug: string;
+  status: string;
+  variants: IVarient[];
+}
+
 const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
-  const { cartItems, loading: cartLoading } = useCart();
-  const [status, setStatus] = useState<CartStatus>("idle");
-  const [isHovered, setIsHovered] = useState(false);
+  // console.log("products-->", product);
 
   const productData = useMemo(() => {
     const imageUrl = product.images?.[0]?.url ?? "/placeholder.svg";
@@ -32,17 +47,10 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
 
     return { imageUrl, imageAlt, variantId, price, avgRating };
   }, [product]);
-
-  const isInCart = cartItems.has(product.id);
-  const isLoading = status === "adding" || status === "removing" || cartLoading;
-  const isDisabled = !productData.variantId || isLoading;
-
   return (
     <Card className="h-full hover:shadow-lg transition-transform duration-200 hover:scale-[1.01] border-0 shadow-sm">
       <CardContent className="p-3 flex flex-col h-full">
-        {/* Clickable area for navigation */}
         <Link href={`/product/${product.slug}`} className="block group flex-1">
-          {/* Image */}
           <div className="aspect-square mb-3 overflow-hidden rounded-lg bg-gray-50 relative group">
             <Image
               src={productData.imageUrl}
@@ -98,9 +106,6 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
             productId={product.id}
             variantId={productData.variantId}
             inStock={true}
-            onAddSuccess={() => setStatus("added")}
-            onRemoveSuccess={() => setStatus("removed")}
-            onError={() => setStatus("error")}
           />
         </div>
       </CardContent>
