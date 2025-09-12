@@ -62,8 +62,8 @@ const ProductCard = memo<ProductCardProps>(
       };
     }, [product.images, product.variants, product.reviews, product.name]);
 
-    // Memoize star rating component to prevent re-renders
-    const starRating = (() => {
+    // Memoize star rating component using useMemo
+    const starRating = useMemo(() => {
       if (!productData.hasReviews) return null;
 
       return (
