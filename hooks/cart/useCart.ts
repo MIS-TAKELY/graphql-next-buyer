@@ -23,7 +23,7 @@ export const useCart = () => {
   const { data: myCartItemsIds, loading: cartLoading } = useQuery(
     GET_CART_PRODUCT_IDS,
     {
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "cache-first",
       errorPolicy: "all",
       onCompleted: (data) => {
         if (data?.getMyCart) {
@@ -73,7 +73,7 @@ export const useCart = () => {
       setTimeout(() => {
         setCartItems((prev) => new Set([...prev, productId]));
         setItemLoading(false);
-      }, 500);
+      }, 400);
       setPendingOperations((prev) => new Set([...prev, productId]));
 
       addToCartMutation({
@@ -113,7 +113,7 @@ export const useCart = () => {
           setItemLoading(false);
           return newSet;
         });
-      }, 500);
+      }, 400);
       setPendingOperations((prev) => new Set([...prev, productId]));
 
       // Fire mutation with inline handlers
