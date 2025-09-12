@@ -7,7 +7,11 @@ import { useCallback, useMemo, useState } from "react";
 export const useCart = () => {
   // Local optimistic state - this updates instantly
   const [cartItems, setCartItems] = useState<Set<string>>(new Set());
-  const [pendingOperations, setPendingOperations] = useState<Set<string>>(new Set());
+  const [pendingOperations, setPendingOperations] = useState<Set<string>>(
+    new Set()
+  );
+
+  const [itemLoading, setItemLoading] = useState(false);
 
   interface IVariables {
     productId: string;
@@ -16,29 +20,33 @@ export const useCart = () => {
   }
 
   // Load cart items from server
-  const {
-    data: myCartItemsIds,
-    loading: cartLoading,
-  } = useQuery(GET_CART_PRODUCT_IDS, {
-    fetchPolicy: "cache-and-network",
-    errorPolicy: "all",
-    onCompleted: (data) => {
-      if (data?.getMyCart) {
-        const serverIds = new Set<string>(
-          data.getMyCart
-            .map(
-              (item: any) =>
-                item.variant?.product?.id || item.productId || item.product?.id
-            )
-            .filter(Boolean) as string[]
-        );
-        setCartItems(serverIds);
-      }
-    },
-  });
+  const { data: myCartItemsIds, loading: cartLoading } = useQuery(
+    GET_CART_PRODUCT_IDS,
+    {
+      fetchPolicy: "cache-and-network",
+      errorPolicy: "all",
+      onCompleted: (data) => {
+        if (data?.getMyCart) {
+          const serverIds = new Set<string>(
+            data.getMyCart
+              .map(
+                (item: any) =>
+                  item.variant?.product?.id ||
+                  item.productId ||
+                  item.product?.id
+              )
+              .filter(Boolean) as string[]
+          );
+          setCartItems(serverIds);
+        }
+      },
+    }
+  );
 
   const [addToCartMutation] = useMutation<any, IVariables>(ADD_TO_CART);
-  const [removeFromCartMutation] = useMutation<any, IVariables>(REMOVE_FROM_CART);
+  const [removeFromCartMutation] = useMutation<any, IVariables>(
+    REMOVE_FROM_CART
+  );
 
   // Server cart items (for fallback/sync)
   const serverCartItems = useMemo<Set<string>>(() => {
@@ -59,14 +67,15 @@ export const useCart = () => {
     return new Set(ids);
   }, [myCartItemsIds?.getMyCart]);
 
-  // Instantly add to cart with optimistic update
   const addToCart = useCallback(
     async (variantId: string, productId: string) => {
-      // INSTANT optimistic UI update
-      setCartItems((prev) => new Set([...prev, productId]));
+      setItemLoading(true);
+      setTimeout(() => {
+        setCartItems((prev) => new Set([...prev, productId]));
+        setItemLoading(false);
+      }, 500);
       setPendingOperations((prev) => new Set([...prev, productId]));
 
-      // Fire mutation with inline handlers
       addToCartMutation({
         variables: { variantId, quantity: 1, productId },
         onCompleted: () => {
@@ -78,7 +87,6 @@ export const useCart = () => {
         },
         onError: () => {
           console.error("Add to cart error");
-          // Revert optimistic update
           setCartItems((prev) => {
             const newSet = new Set(prev);
             newSet.delete(productId);
@@ -95,15 +103,17 @@ export const useCart = () => {
     [addToCartMutation]
   );
 
-  // Instantly remove from cart with optimistic update
   const removeFromCart = useCallback(
     async (variantId: string, productId: string) => {
-      // INSTANT optimistic UI update
-      setCartItems((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(productId);
-        return newSet;
-      });
+      setItemLoading(true);
+      setTimeout(() => {
+        setCartItems((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(productId);
+          setItemLoading(false);
+          return newSet;
+        });
+      }, 500);
       setPendingOperations((prev) => new Set([...prev, productId]));
 
       // Fire mutation with inline handlers
@@ -118,7 +128,6 @@ export const useCart = () => {
         },
         onError: () => {
           console.error("Remove from cart error");
-          // Revert optimistic update
           setCartItems((prev) => new Set([...prev, productId]));
           setPendingOperations((prev) => {
             const newSet = new Set(prev);
@@ -132,13 +141,14 @@ export const useCart = () => {
   );
 
   return {
-    cartItems,          // Optimistic cart state
-    serverCartItems,    // Server state for debugging
+    cartItems,
+    serverCartItems,
     cartLoading,
     addToCart,
     removeFromCart,
     adding: pendingOperations.size > 0,
     removing: pendingOperations.size > 0,
-    pendingOperations,  // Debugging helper
+    pendingOperations,
+    itemLoading,
   };
 };

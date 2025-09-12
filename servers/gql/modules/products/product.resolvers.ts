@@ -64,7 +64,7 @@ export const productResolvers = {
       });
 
       if (product) {
-        await setCache(cacheKey, product, 600); // cache for 10 minutes
+        await setCache(cacheKey, product, 600);
       }
 
       return product;

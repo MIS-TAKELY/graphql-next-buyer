@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/cart/useCart";
 import { Check, Loader2, ShoppingCart } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 
 type CartStatus = "idle" | "adding" | "removing" | "error";
 
@@ -43,77 +43,51 @@ export function AddToCartButton({
   onRemoveSuccess,
   onError,
 }: AddToCartButtonProps) {
-  const [isPending, startTransition] = useTransition();
-  const [localStatus, setLocalStatus] = useState<CartStatus>("idle");
-
   const {
     cartItems,
     cartLoading,
-    adding,
-    removing,
     addToCart,
     removeFromCart,
     pendingOperations,
+    itemLoading,
   } = useCart();
 
   const isInCart = cartItems.has(productId || "");
   const isDisabled = disabled || !variantId || cartLoading;
   const isPendingOperation = pendingOperations.has(productId || "");
 
-  // Ultra-fast click handler - updates instantly
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (isDisabled) return;
 
-    // Start transition for even smoother UI updates
-    startTransition(async () => {
-      try {
-        if (isInCart) {
-          setLocalStatus("removing");
-          // This returns immediately - no waiting!
-          await removeFromCart(variantId!, productId!);
-          onRemoveSuccess?.();
-        } else {
-          setLocalStatus("adding");
-          // This returns immediately - no waiting!
-          await addToCart(variantId!, productId!);
-          onAddSuccess?.();
-        }
-        setLocalStatus("idle");
-      } catch (error) {
-        setLocalStatus("error");
-        onError?.(error);
-        // Reset error status after a delay
-        setTimeout(() => setLocalStatus("idle"), 2000);
+    try {
+      if (isInCart) {
+        await removeFromCart(variantId!, productId!);
+        onRemoveSuccess?.();
+      } else {
+        await addToCart(variantId!, productId!);
+        onAddSuccess?.();
       }
-    });
+    } catch (error) {
+      onError?.(error);
+    }
   };
 
   const getButtonText = () => {
-    // Show immediate feedback
-    if (localStatus === "adding") return "Adding...";
-    if (localStatus === "removing") return "Removing...";
-    if (localStatus === "error") return "Try Again";
     if (cartLoading && cartItems.size === 0) return "Loading...";
-
     return isInCart ? "In Cart" : "Add To Cart";
   };
 
   const getButtonIcon = () => {
     if (!showIcon) return null;
 
-    // Show spinner for pending operations
-    if (
-      isPendingOperation &&
-      (localStatus === "adding" || localStatus === "removing")
-    ) {
+    if (itemLoading && isPendingOperation) {
       return <Loader2 className="w-4 h-4 animate-spin" />;
     }
 
-    // Show check icon if item is in cart
-    if (isInCart && localStatus !== "removing") {
+    if (isInCart) {
       return <Check className="w-4 h-4" />;
     }
 
@@ -121,7 +95,6 @@ export function AddToCartButton({
   };
 
   const getButtonVariant = () => {
-    if (localStatus === "error") return "destructive";
     if (isInCart) return "outline";
     return variant || "default";
   };
@@ -129,15 +102,11 @@ export function AddToCartButton({
   const getButtonStyles = () => {
     let styles = "w-full transition-all duration-75 active:scale-95";
 
-    if (isInCart && localStatus !== "error") {
+    if (isInCart) {
       styles +=
         " border-gray-400 text-gray-600 hover:bg-red-50 hover:border-red-500 hover:text-red-600";
-    } else if (localStatus !== "error") {
+    } else {
       styles += " bg-white hover:bg-gray-100 text-black";
-    }
-
-    if (isPending) {
-      styles += " opacity-95";
     }
 
     return `${styles} ${className}`;
@@ -148,7 +117,7 @@ export function AddToCartButton({
       size={size}
       variant={getButtonVariant()}
       onClick={handleClick}
-      disabled={isDisabled}
+      disabled={isDisabled || itemLoading}
       className={getButtonStyles()}
     >
       <span className="flex items-center justify-center gap-2 min-w-[100px]">
