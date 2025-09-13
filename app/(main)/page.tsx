@@ -4,6 +4,7 @@ import { IProduct } from "@/components/page/home/ProductCard";
 import ProductCatagoryCardSection from "@/components/page/home/ProductCatagoryCardSection";
 import ProductSection from "@/components/page/home/ProductSection";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
+import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
 
 export const revalidate = 3600;
 
@@ -24,7 +25,7 @@ export default async function HomePage() {
   });
   // console.log(productsResponse);
   const products = productsResponse?.data?.getProducts || [];
-  // console.log(products);
+  console.log(products);
 
   // Compute slices once for optimization
   const sharedSlice = products.slice(0, 8); // Reuse for sections with same data
@@ -56,15 +57,17 @@ export default async function HomePage() {
       <ProductCatagoryCardSection />
       <HeroCarousel />
       <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8">
-        {sections.map((section) => (
-          <ProductSection
-            key={section.name}
-            name={section.name}
-            products={section.products}
-            count={section.count}
-            layout={section.layout}
-          />
-        ))}
+        <SSRApolloProvider initialData={{ products }}>
+          {sections.map((section) => (
+            <ProductSection
+              key={section.name}
+              name={section.name}
+              products={section.products}
+              count={section.count}
+              layout={section.layout}
+            />
+          ))}
+        </SSRApolloProvider>
       </div>
     </div>
   );

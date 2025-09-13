@@ -2,9 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/cart/useCart";
 import { Check, Loader2, ShoppingCart } from "lucide-react";
-import { useState } from "react";
-
-type CartStatus = "idle" | "adding" | "removing" | "error";
 
 interface AddToCartButtonProps {
   productId?: string;

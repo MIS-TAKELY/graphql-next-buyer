@@ -97,7 +97,7 @@ const ProductCard = memo<ProductCardProps>(
           <Link
             href={`/product/${product.slug}`}
             className="block group flex-1"
-            prefetch={false} // Only prefetch on hover/focus
+            prefetch={true}
           >
             <div className="aspect-square mb-3 overflow-hidden rounded-lg bg-gray-50 relative group">
               <Image

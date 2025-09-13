@@ -1,23 +1,19 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Star } from "lucide-react";
-
-interface Review {
-  id: number;
-  user: string;
-  rating: number;
-  date: string;
-  comment: string;
-  verified: boolean;
-}
+import { useMemo } from "react";
 
 interface ProductTabsProps {
+  product: any;
   averageRating: number;
-  mockReviews: Review[];
+  mockReviews: any[];
 }
 
-export default function ProductTabs({ averageRating, mockReviews }: ProductTabsProps) {
+export default function ProductTabs({ product, averageRating, mockReviews }: ProductTabsProps) {
+  const specifications = useMemo(() => product?.specifications || {}, [product]);
+  const features = useMemo(() => product?.features || [], [product]);
+
   return (
     <Tabs defaultValue="specifications" className="w-full">
       <TabsList className="grid w-full grid-cols-3">
@@ -30,7 +26,16 @@ export default function ProductTabs({ averageRating, mockReviews }: ProductTabsP
         <Card>
           <CardContent className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Specifications content */}
+              {Object.entries(specifications).length > 0 ? (
+                Object.entries(specifications).map(([key, value]) => (
+                  <div key={key} className="flex justify-between">
+                    <span className="text-gray-600">{key}</span>
+                    <span className="font-medium">{value as string}</span>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-600">No specifications available</p>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -50,38 +55,44 @@ export default function ProductTabs({ averageRating, mockReviews }: ProductTabsP
                   />
                 ))}
               </div>
-              <div className="text-sm text-gray-600">Based on 127 reviews</div>
+              <div className="text-sm text-gray-600">
+                Based on {mockReviews.length} reviews
+              </div>
             </div>
           </div>
           <div className="space-y-4">
-            {mockReviews.map((review) => (
-              <Card key={review.id}>
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">{review.user}</span>
-                      {review.verified && (
-                        <Badge variant="secondary" className="text-xs">
-                          Verified Purchase
-                        </Badge>
-                      )}
+            {mockReviews.length > 0 ? (
+              mockReviews.map((review) => (
+                <Card key={review.id}>
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{review.user}</span>
+                        {review.verified && (
+                          <Badge variant="secondary" className="text-xs">
+                            Verified Purchase
+                          </Badge>
+                        )}
+                      </div>
+                      <span className="text-sm text-gray-500">{review.date}</span>
                     </div>
-                    <span className="text-sm text-gray-500">{review.date}</span>
-                  </div>
-                  <div className="flex mb-2">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 fill-current ${
-                          i < review.rating ? "text-yellow-400" : "text-gray-300"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-gray-700">{review.comment}</p>
-                </CardContent>
-              </Card>
-            ))}
+                    <div className="flex mb-2">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-4 h-4 fill-current ${
+                            i < review.rating ? "text-yellow-400" : "text-gray-300"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-gray-700">{review.comment}</p>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <p className="text-gray-600">No reviews available</p>
+            )}
           </div>
         </div>
       </TabsContent>
@@ -90,7 +101,13 @@ export default function ProductTabs({ averageRating, mockReviews }: ProductTabsP
         <Card>
           <CardContent className="p-6">
             <ul className="space-y-3">
-              {/* Features content */}
+              {features.length > 0 ? (
+                features.map((feature: string, index: number) => (
+                  <li key={index} className="text-gray-700">{feature}</li>
+                ))
+              ) : (
+                <p className="text-gray-600">No features available</p>
+              )}
             </ul>
           </CardContent>
         </Card>

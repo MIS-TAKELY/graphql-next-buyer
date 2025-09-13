@@ -1,4 +1,4 @@
-// lib/apollo/ssr-provider.tsx
+// lib/apollo/ssr-provider.tsx (Most robust version)
 "use client";
 
 import { ApolloClient, ApolloProvider, createHttpLink } from "@apollo/client";
@@ -7,12 +7,13 @@ import { useAuth } from "@clerk/nextjs";
 import { useMemo } from "react";
 import { APOLLO_CONFIG, APOLLO_DEFAULT_OPTIONS } from "./config";
 
-// Update initialData type to accept multiple queries
 interface SSRApolloProviderProps {
   children: React.ReactNode;
   initialData?: {
     addresses?: any[];
-    userProfile?: any; // add any other prefetched queries here
+    userProfile?: any;
+    products?: any[];
+    currentProduct?: any;
   };
 }
 
@@ -30,6 +31,8 @@ export function SSRApolloProvider({
       };
     });
 
+    console.log("auth link-->", authLink);
+
     const httpLink = createHttpLink({
       uri:
         `${process.env.NEXT_PUBLIC_APP_URL}/api/graphql` ||
@@ -42,28 +45,66 @@ export function SSRApolloProvider({
       defaultOptions: APOLLO_DEFAULT_OPTIONS,
     });
 
-    // Hydrate multiple prefetched queries into the cache
+    // console.log("inner cllient-->",client)
+
+    // Hydrate cache with initial data
     if (initialData) {
-      if (initialData.addresses) {
-        client.cache.writeQuery({
-          query: require("@/client/address/address.queries")
-            .GET_ADDRESS_OF_USER,
-          data: { getAddressOfUser: initialData.addresses },
-        });
-      }
+      try {
+        // Write addresses
+        if (initialData.addresses) {
+          client.cache.writeQuery({
+            query: require("@/client/address/address.queries")
+              .GET_ADDRESS_OF_USER,
+            data: { getAddressOfUser: initialData.addresses },
+          });
+        }
 
-      if (initialData.userProfile) {
-        client.cache.writeQuery({
-          query: require("@/client/user/user.queries").GET_USER_PROFILE_DETAILS,
-          data: initialData.userProfile,
-        });
-      }
+        // Write user profile
+        if (initialData.userProfile) {
+          client.cache.writeQuery({
+            query: require("@/client/user/user.queries")
+              .GET_USER_PROFILE_DETAILS,
+            data: initialData.userProfile,
+          });
+        }
 
-      // Add more queries here as needed in the future
+        // Write products (most important for your case)
+        if (initialData.products && Array.isArray(initialData.products)) {
+          let productsToCache = [...initialData.products];
+
+          // If we have a current product that's not in the products array, add it
+          if (initialData.currentProduct) {
+            const productExists = productsToCache.some(
+              (p) => p.id === initialData.currentProduct.id
+            );
+            if (!productExists) {
+              productsToCache.push(initialData.currentProduct);
+            }
+          }
+
+          client.cache.writeQuery({
+            query: require("@/client/product/product.queries").GET_PRODUCTS,
+            data: { getProducts: productsToCache },
+          });
+
+          // console.log(`✅ Cached ${productsToCache.length} products`);
+        }
+      } catch (error) {
+        console.error("❌ Error hydrating Apollo cache:", error);
+        // Don't throw - let the app continue with an empty cache
+      }
     }
 
     return client;
-  }, [getToken, initialData]);
+  }, [
+    getToken,
+    initialData?.addresses,
+    initialData?.userProfile,
+    initialData?.products,
+    initialData?.currentProduct,
+  ]);
+
+  // console.log("outter cllient-->",client)
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 }

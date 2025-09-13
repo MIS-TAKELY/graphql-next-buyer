@@ -12,7 +12,7 @@ export const productResolvers = {
       // 1. Try cache
       const cached = await getCache(cacheKey);
       if (cached) {
-        console.log("Returning products from Redis");
+        console.log("⚡Returning products from Redis");
         return cached;
       }
 
@@ -70,32 +70,67 @@ export const productResolvers = {
       return product;
     },
 
-    getProductBySlug: async (_: any, { slug }: { slug: string }) => {
-      if (!slug) throw new Error("slug id is required");
+    getProductBySlug: async (
+      _: any,
+      { slug }: { slug: string },
+      ctx: GraphQLContext
+    ) => {
+      if (!slug) throw new Error("Slug is required");
 
       const cacheKey = `products:slug:${slug}`;
-
       const cached = await getCache(cacheKey);
       if (cached) {
         console.log("⚡ Returning product from Redis");
         return cached;
       }
 
+      const start = Date.now();
       const product = await prisma.product.findUnique({
         where: { slug },
-        include: {
-          seller: true,
-          variants: { include: { specifications: true } },
-          images: true,
-          reviews: true,
-          category: { include: { children: true, parent: true } },
-          brand: true,
-          wishlistItems: true,
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          slug: true,
+          status: true,
+          returnPolicy: true,
+          warranty: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+              parent: { select: { id: true, name: true } },
+            },
+          },
+          brand: { select: { id: true, name: true } },
+          seller: { select: { id: true, firstName: true, lastName: true } },
+          images: {
+            select: {
+              id: true,
+              url: true,
+              altText: true,
+              sortOrder: true,
+              type: true,
+            },
+          },
+          variants: {
+            select: { id: true, price: true, stock: true, isDefault: true },
+          },
+          reviews: {
+            select: {
+              id: true,
+              rating: true,
+              comment: true,
+              createdAt: true,
+              user: { select: { firstName: true, lastName: true } },
+            },
+          },
         },
       });
+      console.log(`getProductBySlug query took ${Date.now() - start}ms`);
 
       if (product) {
-        await setCache(cacheKey, product, 600);
+        await setCache(cacheKey, product, 3600); // Cache for 1 hour
       }
 
       return product;

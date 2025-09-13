@@ -2,6 +2,7 @@
 import { ADD_TO_CART, REMOVE_FROM_CART } from "@/client/cart/cart.mutations";
 import { GET_CART_PRODUCT_IDS } from "@/client/cart/cart.queries";
 import { useMutation, useQuery } from "@apollo/client";
+import { useAuth } from "@clerk/nextjs";
 import { useCallback, useMemo, useState } from "react";
 
 export const useCart = () => {
@@ -11,6 +12,7 @@ export const useCart = () => {
     new Set()
   );
 
+  const { userId } = useAuth();
   const [itemLoading, setItemLoading] = useState(false);
 
   interface IVariables {
@@ -19,10 +21,12 @@ export const useCart = () => {
     variantId: string;
   }
 
-  // Load cart items from server
+  // Load cart items from server unconditionally
   const { data: myCartItemsIds, loading: cartLoading } = useQuery(
     GET_CART_PRODUCT_IDS,
     {
+      // Use skip to avoid running the query when userId is falsy
+      skip: !userId, // or use `enabled: !!userId` in newer Apollo Client versions
       fetchPolicy: "cache-first",
       errorPolicy: "all",
       onCompleted: (data) => {
@@ -43,14 +47,9 @@ export const useCart = () => {
     }
   );
 
-  const [addToCartMutation] = useMutation<any, IVariables>(ADD_TO_CART);
-  const [removeFromCartMutation] = useMutation<any, IVariables>(
-    REMOVE_FROM_CART
-  );
-
-  // Server cart items (for fallback/sync)
+  // Compute serverCartItems with a default value when userId is falsy
   const serverCartItems = useMemo<Set<string>>(() => {
-    if (!myCartItemsIds?.getMyCart) return new Set();
+    if (!userId || !myCartItemsIds?.getMyCart) return new Set();
     const ids = myCartItemsIds.getMyCart
       .map((item: any) => {
         if (item.variant?.product?.id) {
@@ -65,10 +64,19 @@ export const useCart = () => {
       .filter(Boolean);
 
     return new Set(ids);
-  }, [myCartItemsIds?.getMyCart]);
+  }, [userId, myCartItemsIds?.getMyCart]);
+
+  const [addToCartMutation] = useMutation<any, IVariables>(ADD_TO_CART);
+  const [removeFromCartMutation] = useMutation<any, IVariables>(
+    REMOVE_FROM_CART
+  );
 
   const addToCart = useCallback(
     async (variantId: string, productId: string) => {
+      if (!userId) {
+        console.error("Cannot add to cart: No user ID");
+        return;
+      }
       setItemLoading(true);
       setTimeout(() => {
         setCartItems((prev) => new Set([...prev, productId]));
@@ -76,35 +84,43 @@ export const useCart = () => {
       }, 400);
       setPendingOperations((prev) => new Set([...prev, productId]));
 
-      addToCartMutation({
-        variables: { variantId, quantity: 1, productId },
-        onCompleted: () => {
-          setPendingOperations((prev) => {
-            const newSet = new Set(prev);
-            newSet.delete(productId);
-            return newSet;
-          });
-        },
-        onError: () => {
-          console.error("Add to cart error");
-          setCartItems((prev) => {
-            const newSet = new Set(prev);
-            newSet.delete(productId);
-            return newSet;
-          });
-          setPendingOperations((prev) => {
-            const newSet = new Set(prev);
-            newSet.delete(productId);
-            return newSet;
-          });
-        },
-      }).catch(() => {});
+      try {
+        await addToCartMutation({
+          variables: { variantId, quantity: 1, productId },
+          onCompleted: () => {
+            setPendingOperations((prev) => {
+              const newSet = new Set(prev);
+              newSet.delete(productId);
+              return newSet;
+            });
+          },
+          onError: () => {
+            console.error("Add to cart error");
+            setCartItems((prev) => {
+              const newSet = new Set(prev);
+              newSet.delete(productId);
+              return newSet;
+            });
+            setPendingOperations((prev) => {
+              const newSet = new Set(prev);
+              newSet.delete(productId);
+              return newSet;
+            });
+          },
+        });
+      } catch (error) {
+        console.error("Add to cart mutation failed", error);
+      }
     },
-    [addToCartMutation]
+    [addToCartMutation, userId]
   );
 
   const removeFromCart = useCallback(
     async (variantId: string, productId: string) => {
+      if (!userId) {
+        console.error("Cannot remove from cart: No user ID");
+        return;
+      }
       setItemLoading(true);
       setTimeout(() => {
         setCartItems((prev) => {
@@ -116,28 +132,31 @@ export const useCart = () => {
       }, 400);
       setPendingOperations((prev) => new Set([...prev, productId]));
 
-      // Fire mutation with inline handlers
-      removeFromCartMutation({
-        variables: { variantId, productId },
-        onCompleted: () => {
-          setPendingOperations((prev) => {
-            const newSet = new Set(prev);
-            newSet.delete(productId);
-            return newSet;
-          });
-        },
-        onError: () => {
-          console.error("Remove from cart error");
-          setCartItems((prev) => new Set([...prev, productId]));
-          setPendingOperations((prev) => {
-            const newSet = new Set(prev);
-            newSet.delete(productId);
-            return newSet;
-          });
-        },
-      }).catch(() => {});
+      try {
+        await removeFromCartMutation({
+          variables: { variantId, productId },
+          onCompleted: () => {
+            setPendingOperations((prev) => {
+              const newSet = new Set(prev);
+              newSet.delete(productId);
+              return newSet;
+            });
+          },
+          onError: () => {
+            console.error("Remove from cart error");
+            setCartItems((prev) => new Set([...prev, productId]));
+            setPendingOperations((prev) => {
+              const newSet = new Set(prev);
+              newSet.delete(productId);
+              return newSet;
+            });
+          },
+        });
+      } catch (error) {
+        console.error("Remove from cart mutation failed", error);
+      }
     },
-    [removeFromCartMutation]
+    [removeFromCartMutation, userId]
   );
 
   return {

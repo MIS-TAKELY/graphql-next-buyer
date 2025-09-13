@@ -70,15 +70,52 @@ export const GET_PRODUCT_BY_SLUG = gql`
       description
       slug
       status
-      # salePrice
-      # saleStart
-      # saleEnd
+      images {
+        id
+        url
+        altText
+        sortOrder
+      }
+      reviews {
+        id
+        user
+        rating
+        date
+        comment
+        verified
+      }
+      variants {
+        id
+        price
+        stock
+        isDefault
+      }
+      category {
+        name
+      }
+      seller {
+        firstName
+        lastName
+      }
+      brand {
+        name
+      }
+      warranty
+      specifications
+      features
+    }
+  }
+`;
+
+export const GET_PRODUCT_DETAILS = gql`
+  query GetProductDetails($slug: String!) {
+    getProductBySlug(slug: $slug) {
+      id
       returnPolicy
       warranty
       category {
         id
         name
-        slug
         parent {
           id
           name
@@ -87,30 +124,19 @@ export const GET_PRODUCT_BY_SLUG = gql`
       brand {
         id
         name
-        slug
       }
       seller {
         id
         firstName
         lastName
       }
-      images {
-        id
-        url
-        altText
-        sortOrder
-        type
-      }
       variants {
         id
-        price
         stock
         isDefault
-        attributes
       }
       reviews {
         id
-        rating
         comment
         createdAt
         user {
