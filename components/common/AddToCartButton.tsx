@@ -1,6 +1,7 @@
-"use client";
+// components/AddToCartButton.tsx
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/cart/useCart";
+import { useAuth } from "@clerk/nextjs";
 import { Check, Loader2, ShoppingCart } from "lucide-react";
 
 interface AddToCartButtonProps {
@@ -48,6 +49,7 @@ export function AddToCartButton({
     pendingOperations,
     itemLoading,
   } = useCart();
+  const { userId } = useAuth();
 
   const isInCart = cartItems.has(productId || "");
   const isDisabled = disabled || !variantId || cartLoading;
@@ -64,7 +66,7 @@ export function AddToCartButton({
         await removeFromCart(variantId!, productId!);
         onRemoveSuccess?.();
       } else {
-        await addToCart(variantId!, productId!);
+        await addToCart(variantId!, productId!, quantity);
         onAddSuccess?.();
       }
     } catch (error) {
@@ -117,7 +119,7 @@ export function AddToCartButton({
       disabled={isDisabled || itemLoading}
       className={getButtonStyles()}
     >
-      <span className="flex items-center justify-center gap-2  min-w-[100px]">
+      <span className="flex items-center justify-center gap-2 min-w-[100px]">
         {getButtonIcon()}
         <span>{getButtonText()}</span>
       </span>

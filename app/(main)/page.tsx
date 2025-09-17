@@ -25,7 +25,7 @@ export default async function HomePage() {
   });
   // console.log(productsResponse);
   const products = productsResponse?.data?.getProducts || [];
-  console.log(products);
+  // console.log(products);
 
   // Compute slices once for optimization
   const sharedSlice = products.slice(0, 8); // Reuse for sections with same data

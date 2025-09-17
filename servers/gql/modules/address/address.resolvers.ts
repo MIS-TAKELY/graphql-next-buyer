@@ -74,7 +74,7 @@ export const addressResolvers = {
         if (!createAddressResponse) throw new Error("Unable to create Address");
         return true;
       } catch (error: any) {
-        console.log("Error occured while creating address", error.message);
+        // console.log("Error occured while creating address", error.message);
         console.error(error);
         return false;
       }
@@ -123,7 +123,7 @@ export const addressResolvers = {
         if (!createAddressResponse) throw new Error("Unable to update Address");
         return true;
       } catch (error: any) {
-        console.log("Error occured while updating address", error.message);
+        // console.log("Error occured while updating address", error.message);
         console.error(error);
         return false;
       }
@@ -148,7 +148,7 @@ export const addressResolvers = {
           throw new Error("Internal server error unable to delete the address");
         return true;
       } catch (error: any) {
-        console.log("Error occured while deleting address", error.message);
+        // console.log("Error occured while deleting address", error.message);
         console.error(error);
         return false;
       }

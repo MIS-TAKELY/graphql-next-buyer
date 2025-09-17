@@ -9,13 +9,13 @@ export async function GET(request: NextRequest) {
     const refId = searchParams.get("refId");
     const amt = searchParams.get("amt");
 
-    console.log("eSewa Callback received:", {
-      status,
-      pid,
-      orderId,
-      refId,
-      amt,
-    });
+    // console.log("eSewa Callback received:", {
+    //   status,
+    //   pid,
+    //   orderId,
+    //   refId,
+    //   amt,
+    // });
 
     if (!pid || !orderId) {
       console.error("Missing required parameters");

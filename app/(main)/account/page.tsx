@@ -37,8 +37,8 @@ export default async function AccountPage() {
     const userProfileDetails = userProfileRes.data;
     const addressesData = addressesRes.data;
 
-    console.log("user profile details", userProfileDetails);
-    console.log("addressesData", addressesData);
+    // console.log("user profile details", userProfileDetails);
+    // console.log("addressesData", addressesData);
 
     // Write user profile to cache
     if (userProfileDetails?.getUserProfileDetails) {

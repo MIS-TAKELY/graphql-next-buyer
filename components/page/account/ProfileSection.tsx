@@ -61,7 +61,7 @@ export default function ProfileSection() {
   // console.log("response", userProfileDetails);
 
   const handleSave = async () => {
-    console.log("user-->", form);
+    // console.log("user-->", form);
     await updateUserProfileDetails({
       variables: {
         input: {

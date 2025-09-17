@@ -20,7 +20,7 @@ export const prisma =
 
 if (process.env.NODE_ENV === "development") {
   process.on("beforeExit", async () => {
-    console.log("Process is exiting, disconnecting Prisma...");
+    // console.log("Process is exiting, disconnecting Prisma...");
     await prisma.$disconnect();
   });
 }

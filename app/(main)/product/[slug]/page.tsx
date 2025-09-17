@@ -21,7 +21,7 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  console.log("Slug being used:", slug); // Debug slug
+  // console.log("Slug being used:", slug); // Debug slug
   const client = await getServerApolloClient();
 
   let product: TProduct | null = null;
@@ -47,7 +47,7 @@ export default async function ProductPage({
       variants: [],
     };
 
-    console.log("Product from list-->", productFromList);
+    // console.log("Product from list-->", productFromList);
 
     const { data: remainingData, error } = await client.query({
       query: GET_REMAINING_PRODUCT_BY_SLUG,
@@ -59,7 +59,7 @@ export default async function ProductPage({
       console.error("Error fetching remaining product data:", error);
     }
 
-    console.log("Remaining data:", remainingData);
+    // console.log("Remaining data:", remainingData);
     const productFromRemaining: IRemainingProductDetails =
       remainingData?.getProductBySlug || {};
     if (productFromRemaining) {
@@ -102,7 +102,7 @@ export default async function ProductPage({
       } as TProduct;
     }
 
-    console.log("Product found in all products:", product);
+    // console.log("Product found in all products:", product);
   } catch (error) {
     console.error("Error fetching all products:", error);
   }
@@ -136,7 +136,7 @@ export default async function ProductPage({
     currentProduct: product,
   };
 
-  console.log("Final product:", product);
+  // console.log("Final product:", product);
 
   return (
     <SSRApolloProvider initialData={initialCacheData}>

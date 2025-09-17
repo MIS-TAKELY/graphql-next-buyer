@@ -128,7 +128,7 @@ const UpdateAddressForm = React.memo<UpdateAddressFormProps>(
         try {
           const submissionData = getSubmissionData();
           const result = await submit(submissionData as any);
-          console.log("Address updated successfully:", result);
+          // console.log("Address updated successfully:", result);
 
           setIsSuccess(true);
           setIsEditing(false);

@@ -3,7 +3,23 @@ import { ADD_TO_CART, REMOVE_FROM_CART } from "@/client/cart/cart.mutations";
 import { GET_CART_PRODUCT_IDS } from "@/client/cart/cart.queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useAuth } from "@clerk/nextjs";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+// Local storage keys
+const ANONYMOUS_CART_KEY = "anonymous_cart";
+const CART_SYNC_KEY = "cart_sync_timestamp";
+
+interface CartItem {
+  productId: string;
+  variantId: string;
+  quantity: number;
+  addedAt: number; // timestamp for ordering
+}
+
+interface AnonymousCart {
+  items: CartItem[];
+  lastUpdated: number;
+}
 
 export const useCart = () => {
   // Local optimistic state - this updates instantly
@@ -11,6 +27,7 @@ export const useCart = () => {
   const [pendingOperations, setPendingOperations] = useState<Set<string>>(
     new Set()
   );
+  const [anonymousCartItems, setAnonymousCartItems] = useState<CartItem[]>([]);
 
   const { userId } = useAuth();
   const [itemLoading, setItemLoading] = useState(false);
@@ -21,12 +38,58 @@ export const useCart = () => {
     variantId: string;
   }
 
-  // Load cart items from server unconditionally
+  const getAnonymousCart = useCallback((): AnonymousCart => {
+    if (typeof window === "undefined") return { items: [], lastUpdated: 0 };
+
+    try {
+      const stored = localStorage.getItem(ANONYMOUS_CART_KEY);
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (error) {
+      console.error("Error reading anonymous cart:", error);
+    }
+    return { items: [], lastUpdated: 0 };
+  }, []);
+
+  const saveAnonymousCart = useCallback((cart: AnonymousCart) => {
+    if (typeof window === "undefined") return;
+
+    try {
+      localStorage.setItem(ANONYMOUS_CART_KEY, JSON.stringify(cart));
+      localStorage.setItem(CART_SYNC_KEY, Date.now().toString());
+    } catch (error) {
+      console.error("Error saving anonymous cart:", error);
+    }
+  }, []);
+
+  const clearAnonymousCart = useCallback(() => {
+    if (typeof window === "undefined") return;
+
+    try {
+      localStorage.removeItem(ANONYMOUS_CART_KEY);
+      localStorage.removeItem(CART_SYNC_KEY);
+      setAnonymousCartItems([]);
+    } catch (error) {
+      console.error("Error clearing anonymous cart:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    const cart = getAnonymousCart();
+    setAnonymousCartItems(cart.items);
+
+    // Create a set of product IDs for quick lookup
+    const productIds = new Set(cart.items.map((item) => item.productId));
+    if (!userId) {
+      setCartItems(productIds);
+    }
+  }, [getAnonymousCart, userId]);
+
   const { data: myCartItemsIds, loading: cartLoading } = useQuery(
     GET_CART_PRODUCT_IDS,
     {
-      // Use skip to avoid running the query when userId is falsy
-      skip: !userId, // or use `enabled: !!userId` in newer Apollo Client versions
+      skip: !userId,
       fetchPolicy: "cache-first",
       errorPolicy: "all",
       onCompleted: (data) => {
@@ -47,7 +110,6 @@ export const useCart = () => {
     }
   );
 
-  // Compute serverCartItems with a default value when userId is falsy
   const serverCartItems = useMemo<Set<string>>(() => {
     if (!userId || !myCartItemsIds?.getMyCart) return new Set();
     const ids = myCartItemsIds.getMyCart
@@ -71,12 +133,101 @@ export const useCart = () => {
     REMOVE_FROM_CART
   );
 
+  // Anonymous cart operations
+  const addToAnonymousCart = useCallback(
+    (variantId: string, productId: string, quantity: number = 1) => {
+      const cart = getAnonymousCart();
+      const existingItemIndex = cart.items.findIndex(
+        (item) => item.productId === productId
+      );
+
+      if (existingItemIndex >= 0) {
+        // Update existing item quantity
+        cart.items[existingItemIndex].quantity += quantity;
+      } else {
+        // Add new item
+        cart.items.push({
+          productId,
+          variantId,
+          quantity,
+          addedAt: Date.now(),
+        });
+      }
+
+      cart.lastUpdated = Date.now();
+      saveAnonymousCart(cart);
+      setAnonymousCartItems(cart.items);
+
+      // Update the cartItems set for UI consistency
+      setCartItems((prev) => new Set([...prev, productId]));
+    },
+    [getAnonymousCart, saveAnonymousCart]
+  );
+
+  const removeFromAnonymousCart = useCallback(
+    (productId: string) => {
+      const cart = getAnonymousCart();
+      cart.items = cart.items.filter((item) => item.productId !== productId);
+      cart.lastUpdated = Date.now();
+
+      saveAnonymousCart(cart);
+      setAnonymousCartItems(cart.items);
+
+      // Update the cartItems set for UI consistency
+      setCartItems((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(productId);
+        return newSet;
+      });
+    },
+    [getAnonymousCart, saveAnonymousCart]
+  );
+
+  // Function to sync anonymous cart to server when user logs in
+  const syncAnonymousCartToServer = useCallback(async () => {
+    if (!userId || anonymousCartItems.length === 0) return;
+
+    try {
+      // Add all anonymous cart items to server
+      for (const item of anonymousCartItems) {
+        await addToCartMutation({
+          variables: {
+            variantId: item.variantId,
+            productId: item.productId,
+            quantity: item.quantity,
+          },
+        });
+      }
+
+      // Clear anonymous cart after successful sync
+      clearAnonymousCart();
+
+      console.log("Anonymous cart synced to server successfully");
+    } catch (error) {
+      console.error("Failed to sync anonymous cart to server:", error);
+    }
+  }, [userId, anonymousCartItems, addToCartMutation, clearAnonymousCart]);
+
+  // Auto-sync when user logs in
+  useEffect(() => {
+    if (userId && anonymousCartItems.length > 0) {
+      syncAnonymousCartToServer();
+    }
+  }, [userId, syncAnonymousCartToServer, anonymousCartItems.length]);
+
   const addToCart = useCallback(
-    async (variantId: string, productId: string) => {
+    async (variantId: string, productId: string, quantity: number = 1) => {
+      // Handle anonymous users
       if (!userId) {
-        console.error("Cannot add to cart: No user ID");
+        setItemLoading(true);
+        setTimeout(() => {
+          addToAnonymousCart(variantId, productId, quantity);
+          setItemLoading(false);
+        }, 400);
         return;
       }
+
+      // Handle logged-in users (existing logic)
       setItemLoading(true);
       setTimeout(() => {
         setCartItems((prev) => new Set([...prev, productId]));
@@ -86,7 +237,7 @@ export const useCart = () => {
 
       try {
         await addToCartMutation({
-          variables: { variantId, quantity: 1, productId },
+          variables: { variantId, quantity, productId },
           onCompleted: () => {
             setPendingOperations((prev) => {
               const newSet = new Set(prev);
@@ -112,15 +263,22 @@ export const useCart = () => {
         console.error("Add to cart mutation failed", error);
       }
     },
-    [addToCartMutation, userId]
+    [addToCartMutation, userId, addToAnonymousCart]
   );
 
   const removeFromCart = useCallback(
     async (variantId: string, productId: string) => {
+      // Handle anonymous users
       if (!userId) {
-        console.error("Cannot remove from cart: No user ID");
+        setItemLoading(true);
+        setTimeout(() => {
+          removeFromAnonymousCart(productId);
+          setItemLoading(false);
+        }, 400);
         return;
       }
+
+      // Handle logged-in users (existing logic)
       setItemLoading(true);
       setTimeout(() => {
         setCartItems((prev) => {
@@ -156,18 +314,36 @@ export const useCart = () => {
         console.error("Remove from cart mutation failed", error);
       }
     },
-    [removeFromCartMutation, userId]
+    [removeFromCartMutation, userId, removeFromAnonymousCart]
   );
+
+  // Get cart count for both logged-in and anonymous users
+  const cartCount = useMemo(() => {
+    if (userId) {
+      return cartItems.size;
+    } else {
+      return anonymousCartItems.reduce(
+        (total, item) => total + item.quantity,
+        0
+      );
+    }
+  }, [userId, cartItems.size, anonymousCartItems]);
 
   return {
     cartItems,
     serverCartItems,
-    cartLoading,
+    cartLoading: userId ? cartLoading : false,
     addToCart,
     removeFromCart,
     adding: pendingOperations.size > 0,
     removing: pendingOperations.size > 0,
     pendingOperations,
     itemLoading,
+    // Additional returns for anonymous cart
+    anonymousCartItems,
+    cartCount,
+    clearAnonymousCart,
+    syncAnonymousCartToServer,
+    isAnonymousUser: !userId,
   };
 };

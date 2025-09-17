@@ -49,7 +49,7 @@ class PerformanceMonitor {
 
     // Only log in development
     if (process.env.NODE_ENV === "development") {
-      console.log(`🚀 ${name}: ${duration}ms`);
+      // console.log(`🚀 ${name}: ${duration}ms`);
     }
 
     return duration;
@@ -102,9 +102,9 @@ export function usePerformanceTracking(componentName: string) {
     // Track re-renders
     renderCount.current++;
     if (process.env.NODE_ENV === "development" && renderCount.current > 1) {
-      console.log(
-        `🔄 ${componentName} re-rendered ${renderCount.current} times`
-      );
+      // console.log(
+      //   `🔄 ${componentName} re-rendered ${renderCount.current} times`
+      // );
     }
   });
 
@@ -121,7 +121,7 @@ export function trackWebVitals() {
   new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
       if (entry.name === "first-contentful-paint") {
-        console.log("🎨 FCP:", entry.startTime);
+        // console.log("🎨 FCP:", entry.startTime);
       }
     }
   }).observe({ entryTypes: ["paint"] });
@@ -130,14 +130,14 @@ export function trackWebVitals() {
   new PerformanceObserver((list) => {
     const entries = list.getEntries();
     const lastEntry = entries[entries.length - 1];
-    console.log("📏 LCP:", lastEntry.startTime);
+    // console.log("📏 LCP:", lastEntry.startTime);
   }).observe({ entryTypes: ["largest-contentful-paint"] });
 
   // Track First Input Delay (FID)
   new PerformanceObserver((list) => {
     const entries = list.getEntries() as unknown as PerformanceEventTiming[];
     for (const entry of entries) {
-      console.log("👆 FID:", entry.processingStart - entry.startTime);
+      // console.log("👆 FID:", entry.processingStart - entry.startTime);
     }
   }).observe({ entryTypes: ["first-input"] as any });
 }

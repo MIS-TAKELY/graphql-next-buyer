@@ -14,7 +14,7 @@ interface ProductPageClientProps {
   product: TProduct | null;
 }
 export default function ProductPageClient({ product }: ProductPageClientProps) {
-  console.log("product-->", product);
+  // console.log("product-->", product);
   const averageRating = useMemo(
     () =>
       product?.reviews?.length

@@ -80,7 +80,7 @@ export default function CheckoutPage() {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    console.log("Processing payment:", { paymentData, selectedPaymentMethod });
+    // console.log("Processing payment:", { paymentData, selectedPaymentMethod });
 
     setCurrentStep(3);
     setIsProcessing(false);

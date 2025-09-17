@@ -31,7 +31,7 @@ export function SSRApolloProvider({
       };
     });
 
-    console.log("auth link-->", authLink);
+    // console.log("auth link-->", authLink);
 
     const httpLink = createHttpLink({
       uri:

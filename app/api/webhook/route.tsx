@@ -9,10 +9,10 @@ const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 export async function POST(req: Request): Promise<NextResponse> {
   try {
     if (!WEBHOOK_SECRET) {
-      console.log("webhook secret not avilable");
+      // console.log("webhook secret not avilable");
       throw new Error("webhook secret not avilable");
     }
-    console.log("webhook secret-->", WEBHOOK_SECRET);
+    // console.log("webhook secret-->", WEBHOOK_SECRET);
 
     const payload = await req.text();
     const rawHeaders = await headers();
@@ -28,7 +28,7 @@ export async function POST(req: Request): Promise<NextResponse> {
     try {
       evt = wh.verify(payload, headerPayload) as WebhookEvent;
     } catch (error) {
-      console.error("[ClerkWebhook] Verification failed:", error);
+      // console.error("[ClerkWebhook] Verification failed:", error);
       return new NextResponse("Invalid signature", { status: 400 });
     }
 
@@ -48,9 +48,9 @@ export async function POST(req: Request): Promise<NextResponse> {
         create: { clerkId, email, role, firstName },
       });
 
-      console.log(
-        `[ClerkWebhook] Synced user: ${clerkId} (${email}, role: ${role})`
-      );
+      // console.log(
+      //   `[ClerkWebhook] Synced user: ${clerkId} (${email}, role: ${role})`
+      // );
     }
 
     return NextResponse.json({ success: true });

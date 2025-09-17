@@ -7,7 +7,7 @@ interface BreadcrumbProps {
 
 export default function Breadcrumb({ category, name }: BreadcrumbProps) {
   if (!category || !name) return <div>loading..</div>;
-  console.log("category",category)
+  // console.log("category",category)
   return (
     <div className="bg-white border-b">
       <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-4">
