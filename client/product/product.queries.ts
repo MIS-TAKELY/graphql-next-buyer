@@ -107,6 +107,27 @@ export const GET_PRODUCT_BY_SLUG = gql`
   }
 `;
 
+export const GET_REMAINING_PRODUCT_BY_SLUG = gql`
+  query GetProductBySlug($slug: String!) {
+    getProductBySlug(slug: $slug) {
+      category {
+        name
+      }
+      seller {
+        firstName
+        lastName
+      }
+      brand {
+        name
+      }
+      variants {
+        stock
+        isDefault
+      }
+    }
+  }
+`;
+
 export const GET_PRODUCT_DETAILS = gql`
   query GetProductDetails($slug: String!) {
     getProductBySlug(slug: $slug) {
@@ -156,6 +177,7 @@ export const GET_PRODUCTS = gql`
       description
       slug
       images {
+        id
         url
         altText
       }

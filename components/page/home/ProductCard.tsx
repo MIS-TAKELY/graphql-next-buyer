@@ -1,39 +1,15 @@
 "use client";
 import { AddToCartButton } from "@/components/common";
 import { Card, CardContent } from "@/components/ui/card";
+import { IProducts } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import { memo, useMemo } from "react";
 
-export interface IImages {
-  altText?: string;
-  url: string;
-}
-
-export interface IReview {
-  rating: number;
-}
-
-export interface IVarient {
-  id: string;
-  price: string;
-}
-
-export interface IProduct {
-  description: string;
-  id: string;
-  images: IImages[];
-  name: string;
-  reviews: IReview[];
-  slug: string;
-  status: string;
-  variants: IVarient[];
-}
-
 interface ProductCardProps {
-  product: IProduct;
-  priority?: boolean; // For above-the-fold images
-  sizes?: string; // Custom image sizes
+  product: IProducts;
+  priority?: boolean;
+  sizes?: string;
 }
 
 const ProductCard = memo<ProductCardProps>(
@@ -42,7 +18,6 @@ const ProductCard = memo<ProductCardProps>(
     priority = false,
     sizes = "(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw",
   }) => {
-    // Memoize heavy calculations
     const productData = useMemo(() => {
       const firstImage = product.images?.[0];
       const firstVariant = product.variants?.[0];
@@ -62,7 +37,6 @@ const ProductCard = memo<ProductCardProps>(
       };
     }, [product.images, product.variants, product.reviews, product.name]);
 
-    // Memoize star rating component using useMemo
     const starRating = useMemo(() => {
       if (!productData.hasReviews) return null;
 

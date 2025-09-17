@@ -56,7 +56,7 @@ export function BuyNowButton({
       size={size}
       variant={isDisabled ? "secondary" : variant}
       onClick={handleBuyNow}
-      disabled={isDisabled}
+      // disabled={isDisabled}
       className={`transition-all duration-200 transform w-full active:scale-95 ${
         fullWidth ? "flex-1" : ""
       } ${
@@ -74,7 +74,7 @@ export function BuyNowButton({
           )
         )}
         <span className="transition-all duration-200 font-semibold">
-          {children || (isDisabled ? "Out of Stock" : "Buy Now")}
+          {children || (isDisabled ? "Notify me" : "Buy Now")}
         </span>
       </span>
     </Button>

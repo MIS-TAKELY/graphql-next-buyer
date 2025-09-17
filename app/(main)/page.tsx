@@ -1,17 +1,17 @@
 import { GET_PRODUCTS } from "@/client/product/product.queries";
 import HeroCarousel from "@/components/page/home/HeroCarousel";
-import { IProduct } from "@/components/page/home/ProductCard";
 import ProductCatagoryCardSection from "@/components/page/home/ProductCatagoryCardSection";
 import ProductSection from "@/components/page/home/ProductSection";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
+import { IProducts } from "@/types/product";
 
 export const revalidate = 3600;
 
 // Define section config for scalability
 type SectionConfig = {
   name: string;
-  products: IProduct[];
+  products: IProducts[];
   count: number;
   layout: "grid" | "horizontal";
 };

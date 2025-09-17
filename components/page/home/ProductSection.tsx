@@ -1,10 +1,11 @@
 import React from "react";
-import ProductCard, { IProduct } from "./ProductCard";
 import { ProductCardSkeleton } from "./ProductCardSkeleton";
+import { IProducts } from "@/types/product";
+import ProductCard from "./ProductCard";
 
 interface ProductSectionProps {
   name: string;
-  products?: IProduct[];
+  products?: IProducts[];
   loading?: boolean;
   count?: number;
   layout?: "grid" | "horizontal";

@@ -129,13 +129,8 @@ const ProductInfo = memo(function ProductInfo({
         </div>
       )}
 
-      {/* Product ID for debugging/support */}
-      <div className="text-xs text-gray-400 border-t pt-2">
-        Product ID: {product.id}
-      </div>
-
       {/* Placeholder for features - you can populate this with actual data */}
-      <div className="border-t pt-4">
+      {/* <div className="border-t pt-4">
         <h3 className="font-semibold text-lg mb-3">Product Details</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
           <div className="flex justify-between">
@@ -161,7 +156,7 @@ const ProductInfo = memo(function ProductInfo({
             </div>
           )}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 });

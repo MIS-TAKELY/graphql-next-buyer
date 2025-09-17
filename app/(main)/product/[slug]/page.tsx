@@ -1,10 +1,18 @@
-// app/product/[slug]/page.tsx
-import { GET_PRODUCT_BY_SLUG, GET_PRODUCTS } from "@/client/product/product.queries";
+import {
+  GET_PRODUCT_BY_SLUG,
+  GET_PRODUCTS,
+  GET_REMAINING_PRODUCT_BY_SLUG,
+} from "@/client/product/product.queries";
 import ProductPageClient from "@/components/page/product/ProductPageClient";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
+import {
+  IProducts,
+  IProductVarient,
+  IRemainingProductDetails,
+  TProduct,
+} from "@/types/product";
 
-// ISR configuration
 export const revalidate = 3600;
 
 export default async function ProductPage({
@@ -13,10 +21,11 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  console.log("Slug being used:", slug); // Debug slug
   const client = await getServerApolloClient();
 
-  let product;
-  let allProducts = [];
+  let product: TProduct | null = null;
+  let allProducts: IProducts[] = [];
 
   try {
     const productsResponse = await client.query({
@@ -25,16 +34,79 @@ export default async function ProductPage({
     });
 
     allProducts = productsResponse?.data?.getProducts || [];
-    console.log("All products fetched:", allProducts.length);
+    let productFromList: IProducts = allProducts.find(
+      (p: any) => p.slug === slug
+    ) ?? {
+      id: "",
+      name: "",
+      description: "",
+      slug: "",
+      status: "",
+      images: [],
+      reviews: [],
+      variants: [],
+    };
 
-    // Try to find the product in the fetched data
-    product = allProducts.find((p: any) => p.slug === slug);
-    console.log("Product found in all products:", !!product);
+    console.log("Product from list-->", productFromList);
+
+    const { data: remainingData, error } = await client.query({
+      query: GET_REMAINING_PRODUCT_BY_SLUG,
+      variables: { slug },
+      fetchPolicy: "cache-first",
+    });
+
+    if (error) {
+      console.error("Error fetching remaining product data:", error);
+    }
+
+    console.log("Remaining data:", remainingData);
+    const productFromRemaining: IRemainingProductDetails =
+      remainingData?.getProductBySlug || {};
+    if (productFromRemaining) {
+      const mergedVariants: IProductVarient[] = productFromList.variants.map(
+        (listVariant) => {
+          const remainingVariant = productFromRemaining.variants?.find(
+            (v) => v.id === listVariant.id
+          );
+
+          return {
+            ...listVariant,
+            stock: remainingVariant?.stock || "0",
+            isDefault: remainingVariant?.isDefault || false,
+            price: listVariant.price,
+            id: listVariant.id,
+          };
+        }
+      );
+
+      product = {
+        ...productFromList,
+        ...productFromRemaining,
+        variants: mergedVariants,
+      } as TProduct; // explicit cast
+    } else if (productFromList.id) {
+      // Fallback when remaining details are missing
+      product = {
+        ...productFromList,
+        category: { name: "" },
+        seller: { firstName: "", lastName: "" },
+        brand: { name: "" },
+        warranty: "",
+        specifications: "",
+        features: "",
+        variants: productFromList.variants.map((v) => ({
+          ...v,
+          stock: "0",
+          isDefault: false,
+        })),
+      } as TProduct;
+    }
+
+    console.log("Product found in all products:", product);
   } catch (error) {
     console.error("Error fetching all products:", error);
   }
 
-  // If product not found in all products, fetch specifically by slug
   if (!product) {
     try {
       const { data, error } = await client.query({
@@ -59,11 +131,12 @@ export default async function ProductPage({
     }
   }
 
-  // Prepare initial cache data for client
   const initialCacheData = {
     products: allProducts,
     currentProduct: product,
   };
+
+  console.log("Final product:", product);
 
   return (
     <SSRApolloProvider initialData={initialCacheData}>

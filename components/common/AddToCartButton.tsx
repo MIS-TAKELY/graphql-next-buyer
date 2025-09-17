@@ -97,7 +97,7 @@ export function AddToCartButton({
   };
 
   const getButtonStyles = () => {
-    let styles = "w-full transition-all duration-75 active:scale-95";
+    let styles = "w-full transition-all duration-75 active:scale-95 py-5";
 
     if (isInCart) {
       styles +=
@@ -117,7 +117,7 @@ export function AddToCartButton({
       disabled={isDisabled || itemLoading}
       className={getButtonStyles()}
     >
-      <span className="flex items-center justify-center gap-2 min-w-[100px]">
+      <span className="flex items-center justify-center gap-2  min-w-[100px]">
         {getButtonIcon()}
         <span>{getButtonText()}</span>
       </span>

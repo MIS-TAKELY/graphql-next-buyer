@@ -6,15 +6,15 @@ import ProductGallery from "@/components/page/product/ProductGallery";
 import ProductInfo from "@/components/page/product/ProductInfo";
 import ProductPageSkeleton from "@/components/page/product/ProductPageSkeleton";
 import ProductTabs from "@/components/page/product/ProductTabs";
+import { IProductVarient, TProduct } from "@/types/product";
 import { useMemo } from "react";
 import SellerInfo from "./SellerInfo";
 
 interface ProductPageClientProps {
-  product: any;
+  product: TProduct | null;
 }
-
 export default function ProductPageClient({ product }: ProductPageClientProps) {
-  // Memoize derived values
+  console.log("product-->", product);
   const averageRating = useMemo(
     () =>
       product?.reviews?.length
@@ -25,16 +25,20 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         : 0,
     [product]
   );
-  const defaultVariant = useMemo(
-    () =>
-      product?.variants?.find((v: any) => v.isDefault) ||
-      product?.variants?.[0],
-    [product]
-  );
+
+  const defaultVariant = useMemo(() => {
+    return (
+      (product?.variants as IProductVarient[])?.find(
+        (variant) => variant.isDefault
+      ) || (product?.variants as IProductVarient[])?.[0]
+    );
+  }, [product]);
+
   const inStock = useMemo(
-    () => (defaultVariant ? defaultVariant.stock > 0 : false),
+    () => (defaultVariant ? Number(defaultVariant.stock) > 0 : false),
     [defaultVariant]
   );
+
   const sellerName = useMemo(
     () =>
       product?.brand?.name ||

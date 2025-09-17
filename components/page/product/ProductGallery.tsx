@@ -23,6 +23,8 @@ const ProductGallery = memo(function ProductGallery({
   const [selectedImage, setSelectedImage] = useState(0);
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
+
+  console.log("images-->",images)
   
   // Memoize sorted images to avoid re-sorting on every render
   const sortedImages = useMemo(() => {
