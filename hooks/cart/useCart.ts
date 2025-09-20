@@ -1,11 +1,11 @@
 "use client";
+
 import { ADD_TO_CART, REMOVE_FROM_CART } from "@/client/cart/cart.mutations";
 import { GET_CART_PRODUCT_IDS } from "@/client/cart/cart.queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useAuth } from "@clerk/nextjs";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-// Local storage keys
 const ANONYMOUS_CART_KEY = "anonymous_cart";
 const CART_SYNC_KEY = "cart_sync_timestamp";
 
@@ -13,183 +13,222 @@ interface CartItem {
   productId: string;
   variantId: string;
   quantity: number;
-  addedAt: number; // timestamp for ordering
 }
 
-interface AnonymousCart {
-  items: CartItem[];
-  lastUpdated: number;
+interface IGetCartIdResponse {
+  getMyCart: [
+    variant: {
+      product: {
+        id: string;
+      };
+    }
+  ];
 }
 
-export const useCart = () => {
-  // Local optimistic state - this updates instantly
-  const [cartItems, setCartItems] = useState<Set<string>>(new Set());
-  const [pendingOperations, setPendingOperations] = useState<Set<string>>(
-    new Set()
-  );
-  const [anonymousCartItems, setAnonymousCartItems] = useState<CartItem[]>([]);
+type TGetCartIdResponse = IGetCartIdResponse | null;
 
+export const useCartT = () => {
   const { userId } = useAuth();
-  const [itemLoading, setItemLoading] = useState(false);
 
-  interface IVariables {
-    productId: string;
-    quantity?: number;
-    variantId: string;
+  // New: State for anonymous cart (array of CartItem)
+  const [anonymousCart, setAnonymousCart] = useState<CartItem[]>([]);
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+
+  const addAnanmusCart=(productId:string)=>{
+    const allCarts=localStorage.ANONYMOUS_CART_KEY;
+    const newAnocart={...allCarts,productId}
+    localStorage.setItem(ANONYMOUS_CART_KEY,newAnocart)
   }
 
-  const getAnonymousCart = useCallback((): AnonymousCart => {
-    if (typeof window === "undefined") return { items: [], lastUpdated: 0 };
-
-    try {
-      const stored = localStorage.getItem(ANONYMOUS_CART_KEY);
-      if (stored) {
-        return JSON.parse(stored);
-      }
-    } catch (error) {
-      console.error("Error reading anonymous cart:", error);
-    }
-    return { items: [], lastUpdated: 0 };
-  }, []);
-
-  const saveAnonymousCart = useCallback((cart: AnonymousCart) => {
-    if (typeof window === "undefined") return;
-
-    try {
-      localStorage.setItem(ANONYMOUS_CART_KEY, JSON.stringify(cart));
-      localStorage.setItem(CART_SYNC_KEY, Date.now().toString());
-    } catch (error) {
-      console.error("Error saving anonymous cart:", error);
-    }
-  }, []);
-
-  const clearAnonymousCart = useCallback(() => {
-    if (typeof window === "undefined") return;
-
-    try {
-      localStorage.removeItem(ANONYMOUS_CART_KEY);
-      localStorage.removeItem(CART_SYNC_KEY);
-      setAnonymousCartItems([]);
-    } catch (error) {
-      console.error("Error clearing anonymous cart:", error);
-    }
-  }, []);
-
+  // New: Load anonymous cart from localStorage on mount
   useEffect(() => {
-    const cart = getAnonymousCart();
-    setAnonymousCartItems(cart.items);
-
-    // Create a set of product IDs for quick lookup
-    const productIds = new Set(cart.items.map((item) => item.productId));
     if (!userId) {
-      setCartItems(productIds);
+      try {
+        setLoading(true);
+        const storedCart = localStorage.getItem(ANONYMOUS_CART_KEY);
+        if (storedCart) {
+          setAnonymousCart(JSON.parse(storedCart));
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to load anonymous cart:", error);
+        setAnonymousCart([]); // Reset on error
+      }
     }
-  }, [getAnonymousCart, userId]);
+  }, [userId]);
 
+  // New: Save anonymous cart to localStorage whenever it changes
+  useEffect(() => {
+    if (!userId && anonymousCart.length > 0) {
+      //   console.log("saving in local storage -->", JSON.stringify(anonymousCart));
+      localStorage.setItem(ANONYMOUS_CART_KEY, JSON.stringify(anonymousCart));
+      // Optional: Update sync timestamp for later server sync
+      localStorage.setItem(CART_SYNC_KEY, Date.now().toString());
+    }
+  }, [anonymousCart, userId]);
+
+  // Get cart ids from server (for logged-in users)
   const { data: myCartItemsIds, loading: cartLoading } = useQuery(
     GET_CART_PRODUCT_IDS,
     {
       skip: !userId,
       fetchPolicy: "cache-first",
       errorPolicy: "all",
-      onCompleted: (data) => {
-        if (data?.getMyCart) {
-          const serverIds = new Set<string>(
-            data.getMyCart
-              .map(
-                (item: any) =>
-                  item.variant?.product?.id ||
-                  item.productId ||
-                  item.product?.id
-              )
-              .filter(Boolean) as string[]
-          );
-          setCartItems(serverIds);
-        }
-      },
     }
   );
 
-  const serverCartItems = useMemo<Set<string>>(() => {
-    if (!userId || !myCartItemsIds?.getMyCart) return new Set();
-    const ids = myCartItemsIds.getMyCart
-      .map((item: any) => {
-        if (item.variant?.product?.id) {
-          return item.variant.product.id;
-        } else if (item.productId) {
-          return item.productId;
-        } else if (item.product?.id) {
-          return item.product.id;
-        }
-        return null;
-      })
-      .filter(Boolean);
-
-    return new Set(ids);
-  }, [userId, myCartItemsIds?.getMyCart]);
-
-  const [addToCartMutation] = useMutation<any, IVariables>(ADD_TO_CART);
-  const [removeFromCartMutation] = useMutation<any, IVariables>(
-    REMOVE_FROM_CART
-  );
-
-  // Anonymous cart operations
-  const addToAnonymousCart = useCallback(
-    (variantId: string, productId: string, quantity: number = 1) => {
-      const cart = getAnonymousCart();
-      const existingItemIndex = cart.items.findIndex(
-        (item) => item.productId === productId
+  // Structure cart ids in Set for fast lookups
+  const myCartItems = useMemo(() => {
+    if (userId) {
+      // Logged-in: Use server data
+      if (!myCartItemsIds?.getMyCart) return new Set<string>();
+      return new Set(
+        myCartItemsIds.getMyCart
+          .map((item: any) => item?.variant?.product?.id)
+          .filter(Boolean)
       );
+    } else {
+      // Anonymous: Use localStorage data
+      return new Set(anonymousCart.map((item) => item.productId));
+    }
+  }, [myCartItemsIds, anonymousCart, userId]);
 
-      if (existingItemIndex >= 0) {
-        // Update existing item quantity
-        cart.items[existingItemIndex].quantity += quantity;
-      } else {
-        // Add new item
-        cart.items.push({
-          productId,
-          variantId,
-          quantity,
-          addedAt: Date.now(),
-        });
-      }
+  // Add to cart mutation (for logged-in users)
+  const [addToCartMutation] = useMutation(ADD_TO_CART, {
+    update(cache, { data }) {
+      if (!data?.addToCart) return;
 
-      cart.lastUpdated = Date.now();
-      saveAnonymousCart(cart);
-      setAnonymousCartItems(cart.items);
+      const newCartItem = data.addToCart;
 
-      // Update the cartItems set for UI consistency
-      setCartItems((prev) => new Set([...prev, productId]));
-    },
-    [getAnonymousCart, saveAnonymousCart]
-  );
+      const existing: TGetCartIdResponse = cache.readQuery({
+        query: GET_CART_PRODUCT_IDS,
+      });
+      const existingCart = existing?.getMyCart ?? [];
 
-  const removeFromAnonymousCart = useCallback(
-    (productId: string) => {
-      const cart = getAnonymousCart();
-      cart.items = cart.items.filter((item) => item.productId !== productId);
-      cart.lastUpdated = Date.now();
-
-      saveAnonymousCart(cart);
-      setAnonymousCartItems(cart.items);
-
-      // Update the cartItems set for UI consistency
-      setCartItems((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(productId);
-        return newSet;
+      cache.writeQuery({
+        query: GET_CART_PRODUCT_IDS,
+        data: {
+          getMyCart: [...existingCart, newCartItem],
+        },
       });
     },
-    [getAnonymousCart, saveAnonymousCart]
+  });
+
+  const addToCart = useCallback(
+    async (variantId: string, productId: string, quantity: number = 1) => {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 400);
+      if (!userId) {
+        // Anonymous: Update local state
+        setAnonymousCart((prevCart) => {
+          const existingItemIndex = prevCart.findIndex(
+            (item) =>
+              item.variantId === variantId && item.productId === productId
+          );
+          console.log("existingItemIndex-->", existingItemIndex);
+
+          let updatedCart: CartItem[];
+          if (existingItemIndex > -1) {
+            console.log("exsits");
+            updatedCart = [...prevCart];
+          } else {
+            console.log("doesnt exsits");
+            // New item: Add to cart
+            updatedCart = [...prevCart, { productId, variantId, quantity }];
+          }
+          console.log("updated cart-->", updatedCart);
+          return updatedCart;
+        });
+        console.log("annamous", anonymousCart);
+      } else {
+        // Logged-in: Use mutation with optimistic response
+        const optimisticCartItem = {
+          quantity,
+          variant: {
+            id: variantId,
+            product: {
+              id: productId,
+            },
+          },
+        };
+        await addToCartMutation({
+          variables: { variantId, productId, quantity },
+          optimisticResponse: {
+            addToCart: optimisticCartItem,
+          },
+        });
+      }
+    },
+    [addToCartMutation, userId]
   );
 
-  // Function to sync anonymous cart to server when user logs in
-  const syncAnonymousCartToServer = useCallback(async () => {
-    if (!userId || anonymousCartItems.length === 0) return;
+  // Remove from cart mutation (for logged-in users)
+  const [removeFromCartMutation] = useMutation(REMOVE_FROM_CART, {
+    update(cache, { data }, { variables }) {
+      if (!data?.removeFromCart) return;
 
-    try {
-      // Add all anonymous cart items to server
-      for (const item of anonymousCartItems) {
+      const existing: TGetCartIdResponse = cache.readQuery({
+        query: GET_CART_PRODUCT_IDS,
+      });
+      const existingCart = existing?.getMyCart ?? [];
+
+      const updatedCart = existingCart.filter(
+        (item: any) => item?.variant?.product?.id !== variables?.productId
+      );
+
+      cache.writeQuery({
+        query: GET_CART_PRODUCT_IDS,
+        data: {
+          getMyCart: updatedCart,
+        },
+      });
+    },
+  });
+
+  const removeFromCart = useCallback(
+    async (variantId: string, productId: string) => {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 400);
+      if (!userId) {
+        // Anonymous: Remove from local state
+        console.log("removing ");
+        console.log("variantId ", variantId);
+        console.log("productId ", productId);
+
+        setAnonymousCart((prevCart) =>
+          prevCart.filter(
+            (item) =>
+              item.variantId !== variantId && item.productId !== productId
+          )
+        );
+        console.log("anonymous", anonymousCart);
+      } else {
+        // Logged-in: Use mutation with optimistic response
+        await removeFromCartMutation({
+          variables: { variantId, productId },
+          optimisticResponse: {
+            removeFromCart: true,
+          },
+        });
+      }
+    },
+    [removeFromCartMutation, userId]
+  );
+
+  // New: Optional sync function (call this when user logs in, e.g., via useEffect on userId change)
+  const syncAnonymousCartToServer = useCallback(async () => {
+    if (userId && anonymousCart.length > 0) {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 400);
+      for (const item of anonymousCart) {
         await addToCartMutation({
           variables: {
             variantId: item.variantId,
@@ -198,152 +237,31 @@ export const useCart = () => {
           },
         });
       }
-
-      // Clear anonymous cart after successful sync
-      clearAnonymousCart();
-
-      console.log("Anonymous cart synced to server successfully");
-    } catch (error) {
-      console.error("Failed to sync anonymous cart to server:", error);
+      // Clear anonymous cart after sync
+      setAnonymousCart([]);
+      localStorage.removeItem(ANONYMOUS_CART_KEY);
+      localStorage.removeItem(CART_SYNC_KEY);
     }
-  }, [userId, anonymousCartItems, addToCartMutation, clearAnonymousCart]);
+  }, [anonymousCart, addToCartMutation, userId]);
 
-  // Auto-sync when user logs in
+  // New: Trigger sync when user logs in (if anonymous cart exists)
   useEffect(() => {
-    if (userId && anonymousCartItems.length > 0) {
+    if (userId) {
       syncAnonymousCartToServer();
     }
-  }, [userId, syncAnonymousCartToServer, anonymousCartItems.length]);
+  }, [userId, syncAnonymousCartToServer]);
 
-  const addToCart = useCallback(
-    async (variantId: string, productId: string, quantity: number = 1) => {
-      // Handle anonymous users
-      if (!userId) {
-        setItemLoading(true);
-        setTimeout(() => {
-          addToAnonymousCart(variantId, productId, quantity);
-          setItemLoading(false);
-        }, 400);
-        return;
-      }
-
-      // Handle logged-in users (existing logic)
-      setItemLoading(true);
-      setTimeout(() => {
-        setCartItems((prev) => new Set([...prev, productId]));
-        setItemLoading(false);
-      }, 400);
-      setPendingOperations((prev) => new Set([...prev, productId]));
-
-      try {
-        await addToCartMutation({
-          variables: { variantId, quantity, productId },
-          onCompleted: () => {
-            setPendingOperations((prev) => {
-              const newSet = new Set(prev);
-              newSet.delete(productId);
-              return newSet;
-            });
-          },
-          onError: () => {
-            console.error("Add to cart error");
-            setCartItems((prev) => {
-              const newSet = new Set(prev);
-              newSet.delete(productId);
-              return newSet;
-            });
-            setPendingOperations((prev) => {
-              const newSet = new Set(prev);
-              newSet.delete(productId);
-              return newSet;
-            });
-          },
-        });
-      } catch (error) {
-        console.error("Add to cart mutation failed", error);
-      }
-    },
-    [addToCartMutation, userId, addToAnonymousCart]
-  );
-
-  const removeFromCart = useCallback(
-    async (variantId: string, productId: string) => {
-      // Handle anonymous users
-      if (!userId) {
-        setItemLoading(true);
-        setTimeout(() => {
-          removeFromAnonymousCart(productId);
-          setItemLoading(false);
-        }, 400);
-        return;
-      }
-
-      // Handle logged-in users (existing logic)
-      setItemLoading(true);
-      setTimeout(() => {
-        setCartItems((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(productId);
-          setItemLoading(false);
-          return newSet;
-        });
-      }, 400);
-      setPendingOperations((prev) => new Set([...prev, productId]));
-
-      try {
-        await removeFromCartMutation({
-          variables: { variantId, productId },
-          onCompleted: () => {
-            setPendingOperations((prev) => {
-              const newSet = new Set(prev);
-              newSet.delete(productId);
-              return newSet;
-            });
-          },
-          onError: () => {
-            console.error("Remove from cart error");
-            setCartItems((prev) => new Set([...prev, productId]));
-            setPendingOperations((prev) => {
-              const newSet = new Set(prev);
-              newSet.delete(productId);
-              return newSet;
-            });
-          },
-        });
-      } catch (error) {
-        console.error("Remove from cart mutation failed", error);
-      }
-    },
-    [removeFromCartMutation, userId, removeFromAnonymousCart]
-  );
-
-  // Get cart count for both logged-in and anonymous users
-  const cartCount = useMemo(() => {
-    if (userId) {
-      return cartItems.size;
-    } else {
-      return anonymousCartItems.reduce(
-        (total, item) => total + item.quantity,
-        0
-      );
-    }
-  }, [userId, cartItems.size, anonymousCartItems]);
-
+  const checkIsInCart = (productId: string | undefined) => {
+    if (myCartItems.has(productId || "")) return true;
+    else return false;
+  };
   return {
-    cartItems,
-    serverCartItems,
-    cartLoading: userId ? cartLoading : false,
-    addToCart,
-    removeFromCart,
-    adding: pendingOperations.size > 0,
-    removing: pendingOperations.size > 0,
-    pendingOperations,
-    itemLoading,
-    // Additional returns for anonymous cart
-    anonymousCartItems,
-    cartCount,
-    clearAnonymousCart,
-    syncAnonymousCartToServer,
-    isAnonymousUser: !userId,
+    myCartItemsT: myCartItems,
+    checkIsInCart,
+    cartLoading,
+    loading,
+    addToCartT: addToCart,
+    removeFromCartT: removeFromCart,
   };
 };
+// can you help me fix the error of not able to add to cart when user is not logged in

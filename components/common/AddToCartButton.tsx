@@ -1,7 +1,6 @@
 // components/AddToCartButton.tsx
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/hooks/cart/useCart";
-import { useAuth } from "@clerk/nextjs";
+import { useCartT } from "@/hooks/cart/useCartT";
 import { Check, Loader2, ShoppingCart } from "lucide-react";
 
 interface AddToCartButtonProps {
@@ -41,32 +40,26 @@ export function AddToCartButton({
   onRemoveSuccess,
   onError,
 }: AddToCartButtonProps) {
-  const {
-    cartItems,
-    cartLoading,
-    addToCart,
-    removeFromCart,
-    pendingOperations,
-    itemLoading,
-  } = useCart();
-  const { userId } = useAuth();
+  const { checkIsInCart, addToCartT, removeFromCartT, cartLoading, loading } =
+    useCartT();
 
-  const isInCart = cartItems.has(productId || "");
-  const isDisabled = disabled || !variantId || cartLoading;
-  const isPendingOperation = pendingOperations.has(productId || "");
+  const isInCart = checkIsInCart(productId);
+  const isDisabled = disabled || !variantId;
+
+  const isLoading = cartLoading || loading;
 
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (isDisabled) return;
+    if (isDisabled || isLoading) return;
 
     try {
       if (isInCart) {
-        await removeFromCart(variantId!, productId!);
+        await removeFromCartT(variantId!, productId!);
         onRemoveSuccess?.();
       } else {
-        await addToCart(variantId!, productId!, quantity);
+        await addToCartT(variantId!, productId!, quantity);
         onAddSuccess?.();
       }
     } catch (error) {
@@ -75,16 +68,14 @@ export function AddToCartButton({
   };
 
   const getButtonText = () => {
-    if (cartLoading && cartItems.size === 0) return "Loading...";
+    if (isLoading) return "Loading..";
+
     return isInCart ? "In Cart" : "Add To Cart";
   };
 
   const getButtonIcon = () => {
     if (!showIcon) return null;
-
-    if (itemLoading && isPendingOperation) {
-      return <Loader2 className="w-4 h-4 animate-spin" />;
-    }
+    if (isLoading) return <Loader2 className="w-4 h-4 animate-spin" />;
 
     if (isInCart) {
       return <Check className="w-4 h-4" />;
@@ -93,31 +84,12 @@ export function AddToCartButton({
     return <ShoppingCart className="w-4 h-4" />;
   };
 
-  const getButtonVariant = () => {
-    if (isInCart) return "outline";
-    return variant || "default";
-  };
-
-  const getButtonStyles = () => {
-    let styles = "w-full transition-all duration-75 active:scale-95 py-5";
-
-    if (isInCart) {
-      styles +=
-        " border-gray-400 text-gray-600 hover:bg-red-50 hover:border-red-500 hover:text-red-600";
-    } else {
-      styles += " bg-white hover:bg-gray-100 text-black";
-    }
-
-    return `${styles} ${className}`;
-  };
-
   return (
     <Button
       size={size}
-      variant={getButtonVariant()}
       onClick={handleClick}
-      disabled={isDisabled || itemLoading}
-      className={getButtonStyles()}
+      disabled={isDisabled || isLoading}
+      className="w-full transition-all duration-75 active:scale-95 py-5 bg-white hover:bg-gray-100 text-black"
     >
       <span className="flex items-center justify-center gap-2 min-w-[100px]">
         {getButtonIcon()}
