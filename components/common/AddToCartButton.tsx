@@ -1,6 +1,5 @@
-// components/AddToCartButton.tsx
 import { Button } from "@/components/ui/button";
-import { useCartT } from "@/hooks/cart/useCartT";
+import { useCart } from "@/hooks/cart/useCart";
 import { Check, Loader2, ShoppingCart } from "lucide-react";
 
 interface AddToCartButtonProps {
@@ -40,8 +39,8 @@ export function AddToCartButton({
   onRemoveSuccess,
   onError,
 }: AddToCartButtonProps) {
-  const { checkIsInCart, addToCartT, removeFromCartT, cartLoading, loading } =
-    useCartT();
+  const { checkIsInCart, addToCart, removeFromCart, cartLoading, loading } =
+    useCart();
 
   const isInCart = checkIsInCart(productId);
   const isDisabled = disabled || !variantId;
@@ -56,10 +55,10 @@ export function AddToCartButton({
 
     try {
       if (isInCart) {
-        await removeFromCartT(variantId!, productId!);
+        await removeFromCart(variantId!, productId!);
         onRemoveSuccess?.();
       } else {
-        await addToCartT(variantId!, productId!, quantity);
+        await addToCart(variantId!, productId!, quantity);
         onAddSuccess?.();
       }
     } catch (error) {
