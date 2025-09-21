@@ -169,6 +169,10 @@ export const useCart = () => {
   });
   const addToCart = useCallback(
     async (variantId: string, productId: string, quantity: number = 1) => {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 400);
       if (!userId) {
         addInAnonymousCart(productId);
       } else {
@@ -212,10 +216,10 @@ export const useCart = () => {
 
   const removeFromCart = useCallback(
     async (variantId: string, productId: string) => {
-      // setLoading(true);
-      // setTimeout(() => {
-      //   setLoading(false);
-      // }, 400);
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 400);
       if (!userId) {
         removeFromAnonymousCart(productId);
       } else {
