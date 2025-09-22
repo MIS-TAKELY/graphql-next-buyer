@@ -2,6 +2,7 @@
 
 import { ADD_TO_CART, REMOVE_FROM_CART } from "@/client/cart/cart.mutations";
 import { GET_CART_PRODUCT_IDS } from "@/client/cart/cart.queries";
+import { useCartStore } from "@/store/cartStore";
 import { useMutation, useQuery } from "@apollo/client";
 import { useAuth } from "@clerk/nextjs";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -9,11 +10,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 const ANONYMOUS_CART_KEY = "anonymous_cart";
 const CART_SYNC_KEY = "cart_sync_timestamp";
 
-interface CartItem {
-  productId: string;
-  variantId: string;
-  quantity: number;
-}
+
 
 interface IGetCartIdResponse {
   getMyCart: [
@@ -33,13 +30,15 @@ interface IGetCartId {
   };
 }
 
-type TGetCartIdResponse = IGetCartIdResponse | null;
-type TGetCartId = IGetCartId | null;
+export type TGetCartIdResponse = IGetCartIdResponse | null;
+export type TGetCartId = IGetCartId | null;
 
 export const useCart = () => {
   const { userId } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
-  const [anonymousCart, setAnonymousCart] = useState<TGetCartId[]>([]);
+  // const [anonymousCart, setAnonymousCart] = useState<TGetCartId[]>([]);
+
+  const { anonymousCart, addInAnonymousCart, removeFromAnonymousCart } = useCartStore();
 
   const getAnonymousCartItems = useCallback(() => {
     try {
@@ -51,54 +50,55 @@ export const useCart = () => {
     }
   }, []);
 
-  const addInAnonymousCart = (productId: string) => {
-    // Get the latest cart items from localStorage
-    const currentCartItems = getAnonymousCartItems();
+  // const addInAnonymousCart = (productId: string) => {
+  //   // Get the latest cart items from localStorage
+  //   const currentCartItems = getAnonymousCartItems();
 
-    // Check if the product is already in the cart
-    const existingItem = currentCartItems.find(
-      (item: TGetCartId) => item?.variant?.product?.id === productId
-    );
+  //   // Check if the product is already in the cart
+  //   const existingItem = currentCartItems.find(
+  //     (item: TGetCartId) => item?.variant?.product?.id === productId
+  //   );
 
-    let updatedCart;
-    if (existingItem) {
-      // Product already exists, don't add duplicate
-      console.log("Product already in cart:", productId);
-      updatedCart = currentCartItems;
-    } else {
-      // Add new item to the cart
-      const newItemToAdd = {
-        variant: { product: { id: productId } },
-      };
-      updatedCart = [...currentCartItems, newItemToAdd];
-    }
+  //   let updatedCart;
+  //   if (existingItem) {
+  //     // Product already exists, don't add duplicate
+  //     console.log("Product already in cart:", productId);
+  //     updatedCart = currentCartItems;
+  //   } else {
+  //     // Add new item to the cart
+  //     const newItemToAdd = {
+  //       variant: { product: { id: productId } },
+  //     };
+  //     updatedCart = [...currentCartItems, newItemToAdd];
+  //   }
 
-    console.log("adding-->", ANONYMOUS_CART_KEY, JSON.stringify(updatedCart));
-    localStorage.setItem(ANONYMOUS_CART_KEY, JSON.stringify(updatedCart));
+  //   // console.log("adding-->", ANONYMOUS_CART_KEY, JSON.stringify(updatedCart));
+  //   localStorage.setItem(ANONYMOUS_CART_KEY, JSON.stringify(updatedCart));
 
-    // Update state to trigger re-render
-    setAnonymousCart(updatedCart);
-  };
+  //   // Update state to trigger re-render
+  //   setAnonymousCart(updatedCart);
+  //   console.log("hello", anonymousCart);
+  // };
 
-  const removeFromAnonymousCart = (productId: string) => {
-    // Get the latest cart items from localStorage
-    const currentCartItems = getAnonymousCartItems();
+  // const removeFromAnonymousCart = (productId: string) => {
+  //   // Get the latest cart items from localStorage
+  //   const currentCartItems = getAnonymousCartItems();
 
-    const updatedCart = currentCartItems.filter(
-      (item: TGetCartId) => item?.variant?.product?.id !== productId
-    );
+  //   const updatedCart = currentCartItems.filter(
+  //     (item: TGetCartId) => item?.variant?.product?.id !== productId
+  //   );
 
-    console.log("removing-->", ANONYMOUS_CART_KEY, JSON.stringify(updatedCart));
-    localStorage.setItem(ANONYMOUS_CART_KEY, JSON.stringify(updatedCart));
+  //   console.log("removing-->", ANONYMOUS_CART_KEY, JSON.stringify(updatedCart));
+  //   localStorage.setItem(ANONYMOUS_CART_KEY, JSON.stringify(updatedCart));
 
-    // Update state to trigger re-render
-    setAnonymousCart(updatedCart);
-  };
+  //   // Update state to trigger re-render
+  //   setAnonymousCart(updatedCart);
+  // };
 
-  useEffect(() => {
-    const cartItems = getAnonymousCartItems();
-    setAnonymousCart(Array.isArray(cartItems) ? cartItems : []);
-  }, []);
+  // useEffect(() => {
+  //   const cartItems = getAnonymousCartItems();
+  //   setAnonymousCart(Array.isArray(cartItems) ? cartItems : []);
+  // }, []);
 
   const { data: myCartItemsIds, loading: cartLoading } = useQuery(
     GET_CART_PRODUCT_IDS,
@@ -109,32 +109,24 @@ export const useCart = () => {
     }
   );
 
-    const myCartItems = useMemo(() => {
-      if (userId) {
-        // Logged-in: Use server data
-        if (!myCartItemsIds?.getMyCart) return new Set<string>();
-        return new Set(
-          myCartItemsIds.getMyCart
-            .map((item: any) => item?.variant?.product?.id)
-            .filter(Boolean)
-        );
-      } else {
-        // console.log(
-        //   "use cart cart items-->",
-        //   new Set(
-        //     anonymousCart
-        //       ?.map((item) => item?.variant?.product?.id)
-        //       .filter(Boolean) || []
-        //   )
-        // );
+  const myCartItems = useMemo(() => {
+    if (userId) {
+      // Logged-in: Use server data
+      if (!myCartItemsIds?.getMyCart) return new Set<string>();
+      return new Set(
+        myCartItemsIds.getMyCart
+          .map((item: any) => item?.variant?.product?.id)
+          .filter(Boolean)
+      );
+    } else {
+      return new Set([
+        ...anonymousCart
+          .map((item) => item?.variant?.product?.id)
+          .filter(Boolean),
+      ]);
+    }
+  }, [myCartItemsIds, userId, anonymousCart]);
 
-        return new Set(
-          anonymousCart
-            ?.map((item) => item?.variant?.product?.id)
-            .filter(Boolean) || []
-        );
-      }
-    }, [myCartItemsIds, userId, anonymousCart]);
 
   const [addToCartMutation] = useMutation(ADD_TO_CART, {
     update(cache, { data }, { variables }) {
@@ -264,5 +256,6 @@ export const useCart = () => {
     removeFromCart,
     getButtonText,
     isLoading,
+    anonymousCart,
   };
 };

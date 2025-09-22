@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { useCart } from "@/hooks/cart/useCart";
 import { Menu, Search, ShoppingCart, User, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -30,7 +31,7 @@ const searchSuggestions = [
 ];
 
 const Navbar = () => {
-  const [cartCount, setCartCount] = useState(0);
+  // const [cartCount, setCartCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -40,7 +41,9 @@ const Navbar = () => {
     phone: "",
   });
 
-  const router=useRouter();
+  const { myCartItems } = useCart();
+
+  const router = useRouter();
 
   const filteredSuggestions = searchSuggestions.filter((suggestion) =>
     suggestion.toLowerCase().includes(searchQuery.toLowerCase())
@@ -62,6 +65,12 @@ const Navbar = () => {
     setShowSuggestions(false);
     window.location.href = `/search?q=${encodeURIComponent(suggestion)}`;
   };
+
+  // const anonymousCart = JSON.parse(
+  //   localStorage.getItem("anonymous_cart") || "[]"
+  // );
+  const cartCount = myCartItems?.size;
+
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16">
@@ -126,7 +135,13 @@ const Navbar = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={()=>{router.push("/account")}}>My Account</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push("/account");
+                  }}
+                >
+                  My Account
+                </DropdownMenuItem>
                 <DropdownMenuItem>Orders</DropdownMenuItem>
                 <DropdownMenuItem>Logout</DropdownMenuItem>
               </DropdownMenuContent>
@@ -137,12 +152,14 @@ const Navbar = () => {
               variant="ghost"
               size="sm"
               className="relative flex items-center gap-1 lg:gap-2 text-sm lg:text-base"
-              onClick={()=>{router.push("/cart")}}
+              onClick={() => {
+                router.push("/cart");
+              }}
             >
               <ShoppingCart className="w-4 h-4 lg:w-5 lg:h-5" />
               <span className="hidden lg:inline">Cart</span>
               {cartCount > 0 && (
-                <Badge className="absolute -top-1 -right-1 lg:-top-2 lg:-right-2 h-4 w-4 lg:h-5 lg:w-5 rounded-full p-0 flex items-center justify-center text-xs">
+                <Badge className="absolute -top-2 -left-2 h-4 w-4 lg:h-5 lg:w-5 rounded-full p-0 flex items-center justify-center text-xs">
                   {cartCount}
                 </Badge>
               )}
@@ -208,15 +225,18 @@ const Navbar = () => {
               variant="ghost"
               size="sm"
               className="relative p-2"
+              onClick={() => {
+                router.push("/cart");
+              }}
             >
               <ShoppingCart className="w-5 h-5" />
               {cartCount > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 flex items-center justify-center text-xs">
+                <Badge className="absolute -top-2 -right-2 h-4 w-4 rounded-full p-0 flex items-center justify-center text-xs">
                   {cartCount}
                 </Badge>
               )}
             </Button>
-            
+
             {/* Menu Toggle Button */}
             <Button
               variant="ghost"
@@ -273,7 +293,7 @@ const Navbar = () => {
                   </div>
                 )}
               </form>
-              
+
               {/* Mobile Navigation Items */}
               <div className="space-y-3">
                 {/* Account Section */}
@@ -293,7 +313,7 @@ const Navbar = () => {
                     <DropdownMenuItem>Logout</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                
+
                 {/* Become a Seller */}
                 <Dialog>
                   <DialogTrigger asChild>

@@ -102,7 +102,7 @@ export default function CartPage() {
     }
 
     const cartdata = productdata.getProducts.filter((product: Product) => {
-      console.log("product-->", product);
+      // console.log("product-->", product);
       return cartProductIds.has(product.id);
     });
 
