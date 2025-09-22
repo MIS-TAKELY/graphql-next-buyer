@@ -1,6 +1,6 @@
 // components/page/product/ProductInfo.tsx
-import { memo } from "react";
 import { Star } from "lucide-react";
+import { memo } from "react";
 
 interface ProductInfoProps {
   product: {
@@ -33,10 +33,10 @@ const ProductInfo = memo(function ProductInfo({
 }: ProductInfoProps) {
   // Format price properly
   const formatPrice = (price: string | number) => {
-    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
-    return numPrice.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    const numPrice = typeof price === "string" ? parseFloat(price) : price;
+    return numPrice.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     });
@@ -51,13 +51,13 @@ const ProductInfo = memo(function ProductInfo({
       <div>
         <div className="flex items-center gap-3 mb-2">
           <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
-          {product.status === 'ACTIVE' && (
+          {product.status === "ACTIVE" && (
             <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
               Available
             </span>
           )}
         </div>
-        
+
         {/* Category & Brand */}
         <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
           {product.category?.name && (
@@ -79,22 +79,30 @@ const ProductInfo = memo(function ProductInfo({
                 <Star
                   key={i}
                   className={`w-5 h-5 fill-current ${
-                    i < Math.floor(averageRating) ? "text-yellow-400" : "text-gray-300"
+                    i < Math.floor(averageRating)
+                      ? "text-yellow-400"
+                      : "text-gray-300"
                   }`}
                 />
               ))}
             </div>
             <span className="text-lg font-medium">
-              ({averageRating > 0 ? averageRating.toFixed(1) : '0.0'})
+              ({averageRating > 0 ? averageRating.toFixed(1) : "0.0"})
             </span>
             {reviewCount > 0 && (
-              <span className="text-gray-500 ml-1">({reviewCount} review{reviewCount !== 1 ? 's' : ''})</span>
+              <span className="text-gray-500 ml-1">
+                ({reviewCount} review{reviewCount !== 1 ? "s" : ""})
+              </span>
             )}
           </div>
-          
+
           <span className="text-gray-600">|</span>
-          
-          <span className={`font-medium ${inStock ? 'text-green-600' : 'text-red-600'}`}>
+
+          <span
+            className={`font-medium ${
+              inStock ? "text-green-600" : "text-red-600"
+            }`}
+          >
             {inStock ? "In Stock" : "Out of Stock"}
           </span>
         </div>
@@ -111,7 +119,7 @@ const ProductInfo = memo(function ProductInfo({
             Price not available
           </span>
         )}
-        
+
         {/* Stock quantity if available */}
         {defaultVariant?.stock && (
           <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">

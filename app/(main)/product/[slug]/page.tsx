@@ -63,21 +63,27 @@ export default async function ProductPage({
     const productFromRemaining: IRemainingProductDetails =
       remainingData?.getProductBySlug || {};
     if (productFromRemaining) {
+      console.log("remaining product-->", productFromRemaining);
+
       const mergedVariants: IProductVarient[] = productFromList.variants.map(
         (listVariant) => {
-          const remainingVariant = productFromRemaining.variants?.find(
-            (v) => v.id === listVariant.id
-          );
+          // const remainingVariant = productFromRemaining.variants?.find(
+          //   (v) => v.id === listVariant.id
+          // );
+
+          console.log("remaining varient-->", productFromRemaining.variants[0]?.stock || "0");
 
           return {
             ...listVariant,
-            stock: remainingVariant?.stock || "0",
-            isDefault: remainingVariant?.isDefault || false,
+            stock: productFromRemaining.variants[0]?.stock || "0",
+            isDefault: productFromRemaining.variants[0]?.isDefault || false,
             price: listVariant.price,
             id: listVariant.id,
           };
         }
       );
+
+      console.log("merged varient-->", mergedVariants);
 
       product = {
         ...productFromList,
@@ -130,6 +136,8 @@ export default async function ProductPage({
       return <div>Error loading product</div>;
     }
   }
+
+  console.log("final product-->", product);
 
   const initialCacheData = {
     products: allProducts,

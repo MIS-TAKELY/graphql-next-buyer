@@ -38,7 +38,7 @@ export function OrderSummary({
   total, 
   formatPrice 
 }: OrderSummaryProps) {
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalItems = items?.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <Card className="sticky top-24">

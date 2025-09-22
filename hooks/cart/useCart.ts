@@ -109,23 +109,32 @@ export const useCart = () => {
     }
   );
 
-  const myCartItems = useMemo(() => {
-    if (userId) {
-      // Logged-in: Use server data
-      if (!myCartItemsIds?.getMyCart) return new Set<string>();
-      return new Set(
-        myCartItemsIds.getMyCart
-          .map((item: any) => item?.variant?.product?.id)
-          .filter(Boolean)
-      );
-    }
-    // Anonymous: Use localStorage data
-    return new Set(
-      anonymousCart
-        ?.map((item) => item?.variant?.product?.id)
-        .filter(Boolean) || []
-    );
-  }, [myCartItemsIds, userId, anonymousCart]);
+    const myCartItems = useMemo(() => {
+      if (userId) {
+        // Logged-in: Use server data
+        if (!myCartItemsIds?.getMyCart) return new Set<string>();
+        return new Set(
+          myCartItemsIds.getMyCart
+            .map((item: any) => item?.variant?.product?.id)
+            .filter(Boolean)
+        );
+      } else {
+        // console.log(
+        //   "use cart cart items-->",
+        //   new Set(
+        //     anonymousCart
+        //       ?.map((item) => item?.variant?.product?.id)
+        //       .filter(Boolean) || []
+        //   )
+        // );
+
+        return new Set(
+          anonymousCart
+            ?.map((item) => item?.variant?.product?.id)
+            .filter(Boolean) || []
+        );
+      }
+    }, [myCartItemsIds, userId, anonymousCart]);
 
   const [addToCartMutation] = useMutation(ADD_TO_CART, {
     update(cache, { data }, { variables }) {
