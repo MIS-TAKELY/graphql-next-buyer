@@ -104,15 +104,7 @@ export const productResolvers = {
           },
           brand: { select: { id: true, name: true } },
           seller: { select: { id: true, firstName: true, lastName: true } },
-          images: {
-            select: {
-              id: true,
-              url: true,
-              altText: true,
-              sortOrder: true,
-              type: true,
-            },
-          },
+          images: true,
           variants: {
             select: { id: true, price: true, stock: true, isDefault: true },
           },

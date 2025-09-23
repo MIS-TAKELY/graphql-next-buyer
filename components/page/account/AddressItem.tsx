@@ -11,11 +11,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   BaseAddress,
   formatAddress,
@@ -149,14 +157,11 @@ const AddressItem = React.memo<AddressItemProps>(
           </CardContent>
         </Card>
 
-        {/* Edit Dialog */}
+        {/* Edit Dialog - Improved spacing and layout */}
         <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Edit Address</DialogTitle>
-              <DialogDescription>
-                Make changes to your address information.
-              </DialogDescription>
+          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+            <DialogHeader className="pb-4">
+              <DialogTitle className="text-xl">Edit Address</DialogTitle>
             </DialogHeader>
 
             <UpdateAddressForm
@@ -169,36 +174,33 @@ const AddressItem = React.memo<AddressItemProps>(
         </Dialog>
 
         {/* Delete Confirmation Dialog */}
-        <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Delete Address</DialogTitle>
-              <DialogDescription>
+        <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Address</AlertDialogTitle>
+              <AlertDialogDescription>
                 Are you sure you want to delete this address? This action cannot
                 be undone.
-              </DialogDescription>
-            </DialogHeader>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
 
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
+            <AlertDialogFooter>
+              <AlertDialogCancel
                 onClick={handleCancelDelete}
                 disabled={deleteLoading}
               >
                 Cancel
-              </Button>
-              <Button
-                type="button"
-                variant="destructive"
+              </AlertDialogCancel>
+              <AlertDialogAction
                 onClick={handleConfirmDelete}
                 disabled={deleteLoading}
+                className="bg-red-600 hover:bg-red-700"
               >
                 {deleteLoading ? "Deleting..." : "Delete Address"}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </>
     );
   }

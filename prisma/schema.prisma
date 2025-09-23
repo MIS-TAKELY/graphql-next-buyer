@@ -396,7 +396,7 @@ model ProductImage {
   variantId String?
   productId String
   url       String
-  altText   String?
+  altText   String?   @default("")
   sortOrder Int       @default(0)
   type      ImageType @default(PRIMARY)
 

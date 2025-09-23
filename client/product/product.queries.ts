@@ -74,7 +74,6 @@ export const GET_PRODUCT_BY_SLUG = gql`
         id
         url
         altText
-        sortOrder
       }
       reviews {
         id
@@ -100,9 +99,6 @@ export const GET_PRODUCT_BY_SLUG = gql`
       brand {
         name
       }
-      warranty
-      specifications
-      features
     }
   }
 `;

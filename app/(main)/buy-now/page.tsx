@@ -10,19 +10,19 @@ import { PaymentStep } from "@/components/page/buy-now/PaymentStep";
 import { OrderSummary } from "@/components/page/checkout/OrderSummary";
 import { useBuyNow } from "@/hooks/buy-now/useBuyNow";
 import { useMutation, useQuery } from "@apollo/client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
 function BuyNowPageInner() {
-  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const searchParams = useSearchParams();
   const productSlug = searchParams.get("product");
+
+  console.log("product slug-->", productSlug);
   const quantity = parseInt(searchParams.get("quantity") || "1");
 
   // eSewa callback parameters
   const isCallback = searchParams.get("callback") === "true";
-  const callbackStatus = searchParams.get("status");
   const callbackPid = searchParams.get("pid");
   const callbackOrderId = searchParams.get("orderId");
   const callbackRefId = searchParams.get("refId");
@@ -52,10 +52,15 @@ function BuyNowPageInner() {
     GET_PRODUCT_BY_SLUG,
     {
       variables: { slug: productSlug },
-      skip: !productSlug,
-    }
+      fetchPolicy: "cache-first",
+      errorPolicy:"all",
+      onError:((error)=>{
+        console.log("error",error)
+      })
+    },
   );
 
+  console.log("prpduct data-->", productData);
   // Query user addresses
   const { data: addressData, loading: addressLoading } =
     useQuery(GET_ADDRESS_OF_USER);
@@ -140,9 +145,9 @@ function BuyNowPageInner() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {!productLoading && !product && (
+      {/* {!productLoading && !product && (
         <div className="text-center text-red-500">Product not found</div>
-      )}
+      )} */}
       <BuyNowHeader
         productSlug={productSlug || ""}
         productName={product?.name}

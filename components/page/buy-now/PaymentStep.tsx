@@ -33,9 +33,9 @@ export function PaymentStep({
           <CreditCard className="h-5 w-5" />
           Payment Method
         </CardTitle>
-        {/* <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Choose your payment method
-        </p> */}
+        </p>
       </CardHeader>
       <CardContent>
         <PaymentMethodSelector

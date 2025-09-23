@@ -25,7 +25,7 @@ const addressTypeOptions = ADDRESS_TYPES.map((type) => ({
   value: type,
   label: type.charAt(0) + type.slice(1).toLowerCase(),
   icon: getAddressTypeIcon(type),
-  description: `Use for ${type.toLowerCase()} purposes`,
+  description: `${type.toLowerCase()} purposes`,
 }));
 
 // Memoized province options
@@ -53,11 +53,11 @@ export const AddressFieldGroup = React.memo<AddressFieldGroupProps>(
     showDefaultCheckbox = true,
     className = "",
   }) => {
-    // Memoize layout class
+    // Memoize layout class with better vertical spacing
     const layoutClass = useMemo(() => {
       return layout === "grid"
         ? "grid grid-cols-1 md:grid-cols-2 gap-4"
-        : "space-y-4";
+        : "space-y-5"; // Increased spacing for vertical layout
     }, [layout]);
 
     // Memoize field change handlers to prevent unnecessary re-renders
@@ -78,7 +78,7 @@ export const AddressFieldGroup = React.memo<AddressFieldGroupProps>(
     );
 
     return (
-      <div className={`space-y-4 ${className}`}>
+      <div className={`${layout === "vertical" ? "space-y-5" : "space-y-4"} ${className}`}>
         {/* Address Type and Label */}
         {showTypeField && (
           <div className={layoutClass}>
@@ -190,7 +190,7 @@ export const AddressFieldGroup = React.memo<AddressFieldGroupProps>(
         </div>
 
         {/* Phone Number */}
-        <div className={layoutClass}>
+        <div className={layout === "vertical" ? "" : layoutClass}>
           <AddressField
             name="phone"
             label="Phone Number"
@@ -204,13 +204,13 @@ export const AddressFieldGroup = React.memo<AddressFieldGroupProps>(
             maxLength={15}
           />
 
-          {/* Spacer for grid layout */}
-          <div className="hidden md:block" />
+          {/* Spacer for grid layout only */}
+          {layout === "grid" && <div className="hidden md:block" />}
         </div>
 
         {/* Default Address Checkbox */}
         {showDefaultCheckbox && (
-          <div className="pt-2">
+          <div className="pt-3 border-t border-gray-100">
             <AddressCheckboxField
               name="isDefault"
               label="Set as default address"
