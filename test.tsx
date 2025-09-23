@@ -1,400 +1,97 @@
-"use client";
+import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
+import { GET_USER_PROFILE_DETAILS } from "@/client/user/user.queries";
+import AccountClient from "@/components/page/account/AccountClient";
+import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
+import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
 
-import { GET_PRODUCTS } from "@/client/product/product.queries";
-import CartEmpty from "@/components/cart/CartEmpty";
-import CartError from "@/components/cart/CartError";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { useCart } from "@/hooks/cart/useCart";
-import { useQuery } from "@apollo/client";
-import { ArrowLeft, Minus, Plus, ShoppingBag, Tag, Trash2 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useMemo, useState } from "react";
-
-// Cart Header Component
-function CartHeader({ cartItems }: { cartItems: any[] }) {
-  return (
-    <div className="flex items-center gap-4 mb-6">
-      <Link href="/">
-        <Button variant="ghost" size="sm">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Continue Shopping
-        </Button>
-      </Link>
-      <h1 className="text-2xl sm:text-3xl font-bold">Shopping Cart</h1>
-      <Badge variant="secondary" className="ml-auto">
-        {cartItems.length} {cartItems.length === 1 ? "item" : "items"}
-      </Badge>
-    </div>
-  );
+// Define TypeScript types
+interface UserProfile {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
 }
 
-// Cart Item Component
-function CartItem({
-  item,
-  updateQuantity,
-  removeItem,
-}: {
-  item: any;
-  updateQuantity: (cartId: string, newQuantity: number) => void;
-  removeItem: (productId: string, variantId: string) => void;
-}) {
-  const { variant, product, quantity } = item;
-  const discount = variant.attributes?.comparePrice
-    ? Math.round(
-        ((variant.attributes.comparePrice - variant.price) /
-          variant.attributes.comparePrice) *
-          100
-      )
-    : 0;
-
-  const formatPrice = (priceInCents: number) =>
-    `$${(priceInCents / 100).toFixed(2)}`;
-
-  return (
-    <Card className="overflow-hidden">
-      <CardContent className="p-4 sm:p-6">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-shrink-0 w-full sm:w-32 lg:w-40">
-            <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-              <Image
-                src={product.images[0]?.url || "/placeholder.svg"}
-                alt={product.images[0]?.altText || product.name}
-                width={160}
-                height={160}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
-              <div className="flex-1">
-                <Link href={`/product/${product.slug}`}>
-                  <h3 className="font-semibold text-lg mb-2 hover:text-blue-600 transition-colors">
-                    {product.name}
-                  </h3>
-                </Link>
-
-                <div className="space-y-2 text-sm text-gray-600">
-                  {product.description && <p>{product.description}</p>}
-                  {variant.sku && (
-                    <p>
-                      <span className="font-medium">SKU:</span> {variant.sku}
-                    </p>
-                  )}
-                </div>
-
-                {/* Mobile Price & Actions */}
-                <div className="sm:hidden mt-4 space-y-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl font-bold">
-                      {formatPrice(variant.price)}
-                    </span>
-                    {variant.attributes?.comparePrice && (
-                      <>
-                        <span className="text-sm text-gray-500 line-through">
-                          {formatPrice(variant.attributes.comparePrice)}
-                        </span>
-                        {discount > 0 && (
-                          <Badge variant="destructive" className="text-xs">
-                            {discount}% OFF
-                          </Badge>
-                        )}
-                      </>
-                    )}
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center border rounded-md">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0"
-                        onClick={() => updateQuantity(item.id, quantity - 1)}
-                        disabled={quantity <= 1}
-                      >
-                        <Minus className="h-3 w-3" />
-                      </Button>
-                      <span className="px-3 py-1 text-sm font-medium">
-                        {quantity}
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0"
-                        onClick={() => updateQuantity(item.id, quantity + 1)}
-                        disabled={quantity >= variant.stock}
-                      >
-                        <Plus className="h-3 w-3" />
-                      </Button>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeItem(product.id, variant.id)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Desktop Price & Actions */}
-              <div className="hidden sm:flex flex-col items-end gap-4">
-                <div className="text-right">
-                  <div className="text-xl font-bold">
-                    {formatPrice(variant.price)}
-                  </div>
-                  {variant.attributes?.comparePrice && (
-                    <div className="flex items-center gap-2 justify-end">
-                      <span className="text-sm text-gray-500 line-through">
-                        {formatPrice(variant.attributes.comparePrice)}
-                      </span>
-                      {discount > 0 && (
-                        <Badge variant="destructive" className="text-xs">
-                          {discount}% OFF
-                        </Badge>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center border rounded-md">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0"
-                      onClick={() => updateQuantity(item.id, quantity - 1)}
-                      disabled={quantity <= 1}
-                    >
-                      <Minus className="h-3 w-3" />
-                    </Button>
-                    <span className="px-3 py-1 text-sm font-medium">
-                      {quantity}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0"
-                      onClick={() => updateQuantity(item.id, quantity + 1)}
-                      disabled={quantity >= variant.stock}
-                    >
-                      <Plus className="h-3 w-3" />
-                    </Button>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => removeItem(product.id, variant.id)}
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+interface Address {
+  id: string;
+  address: string;
+  city: string;
+  country: string;
 }
 
-// Order Summary Component
-function OrderSummary({
-  cartItems,
-  subtotal,
-  originalTotal,
-  totalSavings,
-}: {
-  cartItems: any[];
-  subtotal: number;
-  originalTotal: number;
-  totalSavings: number;
-}) {
-  const formatPrice = (priceInCents: number) =>
-    `$${(priceInCents / 100).toFixed(2)}`;
-
-  return (
-    <Card className="sticky top-24">
-      <CardContent className="p-6">
-        <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-        <div className="space-y-3 text-sm">
-          <div className="flex justify-between">
-            <span>Subtotal ({cartItems.length} items)</span>
-            <span>{formatPrice(subtotal)}</span>
-          </div>
-          {totalSavings > 0 && (
-            <div className="flex justify-between text-green-600">
-              <span className="flex items-center gap-1">
-                <Tag className="w-4 h-4" />
-                Total Savings
-              </span>
-              <span>-{formatPrice(totalSavings)}</span>
-            </div>
-          )}
-          <div className="flex justify-between">
-            <span>Shipping</span>
-            <span className="text-green-600">FREE</span>
-          </div>
-          <div className="border-t pt-3 flex justify-between text-lg font-bold">
-            <span>Total</span>
-            <span>{formatPrice(subtotal)}</span>
-          </div>
-        </div>
-        <div className="mt-4 text-center text-sm text-gray-600">
-          <p>Free shipping on all orders</p>
-          <p>30-day return policy</p>
-        </div>
-      </CardContent>
-    </Card>
-  );
+interface InitialData {
+  addresses?: Address[];
+  userProfile?: { getUserProfileDetails: Omit<UserProfile, "__typename"> };
 }
 
-// Main CartPage Component
-export default function CartPage() {
-  const [cartItems, setCartItems] = useState<any[]>([]);
-  const {
-    removeFromCart,
-    myCartItems: cartProductIds,
-    cartLoading,
-  } = useCart();
+const mockUser: UserProfile = {
+  id: "1",
+  email: "john.doe@example.com",
+  firstName: "John",
+  lastName: "Doe",
+  phone: "+1234567890",
+};
 
-  const {
-    data: productdata,
-    loading: productDataLoading,
-    error: productDataError,
-  } = useQuery(GET_PRODUCTS, { fetchPolicy: "cache-first" });
+export const dynamic = "force-dynamic";
 
-  const processedCartItems = useMemo(() => {
-    if (
-      !cartProductIds ||
-      !productdata?.getProducts ||
-      cartLoading ||
-      productDataLoading
-    ) {
-      return [];
+export default async function AccountPage() {
+  let initialData: InitialData = {};
+
+  try {
+    const client = await getServerApolloClient();
+
+    // Fetch data in parallel
+    const [userProfileRes, addressesRes] = await Promise.all([
+      client.query({
+        query: GET_USER_PROFILE_DETAILS,
+        fetchPolicy: "no-cache",
+        errorPolicy: "all",
+      }),
+      client.query({
+        query: GET_ADDRESS_OF_USER,
+        fetchPolicy: "no-cache",
+        errorPolicy: "all",
+      }),
+    ]);
+
+    const userProfileDetails = userProfileRes.data?.getUserProfileDetails;
+    const addressesData = addressesRes.data?.getAddressOfUser;
+
+    // Handle user profile data
+    if (userProfileDetails) {
+      const { __typename, ...cleanProfile } = userProfileDetails;
+      initialData.userProfile = { getUserProfileDetails: cleanProfile };
+      client.cache.writeQuery({
+        query: GET_USER_PROFILE_DETAILS,
+        data: { getUserProfileDetails: cleanProfile },
+      });
     }
 
-    const cartdata = productdata.getProducts.filter((product: any) =>
-      cartProductIds.has(product.id)
-    );
-
-    return cartdata.map((product: any, index: number) => {
-      const variant = product.variants[0];
-      const priceInCents = parseFloat(variant.price) * 100;
-      const comparePrice = variant.comparePrice
-        ? parseFloat(variant.comparePrice) * 100
-        : undefined;
-
-      return {
-        id: product?.id || `cart-${index}`,
-        quantity: 1,
-        createdAt: new Date(),
-        variant: {
-          id: variant.id,
-          sku: variant.sku || `SKU-${product.id}`,
-          price: priceInCents,
-          stock: variant.stock || 10,
-          attributes: { comparePrice },
-        },
-        product: {
-          ...product,
-          salePrice: priceInCents,
-          returnPolicy: "30-day return policy",
-          warranty: "1 Year Warranty",
-        },
-      };
-    });
-  }, [
-    cartProductIds,
-    productdata?.getProducts,
-    cartLoading,
-    productDataLoading,
-  ]);
-
-  useMemo(() => {
-    if (JSON.stringify(cartItems) !== JSON.stringify(processedCartItems)) {
-      setCartItems(processedCartItems);
+    // Handle addresses data
+    if (addressesData) {
+      const cleanedAddresses = addressesData.map(({ __typename, ...clean }) => clean);
+      initialData.addresses = cleanedAddresses;
+      client.cache.writeQuery({
+        query: GET_ADDRESS_OF_USER,
+        data: { getAddressOfUser: cleanedAddresses },
+      });
     }
-  }, [processedCartItems]);
-
-  const updateQuantity = (cartId: string, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    setCartItems((items) =>
-      items.map((item) =>
-        item.id === cartId ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  };
-
-  const removeItem = async (productId: string, variantId: string) => {
-    try {
-      await removeFromCart(variantId, productId);
-    } catch (error) {
-      console.error("Error removing item:", error);
-    }
-  };
-
-  const { subtotal, originalTotal, totalSavings } = useMemo(() => {
-    const subtotal = cartItems.reduce(
-      (sum, item) => sum + item.variant.price * item.quantity,
-      0
-    );
-    const originalTotal = cartItems.reduce((sum, item) => {
-      const comparePrice =
-        item.variant.attributes?.comparePrice || item.variant.price;
-      return sum + comparePrice * item.quantity;
-    }, 0);
-    const totalSavings = originalTotal - subtotal;
-
-    return { subtotal, originalTotal, totalSavings };
-  }, [cartItems]);
-
-  if (productDataLoading || cartLoading) {
-    return (
-      <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8">
-        <div className="text-center py-16">
-          <ShoppingBag className="mx-auto h-24 w-24 text-gray-400 mb-4 animate-spin" />
-          <h2 className="text-2xl font-bold mb-2">Loading cart...</h2>
-        </div>
-      </div>
-    );
-  }
-
-  if (productDataError) {
-    return <CartError />;
-  }
-
-  if (cartItems.length === 0) {
-    return <CartEmpty />;
+  } catch (error) {
+    console.error("Server prefetch failed:", error);
+    // Fallback to mock data on error
+    initialData.userProfile = { getUserProfileDetails: mockUser };
+    initialData.addresses = []; // Empty array as fallback
   }
 
   return (
-    <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8">
-      <CartHeader cartItems={cartItems} />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-4">
-          {cartItems.map((item) => (
-            <CartItem
-              key={item.id}
-              item={item}
-              updateQuantity={updateQuantity}
-              removeItem={removeItem}
-            />
-          ))}
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="container mx-auto py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          <SSRApolloProvider initialData={initialData}>
+            <AccountClient user={mockUser} />
+          </SSRApolloProvider>
         </div>
-        <OrderSummary
-          cartItems={cartItems}
-          subtotal={subtotal}
-          originalTotal={originalTotal}
-          totalSavings={totalSavings}
-        />
       </div>
     </div>
   );

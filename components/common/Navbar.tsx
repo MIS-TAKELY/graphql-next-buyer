@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/cart/useCart";
 import { Menu, Search, ShoppingCart, User, X } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -70,7 +71,6 @@ const Navbar = () => {
   //   localStorage.getItem("anonymous_cart") || "[]"
   // );
   const cartCount = myCartItems?.size;
-
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16">
@@ -135,12 +135,15 @@ const Navbar = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem
+                {/* <DropdownMenuItem
                   onClick={() => {
                     router.push("/account");
                   }}
                 >
                   My Account
+                </DropdownMenuItem> */}
+                <DropdownMenuItem>
+                  <Link href={"/account"} prefetch={true}>My Account</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>Orders</DropdownMenuItem>
                 <DropdownMenuItem>Logout</DropdownMenuItem>

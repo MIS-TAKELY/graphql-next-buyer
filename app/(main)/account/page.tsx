@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
 import { GET_USER_PROFILE_DETAILS } from "@/client/user/user.queries";
 import AccountClient from "@/components/page/account/AccountClient";
@@ -21,23 +21,29 @@ export default async function AccountPage() {
 
     console.time("db-fetch");
     // Run both queries in parallel
-    const [userProfileRes, addressesRes] = await Promise.all([
-      client.query({
-        query: GET_USER_PROFILE_DETAILS,
-        fetchPolicy: "no-cache",
-        errorPolicy: "all",
-      }),
-      client.query({
-        query: GET_ADDRESS_OF_USER,
-        fetchPolicy: "no-cache",
-        errorPolicy: "all",
-      }),
-    ]);
+    // const [userProfileRes, addressesRes] = await Promise.all([
+    //   client.query({
+    //     query: GET_USER_PROFILE_DETAILS,
+    //     fetchPolicy: "no-cache",
+    //     errorPolicy: "all",
+    //   }),
+    //   client.query({
+    //     query: GET_ADDRESS_OF_USER,
+    //     fetchPolicy: "no-cache",
+    //     errorPolicy: "all",
+    //   }),
+    // ]);
+
+    const userProfileRes = await client.query({
+      query: GET_USER_PROFILE_DETAILS,
+      fetchPolicy: "no-cache",
+      errorPolicy: "all",
+    });
 
     const userProfileDetails = userProfileRes.data;
-    const addressesData = addressesRes.data;
+    const addressesData = userProfileRes.data.addresses;
 
-    // console.log("user profile details", userProfileDetails);
+    console.log("user profile details", userProfileDetails);
     // console.log("addressesData", addressesData);
 
     // Write user profile to cache
@@ -78,7 +84,7 @@ export default async function AccountPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen ">
       <div className="container mx-auto py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <SSRApolloProvider initialData={initialData}>

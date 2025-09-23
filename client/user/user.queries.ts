@@ -10,6 +10,19 @@ export const GET_USER_PROFILE_DETAILS = gql`
       phone
       gender
       dob
+      addresses {
+        id
+        type
+        label
+        line1
+        line2
+        city
+        state
+        country
+        postalCode
+        phone
+        isDefault
+      }
     }
   }
 `;

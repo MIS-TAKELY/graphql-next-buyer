@@ -71,7 +71,7 @@ export default async function ProductPage({
           //   (v) => v.id === listVariant.id
           // );
 
-          console.log("remaining varient-->", productFromRemaining.variants[0]?.stock || "0");
+          // console.log("remaining varient-->", productFromRemaining.variants[0]?.stock || "0");
 
           return {
             ...listVariant,
@@ -137,7 +137,7 @@ export default async function ProductPage({
     }
   }
 
-  console.log("final product-->", product);
+  // console.log("final product-->", product);
 
   const initialCacheData = {
     products: allProducts,
