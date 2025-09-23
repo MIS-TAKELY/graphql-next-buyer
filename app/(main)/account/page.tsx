@@ -1,4 +1,4 @@
-// export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
 import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
 import { GET_USER_PROFILE_DETAILS } from "@/client/user/user.queries";
 import AccountClient from "@/components/page/account/AccountClient";
