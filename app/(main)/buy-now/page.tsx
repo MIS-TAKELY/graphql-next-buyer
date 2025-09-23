@@ -48,17 +48,16 @@ function BuyNowPageInner() {
   const [verifyEsewaPayment] = useMutation(VERIFY_ESEWA_PAYMENT);
 
   // Query product
-  const { data: productData, loading: productLoading } = useQuery(
+  const { data: productData, loading: productLoading, error:productDataError} = useQuery(
     GET_PRODUCT_BY_SLUG,
     {
       variables: { slug: productSlug },
       fetchPolicy: "cache-first",
-      errorPolicy:"all",
-      onError:((error)=>{
-        console.log("error",error)
-      })
-    },
+      errorPolicy: "all",
+    }
   );
+
+  console.log("error",productDataError)
 
   console.log("prpduct data-->", productData);
   // Query user addresses

@@ -29,7 +29,7 @@ export const reviewTypeDefs = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
 
-    user: User!
+    user: User
     product: Product!
     media: [ReviewMedia]
     votes: [ReviewVote]

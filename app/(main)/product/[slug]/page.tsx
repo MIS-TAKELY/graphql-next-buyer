@@ -47,7 +47,7 @@ export default async function ProductPage({
       variants: [],
     };
 
-    console.log("Product from list-->", productFromList);
+    // console.log("Product from list-->", productFromList);
 
     const { data: remainingData, error } = await client.query({
       query: GET_REMAINING_PRODUCT_BY_SLUG,
@@ -83,7 +83,7 @@ export default async function ProductPage({
         }
       );
 
-      // console.log("merged varient-->", productFromList);
+      console.log("merged varient-->", mergedVariants);
 
       product = {
         ...productFromList,
@@ -137,13 +137,7 @@ export default async function ProductPage({
     }
   }
 
-  console.log("final product-->", product);
-
-  client.cache.writeQuery({
-    query: GET_PRODUCT_BY_SLUG,
-    variables: { slug },
-    data: { getProductBySlug: product },
-  });
+  // console.log("final product-->", product);
 
   const initialCacheData = {
     products: allProducts,

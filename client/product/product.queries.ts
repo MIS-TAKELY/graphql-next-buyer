@@ -77,11 +77,11 @@ export const GET_PRODUCT_BY_SLUG = gql`
       }
       reviews {
         id
-        user
+        user {
+          id
+        }
         rating
-        date
         comment
-        verified
       }
       variants {
         id
