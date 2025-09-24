@@ -349,6 +349,10 @@ exports.Prisma.PaymentScalarFieldEnum = {
   status: 'status',
   transactionId: 'transactionId',
   provider: 'provider',
+  esewaRefId: 'esewaRefId',
+  productCode: 'productCode',
+  signature: 'signature',
+  verifiedAt: 'verifiedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

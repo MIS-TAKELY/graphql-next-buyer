@@ -1,10 +1,10 @@
-// hooks/useBuyNow.ts
 import {
   CREATE_ORDER,
   INITIATE_ESEWA_PAYMENT,
 } from "@/client/payment/payment.mutations";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
+// import toast from "react-toastify"; // Assuming you use react-toastify for notifications
 
 export function useBuyNow() {
   const [step, setStep] = useState<"address" | "payment" | "summary">(
@@ -25,7 +25,6 @@ export function useBuyNow() {
   };
 
   const handleAddressCancel = () => {
-    // Reset to address selection mode
     setSelectedAddress(null);
     setShowAddressForm(false);
   };
@@ -36,7 +35,6 @@ export function useBuyNow() {
 
   const handleSelectAddress = (address: any) => {
     setSelectedAddress(address);
-    // Don't auto-advance, let user review and confirm
   };
 
   const handlePaymentMethodSelect = (method: any) => {
@@ -46,7 +44,20 @@ export function useBuyNow() {
   const handlePaymentSubmit = async (paymentData: any) => {
     setIsProcessingPayment(true);
     try {
-      // Expect paymentData to include: variantId, quantity, paymentProvider, paymentMethodId?, shippingAddress snapshot
+      const paymentProvider = paymentData.walletProvider
+        ? paymentData.walletProvider.toUpperCase()
+        : paymentData.paymentProvider;
+
+      const supportedProviders = [
+        "ESEWA",
+        "KHALTI",
+        "IMEPAY",
+        "CASH_ON_DELIVERY",
+      ];
+      if (!supportedProviders.includes(paymentProvider)) {
+        throw new Error("Unsupported payment provider");
+      }
+
       const variables = {
         input: {
           items: [
@@ -68,10 +79,9 @@ export function useBuyNow() {
           billingAddress: null,
           shippingMethod: paymentData.shippingMethod ?? "STANDARD",
           couponCode: paymentData.couponCode ?? null,
-          paymentProvider: paymentData.paymentProvider,
-          // paymentMethodId: paymentData.paymentMethodId ?? null,
+          paymentProvider,
         },
-      } as any;
+      };
 
       const orderResult = await createOrder({ variables });
       const orderId = orderResult.data?.createOrder?.id;
@@ -81,25 +91,44 @@ export function useBuyNow() {
       }
 
       // Handle eSewa payment
-      if (paymentData.paymentProvider === "ESEWA") {
+      if (paymentProvider === "ESEWA") {
         const esewaResult = await initiateEsewaPayment({
           variables: { orderId },
         });
-        const paymentUrl = esewaResult.data?.initiateEsewaPayment?.paymentUrl;
 
-        if (paymentUrl) {
-          // Redirect to eSewa payment gateway
-          window.location.href = paymentUrl;
-          return;
+        console.log("eSewa Result:", JSON.stringify(esewaResult, null, 2)); // Add logging
+
+        if (esewaResult.data.initiateEsewaPayment.success) {
+          // Create and submit form
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action = esewaResult.data.initiateEsewaPayment.paymentUrl;
+
+          // Add all payment data as hidden inputs
+          Object.entries(
+            esewaResult.data.initiateEsewaPayment.paymentData
+          ).forEach(([key, value]) => {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = value as string;
+            form.appendChild(input);
+          });
+
+          document.body.appendChild(form);
+          form.submit();
         } else {
-          throw new Error("Failed to get eSewa payment URL");
+          alert(
+            esewaResult.data.initiateEsewaPayment.error ||
+              "Payment initiation failed"
+          );
         }
       }
 
-      // For non-eSewa payments, continue to summary
       setStep("summary");
     } catch (e) {
-      console.error("Order creation failed", e);
+      console.error("Order creation failed:", e);
+      // toast.error(`Payment failed: ${e.message}`); // Ensure toast is imported
     } finally {
       setIsProcessingPayment(false);
     }

@@ -1,98 +1,76 @@
-import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
-import { GET_USER_PROFILE_DETAILS } from "@/client/user/user.queries";
-import AccountClient from "@/components/page/account/AccountClient";
-import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
-import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
+// app/api/payment/esewa/success/route.ts:
 
-// Define TypeScript types
-interface UserProfile {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-}
+// import { NextRequest, NextResponse } from "next/server";
+// import { verifyEsewaPayment } from "@/lib/esewa";
+// import { prisma } from "@/lib/prisma"; // assuming you use Prisma
 
-interface Address {
-  id: string;
-  address: string;
-  city: string;
-  country: string;
-}
+// export async function GET(req: NextRequest) {
+//   try {
+//     const { searchParams } = new URL(req.url);
+//     const refId = searchParams.get("refId"); // returned by eSewa
+//     const oid = searchParams.get("oid"); // your order/payment id
+//     const amt = searchParams.get("amt");
 
-interface InitialData {
-  addresses?: Address[];
-  userProfile?: { getUserProfileDetails: Omit<UserProfile, "__typename"> };
-}
+//     if (!refId || !oid || !amt) {
+//       return NextResponse.json({ error: "Missing params" }, { status: 400 });
+//     }
 
-const mockUser: UserProfile = {
-  id: "1",
-  email: "john.doe@example.com",
-  firstName: "John",
-  lastName: "Doe",
-  phone: "+1234567890",
-};
+//     const verified = await verifyEsewaPayment({
+//       amount: Number(amt),
+//       refId,
+//       pid: oid,
+//     });
 
-export const dynamic = "force-dynamic";
+//     if (!verified) {
+//       await prisma.payment.update({
+//         where: { transactionId: oid },
+//         data: { status: "FAILED" },
+//       });
 
-export default async function AccountPage() {
-  let initialData: InitialData = {};
+//       return NextResponse.json({ success: false, message: "Verification failed" });
+//     }
 
-  try {
-    const client = await getServerApolloClient();
+//     // ✅ Payment confirmed
+//     await prisma.payment.update({
+//       where: { transactionId: oid },
+//       data: { status: "COMPLETED", providerPaymentId: refId },
+//     });
 
-    // Fetch data in parallel
-    const [userProfileRes, addressesRes] = await Promise.all([
-      client.query({
-        query: GET_USER_PROFILE_DETAILS,
-        fetchPolicy: "no-cache",
-        errorPolicy: "all",
-      }),
-      client.query({
-        query: GET_ADDRESS_OF_USER,
-        fetchPolicy: "no-cache",
-        errorPolicy: "all",
-      }),
-    ]);
+//     await prisma.order.update({
+//       where: { id: oid },
+//       data: { status: "CONFIRMED" },
+//     });
 
-    const userProfileDetails = userProfileRes.data?.getUserProfileDetails;
-    const addressesData = addressesRes.data?.getAddressOfUser;
+//     return NextResponse.json({ success: true });
+//   } catch (error) {
+//     console.error(error);
+//     return NextResponse.json({ error: "Server error" }, { status: 500 });
+//   }
+// }
 
-    // Handle user profile data
-    if (userProfileDetails) {
-      const { __typename, ...cleanProfile } = userProfileDetails;
-      initialData.userProfile = { getUserProfileDetails: cleanProfile };
-      client.cache.writeQuery({
-        query: GET_USER_PROFILE_DETAILS,
-        data: { getUserProfileDetails: cleanProfile },
-      });
-    }
 
-    // Handle addresses data
-    if (addressesData) {
-      const cleanedAddresses = addressesData.map(({ __typename, ...clean }) => clean);
-      initialData.addresses = cleanedAddresses;
-      client.cache.writeQuery({
-        query: GET_ADDRESS_OF_USER,
-        data: { getAddressOfUser: cleanedAddresses },
-      });
-    }
-  } catch (error) {
-    console.error("Server prefetch failed:", error);
-    // Fallback to mock data on error
-    initialData.userProfile = { getUserProfileDetails: mockUser };
-    initialData.addresses = []; // Empty array as fallback
-  }
 
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="container mx-auto py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <SSRApolloProvider initialData={initialData}>
-            <AccountClient user={mockUser} />
-          </SSRApolloProvider>
-        </div>
-      </div>
-    </div>
-  );
-}
+// app/api/payment/esewa/failure/route.ts:
+
+
+// import { NextRequest, NextResponse } from "next/server";
+// import { prisma } from "@/lib/prisma";
+
+// export async function GET(req: NextRequest) {
+//   const { searchParams } = new URL(req.url);
+//   const oid = searchParams.get("oid");
+
+//   if (oid) {
+//     await prisma.payment.update({
+//       where: { transactionId: oid },
+//       data: { status: "FAILED" },
+//     });
+
+//     await prisma.order.update({
+//       where: { id: oid },
+//       data: { status: "CANCELLED" },
+//     });
+//   }
+
+//   return NextResponse.json({ success: false, message: "Payment failed" });
+// }

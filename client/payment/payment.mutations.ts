@@ -79,10 +79,33 @@ export const VALIDATE_PAYMENT = gql`
   }
 `;
 
+// export const CREATE_ORDER = gql`
+//   mutation CreateOrder($input: CreateOrderInput!) {
+//     createOrder(input: $input) {
+//       id
+//     }
+//   }
+// `;
+
 export const INITIATE_ESEWA_PAYMENT = gql`
   mutation InitiateEsewaPayment($orderId: ID!) {
     initiateEsewaPayment(orderId: $orderId) {
+      success
       paymentUrl
+      paymentData {
+        amount
+        tax_amount
+        total_amount
+        transaction_uuid
+        product_code
+        product_service_charge
+        product_delivery_charge
+        success_url
+        failure_url
+        signed_field_names
+        signature
+      }
+      error
     }
   }
 `;

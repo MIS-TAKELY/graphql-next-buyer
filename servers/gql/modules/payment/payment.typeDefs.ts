@@ -27,18 +27,36 @@ export const paymentTypeDefs = gql`
     method: PaymentMethod
   }
 
-  type EsewaPaymentResponse {
-    paymentUrl: String!
+  type EsewaPaymentInitiation {
+    success: Boolean!
+    paymentUrl: String
+    paymentData: EsewaPaymentData
+    error: String
   }
 
-  input EsewaVerifyInput {
-    orderId: ID!
-    refId: String!
-    amount: Float!
+  type EsewaPaymentData {
+    amount: String!
+    tax_amount: String!
+    total_amount: String!
+    transaction_uuid: String!
+    product_code: String!
+    product_service_charge: String!
+    product_delivery_charge: String!
+    success_url: String!
+    failure_url: String!
+    signed_field_names: String!
+    signature: String!
   }
 
-  extend type Mutation {
-    initiateEsewaPayment(orderId: ID!): EsewaPaymentResponse!
-    verifyEsewaPayment(input: EsewaVerifyInput!): Payment!
+  type PaymentVerificationResult {
+    success: Boolean!
+    payment: Payment
+    order: Order
+    message: String
+  }
+
+  type Mutation {
+    initiateEsewaPayment(orderId: ID!): EsewaPaymentInitiation!
+    verifyEsewaPayment(data: String!): PaymentVerificationResult!
   }
 `;

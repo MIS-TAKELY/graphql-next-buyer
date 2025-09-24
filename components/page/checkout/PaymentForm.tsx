@@ -55,7 +55,7 @@ export function PaymentForm({
     upiId: "",
     bankName: "",
     walletProvider: "",
-    walletNumber: "",
+    // walletNumber: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -132,9 +132,9 @@ export function PaymentForm({
       newErrors.walletProvider = "Please select wallet provider";
     }
 
-    if (formData.walletProvider && !formData.walletNumber) {
-      newErrors.walletNumber = "Wallet number/phone is required";
-    }
+    // if (formData.walletProvider && !formData.walletNumber) {
+    //   newErrors.walletNumber = "Wallet number/phone is required";
+    // }
 
     return newErrors;
   };
@@ -488,7 +488,7 @@ export function PaymentForm({
               )}
             </div>
 
-            {formData.walletProvider && (
+            {/* {formData.walletProvider && (
               <div>
                 <label className="block text-sm font-medium mb-2">
                   Wallet Number / Phone *
@@ -508,7 +508,7 @@ export function PaymentForm({
                   </p>
                 )}
               </div>
-            )}
+            )} */}
           </div>
         );
 

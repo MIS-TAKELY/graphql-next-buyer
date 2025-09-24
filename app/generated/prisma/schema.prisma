@@ -396,7 +396,7 @@ model ProductImage {
   variantId String?
   productId String
   url       String
-  altText   String?
+  altText   String?   @default("")
   sortOrder Int       @default(0)
   type      ImageType @default(PRIMARY)
 
@@ -485,22 +485,31 @@ model PaymentMethod {
   @@map("payment_methods")
 }
 
+// Update your Payment model to include eSewa-specific fields
 model Payment {
   id            String        @id @default(cuid())
   orderId       String
   methodId      String?
   amount        Decimal       @db.Money
-  currency      String        @default("NERU")
+  currency      String        @default("NPR")
   status        PaymentStatus @default(PENDING)
-  transactionId String?       @unique
-  provider      String
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  transactionId String?       @unique @default(cuid())
+  provider      String        @default("ESEWA")
+
+  // eSewa specific fields
+  esewaRefId  String?   @unique
+  productCode String?
+  signature   String?
+  verifiedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   order  Order          @relation(fields: [orderId], references: [id])
   method PaymentMethod? @relation(fields: [methodId], references: [id])
 
   @@index([orderId, status])
+  @@index([esewaRefId])
   @@map("payments")
 }
 

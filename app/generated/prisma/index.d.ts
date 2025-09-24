@@ -26814,6 +26814,10 @@ export namespace Prisma {
     status: $Enums.PaymentStatus | null
     transactionId: string | null
     provider: string | null
+    esewaRefId: string | null
+    productCode: string | null
+    signature: string | null
+    verifiedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -26827,6 +26831,10 @@ export namespace Prisma {
     status: $Enums.PaymentStatus | null
     transactionId: string | null
     provider: string | null
+    esewaRefId: string | null
+    productCode: string | null
+    signature: string | null
+    verifiedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -26840,6 +26848,10 @@ export namespace Prisma {
     status: number
     transactionId: number
     provider: number
+    esewaRefId: number
+    productCode: number
+    signature: number
+    verifiedAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -26863,6 +26875,10 @@ export namespace Prisma {
     status?: true
     transactionId?: true
     provider?: true
+    esewaRefId?: true
+    productCode?: true
+    signature?: true
+    verifiedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -26876,6 +26892,10 @@ export namespace Prisma {
     status?: true
     transactionId?: true
     provider?: true
+    esewaRefId?: true
+    productCode?: true
+    signature?: true
+    verifiedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -26889,6 +26909,10 @@ export namespace Prisma {
     status?: true
     transactionId?: true
     provider?: true
+    esewaRefId?: true
+    productCode?: true
+    signature?: true
+    verifiedAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -26989,6 +27013,10 @@ export namespace Prisma {
     status: $Enums.PaymentStatus
     transactionId: string | null
     provider: string
+    esewaRefId: string | null
+    productCode: string | null
+    signature: string | null
+    verifiedAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: PaymentCountAggregateOutputType | null
@@ -27021,6 +27049,10 @@ export namespace Prisma {
     status?: boolean
     transactionId?: boolean
     provider?: boolean
+    esewaRefId?: boolean
+    productCode?: boolean
+    signature?: boolean
+    verifiedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
@@ -27036,6 +27068,10 @@ export namespace Prisma {
     status?: boolean
     transactionId?: boolean
     provider?: boolean
+    esewaRefId?: boolean
+    productCode?: boolean
+    signature?: boolean
+    verifiedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
@@ -27051,6 +27087,10 @@ export namespace Prisma {
     status?: boolean
     transactionId?: boolean
     provider?: boolean
+    esewaRefId?: boolean
+    productCode?: boolean
+    signature?: boolean
+    verifiedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
@@ -27066,11 +27106,15 @@ export namespace Prisma {
     status?: boolean
     transactionId?: boolean
     provider?: boolean
+    esewaRefId?: boolean
+    productCode?: boolean
+    signature?: boolean
+    verifiedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "methodId" | "amount" | "currency" | "status" | "transactionId" | "provider" | "createdAt" | "updatedAt", ExtArgs["result"]["payment"]>
+  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "methodId" | "amount" | "currency" | "status" | "transactionId" | "provider" | "esewaRefId" | "productCode" | "signature" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["payment"]>
   export type PaymentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | OrderDefaultArgs<ExtArgs>
     method?: boolean | Payment$methodArgs<ExtArgs>
@@ -27099,6 +27143,10 @@ export namespace Prisma {
       status: $Enums.PaymentStatus
       transactionId: string | null
       provider: string
+      esewaRefId: string | null
+      productCode: string | null
+      signature: string | null
+      verifiedAt: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["payment"]>
@@ -27534,6 +27582,10 @@ export namespace Prisma {
     readonly status: FieldRef<"Payment", 'PaymentStatus'>
     readonly transactionId: FieldRef<"Payment", 'String'>
     readonly provider: FieldRef<"Payment", 'String'>
+    readonly esewaRefId: FieldRef<"Payment", 'String'>
+    readonly productCode: FieldRef<"Payment", 'String'>
+    readonly signature: FieldRef<"Payment", 'String'>
+    readonly verifiedAt: FieldRef<"Payment", 'DateTime'>
     readonly createdAt: FieldRef<"Payment", 'DateTime'>
     readonly updatedAt: FieldRef<"Payment", 'DateTime'>
   }
@@ -38421,6 +38473,10 @@ export namespace Prisma {
     status: 'status',
     transactionId: 'transactionId',
     provider: 'provider',
+    esewaRefId: 'esewaRefId',
+    productCode: 'productCode',
+    signature: 'signature',
+    verifiedAt: 'verifiedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -40463,6 +40519,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusFilter<"Payment"> | $Enums.PaymentStatus
     transactionId?: StringNullableFilter<"Payment"> | string | null
     provider?: StringFilter<"Payment"> | string
+    esewaRefId?: StringNullableFilter<"Payment"> | string | null
+    productCode?: StringNullableFilter<"Payment"> | string | null
+    signature?: StringNullableFilter<"Payment"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"Payment"> | Date | string | null
     createdAt?: DateTimeFilter<"Payment"> | Date | string
     updatedAt?: DateTimeFilter<"Payment"> | Date | string
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
@@ -40478,6 +40538,10 @@ export namespace Prisma {
     status?: SortOrder
     transactionId?: SortOrderInput | SortOrder
     provider?: SortOrder
+    esewaRefId?: SortOrderInput | SortOrder
+    productCode?: SortOrderInput | SortOrder
+    signature?: SortOrderInput | SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     order?: OrderOrderByWithRelationInput
@@ -40487,6 +40551,7 @@ export namespace Prisma {
   export type PaymentWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     transactionId?: string
+    esewaRefId?: string
     AND?: PaymentWhereInput | PaymentWhereInput[]
     OR?: PaymentWhereInput[]
     NOT?: PaymentWhereInput | PaymentWhereInput[]
@@ -40496,11 +40561,14 @@ export namespace Prisma {
     currency?: StringFilter<"Payment"> | string
     status?: EnumPaymentStatusFilter<"Payment"> | $Enums.PaymentStatus
     provider?: StringFilter<"Payment"> | string
+    productCode?: StringNullableFilter<"Payment"> | string | null
+    signature?: StringNullableFilter<"Payment"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"Payment"> | Date | string | null
     createdAt?: DateTimeFilter<"Payment"> | Date | string
     updatedAt?: DateTimeFilter<"Payment"> | Date | string
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
     method?: XOR<PaymentMethodNullableScalarRelationFilter, PaymentMethodWhereInput> | null
-  }, "id" | "transactionId">
+  }, "id" | "transactionId" | "esewaRefId">
 
   export type PaymentOrderByWithAggregationInput = {
     id?: SortOrder
@@ -40511,6 +40579,10 @@ export namespace Prisma {
     status?: SortOrder
     transactionId?: SortOrderInput | SortOrder
     provider?: SortOrder
+    esewaRefId?: SortOrderInput | SortOrder
+    productCode?: SortOrderInput | SortOrder
+    signature?: SortOrderInput | SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PaymentCountOrderByAggregateInput
@@ -40532,6 +40604,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusWithAggregatesFilter<"Payment"> | $Enums.PaymentStatus
     transactionId?: StringNullableWithAggregatesFilter<"Payment"> | string | null
     provider?: StringWithAggregatesFilter<"Payment"> | string
+    esewaRefId?: StringNullableWithAggregatesFilter<"Payment"> | string | null
+    productCode?: StringNullableWithAggregatesFilter<"Payment"> | string | null
+    signature?: StringNullableWithAggregatesFilter<"Payment"> | string | null
+    verifiedAt?: DateTimeNullableWithAggregatesFilter<"Payment"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
   }
@@ -42854,7 +42930,11 @@ export namespace Prisma {
     currency?: string
     status?: $Enums.PaymentStatus
     transactionId?: string | null
-    provider: string
+    provider?: string
+    esewaRefId?: string | null
+    productCode?: string | null
+    signature?: string | null
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     order: OrderCreateNestedOneWithoutPaymentsInput
@@ -42869,7 +42949,11 @@ export namespace Prisma {
     currency?: string
     status?: $Enums.PaymentStatus
     transactionId?: string | null
-    provider: string
+    provider?: string
+    esewaRefId?: string | null
+    productCode?: string | null
+    signature?: string | null
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42881,6 +42965,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     provider?: StringFieldUpdateOperationsInput | string
+    esewaRefId?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     order?: OrderUpdateOneRequiredWithoutPaymentsNestedInput
@@ -42896,6 +42984,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     provider?: StringFieldUpdateOperationsInput | string
+    esewaRefId?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42908,7 +43000,11 @@ export namespace Prisma {
     currency?: string
     status?: $Enums.PaymentStatus
     transactionId?: string | null
-    provider: string
+    provider?: string
+    esewaRefId?: string | null
+    productCode?: string | null
+    signature?: string | null
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42920,6 +43016,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     provider?: StringFieldUpdateOperationsInput | string
+    esewaRefId?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42933,6 +43033,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     provider?: StringFieldUpdateOperationsInput | string
+    esewaRefId?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -45231,6 +45335,10 @@ export namespace Prisma {
     status?: SortOrder
     transactionId?: SortOrder
     provider?: SortOrder
+    esewaRefId?: SortOrder
+    productCode?: SortOrder
+    signature?: SortOrder
+    verifiedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -45248,6 +45356,10 @@ export namespace Prisma {
     status?: SortOrder
     transactionId?: SortOrder
     provider?: SortOrder
+    esewaRefId?: SortOrder
+    productCode?: SortOrder
+    signature?: SortOrder
+    verifiedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -45261,6 +45373,10 @@ export namespace Prisma {
     status?: SortOrder
     transactionId?: SortOrder
     provider?: SortOrder
+    esewaRefId?: SortOrder
+    productCode?: SortOrder
+    signature?: SortOrder
+    verifiedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -52683,7 +52799,11 @@ export namespace Prisma {
     currency?: string
     status?: $Enums.PaymentStatus
     transactionId?: string | null
-    provider: string
+    provider?: string
+    esewaRefId?: string | null
+    productCode?: string | null
+    signature?: string | null
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     method?: PaymentMethodCreateNestedOneWithoutPaymentInput
@@ -52696,7 +52816,11 @@ export namespace Prisma {
     currency?: string
     status?: $Enums.PaymentStatus
     transactionId?: string | null
-    provider: string
+    provider?: string
+    esewaRefId?: string | null
+    productCode?: string | null
+    signature?: string | null
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -52902,6 +53026,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusFilter<"Payment"> | $Enums.PaymentStatus
     transactionId?: StringNullableFilter<"Payment"> | string | null
     provider?: StringFilter<"Payment"> | string
+    esewaRefId?: StringNullableFilter<"Payment"> | string | null
+    productCode?: StringNullableFilter<"Payment"> | string | null
+    signature?: StringNullableFilter<"Payment"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"Payment"> | Date | string | null
     createdAt?: DateTimeFilter<"Payment"> | Date | string
     updatedAt?: DateTimeFilter<"Payment"> | Date | string
   }
@@ -53202,7 +53330,11 @@ export namespace Prisma {
     currency?: string
     status?: $Enums.PaymentStatus
     transactionId?: string | null
-    provider: string
+    provider?: string
+    esewaRefId?: string | null
+    productCode?: string | null
+    signature?: string | null
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     order: OrderCreateNestedOneWithoutPaymentsInput
@@ -53215,7 +53347,11 @@ export namespace Prisma {
     currency?: string
     status?: $Enums.PaymentStatus
     transactionId?: string | null
-    provider: string
+    provider?: string
+    esewaRefId?: string | null
+    productCode?: string | null
+    signature?: string | null
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -56214,7 +56350,11 @@ export namespace Prisma {
     currency?: string
     status?: $Enums.PaymentStatus
     transactionId?: string | null
-    provider: string
+    provider?: string
+    esewaRefId?: string | null
+    productCode?: string | null
+    signature?: string | null
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -56285,6 +56425,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     provider?: StringFieldUpdateOperationsInput | string
+    esewaRefId?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     method?: PaymentMethodUpdateOneWithoutPaymentNestedInput
@@ -56298,6 +56442,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     provider?: StringFieldUpdateOperationsInput | string
+    esewaRefId?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -56310,6 +56458,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     provider?: StringFieldUpdateOperationsInput | string
+    esewaRefId?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -56408,7 +56560,11 @@ export namespace Prisma {
     currency?: string
     status?: $Enums.PaymentStatus
     transactionId?: string | null
-    provider: string
+    provider?: string
+    esewaRefId?: string | null
+    productCode?: string | null
+    signature?: string | null
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -56420,6 +56576,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     provider?: StringFieldUpdateOperationsInput | string
+    esewaRefId?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     order?: OrderUpdateOneRequiredWithoutPaymentsNestedInput
@@ -56433,6 +56593,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     provider?: StringFieldUpdateOperationsInput | string
+    esewaRefId?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -56445,6 +56609,10 @@ export namespace Prisma {
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     provider?: StringFieldUpdateOperationsInput | string
+    esewaRefId?: NullableStringFieldUpdateOperationsInput | string | null
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

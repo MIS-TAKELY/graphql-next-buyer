@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db/prisma";
 import { generateOrderNumber } from "@/randomOrderNumber";
 import { requireAuth, requireBuyer } from "../../auth/auth";
+import { GraphQLContext } from "../../context";
 
 interface OrderInput {
   items: Array<{
@@ -27,7 +28,11 @@ interface DiscountCalculation {
 
 export const orderResolvers = {
   Mutation: {
-    createOrder: async (_: any, { input }: { input: OrderInput }, ctx: any) => {
+    createOrder: async (
+      _: any,
+      { input }: { input: OrderInput },
+      ctx: GraphQLContext
+    ) => {
       const user = requireAuth(ctx);
       requireBuyer(ctx);
 
@@ -75,6 +80,9 @@ export const orderResolvers = {
 
         const totalPrice = unitPrice.mul(i.quantity);
         subtotal += Number(totalPrice);
+
+        // console.log("total price-->",totalPrice)
+        // console.log("subtotal price-->",subtotal)
 
         return {
           variantId: i.variantId,
