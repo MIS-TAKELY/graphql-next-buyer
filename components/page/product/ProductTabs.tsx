@@ -1,3 +1,4 @@
+// components/page/product/ProductTabs.tsx
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -16,25 +17,31 @@ export default function ProductTabs({ product, averageRating, mockReviews }: Pro
 
   return (
     <Tabs defaultValue="specifications" className="w-full">
-      <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="specifications">Specifications</TabsTrigger>
-        <TabsTrigger value="reviews">Reviews</TabsTrigger>
-        <TabsTrigger value="features">All Features</TabsTrigger>
+      <TabsList className="grid w-full grid-cols-3 bg-gray-100 dark:bg-gray-800">
+        <TabsTrigger value="specifications" className="text-gray-900 dark:text-white data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900">
+          Specifications
+        </TabsTrigger>
+        <TabsTrigger value="reviews" className="text-gray-900 dark:text-white data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900">
+          Reviews
+        </TabsTrigger>
+        <TabsTrigger value="features" className="text-gray-900 dark:text-white data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900">
+          All Features
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent value="specifications" className="mt-6">
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
           <CardContent className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {Object.entries(specifications).length > 0 ? (
                 Object.entries(specifications).map(([key, value]) => (
                   <div key={key} className="flex justify-between">
-                    <span className="text-gray-600">{key}</span>
-                    <span className="font-medium">{value as string}</span>
+                    <span className="text-gray-600 dark:text-gray-300">{key}</span>
+                    <span className="font-medium text-gray-900 dark:text-white">{value as string}</span>
                   </div>
                 ))
               ) : (
-                <p className="text-gray-600">No specifications available</p>
+                <p className="text-gray-600 dark:text-gray-300">No specifications available</p>
               )}
             </div>
           </CardContent>
@@ -50,12 +57,12 @@ export default function ProductTabs({ product, averageRating, mockReviews }: Pro
                   <Star
                     key={i}
                     className={`w-5 h-5 fill-current ${
-                      i < Math.floor(averageRating) ? "text-yellow-400" : "text-gray-300"
+                      i < Math.floor(averageRating) ? "text-yellow-400 dark:text-yellow-300" : "text-gray-300 dark:text-gray-600"
                     }`}
                   />
                 ))}
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-600 dark:text-gray-300">
                 Based on {mockReviews.length} reviews
               </div>
             </div>
@@ -63,50 +70,50 @@ export default function ProductTabs({ product, averageRating, mockReviews }: Pro
           <div className="space-y-4">
             {mockReviews.length > 0 ? (
               mockReviews.map((review) => (
-                <Card key={review.id}>
+                <Card key={review.id} className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium">{review.user}</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{review.user}</span>
                         {review.verified && (
-                          <Badge variant="secondary" className="text-xs">
+                          <Badge variant="secondary" className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
                             Verified Purchase
                           </Badge>
                         )}
                       </div>
-                      <span className="text-sm text-gray-500">{review.date}</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">{review.date}</span>
                     </div>
                     <div className="flex mb-2">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
                           className={`w-4 h-4 fill-current ${
-                            i < review.rating ? "text-yellow-400" : "text-gray-300"
+                            i < review.rating ? "text-yellow-400 dark:text-yellow-300" : "text-gray-300 dark:text-gray-600"
                           }`}
                         />
                       ))}
                     </div>
-                    <p className="text-gray-700">{review.comment}</p>
+                    <p className="text-gray-700 dark:text-gray-200">{review.comment}</p>
                   </CardContent>
                 </Card>
               ))
             ) : (
-              <p className="text-gray-600">No reviews available</p>
+              <p className="text-gray-600 dark:text-gray-300">No reviews available</p>
             )}
           </div>
         </div>
       </TabsContent>
 
       <TabsContent value="features" className="mt-6">
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
           <CardContent className="p-6">
             <ul className="space-y-3">
               {features.length > 0 ? (
                 features.map((feature: string, index: number) => (
-                  <li key={index} className="text-gray-700">{feature}</li>
+                  <li key={index} className="text-gray-700 dark:text-gray-200">{feature}</li>
                 ))
               ) : (
-                <p className="text-gray-600">No features available</p>
+                <p className="text-gray-600 dark:text-gray-300">No features available</p>
               )}
             </ul>
           </CardContent>

@@ -1,3 +1,4 @@
+// pages/index.tsx
 import { GET_PRODUCTS } from "@/client/product/product.queries";
 import HeroCarousel from "@/components/page/home/HeroCarousel";
 import ProductCatagoryCardSection from "@/components/page/home/ProductCatagoryCardSection";
@@ -8,7 +9,6 @@ import { IProducts } from "@/types/product";
 
 export const revalidate = 3600;
 
-// Define section config for scalability
 type SectionConfig = {
   name: string;
   products: IProducts[];
@@ -23,14 +23,10 @@ export default async function HomePage() {
     fetchPolicy: "no-cache",
     errorPolicy: "all",
   });
-  // console.log(productsResponse);
   const products = productsResponse?.data?.getProducts || [];
-  console.log(products);
 
-  // Compute slices once for optimization
-  const sharedSlice = products.slice(0, 8); // Reuse for sections with same data
+  const sharedSlice = products.slice(0, 8);
 
-  // Config array: Easy to add/remove sections
   const sections: SectionConfig[] = [
     {
       name: "Today's Best Deals",
@@ -53,7 +49,7 @@ export default async function HomePage() {
   ];
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       <ProductCatagoryCardSection />
       <HeroCarousel />
       <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8">

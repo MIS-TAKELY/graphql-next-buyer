@@ -1,8 +1,9 @@
+import ApolloWrapper from "@/lib/apollo/apollo-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ApolloWrapper from "@/lib/apollo/apollo-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +31,11 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <ApolloWrapper>{children}</ApolloWrapper>
+          <ApolloWrapper>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              {children}
+            </ThemeProvider>
+          </ApolloWrapper>
         </body>
       </ClerkProvider>
     </html>

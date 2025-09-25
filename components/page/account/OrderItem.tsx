@@ -1,5 +1,9 @@
+// OrderItem.tsx
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import React from "react";
 
 type OrderStatus =
   | "PENDING"
@@ -8,6 +12,32 @@ type OrderStatus =
   | "DELIVERED"
   | "CANCELLED"
   | string;
+
+export interface Order {
+  id: string;
+  orderNumber: string;
+  createdAt: string;
+  total: string;
+  status: OrderStatus;
+}
+
+// OrderItem returned from GraphQL
+export interface OrderItem {
+  id: string;
+  items:[
+   { order:Order}
+  ];
+}
+
+// export interface OrderItem {
+//   id: string;
+//   order: Order;
+// }
+
+// Root query response
+export interface GetMyOrderItemsResponse {
+  getMyOrderItems: OrderItem[];
+}
 
 function getStatusColor(status: OrderStatus) {
   switch (status) {
@@ -25,31 +55,27 @@ function getStatusColor(status: OrderStatus) {
 }
 
 interface OrderItemProps {
-  order: {
-    orderNumber: string | number;
-    createdAt: string | number | Date;
-    total: number;
-    status: OrderStatus;
-  };
+  order: Order;
 }
 
-export default function OrderItem({ order }: OrderItemProps) {
+function OrderItemComponent({ order }: OrderItemProps) {
+  console.log("order-->",order)
   return (
     <Card className="border">
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-medium">Order #{order.orderNumber}</p>
+            <p className="font-medium">Order #{order?.orderNumber}</p>
             <p className="text-sm text-muted-foreground">
-              Placed on {new Date(order.createdAt).toLocaleDateString()}
+              Placed on {new Date(order?.createdAt).toLocaleDateString()}
             </p>
           </div>
           <div className="text-right">
-            <p className="font-semibold">${order.total.toFixed(2)}</p>
+            <p className="font-semibold">${order?.total}</p>
             <p
-              className={`text-sm font-medium ${getStatusColor(order.status)}`}
+              className={`text-sm font-medium ${getStatusColor(order?.status)}`}
             >
-              {order.status}
+              {order?.status}
             </p>
           </div>
         </div>
@@ -57,7 +83,7 @@ export default function OrderItem({ order }: OrderItemProps) {
           <Button variant="outline" size="sm">
             View Details
           </Button>
-          {order.status === "DELIVERED" && (
+          {order?.status === "DELIVERED" && (
             <Button variant="outline" size="sm">
               Reorder
             </Button>
@@ -67,3 +93,5 @@ export default function OrderItem({ order }: OrderItemProps) {
     </Card>
   );
 }
+
+export default React.memo(OrderItemComponent);

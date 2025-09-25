@@ -1,3 +1,4 @@
+// components/page/product/ProductActionsClient.tsx
 "use client";
 import { useState } from "react";
 import QuantitySelector from "@/components/page/product/QuantitySelector";
@@ -23,9 +24,8 @@ export function ProductActionsClient({
   const toggleWishlist = () => setAddedToWishlist(!addedToWishlist);
 
   return (
-    <>
+    <div className="space-y-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
       <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
-
       <ProductActions
         productId={productId}
         productSlug={productSlug}
@@ -33,11 +33,10 @@ export function ProductActionsClient({
         quantity={quantity}
         inStock={inStock}
       />
-
       <WishlistShareButtons
         addedToWishlist={addedToWishlist}
         toggleWishlist={toggleWishlist}
       />
-    </>
+    </div>
   );
 }

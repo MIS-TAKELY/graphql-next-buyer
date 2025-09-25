@@ -1,7 +1,9 @@
-import React from "react";
-import { ProductCardSkeleton } from "./ProductCardSkeleton";
+// components/page/home/ProductSection.tsx
+"use client";
 import { IProducts } from "@/types/product";
+import React from "react";
 import ProductCard from "./ProductCard";
+import { ProductCardSkeleton } from "./ProductCardSkeleton";
 
 interface ProductSectionProps {
   name: string;
@@ -36,7 +38,7 @@ function ProductSection({
   if (loading && !products) {
     return (
       <section className="mb-8 md:mb-12">
-        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 px-1">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 px-1 text-black dark:text-white">
           {name}
         </h2>
         <div className={containerClass}>
@@ -56,7 +58,7 @@ function ProductSection({
 
   return (
     <section className="mb-8 md:mb-12">
-      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 px-1">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 px-1 text-black dark:text-white">
         {name}
       </h2>
       <div className={containerClass}>
@@ -69,4 +71,5 @@ function ProductSection({
     </section>
   );
 }
+
 export default React.memo(ProductSection);

@@ -1,3 +1,4 @@
+// app/(main)/buy-now/page.tsx
 "use client";
 
 import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
@@ -17,8 +18,6 @@ function BuyNowPageInner() {
   const [currentStep, setCurrentStep] = useState(1);
   const searchParams = useSearchParams();
   const productSlug = searchParams.get("product");
-
-  console.log("product slug-->", productSlug);
   const quantity = parseInt(searchParams.get("quantity") || "1");
 
   // eSewa callback parameters
@@ -48,7 +47,7 @@ function BuyNowPageInner() {
   const [verifyEsewaPayment] = useMutation(VERIFY_ESEWA_PAYMENT);
 
   // Query product
-  const { data: productData, loading: productLoading, error:productDataError} = useQuery(
+  const { data: productData, loading: productLoading, error: productDataError } = useQuery(
     GET_PRODUCT_BY_SLUG,
     {
       variables: { slug: productSlug },
@@ -57,12 +56,8 @@ function BuyNowPageInner() {
     }
   );
 
-  console.log("error",productDataError)
-
-  console.log("prpduct data-->", productData);
   // Query user addresses
-  const { data: addressData, loading: addressLoading } =
-    useQuery(GET_ADDRESS_OF_USER);
+  const { data: addressData, loading: addressLoading } = useQuery(GET_ADDRESS_OF_USER);
 
   const product = productData?.getProductBySlug;
   const addresses = addressData?.getAddressOfUser || [];
@@ -102,15 +97,11 @@ function BuyNowPageInner() {
               },
             },
           });
-
-          // Move to summary step on successful verification
           setCurrentStep(3);
         } catch (error) {
           console.error("Failed to verify eSewa payment:", error);
-          // Handle verification failure
         }
       };
-
       verifyPayment();
     }
   }, [
@@ -129,13 +120,13 @@ function BuyNowPageInner() {
         setSelectedAddress(defaultAddress);
       }
     }
-  }, [addresses]);
+  }, [addresses, setSelectedAddress]);
 
   // Show error if callback failed
   if (searchParams.get("error")) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center text-red-500">
+      <div className="container mx-auto px-4 py-8 bg-gray-50 dark:bg-gray-900">
+        <div className="text-center text-red-600 dark:text-red-400">
           Payment callback failed. Please try again.
         </div>
       </div>
@@ -143,24 +134,18 @@ function BuyNowPageInner() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* {!productLoading && !product && (
-        <div className="text-center text-red-500">Product not found</div>
-      )} */}
+    <div className="container mx-auto px-4 py-8 bg-gray-50 dark:bg-gray-900">
       <BuyNowHeader
         productSlug={productSlug || ""}
         productName={product?.name}
       />
-
       <BuyNowSteps currentStep={currentStep} />
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* LEFT SIDE: Address & Payment */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Address section */}
           {addressLoading ? (
             <div className="space-y-4">
-              <div className="h-96 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-96 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
             </div>
           ) : (
             step === "address" && (
@@ -175,8 +160,6 @@ function BuyNowPageInner() {
               />
             )
           )}
-
-          {/* Payment section */}
           {step === "payment" && product && (
             <PaymentStep
               selectedAddress={selectedAddress}
@@ -206,11 +189,10 @@ function BuyNowPageInner() {
             />
           )}
         </div>
-
         {/* RIGHT SIDE: Order Summary */}
         <div className="lg:col-span-1">
           {productLoading ? (
-            <div className="h-64 bg-gray-200 rounded animate-pulse"></div>
+            <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
           ) : product ? (
             <OrderSummary
               items={[
@@ -245,7 +227,7 @@ function BuyNowPageInner() {
               tax={Math.round((orderAmount / 1.18) * 0.18)}
               total={orderAmount}
               formatPrice={(priceInCents: number) =>
-                `₹${(priceInCents / 100).toLocaleString("en-IN")}`
+                `रु${(priceInCents / 100).toLocaleString("en-IN")}`
               }
             />
           ) : null}
@@ -258,7 +240,11 @@ function BuyNowPageInner() {
 export default function BuyNowPage() {
   return (
     <Suspense
-      fallback={<div className="container mx-auto px-4 py-8">Loading...</div>}
+      fallback={
+        <div className="container mx-auto px-4 py-8 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
+          Loading...
+        </div>
+      }
     >
       <BuyNowPageInner />
     </Suspense>

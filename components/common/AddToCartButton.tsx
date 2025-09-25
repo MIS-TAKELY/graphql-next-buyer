@@ -1,3 +1,5 @@
+// components/common/AddToCartButton.tsx
+"use client";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/cart/useCart";
 import { Check, Loader2, ShoppingCart } from "lucide-react";
@@ -88,7 +90,7 @@ export function AddToCartButton({
       size={size}
       onClick={handleClick}
       disabled={isDisabled || isLoading}
-      className="w-full transition-all duration-75 active:scale-95 py-5 bg-white hover:bg-gray-100 text-black"
+      className={`w-full transition-all duration-75 active:scale-95 py-5 bg-white dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white ${className}`}
     >
       <span className="flex items-center justify-center gap-2 min-w-[100px]">
         {getButtonIcon()}

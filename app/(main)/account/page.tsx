@@ -20,19 +20,6 @@ export default async function AccountPage() {
     const client = await getServerApolloClient();
 
     console.time("db-fetch");
-    // Run both queries in parallel
-    // const [userProfileRes, addressesRes] = await Promise.all([
-    //   client.query({
-    //     query: GET_USER_PROFILE_DETAILS,
-    //     fetchPolicy: "no-cache",
-    //     errorPolicy: "all",
-    //   }),
-    //   client.query({
-    //     query: GET_ADDRESS_OF_USER,
-    //     fetchPolicy: "no-cache",
-    //     errorPolicy: "all",
-    //   }),
-    // ]);
 
     const userProfileRes = await client.query({
       query: GET_USER_PROFILE_DETAILS,

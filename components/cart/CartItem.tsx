@@ -1,3 +1,4 @@
+// components/cart/CartItem.tsx
 import { ICartItem } from "@/app/(main)/cart/page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -26,12 +27,13 @@ const CartItem = ({
 
   const formatPrice = (priceInCents: number) =>
     `$${(priceInCents / 100).toFixed(2)}`;
+
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
       <CardContent className="p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-shrink-0 w-full sm:w-32 lg:w-40">
-            <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+            <div className="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
               <Image
                 src={product.images[0]?.url || "/placeholder.svg"}
                 alt={product.images[0]?.altText || product.name}
@@ -46,12 +48,12 @@ const CartItem = ({
             <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
               <div className="flex-1">
                 <Link href={`/product/${product.slug}`}>
-                  <h3 className="font-semibold text-lg mb-2 hover:text-blue-600 transition-colors">
+                  <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                     {product.name}
                   </h3>
                 </Link>
 
-                <div className="space-y-2 text-sm text-gray-600">
+                <div className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
                   {product.description && <p>{product.description}</p>}
                   {variant.sku && (
                     <p>
@@ -63,16 +65,19 @@ const CartItem = ({
                 {/* Mobile Price & Actions */}
                 <div className="sm:hidden mt-4 space-y-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-xl font-bold">
+                    <span className="text-xl font-bold text-gray-900 dark:text-white">
                       {formatPrice(variant.price)}
                     </span>
                     {variant.attributes?.comparePrice && (
                       <>
-                        <span className="text-sm text-gray-500 line-through">
+                        <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
                           {formatPrice(variant.attributes.comparePrice)}
                         </span>
                         {discount > 0 && (
-                          <Badge variant="destructive" className="text-xs">
+                          <Badge 
+                            variant="destructive" 
+                            className="text-xs bg-red-600 dark:bg-red-500 text-white"
+                          >
                             {discount}% OFF
                           </Badge>
                         )}
@@ -81,23 +86,23 @@ const CartItem = ({
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center border rounded-md">
+                    <div className="flex items-center border border-gray-200 dark:border-gray-600 rounded-md">
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0"
+                        className="h-8 w-8 p-0 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                         onClick={() => updateQuantity(item.id, quantity - 1)}
                         disabled={quantity <= 1}
                       >
                         <Minus className="h-3 w-3" />
                       </Button>
-                      <span className="px-3 py-1 text-sm font-medium">
+                      <span className="px-3 py-1 text-sm font-medium text-gray-900 dark:text-white">
                         {quantity}
                       </span>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0"
+                        className="h-8 w-8 p-0 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                         onClick={() => updateQuantity(item.id, quantity + 1)}
                         disabled={quantity >= variant.stock}
                       >
@@ -107,8 +112,8 @@ const CartItem = ({
                     <Button
                       variant="ghost"
                       size="sm"
+                      className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
                       onClick={() => removeItem(product.id, variant.id)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -119,16 +124,19 @@ const CartItem = ({
               {/* Desktop Price & Actions */}
               <div className="hidden sm:flex flex-col items-end gap-4">
                 <div className="text-right">
-                  <div className="text-xl font-bold">
+                  <div className="text-xl font-bold text-gray-900 dark:text-white">
                     {formatPrice(variant.price)}
                   </div>
                   {variant.attributes?.comparePrice && (
                     <div className="flex items-center gap-2 justify-end">
-                      <span className="text-sm text-gray-500 line-through">
+                      <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
                         {formatPrice(variant.attributes.comparePrice)}
                       </span>
                       {discount > 0 && (
-                        <Badge variant="destructive" className="text-xs">
+                        <Badge 
+                          variant="destructive" 
+                          className="text-xs bg-red-600 dark:bg-red-500 text-white"
+                        >
                           {discount}% OFF
                         </Badge>
                       )}
@@ -137,23 +145,23 @@ const CartItem = ({
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center border rounded-md">
+                  <div className="flex items-center border border-gray-200 dark:border-gray-600 rounded-md">
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-8 w-8 p-0"
+                      className="h-8 w-8 p-0 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                       onClick={() => updateQuantity(item.id, quantity - 1)}
                       disabled={quantity <= 1}
                     >
                       <Minus className="h-3 w-3" />
                     </Button>
-                    <span className="px-3 py-1 text-sm font-medium">
+                    <span className="px-3 py-1 text-sm font-medium text-gray-900 dark:text-white">
                       {quantity}
                     </span>
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-8 w-8 p-0"
+                      className="h-8 w-8 p-0 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                       onClick={() => updateQuantity(item.id, quantity + 1)}
                       disabled={quantity >= variant.stock}
                     >
@@ -163,8 +171,8 @@ const CartItem = ({
                   <Button
                     variant="ghost"
                     size="sm"
+                    className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
                     onClick={() => removeItem(product.id, variant.id)}
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

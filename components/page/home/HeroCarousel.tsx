@@ -1,5 +1,5 @@
-"use client"
-
+// components/page/home/HeroCarousel.tsx
+"use client";
 import test from "@/assets/403609db54d2a0d0.webp";
 import electronicsDeal from "@/assets/electronics-deal.jpg";
 import fashionDiscount from "@/assets/fashion-discount.jpg";
@@ -9,7 +9,6 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import { memo, useCallback, useEffect, useState } from "react";
 
-// Move slides outside component to prevent recreation
 const SLIDES = [
   {
     id: 1,
@@ -41,7 +40,6 @@ const SLIDES = [
   },
 ];
 
-// Memoized slide component
 interface SlideProps {
   slide: {
     id: number;
@@ -63,15 +61,17 @@ const Slide = memo(({ slide, isHovered }: SlideProps) => (
         isHovered ? "filter blur-sm" : ""
       }`}
       sizes="100vw"
-      priority={slide.id === 1} // Only prioritize first slide
+      priority={slide.id === 1}
     />
     <div
       className="absolute inset-0 flex items-center justify-center transition-all duration-300"
       style={{
-        backgroundColor: isHovered ? "rgba(0,0,0,0.7)" : "rgba(0,0,0,0)",
+        backgroundColor: isHovered
+          ? "rgba(0,0,0,0.7)"
+          : "rgba(0,0,0,0)",
       }}
     >
-      <div className="text-center text-white px-4 w-full max-w-[90%] sm:max-w-[80%] md:max-w-[70%] lg:max-w-[60%]">
+      <div className="text-center text-white dark:text-gray-200 px-4 w-full max-w-[90%] sm:max-w-[80%] md:max-w-[70%] lg:max-w-[60%]">
         <h2
           className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-2 drop-shadow-lg transition-all duration-300"
           style={{
@@ -82,7 +82,7 @@ const Slide = memo(({ slide, isHovered }: SlideProps) => (
           {slide.title}
         </h2>
         <p
-          className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-2 text-secondary font-semibold drop-shadow-md transition-all duration-300"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-2 font-semibold drop-shadow-md transition-all duration-300 text-secondary dark:text-gray-300"
           style={{
             transform: isHovered ? "translateY(0)" : "translateY(30px)",
             opacity: isHovered ? 1 : 0,
@@ -91,7 +91,7 @@ const Slide = memo(({ slide, isHovered }: SlideProps) => (
           {slide.subtitle}
         </p>
         <p
-          className="text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 max-w-[90%] mx-auto drop-shadow-md transition-all duration-300"
+          className="text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 max-w-[90%] mx-auto drop-shadow-md transition-all duration-300 text-white dark:text-gray-300"
           style={{
             transform: isHovered ? "translateY(0)" : "translateY(40px)",
             opacity: isHovered ? 1 : 0,
@@ -106,7 +106,7 @@ const Slide = memo(({ slide, isHovered }: SlideProps) => (
             opacity: isHovered ? 1 : 0,
           }}
         >
-          <Button className="btn-hero text-sm sm:text-base md:text-lg px-6 sm:px-8 py-2 sm:py-3 bg-white text-black hover:bg-gray-200">
+          <Button className="btn-hero text-sm sm:text-base md:text-lg px-6 sm:px-8 py-2 sm:py-3 bg-white dark:bg-gray-800 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
             Shop Now
           </Button>
         </div>
@@ -121,7 +121,6 @@ export default function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Memoize navigation functions
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
   }, []);
@@ -134,9 +133,8 @@ export default function HeroCarousel() {
     setCurrentSlide(index);
   }, []);
 
-  // Auto-rotate carousel with cleanup
   useEffect(() => {
-    if (isHovered) return; // Pause on hover
+    if (isHovered) return;
 
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
@@ -147,7 +145,7 @@ export default function HeroCarousel() {
 
   return (
     <div
-      className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] xl:h-[80vh] max-h-[600px] overflow-hidden bg-gradient-to-r from-primary to-secondary"
+      className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] xl:h-[80vh] max-h-[600px] overflow-hidden bg-gradient-to-r from-primary to-secondary dark:from-gray-800 dark:to-gray-900"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -165,7 +163,7 @@ export default function HeroCarousel() {
       <Button
         variant="ghost"
         onClick={prevSlide}
-        className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 text-white hover:bg-white/20 rounded-full p-2 sm:p-3 z-10"
+        className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/20 rounded-full p-2 sm:p-3 z-10"
         aria-label="Previous slide"
       >
         <ChevronLeftIcon className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -173,7 +171,7 @@ export default function HeroCarousel() {
       <Button
         variant="ghost"
         onClick={nextSlide}
-        className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 text-white hover:bg-white/20 rounded-full p-2 sm:p-3 z-10"
+        className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/20 rounded-full p-2 sm:p-3 z-10"
         aria-label="Next slide"
       >
         <ChevronRightIcon className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -186,7 +184,9 @@ export default function HeroCarousel() {
             key={index}
             onClick={() => goToSlide(index)}
             className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-colors ${
-              index === currentSlide ? "bg-white" : "bg-white/50"
+              index === currentSlide
+                ? "bg-white dark:bg-gray-200"
+                : "bg-white/50 dark:bg-gray-600/50"
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />

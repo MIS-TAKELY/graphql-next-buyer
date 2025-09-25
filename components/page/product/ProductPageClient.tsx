@@ -1,3 +1,4 @@
+// components/page/product/ProductPageClient.tsx
 "use client";
 import Breadcrumb from "@/components/page/product/Breadcrumb";
 import DeliveryInfo from "@/components/page/product/DeliveryInfo";
@@ -13,8 +14,8 @@ import SellerInfo from "./SellerInfo";
 interface ProductPageClientProps {
   product: TProduct | null;
 }
+
 export default function ProductPageClient({ product }: ProductPageClientProps) {
-  console.log("product-->", product);
   const averageRating = useMemo(
     () =>
       product?.reviews?.length
@@ -49,6 +50,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         : "Unknown Seller"),
     [product]
   );
+
   const sortedImages = useMemo(
     () =>
       Array.isArray(product?.images)
@@ -66,7 +68,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Breadcrumb
         category={product.category?.name || "Unknown Category"}
         name={product.name}

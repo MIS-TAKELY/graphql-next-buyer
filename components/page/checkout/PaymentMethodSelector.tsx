@@ -1,3 +1,4 @@
+// components/page/checkout/PaymentMethodSelector.tsx
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -72,7 +73,7 @@ export function PaymentMethodSelector({
 
   return (
     <div className="space-y-4">
-      <div className="text-sm text-gray-600 mb-4">
+      <div className="text-sm text-gray-600 dark:text-gray-300 mb-4">
         Choose your preferred payment method
       </div>
 
@@ -84,10 +85,10 @@ export function PaymentMethodSelector({
           return (
             <Card
               key={method.id}
-              className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
+              className={`cursor-pointer transition-all duration-200 hover:shadow-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 ${
                 isSelected
-                  ? "ring-2 ring-blue-500 bg-blue-50"
-                  : "hover:border-gray-400"
+                  ? "ring-2 ring-blue-500 dark:ring-blue-400 bg-blue-50 dark:bg-blue-900/20"
+                  : "hover:border-gray-400 dark:hover:border-gray-500"
               }`}
               onClick={() => handleMethodSelect(method)}
             >
@@ -96,12 +97,12 @@ export function PaymentMethodSelector({
                   <div className="flex items-center space-x-4">
                     <div
                       className={`p-2 rounded-lg ${
-                        isSelected ? "bg-blue-100" : "bg-gray-100"
+                        isSelected ? "bg-blue-100 dark:bg-blue-900/30" : "bg-gray-100 dark:bg-gray-700"
                       }`}
                     >
                       <Icon
                         className={`w-6 h-6 ${
-                          isSelected ? "text-blue-600" : "text-gray-600"
+                          isSelected ? "text-blue-600 dark:text-blue-400" : "text-gray-600 dark:text-gray-300"
                         }`}
                       />
                     </div>
@@ -110,7 +111,7 @@ export function PaymentMethodSelector({
                       <div className="flex items-center gap-2 mb-1">
                         <h3
                           className={`font-semibold ${
-                            isSelected ? "text-blue-900" : "text-gray-900"
+                            isSelected ? "text-blue-900 dark:text-blue-200" : "text-gray-900 dark:text-white"
                           }`}
                         >
                           {method.name}
@@ -118,7 +119,7 @@ export function PaymentMethodSelector({
                         {method.isPopular && (
                           <Badge
                             variant="secondary"
-                            className="text-xs bg-green-100 text-green-700"
+                            className="text-xs bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300"
                           >
                             Popular
                           </Badge>
@@ -126,7 +127,7 @@ export function PaymentMethodSelector({
                       </div>
                       <p
                         className={`text-sm ${
-                          isSelected ? "text-blue-700" : "text-gray-600"
+                          isSelected ? "text-blue-700 dark:text-blue-300" : "text-gray-600 dark:text-gray-300"
                         }`}
                       >
                         {method.description}
@@ -141,8 +142,8 @@ export function PaymentMethodSelector({
                                 key={provider}
                                 className={`text-xs px-2 py-1 rounded ${
                                   isSelected
-                                    ? "bg-blue-200 text-blue-800"
-                                    : "bg-gray-200 text-gray-700"
+                                    ? "bg-blue-200 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200"
+                                    : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
                                 }`}
                               >
                                 {provider}
@@ -152,8 +153,8 @@ export function PaymentMethodSelector({
                             <span
                               className={`text-xs px-2 py-1 rounded ${
                                 isSelected
-                                  ? "bg-blue-200 text-blue-800"
-                                  : "bg-gray-200 text-gray-700"
+                                  ? "bg-blue-200 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200"
+                                  : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
                               }`}
                             >
                               +{method.providers.length - 4} more
@@ -166,7 +167,7 @@ export function PaymentMethodSelector({
 
                   {isSelected && (
                     <div className="flex-shrink-0">
-                      <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                      <div className="w-6 h-6 bg-blue-500 dark:bg-blue-400 rounded-full flex items-center justify-center">
                         <Check className="w-4 h-4 text-white" />
                       </div>
                     </div>
@@ -179,16 +180,16 @@ export function PaymentMethodSelector({
       </div>
 
       {/* Security Notice */}
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-6">
+      <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-600 rounded-lg p-4 mt-6">
         <div className="flex items-start space-x-2">
-          <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-            <Check className="w-3 h-3 text-green-600" />
+          <div className="w-5 h-5 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+            <Check className="w-3 h-3 text-green-600 dark:text-green-400" />
           </div>
           <div>
-            <h4 className="text-sm font-medium text-green-900 mb-1">
+            <h4 className="text-sm font-medium text-green-900 dark:text-green-200 mb-1">
               Secure Payment
             </h4>
-            <p className="text-sm text-green-700">
+            <p className="text-sm text-green-700 dark:text-green-300">
               All payments are secured with 256-bit SSL encryption. Your payment
               information is never stored on our servers.
             </p>

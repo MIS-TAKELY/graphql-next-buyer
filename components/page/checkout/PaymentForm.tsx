@@ -1,3 +1,4 @@
+// components/page/checkout/PaymentForm.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -46,7 +47,6 @@ export function PaymentForm({
   amount,
 }: PaymentFormProps) {
   const [formData, setFormData] = useState({
-    // Card details
     cardNumber: "",
     expiryMonth: "",
     expiryYear: "",
@@ -55,7 +55,6 @@ export function PaymentForm({
     upiId: "",
     bankName: "",
     walletProvider: "",
-    // walletNumber: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -63,7 +62,6 @@ export function PaymentForm({
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
 
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: "" }));
     }
@@ -84,7 +82,6 @@ export function PaymentForm({
     if (!formData.cardHolderName.trim())
       newErrors.cardHolderName = "Cardholder name is required";
 
-    // Validate expiry date
     if (formData.expiryMonth && formData.expiryYear) {
       const currentDate = new Date();
       const currentYear = currentDate.getFullYear();
@@ -132,10 +129,6 @@ export function PaymentForm({
       newErrors.walletProvider = "Please select wallet provider";
     }
 
-    // if (formData.walletProvider && !formData.walletNumber) {
-    //   newErrors.walletNumber = "Wallet number/phone is required";
-    // }
-
     return newErrors;
   };
 
@@ -157,7 +150,6 @@ export function PaymentForm({
         newErrors = validateWalletForm();
         break;
       case "CASH_ON_DELIVERY":
-        // No validation needed for COD
         break;
     }
 
@@ -194,10 +186,9 @@ export function PaymentForm({
   };
 
   const formatPrice = (priceInCents: number) => {
-    return `₹${(priceInCents / 100).toLocaleString("en-IN")}`;
+    return `रु${priceInCents.toLocaleString("en-IN")}`;
   };
 
-  // Render different forms based on payment method
   const renderPaymentForm = () => {
     switch (paymentMethod.type) {
       case "CREDIT_CARD":
@@ -205,7 +196,7 @@ export function PaymentForm({
         return (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white">
                 Card Number *
               </label>
               <div className="relative">
@@ -220,20 +211,20 @@ export function PaymentForm({
                   }
                   placeholder="1234 5678 9012 3456"
                   maxLength={19}
-                  className={`pl-10 ${
-                    errors.cardNumber ? "border-red-500" : ""
+                  className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
+                    errors.cardNumber ? "border-red-500 dark:border-red-400" : ""
                   }`}
                 />
-                <CreditCard className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <CreditCard className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
               {errors.cardNumber && (
-                <p className="text-red-500 text-sm mt-1">{errors.cardNumber}</p>
+                <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.cardNumber}</p>
               )}
             </div>
 
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white">
                   Month *
                 </label>
                 <select
@@ -241,8 +232,8 @@ export function PaymentForm({
                   onChange={(e) =>
                     handleInputChange("expiryMonth", e.target.value)
                   }
-                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.expiryMonth ? "border-red-500" : ""
+                  className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
+                    errors.expiryMonth ? "border-red-500 dark:border-red-400" : ""
                   }`}
                 >
                   <option value="">MM</option>
@@ -256,21 +247,23 @@ export function PaymentForm({
                   ))}
                 </select>
                 {errors.expiryMonth && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="text-red-500 dark:text-red-400 text-sm mt-1">
                     {errors.expiryMonth}
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Year *</label>
+                <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white">
+                  Year *
+                </label>
                 <select
                   value={formData.expiryYear}
                   onChange={(e) =>
                     handleInputChange("expiryYear", e.target.value)
                   }
-                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.expiryYear ? "border-red-500" : ""
+                  className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
+                    errors.expiryYear ? "border-red-500 dark:border-red-400" : ""
                   }`}
                 >
                   <option value="">YY</option>
@@ -284,14 +277,16 @@ export function PaymentForm({
                   ))}
                 </select>
                 {errors.expiryYear && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="text-red-500 dark:text-red-400 text-sm mt-1">
                     {errors.expiryYear}
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">CVV *</label>
+                <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white">
+                  CVV *
+                </label>
                 <div className="relative">
                   <Input
                     type="text"
@@ -304,18 +299,20 @@ export function PaymentForm({
                     }
                     placeholder="123"
                     maxLength={4}
-                    className={`pl-10 ${errors.cvv ? "border-red-500" : ""}`}
+                    className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
+                      errors.cvv ? "border-red-500 dark:border-red-400" : ""
+                    }`}
                   />
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
                 </div>
                 {errors.cvv && (
-                  <p className="text-red-500 text-sm mt-1">{errors.cvv}</p>
+                  <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.cvv}</p>
                 )}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white">
                 Cardholder Name *
               </label>
               <div className="relative">
@@ -329,14 +326,14 @@ export function PaymentForm({
                     )
                   }
                   placeholder="JOHN DOE"
-                  className={`pl-10 ${
-                    errors.cardHolderName ? "border-red-500" : ""
+                  className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
+                    errors.cardHolderName ? "border-red-500 dark:border-red-400" : ""
                   }`}
                 />
-                <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <User className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
               {errors.cardHolderName && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 dark:text-red-400 text-sm mt-1">
                   {errors.cardHolderName}
                 </p>
               )}
@@ -348,7 +345,9 @@ export function PaymentForm({
         return (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2">UPI ID *</label>
+              <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white">
+                UPI ID *
+              </label>
               <div className="relative">
                 <Input
                   type="text"
@@ -357,25 +356,26 @@ export function PaymentForm({
                     handleInputChange("upiId", e.target.value.toLowerCase())
                   }
                   placeholder="yourname@paytm"
-                  className={`pl-10 ${errors.upiId ? "border-red-500" : ""}`}
+                  className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
+                    errors.upiId ? "border-red-500 dark:border-red-400" : ""
+                  }`}
                 />
-                <Smartphone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Smartphone className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
               {errors.upiId && (
-                <p className="text-red-500 text-sm mt-1">{errors.upiId}</p>
+                <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.upiId}</p>
               )}
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-600 rounded-lg p-4">
               <div className="flex items-center space-x-2">
-                <AlertCircle className="w-5 h-5 text-blue-600" />
+                <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 <div>
-                  <h4 className="text-sm font-medium text-blue-900">
+                  <h4 className="text-sm font-medium text-blue-900 dark:text-blue-200">
                     UPI Payment
                   </h4>
-                  <p className="text-sm text-blue-700">
-                    You will be redirected to your UPI app to complete the
-                    payment.
+                  <p className="text-sm text-blue-700 dark:text-blue-300">
+                    You will be redirected to your UPI app to complete the payment.
                   </p>
                 </div>
               </div>
@@ -387,7 +387,7 @@ export function PaymentForm({
         return (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white">
                 Select Your Bank *
               </label>
               <div className="relative">
@@ -396,8 +396,8 @@ export function PaymentForm({
                   onChange={(e) =>
                     handleInputChange("bankName", e.target.value)
                   }
-                  className={`w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.bankName ? "border-red-500" : ""
+                  className={`w-full pl-10 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
+                    errors.bankName ? "border-red-500 dark:border-red-400" : ""
                   }`}
                 >
                   <option value="">Choose your bank</option>
@@ -412,23 +412,22 @@ export function PaymentForm({
                   <option value="union">Union Bank of India</option>
                   <option value="yes">Yes Bank</option>
                 </select>
-                <Building2 className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Building2 className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
               {errors.bankName && (
-                <p className="text-red-500 text-sm mt-1">{errors.bankName}</p>
+                <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.bankName}</p>
               )}
             </div>
 
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-600 rounded-lg p-4">
               <div className="flex items-center space-x-2">
-                <AlertCircle className="w-5 h-5 text-yellow-600" />
+                <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
                 <div>
-                  <h4 className="text-sm font-medium text-yellow-900">
+                  <h4 className="text-sm font-medium text-yellow-900 dark:text-yellow-200">
                     Net Banking
                   </h4>
-                  <p className="text-sm text-yellow-700">
-                    You will be redirected to your bank&apos;s website to
-                    complete the payment.
+                  <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                    You will be redirected to your bank&apos;s website to complete the payment.
                   </p>
                 </div>
               </div>
@@ -440,7 +439,7 @@ export function PaymentForm({
         return (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white">
                 Select Wallet Provider *
               </label>
               <div className="grid gap-3">
@@ -451,10 +450,10 @@ export function PaymentForm({
                   return (
                     <label
                       key={provider}
-                      className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition ${
+                      className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 ${
                         formData.walletProvider === provider
-                          ? "border-blue-500 bg-blue-50"
-                          : "border-gray-300"
+                          ? "border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20"
+                          : ""
                       }`}
                     >
                       <input
@@ -465,9 +464,8 @@ export function PaymentForm({
                         onChange={(e) =>
                           handleInputChange("walletProvider", e.target.value)
                         }
-                        className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                        className="h-4 w-4 text-blue-600 dark:text-blue-400 border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-400"
                       />
-
                       {logo && (
                         <Image
                           src={logo}
@@ -476,78 +474,54 @@ export function PaymentForm({
                           width={40}
                         />
                       )}
-                      <span className="text-sm font-medium">{provider}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">{provider}</span>
                     </label>
                   );
                 })}
               </div>
               {errors.walletProvider && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 dark:text-red-400 text-sm mt-1">
                   {errors.walletProvider}
                 </p>
               )}
             </div>
-
-            {/* {formData.walletProvider && (
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Wallet Number / Phone *
-                </label>
-                <Input
-                  type="text"
-                  value={formData.walletNumber}
-                  onChange={(e) =>
-                    handleInputChange("walletNumber", e.target.value)
-                  }
-                  placeholder="98XXXXXXXX"
-                  className={errors.walletNumber ? "border-red-500" : ""}
-                />
-                {errors.walletNumber && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.walletNumber}
-                  </p>
-                )}
-              </div>
-            )} */}
           </div>
         );
 
       case "CASH_ON_DELIVERY":
         return (
           <div className="space-y-6">
-            <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-              <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-green-900 mb-2">
+            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-600 rounded-lg p-6 text-center">
+              <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-green-900 dark:text-green-200 mb-2">
                 Cash on Delivery
               </h3>
-              <p className="text-sm text-green-700 mb-4">
-                You can pay in cash when your order is delivered to your
-                doorstep.
+              <p className="text-sm text-green-700 dark:text-green-300 mb-4">
+                You can pay in cash when your order is delivered to your doorstep.
               </p>
-              <div className="bg-white rounded-lg p-4 border border-green-200">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-green-200 dark:border-green-600">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-600">
+                  <span className="text-gray-600 dark:text-gray-300">
                     Amount to pay on delivery:
                   </span>
-                  <span className="font-bold text-green-600">
+                  <span className="font-bold text-green-600 dark:text-green-400">
                     {formatPrice(amount)}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-600 rounded-lg p-4">
               <div className="flex items-start space-x-2">
-                <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-medium text-blue-900 mb-1">
+                  <h4 className="text-sm font-medium text-blue-900 dark:text-blue-200 mb-1">
                     Important Notes:
                   </h4>
-                  <ul className="text-sm text-blue-700 space-y-1">
+                  <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
                     <li>• Please keep the exact amount ready</li>
                     <li>
-                      • Our delivery partner will carry a POS machine for card
-                      payments
+                      • Our delivery partner will carry a POS machine for card payments
                     </li>
                     <li>• COD orders may take 1-2 days longer to process</li>
                   </ul>
@@ -566,10 +540,10 @@ export function PaymentForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="my-5">{renderPaymentForm()}</div>
 
-      <div className="border-t pt-6">
+      <div className="border-t pt-6 border-gray-200 dark:border-gray-600">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-lg font-semibold">Total Amount:</span>
-          <span className="text-2xl font-bold text-blue-600">
+          <span className="text-lg font-semibold text-gray-900 dark:text-white">Total Amount:</span>
+          <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
             {formatPrice(amount)}
           </span>
         </div>
@@ -577,7 +551,7 @@ export function PaymentForm({
         <Button
           type="submit"
           size="lg"
-          className="w-full"
+          className="w-full bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-400 text-white"
           disabled={isProcessing}
         >
           {isProcessing ? (

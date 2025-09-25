@@ -27,13 +27,13 @@ export function PaymentStep({
   if (!selectedAddress) return null;
 
   return (
-    <Card>
+    <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CreditCard className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
+          <CreditCard className="h-5 w-5 text-gray-600 dark:text-gray-300" />
           Payment Method
         </CardTitle>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-gray-600 dark:text-gray-300">
           Choose your payment method
         </p>
       </CardHeader>
@@ -55,7 +55,11 @@ export function PaymentStep({
           amount={orderAmount}
         />
         <div className="mt-4">
-          <Button variant="outline" onClick={onBackToAddress} className="mr-2">
+          <Button 
+            variant="outline" 
+            onClick={onBackToAddress} 
+            className="mr-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
             Back to Address
           </Button>
         </div>

@@ -1,3 +1,4 @@
+// pages/checkout.tsx
 "use client";
 
 import { AddAddressForm } from "@/components/address";
@@ -45,9 +46,7 @@ const mockOrderItems = [
 
 export default function CheckoutPage() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [shippingAddress, setShippingAddress] = useState<BaseAddress | null>(
-    null
-  );
+  const [shippingAddress, setShippingAddress] = useState<BaseAddress | null>(null);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -80,27 +79,38 @@ export default function CheckoutPage() {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // console.log("Processing payment:", { paymentData, selectedPaymentMethod });
-
     setCurrentStep(3);
     setIsProcessing(false);
   };
 
-  const formatPrice = (priceInCents: number) => {
-    return `₹${(priceInCents / 100).toLocaleString("en-IN")}`;
+  const formatPrice = (price: string | number) => {
+    const numPrice = typeof price === "string" ? parseFloat(price) : price;
+
+    return numPrice
+      .toLocaleString("en-NP", {
+        style: "currency",
+        currency: "NPR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+      .replace("NPR", "रु");
   };
 
   return (
-    <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8">
+    <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8 bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
         <Link href="/cart">
-          <Button variant="ghost" size="sm">
-            <ArrowLeft className="w-4 h-4 mr-2" />
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2 text-gray-600 dark:text-gray-300" />
             Back to Cart
           </Button>
         </Link>
-        <h1 className="text-2xl sm:text-3xl font-bold">Checkout</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Checkout</h1>
       </div>
 
       {/* Progress Steps */}
@@ -116,10 +126,10 @@ export default function CheckoutPage() {
                 <div
                   className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
                     isCompleted
-                      ? "bg-green-500 border-green-500 text-white"
+                      ? "bg-green-500 dark:bg-green-500 border-green-500 dark:border-green-500 text-white"
                       : isActive
-                      ? "border-blue-500 text-blue-500"
-                      : "border-gray-300 text-gray-400"
+                      ? "border-blue-500 dark:border-blue-400 text-blue-500 dark:text-blue-400"
+                      : "border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500"
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -127,10 +137,10 @@ export default function CheckoutPage() {
                 <span
                   className={`ml-2 text-sm font-medium ${
                     isActive
-                      ? "text-blue-500"
+                      ? "text-blue-500 dark:text-blue-400"
                       : isCompleted
-                      ? "text-green-500"
-                      : "text-gray-400"
+                      ? "text-green-500 dark:text-green-400"
+                      : "text-gray-400 dark:text-gray-500"
                   }`}
                 >
                   {step.name}
@@ -138,7 +148,7 @@ export default function CheckoutPage() {
                 {index < steps.length - 1 && (
                   <div
                     className={`w-16 h-0.5 ml-4 ${
-                      isCompleted ? "bg-green-500" : "bg-gray-300"
+                      isCompleted ? "bg-green-500 dark:bg-green-400" : "bg-gray-300 dark:bg-gray-600"
                     }`}
                   />
                 )}
@@ -152,10 +162,10 @@ export default function CheckoutPage() {
         {/* Main Content */}
         <div className="lg:col-span-2">
           {currentStep === 1 && (
-            <Card>
+            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Truck className="w-5 h-5" />
+                <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
+                  <Truck className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                   Shipping Address
                 </CardTitle>
               </CardHeader>
@@ -171,17 +181,18 @@ export default function CheckoutPage() {
           {currentStep === 2 && (
             <div className="space-y-6">
               {/* Shipping Address Summary */}
-              <Card>
+              <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
                 <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
+                  <CardTitle className="flex items-center justify-between text-gray-900 dark:text-white">
                     <span className="flex items-center gap-2">
-                      <Truck className="w-5 h-5" />
+                      <Truck className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                       Delivery Address
                     </span>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => setCurrentStep(1)}
+                      className="border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                       Change
                     </Button>
@@ -189,18 +200,17 @@ export default function CheckoutPage() {
                 </CardHeader>
                 <CardContent>
                   {shippingAddress && (
-                    <div className="text-sm space-y-1">
-                      <p className="font-medium">
+                    <div className="text-sm space-y-1 text-gray-600 dark:text-gray-300">
+                      <p className="font-medium text-gray-900 dark:text-white">
                         {shippingAddress.label || "Shipping Address"}
                       </p>
                       <p>{shippingAddress.line1}</p>
                       {shippingAddress.line2 && <p>{shippingAddress.line2}</p>}
                       <p>
-                        {shippingAddress.city}, {shippingAddress.state}{" "}
-                        {shippingAddress.postalCode}
+                        {shippingAddress.city}, {shippingAddress.state} {shippingAddress.postalCode}
                       </p>
                       <p>{shippingAddress.country}</p>
-                      <p className="text-gray-600">
+                      <p className="text-gray-600 dark:text-gray-300">
                         Phone: {shippingAddress.phone}
                       </p>
                     </div>
@@ -209,10 +219,10 @@ export default function CheckoutPage() {
               </Card>
 
               {/* Payment Method Selection */}
-              <Card>
+              <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <CreditCard className="w-5 h-5" />
+                  <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
+                    <CreditCard className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                     Payment Method
                   </CardTitle>
                 </CardHeader>
@@ -226,9 +236,9 @@ export default function CheckoutPage() {
 
               {/* Payment Form */}
               {selectedPaymentMethod && (
-                <Card>
+                <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
                   <CardHeader>
-                    <CardTitle>Payment Details</CardTitle>
+                    <CardTitle className="text-gray-900 dark:text-white">Payment Details</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <PaymentForm
@@ -244,27 +254,33 @@ export default function CheckoutPage() {
           )}
 
           {currentStep === 3 && (
-            <Card>
+            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
               <CardContent className="text-center py-12">
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <ShieldCheck className="w-10 h-10 text-green-600" />
+                <div className="w-20 h-20 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <ShieldCheck className="w-10 h-10 text-green-600 dark:text-green-400" />
                 </div>
-                <h2 className="text-2xl font-bold mb-4 text-green-600">
+                <h2 className="text-2xl font-bold mb-4 text-green-600 dark:text-green-400">
                   Order Placed Successfully!
                 </h2>
-                <p className="text-gray-600 mb-6">
-                  Thank you for your order. You will receive a confirmation
-                  email shortly.
+                <p className="text-gray-600 dark:text-gray-300 mb-6">
+                  Thank you for your order. You will receive a confirmation email shortly.
                 </p>
-                <div className="space-y-2 text-sm text-gray-500">
+                <div className="space-y-2 text-sm text-gray-500 dark:text-gray-400">
                   <p>Order ID: #ORD-{Date.now()}</p>
                   <p>Estimated delivery: 3-5 business days</p>
                 </div>
                 <div className="flex gap-4 justify-center mt-8">
                   <Link href="/">
-                    <Button variant="outline">Continue Shopping</Button>
+                    <Button 
+                      variant="outline" 
+                      className="border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Continue Shopping
+                    </Button>
                   </Link>
-                  <Button>Track Order</Button>
+                  <Button className="bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-400">
+                    Track Order
+                  </Button>
                 </div>
               </CardContent>
             </Card>

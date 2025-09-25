@@ -44,7 +44,7 @@ export const orderTypeDefs = gql`
   }
 
   input AddressSnapshotInput {
-    label : String!
+    label: String!
     line1: String!
     line2: String
     city: String!
@@ -63,7 +63,9 @@ export const orderTypeDefs = gql`
     paymentProvider: String!
     paymentMethodId: ID
   }
-
+  extend type Query {
+    getMyOrderItems: [Order!]!
+  }
   extend type Mutation {
     createOrder(input: CreateOrderInput!): Order!
   }

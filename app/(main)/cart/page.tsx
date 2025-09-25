@@ -1,4 +1,4 @@
-// ```typescript
+// app/(main)/cart/page.tsx
 "use client";
 
 import { GET_PRODUCTS } from "@/client/product/product.queries";
@@ -102,7 +102,6 @@ export default function CartPage() {
     }
 
     const cartdata = productdata.getProducts.filter((product: Product) => {
-      // console.log("product-->", product);
       return cartProductIds.has(product.id);
     });
 
@@ -115,7 +114,7 @@ export default function CartPage() {
 
       return {
         id: product?.id || `cart-${index}`,
-        quantity: 1, 
+        quantity: 1,
         createdAt: new Date(),
         variant: {
           id: variant.id,
@@ -156,7 +155,6 @@ export default function CartPage() {
 
   const removeItem = async (productId: string, variantId: string) => {
     try {
-      console.log("Removing item:", productId, variantId); // Debugging
       await removeFromCart(variantId, productId);
       setCartItems((prevItems) =>
         prevItems.filter((item) => item.product.id !== productId)
@@ -183,10 +181,10 @@ export default function CartPage() {
 
   if (productDataLoading || cartLoading) {
     return (
-      <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8">
+      <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 bg-gray-50 dark:bg-gray-900">
         <div className="text-center py-16">
-          <ShoppingBag className="mx-auto h-24 w-24 text-gray-400 mb-4 animate-spin" />
-          <h2 className="text-2xl font-bold mb-2">Loading cart...</h2>
+          <ShoppingBag className="mx-auto h-24 w-24 text-gray-400 dark:text-gray-500 mb-4 animate-spin" />
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Loading cart...</h2>
         </div>
       </div>
     );
@@ -201,7 +199,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8">
+    <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8 bg-gray-50 dark:bg-gray-900">
       <CartHeader cartItems={cartItems} />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">

@@ -27,6 +27,27 @@ interface DiscountCalculation {
 }
 
 export const orderResolvers = {
+  Query: {
+    getMyOrderItems: async (_: any, __: any, ctx: GraphQLContext) => {
+      const user = requireBuyer(ctx);
+      console.log("user--->", user);
+      if (!user) throw new Error("Invalid user");
+
+      return prisma.order.findMany({
+        where: { buyerId: user.id },
+        include: {
+          items: {
+            select: { order: { select: { orderNumber:true, total:true, createdAt:true ,status:true} } },
+          },
+          // payments: true,
+          // shipments: true,
+          // appliedDiscounts: true,
+          // discountUsage: true,
+          // buyer: true,
+        },
+      });
+    },
+  },
   Mutation: {
     createOrder: async (
       _: any,
@@ -148,6 +169,7 @@ export const orderResolvers = {
                     status: "PENDING",
                     provider: input.paymentProvider,
                     methodId: input.paymentMethodId ?? null,
+                    productCode: "",
                   },
                 },
                 shipments: {

@@ -1,15 +1,15 @@
 "use client";
 
-import { useAccount } from "@/hooks/account/useAccount";
-import SidebarNav from "@/components/page/account/SidebarNav";
-import ProfileSection from "@/components/page/account/ProfileSection";
 import AddressesSection from "@/components/page/account/AddressesSection";
-import OrdersSection from "@/components/page/account/OrdersSection";
-import WishlistSection from "@/components/page/account/WishlistSection";
-import PaymentMethodsSection from "@/components/page/account/PaymentMethodsSection";
 import NotificationsSection from "@/components/page/account/NotificationsSection";
+import OrdersSection from "@/components/page/account/OrdersSection";
+import PaymentMethodsSection from "@/components/page/account/PaymentMethodsSection";
+import ProfileSection from "@/components/page/account/ProfileSection";
 import SecuritySection from "@/components/page/account/SecuritySection";
 import SettingsSection from "@/components/page/account/SettingsSection";
+import SidebarNav from "@/components/page/account/SidebarNav";
+import WishlistSection from "@/components/page/account/WishlistSection";
+import { useAccount } from "@/hooks/account/useAccount";
 
 export default function AccountClient({ user }: { user: any }) {
   const { activeTab, setActiveTab } = useAccount();
@@ -39,7 +39,11 @@ export default function AccountClient({ user }: { user: any }) {
 
   return (
     <>
-      <SidebarNav user={user} activeTab={activeTab} setActiveTab={setActiveTab} />
+      <SidebarNav
+        user={user}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
       <div className="flex-1">{renderActiveSection()}</div>
     </>
   );
