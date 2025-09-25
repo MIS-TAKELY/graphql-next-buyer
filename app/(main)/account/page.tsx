@@ -47,7 +47,7 @@ export default async function AccountPage() {
     if (addressesData?.getAddressOfUser) {
       const cleanedAddresses = addressesData.getAddressOfUser.map(
         (addr: any) => {
-          const { __typename, ...clean } = addr;
+          const { ...clean } = addr;
           return clean;
         }
       );
@@ -62,8 +62,7 @@ export default async function AccountPage() {
 
     // Keep hydrated user profile
     if (userProfileDetails?.getUserProfileDetails) {
-      const { __typename, ...cleanProfile } =
-        userProfileDetails.getUserProfileDetails;
+      const { ...cleanProfile } = userProfileDetails.getUserProfileDetails;
       initialData.userProfile = { getUserProfileDetails: cleanProfile };
     }
   } catch (error) {

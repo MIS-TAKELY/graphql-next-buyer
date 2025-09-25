@@ -1,5 +1,5 @@
 // ./ProfileSection.tsx
-"use client"
+"use client";
 import { UPDATE_USER_PROFILE_DETAILS } from "@/client/user/user.mutations";
 import { GET_USER_PROFILE_DETAILS } from "@/client/user/user.queries";
 import { Button } from "@/components/ui/button";
@@ -17,11 +17,9 @@ import { Edit2, Save, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function ProfileSection() {
-  const {
-    data: userProfileDetails,
-    loading: userProfileDetailsLoading,
-    error: userProfileDetailsError,
-  } = useQuery(GET_USER_PROFILE_DETAILS);
+  const { data: userProfileDetails, error: userProfileDetailsError } = useQuery(
+    GET_USER_PROFILE_DETAILS
+  );
   // if (userProfileDetailsLoading) console.log("Loading user profile");
 
   // if (userProfileDetailsError)

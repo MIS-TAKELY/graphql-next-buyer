@@ -32,9 +32,6 @@ export async function POST(req: Request): Promise<NextResponse> {
       return new NextResponse("Invalid signature", { status: 400 });
     }
 
-    const rolesFromClerk = evt.data;
-    console.log("role from clerk",rolesFromClerk)
-
     if (evt.type === "user.created" || evt.type === "user.updated") {
       const clerkId = evt.data.id;
       const email = evt.data.email_addresses?.[0]?.email_address ?? "";
