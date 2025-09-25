@@ -101,6 +101,7 @@ export default function SettingsSection() {
                     <SelectValue placeholder="Select theme" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="light">System</SelectItem>
                     <SelectItem value="light">Light</SelectItem>
                     <SelectItem value="dark">Dark</SelectItem>
                   </SelectContent>
