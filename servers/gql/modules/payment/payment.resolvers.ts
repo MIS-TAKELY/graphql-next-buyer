@@ -58,7 +58,7 @@ export const paymentResolvers = {
 
         // Create new payment record
         const transactionId = generateTransactionUuid();
-        const payment = await prisma.payment.create({
+         await prisma.payment.create({
           data: {
             orderId: order.id,
             amount: order.total,

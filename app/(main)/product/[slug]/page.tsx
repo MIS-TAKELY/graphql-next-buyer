@@ -63,7 +63,7 @@ export default async function ProductPage({
     const productFromRemaining: IRemainingProductDetails =
       remainingData?.getProductBySlug || {};
     if (productFromRemaining) {
-      console.log("remaining product-->", productFromRemaining);
+      // console.log("remaining product-->", productFromRemaining);
 
       const mergedVariants: IProductVarient[] = productFromList.variants.map(
         (listVariant) => {
@@ -83,7 +83,7 @@ export default async function ProductPage({
         }
       );
 
-      console.log("merged varient-->", mergedVariants);
+      // console.log("merged varient-->", mergedVariants);
 
       product = {
         ...productFromList,

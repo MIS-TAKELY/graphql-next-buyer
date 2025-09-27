@@ -64,7 +64,7 @@ export const orderTypeDefs = gql`
     paymentMethodId: ID
   }
   extend type Query {
-    getMyOrderItems: [Order!]!
+  getMyOrderItems(limit: Int!, offset: Int!): [Order!]!
   }
   extend type Mutation {
     createOrder(input: CreateOrderInput!): Order!

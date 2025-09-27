@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { SignOutButton } from "@clerk/nextjs";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -80,9 +81,9 @@ export default function SettingsSection() {
                     <SelectValue placeholder="Select currency" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="usd">USD</SelectItem>
-                    <SelectItem value="eur">EUR</SelectItem>
-                    <SelectItem value="gbp">GBP</SelectItem>
+                    <SelectItem value="usd">NRP</SelectItem>
+                    <SelectItem value="eur">INR</SelectItem>
+                    <SelectItem value="gbp">USD</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -116,7 +117,7 @@ export default function SettingsSection() {
               Permanently delete your account and all associated data
             </p>
             <Button className="bg-red-600" onClick={handleDeleteAccount}>
-              Delete Account
+              <SignOutButton>Delete Account</SignOutButton>
             </Button>
           </div>
         </div>

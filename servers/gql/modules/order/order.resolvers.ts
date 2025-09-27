@@ -28,16 +28,32 @@ interface DiscountCalculation {
 
 export const orderResolvers = {
   Query: {
-    getMyOrderItems: async (_: any, __: any, ctx: GraphQLContext) => {
+    getMyOrderItems: async (
+      _: any,
+      { limit, offset }: { limit: number; offset: number },
+      ctx: GraphQLContext
+    ) => {
       const user = requireBuyer(ctx);
       console.log("user--->", user);
       if (!user) throw new Error("Invalid user");
 
       return prisma.order.findMany({
         where: { buyerId: user.id },
+        orderBy: { createdAt: "desc" },
+        skip: offset,
+        take: limit,
         include: {
           items: {
-            select: { order: { select: { orderNumber:true, total:true, createdAt:true ,status:true} } },
+            select: {
+              order: {
+                select: {
+                  orderNumber: true,
+                  total: true,
+                  createdAt: true,
+                  status: true,
+                },
+              },
+            },
           },
           // payments: true,
           // shipments: true,

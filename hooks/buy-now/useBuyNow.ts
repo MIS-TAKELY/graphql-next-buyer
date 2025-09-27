@@ -1,8 +1,11 @@
+"use client";
+
 import {
   CREATE_ORDER,
   INITIATE_ESEWA_PAYMENT,
 } from "@/client/payment/payment.mutations";
 import { useMutation } from "@apollo/client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 // import toast from "react-toastify"; // Assuming you use react-toastify for notifications
 
@@ -14,6 +17,8 @@ export function useBuyNow() {
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<any>(null);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+  const router = useRouter();
 
   const [createOrder] = useMutation(CREATE_ORDER);
   const [initiateEsewaPayment] = useMutation(INITIATE_ESEWA_PAYMENT);
@@ -48,12 +53,7 @@ export function useBuyNow() {
         ? paymentData.walletProvider.toUpperCase()
         : paymentData.paymentProvider;
 
-      const supportedProviders = [
-        "ESEWA",
-        "KHALTI",
-        "IMEPAY",
-        "CASH_ON_DELIVERY",
-      ];
+      const supportedProviders = ["ESEWA", "KHALTI", "IMEPAY", "COD"];
       if (!supportedProviders.includes(paymentProvider)) {
         throw new Error("Unsupported payment provider");
       }
@@ -86,8 +86,19 @@ export function useBuyNow() {
       const orderResult = await createOrder({ variables });
       const orderId = orderResult.data?.createOrder?.id;
 
+      console.log("order reslt", orderResult);
+
       if (!orderId) {
         throw new Error("Failed to create order");
+      }
+
+      console.log("pay,emt provider", paymentProvider);
+
+      if (paymentProvider === "COD" && orderId) {
+        console.log("hello");
+        router.push(
+          `/payment/success/?orderId=${orderId}`
+        );
       }
 
       // Handle eSewa payment

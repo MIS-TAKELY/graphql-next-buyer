@@ -9,8 +9,31 @@ export const wishlistTypeDefs = gql`
     name: String!
     createdAt: DateTime!
     updatedAt: DateTime!
+    user: [User!]!
+    items: [WishlistItem!]!
+  }
 
-    user: User!
-    items: [WishlistItem!]
+  type WishlistItem {
+    id: ID!
+    wishlistId: String!
+    productId: String!
+    product: Product!
+    createdAt: DateTime!
+  }
+
+  extend type Query {
+    myWishlists: [Wishlist!]!
+
+    wishlistItems(wishlistId: ID!): [WishlistItem!]!
+  }
+
+  extend type Mutation {
+    addToWishlist(productId: ID!): WishlistItem!
+
+    removeFromWishlist(wishlistId: String!, productId: String!): Boolean!
+
+    createWishlist(name: String!): Wishlist!
+
+    deleteWishlist(wishlistId: ID!): Boolean!
   }
 `;
