@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDate } from "@/utlis/dateHelpers";
 import { Star, ThumbsDown, ThumbsUp } from "lucide-react";
+import Image from "next/image";
 
 export const ReviewCard = ({ review }: { review: Review }) => {
   const initials = `${review.user?.firstName?.[0] ?? ""}${
@@ -57,13 +58,23 @@ export const ReviewCard = ({ review }: { review: Review }) => {
 
         {review.media?.length > 0 && (
           <div className="flex gap-2 mb-4">
-            {review.media.map((m,index) => (
+            {review.media.map((m, index) => (
               <div key={index} className="w-20 h-20 rounded-lg overflow-hidden">
-                <img
-                  src={m.url}
-                  alt="Review media"
-                  className="w-full h-full object-cover"
-                />
+                {m.type === "VIDEO" ? (
+                  <video
+                    src={m.url}
+                    controls
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src={m.url}
+                    alt="Review media"
+                    width={80}
+                    height={80}
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
             ))}
           </div>

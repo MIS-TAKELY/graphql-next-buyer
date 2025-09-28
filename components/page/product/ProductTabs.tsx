@@ -10,9 +10,7 @@ interface ProductTabsProps {
   mockReviews: any[];
 }
 
-export default function ProductTabs({
-  product,
-}: ProductTabsProps) {
+export default function ProductTabs({ product }: ProductTabsProps) {
   const specifications = useMemo(
     () => product?.specifications || {},
     [product]
@@ -68,7 +66,7 @@ export default function ProductTabs({
       </TabsContent>
 
       <TabsContent value="reviews" className="mt-6">
-        <ProductReviews  />
+        <ProductReviews />
       </TabsContent>
 
       <TabsContent value="features" className="mt-6">

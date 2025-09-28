@@ -12,6 +12,7 @@ export const useReview = () => {
   const { data, loading, refetch } = useQuery(GET_REVIEWS_BY_PRODUCT_BY_SLUG, {
     variables: { slug: productSlug },
     skip: !productSlug,
+    fetchPolicy:"cache-first"
   });
 
   const [addReviewMutation, { loading: mutationLoading }] = useMutation(

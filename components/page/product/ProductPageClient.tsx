@@ -7,6 +7,7 @@ import ProductGallery from "@/components/page/product/ProductGallery";
 import ProductInfo from "@/components/page/product/ProductInfo";
 import ProductPageSkeleton from "@/components/page/product/ProductPageSkeleton";
 import ProductTabs from "@/components/page/product/ProductTabs";
+import { useReview } from "@/hooks/review/useReview";
 import { IProductVarient, TProduct } from "@/types/product";
 import { useMemo } from "react";
 import SellerInfo from "./SellerInfo";
@@ -66,6 +67,8 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
   if (!product) {
     return <ProductPageSkeleton />;
   }
+
+  const { data } = useReview();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
