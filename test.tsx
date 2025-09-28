@@ -1,76 +1,85 @@
-// app/api/payment/esewa/success/route.ts:
+// import { MediaItem } from "@/components/review/types";
+// import { Button } from "@/components/ui/button";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { Label } from "@/components/ui/label";
+// import { Textarea } from "@/components/ui/textarea";
+// import { useState } from "react";
+// import { MediaUploader } from "./MediaUploader";
+// import { StarRating } from "./StarRating";
 
-// import { NextRequest, NextResponse } from "next/server";
-// import { verifyEsewaPayment } from "@/lib/esewa";
-// import { prisma } from "@/lib/prisma"; // assuming you use Prisma
+// export const AddReviewForm = ({
+//   onSubmit,
+//   onCancel,
+// }: {
+//   onSubmit: (payload: {
+//     rating: number;
+//     comment: string;
+//     media: MediaItem[]; // Changed to pass full media array
+//   }) => Promise<void> | void;
+//   onCancel: () => void;
+// }) => {
+//   const [rating, setRating] = useState(0);
+//   const [comment, setComment] = useState("");
+//   const [media, setMedia] = useState<MediaItem[]>([]);
 
-// export async function GET(req: NextRequest) {
-//   try {
-//     const { searchParams } = new URL(req.url);
-//     const refId = searchParams.get("refId"); // returned by eSewa
-//     const oid = searchParams.get("oid"); // your order/payment id
-//     const amt = searchParams.get("amt");
+//   const canSubmit = rating > 0 && comment.trim().length > 0;
 
-//     if (!refId || !oid || !amt) {
-//       return NextResponse.json({ error: "Missing params" }, { status: 400 });
+//   const handleSubmit = async () => {
+//     if (!canSubmit) return;
+
+//     try {
+//       await onSubmit({ rating, comment, media }); // Pass full media array
+//       setRating(0);
+//       setComment("");
+//       setMedia([]);
+//     } catch (error) {
+//       console.error("Failed to submit review:", error);
+//     } finally {
 //     }
+//   };
 
-//     const verified = await verifyEsewaPayment({
-//       amount: Number(amt),
-//       refId,
-//       pid: oid,
-//     });
+//   return (
+//     <Card>
+//       <CardHeader>
+//         <CardTitle>Write Your Review</CardTitle>
+//       </CardHeader>
+//       <CardContent className="space-y-6">
+//         <div>
+//           <Label className="text-base font-medium">Rating *</Label>
+//           <div className="mt-2">
+//             <StarRating value={rating} onChange={setRating} />
+//           </div>
+//         </div>
 
-//     if (!verified) {
-//       await prisma.payment.update({
-//         where: { transactionId: oid },
-//         data: { status: "FAILED" },
-//       });
+//         <div>
+//           <Label htmlFor="comment" className="text-base font-medium">
+//             Your Review *
+//           </Label>
+//           <Textarea
+//             id="comment"
+//             placeholder="Share your experience with this product..."
+//             value={comment}
+//             onChange={(e) => setComment(e.target.value)}
+//             className="mt-2 min-h-[120px]"
+//           />
+//         </div>
 
-//       return NextResponse.json({ success: false, message: "Verification failed" });
-//     }
+//         <div>
+//           <Label className="text-base font-medium">
+//             Add Photos or Videos (Optional)
+//           </Label>
+//           <MediaUploader value={media} onChange={setMedia} />
+//         </div>
 
-//     // ✅ Payment confirmed
-//     await prisma.payment.update({
-//       where: { transactionId: oid },
-//       data: { status: "COMPLETED", providerPaymentId: refId },
-//     });
-
-//     await prisma.order.update({
-//       where: { id: oid },
-//       data: { status: "CONFIRMED" },
-//     });
-
-//     return NextResponse.json({ success: true });
-//   } catch (error) {
-//     console.error(error);
-//     return NextResponse.json({ error: "Server error" }, { status: 500 });
-//   }
-// }
-
-
-
-// app/api/payment/esewa/failure/route.ts:
-
-
-// import { NextRequest, NextResponse } from "next/server";
-// import { prisma } from "@/lib/prisma";
-
-// export async function GET(req: NextRequest) {
-//   const { searchParams } = new URL(req.url);
-//   const oid = searchParams.get("oid");
-
-//   if (oid) {
-//     await prisma.payment.update({
-//       where: { transactionId: oid },
-//       data: { status: "FAILED" },
-//     });
-
-//     await prisma.order.update({
-//       where: { id: oid },
-//       data: { status: "CANCELLED" },
-//     });
-//   }
-
-//   return NextResponse.json({ success: false, message: "Payment failed" });
-// }
+//         <div className="flex justify-end gap-3 pt-4">
+//           <Button variant="outline" onClick={onCancel}>
+//             Cancel
+//           </Button>
+//           <Button onClick={handleSubmit} disabled={!canSubmit}>
+//             Submit Review
+//           </Button>
+//         </div>
+//       </CardContent>
+//     </Card>
+//   );
+// };

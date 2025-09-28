@@ -1,9 +1,8 @@
 // components/page/product/ProductTabs.tsx
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Star } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMemo } from "react";
+import ProductReviews from "./ProductReviews";
 
 interface ProductTabsProps {
   product: any;
@@ -11,20 +10,34 @@ interface ProductTabsProps {
   mockReviews: any[];
 }
 
-export default function ProductTabs({ product, averageRating, mockReviews }: ProductTabsProps) {
-  const specifications = useMemo(() => product?.specifications || {}, [product]);
+export default function ProductTabs({
+  product,
+}: ProductTabsProps) {
+  const specifications = useMemo(
+    () => product?.specifications || {},
+    [product]
+  );
   const features = useMemo(() => product?.features || [], [product]);
 
   return (
     <Tabs defaultValue="specifications" className="w-full">
       <TabsList className="grid w-full grid-cols-3 bg-gray-100 dark:bg-gray-800">
-        <TabsTrigger value="specifications" className="text-gray-900 dark:text-white data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900">
+        <TabsTrigger
+          value="specifications"
+          className="text-gray-900 dark:text-white data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900"
+        >
           Specifications
         </TabsTrigger>
-        <TabsTrigger value="reviews" className="text-gray-900 dark:text-white data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900">
+        <TabsTrigger
+          value="reviews"
+          className="text-gray-900 dark:text-white data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900"
+        >
           Reviews
         </TabsTrigger>
-        <TabsTrigger value="features" className="text-gray-900 dark:text-white data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900">
+        <TabsTrigger
+          value="features"
+          className="text-gray-900 dark:text-white data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900"
+        >
           All Features
         </TabsTrigger>
       </TabsList>
@@ -36,12 +49,18 @@ export default function ProductTabs({ product, averageRating, mockReviews }: Pro
               {Object.entries(specifications).length > 0 ? (
                 Object.entries(specifications).map(([key, value]) => (
                   <div key={key} className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-300">{key}</span>
-                    <span className="font-medium text-gray-900 dark:text-white">{value as string}</span>
+                    <span className="text-gray-600 dark:text-gray-300">
+                      {key}
+                    </span>
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {value as string}
+                    </span>
                   </div>
                 ))
               ) : (
-                <p className="text-gray-600 dark:text-gray-300">No specifications available</p>
+                <p className="text-gray-600 dark:text-gray-300">
+                  No specifications available
+                </p>
               )}
             </div>
           </CardContent>
@@ -49,59 +68,7 @@ export default function ProductTabs({ product, averageRating, mockReviews }: Pro
       </TabsContent>
 
       <TabsContent value="reviews" className="mt-6">
-        <div className="space-y-6">
-          <div className="flex items-center gap-6 mb-6">
-            <div className="text-center">
-              <div className="flex justify-center mb-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-5 h-5 fill-current ${
-                      i < Math.floor(averageRating) ? "text-yellow-400 dark:text-yellow-300" : "text-gray-300 dark:text-gray-600"
-                    }`}
-                  />
-                ))}
-              </div>
-              <div className="text-sm text-gray-600 dark:text-gray-300">
-                Based on {mockReviews.length} reviews
-              </div>
-            </div>
-          </div>
-          <div className="space-y-4">
-            {mockReviews.length > 0 ? (
-              mockReviews.map((review) => (
-                <Card key={review.id} className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-gray-900 dark:text-white">{review.user}</span>
-                        {review.verified && (
-                          <Badge variant="secondary" className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                            Verified Purchase
-                          </Badge>
-                        )}
-                      </div>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">{review.date}</span>
-                    </div>
-                    <div className="flex mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 fill-current ${
-                            i < review.rating ? "text-yellow-400 dark:text-yellow-300" : "text-gray-300 dark:text-gray-600"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <p className="text-gray-700 dark:text-gray-200">{review.comment}</p>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              <p className="text-gray-600 dark:text-gray-300">No reviews available</p>
-            )}
-          </div>
-        </div>
+        <ProductReviews  />
       </TabsContent>
 
       <TabsContent value="features" className="mt-6">
@@ -110,10 +77,14 @@ export default function ProductTabs({ product, averageRating, mockReviews }: Pro
             <ul className="space-y-3">
               {features.length > 0 ? (
                 features.map((feature: string, index: number) => (
-                  <li key={index} className="text-gray-700 dark:text-gray-200">{feature}</li>
+                  <li key={index} className="text-gray-700 dark:text-gray-200">
+                    {feature}
+                  </li>
                 ))
               ) : (
-                <p className="text-gray-600 dark:text-gray-300">No features available</p>
+                <p className="text-gray-600 dark:text-gray-300">
+                  No features available
+                </p>
               )}
             </ul>
           </CardContent>

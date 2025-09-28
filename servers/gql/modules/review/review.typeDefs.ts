@@ -25,14 +25,21 @@ export const reviewTypeDefs = gql`
     helpfulCount: Int
     verifiedPurchase: Boolean
     orderItemId: String
-
     createdAt: DateTime!
     updatedAt: DateTime!
-
     user: User
     product: Product!
-    media: [ReviewMedia]
+    media: [ReviewMedia] # ✅ now valid
     votes: [ReviewVote]
+  }
+
+  type ReviewMedia { # ✅ Added this
+    id: ID!
+    reviewId: String!
+    url: String!
+    type: MediaType!
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 
   type ReviewVote {
@@ -44,21 +51,51 @@ export const reviewTypeDefs = gql`
     user: User
   }
 
-  type ReviewMedia {
-    id: ID!
-    reviewId: String!
-    type: MediaType
-    url: String
+  input ReviewMediaInput {
+    url: String!
+    type: MediaType!
   }
 
-  input AddReview {
-    userId: String!
-    productId: String!
+  input AddReviewInput {
+    slug: String!
     rating: Int!
     comment: String
+    media: [ReviewMediaInput]
+  }
+
+  input UpdateReviewInput {
+    rating: Int
+    comment: String
+    media: [ReviewMediaInput]
+  }
+
+  type Query {
+    getReview(id: ID!): Review
+    getReviewsByProductSlug(
+      slug: String!
+      status: ReviewStatus
+      page: Int
+      limit: Int
+      sortBy: String
+    ): [Review]
+    getReviewsByUser(
+      userId: String!
+      status: ReviewStatus
+      page: Int
+      limit: Int
+      sortBy: String
+    ): [Review]
+    getAllReviews(
+      status: ReviewStatus
+      page: Int
+      limit: Int
+      sortBy: String
+    ): [Review]
   }
 
   type Mutation {
-    addReview(input: AddReview!): Review
+    addReview(input: AddReviewInput!): Boolean
+    updateReview(id: ID!, input: UpdateReviewInput!): Review
+    deleteReview(id: ID!): Boolean
   }
 `;
