@@ -30,9 +30,15 @@ const ProductReviews = () => {
     filterRating: "all",
   });
 
+  // console.log("cachedReviews", cachedReviews);
+
   const { data, addReview, loading } = useReview();
 
   // Use API data if present, otherwise fall back to mocks
+  // const reviews: Review[] = cachedReviews
+  //   ? cachedReviews
+  //   : data || ([] as Review[]);
+
   const reviews: Review[] = data || ([] as Review[]);
 
   // // Derived stats

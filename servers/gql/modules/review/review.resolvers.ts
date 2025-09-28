@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db/prisma";
 import { requireBuyer } from "../../auth/auth";
 import { GraphQLContext } from "../../context";
+import { setCache } from "@/services/redis.services";
 
 export const reviewResolvers = {
   Query: {
@@ -189,7 +190,7 @@ export const reviewResolvers = {
       ctx: GraphQLContext
     ) => {
       try {
-        console.log("data received in backend-------------------------->", input);
+       
         const user = requireBuyer(ctx);
         if (!user) throw new Error("Unauthorized user");
 
@@ -238,6 +239,28 @@ export const reviewResolvers = {
               url: item.url,
             })),
           });
+        }
+
+        // Update Redis cache for this specific product
+        const updatedProduct = await prisma.product.findUnique({
+          where: { slug },
+          include: {
+            seller: true,
+            variants: {
+              include: {
+                cartItems: { select: { userId: true, variantId: true } },
+              },
+            },
+            images: true,
+            reviews: true,
+            category: { include: { children: true, parent: true } },
+            brand: true,
+            wishlistItems: true,
+          },
+        });
+
+        if (updatedProduct) {
+          await setCache(`product:${slug}`, updatedProduct, 86400);
         }
 
         return true;

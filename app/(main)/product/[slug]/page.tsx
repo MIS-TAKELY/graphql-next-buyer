@@ -144,7 +144,7 @@ export default async function ProductPage({
     currentProduct: product,
   };
 
-  // console.log("Final product:", product);
+  console.log("Final product:", product);
 
   return (
     <SSRApolloProvider initialData={initialCacheData}>

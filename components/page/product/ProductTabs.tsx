@@ -66,7 +66,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
       </TabsContent>
 
       <TabsContent value="reviews" className="mt-6">
-        <ProductReviews />
+        <ProductReviews reviews={product.reviews} />
       </TabsContent>
 
       <TabsContent value="features" className="mt-6">
