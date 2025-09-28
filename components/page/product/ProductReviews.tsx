@@ -30,7 +30,7 @@ const ProductReviews = () => {
     filterRating: "all",
   });
 
-  const { data, addReview, loading, refetch } = useReview();
+  const { data, addReview, loading } = useReview();
 
   // Use API data if present, otherwise fall back to mocks
   const reviews: Review[] = data || ([] as Review[]);

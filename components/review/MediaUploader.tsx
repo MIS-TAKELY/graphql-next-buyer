@@ -57,7 +57,9 @@ export const MediaUploader = ({
         onChange((prev) => [...prev, mediaItem]);
 
         try {
-          const resourceType = file.type.startsWith("image/") ? "image" : "video";
+          const resourceType = file.type.startsWith("image/")
+            ? "image"
+            : "video";
           const result = await uploadToCloudinary(file, resourceType);
 
           // Mark as uploaded and replace preview URL with Cloudinary URL
@@ -82,9 +84,6 @@ export const MediaUploader = ({
               item.id === mediaItem.id ? { ...item, status: "error" } : item
             )
           );
-
-          // Option B: remove failed item entirely (uncomment if preferred)
-          // onChange((prevValue) => prevValue.filter((item) => item.id !== mediaItem.id));
         } finally {
           URL.revokeObjectURL(localUrl);
         }
@@ -178,7 +177,11 @@ export const MediaUploader = ({
                     />
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50">
-                      <video src={media.url} className="w-full h-full object-cover" controls />
+                      <video
+                        src={media.url}
+                        className="w-full h-full object-cover"
+                        controls
+                      />
                       <span className="text-xs text-gray-600 text-center px-2">
                         {media.name}
                       </span>

@@ -7,6 +7,11 @@ import { Textarea } from "../ui/textarea";
 import { MediaItem, MediaUploader } from "./MediaUploader";
 import { StarRating } from "./StarRating";
 
+export type ReviewMedia = {
+  url: string;
+  type: "IMAGE" | "VIDEO";
+};
+
 export const AddReviewForm = ({
   onSubmit,
   onCancel,
@@ -14,7 +19,7 @@ export const AddReviewForm = ({
   onSubmit: (payload: {
     rating: number;
     comment: string;
-    media: MediaItem[]; // Keep as-is, but we'll map it internally
+    media: ReviewMedia[]; // Keep as-is, but we'll map it internally
   }) => Promise<void> | void;
   onCancel: () => void;
 }) => {
@@ -23,39 +28,36 @@ export const AddReviewForm = ({
   const [comment, setComment] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
-  const { addReview, loading: submitting } = useReview();
+  const { loading: submitting } = useReview();
 
   const onUploadingChange = useCallback((uploading: boolean) => {
     setIsUploading(uploading);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (isUploading) return;
+    if (isUploading) return;
 
-  const uploadedMedia = media
-    .filter((m) => m.status === "uploaded")
-    .slice(0, 5)
-    .map(({ url, type }) => ({ url, type }));
+    const uploadedMedia = media
+      .filter((m) => m.status === "uploaded")
+      .slice(0, 5)
+      .map(({ url, type }) => ({ url, type }));
 
-  try {
-    // This will immediately show the optimistic review
-    await onSubmit({
-      rating,
-      comment,
-      media: uploadedMedia,
-    });
-    
-    // Reset form only after successful submission
-    setMedia([]);
-    setRating(0);
-    setComment("");
-  } catch (error) {
-    console.error("Failed to submit review:", error);
-    // Handle error (show toast, etc.)
-  }
-};
+    try {
+      await onSubmit({
+        rating,
+        comment,
+        media: uploadedMedia,
+      });
+
+      setMedia([]);
+      setRating(0);
+      setComment("");
+    } catch (error) {
+      console.error("Failed to submit review:", error);
+    }
+  };
 
   const isBusy = isUploading || submitting;
   const canSubmit = !isBusy && rating > 0 && comment.trim().length > 0;
@@ -82,8 +84,6 @@ export const AddReviewForm = ({
             className="mt-2 min-h-[120px]"
           />
         </div>
-
-      
       </CardContent>
 
       <MediaUploader
@@ -93,14 +93,16 @@ export const AddReviewForm = ({
         maxSizeMB={10}
       />
 
-        <div className="flex justify-end gap-3 pt-4">
-          <Button variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
-          <Button type="submit" disabled={!canSubmit}> {/* CHANGED: Use type="submit" instead of onClick */}
-            Submit Review
-          </Button>
-        </div>
+      <div className="flex justify-end gap-3 pt-4">
+        <Button variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button type="submit" disabled={!canSubmit}>
+          {" "}
+          {/* CHANGED: Use type="submit" instead of onClick */}
+          Submit Review
+        </Button>
+      </div>
 
       {/* OPTIONAL: Remove this duplicate button if not needed; the one above handles submission */}
       {/* <button

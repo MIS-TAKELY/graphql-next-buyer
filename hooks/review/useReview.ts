@@ -94,7 +94,6 @@ export const useReview = () => {
 
       return result;
     } catch (error) {
-      // Error handling is already done in onError callback
       throw error;
     }
   };

@@ -1,5 +1,5 @@
 export type MediaItem = {
-  id: string;
+  id?: string;
   type: "IMAGE" | "VIDEO";
   url: string;
   name?: string;
