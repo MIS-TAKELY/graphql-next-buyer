@@ -77,8 +77,17 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         name={product.name}
       />
       <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <ProductGallery images={sortedImages} productName={product.name} />
+        <div className="grid grid-cols-1 lg:grid-cols-[35%_65%] gap-8 mb-12">
+          <div className="space-y-4">
+            <ProductGallery images={sortedImages} productName={product.name} />
+            <ProductActionsClient
+              productId={product.id || ""}
+              productSlug={product.slug}
+              variantId={defaultVariant?.id || ""}
+              inStock={inStock}
+            />
+          </div>
+
           <div className="space-y-4">
             <ProductInfo
               product={product}
@@ -86,18 +95,13 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
               inStock={inStock}
               defaultVariant={defaultVariant}
             />
-            <ProductActionsClient
-              productId={product.id || ""}
-              productSlug={product.slug}
-              variantId={defaultVariant?.id || ""}
-              inStock={inStock}
-            />
             <DeliveryInfo
               warranty={product.warranty || "No warranty information"}
             />
             <SellerInfo sellerName={sellerName} />
           </div>
         </div>
+
         <ProductTabs
           product={product}
           averageRating={averageRating}

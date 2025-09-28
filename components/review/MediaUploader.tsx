@@ -1,6 +1,13 @@
 import { uploadToCloudinary } from "@/servers/utils/uploadToCloudinary";
 import { formatFileSize } from "@/utlis/dateHelpers";
-import { Upload, X } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle,
+  Image,
+  Upload,
+  Video,
+  X,
+} from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 export type MediaItem = {
@@ -17,16 +24,15 @@ export const MediaUploader = ({
   value,
   onChange,
   maxSizeMB = 10,
-  onUploadingChange, // NEW: notify parent if any upload is in progress
+  onUploadingChange,
 }: {
   value: MediaItem[];
   onChange: React.Dispatch<React.SetStateAction<MediaItem[]>>;
   maxSizeMB?: number;
-  onUploadingChange?: (uploading: boolean) => void; // NEW
+  onUploadingChange?: (uploading: boolean) => void;
 }) => {
   const [isDragOver, setIsDragOver] = useState(false);
 
-  // NEW: whenever the media list changes, tell parent if anything is uploading
   useEffect(() => {
     const uploading = value.some((m) => m.status === "uploading");
     onUploadingChange?.(uploading);
@@ -34,12 +40,21 @@ export const MediaUploader = ({
 
   const handleFiles = useCallback(
     (files: FileList | File[]) => {
-      const valid = Array.from(files).filter((file) => {
+      const fileArray = Array.from(files);
+      const remainingSlots = 5 - value.length;
+      const filesToProcess = fileArray.slice(0, remainingSlots);
+
+      const valid = filesToProcess.filter((file) => {
         const isImage = file.type.startsWith("image/");
         const isVideo = file.type.startsWith("video/");
         const isValidSize = file.size <= maxSizeMB * 1024 * 1024;
         return (isImage || isVideo) && isValidSize;
       });
+
+      if (valid.length !== filesToProcess.length) {
+        // Could show a toast notification here for invalid files
+        console.warn("Some files were skipped due to invalid format or size");
+      }
 
       valid.forEach(async (file) => {
         const localUrl = URL.createObjectURL(file);
@@ -50,10 +65,9 @@ export const MediaUploader = ({
           type: file.type.startsWith("image/") ? "IMAGE" : "VIDEO",
           name: file.name,
           size: file.size,
-          status: "uploading", // ensure we set uploading right away
+          status: "uploading",
         };
 
-        // Add optimistically
         onChange((prev) => [...prev, mediaItem]);
 
         try {
@@ -62,7 +76,6 @@ export const MediaUploader = ({
             : "video";
           const result = await uploadToCloudinary(file, resourceType);
 
-          // Mark as uploaded and replace preview URL with Cloudinary URL
           onChange((prevValue) =>
             prevValue.map((item) =>
               item.id === mediaItem.id
@@ -78,7 +91,6 @@ export const MediaUploader = ({
           );
         } catch (e) {
           console.error("Upload failed:", e);
-          // Option A: mark error and keep item (so user can remove/retry)
           onChange((prevValue) =>
             prevValue.map((item) =>
               item.id === mediaItem.id ? { ...item, status: "error" } : item
@@ -89,7 +101,7 @@ export const MediaUploader = ({
         }
       });
     },
-    [maxSizeMB, onChange]
+    [maxSizeMB, onChange, value.length]
   );
 
   const onDrop = useCallback(
@@ -115,110 +127,182 @@ export const MediaUploader = ({
     [onChange]
   );
 
-  return (
-    <div className="mt-2 space-y-4">
-      <div
-        onDragOver={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setIsDragOver(true);
-        }}
-        onDragLeave={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setIsDragOver(false);
-        }}
-        onDrop={onDrop}
-        className={`relative border-2 border-dashed rounded-lg p-8 transition-colors cursor-pointer ${
-          isDragOver
-            ? "border-blue-400 bg-blue-50"
-            : "border-gray-300 hover:border-gray-400"
-        }`}
-      >
-        <input
-          type="file"
-          multiple
-          accept="image/*,video/*"
-          onChange={onInput}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
-        <div className="text-center">
-          <div className="flex justify-center gap-2 mb-3">
-            <div className="p-2 bg-gray-100 rounded-full">
-              <Upload className="w-6 h-6 text-gray-600" />
-            </div>
-          </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
-            {isDragOver ? "Drop files here" : "Upload media files"}
-          </h3>
-          <p className="text-sm text-gray-600 mb-2">
-            Drag and drop images or videos, or click to browse
-          </p>
-          <p className="text-xs text-gray-500">
-            Supports: JPG, PNG, GIF, MP4, MOV (Max {maxSizeMB}MB per file)
-          </p>
-        </div>
-      </div>
+  const retryUpload = useCallback(
+    (id: string) => {
+      const mediaItem = value.find((m) => m.id === id);
+      if (!mediaItem) return;
 
+      // Reset status to uploading and retry
+      onChange((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, status: "uploading" } : item
+        )
+      );
+
+      // Re-trigger upload logic here
+    },
+    [value, onChange]
+  );
+
+  const canUploadMore = value.length < 5;
+
+  return (
+    <div className="space-y-6">
+      {/* Upload Area */}
+      {canUploadMore && (
+        <div
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDragOver(true);
+          }}
+          onDragLeave={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDragOver(false);
+          }}
+          onDrop={onDrop}
+          className={`relative border-2 border-dashed rounded-xl p-8 transition-all duration-300 cursor-pointer group ${
+            isDragOver
+              ? "border-blue-400 bg-blue-50 scale-[1.02]"
+              : "border-gray-300 hover:border-blue-300 hover:bg-gray-800"
+          }`}
+        >
+          <input
+            type="file"
+            multiple
+            accept="image/*,video/*"
+            onChange={onInput}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          />
+          <div className="text-center">
+            <div className="flex justify-center mb-4">
+              <div
+                className={`p-4 rounded-full transition-colors ${
+                  isDragOver
+                    ? "bg-blue-100"
+                    : "bg-gray-100 group-hover:bg-blue-50"
+                }`}
+              >
+                <Upload
+                  className={`w-8 h-8 transition-colors ${
+                    isDragOver
+                      ? "text-blue-600"
+                      : "text-gray-600 group-hover:text-blue-500"
+                  }`}
+                />
+              </div>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              {isDragOver ? "Drop your files here" : "Upload photos & videos"}
+            </h3>
+            <p className="text-gray-600 mb-3">
+              Drag and drop your files here, or{" "}
+              <span className="text-blue-600 font-medium">browse</span>
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-gray-500">
+              <div className="flex items-center gap-2">
+                <Image className="w-4 h-4" />
+                <span>Images: JPG, PNG, GIF</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Video className="w-4 h-4" />
+                <span>Videos: MP4, MOV</span>
+              </div>
+            </div>
+            <p className="text-xs text-gray-400 mt-2">
+              Max {maxSizeMB}MB per file • Up to 5 files total
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Media Preview Grid */}
       {value?.length > 0 && (
-        <div>
-          <h4 className="text-sm font-medium text-gray-700 mb-3">
-            Uploaded Files ({value.length})
-          </h4>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h4 className="text-sm font-semibold text-gray-800">
+              Uploaded Files ({value.length}/5)
+            </h4>
+            {value.some((m) => m.status === "error") && (
+              <span className="text-sm text-red-600 flex items-center gap-1">
+                <AlertCircle className="w-4 h-4" />
+                Some uploads failed
+              </span>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {value.map((media) => (
               <div key={media.id} className="relative group">
-                <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border">
+                <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 border-gray-200 group-hover:border-gray-300 transition-colors">
                   {media.type === "IMAGE" ? (
                     <img
                       src={media.url}
                       alt={media.name}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50">
+                    <div className="relative w-full h-full bg-gray-900">
                       <video
                         src={media.url}
                         className="w-full h-full object-cover"
-                        controls
+                        preload="metadata"
                       />
-                      <span className="text-xs text-gray-600 text-center px-2">
-                        {media.name}
-                      </span>
-                      <video
-                        src={media.url}
-                        className="absolute inset-0 w-full h-full object-cover opacity-50"
-                        muted
-                      />
+                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                        <Video className="w-8 h-8 text-white" />
+                      </div>
                     </div>
                   )}
 
-                  {/* Remove */}
+                  {/* Status Overlays */}
+                  {media.status === "uploading" && (
+                    <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center">
+                      <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mb-2" />
+                      <span className="text-white text-xs font-medium">
+                        Uploading...
+                      </span>
+                    </div>
+                  )}
+
+                  {media.status === "uploaded" && (
+                    <div className="absolute top-2 left-2 bg-green-500 text-white rounded-full p-1">
+                      <CheckCircle className="w-3 h-3" />
+                    </div>
+                  )}
+
+                  {media.status === "error" && (
+                    <div className="absolute inset-0 bg-red-600/80 text-white flex flex-col items-center justify-center p-2">
+                      <AlertCircle className="w-6 h-6 mb-1" />
+                      <span className="text-xs font-medium text-center">
+                        Upload failed
+                      </span>
+                      <button
+                        onClick={() => retryUpload(media.id)}
+                        className="text-xs underline mt-1 hover:no-underline"
+                      >
+                        Retry
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Remove Button */}
                   <button
                     onClick={() => removeMedia(media.id)}
-                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                    className="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-red-300"
                     aria-label="Remove media"
                   >
                     <X className="w-3 h-3" />
                   </button>
 
-                  {/* Filename/size on hover */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p className="text-xs truncate">{media.name}</p>
-                    <p className="text-xs">{formatFileSize(media.size)}</p>
+                  {/* File Info on Hover */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p className="text-xs font-medium truncate">{media.name}</p>
+                    <p className="text-xs text-gray-300">
+                      {formatFileSize(media.size)}
+                    </p>
                   </div>
-
-                  {/* NEW: overlay for uploading/error */}
-                  {media.status === "uploading" && (
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                      <div className="h-8 w-8 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                    </div>
-                  )}
-                  {media.status === "error" && (
-                    <div className="absolute inset-0 bg-red-600/60 text-white flex items-center justify-center text-xs font-medium">
-                      Upload failed
-                    </div>
-                  )}
                 </div>
               </div>
             ))}
