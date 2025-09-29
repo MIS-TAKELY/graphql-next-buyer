@@ -4,11 +4,9 @@ import { useCallback, useState } from "react";
 import { Button } from "../ui/button";
 import { CardContent } from "../ui/card";
 import { Textarea } from "../ui/textarea";
-import {  MediaUploader } from "./MediaUploader";
+import { MediaUploader } from "./MediaUploader";
 import { StarRating } from "./StarRating";
 import { MediaItem, ReviewMedia } from "./types";
-
-
 
 export const AddReviewForm = ({
   onSubmit,
@@ -39,7 +37,7 @@ export const AddReviewForm = ({
     setShowAddReview(false);
     if (isUploading) return;
 
-    const uploadedMedia:MediaItem[] = media
+    const uploadedMedia: MediaItem[] = media
       .filter((m) => m.status === "uploaded")
       .slice(0, 5)
       .map(({ url, type }) => ({ url, type }));

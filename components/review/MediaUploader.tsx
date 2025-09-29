@@ -137,6 +137,8 @@ export const MediaUploader = ({
 
   const canUploadMore = value.length < 5;
 
+  console.log("value",value)
+
   return (
     <div className="space-y-6">
       {/* Upload Area */}
