@@ -9,9 +9,10 @@ import { ReviewCard } from "@/components/review/ReviewCard";
 import { FilterState, ReviewFilters } from "@/components/review/ReviewFilters";
 import ReviewSkeleton from "@/components/review/ReviewSkeleton ";
 import { ReviewSummary } from "@/components/review/ReviewSummary";
-import { MediaItem, Review } from "@/components/review/types";
+import { ReviewMedia, Review, MediaItem } from "@/components/review/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@clerk/nextjs";
 
 const sortFns: Record<string, (a: Review, b: Review) => number> = {
   newest: (a, b) =>
@@ -20,10 +21,16 @@ const sortFns: Record<string, (a: Review, b: Review) => number> = {
     new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   highest: (a, b) => b.rating - a.rating,
   lowest: (a, b) => a.rating - b.rating,
-  helpful: (a, b) => b.helpfulCount - a.helpfulCount,
+  helpful: (a, b) => {
+    if (!b.helpfulCount || !a.helpfulCount) {
+      return 0;
+    }
+    return b.helpfulCount - a.helpfulCount;
+  },
 };
 
 const ProductReviews = () => {
+  const { userId } = useAuth();
   const [filters, setFilters] = useState<FilterState>({
     activeTab: "all",
     sortBy: "newest",
@@ -69,7 +76,7 @@ const ProductReviews = () => {
   const handleSubmit = async (payload: {
     rating: number;
     comment: string;
-    media: MediaItem[];
+    media?: MediaItem[];
   }) => {
     console.log("form data-->", ratings, payload.comment, payload.media);
     try {
@@ -90,13 +97,15 @@ const ProductReviews = () => {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span>Customer Reviews</span>
-            <Button
-              onClick={() => setShowAddReview((s) => !s)}
-              className="flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              Write a Review
-            </Button>
+            {userId && (
+              <Button
+                onClick={() => setShowAddReview((s) => !s)}
+                className="flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                Write a Review
+              </Button>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -109,6 +118,7 @@ const ProductReviews = () => {
         <AddReviewForm
           onCancel={() => setShowAddReview(false)}
           onSubmit={handleSubmit}
+          setShowAddReview={setShowAddReview}
         />
       )}
 

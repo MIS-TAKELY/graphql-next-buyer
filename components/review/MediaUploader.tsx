@@ -9,16 +9,7 @@ import {
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-
-export type MediaItem = {
-  id: string;
-  url: string;
-  type: "IMAGE" | "VIDEO";
-  name: string;
-  size: number;
-  status?: "uploading" | "uploaded" | "error";
-  publicId?: string;
-};
+import { ReviewMedia } from "./types";
 
 export const MediaUploader = ({
   value,
@@ -26,8 +17,8 @@ export const MediaUploader = ({
   maxSizeMB = 10,
   onUploadingChange,
 }: {
-  value: MediaItem[];
-  onChange: React.Dispatch<React.SetStateAction<MediaItem[]>>;
+  value: ReviewMedia[];
+  onChange: React.Dispatch<React.SetStateAction<ReviewMedia[]>>;
   maxSizeMB?: number;
   onUploadingChange?: (uploading: boolean) => void;
 }) => {
@@ -59,7 +50,7 @@ export const MediaUploader = ({
       valid.forEach(async (file) => {
         const localUrl = URL.createObjectURL(file);
         const id = `${Date.now()}_${Math.random().toString(36).slice(2)}`;
-        const mediaItem: MediaItem = {
+        const mediaItem: ReviewMedia = {
           id,
           url: localUrl,
           type: file.type.startsWith("image/") ? "IMAGE" : "VIDEO",

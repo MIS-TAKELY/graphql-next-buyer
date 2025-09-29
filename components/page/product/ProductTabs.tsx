@@ -1,6 +1,7 @@
 // components/page/product/ProductTabs.tsx
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useReview } from "@/hooks/review/useReview";
 import { useMemo } from "react";
 import ProductReviews from "./ProductReviews";
 
@@ -16,6 +17,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
     [product]
   );
   const features = useMemo(() => product?.features || [], [product]);
+  const { data } = useReview();
 
   return (
     <Tabs defaultValue="specifications" className="w-full">

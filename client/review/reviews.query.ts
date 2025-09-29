@@ -16,6 +16,8 @@ export const GET_REVIEWS_BY_PRODUCT_BY_SLUG = gql`
       user {
         id
         firstName
+        lastName
+        clerkId
       }
       media {
         id
@@ -48,7 +50,8 @@ export const GET_REVIEW = gql`
       }
       user {
         id
-        name
+        firstName
+        lastName
       }
     }
   }

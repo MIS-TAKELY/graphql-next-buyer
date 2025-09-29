@@ -29,11 +29,11 @@ export const reviewTypeDefs = gql`
     updatedAt: DateTime!
     user: User
     product: Product!
-    media: [ReviewMedia] # ✅ now valid
+    media: [ReviewMedia]
     votes: [ReviewVote]
   }
 
-  type ReviewMedia { # ✅ Added this
+  type ReviewMedia {
     id: ID!
     reviewId: String!
     url: String!
@@ -95,7 +95,7 @@ export const reviewTypeDefs = gql`
 
   type Mutation {
     addReview(input: AddReviewInput!): Boolean
-    updateReview(id: ID!, input: UpdateReviewInput!): Review
+    updateReview(id: ID!, input: UpdateReviewInput!): Boolean
     deleteReview(id: ID!): Boolean
   }
 `;

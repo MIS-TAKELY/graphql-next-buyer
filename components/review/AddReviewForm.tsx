@@ -4,26 +4,26 @@ import { useCallback, useState } from "react";
 import { Button } from "../ui/button";
 import { CardContent } from "../ui/card";
 import { Textarea } from "../ui/textarea";
-import { MediaItem, MediaUploader } from "./MediaUploader";
+import {  MediaUploader } from "./MediaUploader";
 import { StarRating } from "./StarRating";
+import { MediaItem, ReviewMedia } from "./types";
 
-export type ReviewMedia = {
-  url: string;
-  type: "IMAGE" | "VIDEO";
-};
+
 
 export const AddReviewForm = ({
   onSubmit,
   onCancel,
+  setShowAddReview,
 }: {
+  setShowAddReview: (input: boolean) => void;
   onSubmit: (payload: {
     rating: number;
     comment: string;
-    media: ReviewMedia[];
+    media: MediaItem[];
   }) => Promise<void> | void;
   onCancel: () => void;
 }) => {
-  const [media, setMedia] = useState<MediaItem[]>([]);
+  const [media, setMedia] = useState<ReviewMedia[]>([]);
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -36,10 +36,10 @@ export const AddReviewForm = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setShowAddReview(false);
     if (isUploading) return;
 
-    const uploadedMedia = media
+    const uploadedMedia:MediaItem[] = media
       .filter((m) => m.status === "uploaded")
       .slice(0, 5)
       .map(({ url, type }) => ({ url, type }));

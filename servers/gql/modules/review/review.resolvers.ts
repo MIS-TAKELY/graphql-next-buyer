@@ -1,11 +1,11 @@
 import { prisma } from "@/lib/db/prisma";
+import { setCache } from "@/services/redis.services";
 import { requireBuyer } from "../../auth/auth";
 import { GraphQLContext } from "../../context";
-import { setCache } from "@/services/redis.services";
 
 export const reviewResolvers = {
   Query: {
-    getReview: async (_: any, { id }: { id: string }, ctx: GraphQLContext) => {
+    getReview: async (_: any, { id }: { id: string }) => {
       try {
         const review = await prisma.review.findUnique({
           where: { id },
@@ -39,7 +39,6 @@ export const reviewResolvers = {
         limit?: number;
         sortBy?: string;
       },
-      ctx: GraphQLContext
     ) => {
       try {
         const skip = (page - 1) * limit;
@@ -98,7 +97,6 @@ export const reviewResolvers = {
         limit?: number;
         sortBy?: string;
       },
-      ctx: GraphQLContext
     ) => {
       try {
         const skip = (page - 1) * limit;
@@ -142,7 +140,6 @@ export const reviewResolvers = {
         limit?: number;
         sortBy?: string;
       },
-      ctx: GraphQLContext
     ) => {
       try {
         const skip = (page - 1) * limit;
@@ -190,7 +187,6 @@ export const reviewResolvers = {
       ctx: GraphQLContext
     ) => {
       try {
-       
         const user = requireBuyer(ctx);
         if (!user) throw new Error("Unauthorized user");
 
@@ -322,8 +318,10 @@ export const reviewResolvers = {
             });
           }
         }
+        if (!updatedReview)
+          throw new Error("internal server error unable to create review");
 
-        return updatedReview;
+        return true;
       } catch (error: any) {
         console.error("Error while updating review:", error);
         throw new Error(error.message || "Failed to update review");
