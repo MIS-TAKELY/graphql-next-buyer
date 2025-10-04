@@ -37,6 +37,7 @@ export async function POST(req: Request): Promise<NextResponse> {
       const email = evt.data.email_addresses?.[0]?.email_address ?? "";
       const role = "BUYER";
       const firstName = evt.data.first_name!;
+      const lastName = evt.data?.last_name;
 
       if (!email || !clerkId) {
         return new NextResponse("Missing email or Clerk ID", { status: 400 });
@@ -45,7 +46,7 @@ export async function POST(req: Request): Promise<NextResponse> {
       await prisma.user.upsert({
         where: { id: clerkId },
         update: { email, role },
-        create: { clerkId, email, role, firstName },
+        create: { clerkId, email, role, firstName, lastName },
       });
 
       // console.log(
