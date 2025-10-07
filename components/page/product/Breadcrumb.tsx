@@ -7,7 +7,7 @@ interface BreadcrumbProps {
 }
 
 export default function Breadcrumb({ category, name }: BreadcrumbProps) {
-  if (!category || !name) return <div className="text-gray-600 dark:text-gray-300">loading...</div>;
+  if (!category || !name) return <div className="text-gray-600 dark:text-gray-300"></div>;
 
   return (
     <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">

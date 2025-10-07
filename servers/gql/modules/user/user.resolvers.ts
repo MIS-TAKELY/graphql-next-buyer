@@ -25,7 +25,6 @@ export const userResolvers = {
             // payouts: true,
             sellerOrders: true,
             wishlists: true,
-            discountUsage: true,
           },
         });
       } catch (error: any) {

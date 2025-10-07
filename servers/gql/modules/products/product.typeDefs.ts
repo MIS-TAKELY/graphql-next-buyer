@@ -7,7 +7,12 @@ export const productTypeDefs = gql`
     INACTIVE
     DISCONTINUED
   }
-
+  enum DiscountType {
+    PERCENTAGE
+    FIXED_AMOUNT
+    BUY_X_GET_Y
+    FREE_SHIPPING
+  }
   scalar DateTime
 
   type Product {
@@ -15,21 +20,23 @@ export const productTypeDefs = gql`
     sellerId: String!
     name: String!
     slug: String!
+    categoryId: String
     description: String
     status: ProductStatus!
-    createdAt: DateTime!
-    updatedAt: DateTime!
+    brand: String
+    createdAt: String!
+    updatedAt: String!
+
     seller: User!
     variants: [ProductVariant!]
     images: [ProductImage!]
     reviews: [Review!]
     category: Category
-    categoryId: String
-    brand: Brand
-    brandId: String
-    WishlistItem: [WishlistItem!]
-    returnPolicy: String
-    warranty: String
+    wishlistItems: [WishlistItem!]
+    productOffers: [ProductOffer!]
+    deliveryOptions: [DeliveryOption!]
+    warranty: [Warranty!]
+    returnPolicy: [ReturnPolicy!]
   }
 
   input CreateProductInput {

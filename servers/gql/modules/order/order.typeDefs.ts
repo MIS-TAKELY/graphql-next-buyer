@@ -28,7 +28,6 @@ export const orderTypeDefs = gql`
     subtotal: Decimal!
     tax: Decimal!
     shippingFee: Decimal!
-    discount: Decimal!
     total: Decimal!
     createdAt: DateTime!
     updatedAt: DateTime!

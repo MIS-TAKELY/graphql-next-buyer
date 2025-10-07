@@ -29,6 +29,7 @@ const ProductCard = memo<ProductCardProps>(
         imageAlt: firstImage?.altText ?? product.name ?? "Product image",
         variantId: firstVariant?.id,
         price: firstVariant ? parseFloat(firstVariant.price) : 0,
+        mrp: firstVariant ? parseFloat(firstVariant.mrp) : 0,
         avgRating: reviews?.length
           ? reviews.reduce((sum, review) => sum + (review.rating ?? 0), 0) /
             reviews.length
@@ -37,6 +38,9 @@ const ProductCard = memo<ProductCardProps>(
         hasReviews: (reviews?.length ?? 0) > 0,
       };
     }, [product.images, product.variants, product.reviews, product.name]);
+
+
+    // console.log("product data-->",productData)
 
     const starRating = useMemo(() => {
       if (!productData.hasReviews) return null;
@@ -100,8 +104,29 @@ const ProductCard = memo<ProductCardProps>(
 
                 {starRating}
 
-                <div className="font-bold text-lg text-gray-700 dark:text-gray-200">
-                  रु{productData.price.toFixed(2)}
+                <div className="flex items-center gap-2 mt-1">
+                  {/* Discounted / Current Price */}
+                  <span className="font-bold text-lg text-gray-800 dark:text-gray-100">
+                    रु{productData.price.toFixed(2)}
+                  </span>
+
+                  {/* MRP (Struck-through) */}
+                  {productData.mrp && productData.mrp > productData.price && (
+                    <>
+                      <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
+                        रु{productData.mrp.toFixed(2)}
+                      </span>
+
+                      {/* Optional Discount % */}
+                      <span className="text-xs font-medium text-green-600 dark:text-green-400">
+                        {Math.round(
+                          ((productData.mrp - productData.price) / productData.mrp) *
+                            100
+                        )}
+                        % off
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

@@ -5,7 +5,6 @@ export const GET_PRODUCT_CATEGORIES = gql`
     categories {
       id
       name
-
       children {
         id
         name
@@ -47,6 +46,7 @@ export const GET_PRODUCT = gql`
         url
         type
         altText
+        mediaType
       }
       variants {
         price
@@ -74,6 +74,7 @@ export const GET_PRODUCT_BY_SLUG = gql`
         id
         url
         altText
+        mediaType
       }
       reviews {
         id
@@ -86,8 +87,14 @@ export const GET_PRODUCT_BY_SLUG = gql`
       variants {
         id
         price
+        mrp
         stock
         isDefault
+        attributes
+        specifications {
+          key
+          value
+        }
       }
       category {
         name
@@ -96,8 +103,22 @@ export const GET_PRODUCT_BY_SLUG = gql`
         firstName
         lastName
       }
-      brand {
-        name
+      brand
+      productOffers {
+        id
+        offer {
+          description
+          endDate
+          isActive
+          startDate
+          title
+          type
+          value
+        }
+      }
+      deliveryOptions {
+        description
+        title
       }
     }
   }
@@ -113,12 +134,31 @@ export const GET_REMAINING_PRODUCT_BY_SLUG = gql`
         firstName
         lastName
       }
-      brand {
-        name
-      }
+      brand
       variants {
         stock
         isDefault
+        attributes
+        specifications {
+          key
+          value
+        }
+      }
+      productOffers {
+        id
+        offer {
+          description
+          endDate
+          isActive
+          startDate
+          title
+          type
+          value
+        }
+      }
+      deliveryOptions {
+        description
+        title
       }
     }
   }
@@ -176,14 +216,28 @@ export const GET_PRODUCTS = gql`
         id
         url
         altText
+        mediaType
       }
       status
       variants {
         id
         price
+        mrp
       }
       reviews {
         rating
+      }
+      productOffers {
+        id
+        offer {
+          description
+          endDate
+          isActive
+          startDate
+          title
+          type
+          value
+        }
       }
     }
   }

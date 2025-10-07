@@ -59,11 +59,11 @@ export default async function ProductPage({
       console.error("Error fetching remaining product data:", error);
     }
 
-    // console.log("Remaining data:", remainingData);
+    console.log("Remaining data:", remainingData);
     const productFromRemaining: IRemainingProductDetails =
       remainingData?.getProductBySlug || {};
     if (productFromRemaining) {
-      // console.log("remaining product-->", productFromRemaining);
+      console.log("remaining product-->", productFromRemaining);
 
       const mergedVariants: IProductVarient[] = productFromList.variants.map(
         (listVariant) => {
@@ -75,10 +75,12 @@ export default async function ProductPage({
 
           return {
             ...listVariant,
-            stock: productFromRemaining.variants[0]?.stock || "0",
-            isDefault: productFromRemaining.variants[0]?.isDefault || false,
+            stock: productFromRemaining?.variants?.[0]?.stock || "0",
+            isDefault: productFromRemaining?.variants?.[0]?.isDefault || false,
             price: listVariant.price,
             id: listVariant.id,
+            specifications: productFromRemaining?.variants?.[0]?.specifications,
+            attributes: productFromRemaining?.variants?.[0]?.attributes,
           };
         }
       );
@@ -137,7 +139,7 @@ export default async function ProductPage({
     }
   }
 
-  // console.log("final product-->", product);
+  console.log("final product-->", product);
 
   const initialCacheData = {
     products: allProducts,

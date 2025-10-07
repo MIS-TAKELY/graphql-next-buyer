@@ -1,7 +1,14 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
-  provider      = "prisma-client-js"
-  output        = "../app/generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
   binaryTargets = ["native", "windows", "rhel-openssl-3.0.x"]
+
 }
 
 datasource db {
@@ -74,7 +81,7 @@ enum ShippingMethod {
   SAME_DAY
 }
 
-enum ImageType {
+enum MediaType {
   PRIMARY
   PROMOTIONAL
 }
@@ -114,9 +121,22 @@ enum ReviewStatus {
   REJECTED
 }
 
-enum MediaType {
+enum FileType {
   IMAGE
   VIDEO
+}
+
+enum WarrantyType {
+  MANUFACTURER
+  SELLER
+  NO_WARRANTY
+}
+
+enum ReturnType {
+  NO_RETURN
+  REPLACEMENT
+  REFUND
+  REPLACEMENT_OR_REFUND
 }
 
 model User {
@@ -141,7 +161,7 @@ model User {
   payouts        Payout[]        @relation("SellerPayouts")
   sellerOrders   SellerOrder[]   @relation("SellerOrders")
   wishlists      Wishlist[]
-  discountUsage  DiscountUsage[] @relation("UserDiscountUsage")
+  // discountUsage  DiscountUsage[] @relation("UserDiscountUsage")
   ReviewVote     ReviewVote[]
 
   @@index([email, role])
@@ -199,126 +219,106 @@ model Category {
   children              Category[]              @relation("CategoryHierarchy")
   products              Product[]
   categorySpecification CategorySpecification[]
-  categoryDiscounts     CategoryDiscount[] // Add this line
+  // categoryDiscounts     CategoryDiscount[] // Add this line
+  categoryOffers        CategoryOffer[]
 
   @@index([slug])
   @@map("categories")
 }
 
-model Brand {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  slug      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Offer {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  type        DiscountType
+  value       Decimal      @db.Money
+  bannerImage String?
+  startDate   DateTime
+  endDate     DateTime
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
-  products Product[]
-
-  @@map("brands")
-}
-
-model Discount {
-  id              String        @id @default(cuid())
-  name            String // "Summer Sale", "First Time Buyer"
-  description     String?
-  type            DiscountType
-  scope           DiscountScope
-  value           Decimal       @db.Money // Amount or percentage value
-  percentage      Decimal? // For percentage discounts
-  minimumAmount   Decimal?      @db.Money // Minimum cart value
-  maximumDiscount Decimal?      @db.Money // Cap for percentage discounts
-  maxUsageTotal   Int? // Total usage limit
-  maxUsagePerUser Int? // Per user usage limit
-  startDate       DateTime
-  endDate         DateTime
-  isActive        Boolean       @default(true)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-
-  // Relationships
-  coupons           Coupon[]
-  productDiscounts  ProductDiscount[]
-  categoryDiscounts CategoryDiscount[]
-  appliedDiscounts  AppliedDiscount[]
-  usageHistory      DiscountUsage[]
+  // Relations
+  productOffers  ProductOffer[]
+  categoryOffers CategoryOffer[]
+  Order          Order[]
 
   @@index([isActive, startDate, endDate])
-  @@map("discounts")
+  @@map("offers")
 }
 
-model Coupon {
-  id         String       @id @default(cuid())
-  code       String       @unique
-  discountId String
-  status     CouponStatus @default(ACTIVE)
-  usageCount Int          @default(0)
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+model ProductOffer {
+  id        String   @id @default(cuid())
+  offerId   String
+  productId String
+  createdAt DateTime @default(now())
 
-  discount         Discount          @relation(fields: [discountId], references: [id], onDelete: Cascade)
-  appliedDiscounts AppliedDiscount[]
+  offer   Offer   @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@index([code, status])
-  @@map("coupons")
+  @@unique([offerId, productId])
+  @@map("product_offers")
 }
 
-model ProductDiscount {
+model CategoryOffer {
   id         String   @id @default(cuid())
-  productId  String
-  discountId String
-  createdAt  DateTime @default(now())
-
-  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  discount Discount @relation(fields: [discountId], references: [id], onDelete: Cascade)
-
-  @@unique([productId, discountId])
-  @@map("product_discounts")
-}
-
-model CategoryDiscount {
-  id         String   @id @default(cuid())
+  offerId    String
   categoryId String
-  discountId String
   createdAt  DateTime @default(now())
 
+  offer    Offer    @relation(fields: [offerId], references: [id], onDelete: Cascade)
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  discount Discount @relation(fields: [discountId], references: [id], onDelete: Cascade)
 
-  @@unique([categoryId, discountId])
-  @@map("category_discounts")
+  @@unique([offerId, categoryId])
+  @@map("category_offers")
 }
 
-model AppliedDiscount {
-  id             String   @id @default(cuid())
-  orderId        String
-  discountId     String
-  couponId       String? // If coupon was used
-  discountAmount Decimal  @db.Money
-  originalAmount Decimal  @db.Money
-  appliedAt      DateTime @default(now())
+model DeliveryOption {
+  id          String   @id @default(cuid())
+  productId   String
+  title       String
+  description String?
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  order    Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  discount Discount @relation(fields: [discountId], references: [id])
-  coupon   Coupon?  @relation(fields: [couponId], references: [id])
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@index([orderId])
-  @@map("applied_discounts")
+  @@index([productId])
+  @@map("delivery_options")
 }
 
-model DiscountUsage {
-  id         String   @id @default(cuid())
-  discountId String
-  userId     String
-  orderId    String
-  usedAt     DateTime @default(now())
+model Warranty {
+  id          String       @id @default(cuid())
+  productId   String
+  type        WarrantyType @default(SELLER)
+  duration    Int?
+  unit        String?
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
-  discount Discount @relation(fields: [discountId], references: [id], onDelete: Cascade)
-  user     User     @relation("UserDiscountUsage", fields: [userId], references: [id], onDelete: Cascade)
-  order    Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@unique([discountId, userId, orderId])
-  @@index([userId, discountId])
-  @@map("discount_usage")
+  @@index([productId, type])
+  @@map("warranties")
+}
+
+model ReturnPolicy {
+  id         String     @id @default(cuid())
+  productId  String
+  type       ReturnType @default(NO_RETURN)
+  duration   Int?
+  unit       String?
+  conditions String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, type])
+  @@map("return_policies")
 }
 
 model Product {
@@ -327,30 +327,28 @@ model Product {
   name        String
   slug        String        @unique
   description String?
-  status      ProductStatus @default(DRAFT)
+  status      ProductStatus @default(INACTIVE)
 
-  salePrice Decimal?  @db.Money
-  saleStart DateTime?
-  saleEnd   DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // warranty     String?
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  returnPolicy String?
-  warranty     String?
-
-  seller           User              @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
-  variants         ProductVariant[]
-  images           ProductImage[]
-  reviews          Review[]
-  category         Category?         @relation(fields: [categoryId], references: [id])
-  categoryId       String?
-  brand            Brand?            @relation(fields: [brandId], references: [id])
-  brandId          String?
-  wishlistItems    WishlistItem[]
-  productDiscounts ProductDiscount[]
+  seller          User             @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
+  variants        ProductVariant[]
+  images          ProductImage[]
+  reviews         Review[]
+  category        Category?        @relation(fields: [categoryId], references: [id])
+  categoryId      String?
+  // brand            Brand?            @relation(fields: [brandId], references: [id])
+  brand           String
+  // brandId          String?
+  wishlistItems   WishlistItem[]
+  productOffers   ProductOffer[]
+  deliveryOptions DeliveryOption[]
+  warranty        Warranty[]
+  returnPolicy    ReturnPolicy[]
 
   @@index([slug, sellerId])
-  @@index([saleStart, saleEnd])
   @@map("products")
 }
 
@@ -358,7 +356,8 @@ model ProductVariant {
   id         String   @id @default(cuid())
   productId  String
   sku        String   @unique
-  price      Decimal  @db.Money
+  price      Decimal  @db.Money //highlighted price
+  mrp        Decimal  @db.Money //cute price
   stock      Int      @default(0)
   attributes Json?
   isDefault  Boolean  @default(false)
@@ -398,7 +397,8 @@ model ProductImage {
   url       String
   altText   String?   @default("")
   sortOrder Int       @default(0)
-  type      ImageType @default(PRIMARY)
+  mediaType MediaType @default(PRIMARY)
+  fileType  FileType
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
@@ -435,13 +435,15 @@ model Order {
   total            Decimal     @db.Money
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
+  offerId          String?
 
-  buyer            User              @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
-  items            OrderItem[]
-  payments         Payment[]
-  shipments        Shipment[]
-  appliedDiscounts AppliedDiscount[] // Add this line
-  discountUsage    DiscountUsage[]
+  offer     Offer?      @relation(fields: [offerId], references: [id], onDelete: SetNull)
+  buyer     User        @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
+  items     OrderItem[]
+  payments  Payment[]
+  shipments Shipment[]
+  // appliedDiscounts AppliedDiscount[] // Add this line
+  // discountUsage    DiscountUsage[]
 
   @@index([buyerId, status])
   @@index([createdAt])
@@ -569,9 +571,9 @@ model ReviewVote {
 }
 
 model ReviewMedia {
-  id       String    @id @default(cuid())
+  id       String   @id @default(cuid())
   reviewId String
-  type     MediaType
+  type     FileType
   url      String
 
   review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)

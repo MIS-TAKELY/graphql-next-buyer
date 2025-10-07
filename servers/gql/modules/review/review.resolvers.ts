@@ -250,7 +250,6 @@ export const reviewResolvers = {
             images: true,
             reviews: true,
             category: { include: { children: true, parent: true } },
-            brand: true,
             wishlistItems: true,
           },
         });

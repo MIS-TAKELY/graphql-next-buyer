@@ -30,7 +30,11 @@ import { userResolvers } from "./modules/user/user.resolvers";
 import { userTypeDefs } from "./modules/user/user.typeDefs";
 import { wishlistTypeDefs } from "./modules/wishlist/wishlist.typeDefs";
 // import { wishlistItemTypeDefs } from "./modules/wishlistItem/wishlistItem.typeDefs";
+import { deliveryTypedefs } from "./modules/delivery/delivery.typeDefs";
+import { offerTypeDefs } from "./modules/offer/offer.typedefs";
+import { returnTypedefs } from "./modules/return/return.typeDefs";
 import { reviewResolvers } from "./modules/review/review.resolvers";
+import { warrentyTypeDefs } from "./modules/warrenty/warrenty.typeDefs";
 import { wishlistResolvers } from "./modules/wishlist/wishlist.resolvers";
 
 const rootTypeDefs = gql`
@@ -50,6 +54,7 @@ const typeDefs = mergeTypeDefs([
   cartItemTypeDefs,
   categoryTypeDefs,
   categorySpecificationsTypeDefs,
+  deliveryTypedefs,
   orderTypeDefs,
   orderItemTypeDefs,
   paymentTypeDefs,
@@ -65,7 +70,10 @@ const typeDefs = mergeTypeDefs([
   shipmentTypeDefs,
   userTypeDefs,
   wishlistTypeDefs,
-  // wishlistTypeDefs,
+  offerTypeDefs,
+  reviewTypeDefs,
+  returnTypedefs,
+  warrentyTypeDefs,
 ]);
 
 const resolvers = mergeResolvers([

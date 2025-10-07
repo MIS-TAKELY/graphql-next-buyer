@@ -172,26 +172,13 @@ exports.Prisma.CategoryScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.BrandScalarFieldEnum = {
+exports.Prisma.OfferScalarFieldEnum = {
   id: 'id',
-  name: 'name',
-  slug: 'slug',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.DiscountScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
+  title: 'title',
   description: 'description',
   type: 'type',
-  scope: 'scope',
   value: 'value',
-  percentage: 'percentage',
-  minimumAmount: 'minimumAmount',
-  maximumDiscount: 'maximumDiscount',
-  maxUsageTotal: 'maxUsageTotal',
-  maxUsagePerUser: 'maxUsagePerUser',
+  bannerImage: 'bannerImage',
   startDate: 'startDate',
   endDate: 'endDate',
   isActive: 'isActive',
@@ -199,46 +186,50 @@ exports.Prisma.DiscountScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.CouponScalarFieldEnum = {
+exports.Prisma.ProductOfferScalarFieldEnum = {
   id: 'id',
-  code: 'code',
-  discountId: 'discountId',
-  status: 'status',
-  usageCount: 'usageCount',
+  offerId: 'offerId',
+  productId: 'productId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.CategoryOfferScalarFieldEnum = {
+  id: 'id',
+  offerId: 'offerId',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.DeliveryOptionScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  title: 'title',
+  description: 'description',
+  isDefault: 'isDefault',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.ProductDiscountScalarFieldEnum = {
+exports.Prisma.WarrantyScalarFieldEnum = {
   id: 'id',
   productId: 'productId',
-  discountId: 'discountId',
-  createdAt: 'createdAt'
+  type: 'type',
+  duration: 'duration',
+  unit: 'unit',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
-exports.Prisma.CategoryDiscountScalarFieldEnum = {
+exports.Prisma.ReturnPolicyScalarFieldEnum = {
   id: 'id',
-  categoryId: 'categoryId',
-  discountId: 'discountId',
-  createdAt: 'createdAt'
-};
-
-exports.Prisma.AppliedDiscountScalarFieldEnum = {
-  id: 'id',
-  orderId: 'orderId',
-  discountId: 'discountId',
-  couponId: 'couponId',
-  discountAmount: 'discountAmount',
-  originalAmount: 'originalAmount',
-  appliedAt: 'appliedAt'
-};
-
-exports.Prisma.DiscountUsageScalarFieldEnum = {
-  id: 'id',
-  discountId: 'discountId',
-  userId: 'userId',
-  orderId: 'orderId',
-  usedAt: 'usedAt'
+  productId: 'productId',
+  type: 'type',
+  duration: 'duration',
+  unit: 'unit',
+  conditions: 'conditions',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ProductScalarFieldEnum = {
@@ -248,15 +239,10 @@ exports.Prisma.ProductScalarFieldEnum = {
   slug: 'slug',
   description: 'description',
   status: 'status',
-  salePrice: 'salePrice',
-  saleStart: 'saleStart',
-  saleEnd: 'saleEnd',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  returnPolicy: 'returnPolicy',
-  warranty: 'warranty',
   categoryId: 'categoryId',
-  brandId: 'brandId'
+  brand: 'brand'
 };
 
 exports.Prisma.ProductVariantScalarFieldEnum = {
@@ -264,6 +250,7 @@ exports.Prisma.ProductVariantScalarFieldEnum = {
   productId: 'productId',
   sku: 'sku',
   price: 'price',
+  mrp: 'mrp',
   stock: 'stock',
   attributes: 'attributes',
   isDefault: 'isDefault',
@@ -287,7 +274,8 @@ exports.Prisma.ProductImageScalarFieldEnum = {
   url: 'url',
   altText: 'altText',
   sortOrder: 'sortOrder',
-  type: 'type'
+  mediaType: 'mediaType',
+  fileType: 'fileType'
 };
 
 exports.Prisma.CartItemScalarFieldEnum = {
@@ -312,7 +300,8 @@ exports.Prisma.OrderScalarFieldEnum = {
   discount: 'discount',
   total: 'total',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  offerId: 'offerId'
 };
 
 exports.Prisma.OrderItemScalarFieldEnum = {
@@ -509,19 +498,17 @@ exports.DiscountType = exports.$Enums.DiscountType = {
   FREE_SHIPPING: 'FREE_SHIPPING'
 };
 
-exports.DiscountScope = exports.$Enums.DiscountScope = {
-  PRODUCT: 'PRODUCT',
-  CATEGORY: 'CATEGORY',
-  CART: 'CART',
-  SHIPPING: 'SHIPPING',
-  USER_SPECIFIC: 'USER_SPECIFIC'
+exports.WarrantyType = exports.$Enums.WarrantyType = {
+  MANUFACTURER: 'MANUFACTURER',
+  SELLER: 'SELLER',
+  NO_WARRANTY: 'NO_WARRANTY'
 };
 
-exports.CouponStatus = exports.$Enums.CouponStatus = {
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
-  EXPIRED: 'EXPIRED',
-  USED_UP: 'USED_UP'
+exports.ReturnType = exports.$Enums.ReturnType = {
+  NO_RETURN: 'NO_RETURN',
+  REPLACEMENT: 'REPLACEMENT',
+  REFUND: 'REFUND',
+  REPLACEMENT_OR_REFUND: 'REPLACEMENT_OR_REFUND'
 };
 
 exports.ProductStatus = exports.$Enums.ProductStatus = {
@@ -531,9 +518,14 @@ exports.ProductStatus = exports.$Enums.ProductStatus = {
   DISCONTINUED: 'DISCONTINUED'
 };
 
-exports.ImageType = exports.$Enums.ImageType = {
+exports.MediaType = exports.$Enums.MediaType = {
   PRIMARY: 'PRIMARY',
   PROMOTIONAL: 'PROMOTIONAL'
+};
+
+exports.FileType = exports.$Enums.FileType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO'
 };
 
 exports.OrderStatus = exports.$Enums.OrderStatus = {
@@ -586,23 +578,17 @@ exports.ReviewStatus = exports.$Enums.ReviewStatus = {
   REJECTED: 'REJECTED'
 };
 
-exports.MediaType = exports.$Enums.MediaType = {
-  IMAGE: 'IMAGE',
-  VIDEO: 'VIDEO'
-};
-
 exports.Prisma.ModelName = {
   User: 'User',
   Address: 'Address',
   CategorySpecification: 'CategorySpecification',
   Category: 'Category',
-  Brand: 'Brand',
-  Discount: 'Discount',
-  Coupon: 'Coupon',
-  ProductDiscount: 'ProductDiscount',
-  CategoryDiscount: 'CategoryDiscount',
-  AppliedDiscount: 'AppliedDiscount',
-  DiscountUsage: 'DiscountUsage',
+  Offer: 'Offer',
+  ProductOffer: 'ProductOffer',
+  CategoryOffer: 'CategoryOffer',
+  DeliveryOption: 'DeliveryOption',
+  Warranty: 'Warranty',
+  ReturnPolicy: 'ReturnPolicy',
   Product: 'Product',
   ProductVariant: 'ProductVariant',
   ProductSpecification: 'ProductSpecification',

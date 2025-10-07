@@ -48,6 +48,9 @@ export default async function HomePage() {
     },
   ];
 
+
+  console.log("products-->",products)
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       <ProductCatagoryCardSection />

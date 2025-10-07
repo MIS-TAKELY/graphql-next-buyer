@@ -9,25 +9,24 @@ export const productVariantTypeDefs = gql`
     id: ID!
     productId: String!
     sku: String!
-    price: Decimal!
+    price: Float!
+    mrp: Float!
     stock: Int!
     attributes: Json
     isDefault: Boolean!
-    createdAt: DateTime!
-    updatedAt: DateTime!
+    createdAt: String!
+    updatedAt: String!
 
-    product: Product!
     specifications: [ProductSpecification!]
-    cartItems: [CartItem!]
-    orderItems: [OrderItem!]
-    SellerOrderItem: [SellerOrderItem!]
+    product: Product!
   }
+
   input CreateProductVariantInput {
     sku: String!
     price: Decimal!
     stock: Int!
-    attributes: Json 
+    attributes: Json
     isDefault: Boolean = false
-    specifications: [CreateProductSpecificationInput!]! 
+    specifications: [CreateProductSpecificationInput!]!
   }
 `;
