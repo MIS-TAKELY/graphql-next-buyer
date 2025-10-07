@@ -1,7 +1,6 @@
 // components/page/product/ProductInfo.tsx
 "use client";
 
-import Image from "next/image";
 import { Star } from "lucide-react";
 import { memo, useMemo } from "react";
 import ShowProductSpecification from "./ShowProductSpecification";
@@ -58,9 +57,7 @@ const ProductInfo = memo(function ProductInfo({
 
   const promotionalImages = useMemo(
     () =>
-      product?.images?.filter(
-        (image) => image.mediaType !== "PRIMARY"
-      ) || [],
+      product?.images?.filter((image) => image.mediaType !== "PRIMARY") || [],
     [product?.images]
   );
 
@@ -178,7 +175,7 @@ const ProductInfo = memo(function ProductInfo({
 
         {defaultVariant?.stock <= 10 && defaultVariant?.stock > 0 && (
           <span className="text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
-            {defaultVariant.stock} units available
+            only {defaultVariant.stock} units available
           </span>
         )}
       </div>
@@ -186,32 +183,27 @@ const ProductInfo = memo(function ProductInfo({
       {/* Specifications Table */}
       <ShowProductSpecification defaultVariant={defaultVariant} />
 
-      {/* Product Highlights */}
-      {promotionalImages.length > 0 && (
+      {/* 🌟 Seamless Product Highlights (Continuous Stack) */}
+      {promotionalImages && promotionalImages.length > 0 && (
         <section className="mt-12">
           <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6 border-b pb-2">
             Product Highlights
           </h2>
 
-          <div className="space-y-4">
-            {promotionalImages.map((image, index) => (
-              <div key={index} className="relative w-full rounded-lg overflow-hidden shadow-md">
-                <Image
+          <div className="flex flex-col">
+            {promotionalImages.map((image: any, index: number) => (
+              <div key={index} className="relative w-full">
+                <img
                   src={image.url}
                   alt={image.altText || `Highlight ${index + 1}`}
-                  width={800}
-                  height={400}
                   className="w-full h-auto object-cover block"
                   loading="lazy"
-                  sizes="(max-width: 768px) 100vw, 800px"
                 />
 
                 {/* Optional caption overlay */}
                 {image.caption && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-3">
-                    <p className="text-base font-medium text-white">
-                      {image.caption}
-                    </p>
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-3 text-white">
+                    <p className="text-base font-medium">{image.caption}</p>
                   </div>
                 )}
               </div>

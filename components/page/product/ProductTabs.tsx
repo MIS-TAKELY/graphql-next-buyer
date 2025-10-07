@@ -17,7 +17,6 @@ export default function ProductTabs({ product }: ProductTabsProps) {
     [product]
   );
   const features = useMemo(() => product?.features || [], [product]);
-  const { data } = useReview();
 
   return (
     <Tabs defaultValue="specifications" className="w-full">

@@ -121,14 +121,13 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
       />
 
       <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-[35%_65%] gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-8 mb-12">
           {/* LEFT COLUMN - FIXED */}
           <div className="space-y-4 lg:sticky lg:top-24 h-fit self-start">
             <ProductGallery
               images={sortedImages}
               productName={product.name}
               onImageHover={handleImageHover}
-              hasMultipleImages={hasMultipleImages}
             />
             <ProductActionsClient
               productId={product.id || ""}
@@ -182,7 +181,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             imageUrl={imageHoverData.imageUrl}
             position={imageHoverData.position}
             productName={product.name}
-            overlayClassName="fixed top-19 left-[35%] ml-8 w-[790px] h-[645px] hidden lg:block z-50"
+            overlayClassName="fixed top-16 left-[40%] ml-8 w-[730px] h-[655px] hidden lg:block z-50"
           />
         )}
       </div>

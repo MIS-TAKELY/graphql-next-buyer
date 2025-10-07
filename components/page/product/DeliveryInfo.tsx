@@ -7,7 +7,7 @@ interface DeliveryInfoProps {
 
 export default function DeliveryInfo({ warranty }: DeliveryInfoProps) {
   return (
-    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 space-y-3">
+    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 space-y-3 my-4">
       <div className="flex items-center gap-3">
         <Truck className="w-5 h-5 text-green-600 dark:text-green-400" />
         <span className="text-sm text-gray-900 dark:text-white">Free delivery by tomorrow</span>
