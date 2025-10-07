@@ -27,7 +27,7 @@ const ImageZoomViewer = memo(function ImageZoomViewer({
           src={imageUrl}
           alt={`${productName} zoomed detail`}
           fill
-          className="object-contain"
+          className="object-cover"
           style={{
             transform: `scale(2.5)`,
             transformOrigin: `${position.x}% ${position.y}%`,
