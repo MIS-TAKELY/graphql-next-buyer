@@ -72,7 +72,7 @@ const ProductGallery = memo(function ProductGallery({
 
   const displayImages = useMemo<ProductImage[]>(() => {
     if (!images || images.length === 0) return [];
-    return images.filter((image) => image.mediaType !== "PRIMARY");
+    return images.filter((image) => image.mediaType !== "PROMOTIONAL");
   }, [images]);
 
   console.log("displayImages-->", displayImages);

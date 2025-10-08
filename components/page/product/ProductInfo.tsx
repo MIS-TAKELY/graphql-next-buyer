@@ -39,6 +39,7 @@ const ProductInfo = memo(function ProductInfo({
     [product?.images]
   );
 
+  console.log("promotional images-->", promotionalImages);
   const mrp = defaultVariant?.mrp;
   const price = parseFloat(defaultVariant?.price || "0");
   const hasDiscount = mrp && mrp > price;

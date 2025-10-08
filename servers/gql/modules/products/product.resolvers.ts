@@ -1,5 +1,5 @@
 import { PrismaClient } from "@/app/generated/prisma";
-import { setCache } from "@/services/redis.services";
+import { getCache, setCache } from "@/services/redis.services";
 
 const prisma = new PrismaClient();
 
@@ -7,47 +7,46 @@ export const productResolvers = {
   Query: {
     getProducts: async (_: any, __: any) => {
       const cacheKey = "products:all";
-      // const cacheKey = "products:all";
 
       // Try cache for the list of product slugs
-      // const cachedSlugs = await getCache<string[]>(`${cacheKey}:slugs`);
-      // if (cachedSlugs) {
-      //   // Fetch individual produ
-      //   // cts from cache
-      //   const products = await Promise.all(
-      //     cachedSlugs.map(async (slug) => {
-      //       const productKey = `product:${slug}`;
-      //       const cachedProduct = await getCache<any>(productKey);
-      //       if (cachedProduct) {
-      //         console.log(`⚡Returning product ${slug} from Redis`);
-      //         // console.log("product---------------->", cachedProduct);
+      const cachedSlugs = await getCache<string[]>(`${cacheKey}:slugs`);
+      if (cachedSlugs) {
+        // Fetch individual produ
+        // cts from cache
+        const products = await Promise.all(
+          cachedSlugs.map(async (slug) => {
+            const productKey = `product:${slug}`;
+            const cachedProduct = await getCache<any>(productKey);
+            if (cachedProduct) {
+              console.log(`⚡Returning product ${slug} from Redis`);
+              // console.log("product---------------->", cachedProduct);
 
-      //         return cachedProduct;
-      //       }
-      //       // Fallback to DB if product not in cache
-      //       const product = await prisma.product.findUnique({
-      //         where: { slug },
-      //         include: {
-      //           seller: true,
-      //           variants: {
-      //             include: {
-      //               cartItems: { select: { userId: true, variantId: true } },
-      //             },
-      //           },
-      //           images: true,
-      //           reviews: true,
-      //           category: { include: { children: true, parent: true } },
-      //           wishlistItems: true,
-      //         },
-      //       });
-      //       if (product) {
-      //         await setCache(productKey, product, 86400);
-      //       }
-      //       return product;
-      //     })
-      //   );
-      //   return products.filter((p) => p !== null);
-      // }
+              return cachedProduct;
+            }
+            // Fallback to DB if product not in cache
+            const product = await prisma.product.findUnique({
+              where: { slug },
+              include: {
+                seller: true,
+                variants: {
+                  include: {
+                    cartItems: { select: { userId: true, variantId: true } },
+                  },
+                },
+                images: true,
+                reviews: true,
+                category: { include: { children: true, parent: true } },
+                wishlistItems: true,
+              },
+            });
+            if (product) {
+              await setCache(productKey, product, 86400);
+            }
+            return product;
+          })
+        );
+        return products.filter((p) => p !== null);
+      }
 
       // Query DB if slugs not cached
       const products = await prisma.product.findMany({
@@ -93,12 +92,12 @@ export const productResolvers = {
       if (!slug) throw new Error("Slug is required");
 
       const productKey = `product:${slug}`;
-      // const cached = await getCache(productKey);
+      const cached = await getCache(productKey);
 
-      // if (cached) {
-      //   console.log(`⚡ Returning product ${slug} from Redis`);
-      //   return cached;
-      // }
+      if (cached) {
+        console.log(`⚡ Returning product ${slug} from Redis`);
+        return cached;
+      }
 
       console.log("returning from database");
 
