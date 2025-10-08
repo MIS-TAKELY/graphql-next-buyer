@@ -44,7 +44,7 @@ export const GET_PRODUCT = gql`
       images {
         id
         url
-        type
+        fileType
         altText
         mediaType
       }

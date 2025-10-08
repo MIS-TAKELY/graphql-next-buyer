@@ -1,35 +1,13 @@
 // components/page/product/ProductInfo.tsx
 "use client";
 
+import { TProduct } from "@/types/product";
 import { Star } from "lucide-react";
 import { memo, useMemo } from "react";
 import ShowProductSpecification from "./ShowProductSpecification";
 
 interface ProductInfoProps {
-  product: {
-    id: string;
-    name: string;
-    description: string;
-    status: string;
-    images?: Array<{
-      url: string;
-      altText?: string;
-      mediaType?: string;
-      caption?: string;
-    }>;
-    variants?: Array<{
-      id: string;
-      price: string;
-      mrp?: number;
-      stock?: number;
-      isDefault?: boolean;
-    }>;
-    reviews?: Array<{
-      rating: number;
-    }>;
-    category?: { name: string };
-    brand?: { name: string };
-  };
+  product: TProduct;
   averageRating: number;
   inStock: boolean;
   defaultVariant: any;

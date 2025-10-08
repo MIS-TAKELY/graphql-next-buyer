@@ -2,14 +2,14 @@
 "use client";
 import Breadcrumb from "@/components/page/product/Breadcrumb";
 import DeliveryInfo from "@/components/page/product/DeliveryInfo";
+import ImageZoomViewer from "@/components/page/product/ImageZoomViewer";
 import { ProductActionsClient } from "@/components/page/product/ProductActionsClient";
 import ProductGallery from "@/components/page/product/ProductGallery";
 import ProductInfo from "@/components/page/product/ProductInfo";
 import ProductPageSkeleton from "@/components/page/product/ProductPageSkeleton";
 import ProductTabs from "@/components/page/product/ProductTabs";
-import ImageZoomViewer from "@/components/page/product/ImageZoomViewer";
 import { IProductVarient, TProduct } from "@/types/product";
-import { useMemo, useState, useCallback, useRef, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SellerInfo from "./SellerInfo";
 
 interface ProductPageClientProps {
@@ -110,8 +110,6 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
   if (!product) {
     return <ProductPageSkeleton />;
   }
-
-  const hasMultipleImages = sortedImages.length > 1;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">

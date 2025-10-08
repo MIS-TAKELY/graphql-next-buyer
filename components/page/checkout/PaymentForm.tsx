@@ -212,13 +212,17 @@ export function PaymentForm({
                   placeholder="1234 5678 9012 3456"
                   maxLength={19}
                   className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
-                    errors.cardNumber ? "border-red-500 dark:border-red-400" : ""
+                    errors.cardNumber
+                      ? "border-red-500 dark:border-red-400"
+                      : ""
                   }`}
                 />
                 <CreditCard className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
               {errors.cardNumber && (
-                <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.cardNumber}</p>
+                <p className="text-red-500 dark:text-red-400 text-sm mt-1">
+                  {errors.cardNumber}
+                </p>
               )}
             </div>
 
@@ -233,7 +237,9 @@ export function PaymentForm({
                     handleInputChange("expiryMonth", e.target.value)
                   }
                   className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
-                    errors.expiryMonth ? "border-red-500 dark:border-red-400" : ""
+                    errors.expiryMonth
+                      ? "border-red-500 dark:border-red-400"
+                      : ""
                   }`}
                 >
                   <option value="">MM</option>
@@ -263,7 +269,9 @@ export function PaymentForm({
                     handleInputChange("expiryYear", e.target.value)
                   }
                   className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
-                    errors.expiryYear ? "border-red-500 dark:border-red-400" : ""
+                    errors.expiryYear
+                      ? "border-red-500 dark:border-red-400"
+                      : ""
                   }`}
                 >
                   <option value="">YY</option>
@@ -306,7 +314,9 @@ export function PaymentForm({
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
                 </div>
                 {errors.cvv && (
-                  <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.cvv}</p>
+                  <p className="text-red-500 dark:text-red-400 text-sm mt-1">
+                    {errors.cvv}
+                  </p>
                 )}
               </div>
             </div>
@@ -327,7 +337,9 @@ export function PaymentForm({
                   }
                   placeholder="JOHN DOE"
                   className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
-                    errors.cardHolderName ? "border-red-500 dark:border-red-400" : ""
+                    errors.cardHolderName
+                      ? "border-red-500 dark:border-red-400"
+                      : ""
                   }`}
                 />
                 <User className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
@@ -363,7 +375,9 @@ export function PaymentForm({
                 <Smartphone className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
               {errors.upiId && (
-                <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.upiId}</p>
+                <p className="text-red-500 dark:text-red-400 text-sm mt-1">
+                  {errors.upiId}
+                </p>
               )}
             </div>
 
@@ -375,7 +389,8 @@ export function PaymentForm({
                     UPI Payment
                   </h4>
                   <p className="text-sm text-blue-700 dark:text-blue-300">
-                    You will be redirected to your UPI app to complete the payment.
+                    You will be redirected to your UPI app to complete the
+                    payment.
                   </p>
                 </div>
               </div>
@@ -415,7 +430,9 @@ export function PaymentForm({
                 <Building2 className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
               {errors.bankName && (
-                <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.bankName}</p>
+                <p className="text-red-500 dark:text-red-400 text-sm mt-1">
+                  {errors.bankName}
+                </p>
               )}
             </div>
 
@@ -427,7 +444,8 @@ export function PaymentForm({
                     Net Banking
                   </h4>
                   <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                    You will be redirected to your bank&apos;s website to complete the payment.
+                    You will be redirected to your bank&apos;s website to
+                    complete the payment.
                   </p>
                 </div>
               </div>
@@ -474,7 +492,9 @@ export function PaymentForm({
                           width={40}
                         />
                       )}
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">{provider}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        {provider}
+                      </span>
                     </label>
                   );
                 })}
@@ -497,7 +517,8 @@ export function PaymentForm({
                 Cash on Delivery
               </h3>
               <p className="text-sm text-green-700 dark:text-green-300 mb-4">
-                You can pay in cash when your order is delivered to your doorstep.
+                You can pay in cash when your order is delivered to your
+                doorstep.
               </p>
               <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-green-200 dark:border-green-600">
                 <div className="flex justify-between items-center text-sm">
@@ -521,7 +542,8 @@ export function PaymentForm({
                   <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
                     <li>• Please keep the exact amount ready</li>
                     <li>
-                      • Our delivery partner will carry a POS machine for card payments
+                      • Our delivery partner will carry a POS machine for card
+                      payments
                     </li>
                     <li>• COD orders may take 1-2 days longer to process</li>
                   </ul>
@@ -542,7 +564,9 @@ export function PaymentForm({
 
       <div className="border-t pt-6 border-gray-200 dark:border-gray-600">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-lg font-semibold text-gray-900 dark:text-white">Total Amount:</span>
+          <span className="text-lg font-semibold text-gray-900 dark:text-white">
+            Total Amount:
+          </span>
           <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
             {formatPrice(amount)}
           </span>

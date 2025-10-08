@@ -40,7 +40,9 @@ export default function PaymentStatus({
               Your payment has been processed successfully.
             </p>
             {orderId && (
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Order ID: {orderId}</p>
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                Order ID: {orderId}
+              </p>
             )}
             <div className="mt-6 space-y-3">
               <Link

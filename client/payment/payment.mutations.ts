@@ -41,7 +41,6 @@ export const CREATE_ORDER = gql`
       subtotal
       tax
       shippingFee
-      discount
       total
       items {
         id

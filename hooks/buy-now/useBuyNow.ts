@@ -78,10 +78,11 @@ export function useBuyNow() {
           },
           billingAddress: null,
           shippingMethod: paymentData.shippingMethod ?? "STANDARD",
-          couponCode: paymentData.couponCode ?? null,
           paymentProvider,
         },
       };
+
+      console.log("varibles-->",variables)
 
       const orderResult = await createOrder({ variables });
       const orderId = orderResult.data?.createOrder?.id;
@@ -96,9 +97,7 @@ export function useBuyNow() {
 
       if (paymentProvider === "COD" && orderId) {
         console.log("hello");
-        router.push(
-          `/payment/success/?orderId=${orderId}`
-        );
+        router.push(`/payment/success/?orderId=${orderId}`);
       }
 
       // Handle eSewa payment

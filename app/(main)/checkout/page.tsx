@@ -46,7 +46,9 @@ const mockOrderItems = [
 
 export default function CheckoutPage() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [shippingAddress, setShippingAddress] = useState<BaseAddress | null>(null);
+  const [shippingAddress, setShippingAddress] = useState<BaseAddress | null>(
+    null
+  );
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -75,7 +77,7 @@ export default function CheckoutPage() {
 
   const handlePaymentSubmit = async (paymentData: any) => {
     setIsProcessing(true);
-
+    console.log("payment data-->", paymentData);
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -101,16 +103,18 @@ export default function CheckoutPage() {
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
         <Link href="/cart">
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <ArrowLeft className="w-4 h-4 mr-2 text-gray-600 dark:text-gray-300" />
             Back to Cart
           </Button>
         </Link>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Checkout</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+          Checkout
+        </h1>
       </div>
 
       {/* Progress Steps */}
@@ -148,7 +152,9 @@ export default function CheckoutPage() {
                 {index < steps.length - 1 && (
                   <div
                     className={`w-16 h-0.5 ml-4 ${
-                      isCompleted ? "bg-green-500 dark:bg-green-400" : "bg-gray-300 dark:bg-gray-600"
+                      isCompleted
+                        ? "bg-green-500 dark:bg-green-400"
+                        : "bg-gray-300 dark:bg-gray-600"
                     }`}
                   />
                 )}
@@ -207,7 +213,8 @@ export default function CheckoutPage() {
                       <p>{shippingAddress.line1}</p>
                       {shippingAddress.line2 && <p>{shippingAddress.line2}</p>}
                       <p>
-                        {shippingAddress.city}, {shippingAddress.state} {shippingAddress.postalCode}
+                        {shippingAddress.city}, {shippingAddress.state}{" "}
+                        {shippingAddress.postalCode}
                       </p>
                       <p>{shippingAddress.country}</p>
                       <p className="text-gray-600 dark:text-gray-300">
@@ -238,7 +245,9 @@ export default function CheckoutPage() {
               {selectedPaymentMethod && (
                 <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
                   <CardHeader>
-                    <CardTitle className="text-gray-900 dark:text-white">Payment Details</CardTitle>
+                    <CardTitle className="text-gray-900 dark:text-white">
+                      Payment Details
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <PaymentForm
@@ -263,7 +272,8 @@ export default function CheckoutPage() {
                   Order Placed Successfully!
                 </h2>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  Thank you for your order. You will receive a confirmation email shortly.
+                  Thank you for your order. You will receive a confirmation
+                  email shortly.
                 </p>
                 <div className="space-y-2 text-sm text-gray-500 dark:text-gray-400">
                   <p>Order ID: #ORD-{Date.now()}</p>
@@ -271,8 +281,8 @@ export default function CheckoutPage() {
                 </div>
                 <div className="flex gap-4 justify-center mt-8">
                   <Link href="/">
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                       Continue Shopping
