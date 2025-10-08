@@ -51,6 +51,9 @@ export const productResolvers = {
 
       // Query DB if slugs not cached
       const products = await prisma.product.findMany({
+        where: {
+          status: "ACTIVE",
+        },
         include: {
           seller: true,
           variants: {
