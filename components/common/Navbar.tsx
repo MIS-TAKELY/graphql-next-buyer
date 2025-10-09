@@ -76,9 +76,10 @@ const Navbar = () => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <img
-                src="/ecommerce-logo.png"
+                src="/sitelogo.svg"
                 alt="Logo"
-                className="h-8 filter dark:invert"
+                className="h-8 filter dark:invert hover:cursor-pointer"
+                onClick={() => router.push("/")}
               />
             </div>
           </div>
