@@ -3,7 +3,7 @@
 
 import { TProduct } from "@/types/product";
 import { Star } from "lucide-react";
-import { memo, useMemo } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import ShowProductSpecification from "./ShowProductSpecification";
 
 interface ProductInfoProps {
@@ -31,6 +31,10 @@ const ProductInfo = memo(function ProductInfo({
       .replace("NPR", "रु");
   };
 
+  const [showAllHighlights, setShowAllHighlights] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const [teaserHeight, setTeaserHeight] = useState(0);
+
   const reviewCount = product.reviews?.length || 0;
 
   const promotionalImages = useMemo(
@@ -39,13 +43,30 @@ const ProductInfo = memo(function ProductInfo({
     [product?.images]
   );
 
-  console.log("promotional images-->", promotionalImages);
+  // console.log("promotional images-->", promotionalImages);
+
+  useEffect(() => {
+    if (
+      promotionalImages.length > 0 &&
+      imgRef.current?.complete &&
+      imgRef.current.naturalHeight > 0
+    ) {
+      setTeaserHeight(Math.round(imgRef.current.naturalHeight * 0.9));
+    }
+  }, [promotionalImages]);
+
   const mrp = defaultVariant?.mrp;
   const price = parseFloat(defaultVariant?.price || "0");
   const hasDiscount = mrp && mrp > price;
   const discountPercent = hasDiscount
     ? Math.round(((mrp - price) / mrp) * 100)
     : 0;
+
+  const handleImageLoad = () => {
+    if (imgRef.current && !showAllHighlights && promotionalImages.length > 0) {
+      setTeaserHeight(Math.round(imgRef.current.naturalHeight * 0.9));
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -169,25 +190,61 @@ const ProductInfo = memo(function ProductInfo({
             Product Highlights
           </h2>
 
-          <div className="flex flex-col">
-            {promotionalImages.map((image: any, index: number) => (
-              <div key={index} className="relative w-full">
-                <img
-                  src={image.url}
-                  alt={image.altText || `Highlight ${index + 1}`}
-                  className="w-full h-auto object-cover block"
-                  loading="lazy"
-                />
+          {!showAllHighlights ? (
+            <div
+              className="relative w-full overflow-hidden"
+              style={{ height: teaserHeight || "500px" }}
+            >
+              <img
+                ref={imgRef}
+                src={promotionalImages[0].url}
+                alt={promotionalImages[0].altText || "Highlight 1"}
+                className="w-full h-auto object-cover block"
+                loading="lazy"
+                onLoad={handleImageLoad}
+              />
 
-                {/* Optional caption overlay */}
-                {image.caption && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-3 text-white">
-                    <p className="text-base font-medium">{image.caption}</p>
-                  </div>
-                )}
+              {/* Show More overlay */}
+              <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4">
+                <button
+                  onClick={() => setShowAllHighlights(true)}
+                  className="text-white text-sm font-medium underline hover:no-underline"
+                >
+                  Show more
+                </button>
               </div>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className="flex flex-col space-">
+              {promotionalImages.map((image: any, index: number) => (
+                <div key={index} className="relative w-full">
+                  <img
+                    src={image.url}
+                    alt={image.altText || `Highlight ${index + 1}`}
+                    className="w-full h-auto object-cover block"
+                    loading="lazy"
+                  />
+
+                  {/* Optional caption overlay */}
+                  {image.caption && (
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-3 text-white">
+                      <p className="text-base font-medium">{image.caption}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              {/* Show Less button */}
+              <div className="flex justify-center pt-4">
+                <button
+                  onClick={() => setShowAllHighlights(false)}
+                  className="text-gray-600 dark:text-gray-400 text-sm font-medium underline hover:no-underline"
+                >
+                  Show less
+                </button>
+              </div>
+            </div>
+          )}
 
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
             *Images are for illustration purposes. Actual product may vary.

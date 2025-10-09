@@ -9,7 +9,7 @@ import { ReviewCard } from "@/components/review/ReviewCard";
 import { FilterState, ReviewFilters } from "@/components/review/ReviewFilters";
 import ReviewSkeleton from "@/components/review/ReviewSkeleton ";
 import { ReviewSummary } from "@/components/review/ReviewSummary";
-import { ReviewMedia, Review, MediaItem } from "@/components/review/types";
+import { MediaItem, Review } from "@/components/review/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@clerk/nextjs";

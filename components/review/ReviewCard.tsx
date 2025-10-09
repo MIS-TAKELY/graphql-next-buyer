@@ -26,25 +26,27 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MediaUploader } from "./MediaUploader";
 
 export const ReviewCard = ({ review }: { review: Review }) => {
-  // console.log("review-->",review)
   const { updateReview, removeReview, isUpdating, isDeleting } = useReview();
   const { userId } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  // Convert existing review media to MediaItem format
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+
   const convertToMediaItems = (media: Review["media"]): ReviewMedia[] => {
     return (media || []).map((m, index) => ({
       id: `existing_${index}_${Date.now()}`,
       url: m.url,
       type: m.type as "IMAGE" | "VIDEO",
       name: `media_${index}`,
-      size: 0, // We don't have size for existing media
+      size: 0,
       status: "uploaded" as const,
       publicId: m.publicId,
     }));
@@ -66,14 +68,10 @@ export const ReviewCard = ({ review }: { review: Review }) => {
   }`;
 
   const handleEdit = async () => {
-    if (isUploading) {
-      // Optionally show a toast that uploads are still in progress
-      return;
-    }
+    if (isUploading) return;
 
     setIsEditing(false);
 
-    // Convert MediaItems back to review media format
     const updatedMedia = mediaItems
       .filter((item) => item.status === "uploaded")
       .map((item) => ({
@@ -89,7 +87,7 @@ export const ReviewCard = ({ review }: { review: Review }) => {
       media: updatedMedia,
     }).catch((err) => {
       console.error("Failed to update review:", err);
-      setIsEditing(true); // Re-open editing on error
+      setIsEditing(true);
     });
   };
 
@@ -119,6 +117,26 @@ export const ReviewCard = ({ review }: { review: Review }) => {
     });
     setMediaItems([]);
   };
+
+  // Optional: keyboard navigation for lightbox
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!lightboxOpen) return;
+      if (e.key === "ArrowLeft") {
+        setCurrentMediaIndex((prev) =>
+          prev === 0 ? review.media.length - 1 : prev - 1
+        );
+      } else if (e.key === "ArrowRight") {
+        setCurrentMediaIndex((prev) =>
+          prev === review.media.length - 1 ? 0 : prev + 1
+        );
+      } else if (e.key === "Escape") {
+        setLightboxOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxOpen, review.media.length]);
 
   return (
     <>
@@ -209,7 +227,7 @@ export const ReviewCard = ({ review }: { review: Review }) => {
                       onClick={handleCancelEdit}
                       disabled={isUpdating}
                     >
-                      <X className="w-4 h-4" />
+                      <X className="w-4 h-4" /> Cancle
                     </Button>
                     <Button
                       variant="ghost"
@@ -217,7 +235,7 @@ export const ReviewCard = ({ review }: { review: Review }) => {
                       onClick={handleEdit}
                       disabled={isUpdating || isUploading}
                     >
-                      <Save className="w-4 h-4" />
+                      <Save className="w-4 h-4" /> Save Changes
                     </Button>
                   </div>
                 )}
@@ -253,13 +271,17 @@ export const ReviewCard = ({ review }: { review: Review }) => {
                   {review.media.map((m, index) => (
                     <div
                       key={index}
-                      className="w-20 h-20 rounded-lg overflow-hidden relative"
+                      className="w-20 h-20 rounded-lg overflow-hidden relative cursor-pointer"
+                      onClick={() => {
+                        setCurrentMediaIndex(index);
+                        setLightboxOpen(true);
+                      }}
                     >
                       {m.type === "VIDEO" ? (
                         <video
                           src={m.url}
-                          controls
                           className="w-full h-full object-cover"
+                          muted
                         />
                       ) : (
                         <Image
@@ -303,6 +325,7 @@ export const ReviewCard = ({ review }: { review: Review }) => {
         </CardContent>
       </Card>
 
+      {/* Delete Confirmation Modal */}
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
@@ -330,6 +353,64 @@ export const ReviewCard = ({ review }: { review: Review }) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Lightbox Viewer */}
+      {review.media?.length > 0 && (
+        <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+          <DialogContent className="max-w-4xl p-0 bg-black/95">
+            <div className="relative flex items-center justify-center">
+              <Button
+                variant="ghost"
+                className="absolute left-2 top-1/2 -translate-y-1/2 text-white"
+                onClick={() =>
+                  setCurrentMediaIndex((prev) =>
+                    prev === 0 ? review.media.length - 1 : prev - 1
+                  )
+                }
+              >
+                ‹
+              </Button>
+
+              <div className="max-h-[80vh] max-w-[90vw] flex items-center justify-center">
+                {review.media[currentMediaIndex].type === "VIDEO" ? (
+                  <video
+                    src={review.media[currentMediaIndex].url}
+                    controls
+                    autoPlay
+                    className="max-h-[80vh] rounded-lg"
+                  />
+                ) : (
+                  <Image
+                    src={review.media[currentMediaIndex].url}
+                    alt="Review media"
+                    width={800}
+                    height={600}
+                    className="rounded-lg max-h-[80vh] object-contain"
+                  />
+                )}
+              </div>
+
+              <Button
+                variant="ghost"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-white"
+                onClick={() =>
+                  setCurrentMediaIndex((prev) =>
+                    prev === review.media.length - 1 ? 0 : prev + 1
+                  )
+                }
+              >
+                ›
+              </Button>
+            </div>
+
+            <DialogFooter className="justify-center mt-2">
+              <span className="text-gray-300 text-sm">
+                {currentMediaIndex + 1} / {review.media.length}
+              </span>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 };

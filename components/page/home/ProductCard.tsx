@@ -17,7 +17,7 @@ const ProductCard = memo<ProductCardProps>(
   ({
     product,
     priority = false,
-    sizes = "(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw",
+    sizes = "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw",
   }) => {
     const productData = useMemo(() => {
       const firstImage = product.images?.[0];
@@ -39,14 +39,13 @@ const ProductCard = memo<ProductCardProps>(
       };
     }, [product.images, product.variants, product.reviews, product.name]);
 
-
     // console.log("product data-->",productData)
 
     const starRating = useMemo(() => {
       if (!productData.hasReviews) return null;
 
       return (
-        <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-300 mb-2">
+        <div className="flex items-center gap-1 text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-1 sm:mb-2">
           <div
             className="flex"
             role="img"
@@ -65,20 +64,22 @@ const ProductCard = memo<ProductCardProps>(
               </span>
             ))}
           </div>
-          <span>({productData.avgRating.toFixed(1)})</span>
+          <span className="text-xs sm:text-sm">
+            ({productData.avgRating.toFixed(1)})
+          </span>
         </div>
       );
     }, [productData.avgRating, productData.hasReviews]);
 
     return (
       <Card className="h-full hover:shadow-lg transition-transform duration-200 hover:scale-[1.01] border-0 shadow-sm bg-white dark:bg-gray-800">
-        <CardContent className="p-3 flex flex-col h-full">
+        <CardContent className="p-2 xs:p-3 flex flex-col h-full">
           <Link
             href={`/product/${product.slug}`}
             className="block group flex-1"
             prefetch={true}
           >
-            <div className="aspect-square mb-3 overflow-hidden rounded-lg bg-gray-50 dark:bg-gray-700 relative group">
+            <div className="aspect-square mb-2 xs:mb-3 overflow-hidden rounded-lg bg-gray-50 dark:bg-gray-700 relative group">
               <Image
                 src={productData.imageUrl}
                 alt={productData.imageAlt}
@@ -95,32 +96,33 @@ const ProductCard = memo<ProductCardProps>(
 
             <div className="flex-1 flex flex-col justify-between">
               <div>
-                <h3 className="font-medium text-sm mb-2 line-clamp-2 text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                <h3 className="font-medium text-xs xs:text-sm mb-1 xs:mb-2 line-clamp-2 text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                   {product.name}
                 </h3>
-                <p className="font-small text-xs mb-2 text-gray-600 dark:text-gray-300 line-clamp-2">
+                <p className="font-small text-xs mb-1 xs:mb-2 text-gray-600 dark:text-gray-300 line-clamp-2">
                   {product.description}
                 </p>
 
                 {starRating}
 
-                <div className="flex items-center gap-2 mt-1">
+                <div className="flex items-center gap-1 xs:gap-2 mt-1 flex-wrap">
                   {/* Discounted / Current Price */}
-                  <span className="font-bold text-lg text-gray-800 dark:text-gray-100">
+                  <span className="font-bold text-base xs:text-lg text-gray-800 dark:text-gray-100">
                     रु{productData.price.toFixed(2)}
                   </span>
 
                   {/* MRP (Struck-through) */}
                   {productData.mrp && productData.mrp > productData.price && (
                     <>
-                      <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
+                      <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 line-through">
                         रु{productData.mrp.toFixed(2)}
                       </span>
 
                       {/* Optional Discount % */}
                       <span className="text-xs font-medium text-green-600 dark:text-green-400">
                         {Math.round(
-                          ((productData.mrp - productData.price) / productData.mrp) *
+                          ((productData.mrp - productData.price) /
+                            productData.mrp) *
                             100
                         )}
                         % off
@@ -132,7 +134,7 @@ const ProductCard = memo<ProductCardProps>(
             </div>
           </Link>
 
-          <div className="mt-3">
+          <div className="mt-2 xs:mt-3">
             <AddToCartButton
               productId={product.id}
               variantId={productData.variantId}

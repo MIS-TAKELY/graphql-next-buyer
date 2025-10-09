@@ -45,7 +45,6 @@ function useRafThrottledCallback<T extends (...args: any[]) => void>(cb?: T) {
   const frame = useRef<number | null>(null);
   cbRef.current = cb;
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   return useCallback(
     ((...args: any[]) => {
       if (!cbRef.current) return;
@@ -75,7 +74,6 @@ const ProductGallery = memo(function ProductGallery({
     return images.filter((image) => image.mediaType !== "PROMOTIONAL");
   }, [images]);
 
-  console.log("displayImages-->", displayImages);
   const currentImage =
     displayImages[Math.min(selectedImage, displayImages.length - 1)];
 
@@ -130,12 +128,33 @@ const ProductGallery = memo(function ProductGallery({
     [handleImageSelect]
   );
 
+  // Touch navigation for mobile
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = e.changedTouches[0].screenX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchEndX.current = e.changedTouches[0].screenX;
+    const deltaX = touchStartX.current - touchEndX.current;
+
+    if (Math.abs(deltaX) > 50) {
+      if (deltaX > 0) {
+        handleImageSelect(Math.min(selectedImage + 1, displayImages.length - 1));
+      } else {
+        handleImageSelect(Math.max(selectedImage - 1, 0));
+      }
+    }
+  };
+
   return (
     <div className="flex gap-2">
-      {/* Thumbnail Navigation (left side) */}
+      {/* Thumbnail Navigation (hidden on mobile) */}
       {displayImages.length > 1 && (
         <div
-          className="flex flex-col gap-1 overflow-y-auto max-h-[600px] pb-2"
+          className="hidden md:flex flex-col gap-1 overflow-y-auto max-h-[600px] pb-2"
           role="tablist"
           aria-label="Product image thumbnails"
         >
@@ -151,9 +170,7 @@ const ProductGallery = memo(function ProductGallery({
                     ? "border-blue-500 dark:border-blue-400 ring-2 ring-blue-200 dark:ring-blue-600"
                     : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                 }`}
-                aria-label={`View image ${index + 1} of ${
-                  displayImages.length
-                }`}
+                aria-label={`View image ${index + 1} of ${displayImages.length}`}
                 aria-selected={isSelected}
                 role="tab"
               >
@@ -175,12 +192,14 @@ const ProductGallery = memo(function ProductGallery({
         </div>
       )}
 
-      {/* Main Image Display (right side) */}
+      {/* Main Image Display (swipeable) */}
       <div className="flex-1 space-y-2">
         <div
           className="relative aspect-square bg-white dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600 cursor-crosshair"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           aria-label={`${productName} image gallery`}
         >
           {imageLoading && (
