@@ -43,7 +43,7 @@ const handleBuyNow = useCallback(() => {
   if (disabled || !inStock) return;
   
   // Detect if this is from cart (e.g., via a prop or context; for now, assume it's passed or hardcoded in cart usage)
-  const isFromCart = true; // Set this dynamically if needed (e.g., via prop)
+  // const isFromCart = true; // Set this dynamically if needed (e.g., via prop)
 
 
   console.log("isfrom cart -->",isFromCart)

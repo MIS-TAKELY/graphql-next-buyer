@@ -1,6 +1,7 @@
 import { Prisma } from "@/app/generated/prisma";
 import { prisma } from "@/lib/db/prisma";
 import { generateOrderNumber } from "@/randomOrderNumber";
+import { senMail } from "@/services/nodeMailer.services";
 import { requireAuth, requireBuyer } from "../../auth/auth";
 import { GraphQLContext } from "../../context";
 
@@ -135,6 +136,11 @@ export const orderResolvers = {
               id: true,
               status: true,
               sellerId: true,
+              seller: {
+                select: {
+                  email: true,
+                },
+              },
               categoryId: true,
             },
           },
@@ -224,7 +230,11 @@ export const orderResolvers = {
                 shipments: true,
               },
             });
-
+            if (created) {
+              console.log("ssending mail");
+              const info = await senMail(variants[0].product.seller.email);
+              console.log("mail response-->", info);
+            }
             const itemsBySeller: Record<string, typeof computedItems> = {};
             for (const ci of computedItems) {
               if (!itemsBySeller[ci.sellerId]) {
@@ -283,6 +293,10 @@ export const orderResolvers = {
           },
           { timeout: 30000 }
         );
+
+        // if (order) {
+        //   senMail(variants[0].product.seller.email);
+        // }
 
         console.log("order placed---->", order);
 
