@@ -7,8 +7,6 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useAuth } from "@clerk/nextjs";
 import { useCallback, useMemo, useState } from "react";
 
-const ANONYMOUS_CART_KEY = "anonymous_cart";
-const CART_SYNC_KEY = "cart_sync_timestamp";
 
 interface IGetCartIdResponse {
   getMyCart: [

@@ -246,9 +246,9 @@ const ProductInfo = memo(function ProductInfo({
             </div>
           )}
 
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
+          {/* <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
             *Images are for illustration purposes. Actual product may vary.
-          </p>
+          </p> */}
         </section>
       )}
     </div>

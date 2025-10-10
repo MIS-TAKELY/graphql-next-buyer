@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { formatPrice } from "../page/checkout/PaymentForm";
 
 const CartItem = ({
   item,
@@ -24,10 +25,6 @@ const CartItem = ({
           100
       )
     : 0;
-
-  const formatPrice = (priceInCents: number) =>
-    `$${(priceInCents / 100).toFixed(2)}`;
-
   return (
     <Card className="overflow-hidden bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
       <CardContent className="p-4 sm:p-6">

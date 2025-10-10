@@ -1,336 +1,174 @@
-import { gql } from "graphql-tag";
+// "use client";
 
-export const reviewTypeDefs = gql`
-  scalar DateTime
+// import {
+//   CREATE_ORDER,
+//   INITIATE_ESEWA_PAYMENT,
+// } from "@/client/payment/payment.mutations";
+// import { useMutation } from "@apollo/client";
+// import { useRouter } from "next/navigation";
+// import { useState } from "react";
+// // import toast from "react-toastify"; // Assuming you use react-toastify for notifications
 
-  enum ReviewStatus {
-    PENDING
-    APPROVED
-    REJECTED
-  }
+// export function useBuyNow() {
+//   const [step, setStep] = useState<"address" | "payment" | "summary">(
+//     "address"
+//   );
+//   const [selectedAddress, setSelectedAddress] = useState<any>(null);
+//   const [showAddressForm, setShowAddressForm] = useState(false);
+//   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<any>(null);
+//   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
-  enum MediaType {
-    IMAGE
-    VIDEO
-  }
+//   const router = useRouter();
 
-  type Review {
-    id: ID!
-    userId: String!
-    productId: String!
-    rating: Int!
-    comment: String
-    status: ReviewStatus
-    isFeatured: Boolean
-    helpfulCount: Int
-    verifiedPurchase: Boolean
-    orderItemId: String
-    createdAt: DateTime!
-    updatedAt: DateTime!
-    user: User
-    product: Product!
-    media: [ReviewMedia]
-    votes: [ReviewVote]
-  }
+//   const [createOrder] = useMutation(CREATE_ORDER);
+//   const [initiateEsewaPayment] = useMutation(INITIATE_ESEWA_PAYMENT);
 
-  type ReviewMedia {
-    id: ID!
-    reviewId: String!
-    url: String!
-    type: MediaType!
-    createdAt: DateTime!
-    updatedAt: DateTime!
-  }
+//   const handleAddressSaved = (newAddress: any) => {
+//     setSelectedAddress(newAddress);
+//     setStep("payment");
+//     setShowAddressForm(false);
+//   };
 
-  type ReviewVote {
-    id: ID!
-    reviewId: String
-    userId: String
-    vote: Int
-    review: Review
-    user: User
-  }
+//   const handleAddressCancel = () => {
+//     setSelectedAddress(null);
+//     setShowAddressForm(false);
+//   };
 
-  input ReviewMediaInput {
-    url: String!
-    type: MediaType!
-  }
+//   const handleUseDefaultAddress = () => {
+//     setStep("payment");
+//   };
 
-  input AddReviewInput {
-    slug: String!
-    rating: Int!
-    comment: String
-    media: [ReviewMediaInput]
-  }
+//   const handleSelectAddress = (address: any) => {
+//     setSelectedAddress(address);
+//   };
 
-  input UpdateReviewInput {
-    rating: Int
-    comment: String
-    media: [ReviewMediaInput]
-  }
+//   const handlePaymentMethodSelect = (method: any) => {
+//     setSelectedPaymentMethod(method);
+//   };
 
-  type Query {
-    getReview(id: ID!): Review
-    getReviewsByProductSlug(
-      slug: String!
-      status: ReviewStatus
-      page: Int
-      limit: Int
-      sortBy: String
-    ): [Review]
-    getReviewsByUser(
-      userId: String!
-      status: ReviewStatus
-      page: Int
-      limit: Int
-      sortBy: String
-    ): [Review]
-    getAllReviews(
-      status: ReviewStatus
-      page: Int
-      limit: Int
-      sortBy: String
-    ): [Review]
-  }
+//   const handlePaymentSubmit = async (paymentData: any) => {
+//     setIsProcessingPayment(true);
 
-  type Mutation {
-    addReview(input: AddReviewInput!): Boolean
-    updateReview(id: ID!, input: UpdateReviewInput!): Boolean
-    deleteReview(id: ID!): Boolean
-  }
-`;
- import { ADD_REVIEW } from "@/client/review/reviews.mutation";
-import { GET_REVIEWS_BY_PRODUCT_BY_SLUG } from "@/client/review/reviews.query";
-import { useMutation, useQuery } from "@apollo/client";
-import { useParams } from "next/navigation";
-import { useState } from "react";
-import { gql } from "graphql-tag";
+//     console.log("payment data-->>",paymentData)
+//     try {
+//       const paymentProvider = paymentData.walletProvider
+//         ? paymentData.walletProvider.toUpperCase()
+//         : paymentData.paymentProvider;
 
-const UPDATE_REVIEW = gql`
-  mutation UpdateReview($id: ID!, $input: UpdateReviewInput!) {
-    updateReview(id: $id, input: $input)
-  }
-`;
+//       const supportedProviders = ["ESEWA", "KHALTI", "IMEPAY", "COD"];
+//       if (!supportedProviders.includes(paymentProvider)) {
+//         throw new Error("Unsupported payment provider");
+//       }
 
-const DELETE_REVIEW = gql`
-  mutation DeleteReview($id: ID!) {
-    deleteReview(id: $id)
-  }
-`;
+//       const variables = {
+//         input: {
+//           items: [
+//             {
+//               variantId: paymentData.variantId,
+//               quantity: paymentData.quantity ?? 1,
+//             },
+//           ],
+//           shippingAddress: {
+//             line1: selectedAddress?.line1,
+//             label: selectedAddress?.label,
+//             line2: selectedAddress?.line2 ?? null,
+//             city: selectedAddress?.city,
+//             state: selectedAddress?.state,
+//             postalCode: selectedAddress?.postalCode,
+//             country: selectedAddress?.country,
+//             phone: selectedAddress?.phone ?? null,
+//           },
+//           billingAddress: null,
+//           shippingMethod: paymentData.shippingMethod ?? "STANDARD",
+//           paymentProvider,
+//         },
+//       };
 
-export const useReview = () => {
-  const params = useParams();
-  const productSlug = params.slug as string;
-  const [optimisticAdds, setOptimisticAdds] = useState<any[]>([]);
-  const [optimisticUpdates, setOptimisticUpdates] = useState<Record<string, any>>({});
-  const [optimisticDeletes, setOptimisticDeletes] = useState<Set<string>>(new Set());
+//       console.log("varibles-->",variables)
 
-  const { data, loading, refetch } = useQuery(GET_REVIEWS_BY_PRODUCT_BY_SLUG, {
-    variables: { slug: productSlug },
-    skip: !productSlug,
-    fetchPolicy: "cache-first"
-  });
+//       const orderResult = await createOrder({ variables });
+//       const orderId = orderResult.data?.createOrder?.id;
 
-  const [addReviewMutation, { loading: addLoading }] = useMutation(ADD_REVIEW);
+//       console.log("order reslt", orderResult);
 
-  const [updateReviewMutation, { loading: updateLoading }] = useMutation(UPDATE_REVIEW);
+//       if (!orderResult) {
+//         throw new Error("Failed to create order");
+//       }
 
-  const [deleteReviewMutation, { loading: deleteLoading }] = useMutation(DELETE_REVIEW);
+//       console.log("pay,emt provider", paymentProvider);
 
-  const addReview = async (payload: {
-    rating: number;
-    comment: string;
-    media?: Array<{ url: string; type: "IMAGE" | "VIDEO"; status?: "uploading" | "uploaded" | "error" }>;
-  }) => {
-    // Block if any uploads still pending
-    if (payload.media?.some((m) => m.status === "uploading")) {
-      throw new Error("Please wait until all media uploads finish.");
-    }
+//       if (paymentProvider === "COD" && orderId) {
+//         console.log("hello");
+//         router.push(`/payment/success/?orderId=${orderId}`);
+//       }
 
-    // Filter out failed uploads - only include successfully uploaded media
-    const successfulMedia = payload.media?.filter((m) => m.status === "uploaded" || !m.status) ?? [];
+//       // Handle eSewa payment
+//       if (paymentProvider === "ESEWA") {
+//         const esewaResult = await initiateEsewaPayment({
+//           variables: { orderId },
+//         });
 
-    console.log("hook media-->", successfulMedia);
+//         console.log("eSewa Result:", JSON.stringify(esewaResult, null, 2)); // Add logging
 
-    // Create optimistic review with a temporary ID
-    const tempId = `optimistic-${Date.now()}`;
-    const optimisticReview = {
-      id: tempId,
-      rating: payload.rating,
-      comment: payload.comment,
-      user: { 
-        id: 'current-user',
-        firstName: "You", 
-        lastName: "" 
-      },
-      media: successfulMedia.map((m, index) => ({
-        id: `optimistic-media-${Date.now()}-${index}`,
-        reviewId: tempId,
-        url: m.url,
-        type: m.type,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      })),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      status: "PENDING",
-      verifiedPurchase: false,
-      isFeatured: false,
-      helpfulCount: 0,
-      votes: [],
-      isOptimistic: true, // Flag to identify optimistic reviews
-    };
+//         if (esewaResult.data.initiateEsewaPayment.success) {
+//           // Create and submit form
+//           const form = document.createElement("form");
+//           form.method = "POST";
+//           form.action = esewaResult.data.initiateEsewaPayment.paymentUrl;
 
-    // Add optimistic review immediately for instant UI feedback
-    setOptimisticAdds((prev) => [optimisticReview, ...prev]);
+//           // Add all payment data as hidden inputs
+//           Object.entries(
+//             esewaResult.data.initiateEsewaPayment.paymentData
+//           ).forEach(([key, value]) => {
+//             const input = document.createElement("input");
+//             input.type = "hidden";
+//             input.name = key;
+//             input.value = value as string;
+//             form.appendChild(input);
+//           });
 
-    try {
-      // Execute the mutation (this can take time, but UI already shows the review)
-      const result = await addReviewMutation({
-        variables: {
-          input: {
-            slug: productSlug,
-            rating: payload.rating,
-            comment: payload.comment,
-            media: successfulMedia.map(({ url, type }) => ({ url, type })),
-          },
-        },
-      });
+//           document.body.appendChild(form);
+//           form.submit();
+//         } else {
+//           alert(
+//             esewaResult.data.initiateEsewaPayment.error ||
+//               "Payment initiation failed"
+//           );
+//         }
+//       }
 
-      console.log("Review submitted successfully:", result);
-      await refetch();
-      setOptimisticAdds((prev) => prev.filter((r) => r.id !== tempId));
-      return result;
-    } catch (error) {
-      console.error("Review submission error:", error);
-      setOptimisticAdds((prev) => prev.filter((r) => r.id !== tempId));
-      throw error;
-    }
-  };
+//       setStep("summary");
+//     } catch (e) {
+//       console.error("Order creation failed:", e);
+//       // toast.error(`Payment failed: ${e.message}`); // Ensure toast is imported
+//     } finally {
+//       setIsProcessingPayment(false);
+//     }
+//   };
 
-  const updateReview = async (
-    id: string,
-    payload: {
-      rating?: number;
-      comment?: string;
-      media?: Array<{ url: string; type: "IMAGE" | "VIDEO"; status?: "uploading" | "uploaded" | "error" }>;
-    }
-  ) => {
-    // Block if any uploads still pending
-    if (payload.media?.some((m) => m.status === "uploading")) {
-      throw new Error("Please wait until all media uploads finish.");
-    }
+//   const handleBackToAddress = () => {
+//     setStep("address");
+//   };
 
-    // Filter out failed uploads - only include successfully uploaded media
-    const successfulMedia = payload.media?.filter((m) => m.status === "uploaded" || !m.status);
+//   const handleBackToPayment = () => {
+//     setStep("payment");
+//   };
 
-    // Build optimistic update object (only include provided fields)
-    const optimisticUpdate: any = {
-      updatedAt: new Date().toISOString(),
-    };
-    if (payload.rating !== undefined) optimisticUpdate.rating = payload.rating;
-    if (payload.comment !== undefined) optimisticUpdate.comment = payload.comment;
-    if (payload.media !== undefined && successfulMedia) {
-      // If media is provided (even empty array), replace existing media
-      optimisticUpdate.media = successfulMedia.map((m, index) => ({
-        id: `optimistic-media-update-${Date.now()}-${index}`,
-        reviewId: id,
-        url: m.url,
-        type: m.type,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }));
-    }
-
-    // Apply optimistic update
-    setOptimisticUpdates((prev) => ({ ...prev, [id]: optimisticUpdate }));
-
-    try {
-      // Build input for mutation (only include provided fields)
-      const input: any = {};
-      if (payload.rating !== undefined) input.rating = payload.rating;
-      if (payload.comment !== undefined) input.comment = payload.comment;
-      if (payload.media !== undefined && successfulMedia) {
-        input.media = successfulMedia.map(({ url, type }) => ({ url, type }));
-      }
-
-      const result = await updateReviewMutation({
-        variables: {
-          id,
-          input,
-        },
-      });
-
-      console.log("Review updated successfully:", result);
-      await refetch();
-      setOptimisticUpdates((prev) => {
-        const newUpdates = { ...prev };
-        delete newUpdates[id];
-        return newUpdates;
-      });
-      return result;
-    } catch (error) {
-      console.error("Review update error:", error);
-      setOptimisticUpdates((prev) => {
-        const newUpdates = { ...prev };
-        delete newUpdates[id];
-        return newUpdates;
-      });
-      throw error;
-    }
-  };
-
-  const removeReview = async (id: string) => {
-    // Apply optimistic delete
-    setOptimisticDeletes((prev) => new Set([...prev, id]));
-
-    try {
-      const result = await deleteReviewMutation({
-        variables: {
-          id,
-        },
-      });
-
-      console.log("Review deleted successfully:", result);
-      await refetch();
-      setOptimisticDeletes((prev) => {
-        const newDeletes = new Set(prev);
-        newDeletes.delete(id);
-        return newDeletes;
-      });
-      return result;
-    } catch (error) {
-      console.error("Review deletion error:", error);
-      setOptimisticDeletes((prev) => {
-        const newDeletes = new Set(prev);
-        newDeletes.delete(id);
-        return newDeletes;
-      });
-      throw error;
-    }
-  };
-
-  // Combine optimistic adds, updates, and deletes with real reviews
-  const baseReviews = data?.getReviewsByProductSlug || [];
-  const filteredReviews = baseReviews.filter((review) => !optimisticDeletes.has(review.id));
-  const updatedReviews = filteredReviews.map((review) => {
-    const update = optimisticUpdates[review.id];
-    if (update) {
-      return { ...review, ...update };
-    }
-    return review;
-  });
-  const allReviews = [...optimisticAdds, ...updatedReviews];
-
-  return {
-    data: allReviews,
-    loading: loading && optimisticAdds.length === 0,
-    addReview,
-    updateReview,
-    removeReview,
-    refetch,
-    isAdding: addLoading,
-    isUpdating: updateLoading,
-    isDeleting: deleteLoading,
-  };
-};
+//   return {
+//     step,
+//     selectedAddress,
+//     showAddressForm,
+//     selectedPaymentMethod,
+//     isProcessingPayment,
+//     setSelectedAddress,
+//     setShowAddressForm,
+//     handleAddressSaved,
+//     handleAddressCancel,
+//     handleUseDefaultAddress,
+//     handleSelectAddress,
+//     handlePaymentMethodSelect,
+//     handlePaymentSubmit,
+//     handleBackToAddress,
+//     handleBackToPayment,
+//   };
+// }

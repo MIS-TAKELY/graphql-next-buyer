@@ -40,6 +40,10 @@ interface PaymentFormProps {
   amount: number;
 }
 
+export const formatPrice = (priceInCents: number) => {
+  return `रु${priceInCents.toLocaleString("en-IN")}`;
+};
+
 export function PaymentForm({
   paymentMethod,
   onSubmit,
@@ -159,7 +163,7 @@ export function PaymentForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+    console.log("form data-->",formData)
     if (paymentMethod.type === "CASH_ON_DELIVERY") {
       onSubmit({ method: paymentMethod.type });
       return;
@@ -183,10 +187,6 @@ export function PaymentForm({
     } else {
       return v;
     }
-  };
-
-  const formatPrice = (priceInCents: number) => {
-    return `रु${priceInCents.toLocaleString("en-IN")}`;
   };
 
   const renderPaymentForm = () => {

@@ -25,10 +25,12 @@ export const cartItemResolvers = {
             userId: true,
             variantId: true,
             createdAt: true,
+            updatedAt: true,
             user: { select: { id: true, firstName: true, lastName: true } },
             variant: {
               select: {
                 id: true,
+                price: true,
                 product: {
                   select: {
                     id: true,

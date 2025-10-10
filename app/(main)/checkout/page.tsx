@@ -76,8 +76,8 @@ export default function CheckoutPage() {
   };
 
   const handlePaymentSubmit = async (paymentData: any) => {
-    setIsProcessing(true);
     console.log("payment data-->", paymentData);
+    setIsProcessing(true);
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000));
 

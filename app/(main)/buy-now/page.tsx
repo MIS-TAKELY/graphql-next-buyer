@@ -4,6 +4,9 @@
 import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
 import { VERIFY_ESEWA_PAYMENT } from "@/client/payment/payment.mutations";
 import { GET_PRODUCT_BY_SLUG } from "@/client/product/product.queries";
+// NEW: Import cart query (add this if it doesn't exist)
+import { ICartItem } from "@/app/(main)/cart/page"; // Import cart item type
+import { GET_CART_ITEMS } from "@/client/cart/cart.queries"; // Assume this exists
 import { AddressStep } from "@/components/page/buy-now/AddressStep";
 import { BuyNowHeader } from "@/components/page/buy-now/BuyNowHeader";
 import { BuyNowSteps } from "@/components/page/buy-now/BuyNowSteps";
@@ -19,8 +22,9 @@ function BuyNowPageInner() {
   const searchParams = useSearchParams();
   const productSlug = searchParams.get("product");
   const quantity = parseInt(searchParams.get("quantity") || "1");
+  const isFromCart = searchParams.get("from") === "cart"; // NEW: Detect cart mode
 
-  // eSewa callback parameters
+  // eSewa callback parameters (unchanged)
   const isCallback = searchParams.get("callback") === "true";
   const callbackPid = searchParams.get("pid");
   const callbackOrderId = searchParams.get("orderId");
@@ -46,29 +50,49 @@ function BuyNowPageInner() {
 
   const [verifyEsewaPayment] = useMutation(VERIFY_ESEWA_PAYMENT);
 
-  // Query product
-  const { data: productData, loading: productLoading, error: productDataError } = useQuery(
-    GET_PRODUCT_BY_SLUG,
-    {
-      variables: { slug: productSlug },
-      fetchPolicy: "cache-first",
-      errorPolicy: "all",
-    }
-  );
+  // NEW: Query cart if from cart
+  const { data: cartData, loading: cartLoading } = useQuery(GET_CART_ITEMS, {
+    skip: !isFromCart, // Only run if from cart
+    fetchPolicy: "cache-first",
+    errorPolicy: "all",
+  });
 
-  // Query user addresses
-  const { data: addressData, loading: addressLoading } = useQuery(GET_ADDRESS_OF_USER);
+  // Existing product query (skip if from cart)
+  const {
+    data: productData,
+    loading: productLoading,
+    error: productDataError,
+  } = useQuery(GET_PRODUCT_BY_SLUG, {
+    variables: { slug: productSlug },
+    skip: isFromCart, // Skip if from cart
+    fetchPolicy: "cache-first",
+    errorPolicy: "all",
+  });
+
+  // Existing address query (unchanged)
+  const { data: addressData, loading: addressLoading } =
+    useQuery(GET_ADDRESS_OF_USER);
 
   const product = productData?.getProductBySlug;
   const addresses = addressData?.getAddressOfUser || [];
+  const cartItems: ICartItem[] = cartData?.getCarts || []; // NEW: Cart items
 
-  // Calculate order amount
+  // UPDATED: Calculate order amount (handle both single product and cart)
   const calculateOrderAmount = () => {
+    if (isFromCart) {
+      if (!cartItems.length) return 0;
+      const subtotal = cartItems.reduce(
+        (sum, item) => sum + item.variant.price * item.quantity,
+        0
+      ); // Assume price in cents
+      const shipping = 0;
+      const tax = Math.round(subtotal * 0.18);
+      return subtotal + shipping + tax;
+    }
     if (!product || !product.variants) return 0;
     const defaultVariant =
       product.variants.find((v: any) => v.isDefault) || product.variants[0];
     if (!defaultVariant) return 0;
-
     const subtotal = defaultVariant.price * quantity;
     const shipping = 0;
     const tax = Math.round(subtotal * 0.18);
@@ -77,7 +101,66 @@ function BuyNowPageInner() {
 
   const orderAmount = calculateOrderAmount();
 
-  // Handle eSewa callback
+  // UPDATED: Map cart items to OrderItem[] for OrderSummary (if from cart)
+  const orderItemsForSummary = isFromCart
+    ? cartItems.map((cartItem: ICartItem) => ({
+        id: cartItem.id,
+        quantity: cartItem.quantity,
+        price: cartItem.variant.price * cartItem.quantity, // Subtotal per item
+        variant: {
+          id: cartItem.variant.id,
+          price: cartItem.variant.price,
+          attributes: cartItem.variant.attributes,
+          product: {
+            name: cartItem.variant.product.name,
+            images: cartItem.variant.product.images || [],
+          },
+        },
+      }))
+    : [
+        // Fallback to single product (existing logic)
+        {
+          id: product?.id || "",
+          quantity,
+          price:
+            product?.variants?.find((v: any) => v.isDefault)?.price ||
+            product?.variants?.[0]?.price ||
+            0,
+          variant: {
+            id:
+              product?.variants?.find((v: any) => v.isDefault)?.id ||
+              product?.variants?.[0]?.id ||
+              "1",
+            price:
+              product?.variants?.find((v: any) => v.isDefault)?.price ||
+              product?.variants?.[0]?.price ||
+              0,
+            attributes:
+              product?.variants?.find((v: any) => v.isDefault)?.attributes ||
+              product?.variants?.[0]?.attributes,
+            product: {
+              name: product?.name || "",
+              images: product?.images || [],
+            },
+          },
+        },
+      ];
+
+  // NEW: Cart-specific totals (adapt from CartOrderSummary logic)
+  const cartSubtotal =
+    cartItems.reduce(
+      (sum, item) => sum + item.variant.price * item.quantity * 100,
+      0
+    ) / 100; // In NPR
+  const cartOriginalTotal =
+    cartItems.reduce((sum, item) => {
+      const comparePrice =
+        item.variant.attributes?.comparePrice || item.variant.price;
+      return sum + comparePrice * item.quantity * 100;
+    }, 0) / 100;
+  const cartTotalSavings = cartOriginalTotal - cartSubtotal;
+
+  // Handle eSewa callback (unchanged)
   useEffect(() => {
     if (
       isCallback &&
@@ -122,7 +205,7 @@ function BuyNowPageInner() {
     }
   }, [addresses, setSelectedAddress]);
 
-  // Show error if callback failed
+  // Show error if callback failed (unchanged)
   if (searchParams.get("error")) {
     return (
       <div className="container mx-auto px-4 py-8 bg-gray-50 dark:bg-gray-900">
@@ -133,17 +216,22 @@ function BuyNowPageInner() {
     );
   }
 
+  // UPDATED: BuyNowHeader (pass cart info if needed; assume it handles empty slug)
+  const headerProductName = isFromCart
+    ? `Cart (${cartItems.length} items)`
+    : product?.name;
+
   return (
     <div className="container mx-auto px-4 py-8 bg-gray-50 dark:bg-gray-900">
       <BuyNowHeader
         productSlug={productSlug || ""}
-        productName={product?.name}
+        productName={headerProductName}
       />
       <BuyNowSteps currentStep={currentStep} />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* LEFT SIDE: Address & Payment */}
+        {/* LEFT SIDE: Address & Payment (unchanged, but loading handles cartLoading) */}
         <div className="lg:col-span-2 space-y-6">
-          {addressLoading ? (
+          {addressLoading || (isFromCart && cartLoading) ? (
             <div className="space-y-4">
               <div className="h-96 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
             </div>
@@ -160,7 +248,7 @@ function BuyNowPageInner() {
               />
             )
           )}
-          {step === "payment" && product && (
+          {step === "payment" && (product || isFromCart) && (
             <PaymentStep
               selectedAddress={selectedAddress}
               selectedPaymentMethod={selectedPaymentMethod}
@@ -168,60 +256,68 @@ function BuyNowPageInner() {
               isProcessingPayment={isProcessingPayment}
               onPaymentMethodSelect={handlePaymentMethodSelect}
               onPaymentSubmit={(paymentData: any) => {
-                const defaultVariant =
-                  product.variants?.find((v: any) => v.isDefault) ||
-                  product.variants?.[0];
-                handlePaymentSubmit({
-                  ...paymentData,
-                  paymentProvider:
-                    paymentData.method === "CASH_ON_DELIVERY"
-                      ? "COD"
-                      : paymentData.method === "WALLET"
-                      ? "ESEWA"
-                      : paymentData.method,
-                  paymentMethodId: selectedPaymentMethod?.id ?? null,
-                  variantId: defaultVariant?.id,
-                  quantity,
-                  shippingMethod: "STANDARD",
-                });
+                if (isFromCart) {
+                  // NEW: Pass cart items to handlePaymentSubmit (update your hook/mutation to accept array)
+                  handlePaymentSubmit({
+                    ...paymentData,
+                    paymentProvider:
+                      paymentData.method === "CASH_ON_DELIVERY"
+                        ? "COD"
+                        : paymentData.method === "WALLET"
+                        ? "ESEWA"
+                        : paymentData.method,
+                    paymentMethodId: selectedPaymentMethod?.id ?? null,
+                    items: orderItemsForSummary, // Pass full cart items
+                    shippingMethod: "STANDARD",
+                  });
+                } else {
+                  // Existing single-product logic
+                  const defaultVariant =
+                    product.variants?.find((v: any) => v.isDefault) ||
+                    product.variants?.[0];
+                  handlePaymentSubmit({
+                    ...paymentData,
+                    paymentProvider:
+                      paymentData.method === "CASH_ON_DELIVERY"
+                        ? "COD"
+                        : paymentData.method === "WALLET"
+                        ? "ESEWA"
+                        : paymentData.method,
+                    paymentMethodId: selectedPaymentMethod?.id ?? null,
+                    variantId: defaultVariant?.id,
+                    quantity,
+                    shippingMethod: "STANDARD",
+                  });
+                }
               }}
               onBackToAddress={handleBackToAddress}
             />
           )}
         </div>
-        {/* RIGHT SIDE: Order Summary */}
+        {/* RIGHT SIDE: Order Summary (UPDATED: Use cart data if from cart) */}
         <div className="lg:col-span-1">
-          {productLoading ? (
+          {isFromCart ? (
+            cartLoading ? (
+              <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+            ) : cartItems.length > 0 ? (
+              // Use OrderSummary with cart-mapped items (it already supports multiple items)
+              <OrderSummary
+                items={orderItemsForSummary}
+                subtotal={cartSubtotal} // From cart calc
+                shipping={0}
+                tax={Math.round(cartSubtotal * 0.18)}
+                total={orderAmount}
+                formatPrice={(priceInCents: number) =>
+                  `रु${(priceInCents / 100).toLocaleString("en-IN")}`
+                }
+              />
+            ) : null
+          ) : productLoading ? (
             <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
           ) : product ? (
+            // Existing single-product OrderSummary
             <OrderSummary
-              items={[
-                {
-                  id: product.id,
-                  quantity,
-                  price:
-                    product.variants?.find((v: any) => v.isDefault)?.price ||
-                    product.variants?.[0]?.price ||
-                    0,
-                  variant: {
-                    id:
-                      product.variants?.find((v: any) => v.isDefault)?.id ||
-                      product.variants?.[0]?.id ||
-                      "1",
-                    price:
-                      product.variants?.find((v: any) => v.isDefault)?.price ||
-                      product.variants?.[0]?.price ||
-                      0,
-                    attributes:
-                      product.variants?.find((v: any) => v.isDefault)
-                        ?.attributes || product.variants?.[0]?.attributes,
-                    product: {
-                      name: product.name,
-                      images: product.images || [],
-                    },
-                  },
-                },
-              ]}
+              items={orderItemsForSummary}
               subtotal={orderAmount - Math.round((orderAmount / 1.18) * 0.18)}
               shipping={0}
               tax={Math.round((orderAmount / 1.18) * 0.18)}
@@ -237,15 +333,10 @@ function BuyNowPageInner() {
   );
 }
 
+// Export unchanged
 export default function BuyNowPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="container mx-auto px-4 py-8 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
-          Loading...
-        </div>
-      }
-    >
+    <Suspense fallback={<div>Loading...</div>}>
       <BuyNowPageInner />
     </Suspense>
   );

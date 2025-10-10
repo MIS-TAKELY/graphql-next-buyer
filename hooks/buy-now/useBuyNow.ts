@@ -2,6 +2,7 @@
 
 import {
   CREATE_ORDER,
+  CREATE_ORDERS,
   INITIATE_ESEWA_PAYMENT,
 } from "@/client/payment/payment.mutations";
 import { useMutation } from "@apollo/client";
@@ -21,6 +22,7 @@ export function useBuyNow() {
   const router = useRouter();
 
   const [createOrder] = useMutation(CREATE_ORDER);
+  const [createOrders] = useMutation(CREATE_ORDERS);
   const [initiateEsewaPayment] = useMutation(INITIATE_ESEWA_PAYMENT);
 
   const handleAddressSaved = (newAddress: any) => {
@@ -48,6 +50,15 @@ export function useBuyNow() {
 
   const handlePaymentSubmit = async (paymentData: any) => {
     setIsProcessingPayment(true);
+
+    if (!paymentData) console.log("payment data not avilable");
+
+    // console.log("paymentdata---?", paymentData);
+    // const output = paymentData?.items?.map((data: any) => data);
+
+    // const output2 = output.map((v: any) => v);
+    // console.log("output-->", output2);
+
     try {
       const paymentProvider = paymentData.walletProvider
         ? paymentData.walletProvider.toUpperCase()
@@ -58,87 +69,146 @@ export function useBuyNow() {
         throw new Error("Unsupported payment provider");
       }
 
-      const variables = {
-        input: {
-          items: [
-            {
-              variantId: paymentData.variantId,
-              quantity: paymentData.quantity ?? 1,
+      if (paymentData.items && paymentData.items.length > 0) {
+        console.log("paymentdata---?", paymentData);
+
+        // MULTIPLE ORDERS CASE
+        const ordersInput = [
+          {
+            items: paymentData.items.map((item: any) => ({
+              variantId: item.variantId || item.variant?.id,
+              quantity: item.quantity,
+            })),
+            shippingAddress: {
+              line1: selectedAddress?.line1,
+              label: selectedAddress?.label,
+              line2: selectedAddress?.line2 ?? null,
+              city: selectedAddress?.city,
+              state: selectedAddress?.state,
+              postalCode: selectedAddress?.postalCode,
+              country: selectedAddress?.country,
+              phone: selectedAddress?.phone ?? null,
             },
-          ],
-          shippingAddress: {
-            line1: selectedAddress?.line1,
-            label: selectedAddress?.label,
-            line2: selectedAddress?.line2 ?? null,
-            city: selectedAddress?.city,
-            state: selectedAddress?.state,
-            postalCode: selectedAddress?.postalCode,
-            country: selectedAddress?.country,
-            phone: selectedAddress?.phone ?? null,
+            billingAddress: null,
+            shippingMethod: paymentData.shippingMethod ?? "STANDARD",
+            paymentProvider,
           },
-          billingAddress: null,
-          shippingMethod: paymentData.shippingMethod ?? "STANDARD",
-          paymentProvider,
-        },
-      };
+        ];
+        console.log("ordersInput -->", ordersInput);
 
-      console.log("varibles-->",variables)
-
-      const orderResult = await createOrder({ variables });
-      const orderId = orderResult.data?.createOrder?.id;
-
-      console.log("order reslt", orderResult);
-
-      if (!orderId) {
-        throw new Error("Failed to create order");
-      }
-
-      console.log("pay,emt provider", paymentProvider);
-
-      if (paymentProvider === "COD" && orderId) {
-        console.log("hello");
-        router.push(`/payment/success/?orderId=${orderId}`);
-      }
-
-      // Handle eSewa payment
-      if (paymentProvider === "ESEWA") {
-        const esewaResult = await initiateEsewaPayment({
-          variables: { orderId },
+        const ordersResult = await createOrders({
+          variables: { input: ordersInput },
         });
 
-        console.log("eSewa Result:", JSON.stringify(esewaResult, null, 2)); // Add logging
+        console.log("Multiple orders result:", ordersResult);
 
-        if (esewaResult.data.initiateEsewaPayment.success) {
-          // Create and submit form
-          const form = document.createElement("form");
-          form.method = "POST";
-          form.action = esewaResult.data.initiateEsewaPayment.paymentUrl;
+        // Handle COD (redirect to success)
+        if (paymentProvider === "COD") {
+          router.push(`/payment/success`);
+        }
 
-          // Add all payment data as hidden inputs
-          Object.entries(
-            esewaResult.data.initiateEsewaPayment.paymentData
-          ).forEach(([key, value]) => {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = key;
-            input.value = value as string;
-            form.appendChild(input);
+        // For eSewa, Khalti, etc., we’ll handle per order
+        if (paymentProvider === "ESEWA") {
+          for (const order of ordersResult.data.createOrders) {
+            const esewaResult = await initiateEsewaPayment({
+              variables: { orderId: order.id },
+            });
+
+            if (esewaResult.data.initiateEsewaPayment.success) {
+              const form = document.createElement("form");
+              form.method = "POST";
+              form.action = esewaResult.data.initiateEsewaPayment.paymentUrl;
+
+              Object.entries(
+                esewaResult.data.initiateEsewaPayment.paymentData
+              ).forEach(([key, value]) => {
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = key;
+                input.value = value as string;
+                form.appendChild(input);
+              });
+
+              document.body.appendChild(form);
+              form.submit();
+              return; // Stop after first redirect
+            } else {
+              alert(
+                esewaResult.data.initiateEsewaPayment.error ||
+                  "Payment initiation failed"
+              );
+            }
+          }
+        }
+      } else {
+        // SINGLE ORDER CASE (existing logic)
+        const variables = {
+          input: {
+            items: [
+              {
+                variantId: paymentData.variantId,
+                quantity: paymentData.quantity ?? 1,
+              },
+            ],
+            shippingAddress: {
+              line1: selectedAddress?.line1,
+              label: selectedAddress?.label,
+              line2: selectedAddress?.line2 ?? null,
+              city: selectedAddress?.city,
+              state: selectedAddress?.state,
+              postalCode: selectedAddress?.postalCode,
+              country: selectedAddress?.country,
+              phone: selectedAddress?.phone ?? null,
+            },
+            billingAddress: null,
+            shippingMethod: paymentData.shippingMethod ?? "STANDARD",
+            paymentProvider,
+          },
+        };
+
+        const orderResult = await createOrder({ variables });
+        const orderId = orderResult.data?.createOrder?.id;
+
+        if (!orderResult) throw new Error("Failed to create order");
+
+        if (paymentProvider === "COD" && orderId) {
+          router.push(`/payment/success/?orderId=${orderId}`);
+        }
+
+        if (paymentProvider === "ESEWA") {
+          const esewaResult = await initiateEsewaPayment({
+            variables: { orderId },
           });
 
-          document.body.appendChild(form);
-          form.submit();
-        } else {
-          alert(
-            esewaResult.data.initiateEsewaPayment.error ||
-              "Payment initiation failed"
-          );
+          if (esewaResult.data.initiateEsewaPayment.success) {
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = esewaResult.data.initiateEsewaPayment.paymentUrl;
+
+            Object.entries(
+              esewaResult.data.initiateEsewaPayment.paymentData
+            ).forEach(([key, value]) => {
+              const input = document.createElement("input");
+              input.type = "hidden";
+              input.name = key;
+              input.value = value as string;
+              form.appendChild(input);
+            });
+
+            document.body.appendChild(form);
+            form.submit();
+          } else {
+            alert(
+              esewaResult.data.initiateEsewaPayment.error ||
+                "Payment initiation failed"
+            );
+          }
         }
       }
 
       setStep("summary");
     } catch (e) {
       console.error("Order creation failed:", e);
-      // toast.error(`Payment failed: ${e.message}`); // Ensure toast is imported
     } finally {
       setIsProcessingPayment(false);
     }

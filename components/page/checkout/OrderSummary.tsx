@@ -55,7 +55,10 @@ export function OrderSummary({
         <div className="space-y-4">
           <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300">
             <span>Items ({totalItems})</span>
-            <Badge variant="secondary" className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+            <Badge
+              variant="secondary"
+              className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
+            >
               {totalItems} {totalItems === 1 ? "item" : "items"}
             </Badge>
           </div>
@@ -93,7 +96,10 @@ export function OrderSummary({
                         ([key, value]) => {
                           if (key === "comparePrice") return null;
                           return (
-                            <span key={key} className="text-xs text-gray-500 dark:text-gray-400">
+                            <span
+                              key={key}
+                              className="text-xs text-gray-500 dark:text-gray-400"
+                            >
                               {value}
                             </span>
                           );
@@ -116,7 +122,9 @@ export function OrderSummary({
         <div className="space-y-3">
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-600 dark:text-gray-300">Subtotal</span>
-            <span className="font-medium text-gray-900 dark:text-white">रु{subtotal}</span>
+            <span className="font-medium text-gray-900 dark:text-white">
+              रु{subtotal}
+            </span>
           </div>
 
           <div className="flex items-center justify-between text-sm">
@@ -134,7 +142,9 @@ export function OrderSummary({
               <Receipt className="w-4 h-4 text-gray-600 dark:text-gray-300" />
               Tax (GST)
             </span>
-            <span className="font-medium text-gray-900 dark:text-white">रु{tax}</span>
+            <span className="font-medium text-gray-900 dark:text-white">
+              रु{tax}
+            </span>
           </div>
 
           {items.some((item) => item.variant.attributes?.comparePrice) && (
@@ -157,8 +167,12 @@ export function OrderSummary({
           <Separator className="bg-gray-200 dark:bg-gray-600" />
 
           <div className="flex items-center justify-between">
-            <span className="text-lg font-semibold text-gray-900 dark:text-white">Total</span>
-            <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">रु{total}</span>
+            <span className="text-lg font-semibold text-gray-900 dark:text-white">
+              Total
+            </span>
+            <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+              रु{total}
+            </span>
           </div>
         </div>
 
@@ -179,7 +193,9 @@ export function OrderSummary({
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
-              <span className="text-blue-900 dark:text-blue-200 font-medium">Secure checkout</span>
+              <span className="text-blue-900 dark:text-blue-200 font-medium">
+                Secure checkout
+              </span>
             </div>
           </div>
         </div>
@@ -192,7 +208,9 @@ export function OrderSummary({
               <h4 className="text-sm font-medium text-green-900 dark:text-green-200">
                 Estimated Delivery
               </h4>
-              <p className="text-sm text-green-700 dark:text-green-300">3-5 business days</p>
+              <p className="text-sm text-green-700 dark:text-green-300">
+                3-5 business days
+              </p>
             </div>
           </div>
         </div>

@@ -45,6 +45,7 @@ export function ProductActions({
             quantity={quantity}
             inStock={inStock}
             onClick={onBuyNowClick}
+            isFromCart={false}
           />
         )}
       </div>

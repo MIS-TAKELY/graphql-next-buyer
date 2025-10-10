@@ -6,7 +6,7 @@ export const CREATE_PAYMENT_METHOD = gql`
       id
       type
       provider
-      last4
+      last
       upiId
       isDefault
       createdAt
@@ -42,27 +42,34 @@ export const CREATE_ORDER = gql`
       tax
       shippingFee
       total
-      items {
-        id
-        quantity
-        unitPrice
-        totalPrice
-        variant {
-          id
-        }
-      }
-      payments {
-        id
-        status
-        provider
-        amount
-      }
-      shipments {
-        id
-        method
-        status
-      }
-      createdAt
+    }
+  }
+`;
+
+export const CREATE_ORDERS = gql`
+  mutation CreateOrders($input: [CreateOrderInput!]!) {
+    createOrders(input: $input) {
+      id
+      orderNumber
+      status
+      subtotal
+      tax
+      shippingFee
+      total
+    }
+  }
+`;
+
+export const CREATE_CART_ORDER = gql`
+  mutation CreateOrder($input: CreateOrderInput!) {
+    createOrder(input: $input) {
+      id
+      orderNumber
+      status
+      subtotal
+      tax
+      shippingFee
+      total
     }
   }
 `;

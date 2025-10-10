@@ -17,6 +17,7 @@ interface BuyNowButtonProps {
   disabled?: boolean;
   children?: React.ReactNode;
   onClick?: () => void;
+  isFromCart:boolean
 }
 
 export function BuyNowButton({
@@ -31,23 +32,35 @@ export function BuyNowButton({
   disabled = false,
   children,
   onClick,
+  isFromCart
 }: BuyNowButtonProps) {
   const router = useRouter();
 
-  const handleBuyNow = useCallback(() => {
-    // Call custom onClick handler if provided
-    onClick?.();
+  // In BuyNowButton.tsx, update handleBuyNow
+const handleBuyNow = useCallback(() => {
+  onClick?.();
 
-    if (disabled || !inStock) return;
-    
-    // Navigate to buy-now page with product and quantity parameters
+  if (disabled || !inStock) return;
+  
+  // Detect if this is from cart (e.g., via a prop or context; for now, assume it's passed or hardcoded in cart usage)
+  const isFromCart = true; // Set this dynamically if needed (e.g., via prop)
+
+
+  console.log("isfrom cart -->",isFromCart)
+  
+  if (isFromCart) {
+    const searchParams = new URLSearchParams({
+      from: "cart"
+    });
+    router.push(`/buy-now?${searchParams.toString()}`);
+  } else {
     const searchParams = new URLSearchParams({
       product: productSlug,
       quantity: quantity.toString()
     });
-    
     router.push(`/buy-now?${searchParams.toString()}`);
-  }, [disabled, inStock, productSlug, quantity, router, onClick]);
+  }
+}, [disabled, inStock, productSlug, quantity, router, onClick, isFromCart]);
 
   const isDisabled = disabled || !inStock;
 
