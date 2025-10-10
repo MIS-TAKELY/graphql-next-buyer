@@ -230,11 +230,7 @@ export const orderResolvers = {
                 shipments: true,
               },
             });
-            if (created) {
-              console.log("ssending mail");
-              const info = await senMail(variants[0].product.seller.email);
-              console.log("mail response-->", info);
-            }
+
             const itemsBySeller: Record<string, typeof computedItems> = {};
             for (const ci of computedItems) {
               if (!itemsBySeller[ci.sellerId]) {
@@ -294,9 +290,25 @@ export const orderResolvers = {
           { timeout: 30000 }
         );
 
-        // if (order) {
-        //   senMail(variants[0].product.seller.email);
-        // }
+        // Send emails to each unique seller after transaction
+        const itemsBySeller: Record<string, typeof computedItems> = {};
+        for (const ci of computedItems) {
+          if (!itemsBySeller[ci.sellerId]) {
+            itemsBySeller[ci.sellerId] = [];
+          }
+          itemsBySeller[ci.sellerId].push(ci);
+        }
+
+        for (const [sellerId, items] of Object.entries(itemsBySeller)) {
+          const sellerEmail = variants.find(
+            (v) => v.product.sellerId === sellerId
+          )?.product.seller?.email;
+          if (sellerEmail) {
+            console.log("sending mail to seller:", sellerEmail);
+            const info = await senMail(sellerEmail);
+            console.log("mail response-->", info);
+          }
+        }
 
         console.log("order placed---->", order);
 
@@ -331,10 +343,17 @@ export const orderResolvers = {
                       status: true,
                       sellerId: true,
                       categoryId: true,
+                      seller: {
+                        select: {
+                          email: true,
+                        },
+                      },
                     },
                   },
                 },
               });
+
+              console.log("orderInput-->", orderInput);
 
               const byId = new Map(variants.map((v) => [v.id, v]));
               let subtotal = 0;
@@ -464,6 +483,57 @@ export const orderResolvers = {
           },
           { timeout: 60000 }
         );
+
+        // Send emails to each unique seller for each order after transaction
+        for (const orderInput of input) {
+          const variantIds = orderInput.items.map((i) => i.variantId);
+          const variants = await prisma.productVariant.findMany({
+            where: { id: { in: variantIds } },
+            include: {
+              product: {
+                select: {
+                  id: true,
+                  status: true,
+                  sellerId: true,
+                  categoryId: true,
+                  seller: {
+                    select: {
+                      email: true,
+                    },
+                  },
+                },
+              },
+            },
+          });
+
+          const computedItems = orderInput.items.map((i) => {
+            const v = variants.find((vv) => vv.id === i.variantId);
+            if (!v) throw new Error("Variant not found");
+
+            return {
+              variantId: i.variantId,
+              quantity: i.quantity,
+              sellerId: v.product.sellerId,
+            };
+          });
+
+          const itemsBySeller: Record<string, typeof computedItems> = {};
+          for (const ci of computedItems) {
+            if (!itemsBySeller[ci.sellerId]) itemsBySeller[ci.sellerId] = [];
+            itemsBySeller[ci.sellerId].push(ci);
+          }
+
+          for (const [sellerId, items] of Object.entries(itemsBySeller)) {
+            const sellerEmail = variants.find(
+              (v) => v.product.sellerId === sellerId
+            )?.product.seller?.email;
+            if (sellerEmail) {
+              console.log("sending mail to seller:", sellerEmail);
+              const info = await senMail(sellerEmail);
+              console.log("mail response-->", info);
+            }
+          }
+        }
 
         return createdOrders;
       } catch (error: any) {
