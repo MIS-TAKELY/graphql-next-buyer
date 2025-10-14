@@ -8,6 +8,8 @@ export const productResolvers = {
     getProducts: async (_: any, __: any) => {
       const cacheKey = "products:all";
 
+      console.log("backend called");
+
       // Try cache for the list of product slugs
       const cachedSlugs = await getCache<string[]>(`${cacheKey}:slugs`);
       if (cachedSlugs) {
@@ -72,6 +74,8 @@ export const productResolvers = {
         },
         orderBy: { createdAt: "desc" },
       });
+
+      console.log("products from backend-->", products);
 
       // Cache individual products and slugs
       await Promise.all(

@@ -83,6 +83,7 @@ const ProductCard = memo<ProductCardProps>(
               <Image
                 src={productData.imageUrl}
                 alt={productData.imageAlt}
+                unoptimized 
                 fill
                 sizes={sizes}
                 className="object-cover transition-transform duration-200 group-hover:scale-105"

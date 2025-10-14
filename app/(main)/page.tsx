@@ -23,6 +23,8 @@ export default async function HomePage() {
     fetchPolicy: "no-cache",
     errorPolicy: "all",
   });
+  console.log("productsresponse-->", productsResponse);
+
   const products = productsResponse?.data?.getProducts || [];
 
   const sharedSlice = products.slice(0, 8);

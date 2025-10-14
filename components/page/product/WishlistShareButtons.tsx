@@ -70,7 +70,7 @@ const SEND_MESSAGE = gql`
   }
 `;
 
-const GET_MESSAGES = gql`
+export const GET_MESSAGES = gql`
   query GetMessages($conversationId: ID!) {
     messages(conversationId: $conversationId) {
       id
@@ -100,12 +100,12 @@ export const GET_CONVERSATION_BY_PRODUCT = gql`
         name
         slug
       }
-      buyer {
+      sender {
         id
         firstName
         lastName
       }
-      seller {
+      reciever {
         id
         firstName
         lastName
@@ -556,7 +556,7 @@ export default function WishlistShareButtons({
                 size="lg"
                 variant="outline"
                 onClick={handleOpenChat}
-                // disabled={isLoading}
+                disabled={isLoading}
                 className="transition-all"
                 aria-label="Open chat with seller"
               >
@@ -626,13 +626,13 @@ export default function WishlistShareButtons({
                     ? "Type your message..."
                     : "Click to start chat"
                 }
-                // disabled={isLoading || !conversationId}
+                disabled={isLoading || !conversationId}
                 className="flex-1 text-sm"
                 maxLength={500}
               />
               <Button
                 onClick={handleSendMessage}
-                // disabled={!inputValue.trim() || isLoading || !conversationId}
+                disabled={!inputValue.trim() || isLoading || !conversationId}
                 size="icon"
                 className="shrink-0"
                 aria-label="Send message"
