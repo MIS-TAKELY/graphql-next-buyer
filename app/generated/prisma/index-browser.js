@@ -134,6 +134,42 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ConversationScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  senderId: 'senderId',
+  recieverId: 'recieverId',
+  title: 'title',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  senderId: 'senderId',
+  content: 'content',
+  type: 'type',
+  fileUrl: 'fileUrl',
+  isRead: 'isRead',
+  sentAt: 'sentAt'
+};
+
+exports.Prisma.MessageAttachmentScalarFieldEnum = {
+  id: 'id',
+  messageId: 'messageId',
+  url: 'url',
+  type: 'type'
+};
+
+exports.Prisma.ConversationParticipantScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  userId: 'userId',
+  lastReadAt: 'lastReadAt'
+};
+
 exports.Prisma.AddressScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -484,6 +520,18 @@ exports.Role = exports.$Enums.Role = {
   ADMIN: 'ADMIN'
 };
 
+exports.MessageType = exports.$Enums.MessageType = {
+  TEXT: 'TEXT',
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  SYSTEM: 'SYSTEM'
+};
+
+exports.FileType = exports.$Enums.FileType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO'
+};
+
 exports.AddressType = exports.$Enums.AddressType = {
   SHIPPING: 'SHIPPING',
   BILLING: 'BILLING',
@@ -521,11 +569,6 @@ exports.ProductStatus = exports.$Enums.ProductStatus = {
 exports.MediaType = exports.$Enums.MediaType = {
   PRIMARY: 'PRIMARY',
   PROMOTIONAL: 'PROMOTIONAL'
-};
-
-exports.FileType = exports.$Enums.FileType = {
-  IMAGE: 'IMAGE',
-  VIDEO: 'VIDEO'
 };
 
 exports.OrderStatus = exports.$Enums.OrderStatus = {
@@ -580,6 +623,10 @@ exports.ReviewStatus = exports.$Enums.ReviewStatus = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Conversation: 'Conversation',
+  Message: 'Message',
+  MessageAttachment: 'MessageAttachment',
+  ConversationParticipant: 'ConversationParticipant',
   Address: 'Address',
   CategorySpecification: 'CategorySpecification',
   Category: 'Category',

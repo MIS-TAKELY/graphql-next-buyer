@@ -1,4 +1,3 @@
-import redisConfig from "@/config/redis";
 import { prisma } from "@/lib/db/prisma";
 import { getAuth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
@@ -6,14 +5,8 @@ import { NextRequest } from "next/server";
 export interface GraphQLContext {
   prisma: typeof prisma;
   user?: { id: string; clerkId: string; email: string; role: string } | null;
-  publish: (evt: {
-    type: string;
-    payload: unknown;
-    room?: string;
-  }) => Promise<void>;
+  publish: (evt: { channel: string; message: unknown }) => Promise<void>;
 }
-
-// ... (your existing imports)
 
 export async function createContext(
   request: NextRequest
@@ -28,15 +21,27 @@ export async function createContext(
       });
     }
 
+    console.log("user id-->", userId);
+    console.log("user-->", user);
+
     return {
       prisma,
       user,
-      publish: async (evt) => {
-        if (!redisConfig.publisher) {
-          console.warn("Publisher not available; event not sent:", evt);
-          return;
+      publish: async ({ channel, message }) => {
+        const url = `${
+          process.env.UPSTASH_REALTIME_REST_URL
+        }/publish/${encodeURIComponent(channel)}`;
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.UPSTASH_REALTIME_REST_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(message),
+        });
+        if (!res.ok) {
+          console.error("Failed to publish to Realtime:", await res.text());
         }
-        await redisConfig.publisher.publish("events", JSON.stringify(evt));
       },
     };
   } catch (error) {

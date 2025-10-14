@@ -1,7 +1,9 @@
 import { GraphQLContext } from "../context";
 
 export function requireAuth(ctx: GraphQLContext) {
+  // console.log("ctx",ctx.user)
   if (!ctx.user) {
+    console.log("Authentication required")
     throw new Error("Authentication required");
   }
   return ctx.user;

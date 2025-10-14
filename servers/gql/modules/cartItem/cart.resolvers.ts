@@ -56,7 +56,7 @@ export const cartItemResolvers = {
     getMyCart: async (_: any, __: any, ctx: GraphQLContext) => {
       try {
         const user = requireAuth(ctx);
-        const cacheKey = `carts:user:${user.id}`;
+        const cacheKey = `carts:user:${user?.id}`;
 
         // Use cache
         const cached = await getCache(cacheKey);
@@ -67,7 +67,7 @@ export const cartItemResolvers = {
 
         // Minimal query for better performance
         const myCart = await prisma.cartItem.findMany({
-          where: { userId: user.id },
+          where: { userId: user?.id },
           select: {
             id: true,
             quantity: true,
@@ -95,7 +95,7 @@ export const cartItemResolvers = {
         return myCart;
       } catch (error: any) {
         console.error("Error fetching user cart:", error);
-        throw new Error(`Failed to fetch cart items: ${error.message}`);
+        // throw new Error(`Failed to fetch cart items: ${error.message}`);
       }
     },
   },

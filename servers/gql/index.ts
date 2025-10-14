@@ -30,7 +30,11 @@ import { userResolvers } from "./modules/user/user.resolvers";
 import { userTypeDefs } from "./modules/user/user.typeDefs";
 import { wishlistTypeDefs } from "./modules/wishlist/wishlist.typeDefs";
 // import { wishlistItemTypeDefs } from "./modules/wishlistItem/wishlistItem.typeDefs";
+import { conversationResolvers } from "./modules/conversation/conversation.resolvers";
+import { conversationTypedefs } from "./modules/conversation/conversaton.typeDefs";
 import { deliveryTypedefs } from "./modules/delivery/delivery.typeDefs";
+import { messageResolvers } from "./modules/message/message.resolvers";
+import { messageTypedefs } from "./modules/message/message.typeDefs";
 import { offerTypeDefs } from "./modules/offer/offer.typedefs";
 import { returnTypedefs } from "./modules/return/return.typeDefs";
 import { reviewResolvers } from "./modules/review/review.resolvers";
@@ -74,6 +78,8 @@ const typeDefs = mergeTypeDefs([
   reviewTypeDefs,
   returnTypedefs,
   warrentyTypeDefs,
+  messageTypedefs,
+  conversationTypedefs,
 ]);
 
 const resolvers = mergeResolvers([
@@ -87,7 +93,9 @@ const resolvers = mergeResolvers([
   orderResolvers,
   paymentResolvers,
   reviewResolvers,
+  conversationResolvers,
   wishlistResolvers,
+  messageResolvers,
 ]);
 
 export const schema = makeExecutableSchema({ typeDefs, resolvers });

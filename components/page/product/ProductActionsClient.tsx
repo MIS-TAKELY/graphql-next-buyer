@@ -51,7 +51,6 @@ export function ProductActionsClient({
 
   return (
     <div className="space-y-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-      <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
       <ProductActions
         productId={productId}
         productSlug={productSlug}
@@ -59,10 +58,18 @@ export function ProductActionsClient({
         quantity={quantity}
         inStock={inStock}
       />
-      <WishlistShareButtons
-        addedToWishlist={addedToWishlist}
-        toggleWishlist={toggleWishlist}
-      />
+      <div className="flex w-full ">
+        <div className="w-[50%] flex justify-center items-center">
+          <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
+        </div>
+        <div className="flex w-[50%] justify-center items-center">
+          <WishlistShareButtons
+            addedToWishlist={addedToWishlist}
+            toggleWishlist={toggleWishlist}
+            itemId={productId}
+          />
+        </div>
+      </div>
     </div>
   );
 }
