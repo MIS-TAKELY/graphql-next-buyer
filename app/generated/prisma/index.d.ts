@@ -7311,6 +7311,7 @@ export namespace Prisma {
     fileUrl: string | null
     isRead: boolean | null
     sentAt: Date | null
+    clientId: string | null
   }
 
   export type MessageMaxAggregateOutputType = {
@@ -7322,6 +7323,7 @@ export namespace Prisma {
     fileUrl: string | null
     isRead: boolean | null
     sentAt: Date | null
+    clientId: string | null
   }
 
   export type MessageCountAggregateOutputType = {
@@ -7333,6 +7335,7 @@ export namespace Prisma {
     fileUrl: number
     isRead: number
     sentAt: number
+    clientId: number
     _all: number
   }
 
@@ -7346,6 +7349,7 @@ export namespace Prisma {
     fileUrl?: true
     isRead?: true
     sentAt?: true
+    clientId?: true
   }
 
   export type MessageMaxAggregateInputType = {
@@ -7357,6 +7361,7 @@ export namespace Prisma {
     fileUrl?: true
     isRead?: true
     sentAt?: true
+    clientId?: true
   }
 
   export type MessageCountAggregateInputType = {
@@ -7368,6 +7373,7 @@ export namespace Prisma {
     fileUrl?: true
     isRead?: true
     sentAt?: true
+    clientId?: true
     _all?: true
   }
 
@@ -7452,6 +7458,7 @@ export namespace Prisma {
     fileUrl: string | null
     isRead: boolean
     sentAt: Date
+    clientId: string | null
     _count: MessageCountAggregateOutputType | null
     _min: MessageMinAggregateOutputType | null
     _max: MessageMaxAggregateOutputType | null
@@ -7480,6 +7487,7 @@ export namespace Prisma {
     fileUrl?: boolean
     isRead?: boolean
     sentAt?: boolean
+    clientId?: boolean
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
     MessageAttachment?: boolean | Message$MessageAttachmentArgs<ExtArgs>
@@ -7495,6 +7503,7 @@ export namespace Prisma {
     fileUrl?: boolean
     isRead?: boolean
     sentAt?: boolean
+    clientId?: boolean
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -7508,6 +7517,7 @@ export namespace Prisma {
     fileUrl?: boolean
     isRead?: boolean
     sentAt?: boolean
+    clientId?: boolean
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -7521,9 +7531,10 @@ export namespace Prisma {
     fileUrl?: boolean
     isRead?: boolean
     sentAt?: boolean
+    clientId?: boolean
   }
 
-  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "conversationId" | "senderId" | "content" | "type" | "fileUrl" | "isRead" | "sentAt", ExtArgs["result"]["message"]>
+  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "conversationId" | "senderId" | "content" | "type" | "fileUrl" | "isRead" | "sentAt" | "clientId", ExtArgs["result"]["message"]>
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
@@ -7555,6 +7566,7 @@ export namespace Prisma {
       fileUrl: string | null
       isRead: boolean
       sentAt: Date
+      clientId: string | null
     }, ExtArgs["result"]["message"]>
     composites: {}
   }
@@ -7989,6 +8001,7 @@ export namespace Prisma {
     readonly fileUrl: FieldRef<"Message", 'String'>
     readonly isRead: FieldRef<"Message", 'Boolean'>
     readonly sentAt: FieldRef<"Message", 'DateTime'>
+    readonly clientId: FieldRef<"Message", 'String'>
   }
     
 
@@ -41820,7 +41833,8 @@ export namespace Prisma {
     type: 'type',
     fileUrl: 'fileUrl',
     isRead: 'isRead',
-    sentAt: 'sentAt'
+    sentAt: 'sentAt',
+    clientId: 'clientId'
   };
 
   export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
@@ -42825,6 +42839,7 @@ export namespace Prisma {
     fileUrl?: StringNullableFilter<"Message"> | string | null
     isRead?: BoolFilter<"Message"> | boolean
     sentAt?: DateTimeFilter<"Message"> | Date | string
+    clientId?: StringNullableFilter<"Message"> | string | null
     conversation?: XOR<ConversationScalarRelationFilter, ConversationWhereInput>
     sender?: XOR<UserScalarRelationFilter, UserWhereInput>
     MessageAttachment?: MessageAttachmentListRelationFilter
@@ -42839,6 +42854,7 @@ export namespace Prisma {
     fileUrl?: SortOrderInput | SortOrder
     isRead?: SortOrder
     sentAt?: SortOrder
+    clientId?: SortOrderInput | SortOrder
     conversation?: ConversationOrderByWithRelationInput
     sender?: UserOrderByWithRelationInput
     MessageAttachment?: MessageAttachmentOrderByRelationAggregateInput
@@ -42856,6 +42872,7 @@ export namespace Prisma {
     fileUrl?: StringNullableFilter<"Message"> | string | null
     isRead?: BoolFilter<"Message"> | boolean
     sentAt?: DateTimeFilter<"Message"> | Date | string
+    clientId?: StringNullableFilter<"Message"> | string | null
     conversation?: XOR<ConversationScalarRelationFilter, ConversationWhereInput>
     sender?: XOR<UserScalarRelationFilter, UserWhereInput>
     MessageAttachment?: MessageAttachmentListRelationFilter
@@ -42870,6 +42887,7 @@ export namespace Prisma {
     fileUrl?: SortOrderInput | SortOrder
     isRead?: SortOrder
     sentAt?: SortOrder
+    clientId?: SortOrderInput | SortOrder
     _count?: MessageCountOrderByAggregateInput
     _max?: MessageMaxOrderByAggregateInput
     _min?: MessageMinOrderByAggregateInput
@@ -42887,6 +42905,7 @@ export namespace Prisma {
     fileUrl?: StringNullableWithAggregatesFilter<"Message"> | string | null
     isRead?: BoolWithAggregatesFilter<"Message"> | boolean
     sentAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
+    clientId?: StringNullableWithAggregatesFilter<"Message"> | string | null
   }
 
   export type MessageAttachmentWhereInput = {
@@ -45331,6 +45350,7 @@ export namespace Prisma {
     fileUrl?: string | null
     isRead?: boolean
     sentAt?: Date | string
+    clientId?: string | null
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     sender: UserCreateNestedOneWithoutSentMessagesInput
     MessageAttachment?: MessageAttachmentCreateNestedManyWithoutMessageInput
@@ -45345,6 +45365,7 @@ export namespace Prisma {
     fileUrl?: string | null
     isRead?: boolean
     sentAt?: Date | string
+    clientId?: string | null
     MessageAttachment?: MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
   }
 
@@ -45355,6 +45376,7 @@ export namespace Prisma {
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     sender?: UserUpdateOneRequiredWithoutSentMessagesNestedInput
     MessageAttachment?: MessageAttachmentUpdateManyWithoutMessageNestedInput
@@ -45369,6 +45391,7 @@ export namespace Prisma {
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     MessageAttachment?: MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
   }
 
@@ -45381,6 +45404,7 @@ export namespace Prisma {
     fileUrl?: string | null
     isRead?: boolean
     sentAt?: Date | string
+    clientId?: string | null
   }
 
   export type MessageUpdateManyMutationInput = {
@@ -45390,6 +45414,7 @@ export namespace Prisma {
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MessageUncheckedUpdateManyInput = {
@@ -45401,6 +45426,7 @@ export namespace Prisma {
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MessageAttachmentCreateInput = {
@@ -48149,6 +48175,7 @@ export namespace Prisma {
     fileUrl?: SortOrder
     isRead?: SortOrder
     sentAt?: SortOrder
+    clientId?: SortOrder
   }
 
   export type MessageMaxOrderByAggregateInput = {
@@ -48160,6 +48187,7 @@ export namespace Prisma {
     fileUrl?: SortOrder
     isRead?: SortOrder
     sentAt?: SortOrder
+    clientId?: SortOrder
   }
 
   export type MessageMinOrderByAggregateInput = {
@@ -48171,6 +48199,7 @@ export namespace Prisma {
     fileUrl?: SortOrder
     isRead?: SortOrder
     sentAt?: SortOrder
+    clientId?: SortOrder
   }
 
   export type EnumMessageTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -53602,6 +53631,7 @@ export namespace Prisma {
     fileUrl?: string | null
     isRead?: boolean
     sentAt?: Date | string
+    clientId?: string | null
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     MessageAttachment?: MessageAttachmentCreateNestedManyWithoutMessageInput
   }
@@ -53614,6 +53644,7 @@ export namespace Prisma {
     fileUrl?: string | null
     isRead?: boolean
     sentAt?: Date | string
+    clientId?: string | null
     MessageAttachment?: MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
   }
 
@@ -54039,6 +54070,7 @@ export namespace Prisma {
     fileUrl?: StringNullableFilter<"Message"> | string | null
     isRead?: BoolFilter<"Message"> | boolean
     sentAt?: DateTimeFilter<"Message"> | Date | string
+    clientId?: StringNullableFilter<"Message"> | string | null
   }
 
   export type ConversationParticipantUpsertWithWhereUniqueWithoutUserInput = {
@@ -54239,6 +54271,7 @@ export namespace Prisma {
     fileUrl?: string | null
     isRead?: boolean
     sentAt?: Date | string
+    clientId?: string | null
     sender: UserCreateNestedOneWithoutSentMessagesInput
     MessageAttachment?: MessageAttachmentCreateNestedManyWithoutMessageInput
   }
@@ -54251,6 +54284,7 @@ export namespace Prisma {
     fileUrl?: string | null
     isRead?: boolean
     sentAt?: Date | string
+    clientId?: string | null
     MessageAttachment?: MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
   }
 
@@ -54744,6 +54778,7 @@ export namespace Prisma {
     fileUrl?: string | null
     isRead?: boolean
     sentAt?: Date | string
+    clientId?: string | null
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     sender: UserCreateNestedOneWithoutSentMessagesInput
   }
@@ -54757,6 +54792,7 @@ export namespace Prisma {
     fileUrl?: string | null
     isRead?: boolean
     sentAt?: Date | string
+    clientId?: string | null
   }
 
   export type MessageCreateOrConnectWithoutMessageAttachmentInput = {
@@ -54782,6 +54818,7 @@ export namespace Prisma {
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     sender?: UserUpdateOneRequiredWithoutSentMessagesNestedInput
   }
@@ -54795,6 +54832,7 @@ export namespace Prisma {
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserCreateWithoutConversationParticipantInput = {
@@ -60183,6 +60221,7 @@ export namespace Prisma {
     fileUrl?: string | null
     isRead?: boolean
     sentAt?: Date | string
+    clientId?: string | null
   }
 
   export type ConversationParticipantCreateManyUserInput = {
@@ -60648,6 +60687,7 @@ export namespace Prisma {
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     MessageAttachment?: MessageAttachmentUpdateManyWithoutMessageNestedInput
   }
@@ -60660,6 +60700,7 @@ export namespace Prisma {
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     MessageAttachment?: MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
   }
 
@@ -60671,6 +60712,7 @@ export namespace Prisma {
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ConversationParticipantUpdateWithoutUserInput = {
@@ -60699,6 +60741,7 @@ export namespace Prisma {
     fileUrl?: string | null
     isRead?: boolean
     sentAt?: Date | string
+    clientId?: string | null
   }
 
   export type ConversationParticipantCreateManyConversationInput = {
@@ -60714,6 +60757,7 @@ export namespace Prisma {
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     sender?: UserUpdateOneRequiredWithoutSentMessagesNestedInput
     MessageAttachment?: MessageAttachmentUpdateManyWithoutMessageNestedInput
   }
@@ -60726,6 +60770,7 @@ export namespace Prisma {
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     MessageAttachment?: MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
   }
 
@@ -60737,6 +60782,7 @@ export namespace Prisma {
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ConversationParticipantUpdateWithoutConversationInput = {

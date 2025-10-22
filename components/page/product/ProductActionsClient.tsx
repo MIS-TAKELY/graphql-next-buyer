@@ -1,7 +1,7 @@
 "use client";
 import { ProductActions } from "@/components/common/ProductActions";
 import QuantitySelector from "@/components/page/product/QuantitySelector";
-import WishlistShareButtons from "@/components/page/product/WishlistShareButtons";
+import WishlistShareButtons from "@/components/page/product/ProductActions";
 import { useWishlist } from "@/hooks/wishlist/useWishlist";
 import { useEffect, useState } from "react";
 

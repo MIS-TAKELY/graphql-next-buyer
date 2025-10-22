@@ -153,7 +153,8 @@ exports.Prisma.MessageScalarFieldEnum = {
   type: 'type',
   fileUrl: 'fileUrl',
   isRead: 'isRead',
-  sentAt: 'sentAt'
+  sentAt: 'sentAt',
+  clientId: 'clientId'
 };
 
 exports.Prisma.MessageAttachmentScalarFieldEnum = {

@@ -204,6 +204,7 @@ model Message {
   fileUrl        String? // For images/videos
   isRead         Boolean     @default(false)
   sentAt         DateTime    @default(now())
+  clientId       String?
 
   // Relations
   conversation      Conversation        @relation(fields: [conversationId], references: [id], onDelete: Cascade)
