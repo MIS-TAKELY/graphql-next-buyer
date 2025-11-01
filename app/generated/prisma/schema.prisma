@@ -394,25 +394,27 @@ model ReturnPolicy {
 }
 
 model Product {
-  id          String        @id @default(cuid())
-  sellerId    String
-  name        String
-  slug        String        @unique
-  description String?
-  status      ProductStatus @default(INACTIVE)
+  id           String        @id @default(cuid())
+  sellerId     String
+  name         String
+  slug         String        @unique
+  description  String?
+  status       ProductStatus @default(INACTIVE)
+  searchVector String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   // warranty     String?
 
-  seller          User             @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
+  seller          User                        @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
   variants        ProductVariant[]
   images          ProductImage[]
   reviews         Review[]
-  category        Category?        @relation(fields: [categoryId], references: [id])
+  category        Category?                   @relation(fields: [categoryId], references: [id])
   categoryId      String?
   // brand            Brand?            @relation(fields: [brandId], references: [id])
   brand           String
+  embedding       Unsupported("vector(384)")?
   // brandId          String?
   wishlistItems   WishlistItem[]
   productOffers   ProductOffer[]
