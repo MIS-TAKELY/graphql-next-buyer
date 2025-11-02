@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/webhook.js": {
+    "api/webhook.ts": {
       "maxDuration": 10
     },
     "app/**/*.{js,jsx,ts,tsx}": {
