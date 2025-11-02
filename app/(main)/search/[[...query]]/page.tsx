@@ -6,31 +6,41 @@ import ProductGrid from "@/components/search/ProductGrid";
 import SearchHeader from "@/components/search/SearchHeader";
 import SortBar from "@/components/search/SortBar";
 import { useSearch } from "@/hooks/search/useSearch";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-// Define types for product and filter data
-interface Product {
-  id: number;
-  name: string;
+interface Specification {
+  value: string;
+}
+
+interface Variant {
   price: number;
-  originalPrice: number;
-  discount: number;
-  image: string;
+  mrp: number;
+  specifications: Specification[];
+}
+
+interface Image {
+  altText: string;
+  url: string;
+}
+
+interface Review {
   rating: number;
-  ratings: number;
-  reviews: number;
-  category: string;
+}
+
+interface Category {
+  name: string;
+}
+
+interface SearchProduct {
+  name: string;
+  variants: Variant[];
+  images: Image[];
+  reviews: Review[];
+  description: string;
   brand: string;
-  inStock: boolean;
-  assured: boolean;
-  specs: string[];
-  stockInfo: string;
-  stockColor: string;
-  exchangeInfo: string;
-  exchangeColor: string;
-  network: string;
-  publishedDate: string;
+  slug: string;
+  category: Category;
 }
 
 const categories = [
@@ -59,10 +69,8 @@ const totalResults = 10677;
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const query = searchParams.get("q") || "";
-
-  const { searchProducts ,searchLoading} = useSearch(query);
+  const { searchProducts, searchLoading } = useSearch(query);
 
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 100000]);
@@ -71,95 +79,73 @@ export default function SearchPage() {
   const [selectedNetworks, setSelectedNetworks] = useState<string[]>([]);
   const [minRating, setMinRating] = useState(0);
   const [sortBy, setSortBy] = useState("relevance");
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<SearchProduct[]>([]);
 
-  // Transform searchProducts to match Product interface
   useEffect(() => {
     if (Array.isArray(searchProducts)) {
-      const transformedProducts: Product[] = searchProducts.map(
-        (product, index) => {
-          const variant = product.variants[0] || {
-            price: 0,
-            mrp: 0,
-            specifications: [],
-          };
-          const price = variant.price || 0;
-          const originalPrice = variant.mrp || price;
-          const discount =
-            originalPrice > price
-              ? Math.round(((originalPrice - price) / originalPrice) * 100)
-              : 0;
-
-          // Infer category and brand based on product name
-
-          return {
-            id: index + 1, // Simple ID based on index
-            name: product.name,
-            price,
-            originalPrice,
-            discount,
-            image: product.images[0]?.url || "/placeholder-image.jpg",
-            rating: 0, // No rating data provided
-            ratings: 0, // No ratings count provided
-            reviews: product.reviews.length,
-            description: product.description,
-            category: product.category.name,
-            brand: product.brand,
-            inStock: true, // Default
-            assured: false, // Default
-            specs: variant.specifications.map(
-              (spec: { value: string }) => spec.value
-            ),
-            slug:product.slug,
-            stockInfo: "", // No stock info provided
-            stockColor: "text-gray-500",
-            exchangeInfo: "", // No exchange info provided
-            exchangeColor: "text-gray-500",
-            network: "", // Assume network for Apple Watch
-            publishedDate: new Date().toISOString().split("T")[0], // Current date as fallback
-          };
-        }
-      );
+      const transformedProducts: SearchProduct[] = searchProducts.map((product, index) => ({
+        name: (product.name),
+        variants: product.variants.map((variant: any) => ({
+          price: variant.price || 0,
+          mrp: variant.mrp || variant.price || 0,
+          specifications: variant.specifications.map((spec: any) => ({
+            value: spec.value,
+          })),
+        })),
+        images: product.images.map((image: any) => ({
+          altText: image.altText,
+          url: image.url || "/placeholder-image.jpg",
+        })),
+        reviews: product.reviews.map((review: any) => ({
+          rating: review.rating || 0,
+        })),
+        description: product.description,
+        brand: product.brand,
+        slug: product.slug,
+        category: { name: product.category.name },
+      }));
 
       // Apply filtering
       let filtered = transformedProducts.filter((product) => {
-        const matchesPrice =
-          product.price >= priceRange[0] && product.price <= priceRange[1];
+        const price = product.variants[0]?.price || 0;
+        const rating =
+          product.reviews.length > 0
+            ? product.reviews.reduce((sum, review) => sum + review.rating, 0) /
+              product.reviews.length
+            : 0;
+        const matchesPrice = price >= priceRange[0] && price <= priceRange[1];
         const matchesCategory =
           selectedCategories.length === 0 ||
-          selectedCategories.includes(product.category);
+          selectedCategories.includes(product.category.name);
         const matchesBrand =
           selectedBrands.length === 0 || selectedBrands.includes(product.brand);
-        const matchesNetwork =
-          selectedNetworks.length === 0 ||
-          selectedNetworks.includes(product.network);
-        const matchesRating = product.rating >= minRating;
+        const matchesNetwork = selectedNetworks.length === 0; // Network not available
+        const matchesRating = rating >= minRating;
 
-        return (
-          matchesPrice &&
-          matchesCategory &&
-          matchesBrand &&
-          matchesNetwork &&
-          matchesRating
-        );
+        return matchesPrice && matchesCategory && matchesBrand && matchesNetwork && matchesRating;
       });
 
       // Apply sorting
       if (sortBy === "price-low") {
-        filtered.sort((a, b) => a.price - b.price);
+        filtered.sort((a, b) => (a.variants[0]?.price || 0) - (b.variants[0]?.price || 0));
       } else if (sortBy === "price-high") {
-        filtered.sort((a, b) => b.price - b.price);
+        filtered.sort((a, b) => (b.variants[0]?.price || 0) - (a.variants[0]?.price || 0));
       } else if (sortBy === "rating") {
-        filtered.sort((a, b) => b.rating - a.rating);
+        filtered.sort((a, b) => {
+          const aRating =
+            a.reviews.length > 0
+              ? a.reviews.reduce((sum, review) => sum + review.rating, 0) / a.reviews.length
+              : 0;
+          const bRating =
+            b.reviews.length > 0
+              ? b.reviews.reduce((sum, review) => sum + review.rating, 0) / b.reviews.length
+              : 0;
+          return bRating - aRating;
+        });
       } else if (sortBy === "popularity") {
-        filtered.sort((a, b) => b.ratings - a.ratings);
-      } else if (sortBy === "newest") {
-        filtered.sort(
-          (a, b) =>
-            new Date(b.publishedDate).getTime() -
-            new Date(a.publishedDate).getTime()
-        );
+        filtered.sort((a, b) => b.reviews.length - a.reviews.length);
       }
+      // Omit sorting by "newest" since publishedDate is not available
 
       setFilteredProducts(filtered);
     } else {
@@ -177,9 +163,7 @@ export default function SearchPage() {
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
     );
   };
 
@@ -191,9 +175,7 @@ export default function SearchPage() {
 
   const toggleNetwork = (network: string) => {
     setSelectedNetworks((prev) =>
-      prev.includes(network)
-        ? prev.filter((n) => n !== network)
-        : [...prev, network]
+      prev.includes(network) ? prev.filter((n) => n !== network) : [...prev, network]
     );
   };
 
@@ -257,7 +239,6 @@ export default function SearchPage() {
           />
           <ProductGrid
             products={filteredProducts}
-            router={router}
             loading={searchLoading}
             clearFilters={clearFilters}
           />

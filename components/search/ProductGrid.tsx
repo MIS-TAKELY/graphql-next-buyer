@@ -1,23 +1,49 @@
 import { Button } from "@/components/ui/button";
 import { Package } from "lucide-react";
-import { NextRouter } from "next/router";
 import ProductCard from "./ProductCard";
 import ProductCardSkeleton from "./ProductCardSkeleton";
-import { Product } from "./SearchPage";
+
+interface Specification {
+  value: string;
+}
+
+interface Variant {
+  price: number;
+  mrp: number;
+  specifications: Specification[];
+}
+
+interface Image {
+  altText: string;
+  url: string;
+}
+
+interface Review {
+  rating: number;
+}
+
+interface Category {
+  name: string;
+}
+
+interface SearchProduct {
+  name: string;
+  variants: Variant[];
+  images: Image[];
+  reviews: Review[];
+  description: string;
+  brand: string;
+  slug: string;
+  category: Category;
+}
 
 interface ProductGridProps {
-  products: Product[];
-  router: NextRouter;
+  products: SearchProduct[];
   clearFilters: () => void;
   loading?: boolean;
 }
 
-export default function ProductGrid({
-  products,
-  router,
-  clearFilters,
-  loading = false,
-}: ProductGridProps) {
+export default function ProductGrid({ products, clearFilters, loading = false }: ProductGridProps) {
   return (
     <main className="flex-1">
       {loading ? (
@@ -42,7 +68,7 @@ export default function ProductGrid({
       ) : (
         <div className="space-y-4">
           {products?.map((product) => (
-            <ProductCard key={product.id} product={product} router={router} />
+            <ProductCard key={product.slug} product={product} />
           ))}
         </div>
       )}

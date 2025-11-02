@@ -3,6 +3,88 @@ import { getCache, setCache } from "@/services/redis.services";
 
 export const productResolvers = {
   Query: {
+    getProducts: async (_: any, __: any) => {
+      const cacheKey = "products:all";
+
+      // Try cache for the list of product slugs
+      const cachedSlugs = await getCache<string[]>(`${cacheKey}:slugs`);
+      if (cachedSlugs) {
+        // Fetch individual produ
+        // cts from cache
+        const products = await Promise.all(
+          cachedSlugs.map(async (slug) => {
+            const productKey = `product:${slug}`;
+            const cachedProduct = await getCache<any>(productKey);
+            if (cachedProduct) {
+              console.log(`⚡Returning product ${slug} from Redis`);
+              // console.log("product---------------->", cachedProduct);
+
+              return cachedProduct;
+            }
+            // Fallback to DB if product not in cache
+            const product = await prisma.product.findUnique({
+              where: { slug },
+              include: {
+                seller: true,
+                variants: {
+                  include: {
+                    cartItems: { select: { userId: true, variantId: true } },
+                  },
+                },
+                images: true,
+                reviews: true,
+                category: { include: { children: true, parent: true } },
+                wishlistItems: true,
+              },
+            });
+            if (product) {
+              await setCache(productKey, product, 86400);
+            }
+            return product;
+          })
+        );
+        return products.filter((p) => p !== null);
+      }
+
+      // Query DB if slugs not cached
+      const products = await prisma.product.findMany({
+        where: {
+          status: "ACTIVE",
+        },
+        include: {
+          seller: true,
+          variants: {
+            include: {
+              cartItems: { select: { userId: true, variantId: true } },
+            },
+          },
+          productOffers: {
+            include: {
+              offer: true,
+            },
+          },
+          images: true,
+          reviews: true,
+          category: { include: { children: true, parent: true } },
+          wishlistItems: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+
+      // Cache individual products and slugs
+      await Promise.all(
+        products.map((product) =>
+          setCache(`product:${product.slug}`, product, 86400)
+        )
+      );
+      await setCache(
+        `${cacheKey}:slugs`,
+        products.map((p) => p.slug),
+        86400
+      );
+
+      return products;
+    },
     getProductBySlug: async (_: any, { slug }: { slug: string }) => {
       if (!slug) throw new Error("Slug is required");
 

@@ -98,11 +98,11 @@ export const searchResolvers = {
             select: {
               price: true,
               mrp: true,
-              
+
               specifications: {
-                select:{
-                  value:true
-                }
+                select: {
+                  value: true,
+                },
               },
             },
           },
@@ -116,14 +116,13 @@ export const searchResolvers = {
             select: { rating: true },
           },
           category: true,
-          
         },
       });
 
       const productMap = new Map(products.map((p) => [p.id, p]));
       const orderedProducts = productIds
         .map((id) => productMap.get(id))
-        .filter(Boolean)
+        .filter((p): p is NonNullable<typeof p> => Boolean(p))
         .map((p) => ({
           ...p,
           createdAt: p.createdAt.toISOString(),
