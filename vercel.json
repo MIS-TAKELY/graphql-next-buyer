@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "api/webhook.js": {
+      "maxDuration": 10
+    },
+    "app/**/*.{js,jsx,ts,tsx}": {
+      "maxDuration": 10
+    }
+  },
+  "buildCommand": "prisma generate && next build"
+}
