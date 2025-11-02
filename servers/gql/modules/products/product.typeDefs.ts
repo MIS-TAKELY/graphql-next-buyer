@@ -56,7 +56,6 @@ export const productTypeDefs = gql`
     getProducts: [Product!]!
     getProduct(productId: ID!): Product!
     getProductBySlug(slug: String!): Product!
-    # searchProducts(query: String!, limit: Int): [Product!]!
   }
 
   type Mutation {

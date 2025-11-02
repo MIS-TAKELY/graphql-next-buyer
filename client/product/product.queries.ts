@@ -44,9 +44,7 @@ export const GET_PRODUCT = gql`
       images {
         id
         url
-        fileType
         altText
-        mediaType
       }
       variants {
         price

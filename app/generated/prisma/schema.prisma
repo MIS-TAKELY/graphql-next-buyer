@@ -394,13 +394,13 @@ model ReturnPolicy {
 }
 
 model Product {
-  id           String        @id @default(cuid())
-  sellerId     String
-  name         String
-  slug         String        @unique
-  description  String?
-  status       ProductStatus @default(INACTIVE)
-  searchVector String?
+  id          String        @id @default(cuid())
+  sellerId    String
+  name        String
+  slug        String        @unique
+  description String?
+  status      ProductStatus @default(INACTIVE)
+  // searchVector String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -631,6 +631,7 @@ model Review {
 
   @@unique([userId, productId])
   @@index([productId, rating])
+  @@map("reviews")
 }
 
 model ReviewVote {

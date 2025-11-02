@@ -400,7 +400,7 @@ model Product {
   slug         String        @unique
   description  String?
   status       ProductStatus @default(INACTIVE)
-  searchVector String?
+  // searchVector String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -631,6 +631,7 @@ model Review {
 
   @@unique([userId, productId])
   @@index([productId, rating])
+  @@map("reviews")
 }
 
 model ReviewVote {
