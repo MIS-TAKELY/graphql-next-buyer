@@ -1,46 +1,59 @@
-// lib/embeddings.ts
+// scripts/index-embeddings.ts
+import { ProductForEmbedding } from "@/script/index-products";
+import { prisma } from "../lib/db/prisma";
+import { generateEmbedding } from "./embemdind";
 
-let extractor: any | null = null;
-let pipelineModule: any | null = null;
+async function indexAllProducts() {
+  console.log("Starting product embedding indexing...");
 
-async function loadPipeline() {
-  if (pipelineModule) return pipelineModule;
-  try {
-    // dynamic import so Vercel doesn't try to load native libs at build-time
-    pipelineModule = await import("@xenova/transformers");
-    return pipelineModule;
-  } catch (err) {
-    console.error(
-      "Could not import @xenova/transformers. Likely missing native libs. Falling back.",
-      err
-    );
-    pipelineModule = null;
-    return null;
+  const products = await prisma.$queryRaw<ProductForEmbedding[]>`
+  SELECT id, name, description, brand
+  FROM "products"
+  WHERE embedding IS NULL
+  LIMIT 1000
+`;
+
+  if (products.length === 0) {
+    console.log("All products already indexed!");
+    return;
   }
+
+  console.log(`Found ${products.length} products to index...`);
+
+  let successCount = 0;
+  let errorCount = 0;
+
+  for (const product of products) {
+    const text = `${product.name} ${product.description || ""} ${
+      product.brand
+    }`.trim();
+    if (!text) continue;
+
+    try {
+      const vector = await generateEmbedding(text);
+
+      await prisma.$executeRaw`
+        UPDATE "products"
+        SET embedding = ${vector}::vector
+        WHERE id = ${product.id}
+      `;
+
+      successCount++;
+      console.log(`Indexed: ${product.id}`);
+    } catch (error: any) {
+      errorCount++;
+      console.error(`Failed for ${product.id}:`, error.message || error);
+    }
+  }
+
+  console.log(`\nDone! Indexed: ${successCount}, Failed: ${errorCount}`);
 }
 
-async function initExtractor() {
-  if (extractor) return extractor;
-  const mod = await loadPipeline();
-  if (!mod || !mod.pipeline) {
-    // Not available in this environment
-    return null;
-  }
-  extractor = await mod.pipeline(
-    "feature-extraction",
-    "Xenova/all-MiniLM-L6-v2"
-  );
-  return extractor;
-}
-
-export async function generateEmbedding(
-  text: string
-): Promise<number[] | null> {
-  const e = await initExtractor();
-  if (!e) {
-    // fallback: return null so caller can either skip or use different embedding
-    return null;
-  }
-  const output = await e(text, { pooling: "mean", normalize: true });
-  return Array.from(output.data);
-}
+indexAllProducts()
+  .catch((e) => {
+    console.error("Script failed:", e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

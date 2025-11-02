@@ -1,36 +1,65 @@
-// scripts/index-products.ts
-import { generateEmbedding } from "@/lib/index-embedding";
-import { prisma } from "../lib/db/prisma";
+// scripts/index-embeddings.ts
+import { generateEmbedding } from "@/lib/embemdind";
+import { prisma } from "../lib/db/prisma"; // adjust path
+
+export type ProductForEmbedding = {
+  id: string;
+  name: string;
+  description: string | null;
+  brand: string;
+};
 
 async function indexAllProducts() {
-  const products = await prisma.$queryRaw`
-    SELECT id, name, description, brand
-    FROM "products"
-    WHERE embedding IS NULL
-    LIMIT 1000
-  `;
+  console.log("Starting product embedding indexing...");
 
-  for (const p of products as any) {
-    const text = `${p.name} ${p.description ?? ""} ${p.brand}`.trim();
-    if (!text) continue;
-    const vector = await generateEmbedding(text);
-    if (!vector) {
-      console.warn(
-        "Embedding generator not available in this environment — stopping indexing."
-      );
-      return;
-    }
-    await prisma.$executeRaw`
-      UPDATE "products"
-      SET embedding = ${vector}::vector
-      WHERE id = ${p.id}
-    `;
-    console.log("Indexed", p.id);
+  const products = await prisma.$queryRaw<ProductForEmbedding[]>`
+  SELECT id, name, description, brand
+  FROM "products"
+  WHERE embedding IS NULL
+  LIMIT 1000
+`;
+
+  if (products.length === 0) {
+    console.log("All products already indexed!");
+    return;
   }
-  await prisma.$disconnect();
+
+  console.log(`Found ${products.length} products to index...`);
+
+  let successCount = 0;
+  let errorCount = 0;
+
+  for (const product of products) {
+    const text = `${product.name} ${product.description || ""} ${
+      product.brand
+    }`.trim();
+    if (!text) continue;
+
+    try {
+      const vector = await generateEmbedding(text);
+
+      await prisma.$executeRaw`
+        UPDATE "products"
+        SET embedding = ${vector}::vector
+        WHERE id = ${product.id}
+      `;
+
+      successCount++;
+      console.log(`Indexed: ${product.id}`);
+    } catch (error) {
+      errorCount++;
+      console.error(`Failed for ${product.id}:`, error);
+    }
+  }
+
+  console.log(`\nDone! Indexed: ${successCount}, Failed: ${errorCount}`);
 }
 
-indexAllProducts().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+indexAllProducts()
+  .catch((e) => {
+    console.error("Script failed:", e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
