@@ -16,7 +16,7 @@ export default function BrandFilter({
     <div>
       <h3 className="font-medium text-sm mb-3 text-white">Brands</h3>
       <div className="space-y-2">
-        {brands.map((brand) => (
+        {brands?.map((brand) => (
           <div
             key={brand}
             className="flex items-center cursor-pointer hover:bg-gray-900 p-1 rounded transition-colors"

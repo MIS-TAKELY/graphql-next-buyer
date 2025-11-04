@@ -1,3 +1,4 @@
+// SearchPage.tsx
 "use client";
 import ActiveFilters from "@/components/search/ActiveFilters";
 import FilterSidebar from "@/components/search/FilterSidebar";
@@ -5,11 +6,13 @@ import Pagination from "@/components/search/Pagination";
 import ProductGrid from "@/components/search/ProductGrid";
 import SearchHeader from "@/components/search/SearchHeader";
 import SortBar from "@/components/search/SortBar";
+import { Filter, useDynamicSearchFilter } from "@/hooks/dynamicSeaarchFilter/useDynamicSearchFilter";
 import { useSearch } from "@/hooks/search/useSearch";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface Specification {
+  key: string;
   value: string;
 }
 
@@ -41,55 +44,69 @@ interface SearchProduct {
   brand: string;
   slug: string;
   category: Category;
+  [key: string]: any;
 }
 
-const categories = [
-  "Mobiles & Accessories",
-  "Electronics",
-  "Clothing",
-  "Toys",
-  "Fitness",
-  "Personal Care",
-  "Automotive",
-];
-const brands = [
-  "Apple",
-  "Google",
-  "MOTOROLA",
-  "vivo",
-  "OPPO",
-  "Infinix",
-  "Canon",
-  "Nike",
-  "Pantene",
-  "Marvel",
-];
-const networks = ["5G", "4G", "3G", "2G"];
 const totalResults = 10677;
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
+
   const { searchProducts, searchLoading } = useSearch(query);
+  const { dynamicSearchData, dynamicSearchFilterLoading } =
+    useDynamicSearchFilter(query);
 
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 100000]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [selectedNetworks, setSelectedNetworks] = useState<string[]>([]);
+  const [dynamicFilters, setDynamicFilters] = useState<{ [key: string]: string[] }>({});
   const [minRating, setMinRating] = useState(0);
   const [sortBy, setSortBy] = useState("relevance");
   const [filteredProducts, setFilteredProducts] = useState<SearchProduct[]>([]);
+  const [filterOptions, setFilterOptions] = useState<{ [key: string]: string[] }>({});
 
+  // Build filter options dynamically from API and products
+  useEffect(() => {
+    const options: { [key: string]: string[] } = {};
+
+    // Extract from dynamicSearchData (API-based)
+    console.log("filyters-->",dynamicSearchData?.filters)
+    if (dynamicSearchData?.filters) {
+      dynamicSearchData.filters.forEach((filter:Filter) => {
+        options[filter.key] = filter.options || [];
+      });
+    }
+
+    // Extract categories dynamically from products
+    if (Array.isArray(searchProducts)) {
+      const categoryValues = new Set<string>();
+      const brandValues = new Set<string>();
+
+      searchProducts.forEach((product: SearchProduct) => {
+        if (product.category?.name) categoryValues.add(product.category.name);
+        if (product.brand) brandValues.add(product.brand);
+      });
+
+      if (categoryValues.size > 0)
+        options["category"] = Array.from(categoryValues).sort();
+      if (brandValues.size > 0)
+        options["brand"] = Array.from(brandValues).sort();
+    }
+
+    setFilterOptions(options);
+  }, [searchProducts, dynamicSearchData]);
+
+  // Apply filtering logic
   useEffect(() => {
     if (Array.isArray(searchProducts)) {
-      const transformedProducts: SearchProduct[] = searchProducts.map((product, index) => ({
-        name: (product.name),
+      const transformedProducts: SearchProduct[] = searchProducts.map((product) => ({
+        name: product.name,
         variants: product.variants.map((variant: any) => ({
           price: variant.price || 0,
           mrp: variant.mrp || variant.price || 0,
           specifications: variant.specifications.map((spec: any) => ({
-            value: spec.value,
+            key: spec.key || "",
+            value: spec.value || "",
           })),
         })),
         images: product.images.map((image: any) => ({
@@ -102,10 +119,9 @@ export default function SearchPage() {
         description: product.description,
         brand: product.brand,
         slug: product.slug,
-        category: { name: product.category.name },
+        category: { name: product.category?.name },
       }));
 
-      // Apply filtering
       let filtered = transformedProducts.filter((product) => {
         const price = product.variants[0]?.price || 0;
         const rating =
@@ -113,86 +129,81 @@ export default function SearchPage() {
             ? product.reviews.reduce((sum, review) => sum + review.rating, 0) /
               product.reviews.length
             : 0;
+
         const matchesPrice = price >= priceRange[0] && price <= priceRange[1];
-        const matchesCategory =
-          selectedCategories.length === 0 ||
-          selectedCategories.includes(product.category.name);
-        const matchesBrand =
-          selectedBrands.length === 0 || selectedBrands.includes(product.brand);
-        const matchesNetwork = selectedNetworks.length === 0; // Network not available
         const matchesRating = rating >= minRating;
 
-        return matchesPrice && matchesCategory && matchesBrand && matchesNetwork && matchesRating;
+        const matchesDynamicFilters = Object.keys(dynamicFilters).every((key) => {
+          const selectedValues = dynamicFilters[key] || [];
+          if (selectedValues.length === 0) return true;
+
+          if (key === "brand") return selectedValues.includes(product.brand);
+          if (key === "category") return selectedValues.includes(product.category.name);
+
+          return product.variants.some((variant) =>
+            variant.specifications.some(
+              (spec) => spec.key === key && selectedValues.includes(spec.value)
+            )
+          );
+        });
+
+        return matchesPrice && matchesRating && matchesDynamicFilters;
       });
 
-      // Apply sorting
-      if (sortBy === "price-low") {
-        filtered.sort((a, b) => (a.variants[0]?.price || 0) - (b.variants[0]?.price || 0));
-      } else if (sortBy === "price-high") {
-        filtered.sort((a, b) => (b.variants[0]?.price || 0) - (a.variants[0]?.price || 0));
-      } else if (sortBy === "rating") {
+      // Sorting logic
+      if (sortBy === "price-low")
+        filtered.sort(
+          (a, b) => (a.variants[0]?.price || 0) - (b.variants[0]?.price || 0)
+        );
+      else if (sortBy === "price-high")
+        filtered.sort(
+          (a, b) => (b.variants[0]?.price || 0) - (a.variants[0]?.price || 0)
+        );
+      else if (sortBy === "rating")
         filtered.sort((a, b) => {
           const aRating =
             a.reviews.length > 0
-              ? a.reviews.reduce((sum, review) => sum + review.rating, 0) / a.reviews.length
+              ? a.reviews.reduce((sum, r) => sum + r.rating, 0) / a.reviews.length
               : 0;
           const bRating =
             b.reviews.length > 0
-              ? b.reviews.reduce((sum, review) => sum + review.rating, 0) / b.reviews.length
+              ? b.reviews.reduce((sum, r) => sum + r.rating, 0) / b.reviews.length
               : 0;
           return bRating - aRating;
         });
-      } else if (sortBy === "popularity") {
+      else if (sortBy === "popularity")
         filtered.sort((a, b) => b.reviews.length - a.reviews.length);
-      }
-      // Omit sorting by "newest" since publishedDate is not available
 
       setFilteredProducts(filtered);
     } else {
       setFilteredProducts([]);
     }
-  }, [
-    searchProducts,
-    priceRange,
-    selectedCategories,
-    selectedBrands,
-    selectedNetworks,
-    minRating,
-    sortBy,
-  ]);
+  }, [searchProducts, priceRange, dynamicFilters, minRating, sortBy]);
 
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
-    );
-  };
-
-  const toggleBrand = (brand: string) => {
-    setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
-    );
-  };
-
-  const toggleNetwork = (network: string) => {
-    setSelectedNetworks((prev) =>
-      prev.includes(network) ? prev.filter((n) => n !== network) : [...prev, network]
-    );
+  const toggleFilter = (key: string, value: string) => {
+    setDynamicFilters((prev) => {
+      const currentValues = prev[key] || [];
+      return currentValues.includes(value)
+        ? { ...prev, [key]: currentValues.filter((v) => v !== value) }
+        : { ...prev, [key]: [...currentValues, value] };
+    });
   };
 
   const clearFilters = () => {
     setPriceRange([0, 100000]);
-    setSelectedCategories([]);
-    setSelectedBrands([]);
-    setSelectedNetworks([]);
+    setDynamicFilters({});
     setMinRating(0);
   };
 
   const activeFiltersCount =
-    selectedCategories.length +
-    selectedBrands.length +
-    selectedNetworks.length +
+    Object.values(dynamicFilters).reduce((sum, v) => sum + v.length, 0) +
     (minRating > 0 ? 1 : 0) +
     (priceRange[0] !== 0 || priceRange[1] !== 100000 ? 1 : 0);
+
+  const selectedCategories = dynamicFilters["category"] || [];
+  const selectedBrands = dynamicFilters["brand"] || [];
+  const categories = filterOptions["category"] || [];
+  const brands = filterOptions["brand"] || [];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -203,15 +214,13 @@ export default function SearchPage() {
           totalResults={totalResults}
         />
         <ActiveFilters
-          selectedCategories={selectedCategories}
-          selectedBrands={selectedBrands}
-          selectedNetworks={selectedNetworks}
+          dynamicFilters={dynamicFilters}
           minRating={minRating}
-          toggleCategory={toggleCategory}
-          toggleBrand={toggleBrand}
-          toggleNetwork={toggleNetwork}
+          toggleFilter={toggleFilter}
           setMinRating={setMinRating}
           clearFilters={clearFilters}
+          filterOptions={filterOptions}
+          dynamicSearchData={dynamicSearchData}
         />
         <SortBar
           sortBy={sortBy}
@@ -226,16 +235,17 @@ export default function SearchPage() {
             priceRange={priceRange}
             setPriceRange={setPriceRange}
             selectedCategories={selectedCategories}
-            toggleCategory={toggleCategory}
+            toggleCategory={(c) => toggleFilter("category", c)}
             selectedBrands={selectedBrands}
-            toggleBrand={toggleBrand}
-            selectedNetworks={selectedNetworks}
-            toggleNetwork={toggleNetwork}
+            toggleBrand={(b) => toggleFilter("brand", b)}
             minRating={minRating}
             setMinRating={setMinRating}
             categories={categories}
             brands={brands}
-            networks={networks}
+            dynamicFilters={dynamicFilters}
+            toggleFilter={toggleFilter}
+            filterOptions={filterOptions}
+            dynamicSearchData={dynamicSearchData}
           />
           <ProductGrid
             products={filteredProducts}

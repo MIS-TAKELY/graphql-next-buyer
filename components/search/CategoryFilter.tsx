@@ -16,7 +16,7 @@ export default function CategoryFilter({
     <div>
       <h3 className="font-medium text-sm mb-3 text-white">Categories</h3>
       <div className="space-y-2">
-        {categories.map((category) => (
+        {categories?.map((category) => (
           <div
             key={category}
             className="flex items-center cursor-pointer hover:bg-gray-900 p-1 rounded transition-colors"

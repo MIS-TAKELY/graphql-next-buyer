@@ -36,6 +36,7 @@
     "@upstash/realtime": "^0.2.4",
     "@upstash/redis": "^1.35.5",
     "@xenova/transformers": "^2.17.2",
+    "axios": "^1.13.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dot": "^1.1.3",

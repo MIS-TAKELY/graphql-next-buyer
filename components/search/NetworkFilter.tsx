@@ -13,7 +13,7 @@ export default function NetworkFilter({
     <div>
       <h3 className="font-medium text-sm mb-3 text-white">Network Type</h3>
       <div className="flex flex-wrap gap-2">
-        {networks.map((network) => (
+        {networks?.map((network) => (
           <button
             key={network}
             onClick={() => toggleNetwork(network)}
