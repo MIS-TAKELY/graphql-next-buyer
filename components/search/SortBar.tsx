@@ -27,26 +27,26 @@ export default function SortBar({
   ];
 
   return (
-    <div className="mb-6 flex items-center justify-between gap-4">
+    <div className="mb-4 flex items-center justify-between gap-3">
       <Button
         variant="outline"
         onClick={() => setShowFilters(!showFilters)}
-        className="lg:hidden"
+        className="lg:hidden p-2 text-xs"
       >
-        <Filter className="w-4 h-4 mr-2" />
+        <Filter className="w-3 h-3 mr-1" />
         Filters
         {activeFiltersCount > 0 && (
-          <Badge variant="secondary" className="ml-2 text-xs">
+          <Badge variant="secondary" className="ml-1 text-xs">
             {activeFiltersCount}
           </Badge>
         )}
       </Button>
-      <div className="flex items-center gap-2 overflow-x-auto">
+      <div className="flex items-center gap-2 overflow-x-auto scrollbar-hidden">
         {sortOptions.map((option) => (
           <button
             key={option.value}
             onClick={() => setSortBy(option.value)}
-            className={`px-3 py-1.5 rounded-md text-sm whitespace-nowrap transition-colors ${
+            className={`px-2 py-1 rounded-md text-xs whitespace-nowrap transition-colors ${
               sortBy === option.value
                 ? "bg-blue-600 text-white"
                 : "bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700"

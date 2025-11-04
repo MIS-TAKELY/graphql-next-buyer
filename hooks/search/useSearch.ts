@@ -10,7 +10,7 @@ export const useSearch = (query?: string) => {
     variables: {
       query: query,
     },
-    fetchPolicy: "no-cache",
+    fetchPolicy: "cache-first",
   });
 
   if (searchQueryLoading) console.log("loading-->");

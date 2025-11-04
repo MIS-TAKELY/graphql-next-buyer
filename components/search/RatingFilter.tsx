@@ -11,15 +11,14 @@ export default function RatingFilter({
   setMinRating,
 }: RatingFilterProps) {
   const ratings = [4, 3, 2, 1];
-
   return (
     <div>
-      <h3 className="font-medium text-sm mb-3 text-gray-900 dark:text-white">Rating</h3>
-      <div className="space-y-2">
+      <h3 className="font-medium text-sm text-gray-900 dark:text-white mb-2">Rating</h3>
+      <div className="space-y-1">
         {ratings.map((rating) => (
           <div
             key={rating}
-            className="flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 p-1 rounded transition-colors"
+            className="flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 p-1 rounded"
             onClick={() => setMinRating(rating === minRating ? 0 : rating)}
           >
             <Checkbox
@@ -27,7 +26,7 @@ export default function RatingFilter({
               checked={minRating === rating}
               className="border-gray-300 dark:border-gray-600"
             />
-            <div className="ml-2 flex items-center gap-1 text-sm">
+            <div className="ml-2 flex items-center gap-1 text-xs">
               <div className="flex">
                 {Array.from({ length: rating }).map((_, i) => (
                   <Star
