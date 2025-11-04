@@ -12,6 +12,8 @@ export default function BrandFilter({
   selectedBrands,
   toggleBrand,
 }: BrandFilterProps) {
+
+  // console.log("brands",brands)
   return (
     <div>
       <h3 className="font-medium text-sm mb-3 text-white">Brands</h3>

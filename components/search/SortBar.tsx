@@ -49,7 +49,7 @@ export default function SortBar({
             className={`px-3 py-1.5 rounded-md text-sm whitespace-nowrap transition-colors ${
               sortBy === option.value
                 ? "bg-blue-600 text-white"
-                : "bg-gray-900 text-white hover:bg-gray-900 border border-gray-700"
+                : "bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700"
             }`}
           >
             {option.label}

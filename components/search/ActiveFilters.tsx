@@ -25,23 +25,23 @@ export default function ActiveFilters({
         values.map((value) => (
           <div
             key={`${key}-${value}`}
-            className="flex items-center bg-gray-800 text-white px-3 py-1 rounded-full text-sm"
+            className="flex items-center bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-1 rounded-full text-sm"
           >
             <span>
               {dynamicSearchData?.filters.find((f) => f.key === key)?.label || key}: {value}
             </span>
             <X
-              className="ml-2 w-4 h-4 cursor-pointer"
+              className="ml-2 w-4 h-4 cursor-pointer hover:text-red-500"
               onClick={() => toggleFilter(key, value)}
             />
           </div>
         ))
       )}
       {minRating > 0 && (
-        <div className="flex items-center bg-gray-800 text-white px-3 py-1 rounded-full text-sm">
+        <div className="flex items-center bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-1 rounded-full text-sm">
           <span>Rating: {minRating} & up</span>
           <X
-            className="ml-2 w-4 h-4 cursor-pointer"
+            className="ml-2 w-4 h-4 cursor-pointer hover:text-red-500"
             onClick={() => setMinRating(0)}
           />
         </div>
@@ -49,7 +49,7 @@ export default function ActiveFilters({
       {Object.keys(dynamicFilters).length > 0 || minRating > 0 ? (
         <button
           onClick={clearFilters}
-          className="text-sm text-blue-500 hover:underline"
+          className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
         >
           Clear All
         </button>
