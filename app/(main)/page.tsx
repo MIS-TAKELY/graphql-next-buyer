@@ -1,5 +1,6 @@
 // pages/index.tsx
 import { GET_PRODUCTS } from "@/client/product/product.queries";
+import Main from "@/components/landingPage/Main";
 import HeroCarousel from "@/components/page/home/HeroCarousel";
 import ProductCatagoryCardSection from "@/components/page/home/ProductCatagoryCardSection";
 import ProductSection from "@/components/page/home/ProductSection";
@@ -18,11 +19,13 @@ type SectionConfig = {
 
 export default async function HomePage() {
   const client = await getServerApolloClient();
+
   const productsResponse = await client.query({
     query: GET_PRODUCTS,
     fetchPolicy: "no-cache",
     errorPolicy: "all",
   });
+
   console.log("productsresponse-->", productsResponse);
 
   const products = productsResponse?.data?.getProducts || [];
@@ -53,10 +56,11 @@ export default async function HomePage() {
   console.log("products-->", products);
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="bg-muted min-h-screen">
       <ProductCatagoryCardSection />
       <HeroCarousel />
-      <div className="max-w-[1800px] mx-auto px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-2 xs:py-4 sm:py-6 lg:py-8">
+      <Main />
+      <div className="ultra-wide-container py-2 xs:py-4 sm:py-6 lg:py-8">
         <SSRApolloProvider initialData={{ products }}>
           {sections.map((section) => (
             <ProductSection

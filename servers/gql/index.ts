@@ -15,6 +15,8 @@ import { conversationTypedefs } from "./modules/conversation/conversaton.typeDef
 import { deliveryTypedefs } from "./modules/delivery/delivery.typeDefs";
 import { filterResolvers } from "./modules/filter/filter.resolvers";
 import { filterTypeDefs } from "./modules/filter/filter.typeDefs";
+import { topDealsResolvers } from "./modules/landingPage/topDeals/topDeals.resolvers";
+import { topDealsTypeDefs } from "./modules/landingPage/topDeals/topDeals.typeDefs";
 import { messageResolvers } from "./modules/message/message.resolvers";
 import { messageTypedefs } from "./modules/message/message.typeDefs";
 import { offerTypeDefs } from "./modules/offer/offer.typedefs";
@@ -85,6 +87,7 @@ const typeDefs = mergeTypeDefs([
   conversationTypedefs,
   searchTypeDef,
   filterTypeDefs,
+  topDealsTypeDefs,
 ]);
 
 const resolvers = mergeResolvers([
@@ -103,6 +106,7 @@ const resolvers = mergeResolvers([
   messageResolvers,
   searchResolvers,
   filterResolvers,
+  topDealsResolvers,
 ]);
 
 export const schema = makeExecutableSchema({ typeDefs, resolvers });

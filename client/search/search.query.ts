@@ -29,3 +29,9 @@ export const MAKE_SEARCH_QUERY = gql`
     }
   }
 `;
+
+export const GET_SEARCH_SUGGESTIONS = gql`
+  query SearchSuggestions($query: String!) {
+    searchSuggestions(query: $query)
+  }
+`;

@@ -120,7 +120,7 @@ const ProductCard = memo<ProductCardProps>(
                       </span>
 
                       {/* Optional Discount % */}
-                      <span className="text-xs font-medium text-green-600 dark:text-green-400">
+                      <span className="text-xs font-medium text-[#2ecc71]">
                         {Math.round(
                           ((productData.mrp - productData.price) /
                             productData.mrp) *

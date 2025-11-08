@@ -17,22 +17,26 @@
 /* ---------------- Theme ---------------- */
 @theme inline {
   /* Breakpoints */
-  --breakpoint-xs: 480px;
+  --breakpoint-xs: 360px; /* Adjusted for smaller mobile screens */
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
-  --breakpoint-3xl: 1800px;
-  --breakpoint-4xl: 2048px;
+  --breakpoint-3xl: 1920px; /* Adjusted for modern wide screens */
+  --breakpoint-4xl: 2560px; /* Support for 4K displays */
 
   /* Container */
   --width-container: 100%;
-  --width-2xl-container: 1400px;
+  --width-2xl-container: 1440px; /* Slightly increased for better content spread */
+  --width-3xl-container: 1800px; /* Added for ultra-wide screens */
 
   /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-size-base: 1rem; /* Added for responsive typography */
+  --font-size-sm: 0.875rem;
+  --font-size-xs: 0.75rem;
 
   /* Border Radius */
   --radius-sm: calc(var(--radius) - 4px);
@@ -44,7 +48,7 @@
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
 
-  /* Core Colors (mapped from root variables) */
+  /* Core Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-border: var(--border);
@@ -115,7 +119,7 @@
 /* ---------------- Root Variables ---------------- */
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: oklch(0.922 0 0);
   --foreground: oklch(0.145 0 0);
 
   --card: oklch(1 0 0);
@@ -171,9 +175,8 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-/* Dark mode overrides */
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: #2C2C2C;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -233,7 +236,18 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased font-sans;
+    font-size: var(--font-size-base);
+  }
+  @media (max-width: 360px) {
+    body {
+      font-size: var(--font-size-xs);
+    }
+  }
+  @media (min-width: 361px) and (max-width: 640px) {
+    body {
+      font-size: var(--font-size-sm);
+    }
   }
 }
 
@@ -241,8 +255,9 @@
 @layer utilities {
   /* Scrollbar Hide */
   .scrollbar-hide {
-    -ms-overflow-style: none; /* IE & Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain; /* Prevent pull-to-refresh interference */
   }
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
@@ -252,20 +267,26 @@
   .horizontal-scroll {
     scrollbar-width: thin;
     scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   }
   .horizontal-scroll::-webkit-scrollbar {
-    height: 6px;
+    height: 5px; /* Thinner scrollbar for mobile */
   }
   .horizontal-scroll::-webkit-scrollbar-track {
-    background: rgba(243, 244, 246, 0.5);
-    border-radius: 3px;
+    background: rgba(243, 244, 246, 0.3);
+    border-radius: 4px;
   }
   .horizontal-scroll::-webkit-scrollbar-thumb {
-    background: rgba(156, 163, 175, 0.5);
-    border-radius: 3px;
+    background: rgba(156, 163, 175, 0.6);
+    border-radius: 4px;
   }
   .horizontal-scroll::-webkit-scrollbar-thumb:hover {
-    background: rgba(107, 114, 128, 0.7);
+    background: rgba(107, 114, 128, 0.8);
+  }
+  @media (max-width: 640px) {
+    .horizontal-scroll::-webkit-scrollbar {
+      height: 4px; /* Even thinner for small screens */
+    }
   }
 
   /* Text Clamping */
@@ -293,29 +314,52 @@
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1rem; /* Reduced for smaller screens */
+    padding-right: 1rem;
+  }
+  @media (min-width: 360px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .container {
+      max-width: 1280px;
+    }
   }
   @media (min-width: 1536px) {
     .container {
-      max-width: 1400px;
+      max-width: var(--width-2xl-container); /* 1440px */
+    }
+  }
+  @media (min-width: 1920px) {
+    .container {
+      max-width: var(--width-3xl-container); /* 1800px */
     }
   }
 
   /* Ultra-Wide Container */
-  @media (min-width: 1800px) {
+  @media (min-width: 1920px) {
     .ultra-wide-container {
       max-width: 1800px;
       margin-left: auto;
       margin-right: auto;
-      padding-left: 4rem;
-      padding-right: 4rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
     }
   }
-  @media (min-width: 2048px) {
+  @media (min-width: 2560px) {
     .ultra-wide-container {
-      padding-left: 6rem;
-      padding-right: 6rem;
+      max-width: 2200px; /* Support for 4K+ screens */
+      padding-left: 3rem;
+      padding-right: 3rem;
     }
   }
 
@@ -327,16 +371,49 @@
     animation: accordion-up 0.2s ease-out;
   }
 
-  /* Extra Custom Utilities */
+  /* Responsive Shadows */
   .card-shadow {
-    @apply shadow-md hover:shadow-lg transition-shadow duration-200;
+    @apply shadow-sm sm:shadow-md hover:shadow-md sm:hover:shadow-lg transition-shadow duration-200;
   }
+
+  /* Responsive Buttons */
   .btn-rounded {
-    @apply rounded-full px-4 py-2;
+    @apply rounded-full px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base;
+    min-width: 2.5rem; /* Ensure touch-friendly size */
   }
+
+  /* Text Gradient */
   .text-gradient {
     background: linear-gradient(to right, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  /* Responsive Spacing Utilities */
+  .gap-1 {
+    gap: 0.25rem;
+  }
+  .gap-2 {
+    gap: 0.5rem;
+  }
+  .gap-3 {
+    gap: 0.75rem;
+  }
+  .gap-4 {
+    gap: 1rem;
+  }
+  @media (max-width: 360px) {
+    .gap-1 {
+      gap: 0.125rem;
+    }
+    .gap-2 {
+      gap: 0.25rem;
+    }
+    .gap-3 {
+      gap: 0.5rem;
+    }
+    .gap-4 {
+      gap: 0.75rem;
+    }
   }
 }

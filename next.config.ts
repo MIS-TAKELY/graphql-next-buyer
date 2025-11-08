@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com", // ✅ Added Unsplash
       },
+      { protocol: "https", hostname: "placehold.co" },
     ],
   },
   eslint: {

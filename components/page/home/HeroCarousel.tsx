@@ -145,7 +145,7 @@ export default function HeroCarousel() {
 
   return (
     <div
-      className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] xl:h-[80vh] max-h-[600px] overflow-hidden bg-gradient-to-r from-primary to-secondary dark:from-gray-800 dark:to-gray-900"
+      className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] xl:h-[80vh] max-h-[300px] overflow-hidden bg-gradient-to-r from-primary to-secondary dark:from-gray-800 dark:to-gray-900"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
