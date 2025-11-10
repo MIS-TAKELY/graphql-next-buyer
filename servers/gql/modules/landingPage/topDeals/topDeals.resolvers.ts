@@ -1,12 +1,110 @@
-import { Prisma } from "@/app/generated/prisma";
+import { Category, Prisma, ProductVariant } from "@/app/generated/prisma";
 import { detectCategory } from "@/filter/detectCategory";
 import { prisma } from "@/lib/db/prisma";
 import { generateEmbedding } from "@/lib/embemdind";
 import { GraphQLContext } from "@/servers/gql/context";
-import { getCache, setCache } from "@/services/redis.services";
+
+// Type definitions for our custom return types
+interface CategoryWithId {
+  id: string;
+}
+
+interface ProductIdWithSimilarity {
+  id: string;
+  similarity: number;
+}
+
+interface VariantWithDeals extends ProductVariant {
+  finalPrice: number;
+  discountAmount: number;
+  discountPercentage: number;
+  specifications?: Array<{
+    key: string;
+    value: string;
+  }>;
+}
+
+interface ProductWithDetails {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  brand: string;
+  variants: Array<{
+    id: string;
+    sku: string;
+    price: Prisma.Decimal;
+    mrp: Prisma.Decimal;
+    stock: number;
+    specifications: Array<{
+      key: string;
+      value: string;
+    }>;
+  }>;
+  images: Array<{
+    url: string;
+    altText: string | null;
+  }>;
+  category: {
+    id: string;
+    name: string;
+    children: Array<{
+      name: string;
+    }>;
+  } | null;
+  productOffers: Array<{
+    offer: {
+      id: string;
+      title: string;
+      type: string;
+      value: Prisma.Decimal;
+    };
+  }>;
+  reviews: Array<{
+    rating: number;
+  }>;
+}
+
+interface TopDealProduct {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  brand: string;
+  imageUrl: string | null;
+  imageAltText: string | null;
+  saveUpTo: number;
+  discountPercentage: number;
+  avgRating: number;
+  category: {
+    id: string;
+    name: string;
+    children: Array<{
+      name: string;
+    }>;
+  } | null;
+  variants: VariantWithDeals[];
+  productOffers: Array<{
+    offer: {
+      id: string;
+      title: string;
+      type: string;
+      value: Prisma.Decimal;
+    };
+  }>;
+  reviews: Array<{
+    rating: number;
+  }>;
+  images: Array<{
+    url: string;
+    altText: string | null;
+  }>;
+}
 
 // Helper function to get top-level parent category
-async function getTopLevelParentCategory(categoryId: string) {
+async function getTopLevelParentCategory(
+  categoryId: string
+): Promise<Pick<Category, "id" | "name" | "parentId"> | null> {
   let currentCategory = await prisma.category.findUnique({
     where: { id: categoryId },
     select: {
@@ -22,8 +120,8 @@ async function getTopLevelParentCategory(categoryId: string) {
 
   // Traverse up the hierarchy until we find a category with no parent
   let maxDepth = 10; // Prevent infinite loops
-  while (currentCategory.parentId && maxDepth > 0) {
-    const parent = await prisma.category.findUnique({
+  while (currentCategory && currentCategory.parentId && maxDepth > 0) {
+    const parent:any = await prisma.category.findUnique({
       where: { id: currentCategory.parentId },
       select: {
         id: true,
@@ -47,7 +145,7 @@ async function getTopLevelParentCategory(categoryId: string) {
 async function getAllDescendantCategoryIds(
   categoryId: string
 ): Promise<string[]> {
-  const categories = await prisma.$queryRaw<Array<{ id: string }>>(
+  const categories = await prisma.$queryRaw<CategoryWithId[]>(
     Prisma.sql`
       WITH RECURSIVE category_tree AS (
         -- Base case: start with the given category
@@ -70,22 +168,19 @@ async function getAllDescendantCategoryIds(
   return categories.map((c) => c.id);
 }
 
+interface TopDealsArgs {
+  topDealAbout: string;
+  limit: number;
+}
+
 export const topDealsResolvers = {
   Query: {
     getTopDealsaveUpTo: async (
-      _: any,
-      { topDealAbout, limit }: { topDealAbout: string; limit: number },
+      _: unknown,
+      { topDealAbout, limit }: TopDealsArgs,
       ctx: GraphQLContext
-    ) => {
+    ): Promise<TopDealProduct[]> => {
       // Step 1: Detect category from the query using AI
-      // const cacheKey = `topDealAbout:${topDealAbout.trim().toLowerCase()}`;
-      // const cached = await getCache(cacheKey);
-
-      // if (cached) {
-      //   console.log(`⚡returning topdeals on ${topDealAbout} from cache`);
-      //   return cached;
-      // }
-
       const detectedCategory = await detectCategory(topDealAbout);
       console.log("🎯 Detected category:", detectedCategory);
 
@@ -140,9 +235,7 @@ export const topDealsResolvers = {
       const vectorString = `[${vector.join(",")}]`;
 
       // Step 6: Vector search within the top-level category and its descendants
-      const idResults = await prisma.$queryRaw<
-        Array<{ id: string; similarity: number }>
-      >(
+      const idResults = await prisma.$queryRaw<ProductIdWithSimilarity[]>(
         Prisma.sql`
           SELECT 
             id::text,
@@ -171,8 +264,8 @@ export const topDealsResolvers = {
 
       const productIds = idResults.map((p) => p.id);
 
-      // Step 7: Fetch full product details
-      const products = await prisma.product.findMany({
+      // Step 7: Fetch full product details with proper typing
+      const products = (await prisma.product.findMany({
         where: {
           id: { in: productIds },
           status: "ACTIVE",
@@ -212,11 +305,11 @@ export const topDealsResolvers = {
             select: {
               id: true,
               name: true,
-              children:{
-                select:{
-                  name:true
-                }
-              }
+              children: {
+                select: {
+                  name: true,
+                },
+              },
             },
           },
           productOffers: {
@@ -243,42 +336,45 @@ export const topDealsResolvers = {
             select: { rating: true },
           },
         },
-      });
+      })) as ProductWithDetails[];
 
       console.log(`📦 Retrieved ${products.length} full product records`);
 
       // Step 8: Calculate deals for each product
-      const productsWithDeals = products
-        .map((product) => {
+      const productsWithDeals: TopDealProduct[] = products
+        .map((product): TopDealProduct | null => {
           if (!product.variants?.length) return null;
 
-          const variantsWithDeals = product.variants.map((variant) => {
-            const price = Number(variant.price);
-            const mrp = Number(variant.mrp);
-            let finalPrice = price;
-            let discountAmount = mrp - price;
-            let discountPercentage = mrp > 0 ? ((mrp - price) / mrp) * 100 : 0;
+          const variantsWithDeals: VariantWithDeals[] = product.variants.map(
+            (variant) => {
+              const price = Number(variant.price);
+              const mrp = Number(variant.mrp);
+              let finalPrice = price;
+              let discountAmount = mrp - price;
+              let discountPercentage =
+                mrp > 0 ? ((mrp - price) / mrp) * 100 : 0;
 
-            const offer = product.productOffers?.[0]?.offer;
-            if (offer) {
-              if (offer.type === "PERCENTAGE") {
-                const offerDiscount = (price * Number(offer.value)) / 100;
-                finalPrice = price - offerDiscount;
-                discountAmount += offerDiscount;
-              } else if (offer.type === "FIXED_AMOUNT") {
-                finalPrice = Math.max(0, price - Number(offer.value));
-                discountAmount += Number(offer.value);
+              const offer = product.productOffers?.[0]?.offer;
+              if (offer) {
+                if (offer.type === "PERCENTAGE") {
+                  const offerDiscount = (price * Number(offer.value)) / 100;
+                  finalPrice = price - offerDiscount;
+                  discountAmount += offerDiscount;
+                } else if (offer.type === "FIXED_AMOUNT") {
+                  finalPrice = Math.max(0, price - Number(offer.value));
+                  discountAmount += Number(offer.value);
+                }
+                discountPercentage = mrp > 0 ? (discountAmount / mrp) * 100 : 0;
               }
-              discountPercentage = mrp > 0 ? (discountAmount / mrp) * 100 : 0;
-            }
 
-            return {
-              ...variant,
-              finalPrice: Math.round(finalPrice * 100) / 100,
-              discountAmount: Math.round(discountAmount * 100) / 100,
-              discountPercentage: Math.round(discountPercentage),
-            };
-          });
+              return {
+                ...variant,
+                finalPrice: Math.round(finalPrice * 100) / 100,
+                discountAmount: Math.round(discountAmount * 100) / 100,
+                discountPercentage: Math.round(discountPercentage),
+              } as VariantWithDeals;
+            }
+          );
 
           const bestVariant = variantsWithDeals.reduce((best, current) =>
             current.discountPercentage > best.discountPercentage
@@ -300,17 +396,15 @@ export const topDealsResolvers = {
             saveUpTo: bestVariant.discountAmount,
             discountPercentage: bestVariant.discountPercentage,
             avgRating: Math.round(avgRating * 10) / 10,
-          };
+            variants: variantsWithDeals,
+          } as TopDealProduct;
         })
-        .filter((p) => p !== null && p.saveUpTo > 0)
-        .sort((a, b) => b!.saveUpTo - a!.saveUpTo)
+        .filter((p): p is TopDealProduct => p !== null && p.saveUpTo > 0)
+        .sort((a, b) => a.saveUpTo - b.saveUpTo)
         .slice(0, limit);
 
       console.log("productsWithDeals-->", productsWithDeals);
-
-      // await setCache(cacheKey, productsWithDeals, 864000);
-      // console.log(`💰 Top deals found: ${productsWithDeals.length}`);
-      // console.log("----->", productsWithDeals);
+      console.log(`💰 Top deals found: ${productsWithDeals.length}`);
 
       return productsWithDeals;
     },

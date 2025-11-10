@@ -25,3 +25,14 @@ export interface LargeCategory {
   title: string;
   subcategories: Subcategory[];
 }
+
+export interface TopDeal {
+  name: string;
+  saveUpTo?: number;
+  imageUrl?: string;
+  imageAltText?: string;
+}
+
+export interface LandingPagrCategorySwiperData {
+  getTopDealsaveUpTo: TopDeal[];
+}

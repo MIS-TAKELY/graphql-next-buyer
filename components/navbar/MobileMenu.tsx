@@ -1,22 +1,24 @@
-import SearchBar from "./SearchBar";
+import CartButton from "./CartButton";
 import SellerDialog from "./SellerDialog";
 import UserDropdown from "./UserDropdown";
 
 interface MobileMenuProps {
   isOpen: boolean;
+  onClose: () => void;
 }
 
-const MobileMenu = ({ isOpen }: MobileMenuProps) => {
+const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="sm:hidden border-t border-border py-4 bg-card">
-      <div className="space-y-4">
-        <SearchBar placeholder="Search products..." />
-        <div className="space-y-3">
-          <UserDropdown isMobile />
-          <SellerDialog isMobile />
+    <div className="md:hidden border-t border-border py-3 bg-card">
+      <div className="space-y-2 px-2">
+        {/* Cart as first item in mobile menu */}
+        <div onClick={onClose}>
+          <CartButton isMobile />
         </div>
+        <UserDropdown isMobile />
+        <SellerDialog isMobile />
       </div>
     </div>
   );

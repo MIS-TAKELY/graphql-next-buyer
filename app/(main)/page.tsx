@@ -1,4 +1,3 @@
-// pages/index.tsx
 import { GET_PRODUCTS } from "@/client/product/product.queries";
 import Main from "@/components/landingPage/Main";
 import HeroCarousel from "@/components/page/home/HeroCarousel";
@@ -26,7 +25,7 @@ export default async function HomePage() {
     errorPolicy: "all",
   });
 
-  console.log("productsresponse-->", productsResponse);
+  // console.log("productsresponse-->", productsResponse);
 
   const products = productsResponse?.data?.getProducts || [];
 
@@ -60,7 +59,7 @@ export default async function HomePage() {
       <ProductCatagoryCardSection />
       <HeroCarousel />
       <Main />
-      <div className="ultra-wide-container py-2 xs:py-4 sm:py-6 lg:py-8">
+      <div className="py-2 xs:py-3 sm:py-4 md:py-6 lg:py-8 px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
         <SSRApolloProvider initialData={{ products }}>
           {sections.map((section) => (
             <ProductSection

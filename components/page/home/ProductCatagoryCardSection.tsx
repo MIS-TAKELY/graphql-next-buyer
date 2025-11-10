@@ -1,5 +1,4 @@
 "use client";
-
 import { categories } from "@/data/catagory";
 import Link from "next/link";
 import { memo } from "react";
@@ -7,23 +6,25 @@ import { memo } from "react";
 const ProductCategoryCardSection = memo(() => {
   return (
     <section className="bg-card transition-colors duration-300">
-      <div className="container">
+      <div className="px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="bg-card">
           {/* Responsive Layout: Scroll on mobile, Grid on larger screens */}
           <div
             className="
-            overflow-x-auto lg:overflow-x-visible 
-            scrollbar-hide lg:scrollbar-auto
-          "
+              overflow-x-auto lg:overflow-x-visible 
+              scrollbar-hide lg:scrollbar-auto
+              snap-x snap-mandatory
+              horizontal-scroll
+            "
           >
             <div
               className="
-              flex lg:grid lg:grid-cols-10
-              gap-4 xs:gap-6 sm:gap-8 md:gap-4 lg:gap-2 xl:gap-4 2xl:gap-6
-              py-2 xs:py-3 sm:py-4 
-              px-2 xs:px-3 sm:px-4 lg:px-0
-              min-w-max lg:min-w-0
-            "
+                flex lg:grid lg:grid-cols-[repeat(auto-fit,minmax(80px,1fr))]
+                gap-2 xs:gap-3 sm:gap-4 md:gap-3 lg:gap-2 xl:gap-3 2xl:gap-4
+                py-2 xs:py-3 sm:py-4 md:py-6
+                px-2 xs:px-3 sm:px-4 md:px-0
+                min-w-max lg:min-w-0
+              "
             >
               {categories.slice(0, 10).map((category, index) => {
                 const Icon = category.icon;
@@ -35,48 +36,46 @@ const ProductCategoryCardSection = memo(() => {
                         group focus:outline-none 
                         transition-transform hover:scale-105 active:scale-95 
                         flex-shrink-0 lg:flex-shrink
-                        w-auto lg:w-full
+                        w-20 xs:w-24 sm:w-28 md:w-24 lg:w-full
                       "
                       aria-label={`Go to ${category.name} category`}
                     >
                       <div
                         className={`
-                          w-14 h-14 
-                          xs:w-16 xs:h-16 
-                          sm:w-20 sm:h-20 
+                          w-12 xs:w-14 sm:w-16 md:w-14 lg:w-16 xl:w-18
+                          h-12 xs:h-14 sm:h-16 md:h-14 lg:h-16 xl:h-18
                           rounded-full bg-gradient-to-br ${category.color} 
                           flex items-center justify-center 
-                          shadow-sm group-hover:shadow-md 
+                          shadow-sm group-hover:shadow-lg 
                           transition-all duration-200
                         `}
                       >
                         <Icon
                           className="
                             text-white
-                            w-6 h-6
-                            xs:w-7 xs:h-7
-                            sm:w-8 sm:h-8
+                            w-5 xs:w-6 sm:w-7 md:w-6 lg:w-7 xl:w-8
+                            h-5 xs:h-6 sm:h-7 md:h-6 lg:h-7 xl:h-8
                           "
                         />
                       </div>
                       <h3
                         className="
-                        mt-1 xs:mt-1.5 sm:mt-2 
-                        text-[10px] xs:text-[11px] sm:text-xs md:text-sm lg:text-xs xl:text-sm
-                        font-medium text-foreground text-center 
-                        line-clamp-1 lg:line-clamp-2
-                        max-w-[60px] xs:max-w-[70px] sm:max-w-[80px] md:max-w-[90px] lg:max-w-full
-                        px-1
-                      "
+                          mt-1 xs:mt-1.5 sm:mt-2 md:mt-1.5 lg:mt-2
+                          text-[10px] xs:text-xs sm:text-sm md:text-xs lg:text-sm xl:text-base
+                          font-medium text-foreground text-center 
+                          line-clamp-1 lg:line-clamp-2
+                          max-w-[60px] xs:max-w-[80px] sm:max-w-[100px] md:max-w-[80px] lg:max-w-full
+                          px-0.5
+                        "
                       >
                         {category.name}
                       </h3>
                       {category.count && (
                         <p
                           className="
-                          text-[9px] xs:text-[10px] sm:text-[11px] lg:text-[10px] xl:text-xs
-                          text-muted-foreground text-center
-                        "
+                            text-[8px] xs:text-[9px] sm:text-[10px] md:text-[9px] lg:text-[10px] xl:text-xs
+                            text-muted-foreground text-center
+                          "
                         >
                           {category.count}
                         </p>
