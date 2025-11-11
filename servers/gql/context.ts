@@ -21,8 +21,8 @@ export async function createContext(
       });
     }
 
-    console.log("user id-->", userId);
-    console.log("user-->", user);
+    // console.log("user id-->", userId);
+    // console.log("user-->", user);
 
     return {
       prisma,

@@ -3,13 +3,13 @@ import gql from "graphql-tag";
 export const topDealsTypeDefs = gql`
   type topDeals {
     imageUrl: String!
-    imageAltText:String!
+    imageAltText: String!
     saveUpTo: Float!
     name: String!
+    product: Product
   }
 
   type Query {
-    #getTopDealsaveUpTo(topDealAbout: String!): Boolean
-    getTopDealsaveUpTo(topDealAbout: String!,limit:Int): [topDeals!]!
+    getTopDealSaveUpTo(topDealAbout: String!, limit: Int): [topDeals!]!
   }
 `;

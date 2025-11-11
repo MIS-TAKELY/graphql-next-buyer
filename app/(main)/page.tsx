@@ -25,41 +25,21 @@ export default async function HomePage() {
     errorPolicy: "all",
   });
 
-  // console.log("productsresponse-->", productsResponse);
-
   const products = productsResponse?.data?.getProducts || [];
-
   const sharedSlice = products.slice(0, 8);
 
   const sections: SectionConfig[] = [
-    {
-      name: "Today's Best Deals",
-      products: sharedSlice,
-      count: 8,
-      layout: "horizontal",
-    },
-    {
-      name: "Top Offers",
-      products: sharedSlice,
-      count: 6,
-      layout: "grid",
-    },
-    {
-      name: "Recommended For You",
-      products: sharedSlice,
-      count: 6,
-      layout: "grid",
-    },
+    { name: "Today's Best Deals", products: sharedSlice, count: 8, layout: "horizontal" },
+    { name: "Top Offers", products: sharedSlice, count: 6, layout: "grid" },
+    { name: "Recommended For You", products: sharedSlice, count: 6, layout: "grid" },
   ];
 
-  console.log("products-->", products);
-
   return (
-    <div className="bg-muted min-h-screen">
+    <div className="bg-background text-foreground min-h-screen">
       <ProductCatagoryCardSection />
       <HeroCarousel />
       <Main />
-      <div className="py-2 xs:py-3 sm:py-4 md:py-6 lg:py-8 px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
+      <div className="ultra-wide-container py-4 sm:py-6 md:py-8 lg:py-10">
         <SSRApolloProvider initialData={{ products }}>
           {sections.map((section) => (
             <ProductSection

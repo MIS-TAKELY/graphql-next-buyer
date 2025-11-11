@@ -31,8 +31,14 @@ export interface TopDeal {
   saveUpTo?: number;
   imageUrl?: string;
   imageAltText?: string;
+  product?: {
+    brand?: string;
+    category?: {
+      name?: string;
+    };
+  };
 }
 
 export interface LandingPagrCategorySwiperData {
-  getTopDealsaveUpTo: TopDeal[];
+  getTopDealSaveUpTo: TopDeal[];
 }

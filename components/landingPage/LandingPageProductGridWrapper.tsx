@@ -5,9 +5,11 @@ import LandingPageProductGrid from "./LandingPageProductGrid";
 export const LandingPageProductGridWrapper = async ({
   title,
   isLast = false,
+  topDealAbout
 }: {
   title: string;
   isLast?: boolean;
+  topDealAbout:string
 }) => {
   const client = await getServerApolloClient();
 
@@ -18,7 +20,7 @@ export const LandingPageProductGridWrapper = async ({
     const response = await client.query({
       query: GET_TOP_DEALS,
       variables: {
-        topDealAbout: "Dress",
+        topDealAbout,
         limit: 4,
       },
       fetchPolicy: "cache-first",

@@ -35,7 +35,7 @@ export async function detectCategory(
         }
 
         CATEGORIES_CACHE = result;
-        console.log("✅ Categories loaded:", result);
+        // console.log("✅ Categories loaded:", result);
         return result;
       } catch (error) {
         console.error("❌ Failed to load categories:", error);

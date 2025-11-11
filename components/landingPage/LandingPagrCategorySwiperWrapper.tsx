@@ -10,26 +10,22 @@ interface Props {
 
 const LandingPagrCategorySwiperWrapper = async ({ title, category }: Props) => {
   const client = await getServerApolloClient();
-
   let data: LandingPagrCategorySwiperData | undefined;
-  let error: any;
 
   try {
-    const response = await client.query<{ getTopDealsaveUpTo: TopDeal[] }>({
+    const response = await client.query<{ getTopDealSaveUpTo: TopDeal[] }>({
       query: GET_TOP_DEALS,
       variables: { topDealAbout: category, limit: 10 },
       fetchPolicy: "cache-first",
     });
     data = response.data;
-    console.log("LandingPagrCategorySwiper data:", data);
   } catch (err) {
     console.error("Error fetching top deals:", err);
-    error = err;
   }
 
   return (
     <LandingPagrCategorySwiper
-      data={data || { getTopDealsaveUpTo: [] }}
+      data={data || { getTopDealSaveUpTo: [] }}
       title={title}
     />
   );

@@ -103,7 +103,7 @@ const SearchBar = ({
           onFocus={() => setShowSuggestions(true)}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           onKeyDown={handleKeyDown}
-          className="w-full pl-8 md:pl-10 pr-3 md:pr-4 h-8 md:h-10 text-xs md:text-sm lg:text-base bg-input text-foreground border-border placeholder-muted-foreground focus:ring-2 focus:ring-ring"
+          className="w-full pl-8 md:pl-10 pr-3 md:pr-4 h-8 md:h-10 text-xs md:text-sm lg:text-base bg-input text-foreground border-border placeholder-muted-foreground "
         />
       </div>
 

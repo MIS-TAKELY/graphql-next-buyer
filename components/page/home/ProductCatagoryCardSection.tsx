@@ -1,22 +1,16 @@
 "use client";
+
 import { categories } from "@/data/catagory";
 import Link from "next/link";
 import { memo } from "react";
 
 const ProductCategoryCardSection = memo(() => {
   return (
-    <section className="bg-card transition-colors duration-300">
+    <section className="bg-card transition-colors duration-300 w-full">
       <div className="px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
-        <div className="bg-card">
-          {/* Responsive Layout: Scroll on mobile, Grid on larger screens */}
-          <div
-            className="
-              overflow-x-auto lg:overflow-x-visible 
-              scrollbar-hide lg:scrollbar-auto
-              snap-x snap-mandatory
-              horizontal-scroll
-            "
-          >
+        <div className="bg-card w-full">
+          {/* Scrollable container for mobile, grid for lg+ */}
+          <div className="overflow-x-auto lg:overflow-x-visible scrollbar-hide lg:scrollbar-auto snap-x snap-mandatory">
             <div
               className="
                 flex lg:grid lg:grid-cols-[repeat(auto-fit,minmax(80px,1fr))]
@@ -32,9 +26,9 @@ const ProductCategoryCardSection = memo(() => {
                   <Link key={index} href={`/search?q=${category.name}`}>
                     <button
                       className="
-                        flex flex-col items-center justify-center 
-                        group focus:outline-none 
-                        transition-transform hover:scale-105 active:scale-95 
+                        flex flex-col items-center justify-center
+                        group focus:outline-none
+                        transition-transform hover:scale-105 active:scale-95
                         flex-shrink-0 lg:flex-shrink
                         w-20 xs:w-24 sm:w-28 md:w-24 lg:w-full
                       "
@@ -44,9 +38,9 @@ const ProductCategoryCardSection = memo(() => {
                         className={`
                           w-12 xs:w-14 sm:w-16 md:w-14 lg:w-16 xl:w-18
                           h-12 xs:h-14 sm:h-16 md:h-14 lg:h-16 xl:h-18
-                          rounded-full bg-gradient-to-br ${category.color} 
-                          flex items-center justify-center 
-                          shadow-sm group-hover:shadow-lg 
+                          rounded-full bg-gradient-to-br ${category.color}
+                          flex items-center justify-center
+                          shadow-sm group-hover:shadow-lg
                           transition-all duration-200
                         `}
                       >
@@ -62,7 +56,7 @@ const ProductCategoryCardSection = memo(() => {
                         className="
                           mt-1 xs:mt-1.5 sm:mt-2 md:mt-1.5 lg:mt-2
                           text-[10px] xs:text-xs sm:text-sm md:text-xs lg:text-sm xl:text-base
-                          font-medium text-foreground text-center 
+                          font-medium text-foreground text-center
                           line-clamp-1 lg:line-clamp-2
                           max-w-[60px] xs:max-w-[80px] sm:max-w-[100px] md:max-w-[80px] lg:max-w-full
                           px-0.5

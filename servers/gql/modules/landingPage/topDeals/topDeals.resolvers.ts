@@ -1,185 +1,37 @@
-import { Category, Prisma, ProductVariant } from "@/app/generated/prisma";
+import { Prisma } from "@/app/generated/prisma";
 import { detectCategory } from "@/filter/detectCategory";
 import { prisma } from "@/lib/db/prisma";
 import { generateEmbedding } from "@/lib/embemdind";
 import { GraphQLContext } from "@/servers/gql/context";
-
-// Type definitions for our custom return types
-interface CategoryWithId {
-  id: string;
-}
-
-interface ProductIdWithSimilarity {
-  id: string;
-  similarity: number;
-}
-
-interface VariantWithDeals extends ProductVariant {
-  finalPrice: number;
-  discountAmount: number;
-  discountPercentage: number;
-  specifications?: Array<{
-    key: string;
-    value: string;
-  }>;
-}
-
-interface ProductWithDetails {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  brand: string;
-  variants: Array<{
-    id: string;
-    sku: string;
-    price: Prisma.Decimal;
-    mrp: Prisma.Decimal;
-    stock: number;
-    specifications: Array<{
-      key: string;
-      value: string;
-    }>;
-  }>;
-  images: Array<{
-    url: string;
-    altText: string | null;
-  }>;
-  category: {
-    id: string;
-    name: string;
-    children: Array<{
-      name: string;
-    }>;
-  } | null;
-  productOffers: Array<{
-    offer: {
-      id: string;
-      title: string;
-      type: string;
-      value: Prisma.Decimal;
-    };
-  }>;
-  reviews: Array<{
-    rating: number;
-  }>;
-}
-
-interface TopDealProduct {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  brand: string;
-  imageUrl: string | null;
-  imageAltText: string | null;
-  saveUpTo: number;
-  discountPercentage: number;
-  avgRating: number;
-  category: {
-    id: string;
-    name: string;
-    children: Array<{
-      name: string;
-    }>;
-  } | null;
-  variants: VariantWithDeals[];
-  productOffers: Array<{
-    offer: {
-      id: string;
-      title: string;
-      type: string;
-      value: Prisma.Decimal;
-    };
-  }>;
-  reviews: Array<{
-    rating: number;
-  }>;
-  images: Array<{
-    url: string;
-    altText: string | null;
-  }>;
-}
-
-// Helper function to get top-level parent category
-async function getTopLevelParentCategory(
-  categoryId: string
-): Promise<Pick<Category, "id" | "name" | "parentId"> | null> {
-  let currentCategory = await prisma.category.findUnique({
-    where: { id: categoryId },
-    select: {
-      id: true,
-      name: true,
-      parentId: true,
-    },
-  });
-
-  if (!currentCategory) {
-    return null;
-  }
-
-  // Traverse up the hierarchy until we find a category with no parent
-  let maxDepth = 10; // Prevent infinite loops
-  while (currentCategory && currentCategory.parentId && maxDepth > 0) {
-    const parent:any = await prisma.category.findUnique({
-      where: { id: currentCategory.parentId },
-      select: {
-        id: true,
-        name: true,
-        parentId: true,
-      },
-    });
-
-    if (!parent) {
-      break;
-    }
-
-    currentCategory = parent;
-    maxDepth--;
-  }
-
-  return currentCategory;
-}
-
-// Helper function to get all descendant category IDs (including the parent itself)
-async function getAllDescendantCategoryIds(
-  categoryId: string
-): Promise<string[]> {
-  const categories = await prisma.$queryRaw<CategoryWithId[]>(
-    Prisma.sql`
-      WITH RECURSIVE category_tree AS (
-        -- Base case: start with the given category
-        SELECT id
-        FROM categories
-        WHERE id = ${categoryId}
-        
-        UNION ALL
-        
-        -- Recursive case: get child categories
-        SELECT c.id
-        FROM categories c
-        INNER JOIN category_tree ct ON c."parentId" = ct.id
-      )
-      SELECT id::text
-      FROM category_tree
-    `
-  );
-
-  return categories.map((c) => c.id);
-}
-
-interface TopDealsArgs {
-  topDealAbout: string;
-  limit: number;
-}
+import { getCache, setCache } from "@/services/redis.services";
+import {
+  ProductIdWithSimilarity,
+  ProductWithDetails,
+  TopDealProduct,
+  TopDealsArgs,
+  VariantWithDeals,
+} from "@/types/topDeals";
+import {
+  getAllDescendantCategoryIds,
+  getTopLevelParentCategory,
+} from "./topDeal.helper";
 
 export const topDealsResolvers = {
   Query: {
-    getTopDealsaveUpTo: async (
+    getTopDealSaveUpTo: async (
       _: unknown,
       { topDealAbout, limit }: TopDealsArgs,
       ctx: GraphQLContext
     ): Promise<TopDealProduct[]> => {
+      const cacheKey = `top-deals:${topDealAbout.toLowerCase()}:${limit}`;
+
+      const cached = await getCache<TopDealProduct[]>(cacheKey);
+
+      if (cached) {
+        console.log(`⚡ Returning cached Top Deals for ${topDealAbout}`);
+        return cached;
+      }
+
       // Step 1: Detect category from the query using AI
       const detectedCategory = await detectCategory(topDealAbout);
       console.log("🎯 Detected category:", detectedCategory);
@@ -397,14 +249,17 @@ export const topDealsResolvers = {
             discountPercentage: bestVariant.discountPercentage,
             avgRating: Math.round(avgRating * 10) / 10,
             variants: variantsWithDeals,
+            product,
           } as TopDealProduct;
         })
         .filter((p): p is TopDealProduct => p !== null && p.saveUpTo > 0)
         .sort((a, b) => a.saveUpTo - b.saveUpTo)
         .slice(0, limit);
 
-      console.log("productsWithDeals-->", productsWithDeals);
-      console.log(`💰 Top deals found: ${productsWithDeals.length}`);
+      // console.log("productsWithDeals-->", productsWithDeals);
+      // console.log(`💰 Top deals found: ${productsWithDeals.length}`);
+
+      await setCache(cacheKey, productsWithDeals, 86400);
 
       return productsWithDeals;
     },
