@@ -56,7 +56,7 @@ const LandingPageProductGrid = ({
   };
 
   if (error) console.error(error);
-  const deals = data?.getTopDealsaveUpTo?.slice(0, 4) || [];
+  const deals = data?.getTopDealSaveUpTo?.slice(0, 4) || [];
 
   return (
     <div className="w-full">
