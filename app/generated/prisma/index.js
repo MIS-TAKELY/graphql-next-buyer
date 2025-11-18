@@ -657,7 +657,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/mistakely/Desktop/projects/dai/buyer/app/generated/prisma",
+      "value": "/home/mistakely/Desktop/project/dai/buyer/app/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -679,12 +679,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/mistakely/Desktop/projects/dai/buyer/prisma/schema.prisma",
+    "sourceFilePath": "/home/mistakely/Desktop/project/dai/buyer/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.19.0",
