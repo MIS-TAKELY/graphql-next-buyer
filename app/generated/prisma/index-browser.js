@@ -135,6 +135,17 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  body: 'body',
+  type: 'type',
+  data: 'data',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.ConversationScalarFieldEnum = {
   id: 'id',
   productId: 'productId',
@@ -291,6 +302,7 @@ exports.Prisma.ProductVariantScalarFieldEnum = {
   price: 'price',
   mrp: 'mrp',
   stock: 'stock',
+  soldCount: 'soldCount',
   attributes: 'attributes',
   isDefault: 'isDefault',
   createdAt: 'createdAt',
@@ -626,6 +638,7 @@ exports.ReviewStatus = exports.$Enums.ReviewStatus = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Notification: 'Notification',
   Conversation: 'Conversation',
   Message: 'Message',
   MessageAttachment: 'MessageAttachment',

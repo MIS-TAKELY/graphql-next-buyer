@@ -167,9 +167,26 @@ model User {
   sellerConversations     Conversation[]            @relation("SellerConversations")
   sentMessages            Message[]                 @relation("UserSentMessages")
   ConversationParticipant ConversationParticipant[]
+  notifications           Notification[]
 
   @@index([email, role])
   @@map("users")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  body      String
+  type      String // "MESSAGE", "ORDER_STATUS", "SYSTEM"
+  data      Json? // { orderId, conversationId, etc }
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([userId, isRead])
 }
 
 model Conversation {
@@ -431,6 +448,7 @@ model ProductVariant {
   price      Decimal  @db.Money //highlighted price
   mrp        Decimal  @db.Money //cute price
   stock      Int      @default(0)
+  soldCount  Int      @default(0)
   attributes Json?
   isDefault  Boolean  @default(false)
   createdAt  DateTime @default(now())
@@ -509,13 +527,14 @@ model Order {
   updatedAt        DateTime    @updatedAt
   offerId          String?
 
-  offer     Offer?      @relation(fields: [offerId], references: [id], onDelete: SetNull)
-  buyer     User        @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
-  items     OrderItem[]
-  payments  Payment[]
-  shipments Shipment[]
+  offer        Offer?        @relation(fields: [offerId], references: [id], onDelete: SetNull)
+  buyer        User          @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
+  items        OrderItem[]
+  payments     Payment[]
+  shipments    Shipment[]
   // appliedDiscounts AppliedDiscount[] // Add this line
   // discountUsage    DiscountUsage[]
+  sellerOrders SellerOrder[]
 
   @@index([buyerId, status])
   @@index([createdAt])
@@ -692,8 +711,10 @@ model SellerOrder {
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
+  // Relations
   seller User              @relation("SellerOrders", fields: [sellerId], references: [id], onDelete: Cascade)
   items  SellerOrderItem[]
+  order  Order             @relation(fields: [buyerOrderId], references: [id], onDelete: Cascade) // ✅ Add this line
 
   @@index([sellerId, status])
   @@map("seller_orders")

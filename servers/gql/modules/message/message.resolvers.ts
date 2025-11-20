@@ -1,4 +1,5 @@
 // servers/gql/messageResolvers.ts
+import { createAndPushNotification } from "@/lib/notification";
 import { realtime } from "@/lib/realtime";
 import { GraphQLContext } from "../../context";
 
@@ -95,9 +96,13 @@ export const messageResolvers = {
       const conversation = await prisma.conversation.findUnique({
         where: { id: conversationId },
         include: {
-          sender: { select: { id: true } },
-          reciever: { select: { id: true } },
-          ConversationParticipant: true,
+          sender: { select: { id: true, clerkId: true } },
+          reciever: { select: { id: true, clerkId: true } },
+          ConversationParticipant: {
+            include: {
+              user: { select: { id: true, clerkId: true } },
+            },
+          },
         },
       });
 
@@ -177,23 +182,64 @@ export const messageResolvers = {
         attachments: result.MessageAttachment || [],
       };
 
-      const channel = `conversation:${conversationId}`;
+      const realtimePayload = {
+        id: result.id,
+        conversationId,
+        content: result.content || "",
+        type: result.type,
+        clientId,
+        fileUrl: result.fileUrl || null,
+        isRead: result.isRead,
+        sentAt: result.sentAt.toISOString(),
+        sender: result.sender,
+        attachments: (result.MessageAttachment || []).map((att) => ({
+          id: att.id,
+          url: att.url,
+          type: att.type,
+        })),
+      };
+
       try {
-        await realtime.channel(channel).message.newMessage.emit({
-          id: result.id,
-          conversationId,
-          content: result.content || "",
-          type: result.type,
-          clientId,
-          fileUrl: result.fileUrl || null,
-          isRead: result.isRead,
-          sentAt: result.sentAt.toISOString(),
-          sender: result.sender,
-          attachments: (result.MessageAttachment || []).map((att) => ({
-            id: att.id,
-            url: att.url,
-            type: att.type as "IMAGE" | "VIDEO",
-          })),
+        await realtime
+          .channel(`conversation:${conversationId}`)
+          .emit("message.newMessage", realtimePayload);
+
+        const participantClerkIds = new Set<string>();
+        if (conversation.sender?.clerkId) {
+          participantClerkIds.add(conversation.sender.clerkId);
+        }
+        if (conversation.reciever?.clerkId) {
+          participantClerkIds.add(conversation.reciever.clerkId);
+        }
+        conversation.ConversationParticipant?.forEach((participant) => {
+          const clerkId = participant.user?.clerkId;
+          if (clerkId) participantClerkIds.add(clerkId);
+        });
+
+        for (const clerkId of participantClerkIds) {
+          if (!clerkId || clerkId === user.clerkId) continue;
+          await realtime
+            .channel(`user:${clerkId}`)
+            .emit("message.newMessage", realtimePayload);
+        }
+
+        const receiverId =
+          conversation.senderId === user.id
+            ? conversation.recieverId
+            : conversation.senderId;
+
+        // console.log("reciever id--->", receiverId);
+
+        const buyerName =
+          `${result.sender?.firstName || ""} ${
+            result.sender?.lastName || ""
+          }`.trim() || "A buyer";
+
+        await createAndPushNotification({
+          userId: receiverId,
+          title: "New Message",
+          body: `${buyerName} sent you a message`,
+          type: "NEW_MESSAGE",
         });
       } catch (error) {
         console.error("Failed to publish to Upstash Realtime:", error);

@@ -1,5 +1,6 @@
 import { Prisma } from "@/app/generated/prisma";
 import { prisma } from "@/lib/db/prisma";
+import { createAndPushNotification } from "@/lib/notification";
 import { generateOrderNumber } from "@/randomOrderNumber";
 import { senMail } from "@/services/nodeMailer.services";
 import { requireAuth, requireBuyer } from "../../auth/auth";
@@ -268,6 +269,33 @@ export const orderResolvers = {
                   },
                 },
                 include: { items: true },
+              });
+            }
+
+            // After creating the order(s) — add this block
+
+            const buyerName =
+              `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
+              "A customer";
+
+            for (const [sellerId, items] of Object.entries(itemsBySeller)) {
+              const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
+              const total = items.reduce(
+                (sum, i) => sum + Number(i.totalPrice),
+                0
+              );
+
+              await createAndPushNotification({
+                userId: sellerId,
+                title: "New Order Received!",
+                body: `${buyerName} placed order #${created.orderNumber} • ${itemCount} items`,
+                type: "NEW_ORDER",
+                data: {
+                  orderId: created.id,
+                  orderNumber: created.orderNumber,
+                  total,
+                  itemCount,
+                },
               });
             }
 
