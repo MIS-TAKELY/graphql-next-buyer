@@ -228,7 +228,12 @@ export const messageResolvers = {
             ? conversation.recieverId
             : conversation.senderId;
 
-        // console.log("reciever id--->", receiverId);
+        // console.log("sender id-->", conversation.recieverId);
+        // console.log("rec id-->", conversation.senderId);
+        // console.log("cons sender id-->", conversation.sender.id);
+        // console.log("cons reciever clerkid-->", conversation.reciever.clerkId);
+
+        console.log("reciever id--->", conversation.reciever.clerkId);
 
         const buyerName =
           `${result.sender?.firstName || ""} ${
@@ -237,6 +242,7 @@ export const messageResolvers = {
 
         await createAndPushNotification({
           userId: receiverId,
+          recieverClerkId: conversation.reciever.clerkId,
           title: "New Message",
           body: `${buyerName} sent you a message`,
           type: "NEW_MESSAGE",

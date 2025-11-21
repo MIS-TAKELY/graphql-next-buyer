@@ -6,6 +6,8 @@ type NotificationType = "NEW_MESSAGE" | "NEW_ORDER" | "ORDER_STATUS" | "SYSTEM";
 
 interface CreateNotificationInput {
   userId: string;
+  recieverClerkId: string;
+
   title: string;
   body: string;
   type: NotificationType;
@@ -14,15 +16,12 @@ interface CreateNotificationInput {
 
 export async function createAndPushNotification({
   userId,
+  recieverClerkId,
   title,
   body,
   type,
 }: CreateNotificationInput) {
   // 1. Save to DB
-
-  const user = await prisma.user.findUnique({ where: { id: userId } });
-  if (!user) throw new Error("Invalid User");
-  const clerkId = user.clerkId;
 
   const notification = await prisma.notification.create({
     data: {
@@ -37,11 +36,11 @@ export async function createAndPushNotification({
 
   // 2. Push via Upstash Realtime (private channel per user)
 
-  console.log(`user:${clerkId}`);
+  console.log(`user:${recieverClerkId}`);
   // console.log("REALTIME INSTANCE (publisher):", realtime)
   try {
     await realtime
-      .channel(`user:${clerkId}`)
+      .channel(`user:${recieverClerkId}`)
       .emit("notification.newNotification", {
         id: notification.id,
         title,
@@ -56,22 +55,3 @@ export async function createAndPushNotification({
 
   return notification;
 }
-
-// try {
-//     const sentNotificationRespone=await realtime
-//       .channel(`user:${clerkId}`)
-//       .emit("notification.newNotification", {
-//         id: notification.id,
-//         title,
-//         body,
-//         type,
-//         data: data || null,
-//         createdAt: notification.createdAt.toISOString(),
-//         isRead: false,
-//       });
-
-//       console.log("sentNotificationRespone-->",sentNotificationRespone)
-//   } catch (error) {
-//     console.error("Failed to push realtime notification:", error);
-//     // Don't throw — DB save already succeeded
-//   }
