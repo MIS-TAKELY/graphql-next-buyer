@@ -16,7 +16,8 @@ import {
   useMutation,
 } from "@apollo/client";
 import { useRealtime } from "@upstash/realtime/client";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { z } from "zod";
 
 export interface LocalMessage {
   id: string; // server id when known, otherwise temporary
@@ -29,6 +30,10 @@ export interface LocalMessage {
 }
 
 const FETCH_POLICY_NO_CACHE: FetchPolicy = "no-cache";
+
+type RealtimeNewMessage = z.infer<
+  RealtimeEvents["message"]["newMessage"]
+>;
 
 export const useRealChat = (productId?: string, userId?: string) => {
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -380,7 +385,7 @@ export const useRealChat = (productId?: string, userId?: string) => {
 
   // Realtime subscription — guard against duplicates by id and reconcile optimistic by clientId if echoed
   const handleRealtimeNewMessage = useCallback(
-    (payload: RealtimeEvents["message"]["newMessage"]) => {
+    (payload: RealtimeNewMessage) => {
       if (!payload) return;
       const normalized = normalizeServerMessage(payload);
 
@@ -391,18 +396,11 @@ export const useRealChat = (productId?: string, userId?: string) => {
     [normalizeServerMessage, upsertServerMessage]
   );
 
-  const events = useMemo(
-    () => ({
-      message: {
-        newMessage: handleRealtimeNewMessage,
-      },
-    }),
-    [handleRealtimeNewMessage]
-  );
-
-  useRealtime<RealtimeEvents>({
-    channel: conversationId ? `conversation:${conversationId}` : undefined,
-    events,
+  useRealtime<RealtimeEvents, "message.newMessage">({
+    channels: conversationId ? [`conversation:${conversationId}`] : undefined,
+    event: "message.newMessage",
+    onData: handleRealtimeNewMessage,
+    enabled: Boolean(conversationId),
   });
 
   return {

@@ -4,7 +4,16 @@ import { NextRequest } from "next/server";
 
 export interface GraphQLContext {
   prisma: typeof prisma;
-  user?: { id: string; clerkId: string; email: string; role: string } | null;
+  user?:
+    | {
+        id: string;
+        clerkId: string;
+        email: string;
+        role: string;
+        firstName: string | null;
+        lastName: string | null;
+      }
+    | null;
   publish: (evt: { channel: string; message: unknown }) => Promise<void>;
 }
 
@@ -17,7 +26,14 @@ export async function createContext(
     if (userId) {
       user = await prisma.user.findUnique({
         where: { clerkId: userId },
-        select: { id: true, clerkId: true, email: true, role: true },
+        select: {
+          id: true,
+          clerkId: true,
+          email: true,
+          role: true,
+          firstName: true,
+          lastName: true,
+        },
       });
     }
 
