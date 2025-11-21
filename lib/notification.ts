@@ -7,7 +7,6 @@ type NotificationType = "NEW_MESSAGE" | "NEW_ORDER" | "ORDER_STATUS" | "SYSTEM";
 interface CreateNotificationInput {
   userId: string;
   recieverClerkId: string;
-
   title: string;
   body: string;
   type: NotificationType;

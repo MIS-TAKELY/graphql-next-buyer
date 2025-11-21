@@ -140,6 +140,7 @@ export const orderResolvers = {
               seller: {
                 select: {
                   email: true,
+                  clerkId: true,
                 },
               },
               categoryId: true,
@@ -147,7 +148,6 @@ export const orderResolvers = {
           },
         },
       });
-
       const byId = new Map(variants.map((v) => [v.id, v]));
       let subtotal = 0;
 
@@ -288,6 +288,7 @@ export const orderResolvers = {
               await createAndPushNotification({
                 userId: sellerId,
                 title: "New Order Received!",
+                recieverClerkId:variants[0].product.seller.clerkId,
                 body: `${buyerName} placed order #${created.orderNumber} • ${itemCount} items`,
                 type: "NEW_ORDER",
                 data: {
