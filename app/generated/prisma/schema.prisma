@@ -139,18 +139,25 @@ enum ReturnType {
   REPLACEMENT_OR_REFUND
 }
 
+enum VerificationStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
 model User {
-  id        String    @id @default(cuid())
-  clerkId   String    @unique
-  email     String    @unique @db.VarChar(255)
-  firstName String?
-  lastName  String?
-  phone     String?   @db.VarChar(20)
-  gender    Gender?
-  dob       DateTime?
-  role      Role      @default(BUYER)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id             String    @id @default(cuid())
+  clerkId        String    @unique
+  email          String    @unique @db.VarChar(255)
+  firstName      String?
+  lastName       String?
+  avatarImageUrl String?
+  phone          String?   @db.VarChar(20)
+  gender         Gender?
+  dob            DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   addresses               Address[]                 @relation("UserAddresses")
   paymentMethods          PaymentMethod[]           @relation("UserPayments")
@@ -168,9 +175,71 @@ model User {
   sentMessages            Message[]                 @relation("UserSentMessages")
   ConversationParticipant ConversationParticipant[]
   notifications           Notification[]
+  sellerProfile           SellerProfile?
+  roles                   UserRole[]
 
-  @@index([email, role])
+  @@index([email])
   @@map("users")
+}
+
+model UserRole {
+  id        String   @id @default(cuid())
+  userId    String
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, role]) // One user can't have same role twice
+  @@index([userId])
+  @@index([role])
+  @@map("user_roles")
+}
+
+model SellerProfile {
+  id          String  @id @default(cuid())
+  userId      String  @unique
+  shopName    String  @unique
+  slug        String  @unique
+  logo        String?
+  banner      String?
+  description String? @db.Text
+  tagline     String?
+
+  businessName  String?
+  businessRegNo String?
+  businessType  String?
+
+  phone    String  @db.VarChar(20)
+  altPhone String? @db.VarChar(20)
+  email    String?
+
+  // Only ONE address relation → pickup/warehouse
+  pickupAddressId String?
+  pickupAddress   Address? @relation("SellerPickupAddress", fields: [pickupAddressId], references: [id])
+
+  returnPolicy   String? @db.Text
+  shippingPolicy String? @db.Text
+  about          String? @db.Text
+
+  verificationStatus VerificationStatus @default(PENDING)
+  verifiedAt         DateTime?
+  isActive           Boolean            @default(false)
+
+  averageRating Decimal? @default(0) @db.Decimal(3, 2)
+  totalReviews  Int?     @default(0)
+  totalSales    Int?     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([slug])
+  @@index([shopName])
+  @@index([verificationStatus])
+  @@map("seller_profiles")
 }
 
 model Notification {
@@ -182,11 +251,13 @@ model Notification {
   data      Json? // { orderId, conversationId, etc }
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
   @@index([userId, isRead])
+  @@map("notifications")
 }
 
 model Conversation {
@@ -222,6 +293,8 @@ model Message {
   isRead         Boolean     @default(false)
   sentAt         DateTime    @default(now())
   clientId       String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 
   // Relations
   conversation      Conversation        @relation(fields: [conversationId], references: [id], onDelete: Cascade)
@@ -237,6 +310,8 @@ model MessageAttachment {
   messageId String
   url       String
   type      FileType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
 
@@ -273,7 +348,8 @@ model Address {
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 
-  user User @relation("UserAddresses", fields: [userId], references: [id], onDelete: Cascade)
+  user                  User            @relation("UserAddresses", fields: [userId], references: [id], onDelete: Cascade)
+  sellerPickupAddresses SellerProfile[] @relation("SellerPickupAddress")
 
   @@index([userId, type])
   @@map("addresses")
@@ -343,6 +419,7 @@ model ProductOffer {
   offerId   String
   productId String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   offer   Offer   @relation(fields: [offerId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -356,6 +433,7 @@ model CategoryOffer {
   offerId    String
   categoryId String
   createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   offer    Offer    @relation(fields: [offerId], references: [id], onDelete: Cascade)
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
@@ -489,6 +567,8 @@ model ProductImage {
   sortOrder Int       @default(0)
   mediaType MediaType @default(PRIMARY)
   fileType  FileType
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
@@ -651,24 +731,31 @@ model Review {
 }
 
 model ReviewVote {
-  id       String  @id @default(cuid())
-  reviewId String
-  userId   String
-  vote     Boolean
+  id        String   @id @default(cuid())
+  reviewId  String
+  userId    String
+  vote      Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([reviewId, userId])
+  @@map("review_votes")
 }
 
 model ReviewMedia {
-  id       String   @id @default(cuid())
-  reviewId String
-  type     FileType
-  url      String
+  id        String   @id @default(cuid())
+  reviewId  String
+  type      FileType
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@map("review_medias")
 }
 
 model Wishlist {
@@ -690,6 +777,7 @@ model WishlistItem {
   wishlistId String
   productId  String
   createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   wishlist Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
   product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)

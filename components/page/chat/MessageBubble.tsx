@@ -2,24 +2,28 @@
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+// IMPORTANT: Import from types/chat, not the hook
 import { LocalMessage } from "@/types/chat";
 import React from "react";
 
 interface MessageBubbleProps {
   message: LocalMessage;
+  // Optional: If you pass isOwn from parent, use it.
+  // If not, we calculate it below.
+  isOwn?: boolean;
 }
 
-const MessageBubbleComponent = ({ message }: MessageBubbleProps) => {
-  const isUser = message.sender === "user";
+const MessageBubbleComponent = ({ message, isOwn }: MessageBubbleProps) => {
+  // Logic: either use the prop passed from parent OR check if sender is 'user'
+  const isUser = isOwn ?? message.sender === "user";
 
-  console.log("message--->",message)
-
+  console.log("message sender--->",message.sender)
 
   return (
     <div className={cn("flex gap-2", isUser ? "justify-end" : "justify-start")}>
       {!isUser && (
         <Avatar className="w-7 h-7 sm:w-8 sm:h-8 shrink-0">
-          <AvatarFallback className="text-xs">Seller</AvatarFallback>
+          <AvatarFallback className="text-xs">S</AvatarFallback>
         </Avatar>
       )}
 
@@ -31,7 +35,9 @@ const MessageBubbleComponent = ({ message }: MessageBubbleProps) => {
             : "bg-muted rounded-bl-sm"
         )}
       >
-        <p className="text-sm whitespace-pre-wrap break-words">{message.text}</p>
+        <p className="text-sm whitespace-pre-wrap break-words">
+          {message.text}
+        </p>
 
         {message.attachments?.length ? (
           <div className="mt-2 flex flex-wrap gap-1">
@@ -39,31 +45,37 @@ const MessageBubbleComponent = ({ message }: MessageBubbleProps) => {
               <img
                 key={att.id}
                 src={att.url}
-                alt=""
-                className="w-16 h-16 rounded object-cover"
+                alt="attachment"
+                className="w-16 h-16 rounded object-cover border bg-black/10"
               />
             ))}
           </div>
         ) : null}
 
-        <p
+        <div
           className={cn(
-            "text-[10px] sm:text-xs mt-1",
+            "text-[10px] sm:text-xs mt-1 flex items-center gap-1",
             isUser ? "text-primary-foreground/70" : "text-muted-foreground"
           )}
         >
-          {message.timestamp.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-          {message.status === "sending" && " • Sending..."}
-          {message.status === "failed" && " • Failed"}
-        </p>
+          <span>
+            {new Date(message.timestamp).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
+          {message.status === "sending" && (
+            <span className="opacity-70"> • Sending...</span>
+          )}
+          {message.status === "failed" && (
+            <span className="text-red-300"> • Failed</span>
+          )}
+        </div>
       </div>
 
       {isUser && (
         <Avatar className="w-7 h-7 sm:w-8 sm:h-8 shrink-0">
-          <AvatarFallback className="text-xs">You</AvatarFallback>
+          <AvatarFallback className="text-xs">Me</AvatarFallback>
         </Avatar>
       )}
     </div>

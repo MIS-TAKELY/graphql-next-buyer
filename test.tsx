@@ -1,347 +1,77 @@
-// // ```css
-// @import "tailwindcss";
+// servers/gql/schema/user.typeDefs.ts
+import { gql } from "graphql-tag";
 
-// /* ---------------- Sources ---------------- */
-// @source "./**/*.{ts,tsx}";
-// @source "../components/**/*.{ts,tsx}";
-// @source "../client/**/*.{ts,tsx}";
-// @source "../hooks/**/*.{ts,tsx}";
-// @source "../lib/**/*.{ts,tsx}";
-// @source "../servers/**/*.{ts,tsx}";
-// @source "./pages/**/*.{ts,tsx}";
-// @source "./app/**/*.{ts,tsx}";
-// @source "./src/**/*.{ts,tsx}";
+export const userTypeDefs = gql`
+  enum Role {
+    BUYER
+    SELLER
+    ADMIN
+  }
 
-// /* ---------------- Variants ---------------- */
-// @custom-variant dark (&:is(.dark *));
+  scalar DateTime
 
-// /* ---------------- Theme ---------------- */
-// @theme inline {
-//   /* Breakpoints */
-//   --breakpoint-xs: 480px;
-//   --breakpoint-sm: 640px;
-//   --breakpoint-md: 768px;
-//   --breakpoint-lg: 1024px;
-//   --breakpoint-xl: 1280px;
-//   --breakpoint-2xl: 1536px;
-//   --breakpoint-3xl: 1800px;
-//   --breakpoint-4xl: 2048px;
+   enum Gender {
+    MALE
+    FEMALE
+    OTHERS
+    NOT_TO_SAY
+  }
 
-//   /* Container */
-//   --width-container: 100%;
-//   --width-2xl-container: 1400px;
 
-//   /* Fonts */
-//   --font-sans: var(--font-geist-sans);
-//   --font-mono: var(--font-geist-mono);
+  type UserRole {
+    id: ID!
+    userId: ID!
+    role: Role!
+    user: User! # Resolve full user
+    createdAt: DateTime!
+    updatedAt: DateTime!
+  }
 
-//   /* Border Radius */
-//   --radius-sm: calc(var(--radius) - 4px);
-//   --radius-md: calc(var(--radius) - 2px);
-//   --radius-lg: var(--radius);
-//   --radius-xl: calc(var(--radius) + 4px);
+  type Notification {
+    id: ID!
+    userId: ID!
+    title: String!
+    body: String
+    type: String
+    data: Json
+    isRead: String
+    createdAt: DateTime
+    updatedAt: DateTime
+  }
 
-//   /* Animations */
-//   --animate-accordion-down: accordion-down 0.2s ease-out;
-//   --animate-accordion-up: accordion-up 0.2s ease-out;
+  type User {
+    id: ID!
+    clerkId: String!
+    email: String!
+    firstName: String
+    lastName: String
+    phone: String
+    avatarImageUrl: String
+    gender: Gender
+    dob: DateTime
 
-//   /* Core Colors (mapped from root variables) */
-//   --color-background: var(--background);
-//   --color-foreground: var(--foreground);
-//   --color-border: var(--border);
-//   --color-input: var(--input);
-//   --color-ring: var(--ring);
+    "User can have multiple roles (e.g., both BUYER and SELLER)"
+    roles: [UserRole!]! # ← NEW: Array of roles (non-null)
+    createdAt: DateTime!
+    updatedAt: DateTime!
 
-//   /* UI Colors */
-//   --color-primary: var(--primary);
-//   --color-primary-foreground: var(--primary-foreground);
-//   --color-primary-hover: var(--primary-hover);
-//   --color-secondary: var(--secondary);
-//   --color-secondary-foreground: var(--secondary-foreground);
-//   --color-secondary-hover: var(--secondary-hover);
+    # Relations
+    addresses: [Address!]
+    paymentMethods: [PaymentMethod!]
+    cartItems: [CartItem!]
+    orders: [Order!]
+    reviews: [Review!]
+    products: [Product!] # Products they sell
+    payouts: [Payout!]
+    sellerOrders: [SellerOrder!]
+    wishlists: [Wishlist!]
+    sellerProfile: SellerProfile # One-to-one relation
+    notifications: [Notification!]
+  }
 
-//   /* State Colors */
-//   --color-destructive: var(--destructive);
-//   --color-destructive-foreground: var(--destructive-foreground);
-//   --color-success: var(--success);
-//   --color-success-foreground: var(--success-foreground);
-//   --color-warning: var(--warning);
-//   --color-warning-foreground: var(--warning-foreground);
-
-//   /* Extended Colors */
-//   --color-muted: var(--muted);
-//   --color-muted-foreground: var(--muted-foreground);
-//   --color-accent: var(--accent);
-//   --color-accent-foreground: var(--accent-foreground);
-
-//   /* Price & Rating */
-//   --color-price: var(--price);
-//   --color-price-original: var(--price-original);
-//   --color-rating: var(--rating);
-
-//   /* Layout Colors */
-//   --color-card: var(--card);
-//   --color-card-foreground: var(--card-foreground);
-//   --color-popover: var(--popover);
-//   --color-popover-foreground: var(--popover-foreground);
-
-//   /* Sidebar */
-//   --color-sidebar: var(--sidebar);
-//   --color-sidebar-foreground: var(--sidebar-foreground);
-//   --color-sidebar-primary: var(--sidebar-primary);
-//   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-//   --color-sidebar-accent: var(--sidebar-accent);
-//   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-//   --color-sidebar-border: var(--sidebar-border);
-//   --color-sidebar-ring: var(--sidebar-ring);
-
-//   /* Charts */
-//   --color-chart-1: var(--chart-1);
-//   --color-chart-2: var(--chart-2);
-//   --color-chart-3: var(--chart-3);
-//   --color-chart-4: var(--chart-4);
-//   --color-chart-5: var(--chart-5);
-// }
-
-// /* ---------------- Keyframes ---------------- */
-// @keyframes accordion-down {
-//   from { height: 0; }
-//   to { height: var(--radix-accordion-content-height); }
-// }
-// @keyframes accordion-up {
-//   from { height: var(--radix-accordion-content-height); }
-//   to { height: 0; }
-// }
-
-// /* ---------------- Root Variables ---------------- */
-// :root {
-//   --radius: 0.625rem;
-//   --background: oklch(0.922 0 0);
-//   --foreground: oklch(0.145 0 0);
-
-//   --card: oklch(1 0 0);
-//   --card-foreground: oklch(0.145 0 0);
-
-//   --popover: oklch(1 0 0);
-//   --popover-foreground: oklch(0.145 0 0);
-
-//   --primary: oklch(0.205 0 0);
-//   --primary-foreground: oklch(0.985 0 0);
-//   --primary-hover: oklch(0.15 0 0);
-
-//   --secondary: oklch(0.97 0 0);
-//   --secondary-foreground: oklch(0.205 0 0);
-//   --secondary-hover: oklch(0.94 0 0);
-
-//   --muted: oklch(0.97 0 0);
-//   --muted-foreground: oklch(0.556 0 0);
-
-//   --accent: oklch(0.97 0 0);
-//   --accent-foreground: oklch(0.205 0 0);
-
-//   --destructive: oklch(0.577 0.245 27.325);
-//   --destructive-foreground: oklch(0.985 0 0);
-
-//   --success: oklch(0.646 0.222 41.116);
-//   --success-foreground: oklch(0.985 0 0);
-
-//   --warning: oklch(0.828 0.189 84.429);
-//   --warning-foreground: oklch(0.145 0 0);
-
-//   --price: oklch(0.646 0.222 41.116);
-//   --price-original: oklch(0.556 0 0);
-//   --rating: oklch(0.828 0.189 84.429);
-
-//   --border: oklch(0.922 0 0);
-//   --input: oklch(0.922 0 0);
-//   --ring: oklch(0.708 0 0);
-
-//   --chart-1: oklch(0.646 0.222 41.116);
-//   --chart-2: oklch(0.6 0.118 184.704);
-//   --chart-3: oklch(0.398 0.07 227.392);
-//   --chart-4: oklch(0.828 0.189 84.429);
-//   --chart-5: oklch(0.769 0.188 70.08);
-
-//   --sidebar: oklch(0.985 0 0);
-//   --sidebar-foreground: oklch(0.145 0 0);
-//   --sidebar-primary: oklch(0.205 0 0);
-//   --sidebar-primary-foreground: oklch(0.985 0 0);
-//   --sidebar-accent: oklch(0.97 0 0);
-//   --sidebar-accent-foreground: oklch(0.205 0 0);
-//   --sidebar-border: oklch(0.922 0 0);
-//   --sidebar-ring: oklch(0.708 0 0);
-
-//   /* --percentage:#2ECC71; */
-// }
-
-// /* Dark mode overrides */
-// .dark {
-//   --background: #2C2C2C;
-//   --foreground: oklch(0.985 0 0);
-//   --card: oklch(0.205 0 0);
-//   --card-foreground: oklch(0.985 0 0);
-//   --popover: oklch(0.205 0 0);
-//   --popover-foreground: oklch(0.985 0 0);
-
-//   --primary: oklch(0.922 0 0);
-//   --primary-foreground: oklch(0.205 0 0);
-//   --primary-hover: oklch(0.85 0 0);
-
-//   --secondary: oklch(0.269 0 0);
-//   --secondary-foreground: oklch(0.985 0 0);
-//   --secondary-hover: oklch(0.35 0 0);
-
-//   --muted: oklch(0.269 0 0);
-//   --muted-foreground: oklch(0.708 0 0);
-
-//   --accent: oklch(0.269 0 0);
-//   --accent-foreground: oklch(0.985 0 0);
-
-//   --destructive: oklch(0.704 0.191 22.216);
-//   --destructive-foreground: oklch(0.985 0 0);
-
-//   --success: oklch(0.646 0.222 41.116);
-//   --success-foreground: oklch(0.985 0 0);
-
-//   --warning: oklch(0.828 0.189 84.429);
-//   --warning-foreground: oklch(0.145 0 0);
-
-//   --price: oklch(0.646 0.222 41.116);
-//   --price-original: oklch(0.708 0 0);
-//   --rating: oklch(0.828 0.189 84.429);
-
-//   --border: oklch(1 0 0 / 10%);
-//   --input: oklch(1 0 0 / 15%);
-//   --ring: oklch(0.556 0 0);
-
-//   --chart-1: oklch(0.488 0.243 264.376);
-//   --chart-2: oklch(0.696 0.17 162.48);
-//   --chart-3: oklch(0.769 0.188 70.08);
-//   --chart-4: oklch(0.627 0.265 303.9);
-//   --chart-5: oklch(0.645 0.246 16.439);
-
-//   --sidebar: oklch(0.205 0 0);
-//   --sidebar-foreground: oklch(0.985 0 0);
-//   --sidebar-primary: oklch(0.488 0.243 264.376);
-//   --sidebar-primary-foreground: oklch(0.985 0 0);
-//   --sidebar-accent: oklch(0.269 0 0);
-//   --sidebar-accent-foreground: oklch(0.985 0 0);
-//   --sidebar-border: oklch(1 0 0 / 10%);
-//   --sidebar-ring: oklch(0.556 0 0);
-// }
-
-// /* ---------------- Base Styles ---------------- */
-// @layer base {
-//   * {
-//     @apply border-border outline-ring/50;
-//   }
-//   body {
-//     @apply bg-background text-foreground antialiased;
-//   }
-// }
-
-// /* ---------------- Utilities ---------------- */
-// @layer utilities {
-//   /* Scrollbar Hide */
-//   .scrollbar-hide {
-//     -ms-overflow-style: none; /* IE & Edge */
-//     scrollbar-width: none; /* Firefox */
-//   }
-//   .scrollbar-hide::-webkit-scrollbar {
-//     display: none;
-//   }
-
-//   /* Scrollbar Custom (horizontal) */
-//   .horizontal-scroll {
-//     scrollbar-width: thin;
-//     scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
-//   }
-//   .horizontal-scroll::-webkit-scrollbar {
-//     height: 6px;
-//   }
-//   .horizontal-scroll::-webkit-scrollbar-track {
-//     background: rgba(243, 244, 246, 0.5);
-//     border-radius: 3px;
-//   }
-//   .horizontal-scroll::-webkit-scrollbar-thumb {
-//     background: rgba(156, 163, 175, 0.5);
-//     border-radius: 3px;
-//   }
-//   .horizontal-scroll::-webkit-scrollbar-thumb:hover {
-//     background: rgba(107, 114, 128, 0.7);
-//   }
-
-//   /* Text Clamping */
-//   .line-clamp-1 {
-//     overflow: hidden;
-//     display: -webkit-box;
-//     -webkit-box-orient: vertical;
-//     -webkit-line-clamp: 1;
-//   }
-//   .line-clamp-2 {
-//     overflow: hidden;
-//     display: -webkit-box;
-//     -webkit-box-orient: vertical;
-//     -webkit-line-clamp: 2;
-//   }
-//   .line-clamp-3 {
-//     overflow: hidden;
-//     display: -webkit-box;
-//     -webkit-box-orient: vertical;
-//     -webkit-line-clamp: 3;
-//   }
-
-//   /* Container */
-//   .container {
-//     width: 100%;
-//     margin-left: auto;
-//     margin-right: auto;
-//     padding-left: 2rem;
-//     padding-right: 2rem;
-//   }
-//   @media (min-width: 1536px) {
-//     .container {
-//       max-width: 1400px;
-//     }
-//   }
-
-//   /* Ultra-Wide Container */
-//   @media (min-width: 1800px) {
-//     .ultra-wide-container {
-//       max-width: 1800px;
-//       margin-left: auto;
-//       margin-right: auto;
-//       padding-left: 4rem;
-//       padding-right: 4rem;
-//     }
-//   }
-//   @media (min-width: 2048px) {
-//     .ultra-wide-container {
-//       padding-left: 6rem;
-//       padding-right: 6rem;
-//     }
-//   }
-
-//   /* Animations */
-//   .animate-accordion-down {
-//     animation: accordion-down 0.2s ease-out;
-//   }
-//   .animate-accordion-up {
-//     animation: accordion-up 0.2s ease-out;
-//   }
-
-//   /* Extra Custom Utilities */
-//   .card-shadow {
-//     @apply shadow-md hover:shadow-lg transition-shadow duration-200;
-//   }
-//   .btn-rounded {
-//     @apply rounded-full px-4 py-2;
-//   }
-//   .text-gradient {
-//     background: linear-gradient(to right, var(--primary), var(--secondary));
-//     -webkit-background-clip: text;
-//     -webkit-text-fill-color: transparent;
-//   }
-// }
-//  can you modify this css only for better responsiveness
-// ```
+  # Optional: Helpful query to get current user
+  extend type Query {
+    me: User
+    meSellerProfile: SellerProfile
+  }
+`;

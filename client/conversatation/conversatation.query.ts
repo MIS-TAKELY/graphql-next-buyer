@@ -29,7 +29,9 @@ export const GET_CONVERSATION_BY_PRODUCT = gql`
           id
           firstName
           lastName
-          role
+          roles {
+            role
+          }
         }
       }
     }

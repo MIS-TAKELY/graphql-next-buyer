@@ -1,62 +1,80 @@
+// lib/context.ts (or wherever you create context)
+import redisConfig from "@/config/redis";
 import { prisma } from "@/lib/db/prisma";
 import { getAuth } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
 
+// Updated context type — no more `role: string`
 export interface GraphQLContext {
   prisma: typeof prisma;
-  user?:
-    | {
-        id: string;
-        clerkId: string;
-        email: string;
-        role: string;
-        firstName: string | null;
-        lastName: string | null;
-      }
-    | null;
-  publish: (evt: { channel: string; message: unknown }) => Promise<void>;
+  user: {
+    id: string;
+    clerkId: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    roles: string[]; // ← Now an array of roles
+  } | null;
+  publish: (evt: {
+    type: string;
+    payload: unknown;
+    room?: string;
+  }) => Promise<void>;
 }
 
 export async function createContext(
   request: NextRequest
 ): Promise<GraphQLContext> {
   try {
-    const { userId } = await getAuth(request);
+    const { userId: clerkId } = await getAuth(request);
+
+    console.log("clerk id--->", clerkId);
+
     let user = null;
-    if (userId) {
-      user = await prisma.user.findUnique({
-        where: { clerkId: userId },
+
+    if (clerkId) {
+      // Fetch user + their roles in a single query using Prisma's nested read
+      const dbUser = await prisma.user.findUnique({
+        where: { clerkId },
         select: {
           id: true,
           clerkId: true,
           email: true,
-          role: true,
           firstName: true,
           lastName: true,
+          roles: {
+            select: { role: true }, // This pulls from UserRole table
+          },
         },
       });
-    }
 
-    // console.log("user id-->", userId);
-    // console.log("user-->", user);
+      if (dbUser) {
+        user = {
+          id: dbUser.id,
+          clerkId: dbUser.clerkId,
+          email: dbUser.email,
+          roles: dbUser.roles.map((r) => r.role), // ← array of roles
+          firstName: dbUser.firstName ?? "",
+          lastName: dbUser.lastName ?? "",
+        };
+      }
+    }
 
     return {
       prisma,
       user,
-      publish: async ({ channel, message }) => {
-        const url = `${
-          process.env.UPSTASH_REALTIME_REST_URL
-        }/publish/${encodeURIComponent(channel)}`;
-        const res = await fetch(url, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.UPSTASH_REALTIME_REST_TOKEN}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(message),
-        });
-        if (!res.ok) {
-          console.error("Failed to publish to Realtime:", await res.text());
+      publish: async (evt) => {
+        if (!redisConfig.publisher) {
+          console.warn(
+            "Redis publisher not available — event dropped:",
+            evt.type
+          );
+          return;
+        }
+        try {
+          await redisConfig.publisher.publish("events", JSON.stringify(evt));
+        } catch (err) {
+          console.error("Failed to publish event:", err);
         }
       },
     };
@@ -65,7 +83,9 @@ export async function createContext(
     return {
       prisma,
       user: null,
-      publish: async () => {},
+      publish: async () => {
+        console.warn("Publish called but context failed to initialize");
+      },
     };
   }
 }

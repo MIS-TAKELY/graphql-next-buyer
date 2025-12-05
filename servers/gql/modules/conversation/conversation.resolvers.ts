@@ -4,48 +4,40 @@ export const conversationResolvers = {
   Query: {
     conversationByProduct: async (
       _parent: any,
-      { productId }: { productId: string; userId: string },
+      { productId }: { productId: string },
       { prisma, user }: GraphQLContext
     ) => {
-      // Fetch the active conversation for this product and buyer
+      if (!user) throw new Error("Unauthorized");
 
-      if (!user) throw new Error("User id not avilable");
+      // Find an active conversation between this user and the product seller
       const conversation = await prisma.conversation.findFirst({
         where: {
           productId,
-          senderId: user.id,
+          OR: [{ senderId: user.id }, { recieverId: user.id }],
           isActive: true,
         },
         include: {
-          product: {
-            select: { id: true, name: true, slug: true },
-          },
+          product: { select: { id: true, name: true, slug: true } },
           sender: {
-            select: { id: true, firstName: true, lastName: true, email: true },
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              avatarImageUrl: true,
+            },
           },
           reciever: {
-            select: { id: true, firstName: true, lastName: true, email: true },
-          },
-          ConversationParticipant: {
-            include: {
-              user: {
-                select: { id: true, firstName: true, lastName: true },
-              },
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              avatarImageUrl: true,
             },
           },
           messages: {
-            orderBy: { sentAt: "asc" },
-            include: {
-              sender: {
-                select: {
-                  id: true,
-                  firstName: true,
-                  lastName: true,
-                  role: true,
-                },
-              },
-              // attachments: true,
-            },
+            take: 1, // Only need to check existence, messages fetched separately
           },
         },
       });
@@ -57,151 +49,77 @@ export const conversationResolvers = {
     createConversation: async (
       _parent: any,
       { input }: { input: { productId: string } },
-      { prisma, user, publish }: GraphQLContext
+      ctx: GraphQLContext
     ): Promise<any> => {
-      if (!user || user.role !== "BUYER") {
-        throw new Error(
-          "Unauthorized: Only buyers can initiate conversations."
-        );
-      }
+      // Ensure user is authenticated
+      if (!ctx.user) throw new Error("Unauthorized");
 
+      const { prisma, user } = ctx;
       const { productId } = input;
-      const senderId = user.id;
 
-      // Fetch product and its seller
       const product = await prisma.product.findUnique({
         where: { id: productId },
         select: { id: true, name: true, sellerId: true },
       });
 
-      if (!product) {
-        throw new Error("Product not found.");
-      }
+      if (!product) throw new Error("Product not found.");
 
+      // Determine roles
+      const senderId = user.id;
       const recieverId = product.sellerId;
+
       if (senderId === recieverId) {
-        throw new Error("Cannot start a conversation with yourself.");
+        throw new Error("You cannot chat with yourself.");
       }
 
-      // Check for existing conversation
-      let conversation = await prisma.conversation.findUnique({
+      // 1. Check if conversation already exists (idempotency)
+      const existing = await prisma.conversation.findFirst({
         where: {
-          senderId_recieverId_productId: { senderId, recieverId, productId },
-        },
-        include: {
-          ConversationParticipant: true,
+          productId,
+          OR: [
+            { AND: [{ senderId: senderId }, { recieverId: recieverId }] },
+            { AND: [{ senderId: recieverId }, { recieverId: senderId }] }, // Handle case where seller started it
+          ],
         },
       });
 
-      if (conversation) {
-        // If exists and active, return it (reuse)
-        if (!conversation.isActive) {
-          throw new Error("Conversation is inactive.");
+      if (existing) {
+        if (!existing.isActive) {
+          // Reactivate if needed
+          return await prisma.conversation.update({
+            where: { id: existing.id },
+            data: { isActive: true },
+          });
         }
-        return conversation;
+        return existing;
       }
 
-      // Create new conversation (transaction for atomicity)
-      const result = await prisma.$transaction(
-        async (tx) => {
-          // Create conversation
-          const newConversation = await tx.conversation.create({
-            data: {
-              productId,
-              senderId,
-              recieverId,
-              title: `Chat about ${product.name}`, // Auto-generate title
-              isActive: true,
-            },
-            include: {
-              product: { select: { id: true, name: true, slug: true } },
-              sender: {
-                select: {
-                  id: true,
-                  firstName: true,
-                  lastName: true,
-                  email: true,
-                },
-              },
-              reciever: {
-                select: {
-                  id: true,
-                  firstName: true,
-                  lastName: true,
-                  email: true,
-                },
-              },
-              ConversationParticipant: true,
-            },
-          });
-
-          // Add participants if not already (shouldn't be, since new)
-          await tx.conversationParticipant.createMany({
-            data: [
-              { conversationId: newConversation.id, userId: senderId },
-              { conversationId: newConversation.id, userId: recieverId },
-            ],
-            skipDuplicates: true, // Safe in case of retry
-          });
-
-          // Refetch with participants
-          return tx.conversation.findUnique({
-            where: { id: newConversation.id },
-            include: {
-              product: { select: { id: true, name: true, slug: true } },
-              sender: {
-                select: {
-                  id: true,
-                  firstName: true,
-                  lastName: true,
-                  email: true,
-                },
-              },
-              reciever: {
-                select: {
-                  id: true,
-                  firstName: true,
-                  lastName: true,
-                  email: true,
-                },
-              },
-              ConversationParticipant: {
-                include: {
-                  user: {
-                    select: { id: true, firstName: true, lastName: true },
-                  },
-                },
-              },
-            },
-          });
-        },
-        {
-          timeout: 30000,
-        }
-      );
-
-      // Optional: Publish to Upstash for real-time notification to seller
-      if (result) {
-        const channel = `conversation:${result.id}`;
-        const realtimeEvent = {
-          type: "CONVERSATION_CREATED",
-          payload: {
-            conversation: {
-              ...result,
-              createdAt: result.createdAt.toISOString(),
-            },
+      // 2. Create new
+      return await prisma.$transaction(async (tx) => {
+        const newConversation = await tx.conversation.create({
+          data: {
+            productId,
+            senderId,
+            recieverId,
+            title: `Inquiry about ${product.name}`,
+            isActive: true,
           },
-        };
-        try {
-          await publish({ channel, message: realtimeEvent }); // From your context
-        } catch (error) {
-          console.error("Failed to publish conversation creation:", error);
-        }
-      }
+          include: {
+            product: true,
+            sender: true,
+            reciever: true,
+          },
+        });
 
-      return result;
+        await tx.conversationParticipant.createMany({
+          data: [
+            { conversationId: newConversation.id, userId: senderId },
+            { conversationId: newConversation.id, userId: recieverId },
+          ],
+        });
+
+        return newConversation;
+      });
     },
   },
 };
-
-// Merge: export const resolvers = { ...messageResolvers, ...conversationResolvers };

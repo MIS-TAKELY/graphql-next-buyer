@@ -19,6 +19,16 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model UserRole
+ * 
+ */
+export type UserRole = $Result.DefaultSelection<Prisma.$UserRolePayload>
+/**
+ * Model SellerProfile
+ * 
+ */
+export type SellerProfile = $Result.DefaultSelection<Prisma.$SellerProfilePayload>
+/**
  * Model Notification
  * 
  */
@@ -365,6 +375,16 @@ export const ReturnType: {
 
 export type ReturnType = (typeof ReturnType)[keyof typeof ReturnType]
 
+
+export const VerificationStatus: {
+  PENDING: 'PENDING',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type VerificationStatus = (typeof VerificationStatus)[keyof typeof VerificationStatus]
+
 }
 
 export type Role = $Enums.Role
@@ -438,6 +458,10 @@ export const WarrantyType: typeof $Enums.WarrantyType
 export type ReturnType = $Enums.ReturnType
 
 export const ReturnType: typeof $Enums.ReturnType
+
+export type VerificationStatus = $Enums.VerificationStatus
+
+export const VerificationStatus: typeof $Enums.VerificationStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -566,6 +590,26 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userRole`: Exposes CRUD operations for the **UserRole** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserRoles
+    * const userRoles = await prisma.userRole.findMany()
+    * ```
+    */
+  get userRole(): Prisma.UserRoleDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.sellerProfile`: Exposes CRUD operations for the **SellerProfile** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SellerProfiles
+    * const sellerProfiles = await prisma.sellerProfile.findMany()
+    * ```
+    */
+  get sellerProfile(): Prisma.SellerProfileDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
@@ -1328,6 +1372,8 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    UserRole: 'UserRole',
+    SellerProfile: 'SellerProfile',
     Notification: 'Notification',
     Conversation: 'Conversation',
     Message: 'Message',
@@ -1378,7 +1424,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout"
+      modelProps: "user" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1453,6 +1499,154 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserRole: {
+        payload: Prisma.$UserRolePayload<ExtArgs>
+        fields: Prisma.UserRoleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserRoleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserRolePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserRoleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserRolePayload>
+          }
+          findFirst: {
+            args: Prisma.UserRoleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserRolePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserRoleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserRolePayload>
+          }
+          findMany: {
+            args: Prisma.UserRoleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserRolePayload>[]
+          }
+          create: {
+            args: Prisma.UserRoleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserRolePayload>
+          }
+          createMany: {
+            args: Prisma.UserRoleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserRoleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserRolePayload>[]
+          }
+          delete: {
+            args: Prisma.UserRoleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserRolePayload>
+          }
+          update: {
+            args: Prisma.UserRoleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserRolePayload>
+          }
+          deleteMany: {
+            args: Prisma.UserRoleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserRoleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserRoleUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserRolePayload>[]
+          }
+          upsert: {
+            args: Prisma.UserRoleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserRolePayload>
+          }
+          aggregate: {
+            args: Prisma.UserRoleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserRole>
+          }
+          groupBy: {
+            args: Prisma.UserRoleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserRoleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserRoleCountArgs<ExtArgs>
+            result: $Utils.Optional<UserRoleCountAggregateOutputType> | number
+          }
+        }
+      }
+      SellerProfile: {
+        payload: Prisma.$SellerProfilePayload<ExtArgs>
+        fields: Prisma.SellerProfileFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SellerProfileFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SellerProfilePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SellerProfileFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SellerProfilePayload>
+          }
+          findFirst: {
+            args: Prisma.SellerProfileFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SellerProfilePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SellerProfileFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SellerProfilePayload>
+          }
+          findMany: {
+            args: Prisma.SellerProfileFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SellerProfilePayload>[]
+          }
+          create: {
+            args: Prisma.SellerProfileCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SellerProfilePayload>
+          }
+          createMany: {
+            args: Prisma.SellerProfileCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SellerProfileCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SellerProfilePayload>[]
+          }
+          delete: {
+            args: Prisma.SellerProfileDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SellerProfilePayload>
+          }
+          update: {
+            args: Prisma.SellerProfileUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SellerProfilePayload>
+          }
+          deleteMany: {
+            args: Prisma.SellerProfileDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SellerProfileUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SellerProfileUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SellerProfilePayload>[]
+          }
+          upsert: {
+            args: Prisma.SellerProfileUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SellerProfilePayload>
+          }
+          aggregate: {
+            args: Prisma.SellerProfileAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSellerProfile>
+          }
+          groupBy: {
+            args: Prisma.SellerProfileGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SellerProfileGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SellerProfileCountArgs<ExtArgs>
+            result: $Utils.Optional<SellerProfileCountAggregateOutputType> | number
           }
         }
       }
@@ -3921,6 +4115,8 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    userRole?: UserRoleOmit
+    sellerProfile?: SellerProfileOmit
     notification?: NotificationOmit
     conversation?: ConversationOmit
     message?: MessageOmit
@@ -4048,6 +4244,7 @@ export namespace Prisma {
     sentMessages: number
     ConversationParticipant: number
     notifications: number
+    roles: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4066,6 +4263,7 @@ export namespace Prisma {
     sentMessages?: boolean | UserCountOutputTypeCountSentMessagesArgs
     ConversationParticipant?: boolean | UserCountOutputTypeCountConversationParticipantArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+    roles?: boolean | UserCountOutputTypeCountRolesArgs
   }
 
   // Custom InputTypes
@@ -4184,6 +4382,13 @@ export namespace Prisma {
     where?: NotificationWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountRolesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserRoleWhereInput
+  }
+
 
   /**
    * Count Type ConversationCountOutputType
@@ -4253,6 +4458,37 @@ export namespace Prisma {
    */
   export type MessageCountOutputTypeCountMessageAttachmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MessageAttachmentWhereInput
+  }
+
+
+  /**
+   * Count Type AddressCountOutputType
+   */
+
+  export type AddressCountOutputType = {
+    sellerPickupAddresses: number
+  }
+
+  export type AddressCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sellerPickupAddresses?: boolean | AddressCountOutputTypeCountSellerPickupAddressesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AddressCountOutputType without action
+   */
+  export type AddressCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AddressCountOutputType
+     */
+    select?: AddressCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AddressCountOutputType without action
+   */
+  export type AddressCountOutputTypeCountSellerPickupAddressesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SellerProfileWhereInput
   }
 
 
@@ -4735,10 +4971,10 @@ export namespace Prisma {
     email: string | null
     firstName: string | null
     lastName: string | null
+    avatarImageUrl: string | null
     phone: string | null
     gender: $Enums.Gender | null
     dob: Date | null
-    role: $Enums.Role | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4749,10 +4985,10 @@ export namespace Prisma {
     email: string | null
     firstName: string | null
     lastName: string | null
+    avatarImageUrl: string | null
     phone: string | null
     gender: $Enums.Gender | null
     dob: Date | null
-    role: $Enums.Role | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4763,10 +4999,10 @@ export namespace Prisma {
     email: number
     firstName: number
     lastName: number
+    avatarImageUrl: number
     phone: number
     gender: number
     dob: number
-    role: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4779,10 +5015,10 @@ export namespace Prisma {
     email?: true
     firstName?: true
     lastName?: true
+    avatarImageUrl?: true
     phone?: true
     gender?: true
     dob?: true
-    role?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4793,10 +5029,10 @@ export namespace Prisma {
     email?: true
     firstName?: true
     lastName?: true
+    avatarImageUrl?: true
     phone?: true
     gender?: true
     dob?: true
-    role?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4807,10 +5043,10 @@ export namespace Prisma {
     email?: true
     firstName?: true
     lastName?: true
+    avatarImageUrl?: true
     phone?: true
     gender?: true
     dob?: true
-    role?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4894,10 +5130,10 @@ export namespace Prisma {
     email: string
     firstName: string | null
     lastName: string | null
+    avatarImageUrl: string | null
     phone: string | null
     gender: $Enums.Gender | null
     dob: Date | null
-    role: $Enums.Role
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -4925,10 +5161,10 @@ export namespace Prisma {
     email?: boolean
     firstName?: boolean
     lastName?: boolean
+    avatarImageUrl?: boolean
     phone?: boolean
     gender?: boolean
     dob?: boolean
-    role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     addresses?: boolean | User$addressesArgs<ExtArgs>
@@ -4946,6 +5182,8 @@ export namespace Prisma {
     sentMessages?: boolean | User$sentMessagesArgs<ExtArgs>
     ConversationParticipant?: boolean | User$ConversationParticipantArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    sellerProfile?: boolean | User$sellerProfileArgs<ExtArgs>
+    roles?: boolean | User$rolesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4955,10 +5193,10 @@ export namespace Prisma {
     email?: boolean
     firstName?: boolean
     lastName?: boolean
+    avatarImageUrl?: boolean
     phone?: boolean
     gender?: boolean
     dob?: boolean
-    role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -4969,10 +5207,10 @@ export namespace Prisma {
     email?: boolean
     firstName?: boolean
     lastName?: boolean
+    avatarImageUrl?: boolean
     phone?: boolean
     gender?: boolean
     dob?: boolean
-    role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -4983,15 +5221,15 @@ export namespace Prisma {
     email?: boolean
     firstName?: boolean
     lastName?: boolean
+    avatarImageUrl?: boolean
     phone?: boolean
     gender?: boolean
     dob?: boolean
-    role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clerkId" | "email" | "firstName" | "lastName" | "phone" | "gender" | "dob" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clerkId" | "email" | "firstName" | "lastName" | "avatarImageUrl" | "phone" | "gender" | "dob" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     addresses?: boolean | User$addressesArgs<ExtArgs>
     paymentMethods?: boolean | User$paymentMethodsArgs<ExtArgs>
@@ -5008,6 +5246,8 @@ export namespace Prisma {
     sentMessages?: boolean | User$sentMessagesArgs<ExtArgs>
     ConversationParticipant?: boolean | User$ConversationParticipantArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    sellerProfile?: boolean | User$sellerProfileArgs<ExtArgs>
+    roles?: boolean | User$rolesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5031,6 +5271,8 @@ export namespace Prisma {
       sentMessages: Prisma.$MessagePayload<ExtArgs>[]
       ConversationParticipant: Prisma.$ConversationParticipantPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      sellerProfile: Prisma.$SellerProfilePayload<ExtArgs> | null
+      roles: Prisma.$UserRolePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5038,10 +5280,10 @@ export namespace Prisma {
       email: string
       firstName: string | null
       lastName: string | null
+      avatarImageUrl: string | null
       phone: string | null
       gender: $Enums.Gender | null
       dob: Date | null
-      role: $Enums.Role
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -5453,6 +5695,8 @@ export namespace Prisma {
     sentMessages<T extends User$sentMessagesArgs<ExtArgs> = {}>(args?: Subset<T, User$sentMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ConversationParticipant<T extends User$ConversationParticipantArgs<ExtArgs> = {}>(args?: Subset<T, User$ConversationParticipantArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sellerProfile<T extends User$sellerProfileArgs<ExtArgs> = {}>(args?: Subset<T, User$sellerProfileArgs<ExtArgs>>): Prisma__SellerProfileClient<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    roles<T extends User$rolesArgs<ExtArgs> = {}>(args?: Subset<T, User$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5487,10 +5731,10 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly firstName: FieldRef<"User", 'String'>
     readonly lastName: FieldRef<"User", 'String'>
+    readonly avatarImageUrl: FieldRef<"User", 'String'>
     readonly phone: FieldRef<"User", 'String'>
     readonly gender: FieldRef<"User", 'Gender'>
     readonly dob: FieldRef<"User", 'DateTime'>
-    readonly role: FieldRef<"User", 'Role'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -6241,6 +6485,49 @@ export namespace Prisma {
   }
 
   /**
+   * User.sellerProfile
+   */
+  export type User$sellerProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileInclude<ExtArgs> | null
+    where?: SellerProfileWhereInput
+  }
+
+  /**
+   * User.roles
+   */
+  export type User$rolesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleInclude<ExtArgs> | null
+    where?: UserRoleWhereInput
+    orderBy?: UserRoleOrderByWithRelationInput | UserRoleOrderByWithRelationInput[]
+    cursor?: UserRoleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserRoleScalarFieldEnum | UserRoleScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6256,6 +6543,2464 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserRole
+   */
+
+  export type AggregateUserRole = {
+    _count: UserRoleCountAggregateOutputType | null
+    _min: UserRoleMinAggregateOutputType | null
+    _max: UserRoleMaxAggregateOutputType | null
+  }
+
+  export type UserRoleMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    role: $Enums.Role | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserRoleMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    role: $Enums.Role | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserRoleCountAggregateOutputType = {
+    id: number
+    userId: number
+    role: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UserRoleMinAggregateInputType = {
+    id?: true
+    userId?: true
+    role?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserRoleMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    role?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserRoleCountAggregateInputType = {
+    id?: true
+    userId?: true
+    role?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UserRoleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserRole to aggregate.
+     */
+    where?: UserRoleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserRoles to fetch.
+     */
+    orderBy?: UserRoleOrderByWithRelationInput | UserRoleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserRoleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserRoles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserRoles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserRoles
+    **/
+    _count?: true | UserRoleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserRoleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserRoleMaxAggregateInputType
+  }
+
+  export type GetUserRoleAggregateType<T extends UserRoleAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserRole]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserRole[P]>
+      : GetScalarType<T[P], AggregateUserRole[P]>
+  }
+
+
+
+
+  export type UserRoleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserRoleWhereInput
+    orderBy?: UserRoleOrderByWithAggregationInput | UserRoleOrderByWithAggregationInput[]
+    by: UserRoleScalarFieldEnum[] | UserRoleScalarFieldEnum
+    having?: UserRoleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserRoleCountAggregateInputType | true
+    _min?: UserRoleMinAggregateInputType
+    _max?: UserRoleMaxAggregateInputType
+  }
+
+  export type UserRoleGroupByOutputType = {
+    id: string
+    userId: string
+    role: $Enums.Role
+    createdAt: Date
+    updatedAt: Date
+    _count: UserRoleCountAggregateOutputType | null
+    _min: UserRoleMinAggregateOutputType | null
+    _max: UserRoleMaxAggregateOutputType | null
+  }
+
+  type GetUserRoleGroupByPayload<T extends UserRoleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserRoleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserRoleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserRoleGroupByOutputType[P]>
+            : GetScalarType<T[P], UserRoleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserRoleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userRole"]>
+
+  export type UserRoleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userRole"]>
+
+  export type UserRoleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userRole"]>
+
+  export type UserRoleSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UserRoleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["userRole"]>
+  export type UserRoleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserRoleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserRoleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserRolePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserRole"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      role: $Enums.Role
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["userRole"]>
+    composites: {}
+  }
+
+  type UserRoleGetPayload<S extends boolean | null | undefined | UserRoleDefaultArgs> = $Result.GetResult<Prisma.$UserRolePayload, S>
+
+  type UserRoleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserRoleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserRoleCountAggregateInputType | true
+    }
+
+  export interface UserRoleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserRole'], meta: { name: 'UserRole' } }
+    /**
+     * Find zero or one UserRole that matches the filter.
+     * @param {UserRoleFindUniqueArgs} args - Arguments to find a UserRole
+     * @example
+     * // Get one UserRole
+     * const userRole = await prisma.userRole.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserRoleFindUniqueArgs>(args: SelectSubset<T, UserRoleFindUniqueArgs<ExtArgs>>): Prisma__UserRoleClient<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserRole that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserRoleFindUniqueOrThrowArgs} args - Arguments to find a UserRole
+     * @example
+     * // Get one UserRole
+     * const userRole = await prisma.userRole.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserRoleFindUniqueOrThrowArgs>(args: SelectSubset<T, UserRoleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserRoleClient<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserRole that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserRoleFindFirstArgs} args - Arguments to find a UserRole
+     * @example
+     * // Get one UserRole
+     * const userRole = await prisma.userRole.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserRoleFindFirstArgs>(args?: SelectSubset<T, UserRoleFindFirstArgs<ExtArgs>>): Prisma__UserRoleClient<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserRole that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserRoleFindFirstOrThrowArgs} args - Arguments to find a UserRole
+     * @example
+     * // Get one UserRole
+     * const userRole = await prisma.userRole.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserRoleFindFirstOrThrowArgs>(args?: SelectSubset<T, UserRoleFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserRoleClient<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserRoles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserRoleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserRoles
+     * const userRoles = await prisma.userRole.findMany()
+     * 
+     * // Get first 10 UserRoles
+     * const userRoles = await prisma.userRole.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userRoleWithIdOnly = await prisma.userRole.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserRoleFindManyArgs>(args?: SelectSubset<T, UserRoleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserRole.
+     * @param {UserRoleCreateArgs} args - Arguments to create a UserRole.
+     * @example
+     * // Create one UserRole
+     * const UserRole = await prisma.userRole.create({
+     *   data: {
+     *     // ... data to create a UserRole
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserRoleCreateArgs>(args: SelectSubset<T, UserRoleCreateArgs<ExtArgs>>): Prisma__UserRoleClient<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserRoles.
+     * @param {UserRoleCreateManyArgs} args - Arguments to create many UserRoles.
+     * @example
+     * // Create many UserRoles
+     * const userRole = await prisma.userRole.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserRoleCreateManyArgs>(args?: SelectSubset<T, UserRoleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserRoles and returns the data saved in the database.
+     * @param {UserRoleCreateManyAndReturnArgs} args - Arguments to create many UserRoles.
+     * @example
+     * // Create many UserRoles
+     * const userRole = await prisma.userRole.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserRoles and only return the `id`
+     * const userRoleWithIdOnly = await prisma.userRole.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserRoleCreateManyAndReturnArgs>(args?: SelectSubset<T, UserRoleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserRole.
+     * @param {UserRoleDeleteArgs} args - Arguments to delete one UserRole.
+     * @example
+     * // Delete one UserRole
+     * const UserRole = await prisma.userRole.delete({
+     *   where: {
+     *     // ... filter to delete one UserRole
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserRoleDeleteArgs>(args: SelectSubset<T, UserRoleDeleteArgs<ExtArgs>>): Prisma__UserRoleClient<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserRole.
+     * @param {UserRoleUpdateArgs} args - Arguments to update one UserRole.
+     * @example
+     * // Update one UserRole
+     * const userRole = await prisma.userRole.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserRoleUpdateArgs>(args: SelectSubset<T, UserRoleUpdateArgs<ExtArgs>>): Prisma__UserRoleClient<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserRoles.
+     * @param {UserRoleDeleteManyArgs} args - Arguments to filter UserRoles to delete.
+     * @example
+     * // Delete a few UserRoles
+     * const { count } = await prisma.userRole.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserRoleDeleteManyArgs>(args?: SelectSubset<T, UserRoleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserRoles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserRoleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserRoles
+     * const userRole = await prisma.userRole.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserRoleUpdateManyArgs>(args: SelectSubset<T, UserRoleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserRoles and returns the data updated in the database.
+     * @param {UserRoleUpdateManyAndReturnArgs} args - Arguments to update many UserRoles.
+     * @example
+     * // Update many UserRoles
+     * const userRole = await prisma.userRole.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserRoles and only return the `id`
+     * const userRoleWithIdOnly = await prisma.userRole.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserRoleUpdateManyAndReturnArgs>(args: SelectSubset<T, UserRoleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserRole.
+     * @param {UserRoleUpsertArgs} args - Arguments to update or create a UserRole.
+     * @example
+     * // Update or create a UserRole
+     * const userRole = await prisma.userRole.upsert({
+     *   create: {
+     *     // ... data to create a UserRole
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserRole we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserRoleUpsertArgs>(args: SelectSubset<T, UserRoleUpsertArgs<ExtArgs>>): Prisma__UserRoleClient<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserRoles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserRoleCountArgs} args - Arguments to filter UserRoles to count.
+     * @example
+     * // Count the number of UserRoles
+     * const count = await prisma.userRole.count({
+     *   where: {
+     *     // ... the filter for the UserRoles we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserRoleCountArgs>(
+      args?: Subset<T, UserRoleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserRoleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserRole.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserRoleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserRoleAggregateArgs>(args: Subset<T, UserRoleAggregateArgs>): Prisma.PrismaPromise<GetUserRoleAggregateType<T>>
+
+    /**
+     * Group by UserRole.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserRoleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserRoleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserRoleGroupByArgs['orderBy'] }
+        : { orderBy?: UserRoleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserRoleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserRoleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserRole model
+   */
+  readonly fields: UserRoleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserRole.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserRoleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserRole model
+   */
+  interface UserRoleFieldRefs {
+    readonly id: FieldRef<"UserRole", 'String'>
+    readonly userId: FieldRef<"UserRole", 'String'>
+    readonly role: FieldRef<"UserRole", 'Role'>
+    readonly createdAt: FieldRef<"UserRole", 'DateTime'>
+    readonly updatedAt: FieldRef<"UserRole", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserRole findUnique
+   */
+  export type UserRoleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleInclude<ExtArgs> | null
+    /**
+     * Filter, which UserRole to fetch.
+     */
+    where: UserRoleWhereUniqueInput
+  }
+
+  /**
+   * UserRole findUniqueOrThrow
+   */
+  export type UserRoleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleInclude<ExtArgs> | null
+    /**
+     * Filter, which UserRole to fetch.
+     */
+    where: UserRoleWhereUniqueInput
+  }
+
+  /**
+   * UserRole findFirst
+   */
+  export type UserRoleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleInclude<ExtArgs> | null
+    /**
+     * Filter, which UserRole to fetch.
+     */
+    where?: UserRoleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserRoles to fetch.
+     */
+    orderBy?: UserRoleOrderByWithRelationInput | UserRoleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserRoles.
+     */
+    cursor?: UserRoleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserRoles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserRoles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserRoles.
+     */
+    distinct?: UserRoleScalarFieldEnum | UserRoleScalarFieldEnum[]
+  }
+
+  /**
+   * UserRole findFirstOrThrow
+   */
+  export type UserRoleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleInclude<ExtArgs> | null
+    /**
+     * Filter, which UserRole to fetch.
+     */
+    where?: UserRoleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserRoles to fetch.
+     */
+    orderBy?: UserRoleOrderByWithRelationInput | UserRoleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserRoles.
+     */
+    cursor?: UserRoleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserRoles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserRoles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserRoles.
+     */
+    distinct?: UserRoleScalarFieldEnum | UserRoleScalarFieldEnum[]
+  }
+
+  /**
+   * UserRole findMany
+   */
+  export type UserRoleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleInclude<ExtArgs> | null
+    /**
+     * Filter, which UserRoles to fetch.
+     */
+    where?: UserRoleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserRoles to fetch.
+     */
+    orderBy?: UserRoleOrderByWithRelationInput | UserRoleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserRoles.
+     */
+    cursor?: UserRoleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserRoles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserRoles.
+     */
+    skip?: number
+    distinct?: UserRoleScalarFieldEnum | UserRoleScalarFieldEnum[]
+  }
+
+  /**
+   * UserRole create
+   */
+  export type UserRoleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserRole.
+     */
+    data: XOR<UserRoleCreateInput, UserRoleUncheckedCreateInput>
+  }
+
+  /**
+   * UserRole createMany
+   */
+  export type UserRoleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserRoles.
+     */
+    data: UserRoleCreateManyInput | UserRoleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserRole createManyAndReturn
+   */
+  export type UserRoleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserRoles.
+     */
+    data: UserRoleCreateManyInput | UserRoleCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserRole update
+   */
+  export type UserRoleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserRole.
+     */
+    data: XOR<UserRoleUpdateInput, UserRoleUncheckedUpdateInput>
+    /**
+     * Choose, which UserRole to update.
+     */
+    where: UserRoleWhereUniqueInput
+  }
+
+  /**
+   * UserRole updateMany
+   */
+  export type UserRoleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserRoles.
+     */
+    data: XOR<UserRoleUpdateManyMutationInput, UserRoleUncheckedUpdateManyInput>
+    /**
+     * Filter which UserRoles to update
+     */
+    where?: UserRoleWhereInput
+    /**
+     * Limit how many UserRoles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserRole updateManyAndReturn
+   */
+  export type UserRoleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * The data used to update UserRoles.
+     */
+    data: XOR<UserRoleUpdateManyMutationInput, UserRoleUncheckedUpdateManyInput>
+    /**
+     * Filter which UserRoles to update
+     */
+    where?: UserRoleWhereInput
+    /**
+     * Limit how many UserRoles to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserRole upsert
+   */
+  export type UserRoleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserRole to update in case it exists.
+     */
+    where: UserRoleWhereUniqueInput
+    /**
+     * In case the UserRole found by the `where` argument doesn't exist, create a new UserRole with this data.
+     */
+    create: XOR<UserRoleCreateInput, UserRoleUncheckedCreateInput>
+    /**
+     * In case the UserRole was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserRoleUpdateInput, UserRoleUncheckedUpdateInput>
+  }
+
+  /**
+   * UserRole delete
+   */
+  export type UserRoleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleInclude<ExtArgs> | null
+    /**
+     * Filter which UserRole to delete.
+     */
+    where: UserRoleWhereUniqueInput
+  }
+
+  /**
+   * UserRole deleteMany
+   */
+  export type UserRoleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserRoles to delete
+     */
+    where?: UserRoleWhereInput
+    /**
+     * Limit how many UserRoles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserRole without action
+   */
+  export type UserRoleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserRole
+     */
+    select?: UserRoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserRole
+     */
+    omit?: UserRoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserRoleInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SellerProfile
+   */
+
+  export type AggregateSellerProfile = {
+    _count: SellerProfileCountAggregateOutputType | null
+    _avg: SellerProfileAvgAggregateOutputType | null
+    _sum: SellerProfileSumAggregateOutputType | null
+    _min: SellerProfileMinAggregateOutputType | null
+    _max: SellerProfileMaxAggregateOutputType | null
+  }
+
+  export type SellerProfileAvgAggregateOutputType = {
+    averageRating: Decimal | null
+    totalReviews: number | null
+    totalSales: number | null
+  }
+
+  export type SellerProfileSumAggregateOutputType = {
+    averageRating: Decimal | null
+    totalReviews: number | null
+    totalSales: number | null
+  }
+
+  export type SellerProfileMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    shopName: string | null
+    slug: string | null
+    logo: string | null
+    banner: string | null
+    description: string | null
+    tagline: string | null
+    businessName: string | null
+    businessRegNo: string | null
+    businessType: string | null
+    phone: string | null
+    altPhone: string | null
+    email: string | null
+    pickupAddressId: string | null
+    returnPolicy: string | null
+    shippingPolicy: string | null
+    about: string | null
+    verificationStatus: $Enums.VerificationStatus | null
+    verifiedAt: Date | null
+    isActive: boolean | null
+    averageRating: Decimal | null
+    totalReviews: number | null
+    totalSales: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SellerProfileMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    shopName: string | null
+    slug: string | null
+    logo: string | null
+    banner: string | null
+    description: string | null
+    tagline: string | null
+    businessName: string | null
+    businessRegNo: string | null
+    businessType: string | null
+    phone: string | null
+    altPhone: string | null
+    email: string | null
+    pickupAddressId: string | null
+    returnPolicy: string | null
+    shippingPolicy: string | null
+    about: string | null
+    verificationStatus: $Enums.VerificationStatus | null
+    verifiedAt: Date | null
+    isActive: boolean | null
+    averageRating: Decimal | null
+    totalReviews: number | null
+    totalSales: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SellerProfileCountAggregateOutputType = {
+    id: number
+    userId: number
+    shopName: number
+    slug: number
+    logo: number
+    banner: number
+    description: number
+    tagline: number
+    businessName: number
+    businessRegNo: number
+    businessType: number
+    phone: number
+    altPhone: number
+    email: number
+    pickupAddressId: number
+    returnPolicy: number
+    shippingPolicy: number
+    about: number
+    verificationStatus: number
+    verifiedAt: number
+    isActive: number
+    averageRating: number
+    totalReviews: number
+    totalSales: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SellerProfileAvgAggregateInputType = {
+    averageRating?: true
+    totalReviews?: true
+    totalSales?: true
+  }
+
+  export type SellerProfileSumAggregateInputType = {
+    averageRating?: true
+    totalReviews?: true
+    totalSales?: true
+  }
+
+  export type SellerProfileMinAggregateInputType = {
+    id?: true
+    userId?: true
+    shopName?: true
+    slug?: true
+    logo?: true
+    banner?: true
+    description?: true
+    tagline?: true
+    businessName?: true
+    businessRegNo?: true
+    businessType?: true
+    phone?: true
+    altPhone?: true
+    email?: true
+    pickupAddressId?: true
+    returnPolicy?: true
+    shippingPolicy?: true
+    about?: true
+    verificationStatus?: true
+    verifiedAt?: true
+    isActive?: true
+    averageRating?: true
+    totalReviews?: true
+    totalSales?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SellerProfileMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    shopName?: true
+    slug?: true
+    logo?: true
+    banner?: true
+    description?: true
+    tagline?: true
+    businessName?: true
+    businessRegNo?: true
+    businessType?: true
+    phone?: true
+    altPhone?: true
+    email?: true
+    pickupAddressId?: true
+    returnPolicy?: true
+    shippingPolicy?: true
+    about?: true
+    verificationStatus?: true
+    verifiedAt?: true
+    isActive?: true
+    averageRating?: true
+    totalReviews?: true
+    totalSales?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SellerProfileCountAggregateInputType = {
+    id?: true
+    userId?: true
+    shopName?: true
+    slug?: true
+    logo?: true
+    banner?: true
+    description?: true
+    tagline?: true
+    businessName?: true
+    businessRegNo?: true
+    businessType?: true
+    phone?: true
+    altPhone?: true
+    email?: true
+    pickupAddressId?: true
+    returnPolicy?: true
+    shippingPolicy?: true
+    about?: true
+    verificationStatus?: true
+    verifiedAt?: true
+    isActive?: true
+    averageRating?: true
+    totalReviews?: true
+    totalSales?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SellerProfileAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SellerProfile to aggregate.
+     */
+    where?: SellerProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SellerProfiles to fetch.
+     */
+    orderBy?: SellerProfileOrderByWithRelationInput | SellerProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SellerProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SellerProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SellerProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SellerProfiles
+    **/
+    _count?: true | SellerProfileCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SellerProfileAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SellerProfileSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SellerProfileMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SellerProfileMaxAggregateInputType
+  }
+
+  export type GetSellerProfileAggregateType<T extends SellerProfileAggregateArgs> = {
+        [P in keyof T & keyof AggregateSellerProfile]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSellerProfile[P]>
+      : GetScalarType<T[P], AggregateSellerProfile[P]>
+  }
+
+
+
+
+  export type SellerProfileGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SellerProfileWhereInput
+    orderBy?: SellerProfileOrderByWithAggregationInput | SellerProfileOrderByWithAggregationInput[]
+    by: SellerProfileScalarFieldEnum[] | SellerProfileScalarFieldEnum
+    having?: SellerProfileScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SellerProfileCountAggregateInputType | true
+    _avg?: SellerProfileAvgAggregateInputType
+    _sum?: SellerProfileSumAggregateInputType
+    _min?: SellerProfileMinAggregateInputType
+    _max?: SellerProfileMaxAggregateInputType
+  }
+
+  export type SellerProfileGroupByOutputType = {
+    id: string
+    userId: string
+    shopName: string
+    slug: string
+    logo: string | null
+    banner: string | null
+    description: string | null
+    tagline: string | null
+    businessName: string | null
+    businessRegNo: string | null
+    businessType: string | null
+    phone: string
+    altPhone: string | null
+    email: string | null
+    pickupAddressId: string | null
+    returnPolicy: string | null
+    shippingPolicy: string | null
+    about: string | null
+    verificationStatus: $Enums.VerificationStatus
+    verifiedAt: Date | null
+    isActive: boolean
+    averageRating: Decimal | null
+    totalReviews: number | null
+    totalSales: number | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SellerProfileCountAggregateOutputType | null
+    _avg: SellerProfileAvgAggregateOutputType | null
+    _sum: SellerProfileSumAggregateOutputType | null
+    _min: SellerProfileMinAggregateOutputType | null
+    _max: SellerProfileMaxAggregateOutputType | null
+  }
+
+  type GetSellerProfileGroupByPayload<T extends SellerProfileGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SellerProfileGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SellerProfileGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SellerProfileGroupByOutputType[P]>
+            : GetScalarType<T[P], SellerProfileGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SellerProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    shopName?: boolean
+    slug?: boolean
+    logo?: boolean
+    banner?: boolean
+    description?: boolean
+    tagline?: boolean
+    businessName?: boolean
+    businessRegNo?: boolean
+    businessType?: boolean
+    phone?: boolean
+    altPhone?: boolean
+    email?: boolean
+    pickupAddressId?: boolean
+    returnPolicy?: boolean
+    shippingPolicy?: boolean
+    about?: boolean
+    verificationStatus?: boolean
+    verifiedAt?: boolean
+    isActive?: boolean
+    averageRating?: boolean
+    totalReviews?: boolean
+    totalSales?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    pickupAddress?: boolean | SellerProfile$pickupAddressArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sellerProfile"]>
+
+  export type SellerProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    shopName?: boolean
+    slug?: boolean
+    logo?: boolean
+    banner?: boolean
+    description?: boolean
+    tagline?: boolean
+    businessName?: boolean
+    businessRegNo?: boolean
+    businessType?: boolean
+    phone?: boolean
+    altPhone?: boolean
+    email?: boolean
+    pickupAddressId?: boolean
+    returnPolicy?: boolean
+    shippingPolicy?: boolean
+    about?: boolean
+    verificationStatus?: boolean
+    verifiedAt?: boolean
+    isActive?: boolean
+    averageRating?: boolean
+    totalReviews?: boolean
+    totalSales?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    pickupAddress?: boolean | SellerProfile$pickupAddressArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sellerProfile"]>
+
+  export type SellerProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    shopName?: boolean
+    slug?: boolean
+    logo?: boolean
+    banner?: boolean
+    description?: boolean
+    tagline?: boolean
+    businessName?: boolean
+    businessRegNo?: boolean
+    businessType?: boolean
+    phone?: boolean
+    altPhone?: boolean
+    email?: boolean
+    pickupAddressId?: boolean
+    returnPolicy?: boolean
+    shippingPolicy?: boolean
+    about?: boolean
+    verificationStatus?: boolean
+    verifiedAt?: boolean
+    isActive?: boolean
+    averageRating?: boolean
+    totalReviews?: boolean
+    totalSales?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    pickupAddress?: boolean | SellerProfile$pickupAddressArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sellerProfile"]>
+
+  export type SellerProfileSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    shopName?: boolean
+    slug?: boolean
+    logo?: boolean
+    banner?: boolean
+    description?: boolean
+    tagline?: boolean
+    businessName?: boolean
+    businessRegNo?: boolean
+    businessType?: boolean
+    phone?: boolean
+    altPhone?: boolean
+    email?: boolean
+    pickupAddressId?: boolean
+    returnPolicy?: boolean
+    shippingPolicy?: boolean
+    about?: boolean
+    verificationStatus?: boolean
+    verifiedAt?: boolean
+    isActive?: boolean
+    averageRating?: boolean
+    totalReviews?: boolean
+    totalSales?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SellerProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "shopName" | "slug" | "logo" | "banner" | "description" | "tagline" | "businessName" | "businessRegNo" | "businessType" | "phone" | "altPhone" | "email" | "pickupAddressId" | "returnPolicy" | "shippingPolicy" | "about" | "verificationStatus" | "verifiedAt" | "isActive" | "averageRating" | "totalReviews" | "totalSales" | "createdAt" | "updatedAt", ExtArgs["result"]["sellerProfile"]>
+  export type SellerProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pickupAddress?: boolean | SellerProfile$pickupAddressArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SellerProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pickupAddress?: boolean | SellerProfile$pickupAddressArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SellerProfileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pickupAddress?: boolean | SellerProfile$pickupAddressArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SellerProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SellerProfile"
+    objects: {
+      pickupAddress: Prisma.$AddressPayload<ExtArgs> | null
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      shopName: string
+      slug: string
+      logo: string | null
+      banner: string | null
+      description: string | null
+      tagline: string | null
+      businessName: string | null
+      businessRegNo: string | null
+      businessType: string | null
+      phone: string
+      altPhone: string | null
+      email: string | null
+      pickupAddressId: string | null
+      returnPolicy: string | null
+      shippingPolicy: string | null
+      about: string | null
+      verificationStatus: $Enums.VerificationStatus
+      verifiedAt: Date | null
+      isActive: boolean
+      averageRating: Prisma.Decimal | null
+      totalReviews: number | null
+      totalSales: number | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["sellerProfile"]>
+    composites: {}
+  }
+
+  type SellerProfileGetPayload<S extends boolean | null | undefined | SellerProfileDefaultArgs> = $Result.GetResult<Prisma.$SellerProfilePayload, S>
+
+  type SellerProfileCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SellerProfileFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SellerProfileCountAggregateInputType | true
+    }
+
+  export interface SellerProfileDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SellerProfile'], meta: { name: 'SellerProfile' } }
+    /**
+     * Find zero or one SellerProfile that matches the filter.
+     * @param {SellerProfileFindUniqueArgs} args - Arguments to find a SellerProfile
+     * @example
+     * // Get one SellerProfile
+     * const sellerProfile = await prisma.sellerProfile.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SellerProfileFindUniqueArgs>(args: SelectSubset<T, SellerProfileFindUniqueArgs<ExtArgs>>): Prisma__SellerProfileClient<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SellerProfile that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SellerProfileFindUniqueOrThrowArgs} args - Arguments to find a SellerProfile
+     * @example
+     * // Get one SellerProfile
+     * const sellerProfile = await prisma.sellerProfile.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SellerProfileFindUniqueOrThrowArgs>(args: SelectSubset<T, SellerProfileFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SellerProfileClient<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SellerProfile that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SellerProfileFindFirstArgs} args - Arguments to find a SellerProfile
+     * @example
+     * // Get one SellerProfile
+     * const sellerProfile = await prisma.sellerProfile.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SellerProfileFindFirstArgs>(args?: SelectSubset<T, SellerProfileFindFirstArgs<ExtArgs>>): Prisma__SellerProfileClient<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SellerProfile that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SellerProfileFindFirstOrThrowArgs} args - Arguments to find a SellerProfile
+     * @example
+     * // Get one SellerProfile
+     * const sellerProfile = await prisma.sellerProfile.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SellerProfileFindFirstOrThrowArgs>(args?: SelectSubset<T, SellerProfileFindFirstOrThrowArgs<ExtArgs>>): Prisma__SellerProfileClient<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SellerProfiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SellerProfileFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SellerProfiles
+     * const sellerProfiles = await prisma.sellerProfile.findMany()
+     * 
+     * // Get first 10 SellerProfiles
+     * const sellerProfiles = await prisma.sellerProfile.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sellerProfileWithIdOnly = await prisma.sellerProfile.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SellerProfileFindManyArgs>(args?: SelectSubset<T, SellerProfileFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SellerProfile.
+     * @param {SellerProfileCreateArgs} args - Arguments to create a SellerProfile.
+     * @example
+     * // Create one SellerProfile
+     * const SellerProfile = await prisma.sellerProfile.create({
+     *   data: {
+     *     // ... data to create a SellerProfile
+     *   }
+     * })
+     * 
+     */
+    create<T extends SellerProfileCreateArgs>(args: SelectSubset<T, SellerProfileCreateArgs<ExtArgs>>): Prisma__SellerProfileClient<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SellerProfiles.
+     * @param {SellerProfileCreateManyArgs} args - Arguments to create many SellerProfiles.
+     * @example
+     * // Create many SellerProfiles
+     * const sellerProfile = await prisma.sellerProfile.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SellerProfileCreateManyArgs>(args?: SelectSubset<T, SellerProfileCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SellerProfiles and returns the data saved in the database.
+     * @param {SellerProfileCreateManyAndReturnArgs} args - Arguments to create many SellerProfiles.
+     * @example
+     * // Create many SellerProfiles
+     * const sellerProfile = await prisma.sellerProfile.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SellerProfiles and only return the `id`
+     * const sellerProfileWithIdOnly = await prisma.sellerProfile.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SellerProfileCreateManyAndReturnArgs>(args?: SelectSubset<T, SellerProfileCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SellerProfile.
+     * @param {SellerProfileDeleteArgs} args - Arguments to delete one SellerProfile.
+     * @example
+     * // Delete one SellerProfile
+     * const SellerProfile = await prisma.sellerProfile.delete({
+     *   where: {
+     *     // ... filter to delete one SellerProfile
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SellerProfileDeleteArgs>(args: SelectSubset<T, SellerProfileDeleteArgs<ExtArgs>>): Prisma__SellerProfileClient<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SellerProfile.
+     * @param {SellerProfileUpdateArgs} args - Arguments to update one SellerProfile.
+     * @example
+     * // Update one SellerProfile
+     * const sellerProfile = await prisma.sellerProfile.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SellerProfileUpdateArgs>(args: SelectSubset<T, SellerProfileUpdateArgs<ExtArgs>>): Prisma__SellerProfileClient<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SellerProfiles.
+     * @param {SellerProfileDeleteManyArgs} args - Arguments to filter SellerProfiles to delete.
+     * @example
+     * // Delete a few SellerProfiles
+     * const { count } = await prisma.sellerProfile.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SellerProfileDeleteManyArgs>(args?: SelectSubset<T, SellerProfileDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SellerProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SellerProfileUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SellerProfiles
+     * const sellerProfile = await prisma.sellerProfile.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SellerProfileUpdateManyArgs>(args: SelectSubset<T, SellerProfileUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SellerProfiles and returns the data updated in the database.
+     * @param {SellerProfileUpdateManyAndReturnArgs} args - Arguments to update many SellerProfiles.
+     * @example
+     * // Update many SellerProfiles
+     * const sellerProfile = await prisma.sellerProfile.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SellerProfiles and only return the `id`
+     * const sellerProfileWithIdOnly = await prisma.sellerProfile.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SellerProfileUpdateManyAndReturnArgs>(args: SelectSubset<T, SellerProfileUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SellerProfile.
+     * @param {SellerProfileUpsertArgs} args - Arguments to update or create a SellerProfile.
+     * @example
+     * // Update or create a SellerProfile
+     * const sellerProfile = await prisma.sellerProfile.upsert({
+     *   create: {
+     *     // ... data to create a SellerProfile
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SellerProfile we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SellerProfileUpsertArgs>(args: SelectSubset<T, SellerProfileUpsertArgs<ExtArgs>>): Prisma__SellerProfileClient<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SellerProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SellerProfileCountArgs} args - Arguments to filter SellerProfiles to count.
+     * @example
+     * // Count the number of SellerProfiles
+     * const count = await prisma.sellerProfile.count({
+     *   where: {
+     *     // ... the filter for the SellerProfiles we want to count
+     *   }
+     * })
+    **/
+    count<T extends SellerProfileCountArgs>(
+      args?: Subset<T, SellerProfileCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SellerProfileCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SellerProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SellerProfileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SellerProfileAggregateArgs>(args: Subset<T, SellerProfileAggregateArgs>): Prisma.PrismaPromise<GetSellerProfileAggregateType<T>>
+
+    /**
+     * Group by SellerProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SellerProfileGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SellerProfileGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SellerProfileGroupByArgs['orderBy'] }
+        : { orderBy?: SellerProfileGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SellerProfileGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSellerProfileGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SellerProfile model
+   */
+  readonly fields: SellerProfileFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SellerProfile.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SellerProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    pickupAddress<T extends SellerProfile$pickupAddressArgs<ExtArgs> = {}>(args?: Subset<T, SellerProfile$pickupAddressArgs<ExtArgs>>): Prisma__AddressClient<$Result.GetResult<Prisma.$AddressPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SellerProfile model
+   */
+  interface SellerProfileFieldRefs {
+    readonly id: FieldRef<"SellerProfile", 'String'>
+    readonly userId: FieldRef<"SellerProfile", 'String'>
+    readonly shopName: FieldRef<"SellerProfile", 'String'>
+    readonly slug: FieldRef<"SellerProfile", 'String'>
+    readonly logo: FieldRef<"SellerProfile", 'String'>
+    readonly banner: FieldRef<"SellerProfile", 'String'>
+    readonly description: FieldRef<"SellerProfile", 'String'>
+    readonly tagline: FieldRef<"SellerProfile", 'String'>
+    readonly businessName: FieldRef<"SellerProfile", 'String'>
+    readonly businessRegNo: FieldRef<"SellerProfile", 'String'>
+    readonly businessType: FieldRef<"SellerProfile", 'String'>
+    readonly phone: FieldRef<"SellerProfile", 'String'>
+    readonly altPhone: FieldRef<"SellerProfile", 'String'>
+    readonly email: FieldRef<"SellerProfile", 'String'>
+    readonly pickupAddressId: FieldRef<"SellerProfile", 'String'>
+    readonly returnPolicy: FieldRef<"SellerProfile", 'String'>
+    readonly shippingPolicy: FieldRef<"SellerProfile", 'String'>
+    readonly about: FieldRef<"SellerProfile", 'String'>
+    readonly verificationStatus: FieldRef<"SellerProfile", 'VerificationStatus'>
+    readonly verifiedAt: FieldRef<"SellerProfile", 'DateTime'>
+    readonly isActive: FieldRef<"SellerProfile", 'Boolean'>
+    readonly averageRating: FieldRef<"SellerProfile", 'Decimal'>
+    readonly totalReviews: FieldRef<"SellerProfile", 'Int'>
+    readonly totalSales: FieldRef<"SellerProfile", 'Int'>
+    readonly createdAt: FieldRef<"SellerProfile", 'DateTime'>
+    readonly updatedAt: FieldRef<"SellerProfile", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SellerProfile findUnique
+   */
+  export type SellerProfileFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which SellerProfile to fetch.
+     */
+    where: SellerProfileWhereUniqueInput
+  }
+
+  /**
+   * SellerProfile findUniqueOrThrow
+   */
+  export type SellerProfileFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which SellerProfile to fetch.
+     */
+    where: SellerProfileWhereUniqueInput
+  }
+
+  /**
+   * SellerProfile findFirst
+   */
+  export type SellerProfileFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which SellerProfile to fetch.
+     */
+    where?: SellerProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SellerProfiles to fetch.
+     */
+    orderBy?: SellerProfileOrderByWithRelationInput | SellerProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SellerProfiles.
+     */
+    cursor?: SellerProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SellerProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SellerProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SellerProfiles.
+     */
+    distinct?: SellerProfileScalarFieldEnum | SellerProfileScalarFieldEnum[]
+  }
+
+  /**
+   * SellerProfile findFirstOrThrow
+   */
+  export type SellerProfileFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which SellerProfile to fetch.
+     */
+    where?: SellerProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SellerProfiles to fetch.
+     */
+    orderBy?: SellerProfileOrderByWithRelationInput | SellerProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SellerProfiles.
+     */
+    cursor?: SellerProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SellerProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SellerProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SellerProfiles.
+     */
+    distinct?: SellerProfileScalarFieldEnum | SellerProfileScalarFieldEnum[]
+  }
+
+  /**
+   * SellerProfile findMany
+   */
+  export type SellerProfileFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which SellerProfiles to fetch.
+     */
+    where?: SellerProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SellerProfiles to fetch.
+     */
+    orderBy?: SellerProfileOrderByWithRelationInput | SellerProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SellerProfiles.
+     */
+    cursor?: SellerProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SellerProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SellerProfiles.
+     */
+    skip?: number
+    distinct?: SellerProfileScalarFieldEnum | SellerProfileScalarFieldEnum[]
+  }
+
+  /**
+   * SellerProfile create
+   */
+  export type SellerProfileCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SellerProfile.
+     */
+    data: XOR<SellerProfileCreateInput, SellerProfileUncheckedCreateInput>
+  }
+
+  /**
+   * SellerProfile createMany
+   */
+  export type SellerProfileCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SellerProfiles.
+     */
+    data: SellerProfileCreateManyInput | SellerProfileCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SellerProfile createManyAndReturn
+   */
+  export type SellerProfileCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * The data used to create many SellerProfiles.
+     */
+    data: SellerProfileCreateManyInput | SellerProfileCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SellerProfile update
+   */
+  export type SellerProfileUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SellerProfile.
+     */
+    data: XOR<SellerProfileUpdateInput, SellerProfileUncheckedUpdateInput>
+    /**
+     * Choose, which SellerProfile to update.
+     */
+    where: SellerProfileWhereUniqueInput
+  }
+
+  /**
+   * SellerProfile updateMany
+   */
+  export type SellerProfileUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SellerProfiles.
+     */
+    data: XOR<SellerProfileUpdateManyMutationInput, SellerProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which SellerProfiles to update
+     */
+    where?: SellerProfileWhereInput
+    /**
+     * Limit how many SellerProfiles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SellerProfile updateManyAndReturn
+   */
+  export type SellerProfileUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * The data used to update SellerProfiles.
+     */
+    data: XOR<SellerProfileUpdateManyMutationInput, SellerProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which SellerProfiles to update
+     */
+    where?: SellerProfileWhereInput
+    /**
+     * Limit how many SellerProfiles to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SellerProfile upsert
+   */
+  export type SellerProfileUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SellerProfile to update in case it exists.
+     */
+    where: SellerProfileWhereUniqueInput
+    /**
+     * In case the SellerProfile found by the `where` argument doesn't exist, create a new SellerProfile with this data.
+     */
+    create: XOR<SellerProfileCreateInput, SellerProfileUncheckedCreateInput>
+    /**
+     * In case the SellerProfile was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SellerProfileUpdateInput, SellerProfileUncheckedUpdateInput>
+  }
+
+  /**
+   * SellerProfile delete
+   */
+  export type SellerProfileDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileInclude<ExtArgs> | null
+    /**
+     * Filter which SellerProfile to delete.
+     */
+    where: SellerProfileWhereUniqueInput
+  }
+
+  /**
+   * SellerProfile deleteMany
+   */
+  export type SellerProfileDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SellerProfiles to delete
+     */
+    where?: SellerProfileWhereInput
+    /**
+     * Limit how many SellerProfiles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SellerProfile.pickupAddress
+   */
+  export type SellerProfile$pickupAddressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Address
+     */
+    select?: AddressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Address
+     */
+    omit?: AddressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AddressInclude<ExtArgs> | null
+    where?: AddressWhereInput
+  }
+
+  /**
+   * SellerProfile without action
+   */
+  export type SellerProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileInclude<ExtArgs> | null
   }
 
 
@@ -6277,6 +9022,7 @@ export namespace Prisma {
     type: string | null
     isRead: boolean | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type NotificationMaxAggregateOutputType = {
@@ -6287,6 +9033,7 @@ export namespace Prisma {
     type: string | null
     isRead: boolean | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type NotificationCountAggregateOutputType = {
@@ -6298,6 +9045,7 @@ export namespace Prisma {
     data: number
     isRead: number
     createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -6310,6 +9058,7 @@ export namespace Prisma {
     type?: true
     isRead?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type NotificationMaxAggregateInputType = {
@@ -6320,6 +9069,7 @@ export namespace Prisma {
     type?: true
     isRead?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type NotificationCountAggregateInputType = {
@@ -6331,6 +9081,7 @@ export namespace Prisma {
     data?: true
     isRead?: true
     createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -6415,6 +9166,7 @@ export namespace Prisma {
     data: JsonValue | null
     isRead: boolean
     createdAt: Date
+    updatedAt: Date
     _count: NotificationCountAggregateOutputType | null
     _min: NotificationMinAggregateOutputType | null
     _max: NotificationMaxAggregateOutputType | null
@@ -6443,6 +9195,7 @@ export namespace Prisma {
     data?: boolean
     isRead?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
@@ -6455,6 +9208,7 @@ export namespace Prisma {
     data?: boolean
     isRead?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
@@ -6467,6 +9221,7 @@ export namespace Prisma {
     data?: boolean
     isRead?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
@@ -6479,9 +9234,10 @@ export namespace Prisma {
     data?: boolean
     isRead?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "body" | "type" | "data" | "isRead" | "createdAt", ExtArgs["result"]["notification"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "body" | "type" | "data" | "isRead" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
   export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -6506,6 +9262,7 @@ export namespace Prisma {
       data: Prisma.JsonValue | null
       isRead: boolean
       createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["notification"]>
     composites: {}
   }
@@ -6938,6 +9695,7 @@ export namespace Prisma {
     readonly data: FieldRef<"Notification", 'Json'>
     readonly isRead: FieldRef<"Notification", 'Boolean'>
     readonly createdAt: FieldRef<"Notification", 'DateTime'>
+    readonly updatedAt: FieldRef<"Notification", 'DateTime'>
   }
     
 
@@ -8543,6 +11301,8 @@ export namespace Prisma {
     isRead: boolean | null
     sentAt: Date | null
     clientId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type MessageMaxAggregateOutputType = {
@@ -8555,6 +11315,8 @@ export namespace Prisma {
     isRead: boolean | null
     sentAt: Date | null
     clientId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type MessageCountAggregateOutputType = {
@@ -8567,6 +11329,8 @@ export namespace Prisma {
     isRead: number
     sentAt: number
     clientId: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -8581,6 +11345,8 @@ export namespace Prisma {
     isRead?: true
     sentAt?: true
     clientId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type MessageMaxAggregateInputType = {
@@ -8593,6 +11359,8 @@ export namespace Prisma {
     isRead?: true
     sentAt?: true
     clientId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type MessageCountAggregateInputType = {
@@ -8605,6 +11373,8 @@ export namespace Prisma {
     isRead?: true
     sentAt?: true
     clientId?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -8690,6 +11460,8 @@ export namespace Prisma {
     isRead: boolean
     sentAt: Date
     clientId: string | null
+    createdAt: Date
+    updatedAt: Date
     _count: MessageCountAggregateOutputType | null
     _min: MessageMinAggregateOutputType | null
     _max: MessageMaxAggregateOutputType | null
@@ -8719,6 +11491,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: boolean
     clientId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
     MessageAttachment?: boolean | Message$MessageAttachmentArgs<ExtArgs>
@@ -8735,6 +11509,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: boolean
     clientId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -8749,6 +11525,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: boolean
     clientId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -8763,9 +11541,11 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: boolean
     clientId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "conversationId" | "senderId" | "content" | "type" | "fileUrl" | "isRead" | "sentAt" | "clientId", ExtArgs["result"]["message"]>
+  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "conversationId" | "senderId" | "content" | "type" | "fileUrl" | "isRead" | "sentAt" | "clientId" | "createdAt" | "updatedAt", ExtArgs["result"]["message"]>
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
@@ -8798,6 +11578,8 @@ export namespace Prisma {
       isRead: boolean
       sentAt: Date
       clientId: string | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["message"]>
     composites: {}
   }
@@ -9233,6 +12015,8 @@ export namespace Prisma {
     readonly isRead: FieldRef<"Message", 'Boolean'>
     readonly sentAt: FieldRef<"Message", 'DateTime'>
     readonly clientId: FieldRef<"Message", 'String'>
+    readonly createdAt: FieldRef<"Message", 'DateTime'>
+    readonly updatedAt: FieldRef<"Message", 'DateTime'>
   }
     
 
@@ -9686,6 +12470,8 @@ export namespace Prisma {
     messageId: string | null
     url: string | null
     type: $Enums.FileType | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type MessageAttachmentMaxAggregateOutputType = {
@@ -9693,6 +12479,8 @@ export namespace Prisma {
     messageId: string | null
     url: string | null
     type: $Enums.FileType | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type MessageAttachmentCountAggregateOutputType = {
@@ -9700,6 +12488,8 @@ export namespace Prisma {
     messageId: number
     url: number
     type: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -9709,6 +12499,8 @@ export namespace Prisma {
     messageId?: true
     url?: true
     type?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type MessageAttachmentMaxAggregateInputType = {
@@ -9716,6 +12508,8 @@ export namespace Prisma {
     messageId?: true
     url?: true
     type?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type MessageAttachmentCountAggregateInputType = {
@@ -9723,6 +12517,8 @@ export namespace Prisma {
     messageId?: true
     url?: true
     type?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -9803,6 +12599,8 @@ export namespace Prisma {
     messageId: string
     url: string
     type: $Enums.FileType
+    createdAt: Date
+    updatedAt: Date
     _count: MessageAttachmentCountAggregateOutputType | null
     _min: MessageAttachmentMinAggregateOutputType | null
     _max: MessageAttachmentMaxAggregateOutputType | null
@@ -9827,6 +12625,8 @@ export namespace Prisma {
     messageId?: boolean
     url?: boolean
     type?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     message?: boolean | MessageDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["messageAttachment"]>
 
@@ -9835,6 +12635,8 @@ export namespace Prisma {
     messageId?: boolean
     url?: boolean
     type?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     message?: boolean | MessageDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["messageAttachment"]>
 
@@ -9843,6 +12645,8 @@ export namespace Prisma {
     messageId?: boolean
     url?: boolean
     type?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     message?: boolean | MessageDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["messageAttachment"]>
 
@@ -9851,9 +12655,11 @@ export namespace Prisma {
     messageId?: boolean
     url?: boolean
     type?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type MessageAttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "messageId" | "url" | "type", ExtArgs["result"]["messageAttachment"]>
+  export type MessageAttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "messageId" | "url" | "type" | "createdAt" | "updatedAt", ExtArgs["result"]["messageAttachment"]>
   export type MessageAttachmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     message?: boolean | MessageDefaultArgs<ExtArgs>
   }
@@ -9874,6 +12680,8 @@ export namespace Prisma {
       messageId: string
       url: string
       type: $Enums.FileType
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["messageAttachment"]>
     composites: {}
   }
@@ -10302,6 +13110,8 @@ export namespace Prisma {
     readonly messageId: FieldRef<"MessageAttachment", 'String'>
     readonly url: FieldRef<"MessageAttachment", 'String'>
     readonly type: FieldRef<"MessageAttachment", 'FileType'>
+    readonly createdAt: FieldRef<"MessageAttachment", 'DateTime'>
+    readonly updatedAt: FieldRef<"MessageAttachment", 'DateTime'>
   }
     
 
@@ -12006,6 +14816,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    sellerPickupAddresses?: boolean | Address$sellerPickupAddressesArgs<ExtArgs>
+    _count?: boolean | AddressCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["address"]>
 
   export type AddressSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -12064,6 +14876,8 @@ export namespace Prisma {
   export type AddressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "label" | "line1" | "line2" | "city" | "state" | "country" | "postalCode" | "phone" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["address"]>
   export type AddressInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    sellerPickupAddresses?: boolean | Address$sellerPickupAddressesArgs<ExtArgs>
+    _count?: boolean | AddressCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AddressIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -12076,6 +14890,7 @@ export namespace Prisma {
     name: "Address"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      sellerPickupAddresses: Prisma.$SellerProfilePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -12487,6 +15302,7 @@ export namespace Prisma {
   export interface Prisma__AddressClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sellerPickupAddresses<T extends Address$sellerPickupAddressesArgs<ExtArgs> = {}>(args?: Subset<T, Address$sellerPickupAddressesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12923,6 +15739,30 @@ export namespace Prisma {
      * Limit how many Addresses to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Address.sellerPickupAddresses
+   */
+  export type Address$sellerPickupAddressesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerProfile
+     */
+    select?: SellerProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerProfile
+     */
+    omit?: SellerProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerProfileInclude<ExtArgs> | null
+    where?: SellerProfileWhereInput
+    orderBy?: SellerProfileOrderByWithRelationInput | SellerProfileOrderByWithRelationInput[]
+    cursor?: SellerProfileWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SellerProfileScalarFieldEnum | SellerProfileScalarFieldEnum[]
   }
 
   /**
@@ -16520,6 +19360,7 @@ export namespace Prisma {
     offerId: string | null
     productId: string | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ProductOfferMaxAggregateOutputType = {
@@ -16527,6 +19368,7 @@ export namespace Prisma {
     offerId: string | null
     productId: string | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ProductOfferCountAggregateOutputType = {
@@ -16534,6 +19376,7 @@ export namespace Prisma {
     offerId: number
     productId: number
     createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -16543,6 +19386,7 @@ export namespace Prisma {
     offerId?: true
     productId?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type ProductOfferMaxAggregateInputType = {
@@ -16550,6 +19394,7 @@ export namespace Prisma {
     offerId?: true
     productId?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type ProductOfferCountAggregateInputType = {
@@ -16557,6 +19402,7 @@ export namespace Prisma {
     offerId?: true
     productId?: true
     createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -16637,6 +19483,7 @@ export namespace Prisma {
     offerId: string
     productId: string
     createdAt: Date
+    updatedAt: Date
     _count: ProductOfferCountAggregateOutputType | null
     _min: ProductOfferMinAggregateOutputType | null
     _max: ProductOfferMaxAggregateOutputType | null
@@ -16661,6 +19508,7 @@ export namespace Prisma {
     offerId?: boolean
     productId?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     offer?: boolean | OfferDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productOffer"]>
@@ -16670,6 +19518,7 @@ export namespace Prisma {
     offerId?: boolean
     productId?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     offer?: boolean | OfferDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productOffer"]>
@@ -16679,6 +19528,7 @@ export namespace Prisma {
     offerId?: boolean
     productId?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     offer?: boolean | OfferDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productOffer"]>
@@ -16688,9 +19538,10 @@ export namespace Prisma {
     offerId?: boolean
     productId?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type ProductOfferOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "offerId" | "productId" | "createdAt", ExtArgs["result"]["productOffer"]>
+  export type ProductOfferOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "offerId" | "productId" | "createdAt" | "updatedAt", ExtArgs["result"]["productOffer"]>
   export type ProductOfferInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     offer?: boolean | OfferDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -16715,6 +19566,7 @@ export namespace Prisma {
       offerId: string
       productId: string
       createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["productOffer"]>
     composites: {}
   }
@@ -17144,6 +19996,7 @@ export namespace Prisma {
     readonly offerId: FieldRef<"ProductOffer", 'String'>
     readonly productId: FieldRef<"ProductOffer", 'String'>
     readonly createdAt: FieldRef<"ProductOffer", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProductOffer", 'DateTime'>
   }
     
 
@@ -17573,6 +20426,7 @@ export namespace Prisma {
     offerId: string | null
     categoryId: string | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type CategoryOfferMaxAggregateOutputType = {
@@ -17580,6 +20434,7 @@ export namespace Prisma {
     offerId: string | null
     categoryId: string | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type CategoryOfferCountAggregateOutputType = {
@@ -17587,6 +20442,7 @@ export namespace Prisma {
     offerId: number
     categoryId: number
     createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -17596,6 +20452,7 @@ export namespace Prisma {
     offerId?: true
     categoryId?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type CategoryOfferMaxAggregateInputType = {
@@ -17603,6 +20460,7 @@ export namespace Prisma {
     offerId?: true
     categoryId?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type CategoryOfferCountAggregateInputType = {
@@ -17610,6 +20468,7 @@ export namespace Prisma {
     offerId?: true
     categoryId?: true
     createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -17690,6 +20549,7 @@ export namespace Prisma {
     offerId: string
     categoryId: string
     createdAt: Date
+    updatedAt: Date
     _count: CategoryOfferCountAggregateOutputType | null
     _min: CategoryOfferMinAggregateOutputType | null
     _max: CategoryOfferMaxAggregateOutputType | null
@@ -17714,6 +20574,7 @@ export namespace Prisma {
     offerId?: boolean
     categoryId?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     offer?: boolean | OfferDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["categoryOffer"]>
@@ -17723,6 +20584,7 @@ export namespace Prisma {
     offerId?: boolean
     categoryId?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     offer?: boolean | OfferDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["categoryOffer"]>
@@ -17732,6 +20594,7 @@ export namespace Prisma {
     offerId?: boolean
     categoryId?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     offer?: boolean | OfferDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["categoryOffer"]>
@@ -17741,9 +20604,10 @@ export namespace Prisma {
     offerId?: boolean
     categoryId?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type CategoryOfferOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "offerId" | "categoryId" | "createdAt", ExtArgs["result"]["categoryOffer"]>
+  export type CategoryOfferOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "offerId" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["categoryOffer"]>
   export type CategoryOfferInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     offer?: boolean | OfferDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -17768,6 +20632,7 @@ export namespace Prisma {
       offerId: string
       categoryId: string
       createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["categoryOffer"]>
     composites: {}
   }
@@ -18197,6 +21062,7 @@ export namespace Prisma {
     readonly offerId: FieldRef<"CategoryOffer", 'String'>
     readonly categoryId: FieldRef<"CategoryOffer", 'String'>
     readonly createdAt: FieldRef<"CategoryOffer", 'DateTime'>
+    readonly updatedAt: FieldRef<"CategoryOffer", 'DateTime'>
   }
     
 
@@ -25753,6 +28619,8 @@ export namespace Prisma {
     sortOrder: number | null
     mediaType: $Enums.MediaType | null
     fileType: $Enums.FileType | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ProductImageMaxAggregateOutputType = {
@@ -25764,6 +28632,8 @@ export namespace Prisma {
     sortOrder: number | null
     mediaType: $Enums.MediaType | null
     fileType: $Enums.FileType | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ProductImageCountAggregateOutputType = {
@@ -25775,6 +28645,8 @@ export namespace Prisma {
     sortOrder: number
     mediaType: number
     fileType: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -25796,6 +28668,8 @@ export namespace Prisma {
     sortOrder?: true
     mediaType?: true
     fileType?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ProductImageMaxAggregateInputType = {
@@ -25807,6 +28681,8 @@ export namespace Prisma {
     sortOrder?: true
     mediaType?: true
     fileType?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ProductImageCountAggregateInputType = {
@@ -25818,6 +28694,8 @@ export namespace Prisma {
     sortOrder?: true
     mediaType?: true
     fileType?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -25916,6 +28794,8 @@ export namespace Prisma {
     sortOrder: number
     mediaType: $Enums.MediaType
     fileType: $Enums.FileType
+    createdAt: Date
+    updatedAt: Date
     _count: ProductImageCountAggregateOutputType | null
     _avg: ProductImageAvgAggregateOutputType | null
     _sum: ProductImageSumAggregateOutputType | null
@@ -25946,6 +28826,8 @@ export namespace Prisma {
     sortOrder?: boolean
     mediaType?: boolean
     fileType?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productImage"]>
 
@@ -25958,6 +28840,8 @@ export namespace Prisma {
     sortOrder?: boolean
     mediaType?: boolean
     fileType?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productImage"]>
 
@@ -25970,6 +28854,8 @@ export namespace Prisma {
     sortOrder?: boolean
     mediaType?: boolean
     fileType?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productImage"]>
 
@@ -25982,9 +28868,11 @@ export namespace Prisma {
     sortOrder?: boolean
     mediaType?: boolean
     fileType?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type ProductImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "variantId" | "productId" | "url" | "altText" | "sortOrder" | "mediaType" | "fileType", ExtArgs["result"]["productImage"]>
+  export type ProductImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "variantId" | "productId" | "url" | "altText" | "sortOrder" | "mediaType" | "fileType" | "createdAt" | "updatedAt", ExtArgs["result"]["productImage"]>
   export type ProductImageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }
@@ -26009,6 +28897,8 @@ export namespace Prisma {
       sortOrder: number
       mediaType: $Enums.MediaType
       fileType: $Enums.FileType
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["productImage"]>
     composites: {}
   }
@@ -26441,6 +29331,8 @@ export namespace Prisma {
     readonly sortOrder: FieldRef<"ProductImage", 'Int'>
     readonly mediaType: FieldRef<"ProductImage", 'MediaType'>
     readonly fileType: FieldRef<"ProductImage", 'FileType'>
+    readonly createdAt: FieldRef<"ProductImage", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProductImage", 'DateTime'>
   }
     
 
@@ -35317,6 +38209,8 @@ export namespace Prisma {
     reviewId: string | null
     userId: string | null
     vote: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ReviewVoteMaxAggregateOutputType = {
@@ -35324,6 +38218,8 @@ export namespace Prisma {
     reviewId: string | null
     userId: string | null
     vote: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ReviewVoteCountAggregateOutputType = {
@@ -35331,6 +38227,8 @@ export namespace Prisma {
     reviewId: number
     userId: number
     vote: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -35340,6 +38238,8 @@ export namespace Prisma {
     reviewId?: true
     userId?: true
     vote?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ReviewVoteMaxAggregateInputType = {
@@ -35347,6 +38247,8 @@ export namespace Prisma {
     reviewId?: true
     userId?: true
     vote?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ReviewVoteCountAggregateInputType = {
@@ -35354,6 +38256,8 @@ export namespace Prisma {
     reviewId?: true
     userId?: true
     vote?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -35434,6 +38338,8 @@ export namespace Prisma {
     reviewId: string
     userId: string
     vote: boolean
+    createdAt: Date
+    updatedAt: Date
     _count: ReviewVoteCountAggregateOutputType | null
     _min: ReviewVoteMinAggregateOutputType | null
     _max: ReviewVoteMaxAggregateOutputType | null
@@ -35458,6 +38364,8 @@ export namespace Prisma {
     reviewId?: boolean
     userId?: boolean
     vote?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     review?: boolean | ReviewDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reviewVote"]>
@@ -35467,6 +38375,8 @@ export namespace Prisma {
     reviewId?: boolean
     userId?: boolean
     vote?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     review?: boolean | ReviewDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reviewVote"]>
@@ -35476,6 +38386,8 @@ export namespace Prisma {
     reviewId?: boolean
     userId?: boolean
     vote?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     review?: boolean | ReviewDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reviewVote"]>
@@ -35485,9 +38397,11 @@ export namespace Prisma {
     reviewId?: boolean
     userId?: boolean
     vote?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type ReviewVoteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reviewId" | "userId" | "vote", ExtArgs["result"]["reviewVote"]>
+  export type ReviewVoteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reviewId" | "userId" | "vote" | "createdAt" | "updatedAt", ExtArgs["result"]["reviewVote"]>
   export type ReviewVoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     review?: boolean | ReviewDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -35512,6 +38426,8 @@ export namespace Prisma {
       reviewId: string
       userId: string
       vote: boolean
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["reviewVote"]>
     composites: {}
   }
@@ -35941,6 +38857,8 @@ export namespace Prisma {
     readonly reviewId: FieldRef<"ReviewVote", 'String'>
     readonly userId: FieldRef<"ReviewVote", 'String'>
     readonly vote: FieldRef<"ReviewVote", 'Boolean'>
+    readonly createdAt: FieldRef<"ReviewVote", 'DateTime'>
+    readonly updatedAt: FieldRef<"ReviewVote", 'DateTime'>
   }
     
 
@@ -36370,6 +39288,8 @@ export namespace Prisma {
     reviewId: string | null
     type: $Enums.FileType | null
     url: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ReviewMediaMaxAggregateOutputType = {
@@ -36377,6 +39297,8 @@ export namespace Prisma {
     reviewId: string | null
     type: $Enums.FileType | null
     url: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ReviewMediaCountAggregateOutputType = {
@@ -36384,6 +39306,8 @@ export namespace Prisma {
     reviewId: number
     type: number
     url: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -36393,6 +39317,8 @@ export namespace Prisma {
     reviewId?: true
     type?: true
     url?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ReviewMediaMaxAggregateInputType = {
@@ -36400,6 +39326,8 @@ export namespace Prisma {
     reviewId?: true
     type?: true
     url?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ReviewMediaCountAggregateInputType = {
@@ -36407,6 +39335,8 @@ export namespace Prisma {
     reviewId?: true
     type?: true
     url?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -36487,6 +39417,8 @@ export namespace Prisma {
     reviewId: string
     type: $Enums.FileType
     url: string
+    createdAt: Date
+    updatedAt: Date
     _count: ReviewMediaCountAggregateOutputType | null
     _min: ReviewMediaMinAggregateOutputType | null
     _max: ReviewMediaMaxAggregateOutputType | null
@@ -36511,6 +39443,8 @@ export namespace Prisma {
     reviewId?: boolean
     type?: boolean
     url?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     review?: boolean | ReviewDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reviewMedia"]>
 
@@ -36519,6 +39453,8 @@ export namespace Prisma {
     reviewId?: boolean
     type?: boolean
     url?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     review?: boolean | ReviewDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reviewMedia"]>
 
@@ -36527,6 +39463,8 @@ export namespace Prisma {
     reviewId?: boolean
     type?: boolean
     url?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     review?: boolean | ReviewDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reviewMedia"]>
 
@@ -36535,9 +39473,11 @@ export namespace Prisma {
     reviewId?: boolean
     type?: boolean
     url?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type ReviewMediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reviewId" | "type" | "url", ExtArgs["result"]["reviewMedia"]>
+  export type ReviewMediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reviewId" | "type" | "url" | "createdAt" | "updatedAt", ExtArgs["result"]["reviewMedia"]>
   export type ReviewMediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     review?: boolean | ReviewDefaultArgs<ExtArgs>
   }
@@ -36558,6 +39498,8 @@ export namespace Prisma {
       reviewId: string
       type: $Enums.FileType
       url: string
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["reviewMedia"]>
     composites: {}
   }
@@ -36986,6 +39928,8 @@ export namespace Prisma {
     readonly reviewId: FieldRef<"ReviewMedia", 'String'>
     readonly type: FieldRef<"ReviewMedia", 'FileType'>
     readonly url: FieldRef<"ReviewMedia", 'String'>
+    readonly createdAt: FieldRef<"ReviewMedia", 'DateTime'>
+    readonly updatedAt: FieldRef<"ReviewMedia", 'DateTime'>
   }
     
 
@@ -38503,6 +41447,7 @@ export namespace Prisma {
     wishlistId: string | null
     productId: string | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type WishlistItemMaxAggregateOutputType = {
@@ -38510,6 +41455,7 @@ export namespace Prisma {
     wishlistId: string | null
     productId: string | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type WishlistItemCountAggregateOutputType = {
@@ -38517,6 +41463,7 @@ export namespace Prisma {
     wishlistId: number
     productId: number
     createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -38526,6 +41473,7 @@ export namespace Prisma {
     wishlistId?: true
     productId?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type WishlistItemMaxAggregateInputType = {
@@ -38533,6 +41481,7 @@ export namespace Prisma {
     wishlistId?: true
     productId?: true
     createdAt?: true
+    updatedAt?: true
   }
 
   export type WishlistItemCountAggregateInputType = {
@@ -38540,6 +41489,7 @@ export namespace Prisma {
     wishlistId?: true
     productId?: true
     createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -38620,6 +41570,7 @@ export namespace Prisma {
     wishlistId: string
     productId: string
     createdAt: Date
+    updatedAt: Date
     _count: WishlistItemCountAggregateOutputType | null
     _min: WishlistItemMinAggregateOutputType | null
     _max: WishlistItemMaxAggregateOutputType | null
@@ -38644,6 +41595,7 @@ export namespace Prisma {
     wishlistId?: boolean
     productId?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     wishlist?: boolean | WishlistDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["wishlistItem"]>
@@ -38653,6 +41605,7 @@ export namespace Prisma {
     wishlistId?: boolean
     productId?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     wishlist?: boolean | WishlistDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["wishlistItem"]>
@@ -38662,6 +41615,7 @@ export namespace Prisma {
     wishlistId?: boolean
     productId?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
     wishlist?: boolean | WishlistDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["wishlistItem"]>
@@ -38671,9 +41625,10 @@ export namespace Prisma {
     wishlistId?: boolean
     productId?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type WishlistItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "wishlistId" | "productId" | "createdAt", ExtArgs["result"]["wishlistItem"]>
+  export type WishlistItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "wishlistId" | "productId" | "createdAt" | "updatedAt", ExtArgs["result"]["wishlistItem"]>
   export type WishlistItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     wishlist?: boolean | WishlistDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -38698,6 +41653,7 @@ export namespace Prisma {
       wishlistId: string
       productId: string
       createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["wishlistItem"]>
     composites: {}
   }
@@ -39127,6 +42083,7 @@ export namespace Prisma {
     readonly wishlistId: FieldRef<"WishlistItem", 'String'>
     readonly productId: FieldRef<"WishlistItem", 'String'>
     readonly createdAt: FieldRef<"WishlistItem", 'DateTime'>
+    readonly updatedAt: FieldRef<"WishlistItem", 'DateTime'>
   }
     
 
@@ -43093,15 +46050,58 @@ export namespace Prisma {
     email: 'email',
     firstName: 'firstName',
     lastName: 'lastName',
+    avatarImageUrl: 'avatarImageUrl',
     phone: 'phone',
     gender: 'gender',
     dob: 'dob',
-    role: 'role',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const UserRoleScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    role: 'role',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UserRoleScalarFieldEnum = (typeof UserRoleScalarFieldEnum)[keyof typeof UserRoleScalarFieldEnum]
+
+
+  export const SellerProfileScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    shopName: 'shopName',
+    slug: 'slug',
+    logo: 'logo',
+    banner: 'banner',
+    description: 'description',
+    tagline: 'tagline',
+    businessName: 'businessName',
+    businessRegNo: 'businessRegNo',
+    businessType: 'businessType',
+    phone: 'phone',
+    altPhone: 'altPhone',
+    email: 'email',
+    pickupAddressId: 'pickupAddressId',
+    returnPolicy: 'returnPolicy',
+    shippingPolicy: 'shippingPolicy',
+    about: 'about',
+    verificationStatus: 'verificationStatus',
+    verifiedAt: 'verifiedAt',
+    isActive: 'isActive',
+    averageRating: 'averageRating',
+    totalReviews: 'totalReviews',
+    totalSales: 'totalSales',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SellerProfileScalarFieldEnum = (typeof SellerProfileScalarFieldEnum)[keyof typeof SellerProfileScalarFieldEnum]
 
 
   export const NotificationScalarFieldEnum: {
@@ -43112,7 +46112,8 @@ export namespace Prisma {
     type: 'type',
     data: 'data',
     isRead: 'isRead',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
@@ -43141,7 +46142,9 @@ export namespace Prisma {
     fileUrl: 'fileUrl',
     isRead: 'isRead',
     sentAt: 'sentAt',
-    clientId: 'clientId'
+    clientId: 'clientId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
@@ -43151,7 +46154,9 @@ export namespace Prisma {
     id: 'id',
     messageId: 'messageId',
     url: 'url',
-    type: 'type'
+    type: 'type',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type MessageAttachmentScalarFieldEnum = (typeof MessageAttachmentScalarFieldEnum)[keyof typeof MessageAttachmentScalarFieldEnum]
@@ -43236,7 +46241,8 @@ export namespace Prisma {
     id: 'id',
     offerId: 'offerId',
     productId: 'productId',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type ProductOfferScalarFieldEnum = (typeof ProductOfferScalarFieldEnum)[keyof typeof ProductOfferScalarFieldEnum]
@@ -43246,7 +46252,8 @@ export namespace Prisma {
     id: 'id',
     offerId: 'offerId',
     categoryId: 'categoryId',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type CategoryOfferScalarFieldEnum = (typeof CategoryOfferScalarFieldEnum)[keyof typeof CategoryOfferScalarFieldEnum]
@@ -43346,7 +46353,9 @@ export namespace Prisma {
     altText: 'altText',
     sortOrder: 'sortOrder',
     mediaType: 'mediaType',
-    fileType: 'fileType'
+    fileType: 'fileType',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type ProductImageScalarFieldEnum = (typeof ProductImageScalarFieldEnum)[keyof typeof ProductImageScalarFieldEnum]
@@ -43474,7 +46483,9 @@ export namespace Prisma {
     id: 'id',
     reviewId: 'reviewId',
     userId: 'userId',
-    vote: 'vote'
+    vote: 'vote',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type ReviewVoteScalarFieldEnum = (typeof ReviewVoteScalarFieldEnum)[keyof typeof ReviewVoteScalarFieldEnum]
@@ -43484,7 +46495,9 @@ export namespace Prisma {
     id: 'id',
     reviewId: 'reviewId',
     type: 'type',
-    url: 'url'
+    url: 'url',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type ReviewMediaScalarFieldEnum = (typeof ReviewMediaScalarFieldEnum)[keyof typeof ReviewMediaScalarFieldEnum]
@@ -43505,7 +46518,8 @@ export namespace Prisma {
     id: 'id',
     wishlistId: 'wishlistId',
     productId: 'productId',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type WishlistItemScalarFieldEnum = (typeof WishlistItemScalarFieldEnum)[keyof typeof WishlistItemScalarFieldEnum]
@@ -43668,6 +46682,55 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'VerificationStatus'
+   */
+  export type EnumVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VerificationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'VerificationStatus[]'
+   */
+  export type ListEnumVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VerificationStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -43678,13 +46741,6 @@ export namespace Prisma {
    * Reference to a field of type 'QueryMode'
    */
   export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -43745,20 +46801,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Decimal'
-   */
-  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-  /**
-   * Reference to a field of type 'Decimal[]'
-   */
-  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
-    
-
-
-  /**
    * Reference to a field of type 'WarrantyType'
    */
   export type EnumWarrantyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WarrantyType'>
@@ -43769,20 +46811,6 @@ export namespace Prisma {
    * Reference to a field of type 'WarrantyType[]'
    */
   export type ListEnumWarrantyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WarrantyType[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -43938,10 +46966,10 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     firstName?: StringNullableFilter<"User"> | string | null
     lastName?: StringNullableFilter<"User"> | string | null
+    avatarImageUrl?: StringNullableFilter<"User"> | string | null
     phone?: StringNullableFilter<"User"> | string | null
     gender?: EnumGenderNullableFilter<"User"> | $Enums.Gender | null
     dob?: DateTimeNullableFilter<"User"> | Date | string | null
-    role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     addresses?: AddressListRelationFilter
@@ -43959,6 +46987,8 @@ export namespace Prisma {
     sentMessages?: MessageListRelationFilter
     ConversationParticipant?: ConversationParticipantListRelationFilter
     notifications?: NotificationListRelationFilter
+    sellerProfile?: XOR<SellerProfileNullableScalarRelationFilter, SellerProfileWhereInput> | null
+    roles?: UserRoleListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -43967,10 +46997,10 @@ export namespace Prisma {
     email?: SortOrder
     firstName?: SortOrderInput | SortOrder
     lastName?: SortOrderInput | SortOrder
+    avatarImageUrl?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
-    role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     addresses?: AddressOrderByRelationAggregateInput
@@ -43988,6 +47018,8 @@ export namespace Prisma {
     sentMessages?: MessageOrderByRelationAggregateInput
     ConversationParticipant?: ConversationParticipantOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
+    sellerProfile?: SellerProfileOrderByWithRelationInput
+    roles?: UserRoleOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -43999,10 +47031,10 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     firstName?: StringNullableFilter<"User"> | string | null
     lastName?: StringNullableFilter<"User"> | string | null
+    avatarImageUrl?: StringNullableFilter<"User"> | string | null
     phone?: StringNullableFilter<"User"> | string | null
     gender?: EnumGenderNullableFilter<"User"> | $Enums.Gender | null
     dob?: DateTimeNullableFilter<"User"> | Date | string | null
-    role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     addresses?: AddressListRelationFilter
@@ -44020,6 +47052,8 @@ export namespace Prisma {
     sentMessages?: MessageListRelationFilter
     ConversationParticipant?: ConversationParticipantListRelationFilter
     notifications?: NotificationListRelationFilter
+    sellerProfile?: XOR<SellerProfileNullableScalarRelationFilter, SellerProfileWhereInput> | null
+    roles?: UserRoleListRelationFilter
   }, "id" | "clerkId" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -44028,10 +47062,10 @@ export namespace Prisma {
     email?: SortOrder
     firstName?: SortOrderInput | SortOrder
     lastName?: SortOrderInput | SortOrder
+    avatarImageUrl?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
-    role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -44048,12 +47082,233 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     firstName?: StringNullableWithAggregatesFilter<"User"> | string | null
     lastName?: StringNullableWithAggregatesFilter<"User"> | string | null
+    avatarImageUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
     phone?: StringNullableWithAggregatesFilter<"User"> | string | null
     gender?: EnumGenderNullableWithAggregatesFilter<"User"> | $Enums.Gender | null
     dob?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-    role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type UserRoleWhereInput = {
+    AND?: UserRoleWhereInput | UserRoleWhereInput[]
+    OR?: UserRoleWhereInput[]
+    NOT?: UserRoleWhereInput | UserRoleWhereInput[]
+    id?: StringFilter<"UserRole"> | string
+    userId?: StringFilter<"UserRole"> | string
+    role?: EnumRoleFilter<"UserRole"> | $Enums.Role
+    createdAt?: DateTimeFilter<"UserRole"> | Date | string
+    updatedAt?: DateTimeFilter<"UserRole"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UserRoleOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UserRoleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_role?: UserRoleUserIdRoleCompoundUniqueInput
+    AND?: UserRoleWhereInput | UserRoleWhereInput[]
+    OR?: UserRoleWhereInput[]
+    NOT?: UserRoleWhereInput | UserRoleWhereInput[]
+    userId?: StringFilter<"UserRole"> | string
+    role?: EnumRoleFilter<"UserRole"> | $Enums.Role
+    createdAt?: DateTimeFilter<"UserRole"> | Date | string
+    updatedAt?: DateTimeFilter<"UserRole"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_role">
+
+  export type UserRoleOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UserRoleCountOrderByAggregateInput
+    _max?: UserRoleMaxOrderByAggregateInput
+    _min?: UserRoleMinOrderByAggregateInput
+  }
+
+  export type UserRoleScalarWhereWithAggregatesInput = {
+    AND?: UserRoleScalarWhereWithAggregatesInput | UserRoleScalarWhereWithAggregatesInput[]
+    OR?: UserRoleScalarWhereWithAggregatesInput[]
+    NOT?: UserRoleScalarWhereWithAggregatesInput | UserRoleScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserRole"> | string
+    userId?: StringWithAggregatesFilter<"UserRole"> | string
+    role?: EnumRoleWithAggregatesFilter<"UserRole"> | $Enums.Role
+    createdAt?: DateTimeWithAggregatesFilter<"UserRole"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"UserRole"> | Date | string
+  }
+
+  export type SellerProfileWhereInput = {
+    AND?: SellerProfileWhereInput | SellerProfileWhereInput[]
+    OR?: SellerProfileWhereInput[]
+    NOT?: SellerProfileWhereInput | SellerProfileWhereInput[]
+    id?: StringFilter<"SellerProfile"> | string
+    userId?: StringFilter<"SellerProfile"> | string
+    shopName?: StringFilter<"SellerProfile"> | string
+    slug?: StringFilter<"SellerProfile"> | string
+    logo?: StringNullableFilter<"SellerProfile"> | string | null
+    banner?: StringNullableFilter<"SellerProfile"> | string | null
+    description?: StringNullableFilter<"SellerProfile"> | string | null
+    tagline?: StringNullableFilter<"SellerProfile"> | string | null
+    businessName?: StringNullableFilter<"SellerProfile"> | string | null
+    businessRegNo?: StringNullableFilter<"SellerProfile"> | string | null
+    businessType?: StringNullableFilter<"SellerProfile"> | string | null
+    phone?: StringFilter<"SellerProfile"> | string
+    altPhone?: StringNullableFilter<"SellerProfile"> | string | null
+    email?: StringNullableFilter<"SellerProfile"> | string | null
+    pickupAddressId?: StringNullableFilter<"SellerProfile"> | string | null
+    returnPolicy?: StringNullableFilter<"SellerProfile"> | string | null
+    shippingPolicy?: StringNullableFilter<"SellerProfile"> | string | null
+    about?: StringNullableFilter<"SellerProfile"> | string | null
+    verificationStatus?: EnumVerificationStatusFilter<"SellerProfile"> | $Enums.VerificationStatus
+    verifiedAt?: DateTimeNullableFilter<"SellerProfile"> | Date | string | null
+    isActive?: BoolFilter<"SellerProfile"> | boolean
+    averageRating?: DecimalNullableFilter<"SellerProfile"> | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: IntNullableFilter<"SellerProfile"> | number | null
+    totalSales?: IntNullableFilter<"SellerProfile"> | number | null
+    createdAt?: DateTimeFilter<"SellerProfile"> | Date | string
+    updatedAt?: DateTimeFilter<"SellerProfile"> | Date | string
+    pickupAddress?: XOR<AddressNullableScalarRelationFilter, AddressWhereInput> | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type SellerProfileOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    shopName?: SortOrder
+    slug?: SortOrder
+    logo?: SortOrderInput | SortOrder
+    banner?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    tagline?: SortOrderInput | SortOrder
+    businessName?: SortOrderInput | SortOrder
+    businessRegNo?: SortOrderInput | SortOrder
+    businessType?: SortOrderInput | SortOrder
+    phone?: SortOrder
+    altPhone?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    pickupAddressId?: SortOrderInput | SortOrder
+    returnPolicy?: SortOrderInput | SortOrder
+    shippingPolicy?: SortOrderInput | SortOrder
+    about?: SortOrderInput | SortOrder
+    verificationStatus?: SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    averageRating?: SortOrderInput | SortOrder
+    totalReviews?: SortOrderInput | SortOrder
+    totalSales?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    pickupAddress?: AddressOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type SellerProfileWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    shopName?: string
+    slug?: string
+    AND?: SellerProfileWhereInput | SellerProfileWhereInput[]
+    OR?: SellerProfileWhereInput[]
+    NOT?: SellerProfileWhereInput | SellerProfileWhereInput[]
+    logo?: StringNullableFilter<"SellerProfile"> | string | null
+    banner?: StringNullableFilter<"SellerProfile"> | string | null
+    description?: StringNullableFilter<"SellerProfile"> | string | null
+    tagline?: StringNullableFilter<"SellerProfile"> | string | null
+    businessName?: StringNullableFilter<"SellerProfile"> | string | null
+    businessRegNo?: StringNullableFilter<"SellerProfile"> | string | null
+    businessType?: StringNullableFilter<"SellerProfile"> | string | null
+    phone?: StringFilter<"SellerProfile"> | string
+    altPhone?: StringNullableFilter<"SellerProfile"> | string | null
+    email?: StringNullableFilter<"SellerProfile"> | string | null
+    pickupAddressId?: StringNullableFilter<"SellerProfile"> | string | null
+    returnPolicy?: StringNullableFilter<"SellerProfile"> | string | null
+    shippingPolicy?: StringNullableFilter<"SellerProfile"> | string | null
+    about?: StringNullableFilter<"SellerProfile"> | string | null
+    verificationStatus?: EnumVerificationStatusFilter<"SellerProfile"> | $Enums.VerificationStatus
+    verifiedAt?: DateTimeNullableFilter<"SellerProfile"> | Date | string | null
+    isActive?: BoolFilter<"SellerProfile"> | boolean
+    averageRating?: DecimalNullableFilter<"SellerProfile"> | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: IntNullableFilter<"SellerProfile"> | number | null
+    totalSales?: IntNullableFilter<"SellerProfile"> | number | null
+    createdAt?: DateTimeFilter<"SellerProfile"> | Date | string
+    updatedAt?: DateTimeFilter<"SellerProfile"> | Date | string
+    pickupAddress?: XOR<AddressNullableScalarRelationFilter, AddressWhereInput> | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId" | "shopName" | "slug">
+
+  export type SellerProfileOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    shopName?: SortOrder
+    slug?: SortOrder
+    logo?: SortOrderInput | SortOrder
+    banner?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    tagline?: SortOrderInput | SortOrder
+    businessName?: SortOrderInput | SortOrder
+    businessRegNo?: SortOrderInput | SortOrder
+    businessType?: SortOrderInput | SortOrder
+    phone?: SortOrder
+    altPhone?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    pickupAddressId?: SortOrderInput | SortOrder
+    returnPolicy?: SortOrderInput | SortOrder
+    shippingPolicy?: SortOrderInput | SortOrder
+    about?: SortOrderInput | SortOrder
+    verificationStatus?: SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    averageRating?: SortOrderInput | SortOrder
+    totalReviews?: SortOrderInput | SortOrder
+    totalSales?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SellerProfileCountOrderByAggregateInput
+    _avg?: SellerProfileAvgOrderByAggregateInput
+    _max?: SellerProfileMaxOrderByAggregateInput
+    _min?: SellerProfileMinOrderByAggregateInput
+    _sum?: SellerProfileSumOrderByAggregateInput
+  }
+
+  export type SellerProfileScalarWhereWithAggregatesInput = {
+    AND?: SellerProfileScalarWhereWithAggregatesInput | SellerProfileScalarWhereWithAggregatesInput[]
+    OR?: SellerProfileScalarWhereWithAggregatesInput[]
+    NOT?: SellerProfileScalarWhereWithAggregatesInput | SellerProfileScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SellerProfile"> | string
+    userId?: StringWithAggregatesFilter<"SellerProfile"> | string
+    shopName?: StringWithAggregatesFilter<"SellerProfile"> | string
+    slug?: StringWithAggregatesFilter<"SellerProfile"> | string
+    logo?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    banner?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    description?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    tagline?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    businessName?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    businessRegNo?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    businessType?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    phone?: StringWithAggregatesFilter<"SellerProfile"> | string
+    altPhone?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    email?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    pickupAddressId?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    returnPolicy?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    shippingPolicy?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    about?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    verificationStatus?: EnumVerificationStatusWithAggregatesFilter<"SellerProfile"> | $Enums.VerificationStatus
+    verifiedAt?: DateTimeNullableWithAggregatesFilter<"SellerProfile"> | Date | string | null
+    isActive?: BoolWithAggregatesFilter<"SellerProfile"> | boolean
+    averageRating?: DecimalNullableWithAggregatesFilter<"SellerProfile"> | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: IntNullableWithAggregatesFilter<"SellerProfile"> | number | null
+    totalSales?: IntNullableWithAggregatesFilter<"SellerProfile"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"SellerProfile"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SellerProfile"> | Date | string
   }
 
   export type NotificationWhereInput = {
@@ -44068,6 +47323,7 @@ export namespace Prisma {
     data?: JsonNullableFilter<"Notification">
     isRead?: BoolFilter<"Notification"> | boolean
     createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -44080,6 +47336,7 @@ export namespace Prisma {
     data?: SortOrderInput | SortOrder
     isRead?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
@@ -44095,6 +47352,7 @@ export namespace Prisma {
     data?: JsonNullableFilter<"Notification">
     isRead?: BoolFilter<"Notification"> | boolean
     createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
@@ -44107,6 +47365,7 @@ export namespace Prisma {
     data?: SortOrderInput | SortOrder
     isRead?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: NotificationCountOrderByAggregateInput
     _max?: NotificationMaxOrderByAggregateInput
     _min?: NotificationMinOrderByAggregateInput
@@ -44124,6 +47383,7 @@ export namespace Prisma {
     data?: JsonNullableWithAggregatesFilter<"Notification">
     isRead?: BoolWithAggregatesFilter<"Notification"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
 
   export type ConversationWhereInput = {
@@ -44222,6 +47482,8 @@ export namespace Prisma {
     isRead?: BoolFilter<"Message"> | boolean
     sentAt?: DateTimeFilter<"Message"> | Date | string
     clientId?: StringNullableFilter<"Message"> | string | null
+    createdAt?: DateTimeFilter<"Message"> | Date | string
+    updatedAt?: DateTimeFilter<"Message"> | Date | string
     conversation?: XOR<ConversationScalarRelationFilter, ConversationWhereInput>
     sender?: XOR<UserScalarRelationFilter, UserWhereInput>
     MessageAttachment?: MessageAttachmentListRelationFilter
@@ -44237,6 +47499,8 @@ export namespace Prisma {
     isRead?: SortOrder
     sentAt?: SortOrder
     clientId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     conversation?: ConversationOrderByWithRelationInput
     sender?: UserOrderByWithRelationInput
     MessageAttachment?: MessageAttachmentOrderByRelationAggregateInput
@@ -44255,6 +47519,8 @@ export namespace Prisma {
     isRead?: BoolFilter<"Message"> | boolean
     sentAt?: DateTimeFilter<"Message"> | Date | string
     clientId?: StringNullableFilter<"Message"> | string | null
+    createdAt?: DateTimeFilter<"Message"> | Date | string
+    updatedAt?: DateTimeFilter<"Message"> | Date | string
     conversation?: XOR<ConversationScalarRelationFilter, ConversationWhereInput>
     sender?: XOR<UserScalarRelationFilter, UserWhereInput>
     MessageAttachment?: MessageAttachmentListRelationFilter
@@ -44270,6 +47536,8 @@ export namespace Prisma {
     isRead?: SortOrder
     sentAt?: SortOrder
     clientId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: MessageCountOrderByAggregateInput
     _max?: MessageMaxOrderByAggregateInput
     _min?: MessageMinOrderByAggregateInput
@@ -44288,6 +47556,8 @@ export namespace Prisma {
     isRead?: BoolWithAggregatesFilter<"Message"> | boolean
     sentAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
     clientId?: StringNullableWithAggregatesFilter<"Message"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
   }
 
   export type MessageAttachmentWhereInput = {
@@ -44298,6 +47568,8 @@ export namespace Prisma {
     messageId?: StringFilter<"MessageAttachment"> | string
     url?: StringFilter<"MessageAttachment"> | string
     type?: EnumFileTypeFilter<"MessageAttachment"> | $Enums.FileType
+    createdAt?: DateTimeFilter<"MessageAttachment"> | Date | string
+    updatedAt?: DateTimeFilter<"MessageAttachment"> | Date | string
     message?: XOR<MessageScalarRelationFilter, MessageWhereInput>
   }
 
@@ -44306,6 +47578,8 @@ export namespace Prisma {
     messageId?: SortOrder
     url?: SortOrder
     type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     message?: MessageOrderByWithRelationInput
   }
 
@@ -44317,6 +47591,8 @@ export namespace Prisma {
     messageId?: StringFilter<"MessageAttachment"> | string
     url?: StringFilter<"MessageAttachment"> | string
     type?: EnumFileTypeFilter<"MessageAttachment"> | $Enums.FileType
+    createdAt?: DateTimeFilter<"MessageAttachment"> | Date | string
+    updatedAt?: DateTimeFilter<"MessageAttachment"> | Date | string
     message?: XOR<MessageScalarRelationFilter, MessageWhereInput>
   }, "id">
 
@@ -44325,6 +47601,8 @@ export namespace Prisma {
     messageId?: SortOrder
     url?: SortOrder
     type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: MessageAttachmentCountOrderByAggregateInput
     _max?: MessageAttachmentMaxOrderByAggregateInput
     _min?: MessageAttachmentMinOrderByAggregateInput
@@ -44338,6 +47616,8 @@ export namespace Prisma {
     messageId?: StringWithAggregatesFilter<"MessageAttachment"> | string
     url?: StringWithAggregatesFilter<"MessageAttachment"> | string
     type?: EnumFileTypeWithAggregatesFilter<"MessageAttachment"> | $Enums.FileType
+    createdAt?: DateTimeWithAggregatesFilter<"MessageAttachment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MessageAttachment"> | Date | string
   }
 
   export type ConversationParticipantWhereInput = {
@@ -44413,6 +47693,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Address"> | Date | string
     updatedAt?: DateTimeFilter<"Address"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    sellerPickupAddresses?: SellerProfileListRelationFilter
   }
 
   export type AddressOrderByWithRelationInput = {
@@ -44431,6 +47712,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
+    sellerPickupAddresses?: SellerProfileOrderByRelationAggregateInput
   }
 
   export type AddressWhereUniqueInput = Prisma.AtLeast<{
@@ -44452,6 +47734,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Address"> | Date | string
     updatedAt?: DateTimeFilter<"Address"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    sellerPickupAddresses?: SellerProfileListRelationFilter
   }, "id">
 
   export type AddressOrderByWithAggregationInput = {
@@ -44748,6 +48031,7 @@ export namespace Prisma {
     offerId?: StringFilter<"ProductOffer"> | string
     productId?: StringFilter<"ProductOffer"> | string
     createdAt?: DateTimeFilter<"ProductOffer"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductOffer"> | Date | string
     offer?: XOR<OfferScalarRelationFilter, OfferWhereInput>
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }
@@ -44757,6 +48041,7 @@ export namespace Prisma {
     offerId?: SortOrder
     productId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     offer?: OfferOrderByWithRelationInput
     product?: ProductOrderByWithRelationInput
   }
@@ -44770,6 +48055,7 @@ export namespace Prisma {
     offerId?: StringFilter<"ProductOffer"> | string
     productId?: StringFilter<"ProductOffer"> | string
     createdAt?: DateTimeFilter<"ProductOffer"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductOffer"> | Date | string
     offer?: XOR<OfferScalarRelationFilter, OfferWhereInput>
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }, "id" | "offerId_productId">
@@ -44779,6 +48065,7 @@ export namespace Prisma {
     offerId?: SortOrder
     productId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: ProductOfferCountOrderByAggregateInput
     _max?: ProductOfferMaxOrderByAggregateInput
     _min?: ProductOfferMinOrderByAggregateInput
@@ -44792,6 +48079,7 @@ export namespace Prisma {
     offerId?: StringWithAggregatesFilter<"ProductOffer"> | string
     productId?: StringWithAggregatesFilter<"ProductOffer"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ProductOffer"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProductOffer"> | Date | string
   }
 
   export type CategoryOfferWhereInput = {
@@ -44802,6 +48090,7 @@ export namespace Prisma {
     offerId?: StringFilter<"CategoryOffer"> | string
     categoryId?: StringFilter<"CategoryOffer"> | string
     createdAt?: DateTimeFilter<"CategoryOffer"> | Date | string
+    updatedAt?: DateTimeFilter<"CategoryOffer"> | Date | string
     offer?: XOR<OfferScalarRelationFilter, OfferWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
   }
@@ -44811,6 +48100,7 @@ export namespace Prisma {
     offerId?: SortOrder
     categoryId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     offer?: OfferOrderByWithRelationInput
     category?: CategoryOrderByWithRelationInput
   }
@@ -44824,6 +48114,7 @@ export namespace Prisma {
     offerId?: StringFilter<"CategoryOffer"> | string
     categoryId?: StringFilter<"CategoryOffer"> | string
     createdAt?: DateTimeFilter<"CategoryOffer"> | Date | string
+    updatedAt?: DateTimeFilter<"CategoryOffer"> | Date | string
     offer?: XOR<OfferScalarRelationFilter, OfferWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
   }, "id" | "offerId_categoryId">
@@ -44833,6 +48124,7 @@ export namespace Prisma {
     offerId?: SortOrder
     categoryId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: CategoryOfferCountOrderByAggregateInput
     _max?: CategoryOfferMaxOrderByAggregateInput
     _min?: CategoryOfferMinOrderByAggregateInput
@@ -44846,6 +48138,7 @@ export namespace Prisma {
     offerId?: StringWithAggregatesFilter<"CategoryOffer"> | string
     categoryId?: StringWithAggregatesFilter<"CategoryOffer"> | string
     createdAt?: DateTimeWithAggregatesFilter<"CategoryOffer"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CategoryOffer"> | Date | string
   }
 
   export type DeliveryOptionWhereInput = {
@@ -45339,6 +48632,8 @@ export namespace Prisma {
     sortOrder?: IntFilter<"ProductImage"> | number
     mediaType?: EnumMediaTypeFilter<"ProductImage"> | $Enums.MediaType
     fileType?: EnumFileTypeFilter<"ProductImage"> | $Enums.FileType
+    createdAt?: DateTimeFilter<"ProductImage"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductImage"> | Date | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }
 
@@ -45351,6 +48646,8 @@ export namespace Prisma {
     sortOrder?: SortOrder
     mediaType?: SortOrder
     fileType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     product?: ProductOrderByWithRelationInput
   }
 
@@ -45366,6 +48663,8 @@ export namespace Prisma {
     sortOrder?: IntFilter<"ProductImage"> | number
     mediaType?: EnumMediaTypeFilter<"ProductImage"> | $Enums.MediaType
     fileType?: EnumFileTypeFilter<"ProductImage"> | $Enums.FileType
+    createdAt?: DateTimeFilter<"ProductImage"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductImage"> | Date | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }, "id">
 
@@ -45378,6 +48677,8 @@ export namespace Prisma {
     sortOrder?: SortOrder
     mediaType?: SortOrder
     fileType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: ProductImageCountOrderByAggregateInput
     _avg?: ProductImageAvgOrderByAggregateInput
     _max?: ProductImageMaxOrderByAggregateInput
@@ -45397,6 +48698,8 @@ export namespace Prisma {
     sortOrder?: IntWithAggregatesFilter<"ProductImage"> | number
     mediaType?: EnumMediaTypeWithAggregatesFilter<"ProductImage"> | $Enums.MediaType
     fileType?: EnumFileTypeWithAggregatesFilter<"ProductImage"> | $Enums.FileType
+    createdAt?: DateTimeWithAggregatesFilter<"ProductImage"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProductImage"> | Date | string
   }
 
   export type CartItemWhereInput = {
@@ -46047,6 +49350,8 @@ export namespace Prisma {
     reviewId?: StringFilter<"ReviewVote"> | string
     userId?: StringFilter<"ReviewVote"> | string
     vote?: BoolFilter<"ReviewVote"> | boolean
+    createdAt?: DateTimeFilter<"ReviewVote"> | Date | string
+    updatedAt?: DateTimeFilter<"ReviewVote"> | Date | string
     review?: XOR<ReviewScalarRelationFilter, ReviewWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -46056,6 +49361,8 @@ export namespace Prisma {
     reviewId?: SortOrder
     userId?: SortOrder
     vote?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     review?: ReviewOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
   }
@@ -46069,6 +49376,8 @@ export namespace Prisma {
     reviewId?: StringFilter<"ReviewVote"> | string
     userId?: StringFilter<"ReviewVote"> | string
     vote?: BoolFilter<"ReviewVote"> | boolean
+    createdAt?: DateTimeFilter<"ReviewVote"> | Date | string
+    updatedAt?: DateTimeFilter<"ReviewVote"> | Date | string
     review?: XOR<ReviewScalarRelationFilter, ReviewWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "reviewId_userId">
@@ -46078,6 +49387,8 @@ export namespace Prisma {
     reviewId?: SortOrder
     userId?: SortOrder
     vote?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: ReviewVoteCountOrderByAggregateInput
     _max?: ReviewVoteMaxOrderByAggregateInput
     _min?: ReviewVoteMinOrderByAggregateInput
@@ -46091,6 +49402,8 @@ export namespace Prisma {
     reviewId?: StringWithAggregatesFilter<"ReviewVote"> | string
     userId?: StringWithAggregatesFilter<"ReviewVote"> | string
     vote?: BoolWithAggregatesFilter<"ReviewVote"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ReviewVote"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ReviewVote"> | Date | string
   }
 
   export type ReviewMediaWhereInput = {
@@ -46101,6 +49414,8 @@ export namespace Prisma {
     reviewId?: StringFilter<"ReviewMedia"> | string
     type?: EnumFileTypeFilter<"ReviewMedia"> | $Enums.FileType
     url?: StringFilter<"ReviewMedia"> | string
+    createdAt?: DateTimeFilter<"ReviewMedia"> | Date | string
+    updatedAt?: DateTimeFilter<"ReviewMedia"> | Date | string
     review?: XOR<ReviewScalarRelationFilter, ReviewWhereInput>
   }
 
@@ -46109,6 +49424,8 @@ export namespace Prisma {
     reviewId?: SortOrder
     type?: SortOrder
     url?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     review?: ReviewOrderByWithRelationInput
   }
 
@@ -46120,6 +49437,8 @@ export namespace Prisma {
     reviewId?: StringFilter<"ReviewMedia"> | string
     type?: EnumFileTypeFilter<"ReviewMedia"> | $Enums.FileType
     url?: StringFilter<"ReviewMedia"> | string
+    createdAt?: DateTimeFilter<"ReviewMedia"> | Date | string
+    updatedAt?: DateTimeFilter<"ReviewMedia"> | Date | string
     review?: XOR<ReviewScalarRelationFilter, ReviewWhereInput>
   }, "id">
 
@@ -46128,6 +49447,8 @@ export namespace Prisma {
     reviewId?: SortOrder
     type?: SortOrder
     url?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: ReviewMediaCountOrderByAggregateInput
     _max?: ReviewMediaMaxOrderByAggregateInput
     _min?: ReviewMediaMinOrderByAggregateInput
@@ -46141,6 +49462,8 @@ export namespace Prisma {
     reviewId?: StringWithAggregatesFilter<"ReviewMedia"> | string
     type?: EnumFileTypeWithAggregatesFilter<"ReviewMedia"> | $Enums.FileType
     url?: StringWithAggregatesFilter<"ReviewMedia"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ReviewMedia"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ReviewMedia"> | Date | string
   }
 
   export type WishlistWhereInput = {
@@ -46209,6 +49532,7 @@ export namespace Prisma {
     wishlistId?: StringFilter<"WishlistItem"> | string
     productId?: StringFilter<"WishlistItem"> | string
     createdAt?: DateTimeFilter<"WishlistItem"> | Date | string
+    updatedAt?: DateTimeFilter<"WishlistItem"> | Date | string
     wishlist?: XOR<WishlistScalarRelationFilter, WishlistWhereInput>
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }
@@ -46218,6 +49542,7 @@ export namespace Prisma {
     wishlistId?: SortOrder
     productId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     wishlist?: WishlistOrderByWithRelationInput
     product?: ProductOrderByWithRelationInput
   }
@@ -46231,6 +49556,7 @@ export namespace Prisma {
     wishlistId?: StringFilter<"WishlistItem"> | string
     productId?: StringFilter<"WishlistItem"> | string
     createdAt?: DateTimeFilter<"WishlistItem"> | Date | string
+    updatedAt?: DateTimeFilter<"WishlistItem"> | Date | string
     wishlist?: XOR<WishlistScalarRelationFilter, WishlistWhereInput>
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }, "id" | "wishlistId_productId">
@@ -46240,6 +49566,7 @@ export namespace Prisma {
     wishlistId?: SortOrder
     productId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: WishlistItemCountOrderByAggregateInput
     _max?: WishlistItemMaxOrderByAggregateInput
     _min?: WishlistItemMinOrderByAggregateInput
@@ -46253,6 +49580,7 @@ export namespace Prisma {
     wishlistId?: StringWithAggregatesFilter<"WishlistItem"> | string
     productId?: StringWithAggregatesFilter<"WishlistItem"> | string
     createdAt?: DateTimeWithAggregatesFilter<"WishlistItem"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WishlistItem"> | Date | string
   }
 
   export type SellerOrderWhereInput = {
@@ -46511,10 +49839,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -46532,6 +49860,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -46540,10 +49870,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -46561,6 +49891,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -46569,10 +49901,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -46590,6 +49922,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -46598,10 +49932,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -46619,6 +49953,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -46627,10 +49963,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -46641,10 +49977,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -46655,10 +49991,266 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserRoleCreateInput = {
+    id?: string
+    role: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutRolesInput
+  }
+
+  export type UserRoleUncheckedCreateInput = {
+    id?: string
+    userId: string
+    role: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserRoleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutRolesNestedInput
+  }
+
+  export type UserRoleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserRoleCreateManyInput = {
+    id?: string
+    userId: string
+    role: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserRoleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserRoleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SellerProfileCreateInput = {
+    id?: string
+    shopName: string
+    slug: string
+    logo?: string | null
+    banner?: string | null
+    description?: string | null
+    tagline?: string | null
+    businessName?: string | null
+    businessRegNo?: string | null
+    businessType?: string | null
+    phone: string
+    altPhone?: string | null
+    email?: string | null
+    returnPolicy?: string | null
+    shippingPolicy?: string | null
+    about?: string | null
+    verificationStatus?: $Enums.VerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    averageRating?: Decimal | DecimalJsLike | number | string | null
+    totalReviews?: number | null
+    totalSales?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    pickupAddress?: AddressCreateNestedOneWithoutSellerPickupAddressesInput
+    user: UserCreateNestedOneWithoutSellerProfileInput
+  }
+
+  export type SellerProfileUncheckedCreateInput = {
+    id?: string
+    userId: string
+    shopName: string
+    slug: string
+    logo?: string | null
+    banner?: string | null
+    description?: string | null
+    tagline?: string | null
+    businessName?: string | null
+    businessRegNo?: string | null
+    businessType?: string | null
+    phone: string
+    altPhone?: string | null
+    email?: string | null
+    pickupAddressId?: string | null
+    returnPolicy?: string | null
+    shippingPolicy?: string | null
+    about?: string | null
+    verificationStatus?: $Enums.VerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    averageRating?: Decimal | DecimalJsLike | number | string | null
+    totalReviews?: number | null
+    totalSales?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SellerProfileUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    businessName?: NullableStringFieldUpdateOperationsInput | string | null
+    businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
+    totalSales?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pickupAddress?: AddressUpdateOneWithoutSellerPickupAddressesNestedInput
+    user?: UserUpdateOneRequiredWithoutSellerProfileNestedInput
+  }
+
+  export type SellerProfileUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    shopName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    businessName?: NullableStringFieldUpdateOperationsInput | string | null
+    businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
+    totalSales?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SellerProfileCreateManyInput = {
+    id?: string
+    userId: string
+    shopName: string
+    slug: string
+    logo?: string | null
+    banner?: string | null
+    description?: string | null
+    tagline?: string | null
+    businessName?: string | null
+    businessRegNo?: string | null
+    businessType?: string | null
+    phone: string
+    altPhone?: string | null
+    email?: string | null
+    pickupAddressId?: string | null
+    returnPolicy?: string | null
+    shippingPolicy?: string | null
+    about?: string | null
+    verificationStatus?: $Enums.VerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    averageRating?: Decimal | DecimalJsLike | number | string | null
+    totalReviews?: number | null
+    totalSales?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SellerProfileUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    businessName?: NullableStringFieldUpdateOperationsInput | string | null
+    businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
+    totalSales?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SellerProfileUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    shopName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    businessName?: NullableStringFieldUpdateOperationsInput | string | null
+    businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
+    totalSales?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -46671,6 +50263,7 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: boolean
     createdAt?: Date | string
+    updatedAt?: Date | string
     user: UserCreateNestedOneWithoutNotificationsInput
   }
 
@@ -46683,6 +50276,7 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: boolean
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationUpdateInput = {
@@ -46693,6 +50287,7 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
   }
 
@@ -46705,6 +50300,7 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationCreateManyInput = {
@@ -46716,6 +50312,7 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: boolean
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationUpdateManyMutationInput = {
@@ -46726,6 +50323,7 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationUncheckedUpdateManyInput = {
@@ -46737,6 +50335,7 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ConversationCreateInput = {
@@ -46829,6 +50428,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: Date | string
     clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     sender: UserCreateNestedOneWithoutSentMessagesInput
     MessageAttachment?: MessageAttachmentCreateNestedManyWithoutMessageInput
@@ -46844,6 +50445,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: Date | string
     clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     MessageAttachment?: MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
   }
 
@@ -46855,6 +50458,8 @@ export namespace Prisma {
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     sender?: UserUpdateOneRequiredWithoutSentMessagesNestedInput
     MessageAttachment?: MessageAttachmentUpdateManyWithoutMessageNestedInput
@@ -46870,6 +50475,8 @@ export namespace Prisma {
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     MessageAttachment?: MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
   }
 
@@ -46883,6 +50490,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: Date | string
     clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type MessageUpdateManyMutationInput = {
@@ -46893,6 +50502,8 @@ export namespace Prisma {
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageUncheckedUpdateManyInput = {
@@ -46905,12 +50516,16 @@ export namespace Prisma {
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageAttachmentCreateInput = {
     id?: string
     url: string
     type: $Enums.FileType
+    createdAt?: Date | string
+    updatedAt?: Date | string
     message: MessageCreateNestedOneWithoutMessageAttachmentInput
   }
 
@@ -46919,12 +50534,16 @@ export namespace Prisma {
     messageId: string
     url: string
     type: $Enums.FileType
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type MessageAttachmentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     message?: MessageUpdateOneRequiredWithoutMessageAttachmentNestedInput
   }
 
@@ -46933,6 +50552,8 @@ export namespace Prisma {
     messageId?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageAttachmentCreateManyInput = {
@@ -46940,12 +50561,16 @@ export namespace Prisma {
     messageId: string
     url: string
     type: $Enums.FileType
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type MessageAttachmentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageAttachmentUncheckedUpdateManyInput = {
@@ -46953,6 +50578,8 @@ export namespace Prisma {
     messageId?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ConversationParticipantCreateInput = {
@@ -47017,6 +50644,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutAddressesInput
+    sellerPickupAddresses?: SellerProfileCreateNestedManyWithoutPickupAddressInput
   }
 
   export type AddressUncheckedCreateInput = {
@@ -47034,6 +50662,7 @@ export namespace Prisma {
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    sellerPickupAddresses?: SellerProfileUncheckedCreateNestedManyWithoutPickupAddressInput
   }
 
   export type AddressUpdateInput = {
@@ -47051,6 +50680,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutAddressesNestedInput
+    sellerPickupAddresses?: SellerProfileUpdateManyWithoutPickupAddressNestedInput
   }
 
   export type AddressUncheckedUpdateInput = {
@@ -47068,6 +50698,7 @@ export namespace Prisma {
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sellerPickupAddresses?: SellerProfileUncheckedUpdateManyWithoutPickupAddressNestedInput
   }
 
   export type AddressCreateManyInput = {
@@ -47401,6 +51032,7 @@ export namespace Prisma {
   export type ProductOfferCreateInput = {
     id?: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     offer: OfferCreateNestedOneWithoutProductOffersInput
     product: ProductCreateNestedOneWithoutProductOffersInput
   }
@@ -47410,11 +51042,13 @@ export namespace Prisma {
     offerId: string
     productId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ProductOfferUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     offer?: OfferUpdateOneRequiredWithoutProductOffersNestedInput
     product?: ProductUpdateOneRequiredWithoutProductOffersNestedInput
   }
@@ -47424,6 +51058,7 @@ export namespace Prisma {
     offerId?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductOfferCreateManyInput = {
@@ -47431,11 +51066,13 @@ export namespace Prisma {
     offerId: string
     productId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ProductOfferUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductOfferUncheckedUpdateManyInput = {
@@ -47443,11 +51080,13 @@ export namespace Prisma {
     offerId?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoryOfferCreateInput = {
     id?: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     offer: OfferCreateNestedOneWithoutCategoryOffersInput
     category: CategoryCreateNestedOneWithoutCategoryOffersInput
   }
@@ -47457,11 +51096,13 @@ export namespace Prisma {
     offerId: string
     categoryId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CategoryOfferUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     offer?: OfferUpdateOneRequiredWithoutCategoryOffersNestedInput
     category?: CategoryUpdateOneRequiredWithoutCategoryOffersNestedInput
   }
@@ -47471,6 +51112,7 @@ export namespace Prisma {
     offerId?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoryOfferCreateManyInput = {
@@ -47478,11 +51120,13 @@ export namespace Prisma {
     offerId: string
     categoryId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CategoryOfferUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoryOfferUncheckedUpdateManyInput = {
@@ -47490,6 +51134,7 @@ export namespace Prisma {
     offerId?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DeliveryOptionCreateInput = {
@@ -48021,6 +51666,8 @@ export namespace Prisma {
     sortOrder?: number
     mediaType?: $Enums.MediaType
     fileType: $Enums.FileType
+    createdAt?: Date | string
+    updatedAt?: Date | string
     product: ProductCreateNestedOneWithoutImagesInput
   }
 
@@ -48033,6 +51680,8 @@ export namespace Prisma {
     sortOrder?: number
     mediaType?: $Enums.MediaType
     fileType: $Enums.FileType
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ProductImageUpdateInput = {
@@ -48043,6 +51692,8 @@ export namespace Prisma {
     sortOrder?: IntFieldUpdateOperationsInput | number
     mediaType?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
     fileType?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutImagesNestedInput
   }
 
@@ -48055,6 +51706,8 @@ export namespace Prisma {
     sortOrder?: IntFieldUpdateOperationsInput | number
     mediaType?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
     fileType?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductImageCreateManyInput = {
@@ -48066,6 +51719,8 @@ export namespace Prisma {
     sortOrder?: number
     mediaType?: $Enums.MediaType
     fileType: $Enums.FileType
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ProductImageUpdateManyMutationInput = {
@@ -48076,6 +51731,8 @@ export namespace Prisma {
     sortOrder?: IntFieldUpdateOperationsInput | number
     mediaType?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
     fileType?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductImageUncheckedUpdateManyInput = {
@@ -48087,6 +51744,8 @@ export namespace Prisma {
     sortOrder?: IntFieldUpdateOperationsInput | number
     mediaType?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
     fileType?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CartItemCreateInput = {
@@ -48787,6 +52446,8 @@ export namespace Prisma {
   export type ReviewVoteCreateInput = {
     id?: string
     vote: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     review: ReviewCreateNestedOneWithoutVotesInput
     user: UserCreateNestedOneWithoutReviewVoteInput
   }
@@ -48796,11 +52457,15 @@ export namespace Prisma {
     reviewId: string
     userId: string
     vote: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReviewVoteUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     vote?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     review?: ReviewUpdateOneRequiredWithoutVotesNestedInput
     user?: UserUpdateOneRequiredWithoutReviewVoteNestedInput
   }
@@ -48810,6 +52475,8 @@ export namespace Prisma {
     reviewId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     vote?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewVoteCreateManyInput = {
@@ -48817,11 +52484,15 @@ export namespace Prisma {
     reviewId: string
     userId: string
     vote: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReviewVoteUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     vote?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewVoteUncheckedUpdateManyInput = {
@@ -48829,12 +52500,16 @@ export namespace Prisma {
     reviewId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     vote?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewMediaCreateInput = {
     id?: string
     type: $Enums.FileType
     url: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     review: ReviewCreateNestedOneWithoutMediaInput
   }
 
@@ -48843,12 +52518,16 @@ export namespace Prisma {
     reviewId: string
     type: $Enums.FileType
     url: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReviewMediaUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
     url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     review?: ReviewUpdateOneRequiredWithoutMediaNestedInput
   }
 
@@ -48857,6 +52536,8 @@ export namespace Prisma {
     reviewId?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
     url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewMediaCreateManyInput = {
@@ -48864,12 +52545,16 @@ export namespace Prisma {
     reviewId: string
     type: $Enums.FileType
     url: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReviewMediaUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
     url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewMediaUncheckedUpdateManyInput = {
@@ -48877,6 +52562,8 @@ export namespace Prisma {
     reviewId?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
     url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WishlistCreateInput = {
@@ -48941,6 +52628,7 @@ export namespace Prisma {
   export type WishlistItemCreateInput = {
     id?: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     wishlist: WishlistCreateNestedOneWithoutItemsInput
     product: ProductCreateNestedOneWithoutWishlistItemsInput
   }
@@ -48950,11 +52638,13 @@ export namespace Prisma {
     wishlistId: string
     productId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type WishlistItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     wishlist?: WishlistUpdateOneRequiredWithoutItemsNestedInput
     product?: ProductUpdateOneRequiredWithoutWishlistItemsNestedInput
   }
@@ -48964,6 +52654,7 @@ export namespace Prisma {
     wishlistId?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WishlistItemCreateManyInput = {
@@ -48971,11 +52662,13 @@ export namespace Prisma {
     wishlistId: string
     productId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type WishlistItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WishlistItemUncheckedUpdateManyInput = {
@@ -48983,6 +52676,7 @@ export namespace Prisma {
     wishlistId?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SellerOrderCreateInput = {
@@ -49298,13 +52992,6 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type EnumRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -49400,6 +53087,17 @@ export namespace Prisma {
     none?: NotificationWhereInput
   }
 
+  export type SellerProfileNullableScalarRelationFilter = {
+    is?: SellerProfileWhereInput | null
+    isNot?: SellerProfileWhereInput | null
+  }
+
+  export type UserRoleListRelationFilter = {
+    every?: UserRoleWhereInput
+    some?: UserRoleWhereInput
+    none?: UserRoleWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -49461,16 +53159,20 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type UserRoleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     clerkId?: SortOrder
     email?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    avatarImageUrl?: SortOrder
     phone?: SortOrder
     gender?: SortOrder
     dob?: SortOrder
-    role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -49481,10 +53183,10 @@ export namespace Prisma {
     email?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    avatarImageUrl?: SortOrder
     phone?: SortOrder
     gender?: SortOrder
     dob?: SortOrder
-    role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -49495,10 +53197,10 @@ export namespace Prisma {
     email?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    avatarImageUrl?: SortOrder
     phone?: SortOrder
     gender?: SortOrder
     dob?: SortOrder
-    role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -49563,16 +53265,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRoleFilter<$PrismaModel>
-    _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -49585,6 +53277,245 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type EnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type UserRoleUserIdRoleCompoundUniqueInput = {
+    userId: string
+    role: $Enums.Role
+  }
+
+  export type UserRoleCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserRoleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserRoleMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type EnumVerificationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.VerificationStatus | EnumVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumVerificationStatusFilter<$PrismaModel> | $Enums.VerificationStatus
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type AddressNullableScalarRelationFilter = {
+    is?: AddressWhereInput | null
+    isNot?: AddressWhereInput | null
+  }
+
+  export type SellerProfileCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    shopName?: SortOrder
+    slug?: SortOrder
+    logo?: SortOrder
+    banner?: SortOrder
+    description?: SortOrder
+    tagline?: SortOrder
+    businessName?: SortOrder
+    businessRegNo?: SortOrder
+    businessType?: SortOrder
+    phone?: SortOrder
+    altPhone?: SortOrder
+    email?: SortOrder
+    pickupAddressId?: SortOrder
+    returnPolicy?: SortOrder
+    shippingPolicy?: SortOrder
+    about?: SortOrder
+    verificationStatus?: SortOrder
+    verifiedAt?: SortOrder
+    isActive?: SortOrder
+    averageRating?: SortOrder
+    totalReviews?: SortOrder
+    totalSales?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SellerProfileAvgOrderByAggregateInput = {
+    averageRating?: SortOrder
+    totalReviews?: SortOrder
+    totalSales?: SortOrder
+  }
+
+  export type SellerProfileMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    shopName?: SortOrder
+    slug?: SortOrder
+    logo?: SortOrder
+    banner?: SortOrder
+    description?: SortOrder
+    tagline?: SortOrder
+    businessName?: SortOrder
+    businessRegNo?: SortOrder
+    businessType?: SortOrder
+    phone?: SortOrder
+    altPhone?: SortOrder
+    email?: SortOrder
+    pickupAddressId?: SortOrder
+    returnPolicy?: SortOrder
+    shippingPolicy?: SortOrder
+    about?: SortOrder
+    verificationStatus?: SortOrder
+    verifiedAt?: SortOrder
+    isActive?: SortOrder
+    averageRating?: SortOrder
+    totalReviews?: SortOrder
+    totalSales?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SellerProfileMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    shopName?: SortOrder
+    slug?: SortOrder
+    logo?: SortOrder
+    banner?: SortOrder
+    description?: SortOrder
+    tagline?: SortOrder
+    businessName?: SortOrder
+    businessRegNo?: SortOrder
+    businessType?: SortOrder
+    phone?: SortOrder
+    altPhone?: SortOrder
+    email?: SortOrder
+    pickupAddressId?: SortOrder
+    returnPolicy?: SortOrder
+    shippingPolicy?: SortOrder
+    about?: SortOrder
+    verificationStatus?: SortOrder
+    verifiedAt?: SortOrder
+    isActive?: SortOrder
+    averageRating?: SortOrder
+    totalReviews?: SortOrder
+    totalSales?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SellerProfileSumOrderByAggregateInput = {
+    averageRating?: SortOrder
+    totalReviews?: SortOrder
+    totalSales?: SortOrder
+  }
+
+  export type EnumVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.VerificationStatus | EnumVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.VerificationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumVerificationStatusFilter<$PrismaModel>
+    _max?: NestedEnumVerificationStatusFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
   export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -49610,16 +53541,6 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
-  }
-
   export type NotificationCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -49629,6 +53550,7 @@ export namespace Prisma {
     data?: SortOrder
     isRead?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type NotificationMaxOrderByAggregateInput = {
@@ -49639,6 +53561,7 @@ export namespace Prisma {
     type?: SortOrder
     isRead?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type NotificationMinOrderByAggregateInput = {
@@ -49649,6 +53572,7 @@ export namespace Prisma {
     type?: SortOrder
     isRead?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
   export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -49675,14 +53599,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedJsonNullableFilter<$PrismaModel>
     _max?: NestedJsonNullableFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ProductScalarRelationFilter = {
@@ -49761,6 +53677,8 @@ export namespace Prisma {
     isRead?: SortOrder
     sentAt?: SortOrder
     clientId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type MessageMaxOrderByAggregateInput = {
@@ -49773,6 +53691,8 @@ export namespace Prisma {
     isRead?: SortOrder
     sentAt?: SortOrder
     clientId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type MessageMinOrderByAggregateInput = {
@@ -49785,6 +53705,8 @@ export namespace Prisma {
     isRead?: SortOrder
     sentAt?: SortOrder
     clientId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EnumMessageTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -49814,6 +53736,8 @@ export namespace Prisma {
     messageId?: SortOrder
     url?: SortOrder
     type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type MessageAttachmentMaxOrderByAggregateInput = {
@@ -49821,6 +53745,8 @@ export namespace Prisma {
     messageId?: SortOrder
     url?: SortOrder
     type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type MessageAttachmentMinOrderByAggregateInput = {
@@ -49828,6 +53754,8 @@ export namespace Prisma {
     messageId?: SortOrder
     url?: SortOrder
     type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EnumFileTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -49871,6 +53799,16 @@ export namespace Prisma {
     in?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumAddressTypeFilter<$PrismaModel> | $Enums.AddressType
+  }
+
+  export type SellerProfileListRelationFilter = {
+    every?: SellerProfileWhereInput
+    some?: SellerProfileWhereInput
+    none?: SellerProfileWhereInput
+  }
+
+  export type SellerProfileOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type AddressCountOrderByAggregateInput = {
@@ -50162,6 +54100,7 @@ export namespace Prisma {
     offerId?: SortOrder
     productId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ProductOfferMaxOrderByAggregateInput = {
@@ -50169,6 +54108,7 @@ export namespace Prisma {
     offerId?: SortOrder
     productId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ProductOfferMinOrderByAggregateInput = {
@@ -50176,6 +54116,7 @@ export namespace Prisma {
     offerId?: SortOrder
     productId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type CategoryOfferOfferIdCategoryIdCompoundUniqueInput = {
@@ -50188,6 +54129,7 @@ export namespace Prisma {
     offerId?: SortOrder
     categoryId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type CategoryOfferMaxOrderByAggregateInput = {
@@ -50195,6 +54137,7 @@ export namespace Prisma {
     offerId?: SortOrder
     categoryId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type CategoryOfferMinOrderByAggregateInput = {
@@ -50202,6 +54145,7 @@ export namespace Prisma {
     offerId?: SortOrder
     categoryId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type DeliveryOptionCountOrderByAggregateInput = {
@@ -50239,17 +54183,6 @@ export namespace Prisma {
     in?: $Enums.WarrantyType[] | ListEnumWarrantyTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.WarrantyType[] | ListEnumWarrantyTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumWarrantyTypeFilter<$PrismaModel> | $Enums.WarrantyType
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type WarrantyCountOrderByAggregateInput = {
@@ -50301,22 +54234,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumWarrantyTypeFilter<$PrismaModel>
     _max?: NestedEnumWarrantyTypeFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumReturnTypeFilter<$PrismaModel = never> = {
@@ -50657,6 +54574,8 @@ export namespace Prisma {
     sortOrder?: SortOrder
     mediaType?: SortOrder
     fileType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ProductImageAvgOrderByAggregateInput = {
@@ -50672,6 +54591,8 @@ export namespace Prisma {
     sortOrder?: SortOrder
     mediaType?: SortOrder
     fileType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ProductImageMinOrderByAggregateInput = {
@@ -50683,6 +54604,8 @@ export namespace Prisma {
     sortOrder?: SortOrder
     mediaType?: SortOrder
     fileType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ProductImageSumOrderByAggregateInput = {
@@ -51284,6 +55207,8 @@ export namespace Prisma {
     reviewId?: SortOrder
     userId?: SortOrder
     vote?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ReviewVoteMaxOrderByAggregateInput = {
@@ -51291,6 +55216,8 @@ export namespace Prisma {
     reviewId?: SortOrder
     userId?: SortOrder
     vote?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ReviewVoteMinOrderByAggregateInput = {
@@ -51298,6 +55225,8 @@ export namespace Prisma {
     reviewId?: SortOrder
     userId?: SortOrder
     vote?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ReviewMediaCountOrderByAggregateInput = {
@@ -51305,6 +55234,8 @@ export namespace Prisma {
     reviewId?: SortOrder
     type?: SortOrder
     url?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ReviewMediaMaxOrderByAggregateInput = {
@@ -51312,6 +55243,8 @@ export namespace Prisma {
     reviewId?: SortOrder
     type?: SortOrder
     url?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ReviewMediaMinOrderByAggregateInput = {
@@ -51319,6 +55252,8 @@ export namespace Prisma {
     reviewId?: SortOrder
     type?: SortOrder
     url?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type WishlistCountOrderByAggregateInput = {
@@ -51360,6 +55295,7 @@ export namespace Prisma {
     wishlistId?: SortOrder
     productId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type WishlistItemMaxOrderByAggregateInput = {
@@ -51367,6 +55303,7 @@ export namespace Prisma {
     wishlistId?: SortOrder
     productId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type WishlistItemMinOrderByAggregateInput = {
@@ -51374,6 +55311,7 @@ export namespace Prisma {
     wishlistId?: SortOrder
     productId?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type SellerOrderCountOrderByAggregateInput = {
@@ -51638,6 +55576,19 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type SellerProfileCreateNestedOneWithoutUserInput = {
+    create?: XOR<SellerProfileCreateWithoutUserInput, SellerProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: SellerProfileCreateOrConnectWithoutUserInput
+    connect?: SellerProfileWhereUniqueInput
+  }
+
+  export type UserRoleCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserRoleCreateWithoutUserInput, UserRoleUncheckedCreateWithoutUserInput> | UserRoleCreateWithoutUserInput[] | UserRoleUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserRoleCreateOrConnectWithoutUserInput | UserRoleCreateOrConnectWithoutUserInput[]
+    createMany?: UserRoleCreateManyUserInputEnvelope
+    connect?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+  }
+
   export type AddressUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
@@ -51743,6 +55694,19 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type SellerProfileUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<SellerProfileCreateWithoutUserInput, SellerProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: SellerProfileCreateOrConnectWithoutUserInput
+    connect?: SellerProfileWhereUniqueInput
+  }
+
+  export type UserRoleUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserRoleCreateWithoutUserInput, UserRoleUncheckedCreateWithoutUserInput> | UserRoleCreateWithoutUserInput[] | UserRoleUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserRoleCreateOrConnectWithoutUserInput | UserRoleCreateOrConnectWithoutUserInput[]
+    createMany?: UserRoleCreateManyUserInputEnvelope
+    connect?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -51757,10 +55721,6 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
-  }
-
-  export type EnumRoleFieldUpdateOperationsInput = {
-    set?: $Enums.Role
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -51977,6 +55937,30 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type SellerProfileUpdateOneWithoutUserNestedInput = {
+    create?: XOR<SellerProfileCreateWithoutUserInput, SellerProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: SellerProfileCreateOrConnectWithoutUserInput
+    upsert?: SellerProfileUpsertWithoutUserInput
+    disconnect?: SellerProfileWhereInput | boolean
+    delete?: SellerProfileWhereInput | boolean
+    connect?: SellerProfileWhereUniqueInput
+    update?: XOR<XOR<SellerProfileUpdateToOneWithWhereWithoutUserInput, SellerProfileUpdateWithoutUserInput>, SellerProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserRoleUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserRoleCreateWithoutUserInput, UserRoleUncheckedCreateWithoutUserInput> | UserRoleCreateWithoutUserInput[] | UserRoleUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserRoleCreateOrConnectWithoutUserInput | UserRoleCreateOrConnectWithoutUserInput[]
+    upsert?: UserRoleUpsertWithWhereUniqueWithoutUserInput | UserRoleUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserRoleCreateManyUserInputEnvelope
+    set?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+    disconnect?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+    delete?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+    connect?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+    update?: UserRoleUpdateWithWhereUniqueWithoutUserInput | UserRoleUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserRoleUpdateManyWithWhereWithoutUserInput | UserRoleUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserRoleScalarWhereInput | UserRoleScalarWhereInput[]
+  }
+
   export type AddressUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
@@ -52187,14 +56171,106 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutNotificationsInput = {
-    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+  export type SellerProfileUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<SellerProfileCreateWithoutUserInput, SellerProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: SellerProfileCreateOrConnectWithoutUserInput
+    upsert?: SellerProfileUpsertWithoutUserInput
+    disconnect?: SellerProfileWhereInput | boolean
+    delete?: SellerProfileWhereInput | boolean
+    connect?: SellerProfileWhereUniqueInput
+    update?: XOR<XOR<SellerProfileUpdateToOneWithWhereWithoutUserInput, SellerProfileUpdateWithoutUserInput>, SellerProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserRoleUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserRoleCreateWithoutUserInput, UserRoleUncheckedCreateWithoutUserInput> | UserRoleCreateWithoutUserInput[] | UserRoleUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserRoleCreateOrConnectWithoutUserInput | UserRoleCreateOrConnectWithoutUserInput[]
+    upsert?: UserRoleUpsertWithWhereUniqueWithoutUserInput | UserRoleUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserRoleCreateManyUserInputEnvelope
+    set?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+    disconnect?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+    delete?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+    connect?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+    update?: UserRoleUpdateWithWhereUniqueWithoutUserInput | UserRoleUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserRoleUpdateManyWithWhereWithoutUserInput | UserRoleUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserRoleScalarWhereInput | UserRoleScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutRolesInput = {
+    create?: XOR<UserCreateWithoutRolesInput, UserUncheckedCreateWithoutRolesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRolesInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type EnumRoleFieldUpdateOperationsInput = {
+    set?: $Enums.Role
+  }
+
+  export type UserUpdateOneRequiredWithoutRolesNestedInput = {
+    create?: XOR<UserCreateWithoutRolesInput, UserUncheckedCreateWithoutRolesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRolesInput
+    upsert?: UserUpsertWithoutRolesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRolesInput, UserUpdateWithoutRolesInput>, UserUncheckedUpdateWithoutRolesInput>
+  }
+
+  export type AddressCreateNestedOneWithoutSellerPickupAddressesInput = {
+    create?: XOR<AddressCreateWithoutSellerPickupAddressesInput, AddressUncheckedCreateWithoutSellerPickupAddressesInput>
+    connectOrCreate?: AddressCreateOrConnectWithoutSellerPickupAddressesInput
+    connect?: AddressWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutSellerProfileInput = {
+    create?: XOR<UserCreateWithoutSellerProfileInput, UserUncheckedCreateWithoutSellerProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSellerProfileInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumVerificationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.VerificationStatus
   }
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type AddressUpdateOneWithoutSellerPickupAddressesNestedInput = {
+    create?: XOR<AddressCreateWithoutSellerPickupAddressesInput, AddressUncheckedCreateWithoutSellerPickupAddressesInput>
+    connectOrCreate?: AddressCreateOrConnectWithoutSellerPickupAddressesInput
+    upsert?: AddressUpsertWithoutSellerPickupAddressesInput
+    disconnect?: AddressWhereInput | boolean
+    delete?: AddressWhereInput | boolean
+    connect?: AddressWhereUniqueInput
+    update?: XOR<XOR<AddressUpdateToOneWithWhereWithoutSellerPickupAddressesInput, AddressUpdateWithoutSellerPickupAddressesInput>, AddressUncheckedUpdateWithoutSellerPickupAddressesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutSellerProfileNestedInput = {
+    create?: XOR<UserCreateWithoutSellerProfileInput, UserUncheckedCreateWithoutSellerProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSellerProfileInput
+    upsert?: UserUpsertWithoutSellerProfileInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSellerProfileInput, UserUpdateWithoutSellerProfileInput>, UserUncheckedUpdateWithoutSellerProfileInput>
+  }
+
+  export type UserCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
   }
 
   export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
@@ -52457,6 +56533,20 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type SellerProfileCreateNestedManyWithoutPickupAddressInput = {
+    create?: XOR<SellerProfileCreateWithoutPickupAddressInput, SellerProfileUncheckedCreateWithoutPickupAddressInput> | SellerProfileCreateWithoutPickupAddressInput[] | SellerProfileUncheckedCreateWithoutPickupAddressInput[]
+    connectOrCreate?: SellerProfileCreateOrConnectWithoutPickupAddressInput | SellerProfileCreateOrConnectWithoutPickupAddressInput[]
+    createMany?: SellerProfileCreateManyPickupAddressInputEnvelope
+    connect?: SellerProfileWhereUniqueInput | SellerProfileWhereUniqueInput[]
+  }
+
+  export type SellerProfileUncheckedCreateNestedManyWithoutPickupAddressInput = {
+    create?: XOR<SellerProfileCreateWithoutPickupAddressInput, SellerProfileUncheckedCreateWithoutPickupAddressInput> | SellerProfileCreateWithoutPickupAddressInput[] | SellerProfileUncheckedCreateWithoutPickupAddressInput[]
+    connectOrCreate?: SellerProfileCreateOrConnectWithoutPickupAddressInput | SellerProfileCreateOrConnectWithoutPickupAddressInput[]
+    createMany?: SellerProfileCreateManyPickupAddressInputEnvelope
+    connect?: SellerProfileWhereUniqueInput | SellerProfileWhereUniqueInput[]
+  }
+
   export type EnumAddressTypeFieldUpdateOperationsInput = {
     set?: $Enums.AddressType
   }
@@ -52467,6 +56557,34 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutAddressesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAddressesInput, UserUpdateWithoutAddressesInput>, UserUncheckedUpdateWithoutAddressesInput>
+  }
+
+  export type SellerProfileUpdateManyWithoutPickupAddressNestedInput = {
+    create?: XOR<SellerProfileCreateWithoutPickupAddressInput, SellerProfileUncheckedCreateWithoutPickupAddressInput> | SellerProfileCreateWithoutPickupAddressInput[] | SellerProfileUncheckedCreateWithoutPickupAddressInput[]
+    connectOrCreate?: SellerProfileCreateOrConnectWithoutPickupAddressInput | SellerProfileCreateOrConnectWithoutPickupAddressInput[]
+    upsert?: SellerProfileUpsertWithWhereUniqueWithoutPickupAddressInput | SellerProfileUpsertWithWhereUniqueWithoutPickupAddressInput[]
+    createMany?: SellerProfileCreateManyPickupAddressInputEnvelope
+    set?: SellerProfileWhereUniqueInput | SellerProfileWhereUniqueInput[]
+    disconnect?: SellerProfileWhereUniqueInput | SellerProfileWhereUniqueInput[]
+    delete?: SellerProfileWhereUniqueInput | SellerProfileWhereUniqueInput[]
+    connect?: SellerProfileWhereUniqueInput | SellerProfileWhereUniqueInput[]
+    update?: SellerProfileUpdateWithWhereUniqueWithoutPickupAddressInput | SellerProfileUpdateWithWhereUniqueWithoutPickupAddressInput[]
+    updateMany?: SellerProfileUpdateManyWithWhereWithoutPickupAddressInput | SellerProfileUpdateManyWithWhereWithoutPickupAddressInput[]
+    deleteMany?: SellerProfileScalarWhereInput | SellerProfileScalarWhereInput[]
+  }
+
+  export type SellerProfileUncheckedUpdateManyWithoutPickupAddressNestedInput = {
+    create?: XOR<SellerProfileCreateWithoutPickupAddressInput, SellerProfileUncheckedCreateWithoutPickupAddressInput> | SellerProfileCreateWithoutPickupAddressInput[] | SellerProfileUncheckedCreateWithoutPickupAddressInput[]
+    connectOrCreate?: SellerProfileCreateOrConnectWithoutPickupAddressInput | SellerProfileCreateOrConnectWithoutPickupAddressInput[]
+    upsert?: SellerProfileUpsertWithWhereUniqueWithoutPickupAddressInput | SellerProfileUpsertWithWhereUniqueWithoutPickupAddressInput[]
+    createMany?: SellerProfileCreateManyPickupAddressInputEnvelope
+    set?: SellerProfileWhereUniqueInput | SellerProfileWhereUniqueInput[]
+    disconnect?: SellerProfileWhereUniqueInput | SellerProfileWhereUniqueInput[]
+    delete?: SellerProfileWhereUniqueInput | SellerProfileWhereUniqueInput[]
+    connect?: SellerProfileWhereUniqueInput | SellerProfileWhereUniqueInput[]
+    update?: SellerProfileUpdateWithWhereUniqueWithoutPickupAddressInput | SellerProfileUpdateWithWhereUniqueWithoutPickupAddressInput[]
+    updateMany?: SellerProfileUpdateManyWithWhereWithoutPickupAddressInput | SellerProfileUpdateManyWithWhereWithoutPickupAddressInput[]
+    deleteMany?: SellerProfileScalarWhereInput | SellerProfileScalarWhereInput[]
   }
 
   export type CategoryCreateNestedOneWithoutCategorySpecificationInput = {
@@ -52883,14 +57001,6 @@ export namespace Prisma {
 
   export type EnumWarrantyTypeFieldUpdateOperationsInput = {
     set?: $Enums.WarrantyType
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type ProductUpdateOneRequiredWithoutWarrantyNestedInput = {
@@ -54331,13 +58441,6 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type NestedEnumRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -54429,16 +58532,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRoleFilter<$PrismaModel>
-    _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -54453,9 +58546,105 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedEnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
+  }
+
+  export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type NestedEnumVerificationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.VerificationStatus | EnumVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumVerificationStatusFilter<$PrismaModel> | $Enums.VerificationStatus
+  }
+
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type NestedEnumVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.VerificationStatus | EnumVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.VerificationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumVerificationStatusFilter<$PrismaModel>
+    _max?: NestedEnumVerificationStatusFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -54479,14 +58668,6 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumMessageTypeFilter<$PrismaModel = never> = {
@@ -54599,33 +58780,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumWarrantyTypeFilter<$PrismaModel>
     _max?: NestedEnumWarrantyTypeFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumReturnTypeFilter<$PrismaModel = never> = {
@@ -54858,6 +59012,7 @@ export namespace Prisma {
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    sellerPickupAddresses?: SellerProfileCreateNestedManyWithoutPickupAddressInput
   }
 
   export type AddressUncheckedCreateWithoutUserInput = {
@@ -54874,6 +59029,7 @@ export namespace Prisma {
     isDefault?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    sellerPickupAddresses?: SellerProfileUncheckedCreateNestedManyWithoutPickupAddressInput
   }
 
   export type AddressCreateOrConnectWithoutUserInput = {
@@ -55193,6 +59349,8 @@ export namespace Prisma {
   export type ReviewVoteCreateWithoutUserInput = {
     id?: string
     vote: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     review: ReviewCreateNestedOneWithoutVotesInput
   }
 
@@ -55200,6 +59358,8 @@ export namespace Prisma {
     id?: string
     reviewId: string
     vote: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReviewVoteCreateOrConnectWithoutUserInput = {
@@ -55288,6 +59448,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: Date | string
     clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     MessageAttachment?: MessageAttachmentCreateNestedManyWithoutMessageInput
   }
@@ -55301,6 +59463,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: Date | string
     clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     MessageAttachment?: MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
   }
 
@@ -55344,6 +59508,7 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: boolean
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationUncheckedCreateWithoutUserInput = {
@@ -55354,6 +59519,7 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: boolean
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationCreateOrConnectWithoutUserInput = {
@@ -55363,6 +59529,91 @@ export namespace Prisma {
 
   export type NotificationCreateManyUserInputEnvelope = {
     data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SellerProfileCreateWithoutUserInput = {
+    id?: string
+    shopName: string
+    slug: string
+    logo?: string | null
+    banner?: string | null
+    description?: string | null
+    tagline?: string | null
+    businessName?: string | null
+    businessRegNo?: string | null
+    businessType?: string | null
+    phone: string
+    altPhone?: string | null
+    email?: string | null
+    returnPolicy?: string | null
+    shippingPolicy?: string | null
+    about?: string | null
+    verificationStatus?: $Enums.VerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    averageRating?: Decimal | DecimalJsLike | number | string | null
+    totalReviews?: number | null
+    totalSales?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    pickupAddress?: AddressCreateNestedOneWithoutSellerPickupAddressesInput
+  }
+
+  export type SellerProfileUncheckedCreateWithoutUserInput = {
+    id?: string
+    shopName: string
+    slug: string
+    logo?: string | null
+    banner?: string | null
+    description?: string | null
+    tagline?: string | null
+    businessName?: string | null
+    businessRegNo?: string | null
+    businessType?: string | null
+    phone: string
+    altPhone?: string | null
+    email?: string | null
+    pickupAddressId?: string | null
+    returnPolicy?: string | null
+    shippingPolicy?: string | null
+    about?: string | null
+    verificationStatus?: $Enums.VerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    averageRating?: Decimal | DecimalJsLike | number | string | null
+    totalReviews?: number | null
+    totalSales?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SellerProfileCreateOrConnectWithoutUserInput = {
+    where: SellerProfileWhereUniqueInput
+    create: XOR<SellerProfileCreateWithoutUserInput, SellerProfileUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserRoleCreateWithoutUserInput = {
+    id?: string
+    role: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserRoleUncheckedCreateWithoutUserInput = {
+    id?: string
+    role: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserRoleCreateOrConnectWithoutUserInput = {
+    where: UserRoleWhereUniqueInput
+    create: XOR<UserRoleCreateWithoutUserInput, UserRoleUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserRoleCreateManyUserInputEnvelope = {
+    data: UserRoleCreateManyUserInput | UserRoleCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -55680,6 +59931,8 @@ export namespace Prisma {
     reviewId?: StringFilter<"ReviewVote"> | string
     userId?: StringFilter<"ReviewVote"> | string
     vote?: BoolFilter<"ReviewVote"> | boolean
+    createdAt?: DateTimeFilter<"ReviewVote"> | Date | string
+    updatedAt?: DateTimeFilter<"ReviewVote"> | Date | string
   }
 
   export type ConversationUpsertWithWhereUniqueWithoutSenderInput = {
@@ -55757,6 +60010,8 @@ export namespace Prisma {
     isRead?: BoolFilter<"Message"> | boolean
     sentAt?: DateTimeFilter<"Message"> | Date | string
     clientId?: StringNullableFilter<"Message"> | string | null
+    createdAt?: DateTimeFilter<"Message"> | Date | string
+    updatedAt?: DateTimeFilter<"Message"> | Date | string
   }
 
   export type ConversationParticipantUpsertWithWhereUniqueWithoutUserInput = {
@@ -55813,18 +60068,113 @@ export namespace Prisma {
     data?: JsonNullableFilter<"Notification">
     isRead?: BoolFilter<"Notification"> | boolean
     createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
   }
 
-  export type UserCreateWithoutNotificationsInput = {
+  export type SellerProfileUpsertWithoutUserInput = {
+    update: XOR<SellerProfileUpdateWithoutUserInput, SellerProfileUncheckedUpdateWithoutUserInput>
+    create: XOR<SellerProfileCreateWithoutUserInput, SellerProfileUncheckedCreateWithoutUserInput>
+    where?: SellerProfileWhereInput
+  }
+
+  export type SellerProfileUpdateToOneWithWhereWithoutUserInput = {
+    where?: SellerProfileWhereInput
+    data: XOR<SellerProfileUpdateWithoutUserInput, SellerProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SellerProfileUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    businessName?: NullableStringFieldUpdateOperationsInput | string | null
+    businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
+    totalSales?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pickupAddress?: AddressUpdateOneWithoutSellerPickupAddressesNestedInput
+  }
+
+  export type SellerProfileUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    businessName?: NullableStringFieldUpdateOperationsInput | string | null
+    businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
+    totalSales?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserRoleUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserRoleWhereUniqueInput
+    update: XOR<UserRoleUpdateWithoutUserInput, UserRoleUncheckedUpdateWithoutUserInput>
+    create: XOR<UserRoleCreateWithoutUserInput, UserRoleUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserRoleUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserRoleWhereUniqueInput
+    data: XOR<UserRoleUpdateWithoutUserInput, UserRoleUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserRoleUpdateManyWithWhereWithoutUserInput = {
+    where: UserRoleScalarWhereInput
+    data: XOR<UserRoleUpdateManyMutationInput, UserRoleUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserRoleScalarWhereInput = {
+    AND?: UserRoleScalarWhereInput | UserRoleScalarWhereInput[]
+    OR?: UserRoleScalarWhereInput[]
+    NOT?: UserRoleScalarWhereInput | UserRoleScalarWhereInput[]
+    id?: StringFilter<"UserRole"> | string
+    userId?: StringFilter<"UserRole"> | string
+    role?: EnumRoleFilter<"UserRole"> | $Enums.Role
+    createdAt?: DateTimeFilter<"UserRole"> | Date | string
+    updatedAt?: DateTimeFilter<"UserRole"> | Date | string
+  }
+
+  export type UserCreateWithoutRolesInput = {
     id?: string
     clerkId: string
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -55841,18 +60191,20 @@ export namespace Prisma {
     sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
   }
 
-  export type UserUncheckedCreateWithoutNotificationsInput = {
+  export type UserUncheckedCreateWithoutRolesInput = {
     id?: string
     clerkId: string
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -55869,6 +60221,364 @@ export namespace Prisma {
     sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutRolesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutRolesInput, UserUncheckedCreateWithoutRolesInput>
+  }
+
+  export type UserUpsertWithoutRolesInput = {
+    update: XOR<UserUpdateWithoutRolesInput, UserUncheckedUpdateWithoutRolesInput>
+    create: XOR<UserCreateWithoutRolesInput, UserUncheckedCreateWithoutRolesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutRolesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutRolesInput, UserUncheckedUpdateWithoutRolesInput>
+  }
+
+  export type UserUpdateWithoutRolesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clerkId?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    products?: ProductUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutRolesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clerkId?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUncheckedUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUncheckedUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUncheckedUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUncheckedUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type AddressCreateWithoutSellerPickupAddressesInput = {
+    id?: string
+    type: $Enums.AddressType
+    label?: string | null
+    line1: string
+    line2?: string | null
+    city: string
+    state: string
+    country?: string
+    postalCode: string
+    phone?: string | null
+    isDefault?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutAddressesInput
+  }
+
+  export type AddressUncheckedCreateWithoutSellerPickupAddressesInput = {
+    id?: string
+    userId: string
+    type: $Enums.AddressType
+    label?: string | null
+    line1: string
+    line2?: string | null
+    city: string
+    state: string
+    country?: string
+    postalCode: string
+    phone?: string | null
+    isDefault?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AddressCreateOrConnectWithoutSellerPickupAddressesInput = {
+    where: AddressWhereUniqueInput
+    create: XOR<AddressCreateWithoutSellerPickupAddressesInput, AddressUncheckedCreateWithoutSellerPickupAddressesInput>
+  }
+
+  export type UserCreateWithoutSellerProfileInput = {
+    id?: string
+    clerkId: string
+    email: string
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    cartItems?: CartItemCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    products?: ProductCreateNestedManyWithoutSellerInput
+    payouts?: PayoutCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSellerProfileInput = {
+    id?: string
+    clerkId: string
+    email: string
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput
+    payouts?: PayoutUncheckedCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteUncheckedCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationUncheckedCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSellerProfileInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSellerProfileInput, UserUncheckedCreateWithoutSellerProfileInput>
+  }
+
+  export type AddressUpsertWithoutSellerPickupAddressesInput = {
+    update: XOR<AddressUpdateWithoutSellerPickupAddressesInput, AddressUncheckedUpdateWithoutSellerPickupAddressesInput>
+    create: XOR<AddressCreateWithoutSellerPickupAddressesInput, AddressUncheckedCreateWithoutSellerPickupAddressesInput>
+    where?: AddressWhereInput
+  }
+
+  export type AddressUpdateToOneWithWhereWithoutSellerPickupAddressesInput = {
+    where?: AddressWhereInput
+    data: XOR<AddressUpdateWithoutSellerPickupAddressesInput, AddressUncheckedUpdateWithoutSellerPickupAddressesInput>
+  }
+
+  export type AddressUpdateWithoutSellerPickupAddressesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    line1?: StringFieldUpdateOperationsInput | string
+    line2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    postalCode?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutAddressesNestedInput
+  }
+
+  export type AddressUncheckedUpdateWithoutSellerPickupAddressesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    line1?: StringFieldUpdateOperationsInput | string
+    line2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: StringFieldUpdateOperationsInput | string
+    state?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    postalCode?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutSellerProfileInput = {
+    update: XOR<UserUpdateWithoutSellerProfileInput, UserUncheckedUpdateWithoutSellerProfileInput>
+    create: XOR<UserCreateWithoutSellerProfileInput, UserUncheckedCreateWithoutSellerProfileInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSellerProfileInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSellerProfileInput, UserUncheckedUpdateWithoutSellerProfileInput>
+  }
+
+  export type UserUpdateWithoutSellerProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clerkId?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    products?: ProductUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSellerProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clerkId?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUncheckedUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUncheckedUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUncheckedUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUncheckedUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutNotificationsInput = {
+    id?: string
+    clerkId: string
+    email: string
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    cartItems?: CartItemCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    products?: ProductCreateNestedManyWithoutSellerInput
+    payouts?: PayoutCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutNotificationsInput = {
+    id?: string
+    clerkId: string
+    email: string
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput
+    payouts?: PayoutUncheckedCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteUncheckedCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationUncheckedCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -55893,10 +60603,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -55913,6 +60623,8 @@ export namespace Prisma {
     sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -55921,10 +60633,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -55941,6 +60653,8 @@ export namespace Prisma {
     sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductCreateWithoutConversationInput = {
@@ -55996,10 +60710,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -56016,6 +60730,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBuyerConversationsInput = {
@@ -56024,10 +60740,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -56044,6 +60760,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBuyerConversationsInput = {
@@ -56057,10 +60775,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -56077,6 +60795,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSellerConversationsInput = {
@@ -56085,10 +60805,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -56105,6 +60825,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSellerConversationsInput = {
@@ -56120,6 +60842,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: Date | string
     clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     sender: UserCreateNestedOneWithoutSentMessagesInput
     MessageAttachment?: MessageAttachmentCreateNestedManyWithoutMessageInput
   }
@@ -56133,6 +60857,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: Date | string
     clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     MessageAttachment?: MessageAttachmentUncheckedCreateNestedManyWithoutMessageInput
   }
 
@@ -56238,10 +60964,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -56258,6 +60984,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBuyerConversationsInput = {
@@ -56266,10 +60994,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -56286,6 +61014,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSellerConversationsInput = {
@@ -56305,10 +61035,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -56325,6 +61055,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSellerConversationsInput = {
@@ -56333,10 +61065,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -56353,6 +61085,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -56422,10 +61156,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -56442,6 +61176,8 @@ export namespace Prisma {
     sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -56450,10 +61186,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -56470,6 +61206,8 @@ export namespace Prisma {
     sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -56481,12 +61219,16 @@ export namespace Prisma {
     id?: string
     url: string
     type: $Enums.FileType
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type MessageAttachmentUncheckedCreateWithoutMessageInput = {
     id?: string
     url: string
     type: $Enums.FileType
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type MessageAttachmentCreateOrConnectWithoutMessageInput = {
@@ -56551,10 +61293,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -56571,6 +61313,8 @@ export namespace Prisma {
     sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -56579,10 +61323,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -56599,6 +61343,8 @@ export namespace Prisma {
     sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessageAttachmentUpsertWithWhereUniqueWithoutMessageInput = {
@@ -56625,6 +61371,8 @@ export namespace Prisma {
     messageId?: StringFilter<"MessageAttachment"> | string
     url?: StringFilter<"MessageAttachment"> | string
     type?: EnumFileTypeFilter<"MessageAttachment"> | $Enums.FileType
+    createdAt?: DateTimeFilter<"MessageAttachment"> | Date | string
+    updatedAt?: DateTimeFilter<"MessageAttachment"> | Date | string
   }
 
   export type MessageCreateWithoutMessageAttachmentInput = {
@@ -56635,6 +61383,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: Date | string
     clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     sender: UserCreateNestedOneWithoutSentMessagesInput
   }
@@ -56649,6 +61399,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: Date | string
     clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type MessageCreateOrConnectWithoutMessageAttachmentInput = {
@@ -56675,6 +61427,8 @@ export namespace Prisma {
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     sender?: UserUpdateOneRequiredWithoutSentMessagesNestedInput
   }
@@ -56689,6 +61443,8 @@ export namespace Prisma {
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateWithoutConversationParticipantInput = {
@@ -56697,10 +61453,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -56717,6 +61473,8 @@ export namespace Prisma {
     sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConversationParticipantInput = {
@@ -56725,10 +61483,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -56745,6 +61503,8 @@ export namespace Prisma {
     sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConversationParticipantInput = {
@@ -56798,10 +61558,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -56818,6 +61578,8 @@ export namespace Prisma {
     sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConversationParticipantInput = {
@@ -56826,10 +61588,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -56846,6 +61608,8 @@ export namespace Prisma {
     sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ConversationUpsertWithoutConversationParticipantInput = {
@@ -56889,10 +61653,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
@@ -56909,6 +61673,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAddressesInput = {
@@ -56917,10 +61683,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
@@ -56937,11 +61703,79 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAddressesInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutAddressesInput, UserUncheckedCreateWithoutAddressesInput>
+  }
+
+  export type SellerProfileCreateWithoutPickupAddressInput = {
+    id?: string
+    shopName: string
+    slug: string
+    logo?: string | null
+    banner?: string | null
+    description?: string | null
+    tagline?: string | null
+    businessName?: string | null
+    businessRegNo?: string | null
+    businessType?: string | null
+    phone: string
+    altPhone?: string | null
+    email?: string | null
+    returnPolicy?: string | null
+    shippingPolicy?: string | null
+    about?: string | null
+    verificationStatus?: $Enums.VerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    averageRating?: Decimal | DecimalJsLike | number | string | null
+    totalReviews?: number | null
+    totalSales?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutSellerProfileInput
+  }
+
+  export type SellerProfileUncheckedCreateWithoutPickupAddressInput = {
+    id?: string
+    userId: string
+    shopName: string
+    slug: string
+    logo?: string | null
+    banner?: string | null
+    description?: string | null
+    tagline?: string | null
+    businessName?: string | null
+    businessRegNo?: string | null
+    businessType?: string | null
+    phone: string
+    altPhone?: string | null
+    email?: string | null
+    returnPolicy?: string | null
+    shippingPolicy?: string | null
+    about?: string | null
+    verificationStatus?: $Enums.VerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    averageRating?: Decimal | DecimalJsLike | number | string | null
+    totalReviews?: number | null
+    totalSales?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SellerProfileCreateOrConnectWithoutPickupAddressInput = {
+    where: SellerProfileWhereUniqueInput
+    create: XOR<SellerProfileCreateWithoutPickupAddressInput, SellerProfileUncheckedCreateWithoutPickupAddressInput>
+  }
+
+  export type SellerProfileCreateManyPickupAddressInputEnvelope = {
+    data: SellerProfileCreateManyPickupAddressInput | SellerProfileCreateManyPickupAddressInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserUpsertWithoutAddressesInput = {
@@ -56961,10 +61795,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
@@ -56981,6 +61815,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAddressesInput = {
@@ -56989,10 +61825,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
@@ -57009,6 +61845,56 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type SellerProfileUpsertWithWhereUniqueWithoutPickupAddressInput = {
+    where: SellerProfileWhereUniqueInput
+    update: XOR<SellerProfileUpdateWithoutPickupAddressInput, SellerProfileUncheckedUpdateWithoutPickupAddressInput>
+    create: XOR<SellerProfileCreateWithoutPickupAddressInput, SellerProfileUncheckedCreateWithoutPickupAddressInput>
+  }
+
+  export type SellerProfileUpdateWithWhereUniqueWithoutPickupAddressInput = {
+    where: SellerProfileWhereUniqueInput
+    data: XOR<SellerProfileUpdateWithoutPickupAddressInput, SellerProfileUncheckedUpdateWithoutPickupAddressInput>
+  }
+
+  export type SellerProfileUpdateManyWithWhereWithoutPickupAddressInput = {
+    where: SellerProfileScalarWhereInput
+    data: XOR<SellerProfileUpdateManyMutationInput, SellerProfileUncheckedUpdateManyWithoutPickupAddressInput>
+  }
+
+  export type SellerProfileScalarWhereInput = {
+    AND?: SellerProfileScalarWhereInput | SellerProfileScalarWhereInput[]
+    OR?: SellerProfileScalarWhereInput[]
+    NOT?: SellerProfileScalarWhereInput | SellerProfileScalarWhereInput[]
+    id?: StringFilter<"SellerProfile"> | string
+    userId?: StringFilter<"SellerProfile"> | string
+    shopName?: StringFilter<"SellerProfile"> | string
+    slug?: StringFilter<"SellerProfile"> | string
+    logo?: StringNullableFilter<"SellerProfile"> | string | null
+    banner?: StringNullableFilter<"SellerProfile"> | string | null
+    description?: StringNullableFilter<"SellerProfile"> | string | null
+    tagline?: StringNullableFilter<"SellerProfile"> | string | null
+    businessName?: StringNullableFilter<"SellerProfile"> | string | null
+    businessRegNo?: StringNullableFilter<"SellerProfile"> | string | null
+    businessType?: StringNullableFilter<"SellerProfile"> | string | null
+    phone?: StringFilter<"SellerProfile"> | string
+    altPhone?: StringNullableFilter<"SellerProfile"> | string | null
+    email?: StringNullableFilter<"SellerProfile"> | string | null
+    pickupAddressId?: StringNullableFilter<"SellerProfile"> | string | null
+    returnPolicy?: StringNullableFilter<"SellerProfile"> | string | null
+    shippingPolicy?: StringNullableFilter<"SellerProfile"> | string | null
+    about?: StringNullableFilter<"SellerProfile"> | string | null
+    verificationStatus?: EnumVerificationStatusFilter<"SellerProfile"> | $Enums.VerificationStatus
+    verifiedAt?: DateTimeNullableFilter<"SellerProfile"> | Date | string | null
+    isActive?: BoolFilter<"SellerProfile"> | boolean
+    averageRating?: DecimalNullableFilter<"SellerProfile"> | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: IntNullableFilter<"SellerProfile"> | number | null
+    totalSales?: IntNullableFilter<"SellerProfile"> | number | null
+    createdAt?: DateTimeFilter<"SellerProfile"> | Date | string
+    updatedAt?: DateTimeFilter<"SellerProfile"> | Date | string
   }
 
   export type CategoryCreateWithoutCategorySpecificationInput = {
@@ -57239,6 +62125,7 @@ export namespace Prisma {
   export type CategoryOfferCreateWithoutCategoryInput = {
     id?: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     offer: OfferCreateNestedOneWithoutCategoryOffersInput
   }
 
@@ -57246,6 +62133,7 @@ export namespace Prisma {
     id?: string
     offerId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CategoryOfferCreateOrConnectWithoutCategoryInput = {
@@ -57397,11 +62285,13 @@ export namespace Prisma {
     offerId?: StringFilter<"CategoryOffer"> | string
     categoryId?: StringFilter<"CategoryOffer"> | string
     createdAt?: DateTimeFilter<"CategoryOffer"> | Date | string
+    updatedAt?: DateTimeFilter<"CategoryOffer"> | Date | string
   }
 
   export type ProductOfferCreateWithoutOfferInput = {
     id?: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     product: ProductCreateNestedOneWithoutProductOffersInput
   }
 
@@ -57409,6 +62299,7 @@ export namespace Prisma {
     id?: string
     productId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ProductOfferCreateOrConnectWithoutOfferInput = {
@@ -57424,6 +62315,7 @@ export namespace Prisma {
   export type CategoryOfferCreateWithoutOfferInput = {
     id?: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     category: CategoryCreateNestedOneWithoutCategoryOffersInput
   }
 
@@ -57431,6 +62323,7 @@ export namespace Prisma {
     id?: string
     categoryId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CategoryOfferCreateOrConnectWithoutOfferInput = {
@@ -57517,6 +62410,7 @@ export namespace Prisma {
     offerId?: StringFilter<"ProductOffer"> | string
     productId?: StringFilter<"ProductOffer"> | string
     createdAt?: DateTimeFilter<"ProductOffer"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductOffer"> | Date | string
   }
 
   export type CategoryOfferUpsertWithWhereUniqueWithoutOfferInput = {
@@ -58189,10 +63083,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -58209,6 +63103,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProductsInput = {
@@ -58217,10 +63113,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -58237,6 +63133,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProductsInput = {
@@ -58296,6 +63194,8 @@ export namespace Prisma {
     sortOrder?: number
     mediaType?: $Enums.MediaType
     fileType: $Enums.FileType
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ProductImageUncheckedCreateWithoutProductInput = {
@@ -58306,6 +63206,8 @@ export namespace Prisma {
     sortOrder?: number
     mediaType?: $Enums.MediaType
     fileType: $Enums.FileType
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ProductImageCreateOrConnectWithoutProductInput = {
@@ -58396,6 +63298,7 @@ export namespace Prisma {
   export type WishlistItemCreateWithoutProductInput = {
     id?: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     wishlist: WishlistCreateNestedOneWithoutItemsInput
   }
 
@@ -58403,6 +63306,7 @@ export namespace Prisma {
     id?: string
     wishlistId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type WishlistItemCreateOrConnectWithoutProductInput = {
@@ -58418,6 +63322,7 @@ export namespace Prisma {
   export type ProductOfferCreateWithoutProductInput = {
     id?: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     offer: OfferCreateNestedOneWithoutProductOffersInput
   }
 
@@ -58425,6 +63330,7 @@ export namespace Prisma {
     id?: string
     offerId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ProductOfferCreateOrConnectWithoutProductInput = {
@@ -58576,10 +63482,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -58596,6 +63502,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProductsInput = {
@@ -58604,10 +63512,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -58624,6 +63532,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductVariantUpsertWithWhereUniqueWithoutProductInput = {
@@ -58687,6 +63597,8 @@ export namespace Prisma {
     sortOrder?: IntFilter<"ProductImage"> | number
     mediaType?: EnumMediaTypeFilter<"ProductImage"> | $Enums.MediaType
     fileType?: EnumFileTypeFilter<"ProductImage"> | $Enums.FileType
+    createdAt?: DateTimeFilter<"ProductImage"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductImage"> | Date | string
   }
 
   export type ReviewUpsertWithWhereUniqueWithoutProductInput = {
@@ -58768,6 +63680,7 @@ export namespace Prisma {
     wishlistId?: StringFilter<"WishlistItem"> | string
     productId?: StringFilter<"WishlistItem"> | string
     createdAt?: DateTimeFilter<"WishlistItem"> | Date | string
+    updatedAt?: DateTimeFilter<"WishlistItem"> | Date | string
   }
 
   export type ProductOfferUpsertWithWhereUniqueWithoutProductInput = {
@@ -59400,10 +64313,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -59420,6 +64333,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCartItemsInput = {
@@ -59428,10 +64343,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -59448,6 +64363,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCartItemsInput = {
@@ -59511,10 +64428,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -59531,6 +64448,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCartItemsInput = {
@@ -59539,10 +64458,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -59559,6 +64478,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductVariantUpsertWithoutCartItemsInput = {
@@ -59649,10 +64570,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -59669,6 +64590,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -59677,10 +64600,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -59697,6 +64620,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -59910,10 +64835,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -59930,6 +64855,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -59938,10 +64865,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -59958,6 +64885,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderItemUpsertWithWhereUniqueWithoutOrderInput = {
@@ -60247,10 +65176,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -60267,6 +65196,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPaymentMethodsInput = {
@@ -60275,10 +65206,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -60295,6 +65226,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPaymentMethodsInput = {
@@ -60361,10 +65294,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -60381,6 +65314,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPaymentMethodsInput = {
@@ -60389,10 +65324,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -60409,6 +65344,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PaymentUpsertWithWhereUniqueWithoutMethodInput = {
@@ -60697,10 +65634,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -60717,6 +65654,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -60725,10 +65664,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -60745,6 +65684,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -60803,12 +65744,16 @@ export namespace Prisma {
     id?: string
     type: $Enums.FileType
     url: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReviewMediaUncheckedCreateWithoutReviewInput = {
     id?: string
     type: $Enums.FileType
     url: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReviewMediaCreateOrConnectWithoutReviewInput = {
@@ -60824,6 +65769,8 @@ export namespace Prisma {
   export type ReviewVoteCreateWithoutReviewInput = {
     id?: string
     vote: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     user: UserCreateNestedOneWithoutReviewVoteInput
   }
 
@@ -60831,6 +65778,8 @@ export namespace Prisma {
     id?: string
     userId: string
     vote: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReviewVoteCreateOrConnectWithoutReviewInput = {
@@ -60860,10 +65809,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -60880,6 +65829,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -60888,10 +65839,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -60908,6 +65859,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductUpsertWithoutReviewsInput = {
@@ -60987,6 +65940,8 @@ export namespace Prisma {
     reviewId?: StringFilter<"ReviewMedia"> | string
     type?: EnumFileTypeFilter<"ReviewMedia"> | $Enums.FileType
     url?: StringFilter<"ReviewMedia"> | string
+    createdAt?: DateTimeFilter<"ReviewMedia"> | Date | string
+    updatedAt?: DateTimeFilter<"ReviewMedia"> | Date | string
   }
 
   export type ReviewVoteUpsertWithWhereUniqueWithoutReviewInput = {
@@ -61048,10 +66003,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -61068,6 +66023,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewVoteInput = {
@@ -61076,10 +66033,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -61096,6 +66053,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewVoteInput = {
@@ -61163,10 +66122,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -61183,6 +66142,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewVoteInput = {
@@ -61191,10 +66152,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -61211,6 +66172,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ReviewCreateWithoutMediaInput = {
@@ -61299,10 +66262,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -61319,6 +66282,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWishlistsInput = {
@@ -61327,10 +66292,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -61347,6 +66312,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWishlistsInput = {
@@ -61357,6 +66324,7 @@ export namespace Prisma {
   export type WishlistItemCreateWithoutWishlistInput = {
     id?: string
     createdAt?: Date | string
+    updatedAt?: Date | string
     product: ProductCreateNestedOneWithoutWishlistItemsInput
   }
 
@@ -61364,6 +66332,7 @@ export namespace Prisma {
     id?: string
     productId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type WishlistItemCreateOrConnectWithoutWishlistInput = {
@@ -61393,10 +66362,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -61413,6 +66382,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWishlistsInput = {
@@ -61421,10 +66392,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -61441,6 +66412,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WishlistItemUpsertWithWhereUniqueWithoutWishlistInput = {
@@ -61613,10 +66586,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -61633,6 +66606,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSellerOrdersInput = {
@@ -61641,10 +66616,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -61661,6 +66636,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSellerOrdersInput = {
@@ -61762,10 +66739,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -61782,6 +66759,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSellerOrdersInput = {
@@ -61790,10 +66769,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -61810,6 +66789,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SellerOrderItemUpsertWithWhereUniqueWithoutSellerOrderInput = {
@@ -62041,10 +67022,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -62061,6 +67042,8 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPayoutsInput = {
@@ -62069,10 +67052,10 @@ export namespace Prisma {
     email: string
     firstName?: string | null
     lastName?: string | null
+    avatarImageUrl?: string | null
     phone?: string | null
     gender?: $Enums.Gender | null
     dob?: Date | string | null
-    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -62089,6 +67072,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPayoutsInput = {
@@ -62113,10 +67098,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -62133,6 +67118,8 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPayoutsInput = {
@@ -62141,10 +67128,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     firstName?: NullableStringFieldUpdateOperationsInput | string | null
     lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -62161,6 +67148,8 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AddressCreateManyUserInput = {
@@ -62277,6 +67266,8 @@ export namespace Prisma {
     id?: string
     reviewId: string
     vote: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ConversationCreateManySenderInput = {
@@ -62308,6 +67299,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: Date | string
     clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ConversationParticipantCreateManyUserInput = {
@@ -62324,6 +67317,14 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: boolean
     createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserRoleCreateManyUserInput = {
+    id?: string
+    role: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AddressUpdateWithoutUserInput = {
@@ -62340,6 +67341,7 @@ export namespace Prisma {
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sellerPickupAddresses?: SellerProfileUpdateManyWithoutPickupAddressNestedInput
   }
 
   export type AddressUncheckedUpdateWithoutUserInput = {
@@ -62356,6 +67358,7 @@ export namespace Prisma {
     isDefault?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sellerPickupAddresses?: SellerProfileUncheckedUpdateManyWithoutPickupAddressNestedInput
   }
 
   export type AddressUncheckedUpdateManyWithoutUserInput = {
@@ -62695,6 +67698,8 @@ export namespace Prisma {
   export type ReviewVoteUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     vote?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     review?: ReviewUpdateOneRequiredWithoutVotesNestedInput
   }
 
@@ -62702,12 +67707,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     reviewId?: StringFieldUpdateOperationsInput | string
     vote?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewVoteUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     reviewId?: StringFieldUpdateOperationsInput | string
     vote?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ConversationUpdateWithoutSenderInput = {
@@ -62786,6 +67795,8 @@ export namespace Prisma {
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     MessageAttachment?: MessageAttachmentUpdateManyWithoutMessageNestedInput
   }
@@ -62799,6 +67810,8 @@ export namespace Prisma {
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     MessageAttachment?: MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
   }
 
@@ -62811,6 +67824,8 @@ export namespace Prisma {
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ConversationParticipantUpdateWithoutUserInput = {
@@ -62839,6 +67854,7 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationUncheckedUpdateWithoutUserInput = {
@@ -62849,6 +67865,7 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationUncheckedUpdateManyWithoutUserInput = {
@@ -62859,6 +67876,28 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserRoleUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserRoleUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserRoleUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageCreateManyConversationInput = {
@@ -62870,6 +67909,8 @@ export namespace Prisma {
     isRead?: boolean
     sentAt?: Date | string
     clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ConversationParticipantCreateManyConversationInput = {
@@ -62886,6 +67927,8 @@ export namespace Prisma {
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sender?: UserUpdateOneRequiredWithoutSentMessagesNestedInput
     MessageAttachment?: MessageAttachmentUpdateManyWithoutMessageNestedInput
   }
@@ -62899,6 +67942,8 @@ export namespace Prisma {
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     MessageAttachment?: MessageAttachmentUncheckedUpdateManyWithoutMessageNestedInput
   }
 
@@ -62911,6 +67956,8 @@ export namespace Prisma {
     isRead?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ConversationParticipantUpdateWithoutConversationInput = {
@@ -62935,24 +67982,144 @@ export namespace Prisma {
     id?: string
     url: string
     type: $Enums.FileType
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type MessageAttachmentUpdateWithoutMessageInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageAttachmentUncheckedUpdateWithoutMessageInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageAttachmentUncheckedUpdateManyWithoutMessageInput = {
     id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SellerProfileCreateManyPickupAddressInput = {
+    id?: string
+    userId: string
+    shopName: string
+    slug: string
+    logo?: string | null
+    banner?: string | null
+    description?: string | null
+    tagline?: string | null
+    businessName?: string | null
+    businessRegNo?: string | null
+    businessType?: string | null
+    phone: string
+    altPhone?: string | null
+    email?: string | null
+    returnPolicy?: string | null
+    shippingPolicy?: string | null
+    about?: string | null
+    verificationStatus?: $Enums.VerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    averageRating?: Decimal | DecimalJsLike | number | string | null
+    totalReviews?: number | null
+    totalSales?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SellerProfileUpdateWithoutPickupAddressInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    businessName?: NullableStringFieldUpdateOperationsInput | string | null
+    businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
+    totalSales?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutSellerProfileNestedInput
+  }
+
+  export type SellerProfileUncheckedUpdateWithoutPickupAddressInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    shopName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    businessName?: NullableStringFieldUpdateOperationsInput | string | null
+    businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
+    totalSales?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SellerProfileUncheckedUpdateManyWithoutPickupAddressInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    shopName?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    businessName?: NullableStringFieldUpdateOperationsInput | string | null
+    businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
+    businessType?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    returnPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPolicy?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    totalReviews?: NullableIntFieldUpdateOperationsInput | number | null
+    totalSales?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoryCreateManyParentInput = {
@@ -62991,6 +68158,7 @@ export namespace Prisma {
     id?: string
     offerId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CategoryUpdateWithoutParentInput = {
@@ -63118,6 +68286,7 @@ export namespace Prisma {
   export type CategoryOfferUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     offer?: OfferUpdateOneRequiredWithoutCategoryOffersNestedInput
   }
 
@@ -63125,24 +68294,28 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     offerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoryOfferUncheckedUpdateManyWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     offerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductOfferCreateManyOfferInput = {
     id?: string
     productId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CategoryOfferCreateManyOfferInput = {
     id?: string
     categoryId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type OrderCreateManyOfferInput = {
@@ -63164,6 +68337,7 @@ export namespace Prisma {
   export type ProductOfferUpdateWithoutOfferInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutProductOffersNestedInput
   }
 
@@ -63171,17 +68345,20 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductOfferUncheckedUpdateManyWithoutOfferInput = {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoryOfferUpdateWithoutOfferInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneRequiredWithoutCategoryOffersNestedInput
   }
 
@@ -63189,12 +68366,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoryOfferUncheckedUpdateManyWithoutOfferInput = {
     id?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrderUpdateWithoutOfferInput = {
@@ -63274,6 +68453,8 @@ export namespace Prisma {
     sortOrder?: number
     mediaType?: $Enums.MediaType
     fileType: $Enums.FileType
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReviewCreateManyProductInput = {
@@ -63294,12 +68475,14 @@ export namespace Prisma {
     id?: string
     wishlistId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ProductOfferCreateManyProductInput = {
     id?: string
     offerId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type DeliveryOptionCreateManyProductInput = {
@@ -63396,6 +68579,8 @@ export namespace Prisma {
     sortOrder?: IntFieldUpdateOperationsInput | number
     mediaType?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
     fileType?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductImageUncheckedUpdateWithoutProductInput = {
@@ -63406,6 +68591,8 @@ export namespace Prisma {
     sortOrder?: IntFieldUpdateOperationsInput | number
     mediaType?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
     fileType?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductImageUncheckedUpdateManyWithoutProductInput = {
@@ -63416,6 +68603,8 @@ export namespace Prisma {
     sortOrder?: IntFieldUpdateOperationsInput | number
     mediaType?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
     fileType?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewUpdateWithoutProductInput = {
@@ -63467,6 +68656,7 @@ export namespace Prisma {
   export type WishlistItemUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     wishlist?: WishlistUpdateOneRequiredWithoutItemsNestedInput
   }
 
@@ -63474,17 +68664,20 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     wishlistId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WishlistItemUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     wishlistId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductOfferUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     offer?: OfferUpdateOneRequiredWithoutProductOffersNestedInput
   }
 
@@ -63492,12 +68685,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     offerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductOfferUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     offerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DeliveryOptionUpdateWithoutProductInput = {
@@ -64047,35 +69242,47 @@ export namespace Prisma {
     id?: string
     type: $Enums.FileType
     url: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReviewVoteCreateManyReviewInput = {
     id?: string
     userId: string
     vote: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReviewMediaUpdateWithoutReviewInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
     url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewMediaUncheckedUpdateWithoutReviewInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
     url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewMediaUncheckedUpdateManyWithoutReviewInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumFileTypeFieldUpdateOperationsInput | $Enums.FileType
     url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewVoteUpdateWithoutReviewInput = {
     id?: StringFieldUpdateOperationsInput | string
     vote?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutReviewVoteNestedInput
   }
 
@@ -64083,23 +69290,29 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     vote?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewVoteUncheckedUpdateManyWithoutReviewInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     vote?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WishlistItemCreateManyWishlistInput = {
     id?: string
     productId: string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type WishlistItemUpdateWithoutWishlistInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutWishlistItemsNestedInput
   }
 
@@ -64107,12 +69320,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WishlistItemUncheckedUpdateManyWithoutWishlistInput = {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SellerOrderItemCreateManySellerOrderInput = {

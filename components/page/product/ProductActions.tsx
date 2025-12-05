@@ -1,75 +1,77 @@
-  "use client";
+"use client";
 
-  import { ShareButton } from "@/components/common/ShareButton";
-  import { WishlistButton } from "@/components/common/WishlistButton";
-  import { TooltipProvider } from "@/components/ui/tooltip";
-  import { useRealChat } from "@/hooks/chat/useRealChat";
-  import { LocalMessage } from "@/types/chat";
-  import { useAuth } from "@clerk/nextjs";
-  import { useCallback, useMemo, useState } from "react";
-  import { ChatTriggerButton } from "../chat/ChatTriggerButton";
+import { ShareButton } from "@/components/common/ShareButton";
+import { WishlistButton } from "@/components/common/WishlistButton";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { useRealChat } from "@/hooks/chat/useRealChat";
+import { useAuth } from "@clerk/nextjs";
+import { useCallback, useState } from "react";
 import { ChatModal } from "../chat/ChatModal";
+import { ChatTriggerButton } from "../chat/ChatTriggerButton"; // Assuming you have this
 
-  interface ProductActionsProps {
-    addedToWishlist: boolean;
-    toggleWishlist: () => Promise<void> | void;
-    itemName?: string;
-    itemId?: string;
-  }
+interface ProductActionsProps {
+  addedToWishlist: boolean;
+  toggleWishlist: () => Promise<void> | void;
+  itemName?: string;
+  itemId?: string;
+}
 
-  export default function ProductActions({
-    addedToWishlist,
-    toggleWishlist,
-    itemName,
-    itemId,
-  }: ProductActionsProps) {
-    const { userId, isLoaded } = useAuth();
-    const [openChat, setOpenChat] = useState(false);
+export default function ProductActions({
+  addedToWishlist,
+  toggleWishlist,
+  itemName,
+  itemId,
+}: ProductActionsProps) {
+  const { userId, isLoaded } = useAuth();
+  const [openChat, setOpenChat] = useState(false);
 
-    const {
-      conversationId,
-      messages,
-      initializeChat,
-      handleSend,
-      isLoading,
-      error,
-    } = useRealChat(itemId, userId || undefined);
+  // Hook logic
+  const {
+    conversationId,
+    messages,
+    initializeChat,
+    handleSend,
+    isLoading,
+    error,
+  } = useRealChat(itemId, userId || undefined);
 
-    const messageCount = useMemo<number>(() => messages.length, [messages]);
+  const handleOpenChat = useCallback(() => {
+    if (!isLoaded || !userId) {
+      // Redirect to login or show toast
+      return;
+    }
+    setOpenChat(true);
+    // Explicitly start initialization when user wants to chat
+    // This prevents loops associated with useEffects inside the modal
+    initializeChat();
+  }, [isLoaded, userId, initializeChat]);
 
-    const handleOpenChat = useCallback(async () => {
-      if (!isLoaded || !userId) return;
-      setOpenChat(true);
-      // Kick off initialization proactively for better perceived speed
-      await initializeChat();
-    }, [isLoaded, userId, initializeChat]);
+  return (
+    <TooltipProvider>
+      <div className="flex gap-2">
+        <WishlistButton added={addedToWishlist} onToggle={toggleWishlist} />
+        <ShareButton itemName={itemName} />
 
-    return (
-      <TooltipProvider>
-        <div className="flex gap-2">
-          <WishlistButton added={addedToWishlist} onToggle={toggleWishlist} />
-          <ShareButton itemName={itemName} />
-          {isLoaded && userId && (
-            <ChatTriggerButton
-              onOpen={handleOpenChat}
-              disabled={isLoading}
-              messageCount={messageCount}
-            />
-          )}
-        </div>
-        {/* <ChatModal/> */}
+        {isLoaded && userId && (
+          <ChatTriggerButton
+            onOpen={handleOpenChat}
+            disabled={isLoading && !conversationId} // Disable only if loading AND no chat exists
+            messageCount={messages.length}
+          />
+        )}
+      </div>
 
-        <ChatModal
-          open={openChat}
-          onOpenChange={setOpenChat}
-          itemName={itemName}
-          conversationId={conversationId}
-          messages={messages as LocalMessage[]}
-          isLoading={isLoading}
-          error={error}
-          initializeChat={initializeChat}
-          onSend={handleSend}
-        />
-      </TooltipProvider>
-    );
-  }
+      <ChatModal
+        open={openChat}
+        onOpenChange={setOpenChat}
+        itemName={itemName}
+        messages={messages}
+        isLoading={isLoading}
+        error={error}
+        onSend={handleSend}
+        // We pass conversationId to know if the input should be enabled
+        hasActiveConversation={!!conversationId}
+      />
+    </TooltipProvider>
+  );
+}

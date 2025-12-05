@@ -1,17 +1,8 @@
-import {
-  GET_PRODUCT_BY_SLUG,
-  GET_PRODUCTS,
-  GET_REMAINING_PRODUCT_BY_SLUG,
-} from "@/client/product/product.queries";
+import { GET_PRODUCT_BY_SLUG } from "@/client/product/product.queries";
 import ProductPageClient from "@/components/page/product/ProductPageClient";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
-import {
-  IProducts,
-  IProductVarient,
-  IRemainingProductDetails,
-  TProduct,
-} from "@/types/product";
+import { IProducts, TProduct } from "@/types/product";
 
 export const revalidate = 3600;
 
@@ -27,117 +18,22 @@ export default async function ProductPage({
   let product: TProduct | null = null;
   let allProducts: IProducts[] = [];
 
-  try {
-    const productsResponse = await client.query({
-      query: GET_PRODUCTS,
-      fetchPolicy: "cache-first",
-    });
+  const { data, error } = await client.query({
+    query: GET_PRODUCT_BY_SLUG,
+    variables: { slug },
+    fetchPolicy: "cache-first",
+  });
 
-    allProducts = productsResponse?.data?.getProducts || [];
-    let productFromList: IProducts = allProducts.find(
-      (p: any) => p.slug === slug
-    ) ?? {
-      id: "",
-      name: "",
-      description: "",
-      slug: "",
-      status: "",
-      images: [],
-      reviews: [],
-      variants: [],
-    };
-
-    // console.log("Product from list-->", productFromList);
-
-    const { data: remainingData, error } = await client.query({
-      query: GET_REMAINING_PRODUCT_BY_SLUG,
-      variables: { slug },
-      fetchPolicy: "cache-first",
-    });
-
-    if (error) {
-      console.error("Error fetching remaining product data:", error);
-    }
-
-    console.log("Remaining data:", remainingData);
-    const productFromRemaining: IRemainingProductDetails =
-      remainingData?.getProductBySlug || {};
-    if (productFromRemaining) {
-      console.log("remaining product-->", productFromRemaining);
-
-      const mergedVariants: IProductVarient[] = productFromList.variants.map(
-        (listVariant) => {
-          // const remainingVariant = productFromRemaining.variants?.find(
-          //   (v) => v.id === listVariant.id
-          // );
-
-          // console.log("remaining varient-->", productFromRemaining.variants[0]?.stock || "0");
-
-          return {
-            ...listVariant,
-            stock: productFromRemaining?.variants?.[0]?.stock || "0",
-            isDefault: productFromRemaining?.variants?.[0]?.isDefault || false,
-            price: listVariant.price,
-            id: listVariant.id,
-            specifications: productFromRemaining?.variants?.[0]?.specifications,
-            attributes: productFromRemaining?.variants?.[0]?.attributes,
-          };
-        }
-      );
-
-      // console.log("merged varient-->", mergedVariants);
-
-      product = {
-        ...productFromList,
-        ...productFromRemaining,
-        variants: mergedVariants,
-      } as TProduct; // explicit cast
-    } else if (productFromList.id) {
-      // Fallback when remaining details are missing
-      product = {
-        ...productFromList,
-        category: { name: "" },
-        seller: { firstName: "", lastName: "" },
-        brand: { name: "" },
-        warranty: "",
-        specifications: "",
-        features: "",
-        variants: productFromList.variants.map((v) => ({
-          ...v,
-          stock: "0",
-          isDefault: false,
-        })),
-      } as TProduct;
-    }
-
-    // console.log("Product found in all products:", product);
-  } catch (error) {
-    console.error("Error fetching all products:", error);
+  if (error) {
+    console.error("Error fetching product by slug:", error);
+    return <div>Error: {error.message}</div>;
   }
 
-  if (!product) {
-    try {
-      const { data, error } = await client.query({
-        query: GET_PRODUCT_BY_SLUG,
-        variables: { slug },
-        fetchPolicy: "cache-first",
-      });
-
-      if (error) {
-        console.error("Error fetching product by slug:", error);
-        return <div>Error: {error.message}</div>;
-      }
-
-      if (!data?.getProductBySlug) {
-        return <div>Product not found</div>;
-      }
-
-      product = data.getProductBySlug;
-    } catch (error) {
-      console.error("Error in product by slug query:", error);
-      return <div>Error loading product</div>;
-    }
+  if (!data?.getProductBySlug) {
+    return <div>Product not found</div>;
   }
+
+  product = data.getProductBySlug;
 
   console.log("final product-->", product);
 

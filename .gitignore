@@ -4,3 +4,6 @@ node_modules
 
 # environment files
 .env
+
+# clerk configuration (can include secrets)
+/.clerk/

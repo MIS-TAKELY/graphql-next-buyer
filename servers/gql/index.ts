@@ -39,6 +39,7 @@ import { searchResolvers } from "./modules/search/search.resolvers";
 import { searchTypeDef } from "./modules/search/search.typeDef";
 import { sellerOrderTypeDefs } from "./modules/sellerOrder/sellerOrder.typeDefs";
 import { sellerOrderItemTypeDefs } from "./modules/sellerOrderItem/sellerOrderItem.typeDefs";
+import { sellerProfileTypeDefs } from "./modules/sellerProfile/sellerProfile.typeDefs";
 import { shipmentTypeDefs } from "./modules/shipment/shipment.typeDefs";
 import { userResolvers } from "./modules/user/user.resolvers";
 import { userTypeDefs } from "./modules/user/user.typeDefs";
@@ -88,6 +89,7 @@ const typeDefs = mergeTypeDefs([
   searchTypeDef,
   filterTypeDefs,
   topDealsTypeDefs,
+  sellerProfileTypeDefs,
 ]);
 
 const resolvers = mergeResolvers([

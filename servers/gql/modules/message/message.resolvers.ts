@@ -1,6 +1,6 @@
 // servers/gql/messageResolvers.ts
 import { createAndPushNotification } from "@/lib/notification";
-import { realtime } from "@/lib/realtime";
+import { NewMessagePayload, realtime } from "@/lib/realtime";
 import { GraphQLContext } from "../../context";
 
 export const messageResolvers = {
@@ -44,7 +44,12 @@ export const messageResolvers = {
               firstName: true,
               lastName: true,
               email: true,
-              role: true,
+              clerkId: true,
+              roles: {
+                select: {
+                  role: true,
+                },
+              },
             },
           },
           MessageAttachment: true,
@@ -136,7 +141,12 @@ export const messageResolvers = {
                 firstName: true,
                 lastName: true,
                 email: true,
-                role: true,
+                 clerkId: true, 
+                roles: {
+                  select: {
+                    role: true,
+                  },
+                },
               },
             },
             MessageAttachment: true,
@@ -161,7 +171,12 @@ export const messageResolvers = {
                   firstName: true,
                   lastName: true,
                   email: true,
-                  role: true,
+                   clerkId: true, 
+                  roles: {
+                    select: {
+                      role: true,
+                    },
+                  },
                 },
               },
               MessageAttachment: true,
@@ -182,7 +197,24 @@ export const messageResolvers = {
         attachments: result.MessageAttachment || [],
       };
 
-      const realtimePayload = {
+      // const realtimePayload = {
+      //   id: result.id,
+      //   conversationId,
+      //   content: result.content || "",
+      //   type: result.type,
+      //   clientId,
+      //   fileUrl: result.fileUrl || null,
+      //   isRead: result.isRead,
+      //   sentAt: result.sentAt.toISOString(),
+      //   sender: result.sender,
+      //   attachments: (result.MessageAttachment || []).map((att) => ({
+      //     id: att.id,
+      //     url: att.url,
+      //     type: att.type,
+      //   })),
+      // };
+
+      const realtimePayload: NewMessagePayload = {
         id: result.id,
         conversationId,
         content: result.content || "",
@@ -190,7 +222,7 @@ export const messageResolvers = {
         clientId,
         fileUrl: result.fileUrl || null,
         isRead: result.isRead,
-        sentAt: result.sentAt.toISOString(),
+        sentAt: result.sentAt, // <-- keep as Date
         sender: result.sender,
         attachments: (result.MessageAttachment || []).map((att) => ({
           id: att.id,

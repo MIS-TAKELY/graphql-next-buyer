@@ -4,326 +4,232 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
+  DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+// IMPORTANT: Import from types/chat
 import { LocalMessage } from "@/types/chat";
-import {
-  File,
-  FileText,
-  MessageCircleMore,
-  Paperclip,
-  Send,
-  X,
-} from "lucide-react";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { File, Loader2, MessageCircle, Paperclip, Send, X } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import { MessageBubble } from "./MessageBubble";
 
 interface SelectedFile {
   file: File;
   preview?: string;
-  name: string;
 }
 
-interface ChatDialogProps {
+interface ChatModalProps {
   open: boolean;
-  itemId?: string;
-  userId?: string;
   onOpenChange: (open: boolean) => void;
-  onClose?: () => void;
   itemName?: string;
-  conversationId?: string | null;
   messages: LocalMessage[];
   isLoading: boolean;
-  error?: string | null;
-  initializeChat: () => Promise<void>;
-  onSend: (text: string, files?: File[]) => void; // Updated to accept files
+  error: string | null;
+  onSend: (text: string, files?: File[]) => void;
+  hasActiveConversation: boolean;
 }
 
 export function ChatModal({
   open,
   onOpenChange,
   itemName,
-  itemId,
-  userId,
-  onClose,
-  conversationId,
   messages,
   isLoading,
   error,
-  initializeChat,
   onSend,
-}: ChatDialogProps) {
+  hasActiveConversation,
+}: ChatModalProps) {
   const [inputValue, setInputValue] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Cleanup file previews on unmount
+  // Auto scroll
   useEffect(() => {
-    return () => {
-      selectedFiles.forEach(({ preview }) => {
-        if (preview) URL.revokeObjectURL(preview);
-      });
-    };
-  }, [selectedFiles]);
-
-  // Initialize chat if dialog opens and chat isn't initialized yet
-  useEffect(() => {
-    if (open && !conversationId && !isLoading) {
-      void initializeChat();
+    if (open && scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [open, conversationId, isLoading, initializeChat]);
+  }, [messages, open]);
 
-  // Auto-focus input when opened
+  // Clean previews
   useEffect(() => {
-    if (open && inputRef.current) {
-      const t = setTimeout(() => inputRef.current?.focus(), 100);
-      return () => clearTimeout(t);
+    if (!open) {
+      setSelectedFiles([]);
+      setInputValue("");
     }
   }, [open]);
 
-  // Auto-scroll to bottom when messages change
-  useEffect(() => {
-    if (!open) return;
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [open, messages.length]);
 
-  const handleAttachClick = useCallback(() => {
-    fileInputRef.current?.click();
-  }, []);
+  console.log("messages modal-->",messages)
 
-  const handleFileChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files) {
-        const newFiles = Array.from(e.target.files);
-        const newFilesWithPreview: SelectedFile[] = newFiles.map((file) => {
-          let preview: string | undefined = undefined;
-          if (
-            file.type.startsWith("image/") ||
-            file.type.startsWith("video/")
-          ) {
-            preview = URL.createObjectURL(file);
-          }
-          return { file, preview, name: file.name };
-        });
-        setSelectedFiles((prev) => [...prev, ...newFilesWithPreview]);
-        e.target.value = "";
-      }
-    },
-    []
-  );
-
-  const handleRemoveFile = useCallback(
-    (index: number) => {
-      const fileToRemove = selectedFiles[index];
-      if (fileToRemove.preview) {
-        URL.revokeObjectURL(fileToRemove.preview);
-      }
-      setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
-    },
-    [selectedFiles]
-  );
-
-  const placeholder = useMemo(() => {
-    if (isLoading) return "Loading...";
-    if (conversationId) return "Type your message...";
-    return "Click to start chat";
-  }, [isLoading, conversationId]);
-
-  const disabled = isLoading || !conversationId;
-
-  const handleSend = useCallback(() => {
-    const text = inputValue.trim();
-    if (!text && selectedFiles.length === 0) return;
-
-    const filesToSend = selectedFiles.map((sf) => sf.file);
-    onSend(text, filesToSend);
-
-    // Cleanup
-    selectedFiles.forEach(({ preview }) => {
-      if (preview) URL.revokeObjectURL(preview);
-    });
-    setInputValue("");
-    setSelectedFiles([]);
-  }, [inputValue, selectedFiles, onSend]);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
-      }
-    },
-    [handleSend]
-  );
-
-  const getFileIcon = (sf: SelectedFile) => {
-    if (sf.preview) return null;
-    const nameLower = sf.name.toLowerCase();
-    if (
-      nameLower.endsWith(".pdf") ||
-      nameLower.endsWith(".doc") ||
-      nameLower.endsWith(".docx")
-    ) {
-      return <FileText className="w-6 h-6 text-muted-foreground" />;
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      const newFiles = files.map((file) => ({
+        file,
+        preview: file.type.startsWith("image/")
+          ? URL.createObjectURL(file)
+          : undefined,
+      }));
+      setSelectedFiles((prev) => [...prev, ...newFiles]);
     }
-    return <File className="w-6 h-6 text-muted-foreground" />;
   };
 
-  const hasContent = inputValue.trim() || selectedFiles.length > 0;
+  const handleSubmit = () => {
+    if (!inputValue.trim() && !selectedFiles.length) return;
+    onSend(
+      inputValue,
+      selectedFiles.map((f) => f.file)
+    );
+    setInputValue("");
+    setSelectedFiles([]);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] w-[95vw] h-[85vh] sm:h-[600px] max-h-[600px] p-0 flex flex-col overflow-hidden">
-        <DialogHeader className="px-4 sm:px-6 py-3 sm:py-4 border-b shrink-0">
-          <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
-            <MessageCircleMore className="w-4 h-4 sm:w-5 sm:h-5" />
-            Chat with Seller
-          </DialogTitle>
-          {itemName && (
-            <p className="text-xs sm:text-sm text-muted-foreground mt-1 truncate">
-              Regarding: {itemName}
-            </p>
-          )}
-          {error && <p className="text-xs text-destructive mt-1">{error}</p>}
-        </DialogHeader>
-
-        <div className="flex-1 overflow-hidden">
-          <ScrollArea className="h-full px-4 sm:px-6">
-            <div className="py-4 space-y-3 sm:space-y-4">
-              {isLoading ? (
-                <p className="text-center text-muted-foreground">
-                  Initializing chat...
-                </p>
-              ) : messages.length === 0 ? (
-                <p className="text-center text-muted-foreground italic">
-                  No messages yet. Start the conversation!
-                </p>
-              ) : (
-                messages.map((m) => <MessageBubble key={m.id} message={m} />)
+      <DialogContent className="p-0 gap-0 sm:max-w-[440px] w-full h-[100dvh] sm:h-[600px] flex flex-col bg-background overflow-hidden border-none sm:border sm:rounded-xl">
+        {/* Header */}
+        <div className="px-4 py-3 border-b bg-muted/20 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+              <MessageCircle className="h-5 w-5" />
+            </div>
+            <div>
+              <DialogTitle className="text-base font-semibold">
+                Seller Chat
+              </DialogTitle>
+              {itemName && (
+                <DialogDescription className="text-xs truncate max-w-[200px]">
+                  Re: {itemName}
+                </DialogDescription>
               )}
-              <div ref={messagesEndRef} />
+            </div>
+          </div>
+        </div>
+
+        {/* Messages Area */}
+        <div className="flex-1 overflow-hidden relative bg-slate-50 dark:bg-slate-950/50">
+          <ScrollArea className="h-full w-full">
+            <div className="p-4 flex flex-col gap-4 min-h-full justify-end">
+              {isLoading && messages.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-10 gap-2 text-muted-foreground">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  <p className="text-sm">Connecting to seller...</p>
+                </div>
+              ) : messages.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-10 text-center gap-2 opacity-60">
+                  <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
+                    <Send className="h-6 w-6 -ml-1" />
+                  </div>
+                  <p className="text-sm">Start the conversation!</p>
+                </div>
+              ) : (
+                messages.map((msg) => (
+                  <MessageBubble
+                    key={msg.clientId || msg.id}
+                    message={msg}
+                    // We pass isOwn here to handle the logic cleanly
+                    isOwn={msg.sender === "user"}
+                  />
+                ))
+              )}
+              {error && (
+                <div className="p-2 text-xs text-center text-red-500 bg-red-50 rounded">
+                  {error}
+                </div>
+              )}
+              <div ref={scrollRef} />
             </div>
           </ScrollArea>
         </div>
 
-        <div className="border-t px-4 sm:px-6 py-3 sm:py-4 shrink-0 bg-background">
-          {/* File previews */}
+        {/* Input Area */}
+        <div className="p-3 bg-background border-t shrink-0">
           {selectedFiles.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 mb-2">
-              {selectedFiles.map((sf, index) => (
+            <div className="flex gap-2 mb-2 overflow-x-auto pb-2 scrollbar-none">
+              {selectedFiles.map((f, i) => (
                 <div
-                  key={index}
-                  className="flex items-center gap-1 bg-muted rounded-md px-2 py-1"
+                  key={i}
+                  className="relative h-16 w-16 shrink-0 rounded-lg border bg-muted flex items-center justify-center overflow-hidden group"
                 >
-                  {sf.preview ? (
-                    sf.file.type.startsWith("image/") ? (
-                      <img
-                        src={sf.preview}
-                        alt={sf.name}
-                        className="w-6 h-6 object-cover rounded"
-                      />
-                    ) : sf.file.type.startsWith("video/") ? (
-                      <video
-                        src={sf.preview}
-                        className="w-6 h-6 object-cover rounded"
-                      />
-                    ) : (
-                      getFileIcon(sf)
-                    )
+                  {f.preview ? (
+                    <img
+                      src={f.preview}
+                      className="h-full w-full object-cover"
+                      alt="preview"
+                    />
                   ) : (
-                    getFileIcon(sf)
+                    <File className="h-6 w-6 text-muted-foreground" />
                   )}
-                  <span className="text-xs truncate max-w-20">{sf.name}</span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleRemoveFile(index)}
-                    className="h-4 w-4 p-0"
+                  <button
+                    onClick={() =>
+                      setSelectedFiles((prev) =>
+                        prev.filter((_, idx) => idx !== i)
+                      )
+                    }
+                    className="absolute top-0.5 right-0.5 bg-black/50 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
-                    <X className="w-3 h-3" />
-                  </Button>
+                    <X className="h-3 w-3" />
+                  </button>
                 </div>
               ))}
             </div>
           )}
 
-          {/* Input area */}
-          <div className="flex gap-2">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    type="button"
-                    onClick={handleAttachClick}
-                    disabled={disabled}
-                    variant="ghost"
-                    size="icon"
-                    className="shrink-0"
-                    aria-label="Attach file"
-                  >
-                    <Paperclip className="w-4 h-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {disabled ? "Initialize chat first" : "Attach file"}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-
-            <Input
-              ref={inputRef}
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={placeholder}
-              disabled={disabled}
-              className="flex-1 text-sm"
-              maxLength={500}
+          <div className="flex gap-2 items-end">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="shrink-0 text-muted-foreground"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={!hasActiveConversation && isLoading}
+            >
+              <Paperclip className="h-5 w-5" />
+            </Button>
+            <input
+              type="file"
+              multiple
+              className="hidden"
+              ref={fileInputRef}
+              onChange={handleFileSelect}
+              accept="image/*,video/*,application/pdf"
             />
 
-            {/* Hidden file input */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              onChange={handleFileChange}
-              multiple
-              accept="image/*,video/*,application/pdf,.doc,.docx"
-              className="hidden"
+            <Input
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={(e) =>
+                e.key === "Enter" && !e.shiftKey && handleSubmit()
+              }
+              placeholder={
+                isLoading && !hasActiveConversation
+                  ? "Initializing..."
+                  : "Type a message..."
+              }
+              disabled={!hasActiveConversation && isLoading}
+              className="flex-1 bg-muted/50 focus-visible:ring-1 focus-visible:ring-primary/20 border-0"
             />
 
             <Button
-              onClick={handleSend}
-              disabled={!hasContent || disabled}
+              onClick={handleSubmit}
+              disabled={
+                (!inputValue && !selectedFiles.length) ||
+                (!hasActiveConversation && isLoading)
+              }
               size="icon"
-              className="shrink-0"
-              aria-label="Send message"
+              className={cn(
+                "shrink-0 transition-all",
+                inputValue || selectedFiles.length
+                  ? "bg-primary"
+                  : "bg-muted text-muted-foreground"
+              )}
             >
-              <Send className="w-4 h-4" />
+              <Send className="h-4 w-4" />
             </Button>
           </div>
-
-          {inputValue.length > 400 && (
-            <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
-              {500 - inputValue.length} characters remaining
-            </p>
-          )}
         </div>
       </DialogContent>
     </Dialog>

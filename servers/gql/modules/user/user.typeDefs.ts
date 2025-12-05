@@ -16,6 +16,28 @@ export const userTypeDefs = gql`
 
   scalar DateTime
 
+  type UserRole {
+    id: ID!
+    userId: ID!
+    role: Role!
+    user: User! # Resolve full user
+    createdAt: DateTime!
+    updatedAt: DateTime!
+  }
+
+    type Notification {
+    id: ID!
+    userId: ID!
+    title: String!
+    body: String
+    type: String
+    data: Json
+    isRead: String
+    createdAt: DateTime
+    updatedAt: DateTime
+  }
+
+
   type User {
     id: ID!
     clerkId: String!
@@ -23,21 +45,27 @@ export const userTypeDefs = gql`
     firstName: String
     lastName: String
     phone: String
+    avatarImageUrl: String
     gender: Gender
     dob: DateTime
-    role: Role!
+
+    "User can have multiple roles (e.g., both BUYER and SELLER)"
+    roles: [UserRole!]! # ← NEW: Array of roles (non-null)
     createdAt: DateTime!
     updatedAt: DateTime!
 
+    # Relations
     addresses: [Address!]
     paymentMethods: [PaymentMethod!]
     cartItems: [CartItem!]
     orders: [Order!]
     reviews: [Review!]
-    products: [Product!]
+    products: [Product!] # Products they sell
     payouts: [Payout!]
     sellerOrders: [SellerOrder!]
-    Wishlist: [Wishlist!]
+    wishlists: [Wishlist!]
+    sellerProfile: SellerProfile # One-to-one relation
+    notifications: [Notification!]
   }
 
   input UpdateUserProfileDetailsInput {
