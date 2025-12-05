@@ -7,7 +7,7 @@ import { SEND_MESSAGE } from "@/client/message/message.mutation";
 import { GET_MESSAGES } from "@/client/message/message.query";
 import { RealtimeEvents } from "@/lib/realtime";
 // Import both LocalMessage and MessageType
-import { LocalMessage, MessageType } from "@/types/chat";
+import { LocalMessage, MessageType, MessageAttachment } from "@/types/chat";
 import { uploadFilesToStorage } from "@/utlis/uploadFilesToStorage";
 import { FetchPolicy, useLazyQuery, useMutation } from "@apollo/client";
 import { useAuth } from "@clerk/nextjs";
@@ -195,10 +195,10 @@ export const useRealChat = (productId?: string, currentUserId?: string) => {
       const clientId = crypto.randomUUID();
 
       // Optimistic Update
-      const optimisticAttachments = files.map((f) => ({
+      const optimisticAttachments: MessageAttachment[] = files.map((f) => ({
         id: crypto.randomUUID(),
         url: URL.createObjectURL(f),
-        type: f.type.startsWith("video") ? "VIDEO" : ("IMAGE" as const),
+        type: f.type.startsWith("video") ? "VIDEO" : "IMAGE",
       }));
 
       const optimisticMsg: LocalMessage = {
@@ -227,8 +227,8 @@ export const useRealChat = (productId?: string, currentUserId?: string) => {
         const type = uploaded?.some((u) => u.type === "VIDEO")
           ? "VIDEO"
           : uploaded?.length
-          ? "IMAGE"
-          : "TEXT";
+            ? "IMAGE"
+            : "TEXT";
 
         const { data } = await sendMessageMutation({
           variables: {
