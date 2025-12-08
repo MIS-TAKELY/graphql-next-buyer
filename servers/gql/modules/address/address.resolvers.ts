@@ -6,27 +6,37 @@ import { GraphQLContext } from "../../context";
 export const addressResolvers = {
   Query: {
     getAddress: async (_: any, __: any, ctx: GraphQLContext) => {
-      const user = requireAuth(ctx);
-      const userId = user.id;
-      if (!userId) throw new Error("user Id not found");
-      return prisma.address.findMany({
-        include: {
-          user: true,
-        },
-      });
+      try {
+        const user = requireAuth(ctx);
+        const userId = user.id;
+        if (!userId) throw new Error("user Id not found");
+        return await prisma.address.findMany({
+          include: {
+            user: true,
+          },
+        });
+      } catch (error: any) {
+        console.error("getAddress Error:", error);
+        throw new Error(`getAddress Failed: ${error.message}`);
+      }
     },
     getAddressOfUser: async (_: any, __: any, ctx: GraphQLContext) => {
-      const user = requireAuth(ctx);
-      const userId = user.id;
-      if (!userId) throw new Error("user Id not found");
-      return prisma.address.findMany({
-        where: {
-          userId,
-        },
-        include: {
-          user: true,
-        },
-      });
+      try {
+        const user = requireAuth(ctx);
+        const userId = user.id;
+        if (!userId) throw new Error("user Id not found");
+        return await prisma.address.findMany({
+          where: {
+            userId,
+          },
+          include: {
+            user: true,
+          },
+        });
+      } catch (error: any) {
+        console.error("getAddressOfUser Error:", error);
+        throw new Error(`getAddressOfUser Failed: ${error.message}`);
+      }
     },
   },
   Mutation: {
@@ -74,9 +84,8 @@ export const addressResolvers = {
         if (!createAddressResponse) throw new Error("Unable to create Address");
         return true;
       } catch (error: any) {
-        // console.log("Error occured while creating address", error.message);
-        console.error(error);
-        return false;
+        console.error("addAddress Error:", error);
+        throw new Error(`addAddress Failed: ${error.message}`);
       }
     },
     updateAddress: async (
@@ -123,9 +132,8 @@ export const addressResolvers = {
         if (!createAddressResponse) throw new Error("Unable to update Address");
         return true;
       } catch (error: any) {
-        // console.log("Error occured while updating address", error.message);
-        console.error(error);
-        return false;
+        console.error("updateAddress Error:", error);
+        throw new Error(`updateAddress Failed: ${error.message}`);
       }
     },
     deleteAddressById: async (
@@ -148,9 +156,8 @@ export const addressResolvers = {
           throw new Error("Internal server error unable to delete the address");
         return true;
       } catch (error: any) {
-        // console.log("Error occured while deleting address", error.message);
-        console.error(error);
-        return false;
+        console.error("deleteAddressById Error:", error);
+        throw new Error(`deleteAddressById Failed: ${error.message}`);
       }
     },
   },
