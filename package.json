@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev  --turbopack",
+    "dev": "next dev",
     "dev:server": "tsx watch index.ts",
-    "build": "next build --turbopack",
+    "build": "next build",
     "postinstall": "prisma generate",
     "start": "next start",
     "lint": "eslint"

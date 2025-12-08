@@ -1,3 +1,4 @@
+// next.config.ts
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -9,13 +10,13 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "images.unsplash.com", // ✅ Added Unsplash
+        hostname: "images.unsplash.com",
       },
-      { protocol: "https", hostname: "placehold.co" },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+      },
     ],
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
 };
 
