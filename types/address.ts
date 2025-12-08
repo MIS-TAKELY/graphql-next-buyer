@@ -39,7 +39,7 @@ export interface BaseAddress {
 
 // Form-specific interfaces
 export interface AddressFormData
-  extends Omit<BaseAddress, "id" | "createdAt" | "updatedAt"> {}
+  extends Omit<BaseAddress, "id" | "createdAt" | "updatedAt"> { }
 
 export interface UpdateAddressFormData extends Partial<AddressFormData> {
   id: string;
@@ -105,7 +105,7 @@ export const VALIDATION_RULES = {
     message: "Please enter a valid 5-digit postal code",
   },
   phone: {
-    required: false, // Optional in Prisma schema
+    required: true, // Required for order creation
     pattern: /^(\+977)?9[67-9]\d{8}$/,
     minLength: 10,
     message: "Please enter a valid Nepal phone number (e.g., 9812345678)",

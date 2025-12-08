@@ -81,13 +81,13 @@ export function useBuyNow() {
             })),
             shippingAddress: {
               line1: selectedAddress?.line1,
-              label: selectedAddress?.label,
+              label: selectedAddress?.label || "Shipping Address",
               line2: selectedAddress?.line2 ?? null,
               city: selectedAddress?.city,
               state: selectedAddress?.state,
               postalCode: selectedAddress?.postalCode,
               country: selectedAddress?.country,
-              phone: selectedAddress?.phone ?? null,
+              phone: selectedAddress?.phone || "",
             },
             billingAddress: null,
             shippingMethod: paymentData.shippingMethod ?? "STANDARD",
@@ -135,7 +135,7 @@ export function useBuyNow() {
             } else {
               alert(
                 esewaResult.data.initiateEsewaPayment.error ||
-                  "Payment initiation failed"
+                "Payment initiation failed"
               );
             }
           }
@@ -152,13 +152,13 @@ export function useBuyNow() {
             ],
             shippingAddress: {
               line1: selectedAddress?.line1,
-              label: selectedAddress?.label,
+              label: selectedAddress?.label || "Shipping Address",
               line2: selectedAddress?.line2 ?? null,
               city: selectedAddress?.city,
               state: selectedAddress?.state,
               postalCode: selectedAddress?.postalCode,
               country: selectedAddress?.country,
-              phone: selectedAddress?.phone ?? null,
+              phone: selectedAddress?.phone || "",
             },
             billingAddress: null,
             shippingMethod: paymentData.shippingMethod ?? "STANDARD",
@@ -200,7 +200,7 @@ export function useBuyNow() {
           } else {
             alert(
               esewaResult.data.initiateEsewaPayment.error ||
-                "Payment initiation failed"
+              "Payment initiation failed"
             );
           }
         }

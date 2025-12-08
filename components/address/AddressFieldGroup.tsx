@@ -198,6 +198,7 @@ export const AddressFieldGroup = React.memo<AddressFieldGroupProps>(
             onChange={fieldHandlers.phone}
             error={errors.phone}
             disabled={disabled}
+            required
             placeholder="Enter phone number"
             type="tel"
             minLength={10}
