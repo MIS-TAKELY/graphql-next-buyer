@@ -33,7 +33,7 @@ export async function getDynamicFilters(searchTerm: string) {
     select: { key: true, label: true, options: true },
   });
 
-  console.log("specs--->", specs);
+  // console.log("specs--->", specs);
   const data = {
     category: category.name,
     filters: specs.map((s) => ({

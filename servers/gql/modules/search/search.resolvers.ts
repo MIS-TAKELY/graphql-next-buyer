@@ -182,7 +182,7 @@ export const searchResolvers = {
         `
       );
 
-      console.log("results-->",results)
+      // console.log("results-->",results)
 
 
       // Extract unique suggestions from product names, categories, and brands

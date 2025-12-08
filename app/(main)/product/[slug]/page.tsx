@@ -35,7 +35,7 @@ export default async function ProductPage({
 
   product = data.getProductBySlug;
 
-  console.log("final product-->", product);
+  // console.log("final product-->", product);
 
   const initialCacheData = {
     products: allProducts,

@@ -28,7 +28,7 @@ export async function createContext(
   try {
     const { userId: clerkId } = await getAuth(request);
 
-    console.log("clerk id--->", clerkId);
+    // console.log("clerk id--->", clerkId);
 
     let user = null;
 
