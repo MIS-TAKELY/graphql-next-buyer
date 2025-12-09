@@ -160,6 +160,7 @@ const AddAddressForm = React.memo<AddAddressFormProps>(function AddAddressForm({
         }
       } catch (err) {
         const error = err as Error;
+        console.log("error message-->",error.message)
         console.error("Failed to save address:", error);
         onError?.(error);
       }

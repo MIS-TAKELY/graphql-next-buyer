@@ -1,7 +1,7 @@
 // lib/context.ts (or wherever you create context)
 import redisConfig from "@/config/redis";
 import { prisma } from "@/lib/db/prisma";
-import { getAuth } from "@clerk/nextjs/server";
+import { getAuth, clerkClient } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
 
 // Updated context type — no more `role: string`
@@ -57,6 +57,64 @@ export async function createContext(
           firstName: dbUser.firstName ?? "",
           lastName: dbUser.lastName ?? "",
         };
+      } else {
+        // Fallback: JIT Sync if user exists in Clerk but not in DB yet
+        try {
+          console.log(
+            `[GraphQL Context] User ${clerkId} not found in DB, attempting JIT sync...`
+          );
+          const client = await clerkClient();
+          const cUser = await client.users.getUser(clerkId);
+          const email = cUser.emailAddresses[0]?.emailAddress;
+
+          if (email) {
+            const firstName = cUser.firstName ?? "";
+            const lastName = cUser.lastName ?? "";
+
+            // Upsert User
+            const newUser = await prisma.user.upsert({
+              where: { clerkId },
+              create: {
+                clerkId,
+                email,
+                firstName,
+                lastName,
+                avatarImageUrl: cUser.imageUrl,
+              },
+              update: {
+                email, // Sync latest email
+              },
+            });
+
+            // Ensure BUYER role
+            await prisma.userRole.upsert({
+              where: {
+                userId_role: {
+                  userId: newUser.id,
+                  role: "BUYER",
+                },
+              },
+              create: {
+                userId: newUser.id,
+                role: "BUYER",
+              },
+              update: {},
+            });
+
+            user = {
+              id: newUser.id,
+              clerkId: newUser.clerkId,
+              email: newUser.email,
+              roles: ["BUYER"],
+              firstName: newUser.firstName ?? "",
+              lastName: newUser.lastName ?? "",
+            };
+
+            console.log(`[GraphQL Context] JIT Sync successful for ${email}`);
+          }
+        } catch (err) {
+          console.error("[GraphQL Context] JIT Sync failed:", err);
+        }
       }
     }
 
