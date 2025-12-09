@@ -8,8 +8,9 @@ import EmptyWishlist from "@/components/wiahlist/EmptyWishlist";
 import WishlistError from "@/components/wiahlist/WishlistError";
 import WishlistSkeleton from "@/components/wiahlist/WishlistSkeleton";
 import { useWishlist } from "@/hooks/wishlist/useWishlist";
-import { Heart, ShoppingBag, Trash2 } from "lucide-react";
+import { Bell, Heart, ShoppingBag, Trash2 } from "lucide-react";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export default function WishlistSection() {
   const { wishlistItems, loading, error, handleRemoveFromWishlist } =
@@ -122,6 +123,16 @@ export default function WishlistSection() {
                     className="flex-1 sm:flex-initial"
                     size="default"
                   />
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2 flex-1 sm:flex-initial"
+                    onClick={() => toast.success("We'll notify you when the price drops!")}
+                  >
+                    <Bell className="w-4 h-4" />
+                    Notify
+                  </Button>
 
                   <Button
                     size="icon"

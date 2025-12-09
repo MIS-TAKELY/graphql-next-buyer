@@ -26,7 +26,7 @@ const CartItem = ({
     )
     : 0;
 
-    console.log("varient price-->",variant.price)
+  console.log("varient price-->", variant.price)
   return (
     <Card className="overflow-hidden bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
       <CardContent className="p-4 sm:p-6">
@@ -39,6 +39,8 @@ const CartItem = ({
                 width={160}
                 height={160}
                 className="w-full h-full object-cover"
+                loading="lazy"
+                quality={85}
               />
             </div>
           </div>

@@ -29,8 +29,14 @@ export const GET_MY_CART_ITEMS = gql`
       quantity
       variant {
         id
+        price
         product {
           id
+          name
+          images {
+            url
+            altText
+          }
         }
       }
     }

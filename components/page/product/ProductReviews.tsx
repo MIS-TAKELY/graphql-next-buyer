@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 
 import { AddReviewForm } from "@/components/review/AddReviewForm";
 import { ReviewCard } from "@/components/review/ReviewCard";
+import ReviewGallery from "./ReviewGallery";
 import { FilterState, ReviewFilters } from "@/components/review/ReviewFilters";
 import ReviewSkeleton from "@/components/review/ReviewSkeleton ";
 import { ReviewSummary } from "@/components/review/ReviewSummary";
@@ -110,6 +111,9 @@ const ProductReviews = () => {
         </CardHeader>
         <CardContent>
           <ReviewSummary total={total} average={average} ratings={ratings} />
+
+          {/* Gallery of all review images */}
+          <ReviewGallery images={reviews.flatMap(r => r.media?.map(m => m.url) || [])} />
         </CardContent>
       </Card>
 

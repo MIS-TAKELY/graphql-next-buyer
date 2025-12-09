@@ -25,6 +25,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { MediaUploader } from "./MediaUploader";
@@ -39,6 +40,19 @@ export const ReviewCard = ({ review }: { review: Review }) => {
   // Lightbox state
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+
+  // Helpful vote state (local for now)
+  const [helpfulCount, setHelpfulCount] = useState(review.helpfulCount || 0);
+  const [hasVoted, setHasVoted] = useState(false);
+
+  const handleHelpfulVote = (isHelpful: boolean) => {
+    if (hasVoted) return; // Prevent multiple votes per session for demo
+    setHasVoted(true);
+    if (isHelpful) {
+      setHelpfulCount(prev => prev + 1);
+    }
+    // detailed logic would call API here
+  };
 
   const convertToMediaItems = (media: Review["media"]): ReviewMedia[] => {
     return (media || []).map((m, index) => ({
@@ -63,9 +77,8 @@ export const ReviewCard = ({ review }: { review: Review }) => {
 
   const isOwnReview = userId === review.user?.clerkId;
 
-  const initials = `${review.user?.firstName?.[0] ?? ""}${
-    review.user?.lastName?.[0] ?? ""
-  }`;
+  const initials = `${review.user?.firstName?.[0] ?? ""}${review.user?.lastName?.[0] ?? ""
+    }`;
 
   const handleEdit = async () => {
     if (isUploading) return;
@@ -169,11 +182,10 @@ export const ReviewCard = ({ review }: { review: Review }) => {
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-4 h-4 cursor-pointer ${
-                            i < editForm.rating
-                              ? "text-yellow-400 fill-current"
-                              : "text-gray-300"
-                          }`}
+                          className={`w-4 h-4 cursor-pointer ${i < editForm.rating
+                            ? "text-yellow-400 fill-current"
+                            : "text-gray-300"
+                            }`}
                           onClick={() => handleRatingChange(i + 1)}
                         />
                       ))}
@@ -183,11 +195,10 @@ export const ReviewCard = ({ review }: { review: Review }) => {
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-4 h-4 fill-current ${
-                            i < review.rating
-                              ? "text-yellow-400"
-                              : "text-gray-300"
-                          }`}
+                          className={`w-4 h-4 fill-current ${i < review.rating
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                            }`}
                         />
                       ))}
                     </div>
@@ -306,16 +317,18 @@ export const ReviewCard = ({ review }: { review: Review }) => {
                 variant="ghost"
                 size="sm"
                 className="flex items-center gap-1 h-8"
-                disabled={isEditing}
+                disabled={isEditing || hasVoted}
+                onClick={() => handleHelpfulVote(true)}
               >
-                <ThumbsUp className="w-4 h-4" />
-                <span className="text-sm">Yes ({review.helpfulCount})</span>
+                <ThumbsUp className={cn("w-4 h-4", hasVoted && "fill-current text-primary")} />
+                <span className="text-sm">Yes ({helpfulCount})</span>
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
                 className="flex items-center gap-1 h-8"
-                disabled={isEditing}
+                disabled={isEditing || hasVoted}
+                onClick={() => handleHelpfulVote(false)}
               >
                 <ThumbsDown className="w-4 h-4" />
                 <span className="text-sm">No</span>

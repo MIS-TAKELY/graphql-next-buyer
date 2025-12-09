@@ -3,6 +3,7 @@ import Main from "@/components/landingPage/Main";
 import HeroCarousel from "@/components/page/home/HeroCarousel";
 import ProductCatagoryCardSection from "@/components/page/home/ProductCatagoryCardSection";
 import ProductSection from "@/components/page/home/ProductSection";
+import DynamicSections from "@/components/page/home/DynamicSections";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
 import { IProducts } from "@/types/product";
@@ -50,6 +51,7 @@ export default async function HomePage() {
               layout={section.layout}
             />
           ))}
+          <DynamicSections />
         </SSRApolloProvider>
       </div>
     </div>

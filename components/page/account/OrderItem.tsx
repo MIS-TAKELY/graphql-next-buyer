@@ -4,6 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import React from "react";
+import OrderTracker from "@/components/order/OrderTracker";
 
 type OrderStatus =
   | "PENDING"
@@ -24,8 +25,8 @@ export interface Order {
 // OrderItem returned from GraphQL
 export interface OrderItem {
   id: string;
-  items:[
-   { order:Order}
+  items: [
+    { order: Order }
   ];
 }
 
@@ -59,7 +60,7 @@ interface OrderItemProps {
 }
 
 function OrderItemComponent({ order }: OrderItemProps) {
-  console.log("order-->",order)
+  console.log("order-->", order)
   return (
     <Card className="border">
       <CardContent className="p-4">
@@ -79,6 +80,12 @@ function OrderItemComponent({ order }: OrderItemProps) {
             </p>
           </div>
         </div>
+
+
+        <div className="mt-4 border-t pt-4">
+          <OrderTracker status={order?.status as any} />
+        </div>
+
         <div className="flex justify-end mt-3 space-x-2">
           <Button variant="outline" size="sm">
             View Details
@@ -90,7 +97,7 @@ function OrderItemComponent({ order }: OrderItemProps) {
           )}
         </div>
       </CardContent>
-    </Card>
+    </Card >
   );
 }
 

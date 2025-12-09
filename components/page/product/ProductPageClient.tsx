@@ -11,6 +11,7 @@ import ProductTabs from "@/components/page/product/ProductTabs";
 import { IProductVarient, TProduct } from "@/types/product";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SellerInfo from "./SellerInfo";
+import RecommendedProducts from "./RecommendedProducts";
 
 interface ProductPageClientProps {
   product: TProduct | null;
@@ -42,7 +43,22 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         setSelectedAttributes(initialAttrs);
       }
     }
+
   }, [product]);
+
+  // Save to Recently Viewed
+  useEffect(() => {
+    if (product?.id) {
+      const stored = localStorage.getItem("recentlyViewed");
+      let ids: string[] = stored ? JSON.parse(stored) : [];
+      // Remove if exists to push to top
+      ids = ids.filter(id => id !== product.id);
+      ids.unshift(product.id);
+      // Limit to 10
+      ids = ids.slice(0, 10);
+      localStorage.setItem("recentlyViewed", JSON.stringify(ids));
+    }
+  }, [product?.id]);
 
   const handleAttributeSelect = useCallback((key: string, value: string) => {
     setSelectedAttributes((prev) => ({
@@ -197,6 +213,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           averageRating={averageRating}
           mockReviews={product.reviews || []}
         />
+
+        <RecommendedProducts currentProductId={product.id || ""} title="Similar Products" />
+        <RecommendedProducts currentProductId={product.id || ""} title="Frequently Bought Together" />
 
         {/* Zoom Viewer Overlay - Fixed Position over right column */}
         {imageHoverData.isHovering && (
