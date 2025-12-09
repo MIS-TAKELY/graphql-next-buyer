@@ -11,6 +11,7 @@ import { BaseAddress } from "@/types/address";
 import { ArrowLeft, CreditCard, ShieldCheck, Truck } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { formatPrice } from "@/lib/utils";
 
 // Mock cart data (this would come from your GraphQL query)
 const mockOrderItems = [
@@ -85,18 +86,7 @@ export default function CheckoutPage() {
     setIsProcessing(false);
   };
 
-  const formatPrice = (price: string | number) => {
-    const numPrice = typeof price === "string" ? parseFloat(price) : price;
 
-    return numPrice
-      .toLocaleString("en-NP", {
-        style: "currency",
-        currency: "NPR",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
-      .replace("NPR", "रु");
-  };
 
   return (
     <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-4 sm:py-6 lg:py-8 bg-gray-50 dark:bg-gray-900">
@@ -128,34 +118,31 @@ export default function CheckoutPage() {
             return (
               <div key={step.id} className="flex items-center">
                 <div
-                  className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
-                    isCompleted
+                  className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${isCompleted
                       ? "bg-green-500 dark:bg-green-500 border-green-500 dark:border-green-500 text-white"
                       : isActive
-                      ? "border-blue-500 dark:border-blue-400 text-blue-500 dark:text-blue-400"
-                      : "border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500"
-                  }`}
+                        ? "border-blue-500 dark:border-blue-400 text-blue-500 dark:text-blue-400"
+                        : "border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500"
+                    }`}
                 >
                   <Icon className="w-5 h-5" />
                 </div>
                 <span
-                  className={`ml-2 text-sm font-medium ${
-                    isActive
+                  className={`ml-2 text-sm font-medium ${isActive
                       ? "text-blue-500 dark:text-blue-400"
                       : isCompleted
-                      ? "text-green-500 dark:text-green-400"
-                      : "text-gray-400 dark:text-gray-500"
-                  }`}
+                        ? "text-green-500 dark:text-green-400"
+                        : "text-gray-400 dark:text-gray-500"
+                    }`}
                 >
                   {step.name}
                 </span>
                 {index < steps.length - 1 && (
                   <div
-                    className={`w-16 h-0.5 ml-4 ${
-                      isCompleted
+                    className={`w-16 h-0.5 ml-4 ${isCompleted
                         ? "bg-green-500 dark:bg-green-400"
                         : "bg-gray-300 dark:bg-gray-600"
-                    }`}
+                      }`}
                   />
                 )}
               </div>

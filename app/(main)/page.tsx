@@ -39,7 +39,7 @@ export default async function HomePage() {
       <ProductCatagoryCardSection />
       <HeroCarousel />
       <Main />
-      <div className="ultra-wide-container py-4 sm:py-6 md:py-8 lg:py-10">
+      <div className="container-wide py-4 sm:py-6 md:py-8 lg:py-10">
         <SSRApolloProvider initialData={{ products }}>
           {sections.map((section) => (
             <ProductSection

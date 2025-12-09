@@ -92,9 +92,9 @@ const SearchBar = ({
   };
 
   return (
-    <form onSubmit={handleSearch} className={`relative ${className}`}>
-      <div className="relative">
-        <Search className="absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 md:w-4 md:h-4 text-muted-foreground" />
+    <form onSubmit={handleSearch} className={`relative ${className} w-full`}>
+      <div className="relative group">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
         <Input
           type="text"
           placeholder={placeholder}
@@ -103,19 +103,19 @@ const SearchBar = ({
           onFocus={() => setShowSuggestions(true)}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           onKeyDown={handleKeyDown}
-          className="w-full pl-8 md:pl-10 pr-3 md:pr-4 h-8 md:h-10 text-xs md:text-sm lg:text-base bg-input text-foreground border-border placeholder-muted-foreground "
+          className="w-full pl-10 pr-4 h-10 text-sm bg-secondary/30 focus:bg-background border-transparent focus:border-primary/20 hover:bg-secondary/50 transition-all duration-200 rounded-full"
         />
       </div>
 
       {showSuggestions && searchQuery && (
-        <div className="absolute top-full left-0 right-0 bg-popover border border-border rounded-md shadow-lg mt-1 z-10 max-h-48 md:max-h-60 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 bg-popover/95 backdrop-blur-md border border-border/50 rounded-xl shadow-lg mt-2 z-50 max-h-64 overflow-y-auto animate-fade-in custom-scrollbar">
           {error && (
-            <div className="px-3 py-2 text-xs md:text-sm text-red-500">
+            <div className="px-4 py-3 text-sm text-destructive">
               Error loading suggestions
             </div>
           )}
           {!error && suggestions.length === 0 && (
-            <div className="px-3 py-2 text-xs md:text-sm">
+            <div className="px-4 py-3 text-sm text-muted-foreground">
               No suggestions found
             </div>
           )}
@@ -126,11 +126,10 @@ const SearchBar = ({
                 key={index}
               >
                 <div
-                  className={`px-3 py-2 cursor-pointer text-xs md:text-sm lg:text-base ${
-                    index === activeIndex
-                      ? "bg-accent text-white"
-                      : "text-popover-foreground hover:bg-accent hover:text-white"
-                  }`}
+                  className={`px-4 py-2.5 cursor-pointer text-sm transition-colors duration-150 ${index === activeIndex
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-foreground hover:bg-muted"
+                    }`}
                   onMouseDown={() => selectSuggestion(suggestion)}
                   onMouseEnter={() => setActiveIndex(index)}
                 >

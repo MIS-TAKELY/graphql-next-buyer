@@ -109,7 +109,7 @@ export function OrderSummary({
                 </div>
 
                 <div className="text-sm font-medium text-gray-900 dark:text-white">
-                  रु{item.price * item.quantity}
+                  {formatPrice(item.price * item.quantity)}
                 </div>
               </div>
             ))}
@@ -123,7 +123,7 @@ export function OrderSummary({
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-600 dark:text-gray-300">Subtotal</span>
             <span className="font-medium text-gray-900 dark:text-white">
-              रु{subtotal}
+              {formatPrice(subtotal)}
             </span>
           </div>
 
@@ -133,7 +133,7 @@ export function OrderSummary({
               Shipping
             </span>
             <span className="font-medium text-green-600 dark:text-green-400">
-              {shipping === 0 ? "FREE" : <div>रु{shipping}</div>}
+              {shipping === 0 ? "FREE" : <div>{formatPrice(shipping)}</div>}
             </span>
           </div>
 
@@ -143,7 +143,7 @@ export function OrderSummary({
               Tax (GST)
             </span>
             <span className="font-medium text-gray-900 dark:text-white">
-              रु{tax}
+              {formatPrice(tax)}
             </span>
           </div>
 
@@ -171,7 +171,7 @@ export function OrderSummary({
               Total
             </span>
             <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-              रु{total}
+              {formatPrice(total)}
             </span>
           </div>
         </div>

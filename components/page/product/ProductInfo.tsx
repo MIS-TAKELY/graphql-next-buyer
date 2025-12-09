@@ -5,12 +5,17 @@ import { TProduct } from "@/types/product";
 import { Star } from "lucide-react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import ShowProductSpecification from "./ShowProductSpecification";
+import { formatPrice } from "@/lib/utils";
+import VariantSelector from "./VariantSelector";
 
 interface ProductInfoProps {
   product: TProduct;
   averageRating: number;
   inStock: boolean;
   defaultVariant: any;
+  variants: any[];
+  selectedAttributes: Record<string, string>;
+  onAttributeSelect: (key: string, value: string) => void;
 }
 
 const ProductInfo = memo(function ProductInfo({
@@ -18,18 +23,11 @@ const ProductInfo = memo(function ProductInfo({
   averageRating,
   inStock,
   defaultVariant,
+  variants,
+  selectedAttributes,
+  onAttributeSelect,
 }: ProductInfoProps) {
-  const formatPrice = (price: string | number) => {
-    const numPrice = typeof price === "string" ? parseFloat(price) : price;
-    return numPrice
-      .toLocaleString("en-NP", {
-        style: "currency",
-        currency: "NPR",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
-      .replace("NPR", "रु");
-  };
+
 
   const [showAllHighlights, setShowAllHighlights] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -42,8 +40,6 @@ const ProductInfo = memo(function ProductInfo({
       product?.images?.filter((image) => image.mediaType !== "PRIMARY") || [],
     [product?.images]
   );
-
-  // console.log("promotional images-->", promotionalImages);
 
   useEffect(() => {
     if (
@@ -72,34 +68,34 @@ const ProductInfo = memo(function ProductInfo({
     <div className="space-y-6">
       {/* Product Title & Status */}
       <div>
-        <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <div className="flex items-center gap-3 mb-2 flex-wrap">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
             {product.name}
           </h1>
 
           {product.status === "ACTIVE" && (
-            <span className="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-medium rounded-full">
+            <span className="px-2.5 py-0.5 bg-success/15 text-success text-xs font-semibold rounded-full border border-success/20">
               Available
             </span>
           )}
         </div>
 
         {/* Category & Brand */}
-        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
           {product.category?.name && (
-            <span className="capitalize">{product.category.name}</span>
+            <span className="capitalize hover:text-primary transition-colors cursor-pointer">{product.category.name}</span>
           )}
           {product.brand?.name && (
             <>
-              <span className="text-gray-500 dark:text-gray-400">•</span>
-              <span>{product.brand.name}</span>
+              <span className="text-border">•</span>
+              <span className="hover:text-primary transition-colors cursor-pointer">{product.brand.name}</span>
             </>
           )}
         </div>
 
         {product.description && (
           <div className="mt-4">
-            <p className="text-gray-700 dark:text-gray-200 text-lg leading-relaxed">
+            <p className="text-muted-foreground text-base leading-relaxed line-clamp-3 hover:line-clamp-none transition-all duration-300">
               {product.description}
             </p>
           </div>
@@ -107,37 +103,35 @@ const ProductInfo = memo(function ProductInfo({
 
         {/* Rating & Stock Status */}
         <div className="flex items-center gap-4 mt-4">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5 p-1.5 rounded-lg bg-secondary/30">
             <div className="flex">
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-5 h-5 fill-current ${
-                    i < Math.floor(averageRating)
-                      ? "text-yellow-400 dark:text-yellow-300"
-                      : "text-gray-300 dark:text-gray-600"
-                  }`}
+                  className={`w-4 h-4 fill-current ${i < Math.floor(averageRating)
+                    ? "text-yellow-400"
+                    : "text-muted-foreground/30"
+                    }`}
                 />
               ))}
             </div>
-            <span className="text-lg font-medium text-gray-900 dark:text-white">
+            <span className="text-sm font-semibold text-foreground">
               {averageRating > 0 ? averageRating.toFixed(1) : "0.0"}
             </span>
             {reviewCount > 0 && (
-              <span className="text-gray-500 dark:text-gray-400 ml-1">
+              <span className="text-xs text-muted-foreground ml-1">
                 ({reviewCount} review{reviewCount !== 1 ? "s" : ""})
               </span>
             )}
           </div>
 
-          <span className="text-gray-500 dark:text-gray-400">|</span>
+          <div className="h-4 w-px bg-border my-auto" />
 
           <span
-            className={`font-medium ${
-              inStock && defaultVariant.stock > 10
-                ? "text-green-600 dark:text-green-400"
-                : "text-red-600 dark:text-red-400"
-            }`}
+            className={`text-sm font-medium ${inStock && defaultVariant.stock > 10
+              ? "text-success"
+              : "text-destructive"
+              }`}
           >
             {inStock
               ? defaultVariant.stock > 10
@@ -149,50 +143,59 @@ const ProductInfo = memo(function ProductInfo({
       </div>
 
       {/* Price Display with MRP & Discount */}
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-baseline gap-3 p-4 bg-card rounded-xl border border-border/40 shadow-sm w-fit min-w-[200px]">
         {defaultVariant?.price ? (
           <>
-            <span className="text-3xl font-bold text-gray-900 dark:text-white">
+            <span className="text-3xl font-bold text-primary">
               {formatPrice(defaultVariant.price)}
             </span>
 
             {hasDiscount && (
-              <>
-                <span className="text-lg text-gray-500 dark:text-gray-400 line-through">
+              <div className="flex flex-col items-start leading-none gap-1">
+                <span className="text-sm text-muted-foreground line-through decoration-destructive/50">
                   {formatPrice(mrp!)}
                 </span>
-                <span className="text-sm font-semibold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900 px-2 py-1 rounded">
+                <span className="text-xs font-bold text-success">
                   {discountPercent}% OFF
                 </span>
-              </>
+              </div>
             )}
           </>
         ) : (
-          <span className="text-2xl font-medium text-gray-500 dark:text-gray-400">
+          <span className="text-xl font-medium text-muted-foreground">
             Price not available
           </span>
         )}
 
         {defaultVariant?.stock <= 10 && defaultVariant?.stock > 0 && (
-          <span className="text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
-            only {defaultVariant.stock} units available
-          </span>
+          <div className="w-full mt-1">
+            <span className="text-xs text-destructive font-medium">
+              Only {defaultVariant.stock} units left!
+            </span>
+          </div>
         )}
       </div>
+
+      {/* Variant Selector */}
+      <VariantSelector
+        variants={variants}
+        selectedAttributes={selectedAttributes}
+        onAttributeSelect={onAttributeSelect}
+      />
 
       {/* Specifications Table */}
       <ShowProductSpecification defaultVariant={defaultVariant} />
 
       {/* 🌟 Seamless Product Highlights (Continuous Stack) */}
       {promotionalImages && promotionalImages.length > 0 && (
-        <section className="mt-12">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6 border-b pb-2">
+        <section className="mt-12 pt-6 border-t border-border">
+          <h2 className="text-xl font-semibold text-foreground mb-6">
             Product Highlights
           </h2>
 
           {!showAllHighlights ? (
             <div
-              className="relative w-full overflow-hidden"
+              className="relative w-full overflow-hidden rounded-xl border border-border/50"
               style={{ height: teaserHeight || "500px" }}
             >
               <img
@@ -205,19 +208,19 @@ const ProductInfo = memo(function ProductInfo({
               />
 
               {/* Show More overlay */}
-              <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4">
+              <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center bg-gradient-to-t from-background via-background/60 to-transparent p-8">
                 <button
                   onClick={() => setShowAllHighlights(true)}
-                  className="text-white text-sm font-medium underline hover:no-underline"
+                  className="px-6 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all"
                 >
-                  Show more
+                  Show all highlights
                 </button>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col space-">
+            <div className="flex flex-col gap-4">
               {promotionalImages.map((image: any, index: number) => (
-                <div key={index} className="relative w-full">
+                <div key={index} className="relative w-full rounded-xl overflow-hidden border border-border/50">
                   <img
                     src={image.url}
                     alt={image.altText || `Highlight ${index + 1}`}
@@ -227,7 +230,7 @@ const ProductInfo = memo(function ProductInfo({
 
                   {/* Optional caption overlay */}
                   {image.caption && (
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-3 text-white">
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm p-3 text-white">
                       <p className="text-base font-medium">{image.caption}</p>
                     </div>
                   )}
@@ -238,17 +241,13 @@ const ProductInfo = memo(function ProductInfo({
               <div className="flex justify-center pt-4">
                 <button
                   onClick={() => setShowAllHighlights(false)}
-                  className="text-gray-600 dark:text-gray-400 text-sm font-medium underline hover:no-underline"
+                  className="text-muted-foreground hover:text-foreground text-sm font-medium underline transition-colors"
                 >
                   Show less
                 </button>
               </div>
             </div>
           )}
-
-          {/* <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
-            *Images are for illustration purposes. Actual product may vary.
-          </p> */}
         </section>
       )}
     </div>

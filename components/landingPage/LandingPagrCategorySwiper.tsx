@@ -1,3 +1,4 @@
+
 "use client";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -50,7 +51,7 @@ export default function LandingPagrCategorySwiper({ title, onViewAll, data }: Pr
   }, []);
 
   return (
-    <section className="relative py-2 sm:py-4 md:py-6 w-full max-w-[100%] mx-auto bg-card px-2">
+    <section className="relative py-2 sm:py-4 md:py-6 container-custom bg-card">
       {/* Header */}
       <div className="flex justify-between items-center mb-3 px-2 sm:px-0">
         {/* ✅ Wrapped Title in a Link */}

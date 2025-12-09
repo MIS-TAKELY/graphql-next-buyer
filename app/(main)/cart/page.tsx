@@ -108,9 +108,9 @@ export default function CartPage() {
 
     return cartdata.map((product: Product, index: number) => {
       const variant = product.variants[0];
-      const priceInCents = parseFloat(variant.price) * 100;
+      const priceInCents = parseFloat(variant.price);
       const comparePrice = variant.comparePrice
-        ? parseFloat(variant.comparePrice) * 100
+        ? parseFloat(variant.comparePrice)
         : undefined;
 
       return {

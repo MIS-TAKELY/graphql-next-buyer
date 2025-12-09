@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { formatPrice } from "../page/checkout/PaymentForm";
+import { formatPrice } from "@/lib/utils";
 
 const CartItem = ({
   item,
@@ -20,11 +20,13 @@ const CartItem = ({
   const { variant, product, quantity } = item;
   const discount = variant.attributes?.comparePrice
     ? Math.round(
-        ((variant.attributes.comparePrice - variant.price) /
-          variant.attributes.comparePrice) *
-          100
-      )
+      ((variant.attributes.comparePrice - variant.price) /
+        variant.attributes.comparePrice) *
+      100
+    )
     : 0;
+
+    console.log("varient price-->",variant.price)
   return (
     <Card className="overflow-hidden bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
       <CardContent className="p-4 sm:p-6">
@@ -71,8 +73,8 @@ const CartItem = ({
                           {formatPrice(variant.attributes.comparePrice)}
                         </span>
                         {discount > 0 && (
-                          <Badge 
-                            variant="destructive" 
+                          <Badge
+                            variant="destructive"
                             className="text-xs bg-red-600 dark:bg-red-500 text-white"
                           >
                             {discount}% OFF
@@ -130,8 +132,8 @@ const CartItem = ({
                         {formatPrice(variant.attributes.comparePrice)}
                       </span>
                       {discount > 0 && (
-                        <Badge 
-                          variant="destructive" 
+                        <Badge
+                          variant="destructive"
                           className="text-xs bg-red-600 dark:bg-red-500 text-white"
                         >
                           {discount}% OFF

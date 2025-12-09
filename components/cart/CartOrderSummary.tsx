@@ -3,7 +3,7 @@ import { ICartItem } from "@/app/(main)/cart/page";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tag } from "lucide-react";
 import { BuyNowButton } from "../common"; // Adjust path as needed
-import { formatPrice } from "../page/checkout/PaymentForm";
+import { formatPrice } from "@/lib/utils";
 
 const CartOrderSummary = ({
   cartItems,

@@ -24,7 +24,7 @@ const Main = async () => {
         />
 
         {/* Product Grid Section */}
-        <div className="w-full max-w-[100%] mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+        <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {/* Featured Products */}
             <LandingPageProductGridWrapper
@@ -46,7 +46,7 @@ const Main = async () => {
           </div>
         </div>
 
-        <div className="w-full max-w-[100%] mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+        <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {/* Featured Products */}
             <LandingPageProductGridWrapper

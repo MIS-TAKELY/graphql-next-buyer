@@ -1,6 +1,9 @@
 // components/page/checkout/PaymentForm.tsx
 "use client";
 
+import { formatPrice } from "@/lib/utils";
+
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -40,9 +43,7 @@ interface PaymentFormProps {
   amount: number;
 }
 
-export const formatPrice = (priceInCents: number) => {
-  return `रु${priceInCents.toLocaleString("en-IN")}`;
-};
+
 
 export function PaymentForm({
   paymentMethod,
@@ -163,7 +164,7 @@ export function PaymentForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("form data-->",formData)
+    console.log("form data-->", formData)
     if (paymentMethod.type === "CASH_ON_DELIVERY") {
       onSubmit({ method: paymentMethod.type });
       return;
@@ -211,11 +212,10 @@ export function PaymentForm({
                   }
                   placeholder="1234 5678 9012 3456"
                   maxLength={19}
-                  className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
-                    errors.cardNumber
+                  className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${errors.cardNumber
                       ? "border-red-500 dark:border-red-400"
                       : ""
-                  }`}
+                    }`}
                 />
                 <CreditCard className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
@@ -236,11 +236,10 @@ export function PaymentForm({
                   onChange={(e) =>
                     handleInputChange("expiryMonth", e.target.value)
                   }
-                  className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
-                    errors.expiryMonth
+                  className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${errors.expiryMonth
                       ? "border-red-500 dark:border-red-400"
                       : ""
-                  }`}
+                    }`}
                 >
                   <option value="">MM</option>
                   {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
@@ -268,11 +267,10 @@ export function PaymentForm({
                   onChange={(e) =>
                     handleInputChange("expiryYear", e.target.value)
                   }
-                  className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
-                    errors.expiryYear
+                  className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${errors.expiryYear
                       ? "border-red-500 dark:border-red-400"
                       : ""
-                  }`}
+                    }`}
                 >
                   <option value="">YY</option>
                   {Array.from(
@@ -307,9 +305,8 @@ export function PaymentForm({
                     }
                     placeholder="123"
                     maxLength={4}
-                    className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
-                      errors.cvv ? "border-red-500 dark:border-red-400" : ""
-                    }`}
+                    className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${errors.cvv ? "border-red-500 dark:border-red-400" : ""
+                      }`}
                   />
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
                 </div>
@@ -336,11 +333,10 @@ export function PaymentForm({
                     )
                   }
                   placeholder="JOHN DOE"
-                  className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
-                    errors.cardHolderName
+                  className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${errors.cardHolderName
                       ? "border-red-500 dark:border-red-400"
                       : ""
-                  }`}
+                    }`}
                 />
                 <User className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
@@ -368,9 +364,8 @@ export function PaymentForm({
                     handleInputChange("upiId", e.target.value.toLowerCase())
                   }
                   placeholder="yourname@paytm"
-                  className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
-                    errors.upiId ? "border-red-500 dark:border-red-400" : ""
-                  }`}
+                  className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${errors.upiId ? "border-red-500 dark:border-red-400" : ""
+                    }`}
                 />
                 <Smartphone className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
@@ -411,9 +406,8 @@ export function PaymentForm({
                   onChange={(e) =>
                     handleInputChange("bankName", e.target.value)
                   }
-                  className={`w-full pl-10 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
-                    errors.bankName ? "border-red-500 dark:border-red-400" : ""
-                  }`}
+                  className={`w-full pl-10 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${errors.bankName ? "border-red-500 dark:border-red-400" : ""
+                    }`}
                 >
                   <option value="">Choose your bank</option>
                   <option value="sbi">State Bank of India</option>
@@ -468,11 +462,10 @@ export function PaymentForm({
                   return (
                     <label
                       key={provider}
-                      className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 ${
-                        formData.walletProvider === provider
+                      className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 ${formData.walletProvider === provider
                           ? "border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20"
                           : ""
-                      }`}
+                        }`}
                     >
                       <input
                         type="radio"

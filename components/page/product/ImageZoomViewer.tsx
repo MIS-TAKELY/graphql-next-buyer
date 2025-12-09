@@ -33,13 +33,14 @@ const ImageZoomViewer = memo(function ImageZoomViewer({
             transformOrigin: `${position.x}% ${position.y}%`,
             transition: "transform-origin 0.05s ease-out",
           }}
-          sizes="500px"
+          sizes="(max-width: 768px) 100vw, 600px"
           priority
           quality={90}
         />
       </div>
       <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full animate-fade-in">
-        Hover to zoom
+        <span className="lg:hidden">Release to close</span>
+        <span className="hidden lg:inline">Zoom Active</span>
       </div>
     </div>
   );

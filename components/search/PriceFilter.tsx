@@ -1,4 +1,5 @@
 import { Slider } from "@/components/ui/slider";
+import { formatPrice } from "@/lib/utils";
 
 interface PriceFilterProps {
   priceRange: number[];
@@ -20,8 +21,8 @@ export default function PriceFilter({
         className="mb-2"
       />
       <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
-        <span>₹{priceRange[0].toLocaleString("en-IN")}</span>
-        <span>₹{priceRange[1].toLocaleString("en-IN")}</span>
+        <span>{formatPrice(priceRange[0])}</span>
+        <span>{formatPrice(priceRange[1])}</span>
       </div>
     </div>
   );

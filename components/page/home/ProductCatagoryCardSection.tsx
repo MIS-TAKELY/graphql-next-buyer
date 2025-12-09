@@ -6,8 +6,8 @@ import { memo } from "react";
 
 const ProductCategoryCardSection = memo(() => {
   return (
-    <section className="bg-card transition-colors duration-300 w-full">
-      <div className="px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
+    <section className="bg transition-colors duration-300 w-full">
+      <div className="container-wide">
         <div className="bg-card w-full">
           {/* Scrollable container for mobile, grid for lg+ */}
           <div className="overflow-x-auto lg:overflow-x-visible scrollbar-hide lg:scrollbar-auto snap-x snap-mandatory">

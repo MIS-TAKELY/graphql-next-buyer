@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { formatPrice } from "@/lib/utils";
+
 import { TopDeal } from "./types";
 
 interface Props {
@@ -36,7 +38,7 @@ const PlainProductCards = ({ product }: Props) => {
           <p className="text-xs xs:text-sm sm:text-base text-price font-semibold mt-1">
             Save up to{" "}
             {typeof product.saveUpTo === "number"
-              ? `रु ${product.saveUpTo.toFixed(2)}`
+              ? formatPrice(product.saveUpTo)
               : product.saveUpTo}
           </p>
         )}

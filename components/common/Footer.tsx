@@ -1,86 +1,62 @@
+import { Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
+
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-8 md:py-12">
-      <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-          <div className="text-center sm:text-left">
-            <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4">ABOUT</h3>
-            <ul className="space-y-2 text-gray-300 text-sm md:text-base">
-              <li>
-                <a href="#" className="hover:text-white transition-colors duration-200">
-                  Contact Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors duration-200">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors duration-200">
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors duration-200">
-                  Press
-                </a>
-              </li>
+    <footer className="bg-muted text-muted-foreground pt-12 md:pt-16 pb-8 border-t border-border">
+      <div className="container-custom">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
+          {/* Brand Column */}
+          <div className="space-y-4">
+            <h3 className="font-bold text-lg text-foreground">DAI Buyer</h3>
+            <p className="text-sm max-w-xs leading-relaxed">
+              Experience the best in e-commerce with our premium selection of products. Quality, trust, and speed delivered to your doorstep.
+            </p>
+            <div className="flex items-center gap-4 pt-2">
+              <a href="#" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Facebook className="w-5 h-5" /></a>
+              <a href="#" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Instagram className="w-5 h-5" /></a>
+              <a href="#" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Twitter className="w-5 h-5" /></a>
+              <a href="#" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Linkedin className="w-5 h-5" /></a>
+            </div>
+          </div>
+
+          {/* Links Columns */}
+          <div>
+            <h3 className="font-semibold text-foreground mb-4">Company</h3>
+            <ul className="space-y-3 text-sm">
+              <li><a href="#" className="hover:text-primary transition-colors">About Us</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Careers</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Press</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Blog</a></li>
             </ul>
           </div>
-          <div className="text-center sm:text-left">
-            <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4">HELP</h3>
-            <ul className="space-y-2 text-gray-300 text-sm md:text-base">
-              <li>
-                <a href="#" className="hover:text-white transition-colors duration-200">
-                  Payments
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors duration-200">
-                  Shipping
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors duration-200">
-                  Cancellation & Returns
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors duration-200">
-                  FAQ
-                </a>
-              </li>
+
+          <div>
+            <h3 className="font-semibold text-foreground mb-4">Support</h3>
+            <ul className="space-y-3 text-sm">
+              <li><a href="#" className="hover:text-primary transition-colors">Help Center</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Cancellation & Returns</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Shipping Info</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Contact Us</a></li>
             </ul>
           </div>
-          <div className="text-center sm:text-left sm:col-span-2 md:col-span-1">
-            <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4">POLICY</h3>
-            <ul className="space-y-2 text-gray-300 text-sm md:text-base">
-              <li>
-                <a href="#" className="hover:text-white transition-colors duration-200">
-                  Return Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors duration-200">
-                  Terms Of Use
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors duration-200">
-                  Security
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors duration-200">
-                  Privacy
-                </a>
-              </li>
+
+          <div>
+            <h3 className="font-semibold text-foreground mb-4">Legal</h3>
+            <ul className="space-y-3 text-sm">
+              <li><a href="#" className="hover:text-primary transition-colors">Terms of Service</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Cookie Policy</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Accessibility</a></li>
             </ul>
           </div>
         </div>
-        <div className="border-t border-gray-700 mt-6 md:mt-8 pt-6 md:pt-8 text-center text-gray-400">
-          <p className="text-sm md:text-base">&copy; 2024 E-Commerce Store. All rights reserved.</p>
+
+        <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+          <p>&copy; {new Date().getFullYear()} DAI Buyer. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <span className="hover:text-primary cursor-pointer">Sitemap</span>
+            <span className="hover:text-primary cursor-pointer">Security</span>
+          </div>
         </div>
       </div>
     </footer>

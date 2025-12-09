@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@radix-ui/react-label";
 import { Star } from "lucide-react";
 import Link from "next/link";
+import { formatPrice } from "@/lib/utils";
 
 interface Specification {
   value: string;
@@ -87,11 +88,11 @@ export default function ProductCard({ product }: ProductCardProps) {
               </div>
               <div className="text-right flex-shrink-0">
                 <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                  ${price.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                  {formatPrice(price)}
                 </div>
                 {originalPrice > price && (
                   <div className="text-xs text-gray-500 dark:text-gray-400 line-through">
-                    ${originalPrice.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                    {formatPrice(originalPrice)}
                   </div>
                 )}
               </div>
@@ -129,8 +130,8 @@ export default function ProductCard({ product }: ProductCardProps) {
               </div>
             </div>
           </div>
-      </CardContent>
-        </Card>
+        </CardContent>
+      </Card>
     </Link>
   );
 }

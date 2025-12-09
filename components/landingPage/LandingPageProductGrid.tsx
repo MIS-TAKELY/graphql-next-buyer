@@ -4,6 +4,8 @@ import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState, useEffect, useCallback } from "react";
+import { formatPrice } from "@/lib/utils";
+
 
 interface ILandingPageProductGrid {
   title: string;
@@ -97,7 +99,7 @@ const LandingPageProductGrid = ({
                   {deal?.name}
                 </div>
                 <div className="text-xs text-price font-semibold">
-                  up to रु {deal?.saveUpTo}
+                  up to {formatPrice(deal?.saveUpTo)}
                 </div>
               </Link>
             ))}
@@ -106,9 +108,8 @@ const LandingPageProductGrid = ({
 
         {/* Tablet / Medium View (below 1366px): Horizontal Scroll */}
         <div
-          className={`hidden ${
-            forceHorizontal ? "lg:block xl:hidden" : "sm:block"
-          } xl:hidden`}
+          className={`hidden ${forceHorizontal ? "lg:block xl:hidden" : "sm:block"
+            } xl:hidden`}
         >
           <div className="relative">
             {/* Left scroll button */}

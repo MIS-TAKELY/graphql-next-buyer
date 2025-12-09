@@ -1,6 +1,9 @@
 // app/(main)/buy-now/page.tsx
 "use client";
 
+import { formatPrice } from "@/lib/utils";
+
+
 import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
 import { VERIFY_ESEWA_PAYMENT } from "@/client/payment/payment.mutations";
 import { GET_PRODUCT_BY_SLUG } from "@/client/product/product.queries";
@@ -104,47 +107,47 @@ function BuyNowPageInner() {
   // UPDATED: Map cart items to OrderItem[] for OrderSummary (if from cart)
   const orderItemsForSummary = isFromCart
     ? cartItems.map((cartItem: ICartItem) => ({
-        id: cartItem.id,
-        quantity: cartItem.quantity,
-        price: cartItem.variant.price * cartItem.quantity, // Subtotal per item
-        variant: {
-          id: cartItem.variant.id,
-          price: cartItem.variant.price,
-          attributes: cartItem.variant.attributes,
-          product: {
-            name: cartItem.variant.product.name,
-            images: cartItem.variant.product.images || [],
-          },
+      id: cartItem.id,
+      quantity: cartItem.quantity,
+      price: cartItem.variant.price * cartItem.quantity, // Subtotal per item
+      variant: {
+        id: cartItem.variant.id,
+        price: cartItem.variant.price,
+        attributes: cartItem.variant.attributes,
+        product: {
+          name: cartItem.variant.product.name,
+          images: cartItem.variant.product.images || [],
         },
-      }))
+      },
+    }))
     : [
-        // Fallback to single product (existing logic)
-        {
-          id: product?.id || "",
-          quantity,
+      // Fallback to single product (existing logic)
+      {
+        id: product?.id || "",
+        quantity,
+        price:
+          product?.variants?.find((v: any) => v.isDefault)?.price ||
+          product?.variants?.[0]?.price ||
+          0,
+        variant: {
+          id:
+            product?.variants?.find((v: any) => v.isDefault)?.id ||
+            product?.variants?.[0]?.id ||
+            "1",
           price:
             product?.variants?.find((v: any) => v.isDefault)?.price ||
             product?.variants?.[0]?.price ||
             0,
-          variant: {
-            id:
-              product?.variants?.find((v: any) => v.isDefault)?.id ||
-              product?.variants?.[0]?.id ||
-              "1",
-            price:
-              product?.variants?.find((v: any) => v.isDefault)?.price ||
-              product?.variants?.[0]?.price ||
-              0,
-            attributes:
-              product?.variants?.find((v: any) => v.isDefault)?.attributes ||
-              product?.variants?.[0]?.attributes,
-            product: {
-              name: product?.name || "",
-              images: product?.images || [],
-            },
+          attributes:
+            product?.variants?.find((v: any) => v.isDefault)?.attributes ||
+            product?.variants?.[0]?.attributes,
+          product: {
+            name: product?.name || "",
+            images: product?.images || [],
           },
         },
-      ];
+      },
+    ];
 
   // NEW: Cart-specific totals (adapt from CartOrderSummary logic)
   const cartSubtotal =
@@ -264,8 +267,8 @@ function BuyNowPageInner() {
                       paymentData.method === "CASH_ON_DELIVERY"
                         ? "COD"
                         : paymentData.method === "WALLET"
-                        ? "ESEWA"
-                        : paymentData.method,
+                          ? "ESEWA"
+                          : paymentData.method,
                     paymentMethodId: selectedPaymentMethod?.id ?? null,
                     items: orderItemsForSummary, // Pass full cart items
                     shippingMethod: "STANDARD",
@@ -281,8 +284,8 @@ function BuyNowPageInner() {
                       paymentData.method === "CASH_ON_DELIVERY"
                         ? "COD"
                         : paymentData.method === "WALLET"
-                        ? "ESEWA"
-                        : paymentData.method,
+                          ? "ESEWA"
+                          : paymentData.method,
                     paymentMethodId: selectedPaymentMethod?.id ?? null,
                     variantId: defaultVariant?.id,
                     quantity,
@@ -307,9 +310,7 @@ function BuyNowPageInner() {
                 shipping={0}
                 tax={Math.round(cartSubtotal * 0.18)}
                 total={orderAmount}
-                formatPrice={(priceInCents: number) =>
-                  `रु${(priceInCents / 100).toLocaleString("en-IN")}`
-                }
+                formatPrice={formatPrice}
               />
             ) : null
           ) : productLoading ? (
@@ -322,9 +323,7 @@ function BuyNowPageInner() {
               shipping={0}
               tax={Math.round((orderAmount / 1.18) * 0.18)}
               total={orderAmount}
-              formatPrice={(priceInCents: number) =>
-                `रु${(priceInCents / 100).toLocaleString("en-IN")}`
-              }
+              formatPrice={formatPrice}
             />
           ) : null}
         </div>
