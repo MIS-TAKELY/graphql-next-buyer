@@ -25,17 +25,17 @@
   --breakpoint-2xl: 1440px;
   --breakpoint-3xl: 1920px;
 
-  /* Fonts */
-  --font-sans: var(--font-geist-sans), "Inter", system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), "Fira Code", monospace;
+  /* Fonts - Mobile-friendly, clean typography like Flipkart/Amazon */
+  --font-sans: "Roboto", "Arial", system-ui, sans-serif;
+  --font-mono: "Fira Code", monospace;
 
-  /* Radius */
-  --radius-xs: 0.25rem;
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-2xl: 2rem;
+  /* Radius - All set to 0 for sharp, modern edges */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
 
   /* Colors - Modern Vibrant Palette (Indigo/Violet) */
   --color-background: var(--background);
@@ -174,6 +174,18 @@
 
 /* ---------------- Utilities ---------------- */
 @layer utilities {
+
+  /* Global radius override for sharp edges */
+  .rounded-none-all,
+  .rounded-none-all * {
+    border-radius: 0 !important;
+  }
+
+  /* Sticky mobile bottom bar - for Buy Now/Add to Cart on product pages */
+  .sticky-bottom-bar {
+    @apply fixed bottom-0 left-0 right-0 z-40 bg-background border-t border-border p-3 shadow-lg;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+  }
 
   /* Layout */
   .container-custom {

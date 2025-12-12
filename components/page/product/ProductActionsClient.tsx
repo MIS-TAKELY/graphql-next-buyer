@@ -50,7 +50,7 @@ export function ProductActionsClient({
   };
 
   return (
-    <div className="space-y-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+    <div className="space-y-4 bg-gray-50 dark:bg-gray-800 p-4">
       <ProductActions
         productId={productId}
         productSlug={productSlug}
@@ -73,3 +73,4 @@ export function ProductActionsClient({
     </div>
   );
 }
+

@@ -165,7 +165,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className="min-h-screen bg-background relative pb-20 lg:pb-0">
       <Breadcrumb
         category={product.category?.name || "Unknown Category"}
         name={product.name}
@@ -180,12 +180,15 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
               productName={product.name}
               onImageHover={handleImageHover}
             />
-            <ProductActionsClient
-              productId={product.id || ""}
-              productSlug={product.slug}
-              variantId={currentVariant?.id || ""}
-              inStock={inStock}
-            />
+            {/* Desktop Actions - Hidden on mobile */}
+            <div className="hidden lg:block">
+              <ProductActionsClient
+                productId={product.id || ""}
+                productSlug={product.slug}
+                variantId={currentVariant?.id || ""}
+                inStock={inStock}
+              />
+            </div>
           </div>
 
           {/* RIGHT COLUMN - SCROLLABLE */}
@@ -227,6 +230,17 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           />
         )}
       </div>
+
+      {/* Sticky Mobile Buy Now Bar - Full width, Amazon/Flipkart style */}
+      <div className="lg:hidden sticky-bottom-bar">
+        <ProductActionsClient
+          productId={product.id || ""}
+          productSlug={product.slug}
+          variantId={currentVariant?.id || ""}
+          inStock={inStock}
+        />
+      </div>
     </div>
   );
 }
+
