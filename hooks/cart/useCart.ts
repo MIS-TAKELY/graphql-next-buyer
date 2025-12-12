@@ -6,7 +6,6 @@ import { useCartStore } from "@/store/cartStore";
 import { useMutation, useQuery } from "@apollo/client";
 import { useAuth } from "@clerk/nextjs";
 import { useCallback, useMemo, useState } from "react";
-import { useUIStore } from "@/store/uiStore";
 
 interface IGetCartIdResponse {
   getMyCart: [
@@ -35,7 +34,6 @@ export const useCart = () => {
 
   const { anonymousCart, addInAnonymousCart, removeFromAnonymousCart } =
     useCartStore();
-  const { openCart } = useUIStore(); // Optional integration
 
   const { data: myCartItemsIds, loading: cartLoading } = useQuery(
     GET_CART_PRODUCT_IDS,
@@ -108,8 +106,6 @@ export const useCart = () => {
   const addToCart = useCallback(
     async (variantId: string, productId: string, quantity: number = 1) => {
       setLoading(true);
-      // Simulate network delay for UX if needed, or remove timeout for responsiveness
-      // setTimeout(() => { setLoading(false); }, 400); 
 
       try {
         if (!userId) {
@@ -122,14 +118,14 @@ export const useCart = () => {
             },
           });
         }
-        openCart(); // Opens the drawer on add
+        // Removed: openCart() - drawer no longer auto-opens on add
       } catch (err) {
         console.error("Add to cart failed", err);
       } finally {
         setLoading(false);
       }
     },
-    [addToCartMutation, userId, addInAnonymousCart, openCart]
+    [addToCartMutation, userId, addInAnonymousCart]
   );
 
   const [removeFromCartMutation] = useMutation(REMOVE_FROM_CART, {
