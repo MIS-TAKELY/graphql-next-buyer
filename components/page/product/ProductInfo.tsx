@@ -74,7 +74,7 @@ const ProductInfo = memo(function ProductInfo({
           </h1>
 
           {product.status === "ACTIVE" && (
-            <span className="px-2.5 py-0.5 bg-success/15 text-success text-xs font-semibold rounded-full border border-success/20">
+            <span className="px-2.5 py-0.5 bg-success/15 text-success text-xs font-semibold border border-success/20">
               Available
             </span>
           )}
@@ -103,7 +103,7 @@ const ProductInfo = memo(function ProductInfo({
 
         {/* Rating & Stock Status */}
         <div className="flex items-center gap-4 mt-4">
-          <div className="flex items-center gap-1.5 p-1.5 rounded-lg bg-secondary/30">
+          <div className="flex items-center gap-1.5 p-1.5 bg-secondary/30">
             <div className="flex">
               {[...Array(5)].map((_, i) => (
                 <Star
@@ -143,7 +143,7 @@ const ProductInfo = memo(function ProductInfo({
       </div>
 
       {/* Price Display with MRP & Discount */}
-      <div className="flex flex-wrap items-baseline gap-3 p-4 bg-card rounded-xl border border-border/40 shadow-sm w-fit min-w-[200px]">
+      <div className="flex flex-wrap items-baseline gap-3 p-4 bg-card border border-border/40 shadow-sm w-fit min-w-[200px]">
         {defaultVariant?.price ? (
           <>
             <span className="text-3xl font-bold text-primary">
@@ -195,7 +195,7 @@ const ProductInfo = memo(function ProductInfo({
 
           {!showAllHighlights ? (
             <div
-              className="relative w-full overflow-hidden rounded-xl border border-border/50"
+              className="relative w-full overflow-hidden border border-border/50"
               style={{ height: teaserHeight || "500px" }}
             >
               <img
@@ -211,7 +211,7 @@ const ProductInfo = memo(function ProductInfo({
               <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center bg-gradient-to-t from-background via-background/60 to-transparent p-8">
                 <button
                   onClick={() => setShowAllHighlights(true)}
-                  className="px-6 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+                  className="px-6 py-2 bg-primary text-primary-foreground text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all"
                 >
                   Show all highlights
                 </button>
@@ -220,7 +220,7 @@ const ProductInfo = memo(function ProductInfo({
           ) : (
             <div className="flex flex-col gap-4">
               {promotionalImages.map((image: any, index: number) => (
-                <div key={index} className="relative w-full rounded-xl overflow-hidden border border-border/50">
+                <div key={index} className="relative w-full overflow-hidden border border-border/50">
                   <img
                     src={image.url}
                     alt={image.altText || `Highlight ${index + 1}`}

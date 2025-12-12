@@ -87,14 +87,14 @@ export default function LandingPagrCategorySwiper({ title, onViewAll, data }: Pr
       <button
         onClick={() => scroll("left")}
         disabled={!canScrollLeft}
-        className="hidden sm:flex btn-rounded absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-card p-1"
+        className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-card p-1 border border-border shadow-sm"
       >
         <ChevronLeft className="text-card-foreground" />
       </button>
       <button
         onClick={() => scroll("right")}
         disabled={!canScrollRight}
-        className="hidden sm:flex btn-rounded absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-card p-1"
+        className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-card p-1 border border-border shadow-sm"
       >
         <ChevronRight className="text-card-foreground" />
       </button>

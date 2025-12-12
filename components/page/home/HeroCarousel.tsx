@@ -57,9 +57,8 @@ const Slide = memo(({ slide, isHovered }: SlideProps) => (
       src={slide.image}
       alt={slide.title}
       fill
-      className={`object-cover z-0 transition-all duration-300 ${
-        isHovered ? "filter blur-sm" : ""
-      }`}
+      className={`object-cover z-0 transition-all duration-300 ${isHovered ? "filter blur-sm" : ""
+        }`}
       sizes="100vw"
       priority={slide.id === 1}
     />
@@ -163,7 +162,7 @@ export default function HeroCarousel() {
       <Button
         variant="ghost"
         onClick={prevSlide}
-        className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/20 rounded-full p-2 sm:p-3 z-10"
+        className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/20 p-2 sm:p-3 z-10"
         aria-label="Previous slide"
       >
         <ChevronLeftIcon className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -171,7 +170,7 @@ export default function HeroCarousel() {
       <Button
         variant="ghost"
         onClick={nextSlide}
-        className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/20 rounded-full p-2 sm:p-3 z-10"
+        className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/20 p-2 sm:p-3 z-10"
         aria-label="Next slide"
       >
         <ChevronRightIcon className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -183,11 +182,10 @@ export default function HeroCarousel() {
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-colors ${
-              index === currentSlide
+            className={`w-2 h-2 sm:w-3 sm:h-3 transition-colors ${index === currentSlide
                 ? "bg-white dark:bg-gray-200"
                 : "bg-white/50 dark:bg-gray-600/50"
-            }`}
+              }`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}

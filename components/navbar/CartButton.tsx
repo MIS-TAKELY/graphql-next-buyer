@@ -51,7 +51,7 @@ const CartButton = ({ isMobile = false }: CartButtonProps) => {
         <ShoppingCart className="w-4 h-4 text-muted-foreground" />
         <span>Cart</span>
         {badgeCount > 0 && (
-          <Badge className="ml-auto h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-destructive text-destructive-foreground">
+          <Badge className="ml-auto h-5 w-5 p-0 flex items-center justify-center text-xs bg-destructive text-destructive-foreground">
             {badgeCount}
           </Badge>
         )}
@@ -65,7 +65,7 @@ const CartButton = ({ isMobile = false }: CartButtonProps) => {
         <ShoppingCart className="w-4 h-4 lg:w-5 lg:h-5 text-muted-foreground" />
         <span className="hidden lg:inline">Cart</span>
         {badgeCount > 0 && (
-          <Badge className="absolute -top-2 -right-2 h-4 w-4 lg:h-5 lg:w-5 rounded-full p-0 flex items-center justify-center text-[10px] lg:text-xs bg-destructive text-destructive-foreground">
+          <Badge className="absolute -top-2 -right-2 h-4 w-4 lg:h-5 lg:w-5 p-0 flex items-center justify-center text-[10px] lg:text-xs bg-destructive text-destructive-foreground">
             {badgeCount}
           </Badge>
         )}

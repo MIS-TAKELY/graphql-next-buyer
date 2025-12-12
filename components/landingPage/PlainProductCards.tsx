@@ -18,7 +18,7 @@ const PlainProductCards = ({ product }: Props) => {
       className="group flex-shrink-0 w-40 xs:w-44 sm:w-48 md:w-52 lg:w-56 snap-start block hover:no-underline"
     >
       {/* Image */}
-      <div className="relative h-28 xs:h-32 sm:h-36 md:h-40 lg:h-44 w-full overflow-hidden rounded-md">
+      <div className="relative h-28 xs:h-32 sm:h-36 md:h-40 lg:h-44 w-full overflow-hidden">
         <Image
           src={product.imageUrl || "/placeholder.svg"}
           alt={product.imageAltText || "Product image"}

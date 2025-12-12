@@ -7,7 +7,7 @@ import { memo } from "react";
 const ProductCategoryCardSection = memo(() => {
   return (
     <section className="bg transition-colors duration-300 w-full">
-      <div className="container-wide">
+      <div className="container-custom">
         <div className="bg-card w-full">
           {/* Scrollable container for mobile, grid for lg+ */}
           <div className="overflow-x-auto lg:overflow-x-visible scrollbar-hide lg:scrollbar-auto snap-x snap-mandatory">
@@ -38,7 +38,7 @@ const ProductCategoryCardSection = memo(() => {
                         className={`
                           w-12 xs:w-14 sm:w-16 md:w-14 lg:w-16 xl:w-18
                           h-12 xs:h-14 sm:h-16 md:h-14 lg:h-16 xl:h-18
-                          rounded-full bg-gradient-to-br ${category.color}
+                          bg-gradient-to-br ${category.color}
                           flex items-center justify-center
                           shadow-sm group-hover:shadow-lg
                           transition-all duration-200

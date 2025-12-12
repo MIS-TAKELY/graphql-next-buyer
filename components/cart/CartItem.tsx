@@ -31,7 +31,7 @@ const CartItem = ({
       <CardContent className="p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-shrink-0 w-full sm:w-32 lg:w-40">
-            <div className="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+            <div className="aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden">
               <Image
                 src={product.images[0]?.url || "/placeholder.svg"}
                 alt={product.images[0]?.altText || product.name}
@@ -86,7 +86,7 @@ const CartItem = ({
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center border border-gray-200 dark:border-gray-600 rounded-md">
+                    <div className="flex items-center border border-gray-200 dark:border-gray-600">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -145,7 +145,7 @@ const CartItem = ({
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center border border-gray-200 dark:border-gray-600 rounded-md">
+                  <div className="flex items-center border border-gray-200 dark:border-gray-600">
                     <Button
                       variant="ghost"
                       size="sm"

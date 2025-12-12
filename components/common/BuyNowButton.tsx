@@ -62,18 +62,18 @@ export function BuyNowButton({
       size={size}
       variant={isDisabled ? "secondary" : variant}
       onClick={handleBuyNow}
-      className={`transition-all duration-200 transform w-full active:scale-95 ${fullWidth ? "flex-1" : ""
+      className={`transition-all duration-200 transform w-full active:scale-[0.98] min-h-[48px] ${fullWidth ? "flex-1" : ""
         } ${!isDisabled
-          ? "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg hover:shadow-xl font-bold"
+          ? "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg hover:shadow-xl font-bold text-base sm:text-lg"
           : ""
         } ${className}`}
     >
       <span className="flex items-center justify-center gap-2">
         {showIcon &&
           (isDisabled ? (
-            <ShoppingBag className="w-5 h-5" />
+            <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />
           ) : (
-            <Zap className="w-5 h-5" />
+            <Zap className="w-5 h-5 sm:w-6 sm:h-6" />
           ))}
         <span className="transition-all duration-200 font-semibold">
           {children || (isDisabled ? "Notify me" : "Buy Now")}

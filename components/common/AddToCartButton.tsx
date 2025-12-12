@@ -12,12 +12,12 @@ interface AddToCartButtonProps {
   className?: string;
   size?: "sm" | "default" | "lg";
   variant?:
-    | "default"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "link"
-    | "destructive";
+  | "default"
+  | "outline"
+  | "secondary"
+  | "ghost"
+  | "link"
+  | "destructive";
   showIcon?: boolean;
   fullWidth?: boolean;
   disabled?: boolean;
@@ -90,7 +90,7 @@ export function AddToCartButton({
       size={size}
       onClick={handleClick}
       disabled={isDisabled || isLoading}
-      className={`w-full transition-all duration-75 active:scale-95 py-5 bg-white dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white ${className}`}
+      className={`w-full transition-all duration-75 active:scale-[0.98] min-h-[48px] py-3 bg-white dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white text-base sm:text-lg font-medium ${className}`}
     >
       <span className="flex items-center justify-center gap-2 min-w-[100px]">
         {getButtonIcon()}

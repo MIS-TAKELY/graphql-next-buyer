@@ -249,8 +249,8 @@ const ProductGallery = memo(function ProductGallery({
                 onClick={() => handleImageSelect(index)}
                 onKeyDown={(e) => onThumbKeyDown(e, index)}
                 className={`
-                  flex-shrink-0 w-16 h-16 md:w-20 md:h-20 
-                  rounded-xl overflow-hidden border-2 transition-all duration-300 transform
+                  flex-shrink-0 w-16 h-16 md:w-20 md:h-20
+                  overflow-hidden border-2 transition-all duration-300 transform
                   focus:outline-none focus:ring-2 focus:ring-primary
                   ${isSelected
                     ? "border-primary ring-2 ring-primary/30 scale-105"
@@ -282,7 +282,7 @@ const ProductGallery = memo(function ProductGallery({
       {/* Main Image Display (swipeable) */}
       <div className="flex-1 w-full relative group">
         <div
-          className="relative aspect-square w-full bg-card rounded-2xl overflow-hidden border border-border shadow-sm transition-shadow hover:shadow-md cursor-crosshair"
+          className="relative aspect-square w-full bg-card overflow-hidden border border-border shadow-sm transition-shadow hover:shadow-md cursor-crosshair"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           onTouchStart={handleTouchStart}
@@ -329,7 +329,7 @@ const ProductGallery = memo(function ProductGallery({
         {/* Image Counter Badge */}
         {displayImages.length > 1 && (
           <div className="absolute bottom-4 right-4 z-10 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-            <span className="text-xs font-medium text-foreground bg-background/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-border">
+            <span className="text-xs font-medium text-foreground bg-background/80 backdrop-blur-md px-3 py-1.5 border border-border">
               {Math.min(selectedImage + 1, displayImages.length)} / {displayImages.length}
             </span>
           </div>

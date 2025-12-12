@@ -183,7 +183,7 @@
 
   /* Sticky mobile bottom bar - for Buy Now/Add to Cart on product pages */
   .sticky-bottom-bar {
-    @apply fixed bottom-0 left-0 right-0 z-40 bg-background border-t border-border p-3 shadow-lg;
+    @apply fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border px-3 pt-2 pb-3 shadow-2xl;
     padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
   }
 

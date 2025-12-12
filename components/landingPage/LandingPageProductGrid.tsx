@@ -62,7 +62,7 @@ const LandingPageProductGrid = ({
 
   return (
     <div className="w-full">
-      <div className="border border-border rounded-lg p-3 md:p-4 bg-card shadow-sm">
+      <div className="border border-border p-3 md:p-4 bg-card shadow-sm">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="font-semibold text-base sm:text-lg md:text-xl text-card-foreground">
@@ -70,7 +70,7 @@ const LandingPageProductGrid = ({
           </h2>
           <button
             onClick={(e) => e.preventDefault()}
-            className="bg-primary rounded-full flex justify-center items-center p-1 hover:bg-primary-hover transition-colors"
+            className="bg-primary flex justify-center items-center p-1 hover:bg-primary-hover transition-colors"
           >
             <ChevronRight className="text-primary-foreground" size={20} />
           </button>
@@ -84,10 +84,10 @@ const LandingPageProductGrid = ({
                 key={index}
                 href={`/search?q=${encodeURIComponent(deal?.name || "")}`}
                 className="group flex flex-col items-center text-center space-y-2 
-                  border border-border p-3 rounded-lg 
+                  border border-border p-3 
                   hover:border-primary/30 transition-all duration-200 hover:no-underline"
               >
-                <div className="relative w-24 h-24 overflow-hidden rounded-lg">
+                <div className="relative w-24 h-24 overflow-hidden">
                   <Image
                     src={deal?.imageUrl || "/placeholder.svg"}
                     alt={deal?.imageAltText || "Product"}
@@ -120,7 +120,7 @@ const LandingPageProductGrid = ({
                   scroll("left");
                 }}
                 className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-card/90 backdrop-blur-sm 
-                  rounded-full p-1 shadow-md border border-border"
+                  p-1 shadow-md border border-border"
                 aria-label="Scroll left"
               >
                 <ChevronRight className="rotate-180 h-4 w-4" />
@@ -135,7 +135,7 @@ const LandingPageProductGrid = ({
                   scroll("right");
                 }}
                 className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-card/90 backdrop-blur-sm 
-                  rounded-full p-1 shadow-md border border-border"
+                  p-1 shadow-md border border-border"
                 aria-label="Scroll right"
               >
                 <ChevronRight className="h-4 w-4" />
@@ -153,10 +153,10 @@ const LandingPageProductGrid = ({
                   key={index}
                   href={`/search?q=${encodeURIComponent(deal?.name || "")}`}
                   className="flex-shrink-0 group flex flex-col items-center text-center space-y-2 
-                    border border-border p-3 rounded-lg w-36 sm:w-40 md:w-44
+                    border border-border p-3 w-36 sm:w-40 md:w-44
                     hover:border-primary/30 transition-all duration-200 hover:no-underline"
                 >
-                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 overflow-hidden rounded-lg">
+                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 overflow-hidden">
                     <Image
                       src={deal?.imageUrl || "/placeholder.svg"}
                       alt={deal?.imageAltText || "Product"}
@@ -184,10 +184,10 @@ const LandingPageProductGrid = ({
                 key={index}
                 href={`/search?q=${encodeURIComponent(deal?.name || "")}`}
                 className="group flex flex-col items-center text-center space-y-1 
-                  border border-border p-2 rounded-lg
+                  border border-border p-2
                   hover:border-primary/30 transition-all duration-200 hover:no-underline"
               >
-                <div className="relative w-16 h-16 xs:w-20 xs:h-20 overflow-hidden rounded-lg">
+                <div className="relative w-16 h-16 xs:w-20 xs:h-20 overflow-hidden">
                   <Image
                     src={deal?.imageUrl || "/placeholder.svg"}
                     alt={deal?.imageAltText || "Product"}

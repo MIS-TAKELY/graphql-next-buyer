@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
 import { useState } from "react";
 import Logo from "../navbar/Logo";
 import SearchBar from "../navbar/SearchBar";
@@ -11,59 +11,68 @@ import MobileMenu from "../navbar/MobileMenu";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   return (
     <nav className="glass sticky top-0 z-50 border-b border-border/40 transition-all duration-300">
       <div className="container-custom">
-        {/* Main Navbar Row */}
-        <div className="flex items-center justify-between h-16 md:h-20 gap-4">
-          {/* Logo */}
+        {/* Single Line Navbar - Amazon/Flipkart Style */}
+        <div className="flex items-center justify-between h-12 sm:h-14 md:h-16 gap-2 sm:gap-4">
+          {/* Logo - Compact on mobile */}
           <div className="flex-shrink-0">
             <Logo />
           </div>
 
-          {/* Search Bar - Hidden on mobile, shown on larger screens */}
-          {/* Note: Original code showed SearchBar on all devices with flex-1. Preserving this but optimizing constraint. */}
+          {/* Search Bar - Hidden on mobile, shown on md+ */}
           <div className="flex-1 max-w-2xl hidden md:block mx-4">
             <SearchBar isMobile={false} />
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-4">
-            <SellerDialog />
-            <div className="h-6 w-px bg-border/60 mx-2" />
-            <UserDropdown />
-            <CartButton />
-          </div>
+          {/* Actions - All in one row */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            {/* Mobile Search Toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+              className="md:hidden h-9 w-9 text-foreground hover:bg-secondary/80"
+              aria-label="Toggle search"
+            >
+              <Search className="w-5 h-5" />
+            </Button>
 
-          {/* Mobile Actions (Search Trigger + Hamburger) */}
-          <div className="md:hidden flex items-center gap-2">
-            {/* Mobile specific formatting could go here, e.g. search icon if bar is hidden */}
-            <div className="sm:hidden w-8">
-              {/* Placeholder for possibly collapsed search or keep search bar flexible if space permits */}
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-2 lg:gap-4">
+              <SellerDialog />
+              <div className="h-5 w-px bg-border/60" />
+              <UserDropdown />
             </div>
 
+            {/* Cart - Always visible */}
             <CartButton />
 
+            {/* Mobile Menu Toggle */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-foreground hover:bg-secondary/80 hover:text-primary transition-colors"
+              className="md:hidden h-9 w-9 text-foreground hover:bg-secondary/80"
             >
               {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5" />
               ) : (
-                <Menu className="w-6 h-6" />
+                <Menu className="w-5 h-5" />
               )}
             </Button>
           </div>
         </div>
 
-        {/* Mobile Search Bar Row (if strictly needed on very small screens separately) */}
-        <div className="pb-3 md:hidden px-1">
-          <SearchBar isMobile={true} />
-        </div>
+        {/* Expandable Mobile Search - Only shows when toggled */}
+        {mobileSearchOpen && (
+          <div className="pb-2 md:hidden animate-fade-in">
+            <SearchBar isMobile={true} />
+          </div>
+        )}
 
         {/* Mobile Dropdown Menu */}
         <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />

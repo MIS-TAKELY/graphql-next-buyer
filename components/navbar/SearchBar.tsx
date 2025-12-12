@@ -103,12 +103,12 @@ const SearchBar = ({
           onFocus={() => setShowSuggestions(true)}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           onKeyDown={handleKeyDown}
-          className="w-full pl-10 pr-4 h-10 text-sm bg-secondary/30 focus:bg-background border-transparent focus:border-primary/20 hover:bg-secondary/50 transition-all duration-200 rounded-full"
+          className="w-full pl-10 pr-4 h-10 text-sm bg-secondary/30 focus:bg-background border-transparent focus:border-primary/20 hover:bg-secondary/50 transition-all duration-200"
         />
       </div>
 
       {showSuggestions && searchQuery && (
-        <div className="absolute top-full left-0 right-0 bg-popover/95 backdrop-blur-md border border-border/50 rounded-xl shadow-lg mt-2 z-50 max-h-64 overflow-y-auto animate-fade-in custom-scrollbar">
+        <div className="absolute top-full left-0 right-0 bg-popover/95 backdrop-blur-md border border-border/50 shadow-lg mt-2 z-50 max-h-64 overflow-y-auto animate-fade-in custom-scrollbar">
           {error && (
             <div className="px-4 py-3 text-sm text-destructive">
               Error loading suggestions
@@ -127,8 +127,8 @@ const SearchBar = ({
               >
                 <div
                   className={`px-4 py-2.5 cursor-pointer text-sm transition-colors duration-150 ${index === activeIndex
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-foreground hover:bg-muted"
+                    ? "bg-primary/10 text-primary font-medium"
+                    : "text-foreground hover:bg-muted"
                     }`}
                   onMouseDown={() => selectSuggestion(suggestion)}
                   onMouseEnter={() => setActiveIndex(index)}
