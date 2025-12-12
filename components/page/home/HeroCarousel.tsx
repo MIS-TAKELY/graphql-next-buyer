@@ -143,52 +143,54 @@ export default function HeroCarousel() {
   }, [isHovered]);
 
   return (
-    <div
-      className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] xl:h-[80vh] max-h-[300px] overflow-hidden bg-gradient-to-r from-primary to-secondary dark:from-gray-800 dark:to-gray-900"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Slides */}
+    <div className="container-custom">
       <div
-        className="flex transition-transform duration-500 ease-in-out h-full"
-        style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] xl:h-[80vh] max-h-[300px] overflow-hidden bg-gradient-to-r from-primary to-secondary dark:from-gray-800 dark:to-gray-900"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        {SLIDES.map((slide) => (
-          <Slide key={slide.id} slide={slide} isHovered={isHovered} />
-        ))}
-      </div>
+        {/* Slides */}
+        <div
+          className="flex transition-transform duration-500 ease-in-out h-full"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        >
+          {SLIDES.map((slide) => (
+            <Slide key={slide.id} slide={slide} isHovered={isHovered} />
+          ))}
+        </div>
 
-      {/* Navigation Arrows */}
-      <Button
-        variant="ghost"
-        onClick={prevSlide}
-        className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/20 p-2 sm:p-3 z-10"
-        aria-label="Previous slide"
-      >
-        <ChevronLeftIcon className="h-5 w-5 sm:h-6 sm:w-6" />
-      </Button>
-      <Button
-        variant="ghost"
-        onClick={nextSlide}
-        className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/20 p-2 sm:p-3 z-10"
-        aria-label="Next slide"
-      >
-        <ChevronRightIcon className="h-5 w-5 sm:h-6 sm:w-6" />
-      </Button>
+        {/* Navigation Arrows */}
+        <Button
+          variant="ghost"
+          onClick={prevSlide}
+          className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/20 p-2 sm:p-3 z-10"
+          aria-label="Previous slide"
+        >
+          <ChevronLeftIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+        </Button>
+        <Button
+          variant="ghost"
+          onClick={nextSlide}
+          className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/20 p-2 sm:p-3 z-10"
+          aria-label="Next slide"
+        >
+          <ChevronRightIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+        </Button>
 
-      {/* Dots Indicator */}
-      <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-1 sm:space-x-2 z-10">
-        {SLIDES.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-2 h-2 sm:w-3 sm:h-3 transition-colors ${index === currentSlide
+        {/* Dots Indicator */}
+        <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-1 sm:space-x-2 z-10">
+          {SLIDES.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-2 h-2 sm:w-3 sm:h-3 transition-colors ${index === currentSlide
                 ? "bg-white dark:bg-gray-200"
                 : "bg-white/50 dark:bg-gray-600/50"
-              }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
+                }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -47,7 +47,7 @@ export default function HomeLoading() {
             </main>
 
             {/* Product Sections Skeleton */}
-            <div className="container-wide py-4 sm:py-6 md:py-8 lg:py-10">
+            <div className="py-4 sm:py-6 md:py-8 lg:py-10">
                 {/* Today's Best Deals - Horizontal */}
                 <section className="mb-8 xs:mb-10 sm:mb-12 md:mb-16">
                     <div className="container-custom">

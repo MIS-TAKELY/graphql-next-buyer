@@ -42,8 +42,8 @@ export default async function HomePage() {
       <ProductCatagoryCardSection />
       <HeroCarousel />
       <Main />
-      <div className="container-wide py-4 sm:py-6 md:py-8 lg:py-10">
-        <SSRApolloProvider initialData={{ products }}>
+      <SSRApolloProvider initialData={{ products }}>
+        <div className="py-4 sm:py-6 md:py-8 lg:py-10">
           {sections.map((section) => (
             <ProductSection
               key={section.name}
@@ -54,8 +54,8 @@ export default async function HomePage() {
             />
           ))}
           <DynamicSections />
-        </SSRApolloProvider>
-      </div>
+        </div>
+      </SSRApolloProvider>
     </div>
   );
 }
