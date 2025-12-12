@@ -1,49 +1,69 @@
-import { TGetCartId } from "@/hooks/cart/useCart";
 import { create } from "zustand";
-import { persist } from "zustand/middleware"; // Optional: For built-in localStorage persistence
+import { persist } from "zustand/middleware";
 
-// Your existing types (CartItem, etc.) go here...
+export interface CartItemVariant {
+  product: {
+    id: string;
+  };
+  // Add other variant properties if needed
+}
 
-type CartStore = {
-  anonymousCart: TGetCartId[];
-  setAnonymousCart: (cart: TGetCartId[]) => void;
-  addInAnonymousCart: (productId: string) => void;
+export interface CartItem {
+  variant: CartItemVariant;
+  quantity?: number;
+}
+
+interface CartStore {
+  anonymousCart: CartItem[];
+  setAnonymousCart: (cart: CartItem[]) => void;
+  addInAnonymousCart: (productId: string, variantId?: string) => void;
   removeFromAnonymousCart: (productId: string) => void;
-  // Add logged-in cart state if needed
-};
+  clearAnonymousCart: () => void;
+}
 
 export const useCartStore = create<CartStore>()(
-  persist( // Optional: Handles localStorage sync automatically
+  persist(
     (set, get) => ({
-      anonymousCart: [], // Initial empty cart
+      anonymousCart: [],
 
       setAnonymousCart: (cart) => set({ anonymousCart: cart }),
 
-      addInAnonymousCart: (productId) => {
+      addInAnonymousCart: (productId, variantId) => {
         const currentCart = get().anonymousCart;
+
+        // Check if item already exists
         const existingItem = currentCart.find(
-          (item) => item?.variant?.product?.id === productId
+          (item) => item.variant.product.id === productId
         );
 
         if (existingItem) {
+          // Ideally increase quantity here if we tracked it in anonymous cart more robustly
           return;
         }
 
-        const newItem = { variant: { product: { id: productId } } };
-        const updatedCart = [...currentCart, newItem];
-        set({ anonymousCart: updatedCart });
+        const newItem: CartItem = {
+          variant: {
+            product: { id: productId }
+            // We'd ideally need full variant details here, but for now matching existing logic 
+          },
+          quantity: 1
+        };
+
+        set({ anonymousCart: [...currentCart, newItem] });
       },
 
       removeFromAnonymousCart: (productId) => {
         const currentCart = get().anonymousCart;
         const updatedCart = currentCart.filter(
-          (item) => item?.variant?.product?.id !== productId
+          (item) => item.variant.product.id !== productId
         );
         set({ anonymousCart: updatedCart });
       },
+
+      clearAnonymousCart: () => set({ anonymousCart: [] }),
     }),
     {
-      name: "anonymous_cart", // Key for localStorage
+      name: "anonymous_cart",
     }
   )
 );

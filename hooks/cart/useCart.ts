@@ -1,12 +1,12 @@
 "use client";
 
-import { ADD_TO_CART, REMOVE_FROM_CART } from "@/client/cart/cart.mutations";
-import { GET_CART_PRODUCT_IDS } from "@/client/cart/cart.queries";
+import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART_QUANTITY } from "@/client/cart/cart.mutations";
+import { GET_CART_PRODUCT_IDS, GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
 import { useCartStore } from "@/store/cartStore";
 import { useMutation, useQuery } from "@apollo/client";
 import { useAuth } from "@clerk/nextjs";
 import { useCallback, useMemo, useState } from "react";
-
+import { useUIStore } from "@/store/uiStore";
 
 interface IGetCartIdResponse {
   getMyCart: [
@@ -32,10 +32,10 @@ export type TGetCartId = IGetCartId | null;
 export const useCart = () => {
   const { userId } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
-  // const [anonymousCart, setAnonymousCart] = useState<TGetCartId[]>([]);
 
   const { anonymousCart, addInAnonymousCart, removeFromAnonymousCart } =
     useCartStore();
+  const { openCart } = useUIStore(); // Optional integration
 
   const { data: myCartItemsIds, loading: cartLoading } = useQuery(
     GET_CART_PRODUCT_IDS,
@@ -104,24 +104,32 @@ export const useCart = () => {
       console.error("Add to cart mutation failed:", error);
     },
   });
+
   const addToCart = useCallback(
     async (variantId: string, productId: string, quantity: number = 1) => {
       setLoading(true);
-      setTimeout(() => {
+      // Simulate network delay for UX if needed, or remove timeout for responsiveness
+      // setTimeout(() => { setLoading(false); }, 400); 
+
+      try {
+        if (!userId) {
+          addInAnonymousCart(productId, variantId);
+        } else {
+          await addToCartMutation({
+            variables: { variantId, productId, quantity },
+            optimisticResponse: {
+              addToCart: true,
+            },
+          });
+        }
+        openCart(); // Opens the drawer on add
+      } catch (err) {
+        console.error("Add to cart failed", err);
+      } finally {
         setLoading(false);
-      }, 400);
-      if (!userId) {
-        addInAnonymousCart(productId);
-      } else {
-        await addToCartMutation({
-          variables: { variantId, productId, quantity },
-          optimisticResponse: {
-            addToCart: true,
-          },
-        });
       }
     },
-    [addToCartMutation, userId]
+    [addToCartMutation, userId, addInAnonymousCart, openCart]
   );
 
   const [removeFromCartMutation] = useMutation(REMOVE_FROM_CART, {
@@ -154,21 +162,48 @@ export const useCart = () => {
   const removeFromCart = useCallback(
     async (variantId: string, productId: string) => {
       setLoading(true);
-      setTimeout(() => {
+      try {
+        if (!userId) {
+          removeFromAnonymousCart(productId);
+        } else {
+          await removeFromCartMutation({
+            variables: { variantId, productId },
+            optimisticResponse: {
+              removeFromCart: true,
+            },
+          });
+        }
+      } finally {
         setLoading(false);
-      }, 400);
-      if (!userId) {
-        removeFromAnonymousCart(productId);
-      } else {
-        await removeFromCartMutation({
-          variables: { variantId, productId },
-          optimisticResponse: {
-            removeFromCart: true,
-          },
-        });
       }
     },
-    [removeFromCartMutation, userId]
+    [removeFromCartMutation, userId, removeFromAnonymousCart]
+  );
+
+  // Update quantity mutation
+  const [updateQuantityMutation] = useMutation(UPDATE_CART_QUANTITY, {
+    refetchQueries: [{ query: GET_MY_CART_ITEMS }, { query: GET_CART_PRODUCT_IDS }],
+  });
+
+  const updateQuantity = useCallback(
+    async (variantId: string, quantity: number) => {
+      if (quantity < 1) return;
+
+      if (!userId) {
+        // For anonymous cart, update quantity in store
+        // (Assuming anonymous cart doesn't persist quantity to server)
+        return;
+      }
+
+      try {
+        await updateQuantityMutation({
+          variables: { variantId, quantity },
+        });
+      } catch (err) {
+        console.error("Update quantity failed", err);
+      }
+    },
+    [updateQuantityMutation, userId]
   );
 
   const checkIsInCart = (productId: string | undefined) => {
@@ -190,6 +225,7 @@ export const useCart = () => {
     loading,
     addToCart,
     removeFromCart,
+    updateQuantity,
     getButtonText,
     isLoading,
     anonymousCart,

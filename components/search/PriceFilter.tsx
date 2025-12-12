@@ -2,8 +2,8 @@ import { Slider } from "@/components/ui/slider";
 import { formatPrice } from "@/lib/utils";
 
 interface PriceFilterProps {
-  priceRange: number[];
-  setPriceRange: (range: number[]) => void;
+  priceRange: [number, number];
+  setPriceRange: (range: [number, number]) => void;
 }
 
 export default function PriceFilter({

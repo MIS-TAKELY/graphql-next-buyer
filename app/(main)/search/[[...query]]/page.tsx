@@ -1,4 +1,5 @@
 "use client";
+import { useProductStore } from '@/store/productStore';
 import ActiveFilters from "@/components/search/ActiveFilters";
 import FilterSidebar from "@/components/search/FilterSidebar";
 import Pagination from "@/components/search/Pagination";
@@ -47,16 +48,32 @@ export default function SearchPage() {
   const { searchProducts, searchLoading } = useSearch(query);
   const { dynamicSearchData } = useDynamicSearchFilter(query);
   const [showFilters, setShowFilters] = useState(false);
-  const [priceRange, setPriceRange] = useState([0, 100000]);
-  const [dynamicFilters, setDynamicFilters] = useState<{
-    [key: string]: string[];
-  }>({});
-  const [minRating, setMinRating] = useState(0);
-  const [sortBy, setSortBy] = useState("relevance");
+
+  // Zustand Store
+  const {
+    filters,
+    toggleDynamicFilter,
+    setPriceRange,
+    setMinRating,
+    setFilters,
+    resetFilters
+  } = useProductStore();
+
+  const { priceRange, dynamicFilters, minRating, sort: sortBy } = filters;
+
+  const setSortBy = (sort: string) => setFilters({ sort });
+
+  // Sync query to store if needed, or handle initial hydration
+  // For simplicity, we assume store is primary, but we might want to sync URL -> Store on mount
+  // useEffect(() => {
+  //   if (query && filters.searchQuery !== query) {
+  //      setFilters({ searchQuery: query });
+  //   }
+  // }, [query, setFilters]);
 
   const filterOptions = useMemo(() => {
     const options: { [key: string]: string[] } = {};
-    dynamicSearchData?.filters?.forEach((filter:Filter) => {
+    dynamicSearchData?.filters?.forEach((filter: Filter) => {
       if (filter.options && filter.options.length > 0) {
         options[filter.key] = filter.options;
       }
@@ -72,7 +89,7 @@ export default function SearchPage() {
       const rating =
         product.reviews.length > 0
           ? product.reviews.reduce((sum, review) => sum + review.rating, 0) /
-            product.reviews.length
+          product.reviews.length
           : 0;
       const matchesRating = rating >= minRating;
       const matchesDynamicFilters = Object.entries(dynamicFilters).every(
@@ -113,23 +130,15 @@ export default function SearchPage() {
       case "popularity":
         filtered.sort((a, b) => b.reviews.length - a.reviews.length);
         break;
+      // relevance typically default order
     }
     return filtered;
   }, [searchProducts, priceRange, dynamicFilters, minRating, sortBy]);
 
-  const toggleFilter = (key: string, value: string) => {
-    setDynamicFilters((prev) => {
-      const currentValues = prev[key] || [];
-      return currentValues.includes(value)
-        ? { ...prev, [key]: currentValues.filter((v) => v !== value) }
-        : { ...prev, [key]: [...currentValues, value] };
-    });
-  };
+  const toggleFilter = toggleDynamicFilter;
 
   const clearFilters = () => {
-    setPriceRange([0, 100000]);
-    setDynamicFilters({});
-    setMinRating(0);
+    resetFilters();
   };
 
   const activeFiltersCount =
@@ -159,9 +168,8 @@ export default function SearchPage() {
         <div className="flex flex-col lg:flex-row lg:gap-4">
           {/* Mobile overlay sidebar */}
           <div
-            className={`fixed top-52 inset-y-0 left-0 w-64 bg-white dark:bg-gray-900 transform ${
-              showFilters ? "translate-x-0" : "-translate-x-full"
-            } lg:hidden transition-transform duration-300 ease-in-out z-50 overflow-y-auto p-4`}
+            className={`fixed top-52 inset-y-0 left-0 w-64 bg-white dark:bg-gray-900 transform ${showFilters ? "translate-x-0" : "-translate-x-full"
+              } lg:hidden transition-transform duration-300 ease-in-out z-50 overflow-y-auto p-4`}
           >
             <FilterSidebar
               showFilters={true} // Always show content when this div is visible

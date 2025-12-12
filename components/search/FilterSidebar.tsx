@@ -1,3 +1,4 @@
+"use client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@radix-ui/react-label";
@@ -8,8 +9,8 @@ import RatingFilter from "./RatingFilter";
 
 interface FilterSidebarProps {
   showFilters: boolean;
-  priceRange: number[];
-  setPriceRange: (range: number[]) => void;
+  priceRange: [number, number];
+  setPriceRange: (range: [number, number]) => void;
   minRating: number;
   setMinRating: (rating: number) => void;
   dynamicFilters: { [key: string]: string[] };
@@ -109,9 +110,8 @@ export default function FilterSidebar({
 }: FilterSidebarProps) {
   return (
     <aside
-      className={`${
-        showFilters ? "block" : "hidden"
-      } lg:block w-full`}
+      className={`${showFilters ? "block" : "hidden"
+        } lg:block w-full`}
     >
       <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
         <CardContent className="p-4 space-y-4 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">

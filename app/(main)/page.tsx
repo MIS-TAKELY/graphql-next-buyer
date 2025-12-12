@@ -3,10 +3,12 @@ import Main from "@/components/landingPage/Main";
 import HeroCarousel from "@/components/page/home/HeroCarousel";
 import ProductCatagoryCardSection from "@/components/page/home/ProductCatagoryCardSection";
 import ProductSection from "@/components/page/home/ProductSection";
-import DynamicSections from "@/components/page/home/DynamicSections";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
 import { IProducts } from "@/types/product";
+import dynamic from "next/dynamic";
+
+const DynamicSections = dynamic(() => import("@/components/page/home/DynamicSections"));
 
 export const revalidate = 3600;
 

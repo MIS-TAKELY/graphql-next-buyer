@@ -6,6 +6,7 @@ import {
   validateField,
 } from "@/types/address";
 import { useCallback, useMemo } from "react";
+import { addressSchema } from "@/lib/schemas/address";
 
 interface UseAddressValidationOptions {
   validateOnChange?: boolean;
@@ -20,17 +21,41 @@ export const useAddressValidation = (
   // Memoized validation functions to prevent re-creation on every render
   const validateSingleField = useCallback(
     (field: keyof AddressFormData, value: any) => {
-      return validateField(field as any, value);
+      // Check if the field exists in the schema shape
+      // We cast to any because Zod's .shape might not strictly match all keys of AddressFormData
+      const shape = addressSchema.shape as any;
+      const fieldSchema = shape[field];
+
+      // If no schema defined for this field (e.g. userId), skip validation
+      if (!fieldSchema) return null;
+
+      const result = fieldSchema.safeParse(value);
+      if (!result.success) {
+        return result.error.errors[0]?.message || "Invalid value";
+      }
+      return null;
     },
     []
   );
 
   const validateForm = useCallback((formData: Partial<AddressFormData>) => {
-    return validateAddressForm(formData);
+    // safeParse will strip unknown keys if not passthrough, but we used passthrough or just want errors for known ones
+    const result = addressSchema.safeParse(formData);
+    if (!result.success) {
+      const errors: AddressValidationErrors = {};
+      result.error.issues.forEach((issue) => {
+        // issue.path[0] is the field name
+        if (issue.path[0]) {
+          errors[issue.path[0] as keyof AddressFormData] = issue.message;
+        }
+      });
+      return errors;
+    }
+    return {};
   }, []);
 
   const checkIsValid = useCallback((errors: AddressValidationErrors) => {
-    return isFormValid(errors);
+    return isFormValid(errors); // keeping existing helper if correct, or Object.keys(errors).length === 0
   }, []);
 
   // Memoized validation helper that focuses on first error

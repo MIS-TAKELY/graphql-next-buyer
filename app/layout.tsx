@@ -1,3 +1,4 @@
+import { AuthSync } from '@/components/auth/AuthSync';
 import ApolloWrapper from "@/lib/apollo/apollo-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
@@ -44,6 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ClerkProvider>
+        <AuthSync />
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >

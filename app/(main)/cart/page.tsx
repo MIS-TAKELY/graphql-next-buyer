@@ -10,7 +10,7 @@ import CartOrderSummary from "@/components/cart/CartOrderSummary";
 import { useCart } from "@/hooks/cart/useCart";
 import { useQuery } from "@apollo/client";
 import { ShoppingBag } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 interface VariantAttributes {
   comparePrice?: number;
@@ -78,10 +78,9 @@ export interface Product {
 }
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<ICartItem[]>([]);
-
   const {
     removeFromCart,
+    updateQuantity,
     myCartItems: cartProductIds,
     cartLoading,
   } = useCart();
@@ -92,7 +91,8 @@ export default function CartPage() {
     error: productDataError,
   } = useQuery(GET_PRODUCTS, { fetchPolicy: "cache-first" });
 
-  const processedCartItems = useMemo((): ICartItem[] => {
+  // Derive cart items directly from Apollo cache - no local state needed
+  const cartItems = useMemo((): ICartItem[] => {
     if (
       !cartProductIds ||
       !productdata?.getProducts ||
@@ -115,7 +115,7 @@ export default function CartPage() {
 
       return {
         id: product?.id || `cart-${index}`,
-        quantity: 1,
+        quantity: 1, // TODO: Get actual quantity from cart query when available
         createdAt: new Date(),
         variant: {
           id: variant.id,
@@ -139,27 +139,19 @@ export default function CartPage() {
     productDataLoading,
   ]);
 
-  useEffect(() => {
-    if (cartItems.length === 0 && processedCartItems.length > 0) {
-      setCartItems(processedCartItems);
-    }
-  }, [processedCartItems]);
-
-  const updateQuantity = (cartId: string, newQuantity: number) => {
+  // Handle quantity update - calls mutation
+  const handleUpdateQuantity = async (cartId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === cartId ? { ...item, quantity: newQuantity } : item
-      )
-    );
+    const item = cartItems.find((i) => i.id === cartId);
+    if (item) {
+      await updateQuantity(item.variant.id, newQuantity);
+    }
   };
 
-  const removeItem = async (productId: string, variantId: string) => {
+  // Handle remove item
+  const handleRemoveItem = async (productId: string, variantId: string) => {
     try {
       await removeFromCart(variantId, productId);
-      setCartItems((prevItems) =>
-        prevItems.filter((item) => item.product.id !== productId)
-      );
     } catch (error) {
       console.error("Error removing item:", error);
     }
@@ -210,8 +202,8 @@ export default function CartPage() {
             <CartItem
               key={item.id}
               item={item}
-              updateQuantity={updateQuantity}
-              removeItem={removeItem}
+              updateQuantity={handleUpdateQuantity}
+              removeItem={handleRemoveItem}
             />
           ))}
         </div>
