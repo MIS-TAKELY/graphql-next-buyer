@@ -70,7 +70,6 @@ const ProductCard = memo<ProductCardProps>(
                 alt={productData.imageAlt}
                 fill
                 sizes={sizes}
-                unoptimized
                 priority={priority}
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />

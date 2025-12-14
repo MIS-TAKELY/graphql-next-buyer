@@ -66,7 +66,6 @@ export const orderTypeDefs = gql`
     getMyOrderItems(limit: Int!, offset: Int!): [Order!]!
   }
   extend type Mutation {
-    createOrder(input: CreateOrderInput!): Order
-    createOrders(input: [CreateOrderInput!]!): [Order!]!
+    createOrder(input: [CreateOrderInput!]!): [Order!]!
   }
 `;

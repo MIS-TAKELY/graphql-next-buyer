@@ -33,7 +33,7 @@ export const PROCESS_PAYMENT = gql`
 `;
 
 export const CREATE_ORDER = gql`
-  mutation CreateOrder($input: CreateOrderInput!) {
+  mutation CreateOrder($input: [CreateOrderInput!]!) {
     createOrder(input: $input) {
       id
       orderNumber
@@ -46,22 +46,8 @@ export const CREATE_ORDER = gql`
   }
 `;
 
-export const CREATE_ORDERS = gql`
-  mutation CreateOrders($input: [CreateOrderInput!]!) {
-    createOrders(input: $input) {
-      id
-      orderNumber
-      status
-      subtotal
-      tax
-      shippingFee
-      total
-    }
-  }
-`;
-
 export const CREATE_CART_ORDER = gql`
-  mutation CreateOrder($input: CreateOrderInput!) {
+  mutation CreateOrder($input: [CreateOrderInput!]!) {
     createOrder(input: $input) {
       id
       orderNumber

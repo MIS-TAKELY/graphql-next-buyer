@@ -13,6 +13,7 @@ export interface GraphQLContext {
     email: string;
     firstName: string;
     lastName: string;
+    phone?: string | null; // Added phone
     roles: string[]; // ← Now an array of roles
   } | null;
   publish: (evt: {
@@ -42,6 +43,7 @@ export async function createContext(
           email: true,
           firstName: true,
           lastName: true,
+          phone: true, // Fetch phone
           roles: {
             select: { role: true }, // This pulls from UserRole table
           },
@@ -56,6 +58,7 @@ export async function createContext(
           roles: dbUser.roles.map((r) => r.role), // ← array of roles
           firstName: dbUser.firstName ?? "",
           lastName: dbUser.lastName ?? "",
+          phone: dbUser.phone, // Assign phone
         };
       } else {
         // Fallback: JIT Sync if user exists in Clerk but not in DB yet
@@ -66,6 +69,7 @@ export async function createContext(
           const client = await clerkClient();
           const cUser = await client.users.getUser(clerkId);
           const email = cUser.emailAddresses[0]?.emailAddress;
+          const phone = cUser.phoneNumbers?.[0]?.phoneNumber || null; // Extract phone
 
           if (email) {
             const firstName = cUser.firstName ?? "";
@@ -79,6 +83,7 @@ export async function createContext(
                 email,
                 firstName,
                 lastName,
+                phone, // Save phone
                 avatarImageUrl: cUser.imageUrl,
               },
               update: {
@@ -108,6 +113,7 @@ export async function createContext(
               roles: ["BUYER"],
               firstName: newUser.firstName ?? "",
               lastName: newUser.lastName ?? "",
+              phone: newUser.phone,
             };
 
             console.log(`[GraphQL Context] JIT Sync successful for ${email}`);

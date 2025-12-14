@@ -2,7 +2,6 @@
 
 import {
   CREATE_ORDER,
-  CREATE_ORDERS,
   INITIATE_ESEWA_PAYMENT,
 } from "@/client/payment/payment.mutations";
 import { useMutation } from "@apollo/client";
@@ -22,7 +21,7 @@ export function useBuyNow() {
   const router = useRouter();
 
   const [createOrder] = useMutation(CREATE_ORDER);
-  const [createOrders] = useMutation(CREATE_ORDERS);
+
   const [initiateEsewaPayment] = useMutation(INITIATE_ESEWA_PAYMENT);
 
   const handleAddressSaved = (newAddress: any) => {
@@ -96,7 +95,7 @@ export function useBuyNow() {
         ];
         console.log("ordersInput -->", ordersInput);
 
-        const ordersResult = await createOrders({
+        const ordersResult = await createOrder({
           variables: { input: ordersInput },
         });
 
@@ -109,7 +108,7 @@ export function useBuyNow() {
 
         // For eSewa, Khalti, etc., we’ll handle per order
         if (paymentProvider === "ESEWA") {
-          for (const order of ordersResult.data.createOrders) {
+          for (const order of ordersResult.data.createOrder) {
             const esewaResult = await initiateEsewaPayment({
               variables: { orderId: order.id },
             });
@@ -143,31 +142,33 @@ export function useBuyNow() {
       } else {
         // SINGLE ORDER CASE (existing logic)
         const variables = {
-          input: {
-            items: [
-              {
-                variantId: paymentData.variantId,
-                quantity: paymentData.quantity ?? 1,
+          input: [
+            {
+              items: [
+                {
+                  variantId: paymentData.variantId,
+                  quantity: paymentData.quantity ?? 1,
+                },
+              ],
+              shippingAddress: {
+                line1: selectedAddress?.line1,
+                label: selectedAddress?.label || "Shipping Address",
+                line2: selectedAddress?.line2 ?? null,
+                city: selectedAddress?.city,
+                state: selectedAddress?.state,
+                postalCode: selectedAddress?.postalCode,
+                country: selectedAddress?.country,
+                phone: selectedAddress?.phone || "",
               },
-            ],
-            shippingAddress: {
-              line1: selectedAddress?.line1,
-              label: selectedAddress?.label || "Shipping Address",
-              line2: selectedAddress?.line2 ?? null,
-              city: selectedAddress?.city,
-              state: selectedAddress?.state,
-              postalCode: selectedAddress?.postalCode,
-              country: selectedAddress?.country,
-              phone: selectedAddress?.phone || "",
+              billingAddress: null,
+              shippingMethod: paymentData.shippingMethod ?? "STANDARD",
+              paymentProvider,
             },
-            billingAddress: null,
-            shippingMethod: paymentData.shippingMethod ?? "STANDARD",
-            paymentProvider,
-          },
+          ],
         };
 
         const orderResult = await createOrder({ variables });
-        const orderId = orderResult.data?.createOrder?.id;
+        const orderId = orderResult.data?.createOrder?.[0]?.id;
 
         if (!orderResult) throw new Error("Failed to create order");
 

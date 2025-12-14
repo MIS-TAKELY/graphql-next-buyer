@@ -17,8 +17,35 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dai - E-Commerce Platform",
-  description: "Modern e-commerce platform for seamless online shopping",
+  title: {
+    default: "Dai - E-Commerce Platform",
+    template: "%s | Dai",
+  },
+  description: "Modern e-commerce platform for seamless online shopping. Discover the best deals on electronics, fashion, and more.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://dai-ecommerce.com"),
+  keywords: ["ecommerce", "shopping", "electronics", "fashion", "online store"],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    title: "Dai - E-Commerce Platform",
+    description: "Modern e-commerce platform for seamless online shopping. Discover the best deals on electronics, fashion, and more.",
+    siteName: "Dai",
+    images: [
+      {
+        url: "/og-image.jpg", // Ensure this exists or fallback
+        width: 1200,
+        height: 630,
+        alt: "Dai E-Commerce",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dai - E-Commerce Platform",
+    description: "Modern e-commerce platform for seamless online shopping.",
+    images: ["/og-image.jpg"],
+  },
   manifest: "/manifest.json",
   icons: {
     icon: "/favicon.ico",

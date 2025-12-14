@@ -1,6 +1,5 @@
 import { Prisma } from "@/app/generated/prisma";
 import { prisma } from "@/lib/db/prisma";
-import { createAndPushNotification } from "@/lib/notification";
 import { generateOrderNumber } from "@/randomOrderNumber";
 import { senMail } from "@/services/nodeMailer.services";
 import { requireAuth, requireBuyer } from "../../auth/auth";
@@ -119,236 +118,6 @@ export const orderResolvers = {
   Mutation: {
     createOrder: async (
       _: any,
-      { input }: { input: OrderInput },
-      ctx: GraphQLContext
-    ) => {
-      const user = requireAuth(ctx);
-      requireBuyer(ctx);
-
-      // 1) Load variants and compute base pricing
-
-      // console.log("orider input-->",input)
-      const variantIds = input.items.map((i) => i.variantId);
-      const variants = await prisma.productVariant.findMany({
-        where: { id: { in: variantIds } },
-        include: {
-          product: {
-            select: {
-              id: true,
-              status: true,
-              sellerId: true,
-              seller: {
-                select: {
-                  email: true,
-                  clerkId: true,
-                },
-              },
-              categoryId: true,
-            },
-          },
-        },
-      });
-      const byId = new Map(variants.map((v) => [v.id, v]));
-      let subtotal = 0;
-
-      const computedItems = input.items.map((i) => {
-        const v = byId.get(i.variantId);
-
-        if (!v) throw new Error("Variant not found");
-        if (v.product.status !== "ACTIVE") throw new Error("Product inactive");
-        if (v.stock !== null && v.stock < i.quantity)
-          throw new Error("Insufficient stock");
-
-        const unitPrice = v.price.toNumber();
-        const totalPrice = i.quantity * unitPrice;
-        subtotal += totalPrice;
-
-        return {
-          variantId: i.variantId,
-          quantity: i.quantity,
-          unitPrice,
-          totalPrice,
-          sellerId: v.product.sellerId,
-          productId: v.product.id,
-          categoryId: v.product.categoryId,
-        };
-      });
-
-      let discountCalculation: DiscountCalculation = {
-        discountAmount: 0,
-        appliedDiscounts: [],
-      };
-
-      const tax = Math.round(subtotal * 0.18);
-      const shippingFee = 0;
-      const discount = discountCalculation.discountAmount;
-      const total = subtotal + tax + shippingFee - discount;
-      const orderNumber = generateOrderNumber();
-
-      try {
-        const order = await prisma.$transaction(
-          async (tx) => {
-            const created = await tx.order.create({
-              data: {
-                orderNumber,
-                buyerId: user.id,
-                status: "PENDING",
-                shippingSnapshot: input.shippingAddress,
-                billingSnapshot: input.billingAddress ?? Prisma.JsonNull,
-                subtotal,
-                tax,
-                shippingFee,
-                discount,
-                total,
-                items: {
-                  create: computedItems.map((ci) => ({
-                    variantId: ci.variantId,
-                    quantity: ci.quantity,
-                    unitPrice: ci.unitPrice,
-                    totalPrice: ci.totalPrice,
-                  })),
-                },
-                payments: {
-                  create: {
-                    amount: total,
-                    currency: "INR",
-                    status: "PENDING",
-                    provider: input.paymentProvider,
-                    methodId: input.paymentMethodId ?? null,
-                    productCode: "",
-                  },
-                },
-                shipments: {
-                  create: {
-                    method: input.shippingMethod as any,
-                    status: "PENDING",
-                  },
-                },
-              },
-              include: {
-                items: { include: { variant: true } },
-                payments: true,
-                shipments: true,
-              },
-            });
-
-            const itemsBySeller: Record<string, typeof computedItems> = {};
-            for (const ci of computedItems) {
-              if (!itemsBySeller[ci.sellerId]) {
-                itemsBySeller[ci.sellerId] = [];
-              }
-              itemsBySeller[ci.sellerId].push(ci);
-            }
-
-            for (const [sellerId, items] of Object.entries(itemsBySeller)) {
-              const sellerSubtotal = items.reduce(
-                (acc, i) => acc + Number(i.totalPrice),
-                0
-              );
-              const commissionRate = 0.1; // 10% marketplace fee
-              const commission = Math.round(sellerSubtotal * commissionRate);
-
-              await tx.sellerOrder.create({
-                data: {
-                  buyerOrderId: created.id,
-                  sellerId,
-                  status: "PENDING",
-                  subtotal: sellerSubtotal,
-                  total: sellerSubtotal, // or subtotal - commission for net earnings
-                  commission,
-                  items: {
-                    create: items.map((ci) => ({
-                      variantId: ci.variantId,
-                      quantity: ci.quantity,
-                      unitPrice: ci.unitPrice,
-                      totalPrice: ci.totalPrice,
-                      commission: Math.round(
-                        Number(ci.totalPrice) * commissionRate
-                      ),
-                    })),
-                  },
-                },
-                include: { items: true },
-              });
-            }
-
-            // After creating the order(s) — add this block
-
-            const buyerName =
-              `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
-              "A customer";
-
-            for (const [sellerId, items] of Object.entries(itemsBySeller)) {
-              const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
-              const total = items.reduce(
-                (sum, i) => sum + Number(i.totalPrice),
-                0
-              );
-
-              await createAndPushNotification({
-                userId: sellerId,
-                title: "New Order Received!",
-                recieverClerkId:variants[0].product.seller.clerkId,
-                body: `${buyerName} placed order #${created.orderNumber} • ${itemCount} items`,
-                type: "NEW_ORDER",
-                data: {
-                  orderId: created.id,
-                  orderNumber: created.orderNumber,
-                  total,
-                  itemCount,
-                },
-              });
-            }
-
-            await Promise.all(
-              computedItems.map((ci) =>
-                tx.productVariant.update({
-                  where: { id: ci.variantId },
-                  data: { stock: { decrement: ci.quantity } },
-                })
-              )
-            );
-
-            // (f) Clear cart ---> optional
-            // await tx.cartItem.deleteMany({
-            //   where: { userId: user.id, variantId: { in: variantIds } },
-            // });
-
-            return created;
-          },
-          { timeout: 30000 }
-        );
-
-        // Send emails to each unique seller after transaction
-        const itemsBySeller: Record<string, typeof computedItems> = {};
-        for (const ci of computedItems) {
-          if (!itemsBySeller[ci.sellerId]) {
-            itemsBySeller[ci.sellerId] = [];
-          }
-          itemsBySeller[ci.sellerId].push(ci);
-        }
-
-        for (const [sellerId, items] of Object.entries(itemsBySeller)) {
-          const sellerEmail = variants.find(
-            (v) => v.product.sellerId === sellerId
-          )?.product.seller?.email;
-          if (sellerEmail) {
-            console.log("sending mail to seller:", sellerEmail);
-            const info = await senMail(sellerEmail);
-            console.log("mail response-->", info);
-          }
-        }
-
-        console.log("order placed---->", order);
-
-        return order;
-      } catch (error: any) {
-        console.error("Error while creating order:", error.message);
-        throw new Error("Failed to create order");
-      }
-    },
-    createOrders: async (
-      _: any,
       { input }: { input: OrderInput[] },
       ctx: GraphQLContext
     ) => {
@@ -375,6 +144,7 @@ export const orderResolvers = {
                       seller: {
                         select: {
                           email: true,
+                          phone: true,
                         },
                       },
                     },
@@ -528,6 +298,7 @@ export const orderResolvers = {
                   seller: {
                     select: {
                       email: true,
+                      phone: true,
                     },
                   },
                 },
@@ -539,9 +310,14 @@ export const orderResolvers = {
             const v = variants.find((vv) => vv.id === i.variantId);
             if (!v) throw new Error("Variant not found");
 
+            const unitPrice = v.price.toNumber();
+            const totalPrice = i.quantity * unitPrice;
+
             return {
               variantId: i.variantId,
               quantity: i.quantity,
+              unitPrice,
+              totalPrice,
               sellerId: v.product.sellerId,
             };
           });
@@ -553,13 +329,51 @@ export const orderResolvers = {
           }
 
           for (const [sellerId, items] of Object.entries(itemsBySeller)) {
-            const sellerEmail = variants.find(
-              (v) => v.product.sellerId === sellerId
-            )?.product.seller?.email;
-            if (sellerEmail) {
-              console.log("sending mail to seller:", sellerEmail);
-              const info = await senMail(sellerEmail);
+            const seller = variants.find((v) => v.product.sellerId === sellerId)
+              ?.product.seller;
+
+            if (seller?.email) {
+              console.log("sending mail to seller:", seller.email);
+              const info = await senMail(seller.email);
               console.log("mail response-->", info);
+            }
+
+            if (seller?.phone) {
+              const sellerTotal = items.reduce(
+                (acc, i) => acc + Number(i.totalPrice),
+                0
+              );
+
+              // Construct WhatsApp message - FIXED: Added backticks for template literal
+              const message = `🛒 New Order Received!
+                Order Total: ₹${sellerTotal}
+                Customer: ${user.firstName || ""} ${user.lastName || ""}
+                Phone: ${user.phone || "N/A"}`;
+
+              // Send WhatsApp via your worker
+              console.log("sending whatsapp to seller:", seller.phone);
+
+              try {
+                const wppConnectUrl = process.env.WPP_CONNECT;
+
+                if (!wppConnectUrl) {
+                  throw new Error(
+                    "WPP_CONNECT environment variable is not defined"
+                  );
+                }
+
+                await fetch(wppConnectUrl, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    phone: seller.phone.toString(),
+                    message,
+                  }),
+                });
+              } catch (whatsappError) {
+                console.error("Failed to send WhatsApp:", whatsappError);
+                // Don't throw - allow order to complete even if WhatsApp fails
+              }
             }
           }
         }
