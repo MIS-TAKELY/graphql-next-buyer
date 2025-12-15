@@ -18,8 +18,7 @@ export async function getServerApolloClient() {
 
   const httpLink = createHttpLink({
     uri:
-      ` ${process.env.NEXT_PUBLIC_APP_URL}/api/graphql` ||
-      "http://localhost:3000/api/graphql",
+      `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/graphql`,
   });
 
   const authLink = setContext((_, { headers }) => ({

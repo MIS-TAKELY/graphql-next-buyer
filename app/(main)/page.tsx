@@ -37,14 +37,19 @@ export default async function HomePage() {
   let products: IProducts[] = (await CacheService.get<IProducts[]>(CACHE_KEY)) || [];
 
   if (products.length === 0) {
-    const productsResponse = await client.query({
-      query: GET_PRODUCTS,
-      fetchPolicy: "no-cache",
-      errorPolicy: "all",
-    });
-    products = productsResponse?.data?.getProducts || [];
-    if (products.length > 0) {
-      await CacheService.set(CACHE_KEY, products, 3600); // Cache for 1 hour
+    try {
+      const productsResponse = await client.query({
+        query: GET_PRODUCTS,
+        fetchPolicy: "no-cache",
+        errorPolicy: "all",
+      });
+      products = productsResponse?.data?.getProducts || [];
+      if (products.length > 0) {
+        await CacheService.set(CACHE_KEY, products, 3600); // Cache for 1 hour
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      products = []; // Ensure products is empty array on error
     }
   }
 
@@ -67,8 +72,8 @@ export default async function HomePage() {
 
   const sections: SectionConfig[] = [
     { name: "Today's Best Deals", products: sharedSlice, count: 8, layout: "horizontal" },
-    { name: "Top Offers", products: sharedSlice, count: 6, layout: "grid" },
-    { name: "Recommended For You", products: sharedSlice, count: 6, layout: "grid" },
+    { name: "Top Offers", products: sharedSlice, count: 8, layout: "horizontal" },
+    { name: "Recommended For You", products: sharedSlice, count: 8, layout: "horizontal" },
   ];
 
   return (

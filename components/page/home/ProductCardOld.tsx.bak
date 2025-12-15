@@ -80,15 +80,15 @@ const ProductCard = memo<ProductCardProps>(
               </div>
             )}
 
-            {/* Image Container - Use aspect-ratio for responsive height based on width */}
-            <div className="aspect-[4/5] relative bg-white overflow-hidden">
+            {/* Image Container - Fixed height for consistency */}
+            <div className="h-[200px] sm:h-[250px] relative bg-white overflow-hidden">
               <Image
                 src={productData.imageUrl}
                 alt={productData.imageAlt}
                 fill
                 sizes={sizes}
                 priority={priority}
-                className="object-contain"
+                className="object-contain p-4"
               />
             </div>
 
@@ -99,7 +99,6 @@ const ProductCard = memo<ProductCardProps>(
 
               {/* Always render this div with min-height to reserve space for consistency */}
               <div className="flex items-center gap-2 min-h-[20px]">
-                {/* Green Star Rating Badge */}
                 {productData.hasReviews && (
                   <div className="flex items-center gap-1 bg-green-700 text-white px-1.5 py-0.5 rounded-[2px] text-[10px] font-bold">
                     <span>{productData.avgRating.toFixed(1)}</span>
@@ -113,7 +112,8 @@ const ProductCard = memo<ProductCardProps>(
                 )}
               </div>
 
-              <div className="flex items-baseline gap-2 mt-0.5">
+              <div className="flex items-baseline gap-2">
+                {/* Removed mt-0.5 here for uniform gap reliance; add back if needed after testing */}
                 <span className="font-bold text-base text-foreground">
                   {formatPrice(productData.price)}
                 </span>
