@@ -4,6 +4,7 @@ import { generateOrderNumber } from "@/randomOrderNumber";
 import { senMail } from "@/services/nodeMailer.services";
 import { requireAuth, requireBuyer } from "../../auth/auth";
 import { GraphQLContext } from "../../context";
+import { delCache } from "@/services/redis.services";
 
 // interface OrderInput {
 //   items: Array<{
@@ -141,16 +142,18 @@ export const orderResolvers = {
                       status: true,
                       sellerId: true,
                       categoryId: true,
+                      slug: true,
                       seller: {
-                        select: {
-                          email: true,
-                          phone: true,
+                        seller: {
+                          select: {
+                            email: true,
+                            phone: true,
+                          },
                         },
                       },
                     },
                   },
-                },
-              });
+                });
 
               console.log("orderInput-->", orderInput);
 
@@ -282,6 +285,22 @@ export const orderResolvers = {
           },
           { timeout: 60000 }
         );
+
+        // Invalidate cache for affected products (Stock update)
+        for (const orderInput of input) {
+          const variantIds = orderInput.items.map((i) => i.variantId);
+          // We need to re-fetch or assume distinct slugs from the transaction block. 
+          // Simpler to just re-fetch slugs for invalidation safely outside tx.
+          const products = await prisma.product.findMany({
+            where: { variants: { some: { id: { in: variantIds } } } },
+            select: { slug: true }
+          });
+
+          for (const p of products) {
+            console.log(`🗑️ Invalidating cache for product: ${p.slug}`);
+            await delCache(`product:${p.slug}`);
+          }
+        }
 
         // Send emails to each unique seller for each order after transaction
         for (const orderInput of input) {

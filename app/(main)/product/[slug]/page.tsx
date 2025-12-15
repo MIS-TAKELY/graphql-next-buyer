@@ -4,6 +4,7 @@ import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
 import { TProduct } from "@/types/product";
 import { Metadata, ResolvingMetadata } from "next";
+import { CacheService } from "@/services/CacheService";
 
 export const revalidate = 3600;
 
@@ -13,6 +14,11 @@ type Props = {
 };
 
 async function getProduct(slug: string) {
+  const CACHE_KEY = CacheService.generateKey("product", slug);
+  let product: TProduct | null = await CacheService.get<TProduct>(CACHE_KEY);
+
+  if (product) return product;
+
   const client = await getServerApolloClient();
   try {
     const { data } = await client.query({
@@ -20,7 +26,13 @@ async function getProduct(slug: string) {
       variables: { slug },
       fetchPolicy: "no-cache",
     });
-    return data?.getProductBySlug as TProduct | null;
+    product = data?.getProductBySlug as TProduct | null;
+
+    if (product) {
+      await CacheService.set(CACHE_KEY, product, 3600);
+    }
+
+    return product;
   } catch (error) {
     console.error("Error fetching product:", error);
     return null;
@@ -75,25 +87,29 @@ export default async function ProductPage({
   const client = await getServerApolloClient();
 
   let product: TProduct | null = null;
+  const CACHE_KEY = CacheService.generateKey("product", slug);
 
+  product = await CacheService.get<TProduct>(CACHE_KEY);
 
-  const { data, error } = await client.query({
-    query: GET_PRODUCT_BY_SLUG,
-    variables: { slug },
-    fetchPolicy: "cache-first",
-  });
+  if (!product) {
+    const { data, error } = await client.query({
+      query: GET_PRODUCT_BY_SLUG,
+      variables: { slug },
+      fetchPolicy: "no-cache", // fetch fresh if no redis cache
+    });
 
-  if (error) {
-    console.error("Error fetching product by slug:", error);
-    return <div>Error: {error.message}</div>;
+    if (error) {
+      console.error("Error fetching product by slug:", error);
+      return <div>Error: {error.message}</div>;
+    }
+
+    product = data?.getProductBySlug;
+    if (product) {
+      await CacheService.set(CACHE_KEY, product, 3600);
+    }
   }
 
-  if (!data?.getProductBySlug) {
-    return <div>Product not found</div>;
-  }
-
-  product = data.getProductBySlug;
-
+  // Handle case where product is still null (from DB and no error)
   if (!product) {
     return <div>Product not found</div>;
   }

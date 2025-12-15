@@ -1,6 +1,7 @@
 import { GET_TOP_DEALS } from "@/client/landing/topdeals.query";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import LandingPageProductGrid from "./LandingPageProductGrid";
+import { CacheService } from "@/services/CacheService";
 
 export const LandingPageProductGridWrapper = async ({
   title,
@@ -9,7 +10,7 @@ export const LandingPageProductGridWrapper = async ({
 }: {
   title: string;
   isLast?: boolean;
-  topDealAbout:string
+  topDealAbout: string
 }) => {
   const client = await getServerApolloClient();
 
@@ -17,17 +18,29 @@ export const LandingPageProductGridWrapper = async ({
   let error;
 
   try {
-    const response = await client.query({
-      query: GET_TOP_DEALS,
-      variables: {
-        topDealAbout,
-        limit: 4,
-      },
-      fetchPolicy: "cache-first",
-    });
-    data = response.data;
+    const CACHE_KEY = CacheService.generateKey("top-deals", `${topDealAbout}-limit-4`);
+    // Need to type the cache response correctly or cast it
+    const cachedData = await CacheService.get<any>(CACHE_KEY);
 
-    console.log("data-->",data)
+    if (cachedData) {
+      data = cachedData;
+    } else {
+      const response = await client.query({
+        query: GET_TOP_DEALS,
+        variables: {
+          topDealAbout,
+          limit: 4,
+        },
+        fetchPolicy: "no-cache",
+      });
+      data = response.data;
+
+      if (data) {
+        await CacheService.set(CACHE_KEY, data, 3600);
+      }
+    }
+
+    console.log("data-->", data)
   } catch (err) {
     console.error("Error fetching top deals:", err);
     error = err;
