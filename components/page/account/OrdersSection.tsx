@@ -58,16 +58,15 @@ export default function OrdersSection() {
           <EmptyOrders />
         ) : (
           <div>
-            {" "}
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               {loading
                 ? SKELETONS.map((_, i) => <OrderItemSkeleton key={i} />)
                 : orders.map((orderItem) => (
-                    <OrderItem
-                      key={orderItem.id}
-                      order={orderItem.items[0].order}
-                    />
-                  ))}
+                  <OrderItem
+                    key={orderItem.id}
+                    order={orderItem.items[0].order}
+                  />
+                ))}
             </div>
             {/* Pagination Controls */}
             <div className="flex justify-between mt-6">
@@ -75,6 +74,7 @@ export default function OrdersSection() {
                 onClick={handlePrev}
                 disabled={page === 0 || loading}
                 variant="outline"
+                size="sm"
               >
                 Previous
               </Button>
@@ -82,6 +82,7 @@ export default function OrdersSection() {
                 onClick={handleNext}
                 disabled={orders.length < PAGE_SIZE || loading}
                 variant="outline"
+                size="sm"
               >
                 Next
               </Button>

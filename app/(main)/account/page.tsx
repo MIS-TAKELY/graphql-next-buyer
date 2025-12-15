@@ -71,13 +71,9 @@ export default async function AccountPage() {
 
   return (
     <div className="min-h-screen ">
-      <div className="container mx-auto py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <SSRApolloProvider initialData={initialData}>
-            <AccountClient user={mockUser} />
-          </SSRApolloProvider>
-        </div>
-      </div>
+      <SSRApolloProvider initialData={initialData}>
+        <AccountClient user={mockUser} />
+      </SSRApolloProvider>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import electronicsDeal from "@/assets/electronics-deal.jpg";
 import fashionDiscount from "@/assets/fashion-discount.jpg";
 import festivalSale from "@/assets/festival-sale.jpg";
 import { Button } from "@/components/ui/button";
+import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import { memo, useCallback, useEffect, useState } from "react";
@@ -48,142 +49,110 @@ interface SlideProps {
     subtitle: string;
     description: string;
   };
-  isHovered: boolean;
+  isActive: boolean;
 }
 
-const Slide = memo(({ slide, isHovered }: SlideProps) => (
-  <div className="min-w-full relative">
+const Slide = memo(({ slide, isActive }: SlideProps) => (
+  <div className="relative h-full w-full flex-[0_0_100%] min-w-0">
     <Image
       src={slide.image}
       alt={slide.title}
       fill
-      className={`object-cover z-0 transition-all duration-300 ${isHovered ? "filter blur-sm" : ""
+      className={`object-cover z-0 transition-all duration-700 ${isActive ? "scale-100 blur-0" : "scale-105 blur-sm"
         }`}
       sizes="100vw"
       priority={slide.id === 1}
-      {...(slide.id === 1 ? { fetchPriority: "high" } : {})}
     />
-    <div
-      className="absolute inset-0 flex items-center justify-center transition-all duration-300 bg-black/30 hover:bg-black/60"
-      style={{}}
-
-    >
-      <div className="text-center text-white dark:text-gray-200 px-4 w-full max-w-[90%] sm:max-w-[80%] md:max-w-[70%] lg:max-w-[60%]">
-        <h2
-          className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-2 drop-shadow-lg transition-all duration-300"
-          style={{
-            transform: isHovered ? "translateY(0)" : "translateY(20px)",
-            opacity: isHovered ? 1 : 0,
-          }}
-        >
+    <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+      <div className={`text-center text-white px-4 max-w-[90%] sm:max-w-[70%] transition-all duration-700 delay-100 ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        }`}>
+        <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 drop-shadow-xl">
           {slide.title}
         </h2>
-        <p
-          className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-2 font-semibold drop-shadow-md transition-all duration-300 text-secondary dark:text-gray-300"
-          style={{
-            transform: isHovered ? "translateY(0)" : "translateY(30px)",
-            opacity: isHovered ? 1 : 0,
-          }}
-        >
+        <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-4 font-medium text-gray-200 drop-shadow-md">
           {slide.subtitle}
         </p>
-        <p
-          className="text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 max-w-[90%] mx-auto drop-shadow-md transition-all duration-300 text-white dark:text-gray-300"
-          style={{
-            transform: isHovered ? "translateY(0)" : "translateY(40px)",
-            opacity: isHovered ? 1 : 0,
-          }}
-        >
+        <p className="text-sm sm:text-base md:text-lg mb-6 max-w-2xl mx-auto text-gray-300 hidden sm:block">
           {slide.description}
         </p>
-        <div
-          className="transition-all duration-300"
-          style={{
-            transform: isHovered ? "translateY(0)" : "translateY(50px)",
-            opacity: isHovered ? 1 : 0,
-          }}
-        >
-          <Button className="btn-hero text-sm sm:text-base md:text-lg px-6 sm:px-8 py-2 sm:py-3 bg-white dark:bg-gray-800 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-            Shop Now
-          </Button>
-        </div>
+        <Button className="rounded-full px-8 py-6 text-lg bg-white text-black hover:bg-gray-100 border-none">
+          Shop Now
+        </Button>
       </div>
     </div>
   </div>
 ));
-
 Slide.displayName = "Slide";
 
 export default function HeroCarousel() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 30 });
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
-  }, []);
-
-  const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
-  }, []);
-
-  const goToSlide = useCallback((index: number) => {
-    setCurrentSlide(index);
-  }, []);
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
 
   useEffect(() => {
-    if (isHovered) return;
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
 
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
+    // Auto-play
+    const autoplay = setInterval(() => {
+      if (emblaApi.canScrollNext()) {
+        emblaApi.scrollNext();
+      }
     }, 5000);
 
-    return () => clearInterval(timer);
-  }, [isHovered]);
+    return () => {
+      clearInterval(autoplay);
+    }
+  }, [emblaApi, onSelect]);
+
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
   return (
-    <div className="container-custom">
-      <div
-        className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] xl:h-[80vh] max-h-[300px] overflow-hidden bg-gradient-to-r from-primary to-secondary dark:from-gray-800 dark:to-gray-900"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* Slides */}
-        <div
-          className="flex transition-transform duration-500 ease-in-out h-full"
-          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-        >
-          {SLIDES.map((slide) => (
-            <Slide key={slide.id} slide={slide} isHovered={isHovered} />
-          ))}
+    <div className="container-custom py-4 sm:py-6">
+      <div className="relative h-[250px] sm:h-[400px] md:h-[500px] lg:h-[600px] w-full rounded-2xl overflow-hidden shadow-2xl group">
+
+        {/* Carousel Viewport */}
+        <div className="overflow-hidden h-full" ref={emblaRef}>
+          <div className="flex h-full touch-pan-y">
+            {SLIDES.map((slide, index) => (
+              <Slide key={slide.id} slide={slide} isActive={index === selectedIndex} />
+            ))}
+          </div>
         </div>
 
-        {/* Navigation Arrows */}
+        {/* Navigation Buttons */}
         <Button
           variant="ghost"
-          onClick={prevSlide}
-          className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/20 p-2 sm:p-3 z-10"
-          aria-label="Previous slide"
+          size="icon"
+          onClick={scrollPrev}
+          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white rounded-full p-2 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-0"
         >
-          <ChevronLeftIcon className="h-5 w-5 sm:h-6 sm:w-6" />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={nextSlide}
-          className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/20 p-2 sm:p-3 z-10"
-          aria-label="Next slide"
-        >
-          <ChevronRightIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+          <ChevronLeftIcon className="w-6 h-6 sm:w-8 sm:h-8" />
         </Button>
 
-        {/* Dots Indicator */}
-        <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-1 sm:space-x-2 z-10">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={scrollNext}
+          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white rounded-full p-2 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-0"
+        >
+          <ChevronRightIcon className="w-6 h-6 sm:w-8 sm:h-8" />
+        </Button>
+
+        {/* Dots */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
           {SLIDES.map((_, index) => (
             <button
               key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-2 h-2 sm:w-3 sm:h-3 transition-opacity bg-white dark:bg-gray-200 rounded-full ${index === currentSlide
-                ? "opacity-100"
-                : "opacity-50"
+              onClick={() => emblaApi?.scrollTo(index)}
+              className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${index === selectedIndex ? "bg-white w-6 sm:w-8" : "bg-white/50 hover:bg-white/80"
                 }`}
               aria-label={`Go to slide ${index + 1}`}
             />

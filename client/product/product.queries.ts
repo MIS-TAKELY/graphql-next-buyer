@@ -68,6 +68,8 @@ export const GET_PRODUCT_BY_SLUG = gql`
       description
       slug
       status
+      returnPolicy
+      warranty
       images {
         id
         url

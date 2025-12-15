@@ -173,7 +173,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
       />
 
       <div className="container-custom py-4 sm:py-6 lg:py-8 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-[45%_55%] gap-8 xl:gap-12 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[4.5fr_5.5fr] gap-8 xl:gap-12 mb-12">
           {/* LEFT COLUMN - FIXED */}
           <div className="space-y-6 lg:sticky lg:top-24 h-fit self-start">
             <ProductGallery
@@ -206,7 +206,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
               <DeliveryInfo
-                warranty={product.warranty || "No warranty information"}
+                warranty={product.warranty || ""}
+                returnPolicy={product.returnPolicy}
+                deliveryOptions={product.deliveryOptions}
               />
               <SellerInfo sellerName={sellerName} />
             </div>
@@ -219,7 +221,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           <ProductReviews />
         </div>
 
-        <RecommendedProducts currentProductId={product.id || ""} title="Similar Products" />
+        <RecommendedProducts currentProductId={product.id || ""} title="Recommended for You" />
         <RecommendedProducts currentProductId={product.id || ""} title="Frequently Bought Together" />
 
         {/* Zoom Viewer Overlay - Fixed Position over right column */}

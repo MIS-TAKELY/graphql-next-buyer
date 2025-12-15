@@ -1,7 +1,11 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import useEmblaCarousel from "embla-carousel-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import ImageZoomViewer from "./ImageZoomViewer";
 
 interface ProductImage {
   id: string;
@@ -21,42 +25,7 @@ interface ProductGalleryProps {
   }) => void;
 }
 
-function usePointerHoverCapability() {
-  const [canHover, setCanHover] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const update = () => setCanHover(mq.matches);
-    update();
-    try {
-      mq.addEventListener("change", update);
-      return () => mq.removeEventListener("change", update);
-    } catch {
-      // Safari fallback
-      mq.addListener(update);
-      return () => mq.removeListener(update);
-    }
-  }, []);
-  return canHover;
-}
-
-function useRafThrottledCallback<T extends (...args: any[]) => void>(cb?: T) {
-  const cbRef = useRef(cb);
-  const frame = useRef<number | null>(null);
-  cbRef.current = cb;
-
-  return useCallback(
-    ((...args: any[]) => {
-      if (!cbRef.current) return;
-      if (frame.current !== null) return;
-      frame.current = requestAnimationFrame(() => {
-        frame.current = null;
-        cbRef.current?.(...args);
-      });
-    }) as T,
-    []
-  );
-}
+const PLACEHOLDER_IMAGE = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTZlNmU2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjOTA5MDkwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+";
 
 const ProductGallery = memo(function ProductGallery({
   images,
@@ -64,276 +33,150 @@ const ProductGallery = memo(function ProductGallery({
   onImageHover,
 }: ProductGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [imageLoading, setImageLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
-  const canHover = usePointerHoverCapability();
-
+  // Filter valid images
   const displayImages = useMemo<ProductImage[]>(() => {
     if (!images || images.length === 0) return [];
     return images.filter((image) => image.mediaType !== "PROMOTIONAL");
   }, [images]);
 
-  const currentImage =
-    displayImages[Math.min(selectedImage, displayImages.length - 1)];
-
-  const handleImageSelect = useCallback((index: number) => {
-    setSelectedImage(index);
-    setImageLoading(true);
-    setImageError(false);
+  // Check viewport for desktop zoom
+  useEffect(() => {
+    const checkDesktop = () => setIsDesktop(window.matchMedia("(min-width: 1024px)").matches);
+    checkDesktop();
+    window.addEventListener("resize", checkDesktop);
+    return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
-  const handleImageLoad = useCallback(() => {
-    setImageLoading(false);
-  }, []);
+  // Sync state with Embla
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedImage(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
 
-  const handleImageError = useCallback(() => {
-    setImageLoading(false);
-    setImageError(true);
-  }, []);
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+  }, [emblaApi, onSelect]);
 
-  const throttledHover = useRafThrottledCallback(onImageHover);
+  const scrollTo = useCallback((index: number) => {
+    if (emblaApi) emblaApi.scrollTo(index);
+  }, [emblaApi]);
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!throttledHover || imageError || imageLoading || !canHover) return;
-      const rect = e.currentTarget.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      throttledHover({
-        isHovering: true,
-        imageUrl: currentImage?.url || "/placeholder.svg",
-        position: { x, y },
-      });
-    },
-    [throttledHover, imageError, imageLoading, canHover, currentImage?.url]
-  );
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+
+  // Desktop Hover Zoom Logic
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDesktop || !onImageHover) return;
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+
+    // Use placeholder URL if the current image has failed
+    const currentId = displayImages[selectedImage]?.id;
+    const imageUrl = (currentId && failedImages[currentId])
+      ? PLACEHOLDER_IMAGE
+      : (displayImages[selectedImage]?.url || "");
+
+    onImageHover({
+      isHovering: true,
+      imageUrl,
+      position: { x, y }
+    });
+  }, [isDesktop, onImageHover, displayImages, selectedImage, failedImages]);
 
   const handleMouseLeave = useCallback(() => {
-    if (!onImageHover) return;
-    onImageHover({
-      isHovering: false,
-      imageUrl: "",
-      position: { x: 50, y: 50 },
-    });
+    if (onImageHover) {
+      onImageHover({ isHovering: false, imageUrl: "", position: { x: 0, y: 0 } });
+    }
   }, [onImageHover]);
 
-  const onThumbKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleImageSelect(index);
-      }
-    },
-    [handleImageSelect]
-  );
-
-  // Touch navigation and Zoom logic for mobile
-  const touchStartX = useRef(0);
-  const touchStartY = useRef(0);
-  const touchEndX = useRef(0);
-
-  // Long press for Zoom
-  const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const isLongPressRef = useRef(false);
-
-  // Helper to get touch position relative to element
-  const getTouchPos = (e: React.TouchEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const touch = e.touches[0];
-    const x = ((touch.clientX - rect.left) / rect.width) * 100;
-    const y = ((touch.clientY - rect.top) / rect.height) * 100;
-    return { x, y };
-  };
-
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    touchStartX.current = e.touches[0].screenX;
-    touchStartY.current = e.touches[0].screenY;
-    isLongPressRef.current = false;
-
-    // Calculate position synchronously as e.currentTarget is not available in setTimeout
-    const { x, y } = getTouchPos(e);
-
-    // Start long press timer
-    longPressTimerRef.current = setTimeout(() => {
-      isLongPressRef.current = true;
-      if (throttledHover) {
-        throttledHover({
-          isHovering: true,
-          imageUrl: currentImage?.url || "/placeholder.svg",
-          position: { x, y },
-        });
-      }
-    }, 300); // 300ms for long press
-  };
-
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    // If zooming (long press active), track movement and prevent scroll
-    if (isLongPressRef.current) {
-      if (e.cancelable) e.preventDefault(); // Prevent scrolling
-      if (throttledHover) {
-        const { x, y } = getTouchPos(e);
-        throttledHover({
-          isHovering: true,
-          imageUrl: currentImage?.url || "/placeholder.svg",
-          position: { x, y },
-        });
-      }
-      return;
-    }
-
-    // Check if moved enough to cancel long press
-    const moveX = Math.abs(e.touches[0].screenX - touchStartX.current);
-    const moveY = Math.abs(e.touches[0].screenY - touchStartY.current);
-
-    if (moveX > 10 || moveY > 10) {
-      if (longPressTimerRef.current) {
-        clearTimeout(longPressTimerRef.current);
-        longPressTimerRef.current = null;
-      }
-    }
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
-    // Clean up long press
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-      longPressTimerRef.current = null;
-    }
-
-    // If we were zooming, stop zooming
-    if (isLongPressRef.current) {
-      isLongPressRef.current = false;
-      if (throttledHover) {
-        throttledHover({
-          isHovering: false,
-          imageUrl: "",
-          position: { x: 50, y: 50 },
-        });
-      }
-      return;
-    }
-
-    // Existing Swipe Logic
-    touchEndX.current = e.changedTouches[0].screenX;
-    const deltaX = touchStartX.current - touchEndX.current;
-
-    if (Math.abs(deltaX) > 50) {
-      if (deltaX > 0) {
-        handleImageSelect(Math.min(selectedImage + 1, displayImages.length - 1));
-      } else {
-        handleImageSelect(Math.max(selectedImage - 1, 0));
-      }
-    }
-  };
-
-  const handleContextMenu = (e: React.MouseEvent) => {
-    // Prevent context menu on long press to ensure zoom feels native
-    e.preventDefault();
-  };
+  const handleImageError = useCallback((id: string) => {
+    setFailedImages(prev => ({ ...prev, [id]: true }));
+  }, []);
 
   return (
-    <div className="flex flex-col-reverse md:flex-row gap-4">
-      {/* Thumbnail Navigation */}
+    <div className="flex flex-col-reverse lg:flex-row gap-4 h-full">
+      {/* Thumbnails - Desktop (Vertical) / Mobile (Horizontal) */}
       {displayImages.length > 1 && (
-        <div
-          className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto max-h-[600px] scrollbar-hide py-1 px-1"
-          role="tablist"
-          aria-label="Product image thumbnails"
-        >
-          {displayImages.map((image, index) => {
-            const isSelected = selectedImage === index;
-            return (
-              <button
-                key={image.id || index}
-                onClick={() => handleImageSelect(index)}
-                onKeyDown={(e) => onThumbKeyDown(e, index)}
-                className={`
-                  flex-shrink-0 w-16 h-16 md:w-20 md:h-20
-                  overflow-hidden border-2 transition-all duration-300 transform
-                  focus:outline-none focus:ring-2 focus:ring-primary
-                  ${isSelected
-                    ? "border-primary ring-2 ring-primary/30 scale-105"
-                    : "border-border hover:border-primary/50"
-                  }
-                `}
-                aria-label={`View image ${index + 1} of ${displayImages.length}`}
-                aria-selected={isSelected}
-                role="tab"
-              >
-                <div className="relative w-full h-full bg-secondary/10">
-                  <Image
-                    src={image.url || "/placeholder.svg"}
-                    alt={
-                      image.altText || `${productName} thumbnail ${index + 1}`
-                    }
-                    fill
-                    className="object-cover"
-                    sizes="80px"
-                    loading={index > 4 ? "lazy" : "eager"}
-                  />
-                </div>
-              </button>
-            );
-          })}
+        <div className="flex lg:flex-col gap-2 overflow-auto scrollbar-hide shrink-0 lg:w-20 lg:max-h-[600px]">
+          {displayImages.map((image, index) => (
+            <button
+              key={image.id || index}
+              onClick={() => scrollTo(index)}
+              className={`relative w-16 h-16 lg:w-20 lg:h-20 shrink-0 rounded-md overflow-hidden border-2 transition-all 
+                ${selectedImage === index ? "border-primary" : "border-transparent hover:border-gray-200"}`}
+            >
+              <Image
+                src={failedImages[image.id] ? PLACEHOLDER_IMAGE : image.url}
+                alt={image.altText || `Thumbnail ${index + 1}`}
+                fill
+                className="object-cover"
+                sizes="80px"
+                onError={() => handleImageError(image.id)}
+              />
+            </button>
+          ))}
         </div>
       )}
 
-      {/* Main Image Display (swipeable) */}
-      <div className="flex-1 w-full relative group">
-        <div
-          className="relative aspect-square w-full bg-card overflow-hidden border border-border shadow-sm transition-shadow hover:shadow-md cursor-crosshair"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onContextMenu={handleContextMenu}
-          aria-label={`${productName} image gallery`}
-        >
-          {imageLoading && (
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-muted/20 animate-pulse flex items-center justify-center"
-            >
-              <div className="w-8 h-8 border-4 border-muted border-t-primary rounded-full animate-spin" />
-            </div>
-          )}
-
-          {imageError ? (
-            <div
-              className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-900"
-              role="status"
-              aria-live="polite"
-            >
-              <div className="text-center text-muted-foreground">
-                <p className="text-sm">Image unavailable</p>
+      {/* Main Carousel Viewport */}
+      <div className="relative flex-1 bg-white dark:bg-gray-900 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-800">
+        <div className="overflow-hidden h-full" ref={emblaRef}>
+          <div className="flex h-full touch-pan-y">
+            {displayImages.map((image, index) => (
+              <div
+                key={image.id || index}
+                className="relative flex-[0_0_100%] min-w-0 h-[400px] sm:h-[500px] lg:h-[600px] bg-white dark:bg-gray-900"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className="relative w-full h-full">
+                  <Image
+                    src={failedImages[image.id] ? PLACEHOLDER_IMAGE : image.url}
+                    alt={image.altText || productName}
+                    fill
+                    className="object-contain"
+                    priority={index === 0}
+                    sizes="(max-width: 768px) 100vw, 800px"
+                    onError={() => handleImageError(image.id)}
+                  />
+                </div>
               </div>
-            </div>
-          ) : (
-            <Image
-              src={currentImage?.url || "/placeholder.svg"}
-              alt={currentImage?.altText || `${productName} main image`}
-              fill
-              className="object-cover transition-opacity duration-300 will-change-transform"
-              style={{ opacity: imageLoading ? 0 : 1 }}
-              onLoad={handleImageLoad}
-              onError={handleImageError}
-              priority={selectedImage === 0}
-              sizes="(max-width: 768px) 100vw, 800px"
-              quality={90}
-            />
-          )}
+            ))}
+          </div>
         </div>
 
-        {/* Image Counter Badge */}
-        {displayImages.length > 1 && (
-          <div className="absolute bottom-4 right-4 z-10 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-            <span className="text-xs font-medium text-foreground bg-background/80 backdrop-blur-md px-3 py-1.5 border border-border">
-              {Math.min(selectedImage + 1, displayImages.length)} / {displayImages.length}
-            </span>
-          </div>
-        )}
+        {/* Mobile Navigation Arrows */}
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 lg:hidden pointer-events-none">
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={scrollPrev}
+            className="pointer-events-auto bg-black/10 hover:bg-black/20 text-black dark:text-white rounded-full backdrop-blur-sm"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </Button>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={scrollNext}
+            className="pointer-events-auto bg-black/10 hover:bg-black/20 text-black dark:text-white rounded-full backdrop-blur-sm"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </Button>
+        </div>
+
+        {/* Counter Badge */}
+        <div className="absolute bottom-4 right-4 bg-black/60 text-white text-xs px-2 py-1 rounded-md backdrop-blur-md">
+          {selectedImage + 1} / {displayImages.length}
+        </div>
       </div>
     </div>
   );

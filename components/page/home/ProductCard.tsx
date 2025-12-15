@@ -43,20 +43,20 @@ const ProductCard = memo<ProductCardProps>(
       if (!productData.hasReviews) return null;
 
       return (
-        <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+        <div className="flex items-center gap-1 text-[10px] text-muted-foreground mb-1">
           <div className="flex" role="img" aria-label={`${productData.avgRating} stars`}>
-            <span className="text-amber-400">★</span>
+            <span className="text-amber-400 text-xs">★</span>
           </div>
           <span className="font-medium text-foreground">{productData.avgRating.toFixed(1)}</span>
-          <span className="text-[10px] text-muted-foreground">({productData.reviewCount})</span>
+          <span className="text-[9px] text-muted-foreground">({productData.reviewCount})</span>
         </div>
       );
     }, [productData]);
 
     return (
-      <Card className="h-full bg-card border border-border/20 shadow-sm hover:shadow-lg transition-shadow duration-200 group overflow-hidden rounded-none">
+      <Card className="h-full bg-card border border-border/20 shadow-sm hover:shadow-lg transition-shadow duration-200 group overflow-hidden rounded-none flex flex-col">
         <CardContent className="p-0 flex flex-col h-full">
-          <Link href={`/product/${product.slug}`} className="flex-1 block relative">
+          <Link href={`/product/${product.slug}`} className="cursor-pointer block relative flex-grow">
             {/* Discount Badge */}
             {productData.mrp > productData.price && (
               <div className="absolute top-2 left-2 z-10 bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 shadow-sm">
@@ -64,28 +64,38 @@ const ProductCard = memo<ProductCardProps>(
               </div>
             )}
 
-            <div className="aspect-[4/5] overflow-hidden bg-secondary/20 relative">
+            {/* Image Container - Full width, no padding */}
+            <div className="aspect-square relative bg-white overflow-hidden">
               <Image
                 src={productData.imageUrl}
                 alt={productData.imageAlt}
                 fill
                 sizes={sizes}
                 priority={priority}
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-contain p-4"
               />
             </div>
 
-            <div className="p-3 sm:p-4 flex flex-col gap-1">
-              <h3 className="font-semibold text-sm sm:text-base text-card-foreground line-clamp-1 group-hover:text-primary transition-colors">
+            <div className="p-3 flex flex-col gap-1.5">
+              <h3 className="font-medium text-[13px] sm:text-sm text-card-foreground line-clamp-1 group-hover:text-primary transition-colors">
                 {product.name}
               </h3>
 
-              <div className="min-h-[1.25rem]">
-                {starRating}
+              <div className="flex items-center gap-2">
+                {/* Green Star Rating Badge */}
+                {productData.hasReviews && (
+                  <div className="flex items-center gap-1 bg-green-700 text-white px-1.5 py-0.5 rounded-[2px] text-[10px] font-bold">
+                    <span>{productData.avgRating.toFixed(1)}</span>
+                    <span className="text-[10px]">★</span>
+                  </div>
+                )}
+                {productData.hasReviews && (
+                  <span className="text-[10px] text-muted-foreground font-medium">({productData.reviewCount})</span>
+                )}
               </div>
 
-              <div className="flex items-baseline gap-2 mt-1">
-                <span className="font-bold text-base sm:text-lg text-primary">
+              <div className="flex items-baseline gap-2 mt-0.5">
+                <span className="font-bold text-base text-foreground">
                   {formatPrice(productData.price)}
                 </span>
                 {productData.mrp > productData.price && (
@@ -93,15 +103,26 @@ const ProductCard = memo<ProductCardProps>(
                     {formatPrice(productData.mrp)}
                   </span>
                 )}
+                {productData.mrp > productData.price && (
+                  <span className="text-[10px] text-green-700 dark:text-green-400 font-bold">
+                    {Math.round(((productData.mrp - productData.price) / productData.mrp) * 100)}% off
+                  </span>
+                )}
               </div>
+
+              {/* Optional: Add "Free delivery" or "Saver Deal" text if needed here */}
+
             </div>
           </Link>
 
-          <div className="px-3 sm:px-4 pb-3 sm:pb-4 mt-auto">
+          <div className="px-3 pb-3 mt-auto">
+            {/* Use variants or size to make it compact */}
             <AddToCartButton
               productId={product.id}
               variantId={productData.variantId}
               inStock={product.status === "ACTIVE" || product.status === "available"}
+              className="!bg-white dark:!bg-gray-800 !text-primary border border-primary hover:!bg-primary/5 text-xs h-8 py-0 font-medium w-full"
+              size="sm"
             />
           </div>
         </CardContent>

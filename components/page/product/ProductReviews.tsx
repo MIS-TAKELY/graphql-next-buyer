@@ -120,7 +120,11 @@ const ProductReviews = () => {
                 />
               </div>
             ) : (
-              <Button variant="outline" className="w-full" disabled>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => window.location.href = "/sign-in"}
+              >
                 Log in to Review
               </Button>
             )}

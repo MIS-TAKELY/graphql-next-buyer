@@ -38,13 +38,13 @@ export default function AccountClient({ user }: { user: any }) {
   };
 
   return (
-    <>
+    <div className="flex flex-col lg:flex-row gap-6 w-full max-w-7xl mx-auto px-4 py-8">
       <SidebarNav
         user={user}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
-      <div className="flex-1">{renderActiveSection()}</div>
-    </>
+      <div className="flex-1 min-w-0 w-full">{renderActiveSection()}</div>
+    </div>
   );
 }
