@@ -5,6 +5,8 @@ export interface Product {
   variants: Array<{
     id: string;
     price: string;
+    mrp?: string;
+    stock?: string;
   }>;
   images: Array<{
     url: string;

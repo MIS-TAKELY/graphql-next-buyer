@@ -100,14 +100,14 @@ export default function WishlistSection() {
                         ${item.product?.variants?.[0]?.price || "0"}
                       </p>
 
-                      {item.product?.variants?.[0]?.compareAtPrice && (
+                      {item.product?.variants?.[0]?.mrp && (
                         <p className="text-sm text-muted-foreground line-through">
-                          ${item.product.variants[0].compareAtPrice}
+                          ${item.product.variants[0].mrp}
                         </p>
                       )}
                     </div>
 
-                    {item.product?.variants?.[0]?.availableForSale && (
+                    {Number(item.product?.variants?.[0]?.stock || 0) > 0 && (
                       <Badge variant="outline" className="w-fit text-xs">
                         In Stock
                       </Badge>

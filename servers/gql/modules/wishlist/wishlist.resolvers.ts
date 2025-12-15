@@ -10,6 +10,8 @@ const PRODUCT_SELECT = {
     select: {
       id: true,
       price: true,
+      mrp: true,
+      stock: true,
     },
   },
   images: {

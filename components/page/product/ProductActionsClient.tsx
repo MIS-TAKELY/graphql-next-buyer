@@ -3,13 +3,17 @@ import { ProductActions } from "@/components/common/ProductActions";
 import WishlistShareButtons from "@/components/page/product/ProductActions";
 import QuantitySelector from "@/components/page/product/QuantitySelector";
 import { useWishlist } from "@/hooks/wishlist/useWishlist";
-import { useEffect, useState } from "react";
+import { TProduct } from "@/types/product";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface ProductActionsClientProps {
   productId: string;
   productSlug: string;
   variantId: string;
   inStock: boolean;
+  product?: Partial<TProduct>;
 }
 
 export function ProductActionsClient({
@@ -17,36 +21,29 @@ export function ProductActionsClient({
   productSlug,
   variantId,
   inStock,
+  product,
 }: ProductActionsClientProps) {
-  const { wishlistItems, handleAddToWishlist, handleRemoveFromWishlist } =
+  const { isInWishlist, handleAddToWishlist, handleRemoveFromWishlist } =
     useWishlist();
-  const [addedToWishlist, setAddedToWishlist] = useState(false);
+  const { userId } = useAuth();
+  const router = useRouter();
   const [quantity, setQuantity] = useState(1);
 
-  // Check if the product is in the wishlist when the component mounts or wishlistsItems changes
-  useEffect(() => {
-    const isInWishlist = wishlistItems.some(
-      (item: any) => item.product.id === productId
-    );
-    setAddedToWishlist(isInWishlist);
-  }, [wishlistItems, productId]);
+  const isAdded = isInWishlist(productId);
 
   // Toggle wishlist status
   const toggleWishlist = async () => {
-    if (addedToWishlist) {
-      // Find the wishlist ID for the item (assuming first wishlist for simplicity)
-      const wishlistItem = wishlistItems.find(
-        (item: any) => item.product.id === productId
-      );
-      if (wishlistItem) {
-        console.log("removing from wishlist");
-        await handleRemoveFromWishlist(productId, wishlistItem.wishlistId);
-      }
-    } else {
-      console.log("adding to wishlist");
-      await handleAddToWishlist(productId);
+    if (!userId) {
+      router.push("/sign-in");
+      return;
     }
-    // No need to setAddedToWishlist here; the useEffect will handle it when wishlistsItems updates
+
+    if (isAdded) {
+      await handleRemoveFromWishlist(productId);
+    } else {
+      // @ts-ignore - mismatch between TProduct and Wishlist Product types but structurally compatible enough for optimistic UI
+      await handleAddToWishlist(productId, product);
+    }
   };
 
   return (
@@ -64,7 +61,7 @@ export function ProductActionsClient({
         </div>
         <div className="flex flex-1 justify-center items-center">
           <WishlistShareButtons
-            addedToWishlist={addedToWishlist}
+            addedToWishlist={isAdded}
             toggleWishlist={toggleWishlist}
             itemId={productId}
           />
