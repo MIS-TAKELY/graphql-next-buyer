@@ -2,7 +2,7 @@ import { GET_PRODUCT_BY_SLUG } from "@/client/product/product.queries";
 import ProductPageClient from "@/components/page/product/ProductPageClient";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
-import { IProducts, TProduct } from "@/types/product";
+import { TProduct } from "@/types/product";
 import { Metadata, ResolvingMetadata } from "next";
 
 export const revalidate = 3600;
@@ -75,7 +75,7 @@ export default async function ProductPage({
   const client = await getServerApolloClient();
 
   let product: TProduct | null = null;
-  let allProducts: IProducts[] = [];
+
 
   const { data, error } = await client.query({
     query: GET_PRODUCT_BY_SLUG,
@@ -99,7 +99,6 @@ export default async function ProductPage({
   }
 
   const initialCacheData = {
-    products: allProducts,
     currentProduct: product,
   };
 
