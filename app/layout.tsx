@@ -1,6 +1,7 @@
 import { AuthSync } from '@/components/auth/AuthSync';
 import ApolloWrapper from "@/lib/apollo/apollo-provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -71,6 +72,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+
+
       <ClerkProvider>
         <AuthSync />
         <body
@@ -83,6 +86,7 @@ export default function RootLayout({
           </ApolloWrapper>
         </body>
       </ClerkProvider>
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "G-R7VFCZNSEQ"} />
     </html>
   );
 }
