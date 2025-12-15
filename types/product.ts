@@ -79,6 +79,7 @@ export interface IProducts {
   reviews: IProductsReview[];
   variants: IProductsVarient[];
   returnPolicy?: string;
+  category?: ICategory;
   productOffers?: IProductOffer[];
 }
 export interface IProductVarient extends IProductsVarient {

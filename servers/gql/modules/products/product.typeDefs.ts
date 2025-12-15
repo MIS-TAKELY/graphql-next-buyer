@@ -58,6 +58,8 @@ export const productTypeDefs = gql`
     getProducts: [Product!]!
     getProduct(productId: ID!): Product!
     getProductBySlug(slug: String!): Product!
+    getRecommendedProducts(productId: ID!, limit: Int): [Product!]!
+    getProductsBySeller(sellerId: ID!): [Product!]!
   }
 
   type Mutation {

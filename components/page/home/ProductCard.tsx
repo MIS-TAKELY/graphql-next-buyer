@@ -63,7 +63,7 @@ const ProductCard = memo<ProductCardProps>(
     }, [productData]);
 
     return (
-      <Card className="h-full bg-card border border-border/20 shadow-sm hover:shadow-lg transition-shadow duration-200 group overflow-hidden rounded-none flex flex-col">
+      <Card className="w-full h-full bg-card border border-border shadow-sm hover:shadow-lg transition-shadow duration-200 group overflow-hidden rounded-md flex flex-col">
         <CardContent className="p-0 flex flex-col h-full">
           <Link
             href={`/product/${product.slug}`}
@@ -80,19 +80,19 @@ const ProductCard = memo<ProductCardProps>(
               </div>
             )}
 
-            {/* Image Container - Use aspect-ratio for responsive height based on width */}
-            <div className="aspect-[4/5] relative bg-white overflow-hidden">
+            {/* Image Container - Fixed aspect ratio */}
+            <div className="w-full aspect-[4/3] relative bg-white overflow-hidden">
               <Image
                 src={productData.imageUrl}
                 alt={productData.imageAlt}
                 fill
                 sizes={sizes}
                 priority={priority}
-                className="object-contain"
+                className="object-cover"
               />
             </div>
 
-            <div className="p-3 flex flex-col gap-1.5">
+            <div className="p-3 flex flex-col gap-1.5 overflow-hidden">
               <h3 className="font-medium text-[13px] sm:text-sm text-card-foreground line-clamp-2 h-9 sm:h-10 group-hover:text-primary transition-colors">
                 {product.name}
               </h3>
@@ -133,20 +133,17 @@ const ProductCard = memo<ProductCardProps>(
                   </span>
                 )}
               </div>
-
-              {/* Optional: Add "Free delivery" or "Saver Deal" text if needed here */}
             </div>
           </Link>
 
           <div className="px-3 pb-3 mt-auto">
-            {/* Use variants or size to make it compact */}
             <AddToCartButton
               productId={product.id}
               variantId={productData.variantId}
               inStock={
                 product.status === "ACTIVE" || product.status === "available"
               }
-              className="bg-white! dark:bg-gray-800! text-primary! border border-primary hover:bg-primary/5! text-[11px] h-7 py-0 font-medium w-full"
+              className="bg-white! dark:bg-gray-800! text-primary! border border-primary hover:bg-primary/5! text-[10px] sm:text-[11px] h-6 sm:h-7 py-0 font-medium w-full"
               size="sm"
             />
           </div>

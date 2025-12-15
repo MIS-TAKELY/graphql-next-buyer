@@ -247,3 +247,32 @@ export const GET_PRODUCTS = gql`
     }
   }
 `;
+
+export const GET_PRODUCTS_BY_SELLER = gql`
+  query GetProductsBySeller($sellerId: ID!) {
+    getProductsBySeller(sellerId: $sellerId) {
+      id
+      name
+      description
+      slug
+      images {
+        id
+        url
+        altText
+        mediaType
+      }
+      variants {
+        id
+        price
+        mrp
+      }
+      reviews {
+        rating
+      }
+      category {
+        id
+        name
+      }
+    }
+  }
+`;

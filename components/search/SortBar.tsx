@@ -41,16 +41,15 @@ export default function SortBar({
           </Badge>
         )}
       </Button>
-      <div className="flex items-center gap-2 overflow-x-auto scrollbar-hidden">
+      <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
         {sortOptions.map((option) => (
           <button
             key={option.value}
             onClick={() => setSortBy(option.value)}
-            className={`px-2 py-1 rounded-md text-xs whitespace-nowrap transition-colors ${
-              sortBy === option.value
+            className={`px-2 py-1 rounded-md text-xs whitespace-nowrap transition-colors ${sortBy === option.value
                 ? "bg-blue-600 text-white"
                 : "bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700"
-            }`}
+              }`}
           >
             {option.label}
           </button>

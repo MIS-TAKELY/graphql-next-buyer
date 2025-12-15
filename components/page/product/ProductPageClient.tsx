@@ -210,7 +210,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 returnPolicy={product.returnPolicy}
                 deliveryOptions={product.deliveryOptions}
               />
-              <SellerInfo sellerName={sellerName} />
+              <SellerInfo sellerName={sellerName} sellerId={product?.seller?.id} />
             </div>
           </div>
         </div>

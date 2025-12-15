@@ -1,3 +1,4 @@
+import { Prisma } from "@/app/generated/prisma";
 import { prisma } from "@/lib/db/prisma";
 import { getCache, setCache } from "@/services/redis.services";
 
@@ -147,6 +148,138 @@ export const productResolvers = {
       }
 
       return product;
+    },
+    getRecommendedProducts: async (
+      _: any,
+      { productId, limit = 10 }: { productId: string; limit?: number }
+    ) => {
+      const cacheKey = `recommendations:${productId}:${limit}`;
+
+      // Try cache first
+      const cached = await getCache<any[]>(cacheKey);
+      if (cached) {
+        console.log(`⚡ Returning recommendations for ${productId} from Redis`);
+        return cached;
+      }
+
+      // Get the current product's embedding
+      const currentProduct = await prisma.$queryRaw<
+        Array<{ embedding: string }>
+      >`
+        SELECT embedding::text
+        FROM "products"
+        WHERE id = ${productId} AND embedding IS NOT NULL
+      `;
+
+      if (!currentProduct || currentProduct.length === 0) {
+        console.log(`No embedding found for product ${productId}`);
+        // Fallback: return random products
+        const fallbackProducts = await prisma.product.findMany({
+          where: {
+            status: "ACTIVE",
+            id: { not: productId },
+          },
+          take: limit,
+          include: {
+            variants: {
+              select: {
+                id: true,
+                price: true,
+                mrp: true,
+              },
+            },
+            images: {
+              select: {
+                url: true,
+                altText: true,
+              },
+            },
+            reviews: {
+              select: { rating: true },
+            },
+            category: true,
+          },
+        });
+        return fallbackProducts;
+      }
+
+      const embedding = currentProduct[0].embedding;
+
+      // Find similar products using vector similarity
+      const similarProducts = await prisma.$queryRaw<
+        Array<{ id: string; similarity: number }>
+      >`
+        SELECT 
+          id::text,
+          1 - (embedding::text::vector <=> ${embedding}::vector) AS similarity
+        FROM "products"
+        WHERE id != ${productId}
+          AND embedding IS NOT NULL
+          AND status = 'ACTIVE'
+        ORDER BY similarity DESC
+        LIMIT ${limit}
+      `;
+
+      if (similarProducts.length === 0) {
+        return [];
+      }
+
+      const productIds = similarProducts.map((p) => p.id);
+
+      // Fetch full product details
+      const products = await prisma.product.findMany({
+        where: { id: { in: productIds } },
+        include: {
+          variants: {
+            select: {
+              id: true,
+              price: true,
+              mrp: true,
+            },
+          },
+          images: {
+            select: {
+              url: true,
+              altText: true,
+            },
+          },
+          reviews: {
+            select: { rating: true },
+          },
+          category: true,
+        },
+      });
+
+      // Maintain order by similarity
+      const productMap = new Map(products.map((p) => [p.id, p]));
+      const orderedProducts = productIds
+        .map((id) => productMap.get(id))
+        .filter((p): p is NonNullable<typeof p> => Boolean(p));
+
+      // Cache the results
+      await setCache(cacheKey, orderedProducts, 3600); // Cache for 1 hour
+
+      return orderedProducts;
+    },
+    getProductsBySeller: async (_: any, { sellerId }: { sellerId: string }) => {
+      if (!sellerId) throw new Error("Seller ID is required");
+
+      const products = await prisma.product.findMany({
+        where: {
+          sellerId: sellerId,
+          status: "ACTIVE",
+        },
+        include: {
+          variants: true,
+          images: true,
+          reviews: true,
+          category: true,
+          seller: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+
+      return products;
     },
   },
 };

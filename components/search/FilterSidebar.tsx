@@ -1,5 +1,4 @@
 "use client";
-import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@radix-ui/react-label";
 import { ChevronDown, ChevronUp } from "lucide-react"; // Import icons for toggle
@@ -109,29 +108,27 @@ export default function FilterSidebar({
   dynamicSearchData,
 }: FilterSidebarProps) {
   return (
-    <aside
+    <div
       className={`${showFilters ? "block" : "hidden"
         } lg:block w-full`}
     >
-      <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-        <CardContent className="p-4 space-y-4 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
-          <PriceFilter
-            priceRange={priceRange}
-            setPriceRange={setPriceRange}
+      <div className="space-y-4">
+        <PriceFilter
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+        />
+        <RatingFilter minRating={minRating} setMinRating={setMinRating} />
+        {dynamicSearchData?.filters?.map((filter) => (
+          <DynamicFilter
+            key={filter.key}
+            filterKey={filter.key}
+            label={filter.label}
+            options={filterOptions[filter.key] || filter.options || []}
+            selectedValues={dynamicFilters[filter.key] || []}
+            toggleFilter={toggleFilter}
           />
-          <RatingFilter minRating={minRating} setMinRating={setMinRating} />
-          {dynamicSearchData?.filters?.map((filter) => (
-            <DynamicFilter
-              key={filter.key}
-              filterKey={filter.key}
-              label={filter.label}
-              options={filterOptions[filter.key] || filter.options || []}
-              selectedValues={dynamicFilters[filter.key] || []}
-              toggleFilter={toggleFilter}
-            />
-          ))}
-        </CardContent>
-      </Card>
-    </aside>
+        ))}
+      </div>
+    </div>
   );
 }

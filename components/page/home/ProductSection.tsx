@@ -29,7 +29,7 @@ export default function ProductSection({
           className={
             layout === "horizontal"
               ? "flex gap-3 sm:gap-4 overflow-x-auto pb-4 scrollbar-hide"
-              : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-3 sm:gap-4"
+              : "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-3 sm:gap-4 justify-items-center"
           }
         >
           {displayProducts.map((product, index) => (
@@ -37,8 +37,8 @@ export default function ProductSection({
               key={product.id}
               className={
                 layout === "horizontal"
-                  ? "flex-none w-[160px] sm:w-[200px]"
-                  : ""
+                  ? "flex-none w-[220px]"
+                  : "w-full flex justify-center"
               }
             >
               <ProductCard
@@ -46,8 +46,8 @@ export default function ProductSection({
                 priority={index < 4}
                 sizes={
                   layout === "horizontal"
-                    ? "200px"
-                    : "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 16vw"
+                    ? "260px"
+                    : "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 280px"
                 }
               />
             </div>

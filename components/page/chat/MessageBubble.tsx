@@ -17,7 +17,42 @@ const MessageBubbleComponent = ({ message, isOwn }: MessageBubbleProps) => {
   // Logic: either use the prop passed from parent OR check if sender is 'user'
   const isUser = isOwn ?? message.sender === "user";
 
-  console.log("message sender--->",message.sender)
+  const renderAttachment = (att: { id: string; url: string; type: string }) => {
+    if (att.type === "IMAGE") {
+      return (
+        <img
+          key={att.id}
+          src={att.url}
+          alt="attachment"
+          className="w-48 h-48 rounded-lg object-cover border bg-black/10 cursor-pointer hover:opacity-95 transition-opacity"
+          onClick={() => window.open(att.url, "_blank")}
+        />
+      );
+    }
+    if (att.type === "VIDEO") {
+      return (
+        <video
+          key={att.id}
+          src={att.url}
+          controls
+          className="w-48 h-48 rounded-lg object-cover border bg-black/10"
+        />
+      );
+    }
+    return (
+      <a
+        key={att.id}
+        href={att.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-2 p-2 bg-background/10 rounded border hover:bg-background/20 transition-colors"
+      >
+        <span className="text-xs underline truncate max-w-[150px]">
+          {att.url.split("/").pop()}
+        </span>
+      </a>
+    );
+  };
 
   return (
     <div className={cn("flex gap-2", isUser ? "justify-end" : "justify-start")}>
@@ -40,15 +75,8 @@ const MessageBubbleComponent = ({ message, isOwn }: MessageBubbleProps) => {
         </p>
 
         {message.attachments?.length ? (
-          <div className="mt-2 flex flex-wrap gap-1">
-            {message.attachments.map((att) => (
-              <img
-                key={att.id}
-                src={att.url}
-                alt="attachment"
-                className="w-16 h-16 rounded object-cover border bg-black/10"
-              />
-            ))}
+          <div className="mt-2 flex flex-wrap gap-2">
+            {message.attachments.map((att) => renderAttachment(att))}
           </div>
         ) : null}
 

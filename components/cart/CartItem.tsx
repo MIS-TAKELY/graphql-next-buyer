@@ -28,157 +28,101 @@ const CartItem = ({
 
   return (
     <Card className="overflow-hidden bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
-      <CardContent className="p-4 sm:p-6">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-shrink-0 w-full sm:w-32 lg:w-40">
-            <div className="aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden">
-              <Image
-                src={product.images[0]?.url || "/placeholder.svg"}
-                alt={product.images[0]?.altText || product.name}
-                width={160}
-                height={160}
-                className="w-full h-full object-cover"
-                loading="lazy"
-                quality={85}
-              />
+      <CardContent className="p-3 sm:p-4">
+        <div className="flex gap-3">
+          {/* Product Image - Left */}
+          <div className="flex-shrink-0 w-20 sm:w-24">
+            <div className="aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden rounded">
+              <Link href={`/product/${product.slug}`}>
+                <Image
+                  src={product.images[0]?.url || "/placeholder.svg"}
+                  alt={product.images[0]?.altText || product.name}
+                  width={96}
+                  height={96}
+                  className="w-full h-full object-cover hover:opacity-80 transition-opacity"
+                  loading="lazy"
+                  quality={85}
+                />
+              </Link>
             </div>
           </div>
 
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
-              <div className="flex-1">
-                <Link href={`/product/${product.slug}`}>
-                  <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                    {product.name}
-                  </h3>
-                </Link>
+          {/* Product Info - Middle */}
+          <div className="flex-1 min-w-0 flex flex-col justify-between">
+            <div>
+              <Link href={`/product/${product.slug}`}>
+                <h3 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors line-clamp-2 mb-1">
+                  {product.name}
+                </h3>
+              </Link>
 
-                <div className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                  {product.description && <p>{product.description}</p>}
-                  {variant.sku && (
-                    <p>
-                      <span className="font-medium">SKU:</span> {variant.sku}
-                    </p>
-                  )}
-                </div>
-
-                {/* Mobile Price & Actions */}
-                <div className="sm:hidden mt-4 space-y-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl font-bold text-gray-900 dark:text-white">
-                      {formatPrice(variant.price)}
+              {/* Price and Discount */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
+                  {formatPrice(variant.price)}
+                </span>
+                {variant.attributes?.comparePrice && (
+                  <>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 line-through">
+                      {formatPrice(variant.attributes.comparePrice)}
                     </span>
-                    {variant.attributes?.comparePrice && (
-                      <>
-                        <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
-                          {formatPrice(variant.attributes.comparePrice)}
-                        </span>
-                        {discount > 0 && (
-                          <Badge
-                            variant="destructive"
-                            className="text-xs bg-red-600 dark:bg-red-500 text-white"
-                          >
-                            {discount}% OFF
-                          </Badge>
-                        )}
-                      </>
+                    {discount > 0 && (
+                      <Badge
+                        variant="destructive"
+                        className="text-xs bg-green-600 dark:bg-green-500 text-white px-1.5 py-0"
+                      >
+                        {discount}% OFF
+                      </Badge>
                     )}
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center border border-gray-200 dark:border-gray-600">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                        onClick={() => updateQuantity(item.id, quantity - 1)}
-                        disabled={quantity <= 1}
-                      >
-                        <Minus className="h-3 w-3" />
-                      </Button>
-                      <span className="px-3 py-1 text-sm font-medium text-gray-900 dark:text-white">
-                        {quantity}
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                        onClick={() => updateQuantity(item.id, quantity + 1)}
-                        disabled={quantity >= variant.stock}
-                      >
-                        <Plus className="h-3 w-3" />
-                      </Button>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
-                      onClick={() => removeItem(product.id, variant.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
+                  </>
+                )}
               </div>
 
-              {/* Desktop Price & Actions */}
-              <div className="hidden sm:flex flex-col items-end gap-4">
-                <div className="text-right">
-                  <div className="text-xl font-bold text-gray-900 dark:text-white">
-                    {formatPrice(variant.price)}
-                  </div>
-                  {variant.attributes?.comparePrice && (
-                    <div className="flex items-center gap-2 justify-end">
-                      <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
-                        {formatPrice(variant.attributes.comparePrice)}
-                      </span>
-                      {discount > 0 && (
-                        <Badge
-                          variant="destructive"
-                          className="text-xs bg-red-600 dark:bg-red-500 text-white"
-                        >
-                          {discount}% OFF
-                        </Badge>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center border border-gray-200 dark:border-gray-600">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                      onClick={() => updateQuantity(item.id, quantity - 1)}
-                      disabled={quantity <= 1}
-                    >
-                      <Minus className="h-3 w-3" />
-                    </Button>
-                    <span className="px-3 py-1 text-sm font-medium text-gray-900 dark:text-white">
-                      {quantity}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                      onClick={() => updateQuantity(item.id, quantity + 1)}
-                      disabled={quantity >= variant.stock}
-                    >
-                      <Plus className="h-3 w-3" />
-                    </Button>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
-                    onClick={() => removeItem(product.id, variant.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
+              {/* SKU - Desktop only */}
+              {variant.sku && (
+                <p className="hidden sm:block text-xs text-gray-600 dark:text-gray-300 mt-1">
+                  <span className="font-medium">SKU:</span> {variant.sku}
+                </p>
+              )}
             </div>
+          </div>
+
+          {/* Controls - Right */}
+          <div className="flex flex-col items-end justify-between gap-2">
+            {/* Quantity Controls */}
+            <div className="flex items-center border border-gray-200 dark:border-gray-600 rounded">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 p-0 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => updateQuantity(item.id, quantity - 1)}
+                disabled={quantity <= 1}
+              >
+                <Minus className="h-3 w-3" />
+              </Button>
+              <span className="px-2 py-1 text-xs font-medium text-gray-900 dark:text-white min-w-[2rem] text-center">
+                {quantity}
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 p-0 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => updateQuantity(item.id, quantity + 1)}
+                disabled={quantity >= variant.stock}
+              >
+                <Plus className="h-3 w-3" />
+              </Button>
+            </div>
+
+            {/* Delete Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
+              onClick={() => removeItem(product.id, variant.id)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </CardContent>

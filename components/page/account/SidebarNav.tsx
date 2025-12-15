@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -6,11 +8,14 @@ import {
   Heart,
   LogOut,
   MapPin,
+  MessageCircle,
   Package,
   Settings,
   Shield,
   User,
 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Reusable SidebarNav component
 // Props: user, activeTab, setActiveTab
@@ -18,7 +23,7 @@ import {
 interface SidebarNavProps {
   user: { firstName?: string; lastName?: string; email?: string };
   activeTab: string;
-  setActiveTab: (tab: string) => void;
+  setActiveTab?: (tab: string) => void;
 }
 
 export default function SidebarNav({
@@ -26,16 +31,39 @@ export default function SidebarNav({
   activeTab,
   setActiveTab,
 }: SidebarNavProps) {
+  const router = useRouter();
+
   const sidebarItems = [
     { id: "profile", label: "Profile", icon: User },
     { id: "addresses", label: "Addresses", icon: MapPin },
     { id: "orders", label: "My Orders", icon: Package },
     { id: "wishlist", label: "Wishlist", icon: Heart },
+    { id: "chat", label: "Messages", icon: MessageCircle, href: "/account/chat" }, // Added Chat
     { id: "payment", label: "Payment Methods", icon: CreditCard },
     { id: "notifications", label: "Notifications", icon: Bell },
     { id: "security", label: "Security", icon: Shield },
     { id: "settings", label: "Settings", icon: Settings },
   ];
+
+  const handleNavigation = (item: any) => {
+    if (item.href) {
+      router.push(item.href);
+    } else {
+      if (setActiveTab) {
+        setActiveTab(item.id);
+      }
+      // If we are on the separate chat page, we might want to navigate back to account 
+      // when clicking other tabs, but AccountClient handles internal state. 
+      // If we are on /account/chat, clicking "Profile" should probably go to /account?tab=profile
+      // For now, let's assume the user is on /account for most tabs. 
+      // If they are on /account/chat, clicking a non-href item might not work if setActiveTab is a no-op.
+      if (window.location.pathname.includes("/account/chat")) {
+        router.push("/account");
+        // We can't easily set the tab on the other page without URL params or context.
+        // A simple fix for now is just pushing to /account which defaults to profile
+      }
+    }
+  };
 
   return (
     <div className="lg:w-64 w-full shrink-0">
@@ -57,15 +85,16 @@ export default function SidebarNav({
           <nav className="flex lg:flex-col overflow-x-auto lg:overflow-visible space-x-2 lg:space-x-0 lg:space-y-1 pb-2 lg:pb-0 scrollbar-hide">
             {sidebarItems.map((item) => {
               const Icon = item.icon;
+              const isActive = activeTab === item.id;
+
               return (
                 <button
                   key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors whitespace-nowrap ${activeTab === item.id
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-muted"
-                    } ${activeTab === item.id ? "w-auto lg:w-full" : "w-auto lg:w-full"
-                    }`}
+                  onClick={() => handleNavigation(item)}
+                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors whitespace-nowrap ${isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-muted"
+                    } ${isActive ? "w-auto lg:w-full" : "w-auto lg:w-full"}`}
                 >
                   <Icon size={18} />
                   <span className="text-sm font-medium">{item.label}</span>

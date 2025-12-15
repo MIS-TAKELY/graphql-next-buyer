@@ -44,6 +44,63 @@ export const conversationResolvers = {
 
       return conversation;
     },
+    conversations: async (
+      _parent: any,
+      _args: any,
+      { prisma, user }: GraphQLContext
+    ) => {
+      if (!user) throw new Error("Unauthorized");
+
+      const conversations = await prisma.conversation.findMany({
+        where: {
+          OR: [{ senderId: user.id }, { recieverId: user.id }],
+          isActive: true, // Only fetch active chats
+        },
+        include: {
+          product: { select: { id: true, name: true, slug: true } },
+          sender: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              avatarImageUrl: true,
+            },
+          },
+          reciever: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              avatarImageUrl: true,
+            },
+          },
+          messages: {
+            include: {
+              sender: {
+                select: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                  avatarImageUrl: true,
+                },
+              },
+            },
+            orderBy: { sentAt: "desc" },
+            take: 1, // Get the latest message for preview
+          },
+        },
+        orderBy: { updatedAt: "desc" },
+      });
+
+      // Transform to match the schema
+      return conversations.map((conv) => ({
+        ...conv,
+        lastMessage: conv.messages[0],
+        unreadCount: 0, // Placeholder, can be implemented later
+      }));
+    },
   },
   Mutation: {
     createConversation: async (

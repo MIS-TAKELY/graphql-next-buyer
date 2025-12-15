@@ -168,29 +168,24 @@ export default function SearchPage() {
         <div className="flex flex-col lg:flex-row lg:gap-4">
           {/* Mobile overlay sidebar */}
           <div
-            className={`fixed top-52 inset-y-0 left-0 w-64 bg-white dark:bg-gray-900 transform ${showFilters ? "translate-x-0" : "-translate-x-full"
-              } lg:hidden transition-transform duration-300 ease-in-out z-50 overflow-y-auto p-4`}
+            className={`fixed top-0 inset-y-0 left-0 w-72 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md transform ${showFilters ? "translate-x-0" : "-translate-x-full"
+              } lg:hidden transition-transform duration-300 ease-in-out z-50 overflow-y-auto shadow-2xl`}
           >
-            <FilterSidebar
-              showFilters={true} // Always show content when this div is visible
-              priceRange={priceRange}
-              setPriceRange={setPriceRange}
-              minRating={minRating}
-              setMinRating={setMinRating}
-              dynamicFilters={dynamicFilters}
-              toggleFilter={toggleFilter}
-              filterOptions={filterOptions}
-              dynamicSearchData={dynamicSearchData}
-            />
-          </div>
-
-          {/* Desktop sticky sidebar */}
-          <div className="hidden lg:block lg:w-64 lg:flex-shrink-0">
-            <div className="sticky top-20">
-              {" "}
-              {/* Adjust top value as needed */}
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Filters</h2>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  aria-label="Close filters"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
               <FilterSidebar
-                showFilters={true}
+                showFilters={true} // Always show content when this div is visible
                 priceRange={priceRange}
                 setPriceRange={setPriceRange}
                 minRating={minRating}
@@ -203,10 +198,29 @@ export default function SearchPage() {
             </div>
           </div>
 
+          {/* Desktop sticky sidebar */}
+          <div className="hidden lg:block lg:w-64 lg:flex-shrink-0">
+            <div className="sticky top-20">
+              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+                <FilterSidebar
+                  showFilters={true}
+                  priceRange={priceRange}
+                  setPriceRange={setPriceRange}
+                  minRating={minRating}
+                  setMinRating={setMinRating}
+                  dynamicFilters={dynamicFilters}
+                  toggleFilter={toggleFilter}
+                  filterOptions={filterOptions}
+                  dynamicSearchData={dynamicSearchData}
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Overlay for mobile */}
           {showFilters && (
             <div
-              className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
               onClick={() => setShowFilters(false)}
             ></div>
           )}
