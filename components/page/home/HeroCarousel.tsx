@@ -61,6 +61,7 @@ const Slide = memo(({ slide, isHovered }: SlideProps) => (
         }`}
       sizes="100vw"
       priority={slide.id === 1}
+      {...(slide.id === 1 ? { fetchPriority: "high" } : {})}
     />
     <div
       className="absolute inset-0 flex items-center justify-center transition-all duration-300"
@@ -183,9 +184,9 @@ export default function HeroCarousel() {
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-2 h-2 sm:w-3 sm:h-3 transition-colors ${index === currentSlide
-                ? "bg-white dark:bg-gray-200"
-                : "bg-white/50 dark:bg-gray-600/50"
+              className={`w-2 h-2 sm:w-3 sm:h-3 transition-opacity bg-white dark:bg-gray-200 rounded-full ${index === currentSlide
+                ? "opacity-100"
+                : "opacity-50"
                 }`}
               aria-label={`Go to slide ${index + 1}`}
             />
