@@ -73,7 +73,11 @@ export default function RootLayout({
   return (
     <html lang="en">
 
-
+      <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="preconnect" href="https://placehold.co" />
+      </head>
       <ClerkProvider>
         <AuthSync />
         <body

@@ -6,6 +6,7 @@ import ProductSection from "@/components/page/home/ProductSection";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
 import { IProducts } from "@/types/product";
+import { CacheService } from "@/services/CacheService";
 import dynamic from "next/dynamic";
 
 const DynamicSections = dynamic(() => import("@/components/page/home/DynamicSections"));
@@ -32,13 +33,21 @@ type SectionConfig = {
 export default async function HomePage() {
   const client = await getServerApolloClient();
 
-  const productsResponse = await client.query({
-    query: GET_PRODUCTS,
-    fetchPolicy: "no-cache",
-    errorPolicy: "all",
-  });
+  const CACHE_KEY = CacheService.generateKey("landing-page", "products");
+  let products: IProducts[] = (await CacheService.get<IProducts[]>(CACHE_KEY)) || [];
 
-  const products = productsResponse?.data?.getProducts || [];
+  if (products.length === 0) {
+    const productsResponse = await client.query({
+      query: GET_PRODUCTS,
+      fetchPolicy: "no-cache",
+      errorPolicy: "all",
+    });
+    products = productsResponse?.data?.getProducts || [];
+    if (products.length > 0) {
+      await CacheService.set(CACHE_KEY, products, 3600); // Cache for 1 hour
+    }
+  }
+
   const sharedSlice = products.slice(0, 8);
 
   const jsonLd = {

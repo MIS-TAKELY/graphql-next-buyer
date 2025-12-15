@@ -64,12 +64,9 @@ const Slide = memo(({ slide, isHovered }: SlideProps) => (
       {...(slide.id === 1 ? { fetchPriority: "high" } : {})}
     />
     <div
-      className="absolute inset-0 flex items-center justify-center transition-all duration-300"
-      style={{
-        backgroundColor: isHovered
-          ? "rgba(0,0,0,0.7)"
-          : "rgba(0,0,0,0)",
-      }}
+      className="absolute inset-0 flex items-center justify-center transition-all duration-300 bg-black/30 hover:bg-black/60"
+      style={{}}
+
     >
       <div className="text-center text-white dark:text-gray-200 px-4 w-full max-w-[90%] sm:max-w-[80%] md:max-w-[70%] lg:max-w-[60%]">
         <h2

@@ -71,6 +71,7 @@ const LandingPageProductGrid = ({
           <button
             onClick={(e) => e.preventDefault()}
             className="bg-primary flex justify-center items-center p-1 hover:bg-primary-hover transition-colors"
+            aria-label={`View more ${title}`}
           >
             <ChevronRight className="text-primary-foreground" size={20} />
           </button>
@@ -92,6 +93,7 @@ const LandingPageProductGrid = ({
                     src={deal?.imageUrl || "/placeholder.svg"}
                     alt={deal?.imageAltText || "Product"}
                     fill
+                    sizes="96px"
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
@@ -161,6 +163,7 @@ const LandingPageProductGrid = ({
                       src={deal?.imageUrl || "/placeholder.svg"}
                       alt={deal?.imageAltText || "Product"}
                       fill
+                      sizes="(max-width: 640px) 80px, 96px"
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
@@ -192,6 +195,7 @@ const LandingPageProductGrid = ({
                     src={deal?.imageUrl || "/placeholder.svg"}
                     alt={deal?.imageAltText || "Product"}
                     fill
+                    sizes="(max-width: 400px) 64px, 80px"
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
