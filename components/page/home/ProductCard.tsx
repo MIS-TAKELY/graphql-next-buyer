@@ -33,7 +33,7 @@ const ProductCard = memo<ProductCardProps>(
         mrp: firstVariant ? parseFloat(firstVariant.mrp) : 0,
         avgRating: reviews?.length
           ? reviews.reduce((sum, review) => sum + (review.rating ?? 0), 0) /
-            reviews.length
+          reviews.length
           : 0,
         reviewCount: reviews?.length ?? 0,
         hasReviews: (reviews?.length ?? 0) > 0,
@@ -74,7 +74,7 @@ const ProductCard = memo<ProductCardProps>(
               <div className="absolute top-2 left-2 z-10 bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 shadow-sm">
                 {Math.round(
                   ((productData.mrp - productData.price) / productData.mrp) *
-                    100
+                  100
                 )}
                 % OFF
               </div>
@@ -113,21 +113,21 @@ const ProductCard = memo<ProductCardProps>(
                 )}
               </div>
 
-              <div className="flex items-baseline gap-2 mt-0.5">
-                <span className="font-bold text-base text-foreground">
+              <div className="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
+                <span className="font-bold text-sm sm:text-base text-foreground whitespace-nowrap">
                   {formatPrice(productData.price)}
                 </span>
                 {productData.mrp > productData.price && (
-                  <span className="text-xs text-muted-foreground line-through decoration-destructive/50">
+                  <span className="text-[11px] text-muted-foreground line-through decoration-destructive/50 whitespace-nowrap">
                     {formatPrice(productData.mrp)}
                   </span>
                 )}
                 {productData.mrp > productData.price && (
-                  <span className="text-[10px] text-green-700 dark:text-green-400 font-bold">
+                  <span className="text-[10px] text-green-700 dark:text-green-400 font-bold whitespace-nowrap">
                     {Math.round(
                       ((productData.mrp - productData.price) /
                         productData.mrp) *
-                        100
+                      100
                     )}
                     % off
                   </span>
@@ -146,7 +146,7 @@ const ProductCard = memo<ProductCardProps>(
               inStock={
                 product.status === "ACTIVE" || product.status === "available"
               }
-              className="bg-white! dark:bg-gray-800! text-primary! border border-primary hover:bg-primary/5! text-xs h-8 py-0 font-medium w-full"
+              className="bg-white! dark:bg-gray-800! text-primary! border border-primary hover:bg-primary/5! text-[11px] h-7 py-0 font-medium w-full"
               size="sm"
             />
           </div>
