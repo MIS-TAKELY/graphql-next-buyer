@@ -144,16 +144,15 @@ export const orderResolvers = {
                       categoryId: true,
                       slug: true,
                       seller: {
-                        seller: {
-                          select: {
-                            email: true,
-                            phone: true,
-                          },
+                        select: {
+                          email: true,
+                          phone: true,
                         },
                       },
                     },
                   },
-                });
+                },
+              });
 
               console.log("orderInput-->", orderInput);
 
