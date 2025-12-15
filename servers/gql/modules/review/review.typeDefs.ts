@@ -69,13 +69,15 @@ export const reviewTypeDefs = gql`
     media: [ReviewMediaInput]
   }
 
-  type Query {
+  extend type Query {
     getReview(id: ID!): Review
     getReviewsByProductSlug(
       slug: String!
       status: ReviewStatus
+      rating: Int
       page: Int
       limit: Int
+      offset: Int
       sortBy: String
     ): [Review]
     getReviewsByUser(
@@ -91,11 +93,23 @@ export const reviewTypeDefs = gql`
       limit: Int
       sortBy: String
     ): [Review]
+    getReviewStats(slug: String!): ReviewStats
+  }
+
+  type ReviewStats {
+    average: Float!
+    total: Int!
+    counts: [RatingCount!]!
+  }
+
+  type RatingCount {
+    rating: Int!
+    count: Int!
   }
 
   type Mutation {
     addReview(input: AddReviewInput!): Boolean
-    updateReview(id: ID!, input: UpdateReviewInput!): Boolean
+    updateReview(id: ID!, input: UpdateReviewInput!): Review
     deleteReview(id: ID!): Boolean
   }
 `;

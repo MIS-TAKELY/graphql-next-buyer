@@ -7,11 +7,12 @@ import { ProductActionsClient } from "@/components/page/product/ProductActionsCl
 import ProductGallery from "@/components/page/product/ProductGallery";
 import ProductInfo from "@/components/page/product/ProductInfo";
 import ProductPageSkeleton from "@/components/page/product/ProductPageSkeleton";
-import ProductTabs from "@/components/page/product/ProductTabs";
+
 import { IProductVarient, TProduct } from "@/types/product";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SellerInfo from "./SellerInfo";
 import RecommendedProducts from "./RecommendedProducts";
+import ProductReviews from "@/components/page/product/ProductReviews";
 
 interface ProductPageClientProps {
   product: TProduct | null;
@@ -211,11 +212,11 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           </div>
         </div>
 
-        <ProductTabs
-          product={product}
-          averageRating={averageRating}
-          mockReviews={product.reviews || []}
-        />
+
+
+        <div className="mt-12 border-t pt-8">
+          <ProductReviews />
+        </div>
 
         <RecommendedProducts currentProductId={product.id || ""} title="Similar Products" />
         <RecommendedProducts currentProductId={product.id || ""} title="Frequently Bought Together" />

@@ -81,7 +81,7 @@ const typeDefs = mergeTypeDefs([
   userTypeDefs,
   wishlistTypeDefs,
   offerTypeDefs,
-  reviewTypeDefs,
+
   returnTypedefs,
   warrentyTypeDefs,
   messageTypedefs,

@@ -92,7 +92,7 @@ export interface IRemainingProductDetails {
   variants: IProductVarient[];
   warranty: string;
   specifications?: string;
-  features?: string;
+  features?: string[];
   productOffers?: IProductOffer[];
   deliveryOptions?: IDeliveryOption[];
 }

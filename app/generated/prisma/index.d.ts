@@ -24865,6 +24865,7 @@ export namespace Prisma {
     name: number
     slug: number
     description: number
+    features: number
     status: number
     createdAt: number
     updatedAt: number
@@ -24906,6 +24907,7 @@ export namespace Prisma {
     name?: true
     slug?: true
     description?: true
+    features?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -24992,6 +24994,7 @@ export namespace Prisma {
     name: string
     slug: string
     description: string | null
+    features: string[]
     status: $Enums.ProductStatus
     createdAt: Date
     updatedAt: Date
@@ -25022,6 +25025,7 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
+    features?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -25047,6 +25051,7 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
+    features?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -25062,6 +25067,7 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
+    features?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -25077,6 +25083,7 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
+    features?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -25084,7 +25091,7 @@ export namespace Prisma {
     brand?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "name" | "slug" | "description" | "status" | "createdAt" | "updatedAt" | "categoryId" | "brand", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "name" | "slug" | "description" | "features" | "status" | "createdAt" | "updatedAt" | "categoryId" | "brand", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     seller?: boolean | UserDefaultArgs<ExtArgs>
     variants?: boolean | Product$variantsArgs<ExtArgs>
@@ -25129,6 +25136,7 @@ export namespace Prisma {
       name: string
       slug: string
       description: string | null
+      features: string[]
       status: $Enums.ProductStatus
       createdAt: Date
       updatedAt: Date
@@ -25573,6 +25581,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Product", 'String'>
     readonly slug: FieldRef<"Product", 'String'>
     readonly description: FieldRef<"Product", 'String'>
+    readonly features: FieldRef<"Product", 'String[]'>
     readonly status: FieldRef<"Product", 'ProductStatus'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
@@ -46306,6 +46315,7 @@ export namespace Prisma {
     name: 'name',
     slug: 'slug',
     description: 'description',
+    features: 'features',
     status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -48359,6 +48369,7 @@ export namespace Prisma {
     name?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
+    features?: StringNullableListFilter<"Product">
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
@@ -48383,6 +48394,7 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
+    features?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -48410,6 +48422,7 @@ export namespace Prisma {
     sellerId?: StringFilter<"Product"> | string
     name?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
+    features?: StringNullableListFilter<"Product">
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
@@ -48434,6 +48447,7 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
+    features?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -48453,6 +48467,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Product"> | string
     slug?: StringWithAggregatesFilter<"Product"> | string
     description?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    features?: StringNullableListFilter<"Product">
     status?: EnumProductStatusWithAggregatesFilter<"Product"> | $Enums.ProductStatus
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
@@ -51363,6 +51378,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51386,6 +51402,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51407,6 +51424,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51430,6 +51448,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51452,6 +51471,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51464,6 +51484,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51476,6 +51497,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54294,6 +54316,14 @@ export namespace Prisma {
     _max?: NestedEnumReturnTypeFilter<$PrismaModel>
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type EnumProductStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ProductStatus | EnumProductStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ProductStatus[] | ListEnumProductStatusFieldRefInput<$PrismaModel>
@@ -54367,6 +54397,7 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrder
+    features?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -57029,6 +57060,10 @@ export namespace Prisma {
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutReturnPolicyInput, ProductUpdateWithoutReturnPolicyInput>, ProductUncheckedUpdateWithoutReturnPolicyInput>
   }
 
+  export type ProductCreatefeaturesInput = {
+    set: string[]
+  }
+
   export type UserCreateNestedOneWithoutProductsInput = {
     create?: XOR<UserCreateWithoutProductsInput, UserUncheckedCreateWithoutProductsInput>
     connectOrCreate?: UserCreateOrConnectWithoutProductsInput
@@ -57165,6 +57200,11 @@ export namespace Prisma {
     connectOrCreate?: ConversationCreateOrConnectWithoutProductInput | ConversationCreateOrConnectWithoutProductInput[]
     createMany?: ConversationCreateManyProductInputEnvelope
     connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+  }
+
+  export type ProductUpdatefeaturesInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type EnumProductStatusFieldUpdateOperationsInput = {
@@ -59203,6 +59243,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -59224,6 +59265,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -59809,6 +59851,7 @@ export namespace Prisma {
     name?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
+    features?: StringNullableListFilter<"Product">
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
@@ -60662,6 +60705,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -60684,6 +60728,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -60910,6 +60955,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60932,6 +60978,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -62045,6 +62092,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -62067,6 +62115,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -62487,6 +62536,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -62509,6 +62559,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -62588,6 +62639,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -62610,6 +62662,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -62782,6 +62835,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -62804,6 +62858,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -62840,6 +62895,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -62862,6 +62918,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -62882,6 +62939,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -62904,6 +62962,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -62940,6 +62999,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -62962,6 +63022,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -62982,6 +63043,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -63004,6 +63066,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -63040,6 +63103,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63062,6 +63126,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63835,6 +63900,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -63857,6 +63923,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -64009,6 +64076,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64031,6 +64099,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64212,6 +64281,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -64234,6 +64304,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -64270,6 +64341,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64292,6 +64364,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65698,6 +65771,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -65720,6 +65794,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -65879,6 +65954,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65901,6 +65977,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66458,6 +66535,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -66480,6 +66558,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -66543,6 +66622,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66565,6 +66645,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67224,6 +67305,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -67549,6 +67631,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67570,6 +67653,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67591,6 +67675,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -68138,6 +68223,7 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -68204,6 +68290,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -68226,6 +68313,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -68247,6 +68335,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

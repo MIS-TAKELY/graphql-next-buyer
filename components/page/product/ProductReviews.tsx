@@ -1,7 +1,7 @@
 "use client";
 
 import { useReview } from "@/hooks/review/useReview";
-import { ChevronDown, Plus, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { AddReviewForm } from "@/components/review/AddReviewForm";
@@ -12,7 +12,6 @@ import ReviewSkeleton from "@/components/review/ReviewSkeleton ";
 import { ReviewSummary } from "@/components/review/ReviewSummary";
 import { MediaItem, Review } from "@/components/review/types";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@clerk/nextjs";
 
 const sortFns: Record<string, (a: Review, b: Review) => number> = {
@@ -38,48 +37,33 @@ const ProductReviews = () => {
     filterRating: "all",
   });
 
-  // console.log("cachedReviews", cachedReviews);
+  const { data, addReview, loading, stats, filterRating, setFilterRating, refetch,
+    loadMore,
+  } = useReview();
 
-  const { data, addReview, loading } = useReview();
-
-  // Use API data if present, otherwise fall back to mocks
-  // const reviews: Review[] = cachedReviews
-  //   ? cachedReviews
-  //   : data || ([] as Review[]);
-
+  // Use API data
   const reviews: Review[] = data || ([] as Review[]);
 
-  // // Derived stats
-  const { total, average, ratings } = useMemo(() => {
-    const total = reviews.length;
-    const average =
-      total > 0 ? reviews.reduce((s, r) => s + r.rating, 0) / total : 0;
-    const ratings: Record<number, number> = {};
-    for (const r of reviews) ratings[r.rating] = (ratings[r.rating] || 0) + 1;
-    return { total, average, ratings };
-  }, [reviews]);
-
-  // // Filter + sort
+  // Filter + sort
   const filtered = useMemo(() => {
     let list = reviews.filter((r) => {
+      if (filterRating && r.rating !== filterRating) return false;
       if (filters.activeTab === "verified" && !r.verifiedPurchase) return false;
       if (filters.activeTab === "featured" && !r.isFeatured) return false;
-      if (filters.filterRating !== "all" && r.rating !== +filters.filterRating)
-        return false;
       return true;
     });
 
     list = [...list].sort(sortFns[filters.sortBy] ?? sortFns.newest);
     return list;
-  }, [reviews, filters]);
+  }, [reviews, filters, filterRating]);
 
   const [showAddReview, setShowAddReview] = useState(false);
+
   const handleSubmit = async (payload: {
     rating: number;
     comment: string;
     media?: MediaItem[];
   }) => {
-    console.log("form data-->", ratings, payload.comment, payload.media);
     try {
       await addReview({
         rating: payload.rating,
@@ -91,74 +75,108 @@ const ProductReviews = () => {
       console.error("Failed to submit review:", error);
     }
   };
+
+  const handleRatingClick = (rating: number | null) => {
+    const newValue = filterRating === rating ? undefined : (rating ?? undefined);
+    setFilterRating(newValue);
+    setFilters(prev => ({ ...prev, filterRating: newValue ? String(newValue) : "all" } as FilterState));
+  };
+
+
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
-      {/* Summary */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span>Customer Reviews</span>
-            {userId && (
-              <Button
-                onClick={() => setShowAddReview((s) => !s)}
-                className="flex items-center gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                Write a Review
+    <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6">
+
+      {/* Header Section with Stats */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold tracking-tight mb-8 text-foreground">Customer Reviews</h2>
+
+        <div className="bg-muted/30 rounded-xl p-8 flex flex-col md:flex-row gap-12 items-start md:items-center border border-border">
+          {/* Summary Stats */}
+          <div className="flex-1 min-w-[280px]">
+            {stats ? (
+              <ReviewSummary
+                total={stats.total}
+                average={stats.average}
+                ratings={stats.counts.reduce((acc: any, curr: any) => ({ ...acc, [curr.rating]: curr.count }), {})}
+                onRatingClick={handleRatingClick}
+                activeRating={filterRating}
+              />
+            ) : (
+              <div className="h-40 flex items-center justify-center text-muted-foreground">Loading stats...</div>
+            )}
+          </div>
+
+          {/* Call to Action: Write Review */}
+          <div className="flex-1 w-full md:border-l md:pl-12 border-border">
+            <h3 className="text-lg font-semibold mb-2 text-foreground">Review this product</h3>
+            <p className="text-muted-foreground mb-6 text-sm">Share your thoughts with other customers</p>
+
+            {userId ? (
+              <div className="w-full">
+                <AddReviewForm
+                  onCancel={() => setShowAddReview(false)}
+                  onSubmit={handleSubmit}
+                  setShowAddReview={setShowAddReview}
+                />
+              </div>
+            ) : (
+              <Button variant="outline" className="w-full" disabled>
+                Log in to Review
               </Button>
             )}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ReviewSummary total={total} average={average} ratings={ratings} />
-
-          {/* Gallery of all review images */}
-          <ReviewGallery images={reviews.flatMap(r => r.media?.map(m => m.url) || [])} />
-        </CardContent>
-      </Card>
-
-      {/* Add Review */}
-      {showAddReview && (
-        <AddReviewForm
-          onCancel={() => setShowAddReview(false)}
-          onSubmit={handleSubmit}
-          setShowAddReview={setShowAddReview}
-        />
-      )}
-
-      {/* Filters */}
-      <ReviewFilters value={filters} onChange={setFilters} />
-
-      {/* List */}
-      {loading ? (
-        <ReviewSkeleton />
-      ) : filtered.length > 0 ? (
-        <div className="space-y-4">
-          {filtered.map((review) => (
-            <ReviewCard key={review.id} review={review} />
-          ))}
-
-          <div className="text-center pt-6">
-            <Button variant="outline" className="flex items-center gap-2">
-              Load More Reviews
-              <ChevronDown className="w-4 h-4" />
-            </Button>
           </div>
         </div>
-      ) : (
-        <Card>
-          <CardContent className="p-12 text-center">
-            <div className="text-gray-400 mb-2">
-              <Star className="w-12 h-12 mx-auto" />
+      </div>
+
+      {/* Filters Bar */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-border pb-6 mb-8">
+        <ReviewFilters value={filters} onChange={setFilters} hideRatingFilter={true} />
+        <div className="text-sm text-muted-foreground">
+          Scanning {filtered.length} reviews
+        </div>
+      </div>
+
+      {/* Reviews List */}
+      <div className="space-y-0">
+        {loading && !filtered.length ? (
+          <ReviewSkeleton />
+        ) : filtered.length > 0 ? (
+          <>
+            {filtered.map((review) => (
+              <ReviewCard
+                key={review.id}
+                review={review}
+              />
+            ))}
+
+            <div className="pt-10 flex justify-center">
+              <Button
+                variant="outline"
+                className="min-w-[200px]"
+                onClick={loadMore}
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Load More Reviews"}
+              </Button>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No reviews found
-            </h3>
-            <p className="text-gray-600">
-              Be the first to review this product!
-            </p>
-          </CardContent>
-        </Card>
+          </>
+        ) : (
+          <div className="py-16 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+              <Star className="w-8 h-8 text-muted-foreground" />
+            </div>
+            <p className="text-lg font-medium text-foreground">No reviews yet</p>
+            <p className="text-muted-foreground mt-1">Be the first to share your experience!</p>
+          </div>
+        )}
+      </div>
+
+      {/* Gallery - now at bottom, nicely separated */}
+      {reviews.some(r => r.media?.length) && (
+        <div className="mt-16 pt-12 border-t border-border">
+          <h3 className="font-semibold text-xl mb-6 text-foreground">Customer Photos & Videos</h3>
+          <ReviewGallery images={reviews.flatMap(r => r.media?.map(m => m.url) || [])} />
+        </div>
       )}
     </div>
   );

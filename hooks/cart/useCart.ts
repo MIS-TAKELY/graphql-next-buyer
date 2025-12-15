@@ -6,6 +6,7 @@ import { useCartStore } from "@/store/cartStore";
 import { useMutation, useQuery } from "@apollo/client";
 import { useAuth } from "@clerk/nextjs";
 import { useCallback, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 interface IGetCartIdResponse {
   getMyCart: [
@@ -62,6 +63,10 @@ export const useCart = () => {
     }
   }, [myCartItemsIds, userId, anonymousCart]);
 
+  // Import toast from sonner at the top (I will do this in a separate step or just assume it is done if I combine edits, but best to do distinct)
+  // Actually I cannot add import at top and edit body in same replace_file_content call if they are far apart.
+  // I will assume I add import separately.
+
   const [addToCartMutation] = useMutation(ADD_TO_CART, {
     update(cache, { data }, { variables }) {
       if (!data?.addToCart) return;
@@ -100,6 +105,7 @@ export const useCart = () => {
     },
     onError(error) {
       console.error("Add to cart mutation failed:", error);
+      toast.error("Failed to add to cart. Please try again.");
     },
   });
 
@@ -110,6 +116,7 @@ export const useCart = () => {
       try {
         if (!userId) {
           addInAnonymousCart(productId, variantId);
+          toast.success("Added to cart");
         } else {
           await addToCartMutation({
             variables: { variantId, productId, quantity },
@@ -117,10 +124,10 @@ export const useCart = () => {
               addToCart: true,
             },
           });
+          toast.success("Added to cart");
         }
-        // Removed: openCart() - drawer no longer auto-opens on add
       } catch (err) {
-        console.error("Add to cart failed", err);
+        // Error handled in onError
       } finally {
         setLoading(false);
       }
@@ -153,6 +160,9 @@ export const useCart = () => {
         console.log("errror while removing from cart-->", error);
       }
     },
+    onError(error) {
+      toast.error("Failed to remove from cart");
+    }
   });
 
   const removeFromCart = useCallback(
@@ -161,6 +171,7 @@ export const useCart = () => {
       try {
         if (!userId) {
           removeFromAnonymousCart(productId);
+          toast.success("Removed from cart");
         } else {
           await removeFromCartMutation({
             variables: { variantId, productId },
@@ -168,7 +179,10 @@ export const useCart = () => {
               removeFromCart: true,
             },
           });
+          toast.success("Removed from cart");
         }
+      } catch (error) {
+        // Handled in onError
       } finally {
         setLoading(false);
       }
@@ -179,6 +193,9 @@ export const useCart = () => {
   // Update quantity mutation
   const [updateQuantityMutation] = useMutation(UPDATE_CART_QUANTITY, {
     refetchQueries: [{ query: GET_MY_CART_ITEMS }, { query: GET_CART_PRODUCT_IDS }],
+    onError(error) {
+      toast.error("Failed to update quantity");
+    }
   });
 
   const updateQuantity = useCallback(

@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 
 // Get reviews for a product
 export const GET_REVIEWS_BY_PRODUCT_BY_SLUG = gql`
-  query GetReviewsByProductSlug($slug: String!) {
-    getReviewsByProductSlug(slug: $slug) {
+  query GetReviewsByProductSlug($slug: String!, $rating: Int, $offset: Int, $limit: Int) {
+    getReviewsByProductSlug(slug: $slug, rating: $rating, offset: $offset, limit: $limit) {
       id
       rating
       comment
@@ -28,6 +28,19 @@ export const GET_REVIEWS_BY_PRODUCT_BY_SLUG = gql`
         id
         vote
         userId
+      }
+    }
+  }
+`;
+
+export const GET_REVIEW_STATS = gql`
+  query GetReviewStats($slug: String!) {
+    getReviewStats(slug: $slug) {
+      average
+      total
+      counts {
+        rating
+        count
       }
     }
   }

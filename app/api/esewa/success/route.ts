@@ -38,13 +38,49 @@ export async function GET(request: NextRequest) {
       where: {
         transactionId: decodedData.transaction_uuid,
       },
+      include: {
+        order: true,
+      },
     });
 
-    if (payment) {
-      await prisma.payment.update({
-        where: {
-          id: payment.id,
-        },
+    if (!payment) {
+      return NextResponse.redirect(
+        new URL(
+          "/payment/failed?message=Payment record not found",
+          process.env.NEXT_PUBLIC_APP_URL!
+        )
+      );
+    }
+
+    // Idempotency Check: If already completed, success immediately
+    if (payment.status === "COMPLETED") {
+      return NextResponse.redirect(
+        new URL(
+          `/payment/success?orderId=${payment.orderId}`,
+          process.env.NEXT_PUBLIC_APP_URL!
+        )
+      );
+    }
+
+    // Amount Validation Check
+    const paidAmount = parseFloat(decodedData.total_amount.replace(/,/g, ''));
+    const expectedAmount = parseFloat(payment.amount.toString());
+
+    // Allow small floating point difference (epsilon)
+    if (Math.abs(paidAmount - expectedAmount) > 0.01) {
+      console.error(`Payment mismatch: Paid ${paidAmount}, Expected ${expectedAmount}`);
+      return NextResponse.redirect(
+        new URL(
+          "/payment/failed?message=Payment amount mismatch",
+          process.env.NEXT_PUBLIC_APP_URL!
+        )
+      );
+    }
+
+    // Atomic Transaction
+    await prisma.$transaction(async (tx) => {
+      await tx.payment.update({
+        where: { id: payment.id },
         data: {
           status: "COMPLETED",
           esewaRefId: decodedData.refId,
@@ -53,16 +89,11 @@ export async function GET(request: NextRequest) {
         },
       });
 
-      // Update order status
-      await prisma.order.update({
-        where: {
-          id: payment.orderId,
-        },
-        data: {
-          status: "CONFIRMED",
-        },
+      await tx.order.update({
+        where: { id: payment.orderId },
+        data: { status: "CONFIRMED" },
       });
-    }
+    });
 
     // Redirect to success page
     return NextResponse.redirect(

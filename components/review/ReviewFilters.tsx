@@ -17,12 +17,14 @@ export type FilterState = {
 export const ReviewFilters = ({
   value,
   onChange,
+  hideRatingFilter = false,
 }: {
   value: FilterState;
   onChange: (v: FilterState) => void;
+  hideRatingFilter?: boolean;
 }) => {
   return (
-    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between w-full">
       <Tabs
         value={value.activeTab}
         onValueChange={(activeTab) =>
@@ -41,28 +43,30 @@ export const ReviewFilters = ({
       </Tabs>
 
       <div className="flex gap-3 w-full sm:w-auto">
-        <Select
-          value={value.filterRating}
-          onValueChange={(filterRating) =>
-            onChange({
-              ...value,
-              filterRating: filterRating as FilterState["filterRating"],
-            })
-          }
-        >
-          <SelectTrigger className="w-[140px]">
-            <Filter className="w-4 h-4 mr-2" />
-            <SelectValue placeholder="Filter" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Ratings</SelectItem>
-            <SelectItem value="5">5 Stars</SelectItem>
-            <SelectItem value="4">4 Stars</SelectItem>
-            <SelectItem value="3">3 Stars</SelectItem>
-            <SelectItem value="2">2 Stars</SelectItem>
-            <SelectItem value="1">1 Star</SelectItem>
-          </SelectContent>
-        </Select>
+        {!hideRatingFilter && (
+          <Select
+            value={value.filterRating}
+            onValueChange={(filterRating) =>
+              onChange({
+                ...value,
+                filterRating: filterRating as FilterState["filterRating"],
+              })
+            }
+          >
+            <SelectTrigger className="w-[140px]">
+              <Filter className="w-4 h-4 mr-2" />
+              <SelectValue placeholder="Filter" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Ratings</SelectItem>
+              <SelectItem value="5">5 Stars</SelectItem>
+              <SelectItem value="4">4 Stars</SelectItem>
+              <SelectItem value="3">3 Stars</SelectItem>
+              <SelectItem value="2">2 Stars</SelectItem>
+              <SelectItem value="1">1 Star</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
 
         <Select
           value={value.sortBy}

@@ -1,9 +1,10 @@
 "use client";
 
+import { toast } from "sonner";
+
 import { Review, ReviewMedia } from "@/components/review/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -14,21 +15,27 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useReview } from "@/hooks/review/useReview";
+import { cn } from "@/lib/utils";
 import { formatDate } from "@/utlis/dateHelpers";
 import { useAuth } from "@clerk/nextjs";
 import {
+  CheckCircle2,
   Edit2,
-  Save,
+  MoreVertical,
   Star,
-  ThumbsDown,
   ThumbsUp,
   Trash2,
   X,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { MediaUploader } from "./MediaUploader";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const ReviewCard = ({ review }: { review: Review }) => {
   const { updateReview, removeReview, isUpdating, isDeleting } = useReview();
@@ -41,17 +48,16 @@ export const ReviewCard = ({ review }: { review: Review }) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
 
-  // Helpful vote state (local for now)
+  // Helpful vote state
   const [helpfulCount, setHelpfulCount] = useState(review.helpfulCount || 0);
   const [hasVoted, setHasVoted] = useState(false);
 
   const handleHelpfulVote = (isHelpful: boolean) => {
-    if (hasVoted) return; // Prevent multiple votes per session for demo
+    if (hasVoted) return;
     setHasVoted(true);
     if (isHelpful) {
-      setHelpfulCount(prev => prev + 1);
+      setHelpfulCount((prev) => prev + 1);
     }
-    // detailed logic would call API here
   };
 
   const convertToMediaItems = (media: Review["media"]): ReviewMedia[] => {
@@ -77,12 +83,8 @@ export const ReviewCard = ({ review }: { review: Review }) => {
 
   const isOwnReview = userId === review.user?.clerkId;
 
-  const initials = `${review.user?.firstName?.[0] ?? ""}${review.user?.lastName?.[0] ?? ""
-    }`;
-
   const handleEdit = async () => {
     if (isUploading) return;
-
     setIsEditing(false);
 
     const updatedMedia = mediaItems
@@ -98,18 +100,25 @@ export const ReviewCard = ({ review }: { review: Review }) => {
       rating: editForm.rating,
       comment: editForm.comment,
       media: updatedMedia,
-    }).catch((err) => {
-      console.error("Failed to update review:", err);
-      setIsEditing(true);
-    });
+    })
+      .then(() => {
+        toast.success("Review updated!");
+      })
+      .catch((err) => {
+        console.error("Failed to update review:", err);
+        toast.error("Failed to update review");
+        setIsEditing(true);
+      });
   };
 
   const handleDelete = async () => {
     try {
       await removeReview(review.id);
+      toast.success("Review deleted");
       setIsDeleteModalOpen(false);
     } catch (error) {
       console.error("Failed to delete review:", error);
+      toast.error("Failed to delete review");
     }
   };
 
@@ -131,7 +140,7 @@ export const ReviewCard = ({ review }: { review: Review }) => {
     setMediaItems([]);
   };
 
-  // Optional: keyboard navigation for lightbox
+  // Keyboard nav for lightbox
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!lightboxOpen) return;
@@ -151,276 +160,209 @@ export const ReviewCard = ({ review }: { review: Review }) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [lightboxOpen, review.media.length]);
 
+  // Color logic for rating badge
+  const ratingColor = review.rating >= 4 ? "bg-green-600" : review.rating >= 3 ? "bg-green-500" : review.rating >= 2 ? "bg-orange-500" : "bg-red-500";
+
   return (
     <>
-      <Card className={review.isFeatured ? "ring-2 ring-blue-200" : ""}>
-        <CardContent className="p-6">
-          <div className="flex items-start justify-between mb-4">
+      <div className={cn("py-4 border-b border-border last:border-0", review.isFeatured && "bg-accent/30 -mx-4 px-4")}>
+        <div className="flex items-start justify-between gap-4">
+
+          <div className="flex-1 space-y-1.5">
+
+            {/* Rating Badge & Recommendation */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                <span className="text-sm font-medium">{initials}</span>
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">
-                    {review.user?.firstName} {review.user?.lastName}
-                  </span>
-                  {review.verifiedPurchase && (
-                    <Badge variant="secondary" className="text-xs">
-                      Verified Purchase
-                    </Badge>
-                  )}
-                  {review.isFeatured && (
-                    <Badge variant="default" className="text-xs bg-blue-500">
-                      Featured
-                    </Badge>
-                  )}
+              {isEditing ? (
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-5 h-5 cursor-pointer ${i < editForm.rating ? "text-yellow-400 fill-current" : "text-muted"
+                        }`}
+                      onClick={() => handleRatingChange(i + 1)}
+                    />
+                  ))}
                 </div>
-                <div className="flex items-center gap-2 mt-1">
-                  {isEditing ? (
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 cursor-pointer ${i < editForm.rating
-                            ? "text-yellow-400 fill-current"
-                            : "text-gray-300"
-                            }`}
-                          onClick={() => handleRatingChange(i + 1)}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 fill-current ${i < review.rating
-                            ? "text-yellow-400"
-                            : "text-gray-300"
-                            }`}
-                        />
-                      ))}
-                    </div>
-                  )}
-                  <span className="text-sm text-gray-500">
-                    {formatDate(review.createdAt)}
-                  </span>
+              ) : (
+                <div className={cn("flex items-center gap-1 px-1.5 py-0.5 rounded text-white text-[12px] font-bold shadow-sm", ratingColor)}>
+                  <span>{review.rating}</span>
+                  <Star className="w-2.5 h-2.5 fill-current" />
                 </div>
-              </div>
+              )}
+
+              {!isEditing && (
+                <span className="text-sm font-semibold text-foreground">
+                  {review.rating >= 4 ? "Excellent" : review.rating >= 3 ? "Good" : review.rating >= 2 ? "Fair" : "Poor"}
+                </span>
+              )}
             </div>
-            {isOwnReview && !review.isOptimistic && (
-              <div className="flex gap-2">
-                {!isEditing ? (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleStartEdit}
-                      disabled={isUpdating || isDeleting}
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setIsDeleteModalOpen(true)}
-                      disabled={isUpdating || isDeleting}
-                    >
-                      <Trash2 className="w-4 h-4 text-red-500" />
-                    </Button>
-                  </>
-                ) : (
-                  <div className="flex gap-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleCancelEdit}
-                      disabled={isUpdating}
-                    >
-                      <X className="w-4 h-4" /> Cancle
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleEdit}
-                      disabled={isUpdating || isUploading}
-                    >
-                      <Save className="w-4 h-4" /> Save Changes
-                    </Button>
+
+            {/* Review Body */}
+            {isEditing ? (
+              <div className="space-y-4 pt-2">
+                <Textarea
+                  value={editForm.comment}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({ ...prev, comment: e.target.value }))
+                  }
+                  className="min-h-[100px] text-base bg-background text-foreground"
+                  placeholder="Edit your review..."
+                />
+                <MediaUploader
+                  value={mediaItems}
+                  onChange={setMediaItems}
+                  maxSizeMB={10}
+                  onUploadingChange={setIsUploading}
+                />
+                <div className="flex gap-2 justify-end">
+                  <Button variant="ghost" size="sm" onClick={handleCancelEdit}>Cancel</Button>
+                  <Button size="sm" onClick={handleEdit} disabled={isUploading || isUpdating}>Save</Button>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-1">
+                <p className="text-foreground text-[14px] leading-relaxed">
+                  {review.comment}
+                </p>
+
+                {/* Media Grid */}
+                {review.media?.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {review.media.map((m, index) => (
+                      <div
+                        key={index}
+                        className="w-16 h-16 relative rounded-md overflow-hidden cursor-pointer border border-border hover:opacity-90 transition-opacity"
+                        onClick={() => {
+                          setCurrentMediaIndex(index);
+                          setLightboxOpen(true);
+                        }}
+                      >
+                        {m.type === "VIDEO" ? (
+                          <div className="w-full h-full bg-black flex items-center justify-center">
+                            <div className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center"></div>
+                          </div>
+                        ) : (
+                          <Image
+                            src={m.url}
+                            alt="Review media"
+                            layout="fill"
+                            objectFit="cover"
+                          />
+                        )}
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
             )}
-          </div>
 
-          {isEditing ? (
-            <div className="space-y-4 mb-4">
-              <Textarea
-                value={editForm.comment}
-                onChange={(e) =>
-                  setEditForm((prev) => ({ ...prev, comment: e.target.value }))
-                }
-                placeholder="Edit your comment..."
-                className="min-h-[100px]"
-              />
-              <MediaUploader
-                value={mediaItems}
-                onChange={setMediaItems}
-                maxSizeMB={10}
-                onUploadingChange={setIsUploading}
-              />
-            </div>
-          ) : (
-            <>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                {review.comment}
-              </p>
+            {/* Footer: Author, Date, Actions */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2 text-xs text-muted-foreground">
+              <span className="font-medium text-foreground/80">{review.user?.firstName} {review.user?.lastName}</span>
 
-              {review.media?.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {review.media.map((m, index) => (
-                    <div
-                      key={index}
-                      className="w-20 h-20 rounded-lg overflow-hidden relative cursor-pointer"
-                      onClick={() => {
-                        setCurrentMediaIndex(index);
-                        setLightboxOpen(true);
-                      }}
-                    >
-                      {m.type === "VIDEO" ? (
-                        <video
-                          src={m.url}
-                          className="w-full h-full object-cover"
-                          muted
-                        />
-                      ) : (
-                        <Image
-                          src={m.url}
-                          alt="Review media"
-                          width={80}
-                          height={80}
-                          className="w-full h-full object-cover"
-                        />
-                      )}
-                    </div>
-                  ))}
+              {review.verifiedPurchase && (
+                <span className="flex items-center gap-1 text-muted-foreground">
+                  <CheckCircle2 className="w-3 h-3 text-muted-foreground fill-muted/30" />
+                  Certified Buyer
+                </span>
+              )}
+
+              <span>{formatDate(review.createdAt)}</span>
+
+              {!isEditing && (
+                <div className="flex items-center gap-4 ml-auto sm:ml-4">
+                  <div
+                    className={cn("flex items-center gap-1 cursor-pointer hover:text-foreground transition-colors", hasVoted && "text-primary font-medium")}
+                    onClick={() => handleHelpfulVote(true)}
+                  >
+                    <ThumbsUp className={cn("w-3.5 h-3.5", hasVoted && "fill-current")} />
+                    <span>{helpfulCount || 0}</span>
+                  </div>
                 </div>
               )}
-            </>
-          )}
-
-          <div className="flex items-center gap-4 pt-4 border-t">
-            <span className="text-sm text-gray-600">Was this helpful?</span>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="flex items-center gap-1 h-8"
-                disabled={isEditing || hasVoted}
-                onClick={() => handleHelpfulVote(true)}
-              >
-                <ThumbsUp className={cn("w-4 h-4", hasVoted && "fill-current text-primary")} />
-                <span className="text-sm">Yes ({helpfulCount})</span>
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="flex items-center gap-1 h-8"
-                disabled={isEditing || hasVoted}
-                onClick={() => handleHelpfulVote(false)}
-              >
-                <ThumbsDown className="w-4 h-4" />
-                <span className="text-sm">No</span>
-              </Button>
             </div>
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Delete Confirmation Modal */}
+          {/* Context Menu for Owner */}
+          {isOwnReview && !isEditing && !review.isOptimistic && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground">
+                  <MoreVertical className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleStartEdit}>
+                  <Edit2 className="w-3.5 h-3.5 mr-2" />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setIsDeleteModalOpen(true)}>
+                  <Trash2 className="w-3.5 h-3.5 mr-2" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+
+        </div>
+      </div>
+
+      {/* Delete Modal */}
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>Delete Review</DialogTitle>
+            <DialogTitle>Delete Review?</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this review? This action cannot be
-              undone.
+              This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsDeleteModalOpen(false)}
-              disabled={isDeleting}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDelete}
-              disabled={isDeleting}
-            >
-              {isDeleting ? "Deleting..." : "Delete"}
-            </Button>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Lightbox Viewer */}
+      {/* Lightbox */}
       {review.media?.length > 0 && (
         <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
-          <DialogContent className="max-w-4xl p-0 bg-black/95">
-            <div className="relative flex items-center justify-center">
-              <Button
-                variant="ghost"
-                className="absolute left-2 top-1/2 -translate-y-1/2 text-white"
-                onClick={() =>
-                  setCurrentMediaIndex((prev) =>
-                    prev === 0 ? review.media.length - 1 : prev - 1
-                  )
-                }
-              >
-                ‹
-              </Button>
+          <DialogContent className="max-w-4xl p-0 bg-black border-none ring-0 overflow-hidden text-white">
+            {/* Simple Custom Lightbox UI */}
+            <div className="relative w-full h-[80vh] flex items-center justify-center select-none">
+              <button className="absolute top-4 right-4 z-50 p-2 bg-black/50 rounded-full hover:bg-black/70" onClick={() => setLightboxOpen(false)}>
+                <X className="w-5 h-5" />
+              </button>
 
-              <div className="max-h-[80vh] max-w-[90vw] flex items-center justify-center">
+              <div className="absolute left-4 z-40">
+                <Button variant="ghost" className="text-white hover:bg-white/20 rounded-full h-10 w-10 p-0" onClick={() => setCurrentMediaIndex((i) => i === 0 ? review.media.length - 1 : i - 1)}>
+                  ‹
+                </Button>
+              </div>
+
+              <div className="w-full h-full flex items-center justify-center">
                 {review.media[currentMediaIndex].type === "VIDEO" ? (
-                  <video
-                    src={review.media[currentMediaIndex].url}
-                    controls
-                    autoPlay
-                    className="max-h-[80vh] rounded-lg"
-                  />
+                  <video src={review.media[currentMediaIndex].url} controls autoPlay className="max-h-full max-w-full" />
                 ) : (
-                  <Image
-                    src={review.media[currentMediaIndex].url}
-                    alt="Review media"
-                    width={800}
-                    height={600}
-                    className="rounded-lg max-h-[80vh] object-contain"
-                  />
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={review.media[currentMediaIndex].url}
+                      alt="Full size"
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </div>
                 )}
               </div>
 
-              <Button
-                variant="ghost"
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-white"
-                onClick={() =>
-                  setCurrentMediaIndex((prev) =>
-                    prev === review.media.length - 1 ? 0 : prev + 1
-                  )
-                }
-              >
-                ›
-              </Button>
-            </div>
-
-            <DialogFooter className="justify-center mt-2">
-              <span className="text-gray-300 text-sm">
+              <div className="absolute right-4 z-40">
+                <Button variant="ghost" className="text-white hover:bg-white/20 rounded-full h-10 w-10 p-0" onClick={() => setCurrentMediaIndex((i) => i === review.media.length - 1 ? 0 : i + 1)}>
+                  ›
+                </Button>
+              </div>
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 px-3 py-1 rounded-full text-xs">
                 {currentMediaIndex + 1} / {review.media.length}
-              </span>
-            </DialogFooter>
+              </div>
+            </div>
           </DialogContent>
         </Dialog>
       )}

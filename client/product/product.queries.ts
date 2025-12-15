@@ -93,7 +93,12 @@ export const GET_PRODUCT_BY_SLUG = gql`
           key
           value
         }
+        specifications {
+          key
+          value
+        }
       }
+      features
       category {
         name
       }

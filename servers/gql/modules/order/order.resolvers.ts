@@ -5,6 +5,7 @@ import { senMail } from "@/services/nodeMailer.services";
 import { requireAuth, requireBuyer } from "../../auth/auth";
 import { GraphQLContext } from "../../context";
 import { delCache } from "@/services/redis.services";
+import { rateLimit } from "@/services/rateLimit.service";
 
 // interface OrderInput {
 //   items: Array<{
@@ -125,6 +126,12 @@ export const orderResolvers = {
       const user = requireAuth(ctx);
       requireBuyer(ctx);
       console.log("input------>", input);
+
+      // Rate Limit: 5 orders per minute per user to prevent abuse
+      const allowed = await rateLimit(`rate_limit:order:${user.id}`, 5, 60);
+      if (!allowed) {
+        throw new Error("Too many order attempts. Please wait a minute.");
+      }
 
       const createdOrders: CreatedOrder[] = [];
 
@@ -272,14 +279,22 @@ export const orderResolvers = {
                 });
               }
 
-              await Promise.all(
-                computedItems.map((ci) =>
-                  tx.productVariant.update({
-                    where: { id: ci.variantId },
-                    data: { stock: { decrement: ci.quantity } },
-                  })
-                )
-              );
+              // Fix Race Condition: Use updateMany with 'gte' check to ensure sufficient stock at the exact moment of write.
+              for (const ci of computedItems) {
+                const res = await tx.productVariant.updateMany({
+                  where: {
+                    id: ci.variantId,
+                    stock: { gte: ci.quantity }
+                  },
+                  data: {
+                    stock: { decrement: ci.quantity }
+                  }
+                });
+
+                if (res.count === 0) {
+                  throw new Error(`Insufficient stock for item (Race condition detected)`);
+                }
+              }
             }
           },
           { timeout: 60000 }

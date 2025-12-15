@@ -29,19 +29,23 @@ export const reviewResolvers = {
       {
         slug,
         status,
+        rating,
         page = 1,
         limit = 10,
+        offset,
         sortBy = "createdAt:desc",
       }: {
         slug: string;
         status?: "PENDING" | "APPROVED" | "REJECTED";
+        rating?: number;
         page?: number;
         limit?: number;
+        offset?: number;
         sortBy?: string;
       },
     ) => {
       try {
-        const skip = (page - 1) * limit;
+        const skip = offset !== undefined ? offset : (page - 1) * limit;
         const [sortField, sortOrder] = sortBy.split(":");
 
         const validproduct = await prisma.product.findUnique({
@@ -59,6 +63,7 @@ export const reviewResolvers = {
 
         const where: any = { productId };
         if (status) where.status = status;
+        if (rating) where.rating = rating;
 
         const reviews = await prisma.review.findMany({
           where,
@@ -169,6 +174,56 @@ export const reviewResolvers = {
         throw new Error(error.message || "Failed to fetch reviews");
       }
     },
+
+    getReviewStats: async (_: any, { slug }: { slug: string }) => {
+      try {
+        const product = await prisma.product.findUnique({
+          where: { slug },
+          select: { id: true },
+        });
+
+        if (!product) throw new Error("Product not found");
+
+        const aggregations = await prisma.review.groupBy({
+          by: ["rating"],
+          where: { productId: product.id },
+          _count: {
+            _all: true,
+          },
+        });
+
+        const total = aggregations.reduce((acc, curr) => acc + curr._count._all, 0);
+        const weightedSum = aggregations.reduce(
+          (acc, curr) => acc + curr.rating * curr._count._all,
+          0
+        );
+        const average = total > 0 ? weightedSum / total : 0;
+
+        const counts = aggregations.map((agg) => ({
+          rating: agg.rating,
+          count: agg._count._all,
+        }));
+
+        // Fill in missing ratings with 0
+        for (let i = 1; i <= 5; i++) {
+          if (!counts.find((c) => c.rating === i)) {
+            counts.push({ rating: i, count: 0 });
+          }
+        }
+
+        // Sort counts by rating descending
+        counts.sort((a, b) => b.rating - a.rating);
+
+        return {
+          total,
+          average,
+          counts,
+        };
+      } catch (error: any) {
+        console.error("Error fetching review stats:", error);
+        throw new Error(error.message || "Failed to fetch review stats");
+      }
+    },
   },
 
   Mutation: {
@@ -195,6 +250,11 @@ export const reviewResolvers = {
 
         if (!userId) throw new Error("Missing user ID in request");
         if (!slug) throw new Error("Missing product slug in request");
+
+        // Input Validation
+        if (rating < 1 || rating > 5) throw new Error("Rating must be between 1 and 5");
+        if (comment && comment.length > 2000) throw new Error("Comment cannot exceed 2000 characters");
+        if (media && media.length > 5) throw new Error("You can only upload up to 5 media items");
 
         const existingUser = await prisma.user.findUnique({
           where: { id: userId },
@@ -320,7 +380,7 @@ export const reviewResolvers = {
         if (!updatedReview)
           throw new Error("internal server error unable to create review");
 
-        return true;
+        return updatedReview;
       } catch (error: any) {
         console.error("Error while updating review:", error);
         throw new Error(error.message || "Failed to update review");

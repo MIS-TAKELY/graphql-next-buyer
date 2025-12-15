@@ -10,7 +10,17 @@ export const ADD_REVIEW = gql`
 // Update an existing review
 export const UPDATE_REVIEW = gql`
   mutation UpdateReview($id: ID!, $input: UpdateReviewInput!) {
-    updateReview(id: $id, input: $input)
+    updateReview(id: $id, input: $input) {
+      id
+      rating
+      comment
+      media {
+        id
+        url
+        type
+      }
+      updatedAt
+    }
   }
 `;
 

@@ -3,10 +3,13 @@ import {
   DELETE_REVIEW,
   UPDATE_REVIEW,
 } from "@/client/review/reviews.mutation";
-import { GET_REVIEWS_BY_PRODUCT_BY_SLUG } from "@/client/review/reviews.query";
+import {
+  GET_REVIEWS_BY_PRODUCT_BY_SLUG,
+  GET_REVIEW_STATS,
+} from "@/client/review/reviews.query";
 import { Review } from "@/components/review/types";
 import { useMutation, useQuery } from "@apollo/client";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 // Assuming we have a way to get the current user ID
@@ -15,6 +18,8 @@ import { useState } from "react";
 export const useReview = () => {
   const params = useParams();
   const productSlug = params.slug as string;
+  const [filterRating, setFilterRating] = useState<number | undefined>(undefined);
+
   const [optimisticAdds, setOptimisticAdds] = useState<any[]>([]);
   const [optimisticUpdates, setOptimisticUpdates] = useState<
     Record<string, any>
@@ -23,10 +28,42 @@ export const useReview = () => {
     new Set()
   );
 
-  const { data, loading, refetch } = useQuery(GET_REVIEWS_BY_PRODUCT_BY_SLUG, {
+  const [limit] = useState(5);
+  // Using Apollo's fetchMore for pagination, so we don't need manual page state management for the query itself usually,
+  // but we might want to track if there are more items.
+
+  const { data, loading, refetch, fetchMore } = useQuery(GET_REVIEWS_BY_PRODUCT_BY_SLUG, {
+    variables: { slug: productSlug, rating: filterRating, offset: 0, limit },
+    skip: !productSlug,
+    fetchPolicy: "cache-and-network",
+  });
+
+  const loadMore = async () => {
+    if (!data?.getReviewsByProductSlug) return;
+
+    // Calculate current length based on actual data
+    const currentLength = data.getReviewsByProductSlug.length;
+
+    await fetchMore({
+      variables: {
+        offset: currentLength,
+        limit,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          getReviewsByProductSlug: [
+            ...prev.getReviewsByProductSlug,
+            ...fetchMoreResult.getReviewsByProductSlug,
+          ],
+        };
+      },
+    });
+  };
+
+  const { data: statsData, loading: statsLoading } = useQuery(GET_REVIEW_STATS, {
     variables: { slug: productSlug },
     skip: !productSlug,
-    fetchPolicy: "cache-first",
   });
 
   const [addReviewMutation, { loading: addLoading }] = useMutation(ADD_REVIEW);
@@ -200,7 +237,7 @@ export const useReview = () => {
 
           const existing: any = cache.readQuery({
             query: GET_REVIEWS_BY_PRODUCT_BY_SLUG,
-            variables: { slug: productSlug },
+            variables: { slug: productSlug, rating: filterRating, offset: 0, limit },
           });
 
           if (!existing?.getReviewsByProductSlug) {
@@ -210,7 +247,7 @@ export const useReview = () => {
 
           cache.writeQuery({
             query: GET_REVIEWS_BY_PRODUCT_BY_SLUG,
-            variables: { slug: productSlug },
+            variables: { slug: productSlug, rating: filterRating, offset: 0, limit }, // Ensure consistent variables
             data: {
               getReviewsByProductSlug: existing.getReviewsByProductSlug.map(
                 (rev: any) =>
@@ -250,13 +287,13 @@ export const useReview = () => {
       update: (cache) => {
         const existing: any = cache.readQuery({
           query: GET_REVIEWS_BY_PRODUCT_BY_SLUG,
-          variables: { slug: productSlug },
+          variables: { slug: productSlug, rating: filterRating, offset: 0, limit }, // Ensure consistent variables
         });
 
         if (existing) {
           cache.writeQuery({
             query: GET_REVIEWS_BY_PRODUCT_BY_SLUG,
-            variables: { slug: productSlug },
+            variables: { slug: productSlug, rating: filterRating, offset: 0, limit }, // Ensure consistent variables
             data: {
               getReviewsByProductSlug: existing.getReviewsByProductSlug.filter(
                 (rev: any) => rev.id !== id
@@ -271,9 +308,9 @@ export const useReview = () => {
   // Combine optimistic adds, updates, and deletes with real reviews
   const baseReviews = data?.getReviewsByProductSlug || [];
   const filteredReviews = baseReviews.filter(
-    (review:Review) => !optimisticDeletes.has(review.id)
+    (review: Review) => !optimisticDeletes.has(review.id)
   );
-  const updatedReviews = filteredReviews.map((review:Review) => {
+  const updatedReviews = filteredReviews.map((review: Review) => {
     const update = optimisticUpdates[review.id];
     if (update) {
       return { ...review, ...update };
@@ -282,15 +319,25 @@ export const useReview = () => {
   });
   const allReviews = [...optimisticAdds, ...updatedReviews];
 
+  // Basic strict check: if we got fewer items than limit, we likely reached the end. 
+  // Ideally, API should return total count + list, but this is a common heuristic.
+  const hasMore = data?.getReviewsByProductSlug?.length >= limit; // Simplistic check, better to check total count if available
+
   return {
     data: allReviews,
+    stats: statsData?.getReviewStats,
     loading: loading && optimisticAdds.length === 0,
+    statsLoading,
     addReview,
     updateReview,
     removeReview,
     refetch,
+    loadMore,
+    hasMore: true, // Always allow loading more for now until we have proper total count vs current count check or similar mechanism
     isAdding: addLoading,
     isUpdating: updateLoading,
     isDeleting: deleteLoading,
+    filterRating,
+    setFilterRating,
   };
 };

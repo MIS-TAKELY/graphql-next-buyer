@@ -36,7 +36,9 @@ export const productTypeDefs = gql`
     productOffers: [ProductOffer!]
     deliveryOptions: [DeliveryOption!]
     warranty: [Warranty!]
+
     returnPolicy: [ReturnPolicy!]
+    features: [String]
   }
 
   input CreateProductInput {
