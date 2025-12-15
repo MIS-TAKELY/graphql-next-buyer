@@ -63,7 +63,7 @@ export function ChatModal({
   }, [open]);
 
 
-  console.log("messages modal-->",messages)
+
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {

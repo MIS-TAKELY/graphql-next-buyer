@@ -355,7 +355,8 @@ export const useRealChat = (
 
         if (data?.sendMessage) {
           const normalized = normalizeMessage(data.sendMessage);
-          upsertMessage({ ...normalized, clientId });
+          // Force sender to be 'user' since we just sent it
+          upsertMessage({ ...normalized, clientId, sender: "user" });
         } else {
           throw new Error("No response from server");
         }
