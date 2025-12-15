@@ -24,7 +24,7 @@ async function debugRecommendations() {
     FROM "products" 
     WHERE id = ${product.id}
   `;
-    const hasEmbedding = embeddingResult[0]?.embedding ? true : false;
+    const hasEmbedding = (embeddingResult as any)[0]?.embedding ? true : false;
     console.log(`Has embedding: ${hasEmbedding}`);
 
     // 3. Count Active Products
