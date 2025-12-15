@@ -16,6 +16,7 @@ import {
   useLazyQuery,
   useMutation,
 } from "@apollo/client";
+import { useAuth } from "@clerk/nextjs";
 import { useRealtime } from "@upstash/realtime/client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -51,6 +52,7 @@ export const useRealChat = (
   initialConversationId?: string,
   onMessageReceived?: () => void
 ) => {
+  const { userId: clerkId } = useAuth();
   const [conversationId, setConversationId] = useState<string | null>(initialConversationId || null);
   const [messages, setMessages] = useState<LocalMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -405,9 +407,16 @@ export const useRealChat = (
     [handleRealtimeMessage]
   );
 
+  // Subscribe to conversation-level channel
   // useRealtime types don't match the actual runtime API perfectly in some versions
   (useRealtime as any)({
     channel: conversationId ? `conversation:${conversationId}` : undefined,
+    events,
+  });
+
+  // Subscribe to user-level channel for redundancy and cross-conversation notifications
+  (useRealtime as any)({
+    channel: clerkId ? `user:${clerkId}` : undefined,
     events,
   });
 
