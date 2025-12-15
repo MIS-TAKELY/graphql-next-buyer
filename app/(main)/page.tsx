@@ -15,8 +15,8 @@ import { Metadata } from "next";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Home", // Will be "Home | Dai"
-  description: "Welcome to Dai, your one-stop shop for the best products at unbeatable prices.",
+  title: "Home", // Will be "Home | Vanijoy"
+  description: "Welcome to Vanijoy, your one-stop shop for the best products at unbeatable prices.",
   alternates: {
     canonical: "/",
   },
@@ -44,13 +44,13 @@ export default async function HomePage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Dai E-Commerce",
-    "url": process.env.NEXT_PUBLIC_APP_URL || "https://dai-ecommerce.com",
+    "name": "Vanijoy E-Commerce",
+    "url": process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": `${process.env.NEXT_PUBLIC_APP_URL || "https://dai-ecommerce.com"}/shop/search?q={search_term_string}`
+        "urlTemplate": `${process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"}/shop/search?q={search_term_string}`
       },
       "query-input": "required name=search_term_string"
     }

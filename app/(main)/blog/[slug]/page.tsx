@@ -7,7 +7,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
     return {
-        title: `${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} | Blog | Dai`,
+        title: `${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} | Blog | Vanijoy`,
         description: `Read our article about ${slug.replace(/-/g, ' ')}. Expert insights and tips.`,
         openGraph: {
             type: "article",
@@ -24,13 +24,13 @@ export default async function BlogPostPage({ params }: Props) {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "headline": title,
-        "image": [`${process.env.NEXT_PUBLIC_APP_URL || "https://dai-ecommerce.com"}/blog/${slug}/image.jpg`],
+        "image": [`${process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"}/blog/${slug}/image.jpg`],
         "datePublished": "2025-01-01T08:00:00+08:00",
         "dateModified": "2025-01-01T09:20:00+08:00",
         "author": {
             "@type": "Person",
-            "name": "Dai Editorial Team",
-            "url": `${process.env.NEXT_PUBLIC_APP_URL || "https://dai-ecommerce.com"}/about`
+            "name": "Vanijoy Editorial Team",
+            "url": `${process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"}/about`
         }
     };
 

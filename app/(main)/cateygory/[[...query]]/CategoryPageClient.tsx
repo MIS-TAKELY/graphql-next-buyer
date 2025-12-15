@@ -76,13 +76,13 @@ export default function CategoryPageClient({ params }: { params: { query?: strin
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": process.env.NEXT_PUBLIC_APP_URL || "https://dai-ecommerce.com"
+        "item": process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Shop",
-        "item": `${process.env.NEXT_PUBLIC_APP_URL || "https://dai-ecommerce.com"}/shop`
+        "item": `${process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"}/shop`
       }
     ]
   };

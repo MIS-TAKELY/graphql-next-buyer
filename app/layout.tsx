@@ -19,31 +19,31 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Dai - E-Commerce Platform",
-    template: "%s | Dai",
+    default: "Vanijoy - E-Commerce Platform",
+    template: "%s | Vanijoy",
   },
   description: "Modern e-commerce platform for seamless online shopping. Discover the best deals on electronics, fashion, and more.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://dai-ecommerce.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"),
   keywords: ["ecommerce", "shopping", "electronics", "fashion", "online store"],
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "/",
-    title: "Dai - E-Commerce Platform",
+    title: "Vanijoy - E-Commerce Platform",
     description: "Modern e-commerce platform for seamless online shopping. Discover the best deals on electronics, fashion, and more.",
-    siteName: "Dai",
+    siteName: "Vanijoy",
     images: [
       {
         url: "/og-image.jpg", // Ensure this exists or fallback
         width: 1200,
         height: 630,
-        alt: "Dai E-Commerce",
+        alt: "Vanijoy E-Commerce",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dai - E-Commerce Platform",
+    title: "Vanijoy - E-Commerce Platform",
     description: "Modern e-commerce platform for seamless online shopping.",
     images: ["/og-image.jpg"],
   },
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Dai",
+    title: "Vanijoy",
   },
   viewport: {
     width: "device-width",

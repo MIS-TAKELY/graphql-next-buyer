@@ -4,7 +4,7 @@ import CategoryPageClient from "./CategoryPageClient";
 export async function generateMetadata({ params }: { params: Promise<{ query?: string[] }> }): Promise<Metadata> {
     const { query } = await params;
     const categoryName = query?.[0] ? decodeURIComponent(query[0]) : "All Products";
-    const title = `${categoryName} | Shop | Dai`;
+    const title = `${categoryName} | Shop | Vanijoy`;
 
     return {
         title,
