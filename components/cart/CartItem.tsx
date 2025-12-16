@@ -28,19 +28,19 @@ const CartItem = ({
     : 0;
 
   return (
-    <Card className="overflow-hidden bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
-      <CardContent className="p-3 sm:p-4">
+    <Card className="overflow-hidden bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 shadow-sm">
+      <CardContent className="p-3">
         <div className="flex gap-3">
-          {/* Product Image - Left */}
-          <div className="flex-shrink-0 w-20 sm:w-24">
-            <div className="aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden rounded">
+          {/* Product Image - Fixed Width */}
+          <div className="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24">
+            <div className="aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden rounded-md border border-gray-100 dark:border-gray-700">
               <Link href={`/product/${product.slug}`}>
                 <Image
                   src={product.images[0]?.url || "/placeholder.svg"}
                   alt={product.images[0]?.altText || product.name}
                   width={96}
                   height={96}
-                  className="w-full h-full object-cover hover:opacity-80 transition-opacity"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                   quality={85}
                 />
@@ -48,63 +48,60 @@ const CartItem = ({
             </div>
           </div>
 
-          {/* Product Info - Middle */}
-          <div className="flex-1 min-w-0 flex flex-col justify-between">
-            <div>
-              <Link href={`/product/${product.slug}`}>
-                <h3 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors line-clamp-2 mb-1">
+          {/* Product Details & Controls Wrapper */}
+          <div className="flex-1 flex flex-col justify-between min-w-0">
+            {/* Top Row: Title & Remove */}
+            <div className="flex justify-between items-start gap-2">
+              <Link href={`/product/${product.slug}`} className="flex-1 min-w-0">
+                <h3 className="font-medium text-sm sm:text-base text-gray-900 dark:text-white line-clamp-2 leading-tight">
                   {product.name}
                 </h3>
               </Link>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 -mt-1 -mr-1 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
+                onClick={() => removeItem(product.id, variant.id)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
 
-              {/* Price and Discount */}
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
+            {/* Middle: Specs or Variant Info (Optional - using price here) */}
+            <div className="mt-1">
+              <div className="flex items-baseline gap-2">
+                <span className="font-bold text-sm sm:text-lg text-gray-900 dark:text-white">
                   {formatPrice(variant.price)}
                 </span>
                 {variant.attributes?.comparePrice && (
-                  <>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 line-through">
-                      {formatPrice(variant.attributes.comparePrice)}
-                    </span>
-                    {discount > 0 && (
-                      <Badge
-                        variant="destructive"
-                        className="text-xs bg-green-600 dark:bg-green-500 text-white px-1.5 py-0"
-                      >
-                        {discount}% OFF
-                      </Badge>
-                    )}
-                  </>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 line-through">
+                    {formatPrice(variant.attributes.comparePrice)}
+                  </span>
+                )}
+                {discount > 0 && (
+                  <span className="text-[10px] font-medium text-green-600 dark:text-green-400">
+                    {discount}% off
+                  </span>
                 )}
               </div>
+            </div>
 
-              {/* SKU - Desktop only */}
+            {/* Bottom Row: Quantity & SKU */}
+            <div className="flex items-center justify-between mt-3">
+              <div className="scale-90 origin-left sm:scale-100">
+                <QuantitySelector
+                  quantity={quantity}
+                  setQuantity={(newQuantity) => updateQuantity(variant.id, newQuantity)}
+                />
+              </div>
+
+              {/* SKU - Hidden on very small screens, shown on sm+ */}
               {variant.sku && (
-                <p className="hidden sm:block text-xs text-gray-600 dark:text-gray-300 mt-1">
-                  <span className="font-medium">SKU:</span> {variant.sku}
-                </p>
+                <span className="hidden xs:block text-[10px] text-gray-400 dark:text-gray-500 font-mono">
+                  {variant.sku}
+                </span>
               )}
             </div>
-          </div>
-
-          {/* Controls - Right */}
-          <div className="flex flex-col items-end justify-between gap-2">
-            {/* Quantity Controls */}
-            <QuantitySelector
-              quantity={quantity}
-              setQuantity={(newQuantity) => updateQuantity(variant.id, newQuantity)}
-            />
-
-            {/* Delete Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 w-8 p-0 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
-              onClick={() => removeItem(product.id, variant.id)}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
           </div>
         </div>
       </CardContent>
