@@ -59,9 +59,14 @@ export class CacheService {
     /**
      * Generate product detail cache key (matches seller's invalidation pattern)
      * @param slug Product slug
+     * 
+     * Version History:
+     * - v1: Initial implementation
+     * - v2: Added seller.id field to GraphQL query (2025-12-16)
      */
     static getProductDetailKey(slug: string): string {
-        return `product:details:${slug}`;
+        const VERSION = 'v2'; // Increment this when product data structure changes
+        return `product:details:${VERSION}:${slug}`;
     }
 
     /**
