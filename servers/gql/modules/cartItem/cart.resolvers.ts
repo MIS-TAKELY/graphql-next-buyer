@@ -75,6 +75,9 @@ export const cartItemResolvers = {
             variant: {
               select: {
                 id: true,
+                price: true,
+                sku: true,
+                stock: true,
                 product: {
                   select: {
                     id: true,
@@ -205,23 +208,23 @@ export const cartItemResolvers = {
 
     updateCartQuantity: async (
       _: any,
-      { variantId, quantity }: { variantId: string; quantity: number },
+      { cartItemId, quantity }: { cartItemId: string; quantity: number },
       ctx: GraphQLContext
     ) => {
       try {
         const user = requireAuth(ctx);
-        if (!variantId) throw new Error("Variant ID is required");
+        if (!cartItemId) throw new Error("Variant ID is required");
         if (quantity < 0) throw new Error("Quantity cannot be negative");
 
         if (quantity === 0) {
           // Delete if quantity is 0
           await prisma.cartItem.deleteMany({
-            where: { variantId, userId: user.id },
+            where: { variantId: cartItemId, userId: user.id },
           });
         } else {
           // Check stock first
           const variant = await prisma.productVariant.findUnique({
-            where: { id: variantId },
+            where: { id: cartItemId },
             select: { stock: true },
           });
 
@@ -230,7 +233,7 @@ export const cartItemResolvers = {
             throw new Error("Insufficient stock available");
 
           await prisma.cartItem.updateMany({
-            where: { variantId, userId: user.id },
+            where: { variantId: cartItemId, userId: user.id },
             data: { quantity },
           });
         }

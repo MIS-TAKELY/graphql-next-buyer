@@ -192,15 +192,45 @@ export const useCart = () => {
 
   // Update quantity mutation
   const [updateQuantityMutation] = useMutation(UPDATE_CART_QUANTITY, {
-    refetchQueries: [{ query: GET_MY_CART_ITEMS }, { query: GET_CART_PRODUCT_IDS }],
+    update(cache, { data }, { variables }) {
+      if (!data?.updateCartQuantity) return;
+
+      try {
+        const { cartItemId, quantity } = variables || {};
+
+        // Read current cart
+        const currentData: any = cache.readQuery({ query: GET_MY_CART_ITEMS });
+
+        if (currentData?.getMyCart) {
+          const updatedCart = currentData.getMyCart.map((item: any) => {
+            // Check against variant.id since that matches the cartItemId argument
+            if (item.variant.id === cartItemId) {
+              return { ...item, quantity };
+            }
+            return item;
+          });
+
+          cache.writeQuery({
+            query: GET_MY_CART_ITEMS,
+            data: {
+              getMyCart: updatedCart,
+            },
+          });
+        }
+      } catch (error) {
+        console.error("Optimistic update failed:", error);
+      }
+    },
     onError(error) {
       toast.error("Failed to update quantity");
-    }
+    },
   });
 
   const updateQuantity = useCallback(
-    async (variantId: string, quantity: number) => {
+    async (cartItemId: string, quantity: number) => {
       if (quantity < 1) return;
+
+      console.log("varient id-->", cartItemId)
 
       if (!userId) {
         // For anonymous cart, update quantity in store
@@ -210,7 +240,10 @@ export const useCart = () => {
 
       try {
         await updateQuantityMutation({
-          variables: { variantId, quantity },
+          variables: { cartItemId, quantity },
+          optimisticResponse: {
+            updateCartQuantity: true,
+          },
         });
       } catch (err) {
         console.error("Update quantity failed", err);

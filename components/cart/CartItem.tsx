@@ -7,6 +7,7 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
+import QuantitySelector from "../page/product/QuantitySelector";
 
 const CartItem = ({
   item,
@@ -90,29 +91,10 @@ const CartItem = ({
           {/* Controls - Right */}
           <div className="flex flex-col items-end justify-between gap-2">
             {/* Quantity Controls */}
-            <div className="flex items-center border border-gray-200 dark:border-gray-600 rounded">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-7 w-7 p-0 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => updateQuantity(item.id, quantity - 1)}
-                disabled={quantity <= 1}
-              >
-                <Minus className="h-3 w-3" />
-              </Button>
-              <span className="px-2 py-1 text-xs font-medium text-gray-900 dark:text-white min-w-[2rem] text-center">
-                {quantity}
-              </span>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-7 w-7 p-0 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => updateQuantity(item.id, quantity + 1)}
-                disabled={quantity >= variant.stock}
-              >
-                <Plus className="h-3 w-3" />
-              </Button>
-            </div>
+            <QuantitySelector
+              quantity={quantity}
+              setQuantity={(newQuantity) => updateQuantity(variant.id, newQuantity)}
+            />
 
             {/* Delete Button */}
             <Button

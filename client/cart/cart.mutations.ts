@@ -13,8 +13,8 @@ export const REMOVE_FROM_CART = gql`
 `;
 
 export const UPDATE_CART_QUANTITY = gql`
-  mutation UpdateCartQuantity($variantId: ID!, $quantity: Int!) {
-    updateCartQuantity(variantId: $variantId, quantity: $quantity)
+  mutation UpdateCartQuantity($cartItemId: ID!, $quantity: Int!) {
+    updateCartQuantity(cartItemId: $cartItemId, quantity: $quantity)
   }
 `;
 

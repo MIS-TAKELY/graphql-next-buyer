@@ -1,7 +1,7 @@
 // app/(main)/cart/page.tsx
 "use client";
 
-import { GET_PRODUCTS } from "@/client/product/product.queries";
+import { GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
 import CartEmpty from "@/components/cart/CartEmpty";
 import CartError from "@/components/cart/CartError";
 import CartHeader from "@/components/cart/CartHeader";
@@ -77,6 +77,16 @@ export interface Product {
   variants: ProductVariant[];
 }
 
+// Define a new interface for the simplified cart item data
+interface CartItemData {
+  id: string;
+  name: string;
+  image: string;
+  price: string;
+  variantId: string;
+  quantity: number;
+}
+
 export default function CartPage() {
   const {
     removeFromCart,
@@ -85,67 +95,58 @@ export default function CartPage() {
     cartLoading,
   } = useCart();
 
-  const {
-    data: productdata,
-    loading: productDataLoading,
-    error: productDataError,
-  } = useQuery(GET_PRODUCTS, { fetchPolicy: "cache-first" });
+  // Fetch products and filter by cart IDs
+  const { data: cartData, loading: cartDataLoading, error: cartDataError } = useQuery(GET_MY_CART_ITEMS, {
+    skip: !cartProductIds || cartProductIds.size === 0,
+    fetchPolicy: "cache-first",
+  });
 
-  // Derive cart items directly from Apollo cache - no local state needed
   const cartItems = useMemo((): ICartItem[] => {
-    if (
-      !cartProductIds ||
-      !productdata?.getProducts ||
-      cartLoading ||
-      productDataLoading
-    ) {
-      return [];
-    }
+    if (!cartData?.getMyCart) return [];
 
-    const cartdata = productdata.getProducts.filter((product: Product) => {
-      return cartProductIds.has(product.id);
-    });
-
-    return cartdata.map((product: Product, index: number) => {
-      const variant = product.variants[0];
+    return cartData.getMyCart.map((item: any) => {
+      const variant = item.variant;
       const priceInCents = parseFloat(variant.price);
-      const comparePrice = variant.comparePrice
-        ? parseFloat(variant.comparePrice)
-        : undefined;
+      // We don't have comparePrice in the new query yet, but we can assume 0 or update query if needed.
+      // For now let's handle it gracefully.
+      const comparePrice = undefined;
 
       return {
-        id: product?.id || `cart-${index}`,
-        quantity: 1, // TODO: Get actual quantity from cart query when available
-        createdAt: new Date(),
+        id: item.id,
+        quantity: item.quantity,
+        createdAt: new Date(), // Item doesn't return createdAt, using current date or could add to query
         variant: {
           id: variant.id,
-          sku: variant.sku || `SKU-${product.id}`,
+          sku: variant.sku || `SKU-${variant.product.id}`,
           price: priceInCents,
           stock: variant.stock || 10,
           attributes: { comparePrice },
+          product: {
+            ...variant.product,
+            // Add missing fields required by Product interface if any, or cast
+            status: "ACTIVE", // Assumed active since in cart
+            variants: [], // Empty variants array to satisfy interface
+            reviews: []
+          }
         },
         product: {
-          ...product,
+          ...variant.product,
           salePrice: priceInCents,
           returnPolicy: "30-day return policy",
           warranty: "1 Year Warranty",
+          status: "ACTIVE",
+          variants: [],
+          reviews: [] // Add missing fields
         },
       };
     });
-  }, [
-    cartProductIds,
-    productdata?.getProducts,
-    cartLoading,
-    productDataLoading,
-  ]);
+  }, [cartData, cartDataLoading]);
 
   // Handle quantity update - calls mutation
+  // Note: cartId passed here is actually the variantId from CartItem component
   const handleUpdateQuantity = async (cartId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
-    const item = cartItems.find((i) => i.id === cartId);
-    if (item) {
-      await updateQuantity(item.variant.id, newQuantity);
-    }
+    await updateQuantity(cartId, newQuantity);
   };
 
   // Handle remove item
@@ -172,7 +173,7 @@ export default function CartPage() {
     return { subtotal, originalTotal, totalSavings };
   }, [cartItems]);
 
-  if (productDataLoading || cartLoading) {
+  if (cartDataLoading || cartLoading) {
     return (
       <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 bg-gray-50 dark:bg-gray-900">
         <div className="text-center py-16">
@@ -185,7 +186,7 @@ export default function CartPage() {
     );
   }
 
-  if (productDataError) {
+  if (cartDataError) {
     return <CartError />;
   }
 

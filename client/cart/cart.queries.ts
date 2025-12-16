@@ -30,9 +30,12 @@ export const GET_MY_CART_ITEMS = gql`
       variant {
         id
         price
+        sku
+        stock
         product {
           id
           name
+          slug
           images {
             url
             altText
