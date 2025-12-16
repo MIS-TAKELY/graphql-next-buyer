@@ -111,6 +111,7 @@ export const GET_PRODUCT_BY_SLUG = gql`
         name
       }
       seller {
+        id
         firstName
         lastName
       }
