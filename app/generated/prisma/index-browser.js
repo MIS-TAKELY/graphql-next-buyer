@@ -545,6 +545,25 @@ exports.Prisma.PayoutScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ProductQuestionScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  userId: 'userId',
+  content: 'content',
+  isPublic: 'isPublic',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductAnswerScalarFieldEnum = {
+  id: 'id',
+  questionId: 'questionId',
+  sellerId: 'sellerId',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -730,7 +749,9 @@ exports.Prisma.ModelName = {
   WishlistItem: 'WishlistItem',
   SellerOrder: 'SellerOrder',
   SellerOrderItem: 'SellerOrderItem',
-  Payout: 'Payout'
+  Payout: 'Payout',
+  ProductQuestion: 'ProductQuestion',
+  ProductAnswer: 'ProductAnswer'
 };
 
 /**

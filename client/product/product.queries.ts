@@ -68,8 +68,18 @@ export const GET_PRODUCT_BY_SLUG = gql`
       description
       slug
       status
-      returnPolicy
-      warranty
+      returnPolicy {
+        type
+        duration
+        unit
+        conditions
+      }
+      warranty {
+        type
+        duration
+        unit
+        description
+      }
       images {
         id
         url
@@ -91,10 +101,6 @@ export const GET_PRODUCT_BY_SLUG = gql`
         stock
         isDefault
         attributes
-        specifications {
-          key
-          value
-        }
         specifications {
           key
           value

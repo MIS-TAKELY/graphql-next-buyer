@@ -55,4 +55,19 @@ export class CacheService {
     static generateKey(prefix: string, id: string): string {
         return `${prefix}:${id}`;
     }
+
+    /**
+     * Generate product detail cache key (matches seller's invalidation pattern)
+     * @param slug Product slug
+     */
+    static getProductDetailKey(slug: string): string {
+        return `product:details:${slug}`;
+    }
+
+    /**
+     * Generate products list cache key
+     */
+    static getProductsListKey(): string {
+        return 'products:all';
+    }
 }

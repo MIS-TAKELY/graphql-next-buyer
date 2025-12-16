@@ -2,9 +2,9 @@ import { GET_PRODUCT_BY_SLUG } from "@/client/product/product.queries";
 import ProductPageClient from "@/components/page/product/ProductPageClient";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
+import { CacheService } from "@/services/CacheService";
 import { TProduct } from "@/types/product";
 import { Metadata, ResolvingMetadata } from "next";
-import { CacheService } from "@/services/CacheService";
 
 export const revalidate = 3600;
 
@@ -14,7 +14,7 @@ type Props = {
 };
 
 async function getProduct(slug: string) {
-  const CACHE_KEY = CacheService.generateKey("product", slug);
+  const CACHE_KEY = CacheService.getProductDetailKey(slug);
   let product: TProduct | null = await CacheService.get<TProduct>(CACHE_KEY);
 
   if (product) return product;
@@ -57,7 +57,9 @@ export async function generateMetadata(
 
   return {
     title: product.name,
-    description: product.description?.substring(0, 160) || `Buy ${product.name} at the best price.`,
+    description:
+      product.description?.substring(0, 160) ||
+      `Buy ${product.name} at the best price.`,
     alternates: {
       canonical: `/shop/product/${slug}`,
     },
@@ -87,23 +89,41 @@ export default async function ProductPage({
   const client = await getServerApolloClient();
 
   let product: TProduct | null = null;
-  const CACHE_KEY = CacheService.generateKey("product", slug);
+  const CACHE_KEY = CacheService.getProductDetailKey(slug);
 
   product = await CacheService.get<TProduct>(CACHE_KEY);
 
-  if (!product) {
-    const { data, error } = await client.query({
-      query: GET_PRODUCT_BY_SLUG,
-      variables: { slug },
-      fetchPolicy: "no-cache", // fetch fresh if no redis cache
-    });
+  console.log("product frmo sache-->", product);
 
-    if (error) {
-      console.error("Error fetching product by slug:", error);
-      return <div>Error: {error.message}</div>;
+  if (!product) {
+    console.log("calling bds");
+    try {
+      const { data, error, errors } = await client.query({
+        query: GET_PRODUCT_BY_SLUG,
+        variables: { slug },
+        fetchPolicy: "no-cache", // fetch fresh if no redis cache
+      });
+
+      console.log("GraphQL Response:", { data, error, errors });
+
+      if (error) {
+        console.log("error-->", error);
+        console.error("Error fetching product by slug:", error);
+        return <div>Error: {error.message}</div>;
+      }
+
+      if (errors && errors.length > 0) {
+        console.error("GraphQL errors:", errors);
+        return <div>GraphQL Error: {errors[0].message}</div>;
+      }
+
+      product = data?.getProductBySlug;
+      console.log("product frmo db-->", product);
+    } catch (err) {
+      console.error("Caught exception during GraphQL query:", err);
+      return <div>Exception: {String(err)}</div>;
     }
 
-    product = data?.getProductBySlug;
     if (product) {
       await CacheService.set(CACHE_KEY, product, 3600);
     }
@@ -118,7 +138,9 @@ export default async function ProductPage({
     currentProduct: product,
   };
 
-  const currentPrice = product.variants?.[0]?.price ? Number(product.variants[0].price) : 0;
+  const currentPrice = product.variants?.[0]?.price
+    ? Number(product.variants[0].price)
+    : 0;
   // Ensure stock is treated as a number
   const stockValue = product.variants?.[0]?.stock;
   const stock = stockValue ? Number(stockValue) : 0;
@@ -126,49 +148,57 @@ export default async function ProductPage({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": product.name,
-    "image": product.images?.map((img) => img.url) || [],
-    "description": product.description,
-    "sku": product.variants?.[0]?.sku || "",
-    "brand": {
+    name: product.name,
+    image: product.images?.map((img) => img.url) || [],
+    description: product.description,
+    sku: product.variants?.[0]?.sku || "",
+    brand: {
       "@type": "Brand",
-      "name": typeof product.brand === 'string' ? product.brand : product.brand?.name || "Generic"
+      name:
+        typeof product.brand === "string"
+          ? product.brand
+          : product.brand?.name || "Generic",
     },
-    "offers": {
+    offers: {
       "@type": "Offer",
-      "url": `${process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"}/shop/product/${slug}`,
-      "priceCurrency": "NPR",
-      "price": currentPrice,
-      "itemCondition": "https://schema.org/NewCondition",
-      "availability": stock > 0
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock"
-    }
+      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"
+        }/shop/product/${slug}`,
+      priceCurrency: "NPR",
+      price: currentPrice,
+      itemCondition: "https://schema.org/NewCondition",
+      availability:
+        stock > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+    },
   };
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": [
+    itemListElement: [
       {
         "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"
+        position: 1,
+        name: "Home",
+        item:
+          process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com",
       },
       {
         "@type": "ListItem",
-        "position": 2,
-        "name": product.category?.name || "Shop",
-        "item": `${process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"}/shop`
+        position: 2,
+        name: product.category?.name || "Shop",
+        item: `${process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"
+          }/shop`,
       },
       {
         "@type": "ListItem",
-        "position": 3,
-        "name": product.name,
-        "item": `${process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"}/shop/product/${slug}`
-      }
-    ]
+        position: 3,
+        name: product.name,
+        item: `${process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"
+          }/shop/product/${slug}`,
+      },
+    ],
   };
 
   return (

@@ -33,7 +33,7 @@ type SectionConfig = {
 export default async function HomePage() {
   const client = await getServerApolloClient();
 
-  const CACHE_KEY = CacheService.generateKey("landing-page", "products");
+  const CACHE_KEY = CacheService.getProductsListKey();
   let products: IProducts[] = (await CacheService.get<IProducts[]>(CACHE_KEY)) || [];
 
   if (products.length === 0) {

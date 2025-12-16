@@ -188,6 +188,16 @@ export type SellerOrderItem = $Result.DefaultSelection<Prisma.$SellerOrderItemPa
  * 
  */
 export type Payout = $Result.DefaultSelection<Prisma.$PayoutPayload>
+/**
+ * Model ProductQuestion
+ * 
+ */
+export type ProductQuestion = $Result.DefaultSelection<Prisma.$ProductQuestionPayload>
+/**
+ * Model ProductAnswer
+ * 
+ */
+export type ProductAnswer = $Result.DefaultSelection<Prisma.$ProductAnswerPayload>
 
 /**
  * Enums
@@ -930,6 +940,26 @@ export class PrismaClient<
     * ```
     */
   get payout(): Prisma.PayoutDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.productQuestion`: Exposes CRUD operations for the **ProductQuestion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductQuestions
+    * const productQuestions = await prisma.productQuestion.findMany()
+    * ```
+    */
+  get productQuestion(): Prisma.ProductQuestionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.productAnswer`: Exposes CRUD operations for the **ProductAnswer** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductAnswers
+    * const productAnswers = await prisma.productAnswer.findMany()
+    * ```
+    */
+  get productAnswer(): Prisma.ProductAnswerDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1405,7 +1435,9 @@ export namespace Prisma {
     WishlistItem: 'WishlistItem',
     SellerOrder: 'SellerOrder',
     SellerOrderItem: 'SellerOrderItem',
-    Payout: 'Payout'
+    Payout: 'Payout',
+    ProductQuestion: 'ProductQuestion',
+    ProductAnswer: 'ProductAnswer'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1424,7 +1456,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout"
+      modelProps: "user" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout" | "productQuestion" | "productAnswer"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4018,6 +4050,154 @@ export namespace Prisma {
           }
         }
       }
+      ProductQuestion: {
+        payload: Prisma.$ProductQuestionPayload<ExtArgs>
+        fields: Prisma.ProductQuestionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductQuestionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductQuestionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductQuestionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductQuestionPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductQuestionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductQuestionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductQuestionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductQuestionPayload>
+          }
+          findMany: {
+            args: Prisma.ProductQuestionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductQuestionPayload>[]
+          }
+          create: {
+            args: Prisma.ProductQuestionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductQuestionPayload>
+          }
+          createMany: {
+            args: Prisma.ProductQuestionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductQuestionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductQuestionPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductQuestionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductQuestionPayload>
+          }
+          update: {
+            args: Prisma.ProductQuestionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductQuestionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductQuestionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductQuestionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProductQuestionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductQuestionPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProductQuestionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductQuestionPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductQuestionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductQuestion>
+          }
+          groupBy: {
+            args: Prisma.ProductQuestionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductQuestionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductQuestionCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductQuestionCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProductAnswer: {
+        payload: Prisma.$ProductAnswerPayload<ExtArgs>
+        fields: Prisma.ProductAnswerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductAnswerFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductAnswerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductAnswerFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductAnswerPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductAnswerFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductAnswerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductAnswerFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductAnswerPayload>
+          }
+          findMany: {
+            args: Prisma.ProductAnswerFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductAnswerPayload>[]
+          }
+          create: {
+            args: Prisma.ProductAnswerCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductAnswerPayload>
+          }
+          createMany: {
+            args: Prisma.ProductAnswerCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductAnswerCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductAnswerPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductAnswerDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductAnswerPayload>
+          }
+          update: {
+            args: Prisma.ProductAnswerUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductAnswerPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductAnswerDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductAnswerUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProductAnswerUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductAnswerPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProductAnswerUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductAnswerPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductAnswerAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductAnswer>
+          }
+          groupBy: {
+            args: Prisma.ProductAnswerGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductAnswerGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductAnswerCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductAnswerCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4149,6 +4329,8 @@ export namespace Prisma {
     sellerOrder?: SellerOrderOmit
     sellerOrderItem?: SellerOrderItemOmit
     payout?: PayoutOmit
+    productQuestion?: ProductQuestionOmit
+    productAnswer?: ProductAnswerOmit
   }
 
   /* Types for Logging */
@@ -4245,6 +4427,8 @@ export namespace Prisma {
     ConversationParticipant: number
     notifications: number
     roles: number
+    productQuestions: number
+    productAnswers: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4264,6 +4448,8 @@ export namespace Prisma {
     ConversationParticipant?: boolean | UserCountOutputTypeCountConversationParticipantArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     roles?: boolean | UserCountOutputTypeCountRolesArgs
+    productQuestions?: boolean | UserCountOutputTypeCountProductQuestionsArgs
+    productAnswers?: boolean | UserCountOutputTypeCountProductAnswersArgs
   }
 
   // Custom InputTypes
@@ -4387,6 +4573,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountRolesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserRoleWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountProductQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductQuestionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountProductAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductAnswerWhereInput
   }
 
 
@@ -4613,6 +4813,7 @@ export namespace Prisma {
     warranty: number
     returnPolicy: number
     Conversation: number
+    questions: number
   }
 
   export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4625,6 +4826,7 @@ export namespace Prisma {
     warranty?: boolean | ProductCountOutputTypeCountWarrantyArgs
     returnPolicy?: boolean | ProductCountOutputTypeCountReturnPolicyArgs
     Conversation?: boolean | ProductCountOutputTypeCountConversationArgs
+    questions?: boolean | ProductCountOutputTypeCountQuestionsArgs
   }
 
   // Custom InputTypes
@@ -4699,6 +4901,13 @@ export namespace Prisma {
    */
   export type ProductCountOutputTypeCountConversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ConversationWhereInput
+  }
+
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeCountQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductQuestionWhereInput
   }
 
 
@@ -4952,6 +5161,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ProductQuestionCountOutputType
+   */
+
+  export type ProductQuestionCountOutputType = {
+    answers: number
+  }
+
+  export type ProductQuestionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    answers?: boolean | ProductQuestionCountOutputTypeCountAnswersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProductQuestionCountOutputType without action
+   */
+  export type ProductQuestionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestionCountOutputType
+     */
+    select?: ProductQuestionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProductQuestionCountOutputType without action
+   */
+  export type ProductQuestionCountOutputTypeCountAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductAnswerWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -5184,6 +5424,8 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     sellerProfile?: boolean | User$sellerProfileArgs<ExtArgs>
     roles?: boolean | User$rolesArgs<ExtArgs>
+    productQuestions?: boolean | User$productQuestionsArgs<ExtArgs>
+    productAnswers?: boolean | User$productAnswersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -5248,6 +5490,8 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     sellerProfile?: boolean | User$sellerProfileArgs<ExtArgs>
     roles?: boolean | User$rolesArgs<ExtArgs>
+    productQuestions?: boolean | User$productQuestionsArgs<ExtArgs>
+    productAnswers?: boolean | User$productAnswersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5273,6 +5517,8 @@ export namespace Prisma {
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       sellerProfile: Prisma.$SellerProfilePayload<ExtArgs> | null
       roles: Prisma.$UserRolePayload<ExtArgs>[]
+      productQuestions: Prisma.$ProductQuestionPayload<ExtArgs>[]
+      productAnswers: Prisma.$ProductAnswerPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5697,6 +5943,8 @@ export namespace Prisma {
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sellerProfile<T extends User$sellerProfileArgs<ExtArgs> = {}>(args?: Subset<T, User$sellerProfileArgs<ExtArgs>>): Prisma__SellerProfileClient<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     roles<T extends User$rolesArgs<ExtArgs> = {}>(args?: Subset<T, User$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    productQuestions<T extends User$productQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, User$productQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    productAnswers<T extends User$productAnswersArgs<ExtArgs> = {}>(args?: Subset<T, User$productAnswersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6525,6 +6773,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserRoleScalarFieldEnum | UserRoleScalarFieldEnum[]
+  }
+
+  /**
+   * User.productQuestions
+   */
+  export type User$productQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionInclude<ExtArgs> | null
+    where?: ProductQuestionWhereInput
+    orderBy?: ProductQuestionOrderByWithRelationInput | ProductQuestionOrderByWithRelationInput[]
+    cursor?: ProductQuestionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductQuestionScalarFieldEnum | ProductQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * User.productAnswers
+   */
+  export type User$productAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerInclude<ExtArgs> | null
+    where?: ProductAnswerWhereInput
+    orderBy?: ProductAnswerOrderByWithRelationInput | ProductAnswerOrderByWithRelationInput[]
+    cursor?: ProductAnswerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductAnswerScalarFieldEnum | ProductAnswerScalarFieldEnum[]
   }
 
   /**
@@ -25042,6 +25338,7 @@ export namespace Prisma {
     warranty?: boolean | Product$warrantyArgs<ExtArgs>
     returnPolicy?: boolean | Product$returnPolicyArgs<ExtArgs>
     Conversation?: boolean | Product$ConversationArgs<ExtArgs>
+    questions?: boolean | Product$questionsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
@@ -25104,6 +25401,7 @@ export namespace Prisma {
     warranty?: boolean | Product$warrantyArgs<ExtArgs>
     returnPolicy?: boolean | Product$returnPolicyArgs<ExtArgs>
     Conversation?: boolean | Product$ConversationArgs<ExtArgs>
+    questions?: boolean | Product$questionsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -25129,6 +25427,7 @@ export namespace Prisma {
       warranty: Prisma.$WarrantyPayload<ExtArgs>[]
       returnPolicy: Prisma.$ReturnPolicyPayload<ExtArgs>[]
       Conversation: Prisma.$ConversationPayload<ExtArgs>[]
+      questions: Prisma.$ProductQuestionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -25547,6 +25846,7 @@ export namespace Prisma {
     warranty<T extends Product$warrantyArgs<ExtArgs> = {}>(args?: Subset<T, Product$warrantyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WarrantyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     returnPolicy<T extends Product$returnPolicyArgs<ExtArgs> = {}>(args?: Subset<T, Product$returnPolicyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReturnPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Conversation<T extends Product$ConversationArgs<ExtArgs> = {}>(args?: Subset<T, Product$ConversationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    questions<T extends Product$questionsArgs<ExtArgs> = {}>(args?: Subset<T, Product$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -26215,6 +26515,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ConversationScalarFieldEnum | ConversationScalarFieldEnum[]
+  }
+
+  /**
+   * Product.questions
+   */
+  export type Product$questionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionInclude<ExtArgs> | null
+    where?: ProductQuestionWhereInput
+    orderBy?: ProductQuestionOrderByWithRelationInput | ProductQuestionOrderByWithRelationInput[]
+    cursor?: ProductQuestionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductQuestionScalarFieldEnum | ProductQuestionScalarFieldEnum[]
   }
 
   /**
@@ -46040,6 +46364,2207 @@ export namespace Prisma {
 
 
   /**
+   * Model ProductQuestion
+   */
+
+  export type AggregateProductQuestion = {
+    _count: ProductQuestionCountAggregateOutputType | null
+    _min: ProductQuestionMinAggregateOutputType | null
+    _max: ProductQuestionMaxAggregateOutputType | null
+  }
+
+  export type ProductQuestionMinAggregateOutputType = {
+    id: string | null
+    productId: string | null
+    userId: string | null
+    content: string | null
+    isPublic: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductQuestionMaxAggregateOutputType = {
+    id: string | null
+    productId: string | null
+    userId: string | null
+    content: string | null
+    isPublic: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductQuestionCountAggregateOutputType = {
+    id: number
+    productId: number
+    userId: number
+    content: number
+    isPublic: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProductQuestionMinAggregateInputType = {
+    id?: true
+    productId?: true
+    userId?: true
+    content?: true
+    isPublic?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductQuestionMaxAggregateInputType = {
+    id?: true
+    productId?: true
+    userId?: true
+    content?: true
+    isPublic?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductQuestionCountAggregateInputType = {
+    id?: true
+    productId?: true
+    userId?: true
+    content?: true
+    isPublic?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProductQuestionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductQuestion to aggregate.
+     */
+    where?: ProductQuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductQuestions to fetch.
+     */
+    orderBy?: ProductQuestionOrderByWithRelationInput | ProductQuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductQuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductQuestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductQuestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProductQuestions
+    **/
+    _count?: true | ProductQuestionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductQuestionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductQuestionMaxAggregateInputType
+  }
+
+  export type GetProductQuestionAggregateType<T extends ProductQuestionAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductQuestion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductQuestion[P]>
+      : GetScalarType<T[P], AggregateProductQuestion[P]>
+  }
+
+
+
+
+  export type ProductQuestionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductQuestionWhereInput
+    orderBy?: ProductQuestionOrderByWithAggregationInput | ProductQuestionOrderByWithAggregationInput[]
+    by: ProductQuestionScalarFieldEnum[] | ProductQuestionScalarFieldEnum
+    having?: ProductQuestionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductQuestionCountAggregateInputType | true
+    _min?: ProductQuestionMinAggregateInputType
+    _max?: ProductQuestionMaxAggregateInputType
+  }
+
+  export type ProductQuestionGroupByOutputType = {
+    id: string
+    productId: string
+    userId: string
+    content: string
+    isPublic: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: ProductQuestionCountAggregateOutputType | null
+    _min: ProductQuestionMinAggregateOutputType | null
+    _max: ProductQuestionMaxAggregateOutputType | null
+  }
+
+  type GetProductQuestionGroupByPayload<T extends ProductQuestionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductQuestionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductQuestionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductQuestionGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductQuestionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductQuestionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    productId?: boolean
+    userId?: boolean
+    content?: boolean
+    isPublic?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    answers?: boolean | ProductQuestion$answersArgs<ExtArgs>
+    _count?: boolean | ProductQuestionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productQuestion"]>
+
+  export type ProductQuestionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    productId?: boolean
+    userId?: boolean
+    content?: boolean
+    isPublic?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productQuestion"]>
+
+  export type ProductQuestionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    productId?: boolean
+    userId?: boolean
+    content?: boolean
+    isPublic?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productQuestion"]>
+
+  export type ProductQuestionSelectScalar = {
+    id?: boolean
+    productId?: boolean
+    userId?: boolean
+    content?: boolean
+    isPublic?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProductQuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "userId" | "content" | "isPublic" | "createdAt" | "updatedAt", ExtArgs["result"]["productQuestion"]>
+  export type ProductQuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    answers?: boolean | ProductQuestion$answersArgs<ExtArgs>
+    _count?: boolean | ProductQuestionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProductQuestionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ProductQuestionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ProductQuestionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductQuestion"
+    objects: {
+      product: Prisma.$ProductPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+      answers: Prisma.$ProductAnswerPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      productId: string
+      userId: string
+      content: string
+      isPublic: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["productQuestion"]>
+    composites: {}
+  }
+
+  type ProductQuestionGetPayload<S extends boolean | null | undefined | ProductQuestionDefaultArgs> = $Result.GetResult<Prisma.$ProductQuestionPayload, S>
+
+  type ProductQuestionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProductQuestionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProductQuestionCountAggregateInputType | true
+    }
+
+  export interface ProductQuestionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductQuestion'], meta: { name: 'ProductQuestion' } }
+    /**
+     * Find zero or one ProductQuestion that matches the filter.
+     * @param {ProductQuestionFindUniqueArgs} args - Arguments to find a ProductQuestion
+     * @example
+     * // Get one ProductQuestion
+     * const productQuestion = await prisma.productQuestion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductQuestionFindUniqueArgs>(args: SelectSubset<T, ProductQuestionFindUniqueArgs<ExtArgs>>): Prisma__ProductQuestionClient<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProductQuestion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProductQuestionFindUniqueOrThrowArgs} args - Arguments to find a ProductQuestion
+     * @example
+     * // Get one ProductQuestion
+     * const productQuestion = await prisma.productQuestion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductQuestionFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductQuestionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductQuestionClient<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductQuestion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductQuestionFindFirstArgs} args - Arguments to find a ProductQuestion
+     * @example
+     * // Get one ProductQuestion
+     * const productQuestion = await prisma.productQuestion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductQuestionFindFirstArgs>(args?: SelectSubset<T, ProductQuestionFindFirstArgs<ExtArgs>>): Prisma__ProductQuestionClient<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductQuestion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductQuestionFindFirstOrThrowArgs} args - Arguments to find a ProductQuestion
+     * @example
+     * // Get one ProductQuestion
+     * const productQuestion = await prisma.productQuestion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductQuestionFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductQuestionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductQuestionClient<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProductQuestions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductQuestionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductQuestions
+     * const productQuestions = await prisma.productQuestion.findMany()
+     * 
+     * // Get first 10 ProductQuestions
+     * const productQuestions = await prisma.productQuestion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productQuestionWithIdOnly = await prisma.productQuestion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductQuestionFindManyArgs>(args?: SelectSubset<T, ProductQuestionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProductQuestion.
+     * @param {ProductQuestionCreateArgs} args - Arguments to create a ProductQuestion.
+     * @example
+     * // Create one ProductQuestion
+     * const ProductQuestion = await prisma.productQuestion.create({
+     *   data: {
+     *     // ... data to create a ProductQuestion
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductQuestionCreateArgs>(args: SelectSubset<T, ProductQuestionCreateArgs<ExtArgs>>): Prisma__ProductQuestionClient<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProductQuestions.
+     * @param {ProductQuestionCreateManyArgs} args - Arguments to create many ProductQuestions.
+     * @example
+     * // Create many ProductQuestions
+     * const productQuestion = await prisma.productQuestion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductQuestionCreateManyArgs>(args?: SelectSubset<T, ProductQuestionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductQuestions and returns the data saved in the database.
+     * @param {ProductQuestionCreateManyAndReturnArgs} args - Arguments to create many ProductQuestions.
+     * @example
+     * // Create many ProductQuestions
+     * const productQuestion = await prisma.productQuestion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProductQuestions and only return the `id`
+     * const productQuestionWithIdOnly = await prisma.productQuestion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductQuestionCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductQuestionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProductQuestion.
+     * @param {ProductQuestionDeleteArgs} args - Arguments to delete one ProductQuestion.
+     * @example
+     * // Delete one ProductQuestion
+     * const ProductQuestion = await prisma.productQuestion.delete({
+     *   where: {
+     *     // ... filter to delete one ProductQuestion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductQuestionDeleteArgs>(args: SelectSubset<T, ProductQuestionDeleteArgs<ExtArgs>>): Prisma__ProductQuestionClient<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProductQuestion.
+     * @param {ProductQuestionUpdateArgs} args - Arguments to update one ProductQuestion.
+     * @example
+     * // Update one ProductQuestion
+     * const productQuestion = await prisma.productQuestion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductQuestionUpdateArgs>(args: SelectSubset<T, ProductQuestionUpdateArgs<ExtArgs>>): Prisma__ProductQuestionClient<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProductQuestions.
+     * @param {ProductQuestionDeleteManyArgs} args - Arguments to filter ProductQuestions to delete.
+     * @example
+     * // Delete a few ProductQuestions
+     * const { count } = await prisma.productQuestion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductQuestionDeleteManyArgs>(args?: SelectSubset<T, ProductQuestionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductQuestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductQuestionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductQuestions
+     * const productQuestion = await prisma.productQuestion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductQuestionUpdateManyArgs>(args: SelectSubset<T, ProductQuestionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductQuestions and returns the data updated in the database.
+     * @param {ProductQuestionUpdateManyAndReturnArgs} args - Arguments to update many ProductQuestions.
+     * @example
+     * // Update many ProductQuestions
+     * const productQuestion = await prisma.productQuestion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProductQuestions and only return the `id`
+     * const productQuestionWithIdOnly = await prisma.productQuestion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProductQuestionUpdateManyAndReturnArgs>(args: SelectSubset<T, ProductQuestionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProductQuestion.
+     * @param {ProductQuestionUpsertArgs} args - Arguments to update or create a ProductQuestion.
+     * @example
+     * // Update or create a ProductQuestion
+     * const productQuestion = await prisma.productQuestion.upsert({
+     *   create: {
+     *     // ... data to create a ProductQuestion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductQuestion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductQuestionUpsertArgs>(args: SelectSubset<T, ProductQuestionUpsertArgs<ExtArgs>>): Prisma__ProductQuestionClient<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProductQuestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductQuestionCountArgs} args - Arguments to filter ProductQuestions to count.
+     * @example
+     * // Count the number of ProductQuestions
+     * const count = await prisma.productQuestion.count({
+     *   where: {
+     *     // ... the filter for the ProductQuestions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductQuestionCountArgs>(
+      args?: Subset<T, ProductQuestionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductQuestionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductQuestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductQuestionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductQuestionAggregateArgs>(args: Subset<T, ProductQuestionAggregateArgs>): Prisma.PrismaPromise<GetProductQuestionAggregateType<T>>
+
+    /**
+     * Group by ProductQuestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductQuestionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductQuestionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductQuestionGroupByArgs['orderBy'] }
+        : { orderBy?: ProductQuestionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductQuestionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductQuestionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProductQuestion model
+   */
+  readonly fields: ProductQuestionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductQuestion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductQuestionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    answers<T extends ProductQuestion$answersArgs<ExtArgs> = {}>(args?: Subset<T, ProductQuestion$answersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProductQuestion model
+   */
+  interface ProductQuestionFieldRefs {
+    readonly id: FieldRef<"ProductQuestion", 'String'>
+    readonly productId: FieldRef<"ProductQuestion", 'String'>
+    readonly userId: FieldRef<"ProductQuestion", 'String'>
+    readonly content: FieldRef<"ProductQuestion", 'String'>
+    readonly isPublic: FieldRef<"ProductQuestion", 'Boolean'>
+    readonly createdAt: FieldRef<"ProductQuestion", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProductQuestion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProductQuestion findUnique
+   */
+  export type ProductQuestionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductQuestion to fetch.
+     */
+    where: ProductQuestionWhereUniqueInput
+  }
+
+  /**
+   * ProductQuestion findUniqueOrThrow
+   */
+  export type ProductQuestionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductQuestion to fetch.
+     */
+    where: ProductQuestionWhereUniqueInput
+  }
+
+  /**
+   * ProductQuestion findFirst
+   */
+  export type ProductQuestionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductQuestion to fetch.
+     */
+    where?: ProductQuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductQuestions to fetch.
+     */
+    orderBy?: ProductQuestionOrderByWithRelationInput | ProductQuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductQuestions.
+     */
+    cursor?: ProductQuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductQuestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductQuestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductQuestions.
+     */
+    distinct?: ProductQuestionScalarFieldEnum | ProductQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * ProductQuestion findFirstOrThrow
+   */
+  export type ProductQuestionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductQuestion to fetch.
+     */
+    where?: ProductQuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductQuestions to fetch.
+     */
+    orderBy?: ProductQuestionOrderByWithRelationInput | ProductQuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductQuestions.
+     */
+    cursor?: ProductQuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductQuestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductQuestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductQuestions.
+     */
+    distinct?: ProductQuestionScalarFieldEnum | ProductQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * ProductQuestion findMany
+   */
+  export type ProductQuestionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductQuestions to fetch.
+     */
+    where?: ProductQuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductQuestions to fetch.
+     */
+    orderBy?: ProductQuestionOrderByWithRelationInput | ProductQuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProductQuestions.
+     */
+    cursor?: ProductQuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductQuestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductQuestions.
+     */
+    skip?: number
+    distinct?: ProductQuestionScalarFieldEnum | ProductQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * ProductQuestion create
+   */
+  export type ProductQuestionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductQuestion.
+     */
+    data: XOR<ProductQuestionCreateInput, ProductQuestionUncheckedCreateInput>
+  }
+
+  /**
+   * ProductQuestion createMany
+   */
+  export type ProductQuestionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProductQuestions.
+     */
+    data: ProductQuestionCreateManyInput | ProductQuestionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductQuestion createManyAndReturn
+   */
+  export type ProductQuestionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProductQuestions.
+     */
+    data: ProductQuestionCreateManyInput | ProductQuestionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductQuestion update
+   */
+  export type ProductQuestionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductQuestion.
+     */
+    data: XOR<ProductQuestionUpdateInput, ProductQuestionUncheckedUpdateInput>
+    /**
+     * Choose, which ProductQuestion to update.
+     */
+    where: ProductQuestionWhereUniqueInput
+  }
+
+  /**
+   * ProductQuestion updateMany
+   */
+  export type ProductQuestionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProductQuestions.
+     */
+    data: XOR<ProductQuestionUpdateManyMutationInput, ProductQuestionUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductQuestions to update
+     */
+    where?: ProductQuestionWhereInput
+    /**
+     * Limit how many ProductQuestions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductQuestion updateManyAndReturn
+   */
+  export type ProductQuestionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * The data used to update ProductQuestions.
+     */
+    data: XOR<ProductQuestionUpdateManyMutationInput, ProductQuestionUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductQuestions to update
+     */
+    where?: ProductQuestionWhereInput
+    /**
+     * Limit how many ProductQuestions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductQuestion upsert
+   */
+  export type ProductQuestionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductQuestion to update in case it exists.
+     */
+    where: ProductQuestionWhereUniqueInput
+    /**
+     * In case the ProductQuestion found by the `where` argument doesn't exist, create a new ProductQuestion with this data.
+     */
+    create: XOR<ProductQuestionCreateInput, ProductQuestionUncheckedCreateInput>
+    /**
+     * In case the ProductQuestion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductQuestionUpdateInput, ProductQuestionUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductQuestion delete
+   */
+  export type ProductQuestionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionInclude<ExtArgs> | null
+    /**
+     * Filter which ProductQuestion to delete.
+     */
+    where: ProductQuestionWhereUniqueInput
+  }
+
+  /**
+   * ProductQuestion deleteMany
+   */
+  export type ProductQuestionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductQuestions to delete
+     */
+    where?: ProductQuestionWhereInput
+    /**
+     * Limit how many ProductQuestions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductQuestion.answers
+   */
+  export type ProductQuestion$answersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerInclude<ExtArgs> | null
+    where?: ProductAnswerWhereInput
+    orderBy?: ProductAnswerOrderByWithRelationInput | ProductAnswerOrderByWithRelationInput[]
+    cursor?: ProductAnswerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductAnswerScalarFieldEnum | ProductAnswerScalarFieldEnum[]
+  }
+
+  /**
+   * ProductQuestion without action
+   */
+  export type ProductQuestionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductQuestion
+     */
+    select?: ProductQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductQuestion
+     */
+    omit?: ProductQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductQuestionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProductAnswer
+   */
+
+  export type AggregateProductAnswer = {
+    _count: ProductAnswerCountAggregateOutputType | null
+    _min: ProductAnswerMinAggregateOutputType | null
+    _max: ProductAnswerMaxAggregateOutputType | null
+  }
+
+  export type ProductAnswerMinAggregateOutputType = {
+    id: string | null
+    questionId: string | null
+    sellerId: string | null
+    content: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductAnswerMaxAggregateOutputType = {
+    id: string | null
+    questionId: string | null
+    sellerId: string | null
+    content: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductAnswerCountAggregateOutputType = {
+    id: number
+    questionId: number
+    sellerId: number
+    content: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProductAnswerMinAggregateInputType = {
+    id?: true
+    questionId?: true
+    sellerId?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductAnswerMaxAggregateInputType = {
+    id?: true
+    questionId?: true
+    sellerId?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductAnswerCountAggregateInputType = {
+    id?: true
+    questionId?: true
+    sellerId?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProductAnswerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductAnswer to aggregate.
+     */
+    where?: ProductAnswerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductAnswers to fetch.
+     */
+    orderBy?: ProductAnswerOrderByWithRelationInput | ProductAnswerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductAnswerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductAnswers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductAnswers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProductAnswers
+    **/
+    _count?: true | ProductAnswerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductAnswerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductAnswerMaxAggregateInputType
+  }
+
+  export type GetProductAnswerAggregateType<T extends ProductAnswerAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductAnswer]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductAnswer[P]>
+      : GetScalarType<T[P], AggregateProductAnswer[P]>
+  }
+
+
+
+
+  export type ProductAnswerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductAnswerWhereInput
+    orderBy?: ProductAnswerOrderByWithAggregationInput | ProductAnswerOrderByWithAggregationInput[]
+    by: ProductAnswerScalarFieldEnum[] | ProductAnswerScalarFieldEnum
+    having?: ProductAnswerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductAnswerCountAggregateInputType | true
+    _min?: ProductAnswerMinAggregateInputType
+    _max?: ProductAnswerMaxAggregateInputType
+  }
+
+  export type ProductAnswerGroupByOutputType = {
+    id: string
+    questionId: string
+    sellerId: string
+    content: string
+    createdAt: Date
+    updatedAt: Date
+    _count: ProductAnswerCountAggregateOutputType | null
+    _min: ProductAnswerMinAggregateOutputType | null
+    _max: ProductAnswerMaxAggregateOutputType | null
+  }
+
+  type GetProductAnswerGroupByPayload<T extends ProductAnswerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductAnswerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductAnswerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductAnswerGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductAnswerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductAnswerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    questionId?: boolean
+    sellerId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    question?: boolean | ProductQuestionDefaultArgs<ExtArgs>
+    seller?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productAnswer"]>
+
+  export type ProductAnswerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    questionId?: boolean
+    sellerId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    question?: boolean | ProductQuestionDefaultArgs<ExtArgs>
+    seller?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productAnswer"]>
+
+  export type ProductAnswerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    questionId?: boolean
+    sellerId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    question?: boolean | ProductQuestionDefaultArgs<ExtArgs>
+    seller?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productAnswer"]>
+
+  export type ProductAnswerSelectScalar = {
+    id?: boolean
+    questionId?: boolean
+    sellerId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProductAnswerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "questionId" | "sellerId" | "content" | "createdAt" | "updatedAt", ExtArgs["result"]["productAnswer"]>
+  export type ProductAnswerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    question?: boolean | ProductQuestionDefaultArgs<ExtArgs>
+    seller?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ProductAnswerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    question?: boolean | ProductQuestionDefaultArgs<ExtArgs>
+    seller?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ProductAnswerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    question?: boolean | ProductQuestionDefaultArgs<ExtArgs>
+    seller?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ProductAnswerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductAnswer"
+    objects: {
+      question: Prisma.$ProductQuestionPayload<ExtArgs>
+      seller: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      questionId: string
+      sellerId: string
+      content: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["productAnswer"]>
+    composites: {}
+  }
+
+  type ProductAnswerGetPayload<S extends boolean | null | undefined | ProductAnswerDefaultArgs> = $Result.GetResult<Prisma.$ProductAnswerPayload, S>
+
+  type ProductAnswerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProductAnswerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProductAnswerCountAggregateInputType | true
+    }
+
+  export interface ProductAnswerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductAnswer'], meta: { name: 'ProductAnswer' } }
+    /**
+     * Find zero or one ProductAnswer that matches the filter.
+     * @param {ProductAnswerFindUniqueArgs} args - Arguments to find a ProductAnswer
+     * @example
+     * // Get one ProductAnswer
+     * const productAnswer = await prisma.productAnswer.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductAnswerFindUniqueArgs>(args: SelectSubset<T, ProductAnswerFindUniqueArgs<ExtArgs>>): Prisma__ProductAnswerClient<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProductAnswer that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProductAnswerFindUniqueOrThrowArgs} args - Arguments to find a ProductAnswer
+     * @example
+     * // Get one ProductAnswer
+     * const productAnswer = await prisma.productAnswer.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductAnswerFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductAnswerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductAnswerClient<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductAnswer that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductAnswerFindFirstArgs} args - Arguments to find a ProductAnswer
+     * @example
+     * // Get one ProductAnswer
+     * const productAnswer = await prisma.productAnswer.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductAnswerFindFirstArgs>(args?: SelectSubset<T, ProductAnswerFindFirstArgs<ExtArgs>>): Prisma__ProductAnswerClient<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductAnswer that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductAnswerFindFirstOrThrowArgs} args - Arguments to find a ProductAnswer
+     * @example
+     * // Get one ProductAnswer
+     * const productAnswer = await prisma.productAnswer.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductAnswerFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductAnswerFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductAnswerClient<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProductAnswers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductAnswerFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductAnswers
+     * const productAnswers = await prisma.productAnswer.findMany()
+     * 
+     * // Get first 10 ProductAnswers
+     * const productAnswers = await prisma.productAnswer.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productAnswerWithIdOnly = await prisma.productAnswer.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductAnswerFindManyArgs>(args?: SelectSubset<T, ProductAnswerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProductAnswer.
+     * @param {ProductAnswerCreateArgs} args - Arguments to create a ProductAnswer.
+     * @example
+     * // Create one ProductAnswer
+     * const ProductAnswer = await prisma.productAnswer.create({
+     *   data: {
+     *     // ... data to create a ProductAnswer
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductAnswerCreateArgs>(args: SelectSubset<T, ProductAnswerCreateArgs<ExtArgs>>): Prisma__ProductAnswerClient<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProductAnswers.
+     * @param {ProductAnswerCreateManyArgs} args - Arguments to create many ProductAnswers.
+     * @example
+     * // Create many ProductAnswers
+     * const productAnswer = await prisma.productAnswer.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductAnswerCreateManyArgs>(args?: SelectSubset<T, ProductAnswerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductAnswers and returns the data saved in the database.
+     * @param {ProductAnswerCreateManyAndReturnArgs} args - Arguments to create many ProductAnswers.
+     * @example
+     * // Create many ProductAnswers
+     * const productAnswer = await prisma.productAnswer.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProductAnswers and only return the `id`
+     * const productAnswerWithIdOnly = await prisma.productAnswer.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductAnswerCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductAnswerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProductAnswer.
+     * @param {ProductAnswerDeleteArgs} args - Arguments to delete one ProductAnswer.
+     * @example
+     * // Delete one ProductAnswer
+     * const ProductAnswer = await prisma.productAnswer.delete({
+     *   where: {
+     *     // ... filter to delete one ProductAnswer
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductAnswerDeleteArgs>(args: SelectSubset<T, ProductAnswerDeleteArgs<ExtArgs>>): Prisma__ProductAnswerClient<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProductAnswer.
+     * @param {ProductAnswerUpdateArgs} args - Arguments to update one ProductAnswer.
+     * @example
+     * // Update one ProductAnswer
+     * const productAnswer = await prisma.productAnswer.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductAnswerUpdateArgs>(args: SelectSubset<T, ProductAnswerUpdateArgs<ExtArgs>>): Prisma__ProductAnswerClient<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProductAnswers.
+     * @param {ProductAnswerDeleteManyArgs} args - Arguments to filter ProductAnswers to delete.
+     * @example
+     * // Delete a few ProductAnswers
+     * const { count } = await prisma.productAnswer.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductAnswerDeleteManyArgs>(args?: SelectSubset<T, ProductAnswerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductAnswers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductAnswerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductAnswers
+     * const productAnswer = await prisma.productAnswer.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductAnswerUpdateManyArgs>(args: SelectSubset<T, ProductAnswerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductAnswers and returns the data updated in the database.
+     * @param {ProductAnswerUpdateManyAndReturnArgs} args - Arguments to update many ProductAnswers.
+     * @example
+     * // Update many ProductAnswers
+     * const productAnswer = await prisma.productAnswer.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProductAnswers and only return the `id`
+     * const productAnswerWithIdOnly = await prisma.productAnswer.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProductAnswerUpdateManyAndReturnArgs>(args: SelectSubset<T, ProductAnswerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProductAnswer.
+     * @param {ProductAnswerUpsertArgs} args - Arguments to update or create a ProductAnswer.
+     * @example
+     * // Update or create a ProductAnswer
+     * const productAnswer = await prisma.productAnswer.upsert({
+     *   create: {
+     *     // ... data to create a ProductAnswer
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductAnswer we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductAnswerUpsertArgs>(args: SelectSubset<T, ProductAnswerUpsertArgs<ExtArgs>>): Prisma__ProductAnswerClient<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProductAnswers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductAnswerCountArgs} args - Arguments to filter ProductAnswers to count.
+     * @example
+     * // Count the number of ProductAnswers
+     * const count = await prisma.productAnswer.count({
+     *   where: {
+     *     // ... the filter for the ProductAnswers we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductAnswerCountArgs>(
+      args?: Subset<T, ProductAnswerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductAnswerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductAnswer.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductAnswerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductAnswerAggregateArgs>(args: Subset<T, ProductAnswerAggregateArgs>): Prisma.PrismaPromise<GetProductAnswerAggregateType<T>>
+
+    /**
+     * Group by ProductAnswer.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductAnswerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductAnswerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductAnswerGroupByArgs['orderBy'] }
+        : { orderBy?: ProductAnswerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductAnswerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductAnswerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProductAnswer model
+   */
+  readonly fields: ProductAnswerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductAnswer.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductAnswerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    question<T extends ProductQuestionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductQuestionDefaultArgs<ExtArgs>>): Prisma__ProductQuestionClient<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    seller<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProductAnswer model
+   */
+  interface ProductAnswerFieldRefs {
+    readonly id: FieldRef<"ProductAnswer", 'String'>
+    readonly questionId: FieldRef<"ProductAnswer", 'String'>
+    readonly sellerId: FieldRef<"ProductAnswer", 'String'>
+    readonly content: FieldRef<"ProductAnswer", 'String'>
+    readonly createdAt: FieldRef<"ProductAnswer", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProductAnswer", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProductAnswer findUnique
+   */
+  export type ProductAnswerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductAnswer to fetch.
+     */
+    where: ProductAnswerWhereUniqueInput
+  }
+
+  /**
+   * ProductAnswer findUniqueOrThrow
+   */
+  export type ProductAnswerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductAnswer to fetch.
+     */
+    where: ProductAnswerWhereUniqueInput
+  }
+
+  /**
+   * ProductAnswer findFirst
+   */
+  export type ProductAnswerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductAnswer to fetch.
+     */
+    where?: ProductAnswerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductAnswers to fetch.
+     */
+    orderBy?: ProductAnswerOrderByWithRelationInput | ProductAnswerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductAnswers.
+     */
+    cursor?: ProductAnswerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductAnswers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductAnswers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductAnswers.
+     */
+    distinct?: ProductAnswerScalarFieldEnum | ProductAnswerScalarFieldEnum[]
+  }
+
+  /**
+   * ProductAnswer findFirstOrThrow
+   */
+  export type ProductAnswerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductAnswer to fetch.
+     */
+    where?: ProductAnswerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductAnswers to fetch.
+     */
+    orderBy?: ProductAnswerOrderByWithRelationInput | ProductAnswerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductAnswers.
+     */
+    cursor?: ProductAnswerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductAnswers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductAnswers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductAnswers.
+     */
+    distinct?: ProductAnswerScalarFieldEnum | ProductAnswerScalarFieldEnum[]
+  }
+
+  /**
+   * ProductAnswer findMany
+   */
+  export type ProductAnswerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductAnswers to fetch.
+     */
+    where?: ProductAnswerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductAnswers to fetch.
+     */
+    orderBy?: ProductAnswerOrderByWithRelationInput | ProductAnswerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProductAnswers.
+     */
+    cursor?: ProductAnswerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductAnswers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductAnswers.
+     */
+    skip?: number
+    distinct?: ProductAnswerScalarFieldEnum | ProductAnswerScalarFieldEnum[]
+  }
+
+  /**
+   * ProductAnswer create
+   */
+  export type ProductAnswerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductAnswer.
+     */
+    data: XOR<ProductAnswerCreateInput, ProductAnswerUncheckedCreateInput>
+  }
+
+  /**
+   * ProductAnswer createMany
+   */
+  export type ProductAnswerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProductAnswers.
+     */
+    data: ProductAnswerCreateManyInput | ProductAnswerCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductAnswer createManyAndReturn
+   */
+  export type ProductAnswerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProductAnswers.
+     */
+    data: ProductAnswerCreateManyInput | ProductAnswerCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductAnswer update
+   */
+  export type ProductAnswerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductAnswer.
+     */
+    data: XOR<ProductAnswerUpdateInput, ProductAnswerUncheckedUpdateInput>
+    /**
+     * Choose, which ProductAnswer to update.
+     */
+    where: ProductAnswerWhereUniqueInput
+  }
+
+  /**
+   * ProductAnswer updateMany
+   */
+  export type ProductAnswerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProductAnswers.
+     */
+    data: XOR<ProductAnswerUpdateManyMutationInput, ProductAnswerUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductAnswers to update
+     */
+    where?: ProductAnswerWhereInput
+    /**
+     * Limit how many ProductAnswers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductAnswer updateManyAndReturn
+   */
+  export type ProductAnswerUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * The data used to update ProductAnswers.
+     */
+    data: XOR<ProductAnswerUpdateManyMutationInput, ProductAnswerUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductAnswers to update
+     */
+    where?: ProductAnswerWhereInput
+    /**
+     * Limit how many ProductAnswers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductAnswer upsert
+   */
+  export type ProductAnswerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductAnswer to update in case it exists.
+     */
+    where: ProductAnswerWhereUniqueInput
+    /**
+     * In case the ProductAnswer found by the `where` argument doesn't exist, create a new ProductAnswer with this data.
+     */
+    create: XOR<ProductAnswerCreateInput, ProductAnswerUncheckedCreateInput>
+    /**
+     * In case the ProductAnswer was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductAnswerUpdateInput, ProductAnswerUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductAnswer delete
+   */
+  export type ProductAnswerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerInclude<ExtArgs> | null
+    /**
+     * Filter which ProductAnswer to delete.
+     */
+    where: ProductAnswerWhereUniqueInput
+  }
+
+  /**
+   * ProductAnswer deleteMany
+   */
+  export type ProductAnswerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductAnswers to delete
+     */
+    where?: ProductAnswerWhereInput
+    /**
+     * Limit how many ProductAnswers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductAnswer without action
+   */
+  export type ProductAnswerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductAnswer
+     */
+    select?: ProductAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductAnswer
+     */
+    omit?: ProductAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductAnswerInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -46582,6 +49107,31 @@ export namespace Prisma {
   export type PayoutScalarFieldEnum = (typeof PayoutScalarFieldEnum)[keyof typeof PayoutScalarFieldEnum]
 
 
+  export const ProductQuestionScalarFieldEnum: {
+    id: 'id',
+    productId: 'productId',
+    userId: 'userId',
+    content: 'content',
+    isPublic: 'isPublic',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProductQuestionScalarFieldEnum = (typeof ProductQuestionScalarFieldEnum)[keyof typeof ProductQuestionScalarFieldEnum]
+
+
+  export const ProductAnswerScalarFieldEnum: {
+    id: 'id',
+    questionId: 'questionId',
+    sellerId: 'sellerId',
+    content: 'content',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProductAnswerScalarFieldEnum = (typeof ProductAnswerScalarFieldEnum)[keyof typeof ProductAnswerScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -46999,6 +49549,8 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     sellerProfile?: XOR<SellerProfileNullableScalarRelationFilter, SellerProfileWhereInput> | null
     roles?: UserRoleListRelationFilter
+    productQuestions?: ProductQuestionListRelationFilter
+    productAnswers?: ProductAnswerListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -47030,6 +49582,8 @@ export namespace Prisma {
     notifications?: NotificationOrderByRelationAggregateInput
     sellerProfile?: SellerProfileOrderByWithRelationInput
     roles?: UserRoleOrderByRelationAggregateInput
+    productQuestions?: ProductQuestionOrderByRelationAggregateInput
+    productAnswers?: ProductAnswerOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -47064,6 +49618,8 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     sellerProfile?: XOR<SellerProfileNullableScalarRelationFilter, SellerProfileWhereInput> | null
     roles?: UserRoleListRelationFilter
+    productQuestions?: ProductQuestionListRelationFilter
+    productAnswers?: ProductAnswerListRelationFilter
   }, "id" | "clerkId" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -48386,6 +50942,7 @@ export namespace Prisma {
     warranty?: WarrantyListRelationFilter
     returnPolicy?: ReturnPolicyListRelationFilter
     Conversation?: ConversationListRelationFilter
+    questions?: ProductQuestionListRelationFilter
   }
 
   export type ProductOrderByWithRelationInput = {
@@ -48411,6 +50968,7 @@ export namespace Prisma {
     warranty?: WarrantyOrderByRelationAggregateInput
     returnPolicy?: ReturnPolicyOrderByRelationAggregateInput
     Conversation?: ConversationOrderByRelationAggregateInput
+    questions?: ProductQuestionOrderByRelationAggregateInput
   }
 
   export type ProductWhereUniqueInput = Prisma.AtLeast<{
@@ -48439,6 +50997,7 @@ export namespace Prisma {
     warranty?: WarrantyListRelationFilter
     returnPolicy?: ReturnPolicyListRelationFilter
     Conversation?: ConversationListRelationFilter
+    questions?: ProductQuestionListRelationFilter
   }, "id" | "slug">
 
   export type ProductOrderByWithAggregationInput = {
@@ -49848,6 +52407,140 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Payout"> | Date | string
   }
 
+  export type ProductQuestionWhereInput = {
+    AND?: ProductQuestionWhereInput | ProductQuestionWhereInput[]
+    OR?: ProductQuestionWhereInput[]
+    NOT?: ProductQuestionWhereInput | ProductQuestionWhereInput[]
+    id?: StringFilter<"ProductQuestion"> | string
+    productId?: StringFilter<"ProductQuestion"> | string
+    userId?: StringFilter<"ProductQuestion"> | string
+    content?: StringFilter<"ProductQuestion"> | string
+    isPublic?: BoolFilter<"ProductQuestion"> | boolean
+    createdAt?: DateTimeFilter<"ProductQuestion"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductQuestion"> | Date | string
+    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    answers?: ProductAnswerListRelationFilter
+  }
+
+  export type ProductQuestionOrderByWithRelationInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    userId?: SortOrder
+    content?: SortOrder
+    isPublic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    product?: ProductOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+    answers?: ProductAnswerOrderByRelationAggregateInput
+  }
+
+  export type ProductQuestionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProductQuestionWhereInput | ProductQuestionWhereInput[]
+    OR?: ProductQuestionWhereInput[]
+    NOT?: ProductQuestionWhereInput | ProductQuestionWhereInput[]
+    productId?: StringFilter<"ProductQuestion"> | string
+    userId?: StringFilter<"ProductQuestion"> | string
+    content?: StringFilter<"ProductQuestion"> | string
+    isPublic?: BoolFilter<"ProductQuestion"> | boolean
+    createdAt?: DateTimeFilter<"ProductQuestion"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductQuestion"> | Date | string
+    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    answers?: ProductAnswerListRelationFilter
+  }, "id">
+
+  export type ProductQuestionOrderByWithAggregationInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    userId?: SortOrder
+    content?: SortOrder
+    isPublic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProductQuestionCountOrderByAggregateInput
+    _max?: ProductQuestionMaxOrderByAggregateInput
+    _min?: ProductQuestionMinOrderByAggregateInput
+  }
+
+  export type ProductQuestionScalarWhereWithAggregatesInput = {
+    AND?: ProductQuestionScalarWhereWithAggregatesInput | ProductQuestionScalarWhereWithAggregatesInput[]
+    OR?: ProductQuestionScalarWhereWithAggregatesInput[]
+    NOT?: ProductQuestionScalarWhereWithAggregatesInput | ProductQuestionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProductQuestion"> | string
+    productId?: StringWithAggregatesFilter<"ProductQuestion"> | string
+    userId?: StringWithAggregatesFilter<"ProductQuestion"> | string
+    content?: StringWithAggregatesFilter<"ProductQuestion"> | string
+    isPublic?: BoolWithAggregatesFilter<"ProductQuestion"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ProductQuestion"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProductQuestion"> | Date | string
+  }
+
+  export type ProductAnswerWhereInput = {
+    AND?: ProductAnswerWhereInput | ProductAnswerWhereInput[]
+    OR?: ProductAnswerWhereInput[]
+    NOT?: ProductAnswerWhereInput | ProductAnswerWhereInput[]
+    id?: StringFilter<"ProductAnswer"> | string
+    questionId?: StringFilter<"ProductAnswer"> | string
+    sellerId?: StringFilter<"ProductAnswer"> | string
+    content?: StringFilter<"ProductAnswer"> | string
+    createdAt?: DateTimeFilter<"ProductAnswer"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductAnswer"> | Date | string
+    question?: XOR<ProductQuestionScalarRelationFilter, ProductQuestionWhereInput>
+    seller?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ProductAnswerOrderByWithRelationInput = {
+    id?: SortOrder
+    questionId?: SortOrder
+    sellerId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    question?: ProductQuestionOrderByWithRelationInput
+    seller?: UserOrderByWithRelationInput
+  }
+
+  export type ProductAnswerWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProductAnswerWhereInput | ProductAnswerWhereInput[]
+    OR?: ProductAnswerWhereInput[]
+    NOT?: ProductAnswerWhereInput | ProductAnswerWhereInput[]
+    questionId?: StringFilter<"ProductAnswer"> | string
+    sellerId?: StringFilter<"ProductAnswer"> | string
+    content?: StringFilter<"ProductAnswer"> | string
+    createdAt?: DateTimeFilter<"ProductAnswer"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductAnswer"> | Date | string
+    question?: XOR<ProductQuestionScalarRelationFilter, ProductQuestionWhereInput>
+    seller?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type ProductAnswerOrderByWithAggregationInput = {
+    id?: SortOrder
+    questionId?: SortOrder
+    sellerId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProductAnswerCountOrderByAggregateInput
+    _max?: ProductAnswerMaxOrderByAggregateInput
+    _min?: ProductAnswerMinOrderByAggregateInput
+  }
+
+  export type ProductAnswerScalarWhereWithAggregatesInput = {
+    AND?: ProductAnswerScalarWhereWithAggregatesInput | ProductAnswerScalarWhereWithAggregatesInput[]
+    OR?: ProductAnswerScalarWhereWithAggregatesInput[]
+    NOT?: ProductAnswerScalarWhereWithAggregatesInput | ProductAnswerScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProductAnswer"> | string
+    questionId?: StringWithAggregatesFilter<"ProductAnswer"> | string
+    sellerId?: StringWithAggregatesFilter<"ProductAnswer"> | string
+    content?: StringWithAggregatesFilter<"ProductAnswer"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ProductAnswer"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProductAnswer"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     clerkId: string
@@ -49877,6 +52570,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -49908,6 +52603,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserUpdateInput = {
@@ -49939,6 +52636,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -49970,6 +52669,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -51394,6 +54095,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateInput = {
@@ -51417,6 +54119,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUpdateInput = {
@@ -51440,6 +54143,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateInput = {
@@ -51463,6 +54167,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateManyInput = {
@@ -52966,6 +55671,139 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProductQuestionCreateInput = {
+    id?: string
+    content: string
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    product: ProductCreateNestedOneWithoutQuestionsInput
+    user: UserCreateNestedOneWithoutProductQuestionsInput
+    answers?: ProductAnswerCreateNestedManyWithoutQuestionInput
+  }
+
+  export type ProductQuestionUncheckedCreateInput = {
+    id?: string
+    productId: string
+    userId: string
+    content: string
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    answers?: ProductAnswerUncheckedCreateNestedManyWithoutQuestionInput
+  }
+
+  export type ProductQuestionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutQuestionsNestedInput
+    user?: UserUpdateOneRequiredWithoutProductQuestionsNestedInput
+    answers?: ProductAnswerUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type ProductQuestionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answers?: ProductAnswerUncheckedUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type ProductQuestionCreateManyInput = {
+    id?: string
+    productId: string
+    userId: string
+    content: string
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductQuestionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductQuestionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductAnswerCreateInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    question: ProductQuestionCreateNestedOneWithoutAnswersInput
+    seller: UserCreateNestedOneWithoutProductAnswersInput
+  }
+
+  export type ProductAnswerUncheckedCreateInput = {
+    id?: string
+    questionId: string
+    sellerId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductAnswerUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    question?: ProductQuestionUpdateOneRequiredWithoutAnswersNestedInput
+    seller?: UserUpdateOneRequiredWithoutProductAnswersNestedInput
+  }
+
+  export type ProductAnswerUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    questionId?: StringFieldUpdateOperationsInput | string
+    sellerId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductAnswerCreateManyInput = {
+    id?: string
+    questionId: string
+    sellerId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductAnswerUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductAnswerUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    questionId?: StringFieldUpdateOperationsInput | string
+    sellerId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -53120,6 +55958,18 @@ export namespace Prisma {
     none?: UserRoleWhereInput
   }
 
+  export type ProductQuestionListRelationFilter = {
+    every?: ProductQuestionWhereInput
+    some?: ProductQuestionWhereInput
+    none?: ProductQuestionWhereInput
+  }
+
+  export type ProductAnswerListRelationFilter = {
+    every?: ProductAnswerWhereInput
+    some?: ProductAnswerWhereInput
+    none?: ProductAnswerWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -53182,6 +56032,14 @@ export namespace Prisma {
   }
 
   export type UserRoleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProductQuestionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProductAnswerOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -55502,6 +58360,68 @@ export namespace Prisma {
     amount?: SortOrder
   }
 
+  export type ProductQuestionCountOrderByAggregateInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    userId?: SortOrder
+    content?: SortOrder
+    isPublic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductQuestionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    userId?: SortOrder
+    content?: SortOrder
+    isPublic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductQuestionMinOrderByAggregateInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    userId?: SortOrder
+    content?: SortOrder
+    isPublic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductQuestionScalarRelationFilter = {
+    is?: ProductQuestionWhereInput
+    isNot?: ProductQuestionWhereInput
+  }
+
+  export type ProductAnswerCountOrderByAggregateInput = {
+    id?: SortOrder
+    questionId?: SortOrder
+    sellerId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductAnswerMaxOrderByAggregateInput = {
+    id?: SortOrder
+    questionId?: SortOrder
+    sellerId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductAnswerMinOrderByAggregateInput = {
+    id?: SortOrder
+    questionId?: SortOrder
+    sellerId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type AddressCreateNestedManyWithoutUserInput = {
     create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
@@ -55620,6 +58540,20 @@ export namespace Prisma {
     connect?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
   }
 
+  export type ProductQuestionCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProductQuestionCreateWithoutUserInput, ProductQuestionUncheckedCreateWithoutUserInput> | ProductQuestionCreateWithoutUserInput[] | ProductQuestionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProductQuestionCreateOrConnectWithoutUserInput | ProductQuestionCreateOrConnectWithoutUserInput[]
+    createMany?: ProductQuestionCreateManyUserInputEnvelope
+    connect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+  }
+
+  export type ProductAnswerCreateNestedManyWithoutSellerInput = {
+    create?: XOR<ProductAnswerCreateWithoutSellerInput, ProductAnswerUncheckedCreateWithoutSellerInput> | ProductAnswerCreateWithoutSellerInput[] | ProductAnswerUncheckedCreateWithoutSellerInput[]
+    connectOrCreate?: ProductAnswerCreateOrConnectWithoutSellerInput | ProductAnswerCreateOrConnectWithoutSellerInput[]
+    createMany?: ProductAnswerCreateManySellerInputEnvelope
+    connect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+  }
+
   export type AddressUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
@@ -55736,6 +58670,20 @@ export namespace Prisma {
     connectOrCreate?: UserRoleCreateOrConnectWithoutUserInput | UserRoleCreateOrConnectWithoutUserInput[]
     createMany?: UserRoleCreateManyUserInputEnvelope
     connect?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+  }
+
+  export type ProductQuestionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProductQuestionCreateWithoutUserInput, ProductQuestionUncheckedCreateWithoutUserInput> | ProductQuestionCreateWithoutUserInput[] | ProductQuestionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProductQuestionCreateOrConnectWithoutUserInput | ProductQuestionCreateOrConnectWithoutUserInput[]
+    createMany?: ProductQuestionCreateManyUserInputEnvelope
+    connect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+  }
+
+  export type ProductAnswerUncheckedCreateNestedManyWithoutSellerInput = {
+    create?: XOR<ProductAnswerCreateWithoutSellerInput, ProductAnswerUncheckedCreateWithoutSellerInput> | ProductAnswerCreateWithoutSellerInput[] | ProductAnswerUncheckedCreateWithoutSellerInput[]
+    connectOrCreate?: ProductAnswerCreateOrConnectWithoutSellerInput | ProductAnswerCreateOrConnectWithoutSellerInput[]
+    createMany?: ProductAnswerCreateManySellerInputEnvelope
+    connect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -55992,6 +58940,34 @@ export namespace Prisma {
     deleteMany?: UserRoleScalarWhereInput | UserRoleScalarWhereInput[]
   }
 
+  export type ProductQuestionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProductQuestionCreateWithoutUserInput, ProductQuestionUncheckedCreateWithoutUserInput> | ProductQuestionCreateWithoutUserInput[] | ProductQuestionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProductQuestionCreateOrConnectWithoutUserInput | ProductQuestionCreateOrConnectWithoutUserInput[]
+    upsert?: ProductQuestionUpsertWithWhereUniqueWithoutUserInput | ProductQuestionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProductQuestionCreateManyUserInputEnvelope
+    set?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    disconnect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    delete?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    connect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    update?: ProductQuestionUpdateWithWhereUniqueWithoutUserInput | ProductQuestionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProductQuestionUpdateManyWithWhereWithoutUserInput | ProductQuestionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProductQuestionScalarWhereInput | ProductQuestionScalarWhereInput[]
+  }
+
+  export type ProductAnswerUpdateManyWithoutSellerNestedInput = {
+    create?: XOR<ProductAnswerCreateWithoutSellerInput, ProductAnswerUncheckedCreateWithoutSellerInput> | ProductAnswerCreateWithoutSellerInput[] | ProductAnswerUncheckedCreateWithoutSellerInput[]
+    connectOrCreate?: ProductAnswerCreateOrConnectWithoutSellerInput | ProductAnswerCreateOrConnectWithoutSellerInput[]
+    upsert?: ProductAnswerUpsertWithWhereUniqueWithoutSellerInput | ProductAnswerUpsertWithWhereUniqueWithoutSellerInput[]
+    createMany?: ProductAnswerCreateManySellerInputEnvelope
+    set?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    disconnect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    delete?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    connect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    update?: ProductAnswerUpdateWithWhereUniqueWithoutSellerInput | ProductAnswerUpdateWithWhereUniqueWithoutSellerInput[]
+    updateMany?: ProductAnswerUpdateManyWithWhereWithoutSellerInput | ProductAnswerUpdateManyWithWhereWithoutSellerInput[]
+    deleteMany?: ProductAnswerScalarWhereInput | ProductAnswerScalarWhereInput[]
+  }
+
   export type AddressUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AddressCreateWithoutUserInput, AddressUncheckedCreateWithoutUserInput> | AddressCreateWithoutUserInput[] | AddressUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutUserInput | AddressCreateOrConnectWithoutUserInput[]
@@ -56224,6 +59200,34 @@ export namespace Prisma {
     update?: UserRoleUpdateWithWhereUniqueWithoutUserInput | UserRoleUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserRoleUpdateManyWithWhereWithoutUserInput | UserRoleUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserRoleScalarWhereInput | UserRoleScalarWhereInput[]
+  }
+
+  export type ProductQuestionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProductQuestionCreateWithoutUserInput, ProductQuestionUncheckedCreateWithoutUserInput> | ProductQuestionCreateWithoutUserInput[] | ProductQuestionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProductQuestionCreateOrConnectWithoutUserInput | ProductQuestionCreateOrConnectWithoutUserInput[]
+    upsert?: ProductQuestionUpsertWithWhereUniqueWithoutUserInput | ProductQuestionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProductQuestionCreateManyUserInputEnvelope
+    set?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    disconnect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    delete?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    connect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    update?: ProductQuestionUpdateWithWhereUniqueWithoutUserInput | ProductQuestionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProductQuestionUpdateManyWithWhereWithoutUserInput | ProductQuestionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProductQuestionScalarWhereInput | ProductQuestionScalarWhereInput[]
+  }
+
+  export type ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput = {
+    create?: XOR<ProductAnswerCreateWithoutSellerInput, ProductAnswerUncheckedCreateWithoutSellerInput> | ProductAnswerCreateWithoutSellerInput[] | ProductAnswerUncheckedCreateWithoutSellerInput[]
+    connectOrCreate?: ProductAnswerCreateOrConnectWithoutSellerInput | ProductAnswerCreateOrConnectWithoutSellerInput[]
+    upsert?: ProductAnswerUpsertWithWhereUniqueWithoutSellerInput | ProductAnswerUpsertWithWhereUniqueWithoutSellerInput[]
+    createMany?: ProductAnswerCreateManySellerInputEnvelope
+    set?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    disconnect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    delete?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    connect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    update?: ProductAnswerUpdateWithWhereUniqueWithoutSellerInput | ProductAnswerUpdateWithWhereUniqueWithoutSellerInput[]
+    updateMany?: ProductAnswerUpdateManyWithWhereWithoutSellerInput | ProductAnswerUpdateManyWithWhereWithoutSellerInput[]
+    deleteMany?: ProductAnswerScalarWhereInput | ProductAnswerScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutRolesInput = {
@@ -57139,6 +60143,13 @@ export namespace Prisma {
     connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
   }
 
+  export type ProductQuestionCreateNestedManyWithoutProductInput = {
+    create?: XOR<ProductQuestionCreateWithoutProductInput, ProductQuestionUncheckedCreateWithoutProductInput> | ProductQuestionCreateWithoutProductInput[] | ProductQuestionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductQuestionCreateOrConnectWithoutProductInput | ProductQuestionCreateOrConnectWithoutProductInput[]
+    createMany?: ProductQuestionCreateManyProductInputEnvelope
+    connect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+  }
+
   export type ProductVariantUncheckedCreateNestedManyWithoutProductInput = {
     create?: XOR<ProductVariantCreateWithoutProductInput, ProductVariantUncheckedCreateWithoutProductInput> | ProductVariantCreateWithoutProductInput[] | ProductVariantUncheckedCreateWithoutProductInput[]
     connectOrCreate?: ProductVariantCreateOrConnectWithoutProductInput | ProductVariantCreateOrConnectWithoutProductInput[]
@@ -57200,6 +60211,13 @@ export namespace Prisma {
     connectOrCreate?: ConversationCreateOrConnectWithoutProductInput | ConversationCreateOrConnectWithoutProductInput[]
     createMany?: ConversationCreateManyProductInputEnvelope
     connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+  }
+
+  export type ProductQuestionUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<ProductQuestionCreateWithoutProductInput, ProductQuestionUncheckedCreateWithoutProductInput> | ProductQuestionCreateWithoutProductInput[] | ProductQuestionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductQuestionCreateOrConnectWithoutProductInput | ProductQuestionCreateOrConnectWithoutProductInput[]
+    createMany?: ProductQuestionCreateManyProductInputEnvelope
+    connect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
   }
 
   export type ProductUpdatefeaturesInput = {
@@ -57355,6 +60373,20 @@ export namespace Prisma {
     deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
   }
 
+  export type ProductQuestionUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ProductQuestionCreateWithoutProductInput, ProductQuestionUncheckedCreateWithoutProductInput> | ProductQuestionCreateWithoutProductInput[] | ProductQuestionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductQuestionCreateOrConnectWithoutProductInput | ProductQuestionCreateOrConnectWithoutProductInput[]
+    upsert?: ProductQuestionUpsertWithWhereUniqueWithoutProductInput | ProductQuestionUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ProductQuestionCreateManyProductInputEnvelope
+    set?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    disconnect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    delete?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    connect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    update?: ProductQuestionUpdateWithWhereUniqueWithoutProductInput | ProductQuestionUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ProductQuestionUpdateManyWithWhereWithoutProductInput | ProductQuestionUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ProductQuestionScalarWhereInput | ProductQuestionScalarWhereInput[]
+  }
+
   export type ProductVariantUncheckedUpdateManyWithoutProductNestedInput = {
     create?: XOR<ProductVariantCreateWithoutProductInput, ProductVariantUncheckedCreateWithoutProductInput> | ProductVariantCreateWithoutProductInput[] | ProductVariantUncheckedCreateWithoutProductInput[]
     connectOrCreate?: ProductVariantCreateOrConnectWithoutProductInput | ProductVariantCreateOrConnectWithoutProductInput[]
@@ -57479,6 +60511,20 @@ export namespace Prisma {
     update?: ConversationUpdateWithWhereUniqueWithoutProductInput | ConversationUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: ConversationUpdateManyWithWhereWithoutProductInput | ConversationUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+  }
+
+  export type ProductQuestionUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ProductQuestionCreateWithoutProductInput, ProductQuestionUncheckedCreateWithoutProductInput> | ProductQuestionCreateWithoutProductInput[] | ProductQuestionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductQuestionCreateOrConnectWithoutProductInput | ProductQuestionCreateOrConnectWithoutProductInput[]
+    upsert?: ProductQuestionUpsertWithWhereUniqueWithoutProductInput | ProductQuestionUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ProductQuestionCreateManyProductInputEnvelope
+    set?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    disconnect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    delete?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    connect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+    update?: ProductQuestionUpdateWithWhereUniqueWithoutProductInput | ProductQuestionUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ProductQuestionUpdateManyWithWhereWithoutProductInput | ProductQuestionUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ProductQuestionScalarWhereInput | ProductQuestionScalarWhereInput[]
   }
 
   export type ProductSpecificationCreateNestedManyWithoutVariantInput = {
@@ -58435,6 +61481,104 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPayoutsInput, UserUpdateWithoutPayoutsInput>, UserUncheckedUpdateWithoutPayoutsInput>
   }
 
+  export type ProductCreateNestedOneWithoutQuestionsInput = {
+    create?: XOR<ProductCreateWithoutQuestionsInput, ProductUncheckedCreateWithoutQuestionsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutQuestionsInput
+    connect?: ProductWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutProductQuestionsInput = {
+    create?: XOR<UserCreateWithoutProductQuestionsInput, UserUncheckedCreateWithoutProductQuestionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProductQuestionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ProductAnswerCreateNestedManyWithoutQuestionInput = {
+    create?: XOR<ProductAnswerCreateWithoutQuestionInput, ProductAnswerUncheckedCreateWithoutQuestionInput> | ProductAnswerCreateWithoutQuestionInput[] | ProductAnswerUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: ProductAnswerCreateOrConnectWithoutQuestionInput | ProductAnswerCreateOrConnectWithoutQuestionInput[]
+    createMany?: ProductAnswerCreateManyQuestionInputEnvelope
+    connect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+  }
+
+  export type ProductAnswerUncheckedCreateNestedManyWithoutQuestionInput = {
+    create?: XOR<ProductAnswerCreateWithoutQuestionInput, ProductAnswerUncheckedCreateWithoutQuestionInput> | ProductAnswerCreateWithoutQuestionInput[] | ProductAnswerUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: ProductAnswerCreateOrConnectWithoutQuestionInput | ProductAnswerCreateOrConnectWithoutQuestionInput[]
+    createMany?: ProductAnswerCreateManyQuestionInputEnvelope
+    connect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+  }
+
+  export type ProductUpdateOneRequiredWithoutQuestionsNestedInput = {
+    create?: XOR<ProductCreateWithoutQuestionsInput, ProductUncheckedCreateWithoutQuestionsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutQuestionsInput
+    upsert?: ProductUpsertWithoutQuestionsInput
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutQuestionsInput, ProductUpdateWithoutQuestionsInput>, ProductUncheckedUpdateWithoutQuestionsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutProductQuestionsNestedInput = {
+    create?: XOR<UserCreateWithoutProductQuestionsInput, UserUncheckedCreateWithoutProductQuestionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProductQuestionsInput
+    upsert?: UserUpsertWithoutProductQuestionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProductQuestionsInput, UserUpdateWithoutProductQuestionsInput>, UserUncheckedUpdateWithoutProductQuestionsInput>
+  }
+
+  export type ProductAnswerUpdateManyWithoutQuestionNestedInput = {
+    create?: XOR<ProductAnswerCreateWithoutQuestionInput, ProductAnswerUncheckedCreateWithoutQuestionInput> | ProductAnswerCreateWithoutQuestionInput[] | ProductAnswerUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: ProductAnswerCreateOrConnectWithoutQuestionInput | ProductAnswerCreateOrConnectWithoutQuestionInput[]
+    upsert?: ProductAnswerUpsertWithWhereUniqueWithoutQuestionInput | ProductAnswerUpsertWithWhereUniqueWithoutQuestionInput[]
+    createMany?: ProductAnswerCreateManyQuestionInputEnvelope
+    set?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    disconnect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    delete?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    connect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    update?: ProductAnswerUpdateWithWhereUniqueWithoutQuestionInput | ProductAnswerUpdateWithWhereUniqueWithoutQuestionInput[]
+    updateMany?: ProductAnswerUpdateManyWithWhereWithoutQuestionInput | ProductAnswerUpdateManyWithWhereWithoutQuestionInput[]
+    deleteMany?: ProductAnswerScalarWhereInput | ProductAnswerScalarWhereInput[]
+  }
+
+  export type ProductAnswerUncheckedUpdateManyWithoutQuestionNestedInput = {
+    create?: XOR<ProductAnswerCreateWithoutQuestionInput, ProductAnswerUncheckedCreateWithoutQuestionInput> | ProductAnswerCreateWithoutQuestionInput[] | ProductAnswerUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: ProductAnswerCreateOrConnectWithoutQuestionInput | ProductAnswerCreateOrConnectWithoutQuestionInput[]
+    upsert?: ProductAnswerUpsertWithWhereUniqueWithoutQuestionInput | ProductAnswerUpsertWithWhereUniqueWithoutQuestionInput[]
+    createMany?: ProductAnswerCreateManyQuestionInputEnvelope
+    set?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    disconnect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    delete?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    connect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+    update?: ProductAnswerUpdateWithWhereUniqueWithoutQuestionInput | ProductAnswerUpdateWithWhereUniqueWithoutQuestionInput[]
+    updateMany?: ProductAnswerUpdateManyWithWhereWithoutQuestionInput | ProductAnswerUpdateManyWithWhereWithoutQuestionInput[]
+    deleteMany?: ProductAnswerScalarWhereInput | ProductAnswerScalarWhereInput[]
+  }
+
+  export type ProductQuestionCreateNestedOneWithoutAnswersInput = {
+    create?: XOR<ProductQuestionCreateWithoutAnswersInput, ProductQuestionUncheckedCreateWithoutAnswersInput>
+    connectOrCreate?: ProductQuestionCreateOrConnectWithoutAnswersInput
+    connect?: ProductQuestionWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutProductAnswersInput = {
+    create?: XOR<UserCreateWithoutProductAnswersInput, UserUncheckedCreateWithoutProductAnswersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProductAnswersInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ProductQuestionUpdateOneRequiredWithoutAnswersNestedInput = {
+    create?: XOR<ProductQuestionCreateWithoutAnswersInput, ProductQuestionUncheckedCreateWithoutAnswersInput>
+    connectOrCreate?: ProductQuestionCreateOrConnectWithoutAnswersInput
+    upsert?: ProductQuestionUpsertWithoutAnswersInput
+    connect?: ProductQuestionWhereUniqueInput
+    update?: XOR<XOR<ProductQuestionUpdateToOneWithWhereWithoutAnswersInput, ProductQuestionUpdateWithoutAnswersInput>, ProductQuestionUncheckedUpdateWithoutAnswersInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutProductAnswersNestedInput = {
+    create?: XOR<UserCreateWithoutProductAnswersInput, UserUncheckedCreateWithoutProductAnswersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProductAnswersInput
+    upsert?: UserUpsertWithoutProductAnswersInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProductAnswersInput, UserUpdateWithoutProductAnswersInput>, UserUncheckedUpdateWithoutProductAnswersInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -59258,6 +62402,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutSellerInput = {
@@ -59280,6 +62425,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutSellerInput = {
@@ -59656,6 +62802,62 @@ export namespace Prisma {
 
   export type UserRoleCreateManyUserInputEnvelope = {
     data: UserRoleCreateManyUserInput | UserRoleCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductQuestionCreateWithoutUserInput = {
+    id?: string
+    content: string
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    product: ProductCreateNestedOneWithoutQuestionsInput
+    answers?: ProductAnswerCreateNestedManyWithoutQuestionInput
+  }
+
+  export type ProductQuestionUncheckedCreateWithoutUserInput = {
+    id?: string
+    productId: string
+    content: string
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    answers?: ProductAnswerUncheckedCreateNestedManyWithoutQuestionInput
+  }
+
+  export type ProductQuestionCreateOrConnectWithoutUserInput = {
+    where: ProductQuestionWhereUniqueInput
+    create: XOR<ProductQuestionCreateWithoutUserInput, ProductQuestionUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProductQuestionCreateManyUserInputEnvelope = {
+    data: ProductQuestionCreateManyUserInput | ProductQuestionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductAnswerCreateWithoutSellerInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    question: ProductQuestionCreateNestedOneWithoutAnswersInput
+  }
+
+  export type ProductAnswerUncheckedCreateWithoutSellerInput = {
+    id?: string
+    questionId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductAnswerCreateOrConnectWithoutSellerInput = {
+    where: ProductAnswerWhereUniqueInput
+    create: XOR<ProductAnswerCreateWithoutSellerInput, ProductAnswerUncheckedCreateWithoutSellerInput>
+  }
+
+  export type ProductAnswerCreateManySellerInputEnvelope = {
+    data: ProductAnswerCreateManySellerInput | ProductAnswerCreateManySellerInput[]
     skipDuplicates?: boolean
   }
 
@@ -60208,6 +63410,63 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"UserRole"> | Date | string
   }
 
+  export type ProductQuestionUpsertWithWhereUniqueWithoutUserInput = {
+    where: ProductQuestionWhereUniqueInput
+    update: XOR<ProductQuestionUpdateWithoutUserInput, ProductQuestionUncheckedUpdateWithoutUserInput>
+    create: XOR<ProductQuestionCreateWithoutUserInput, ProductQuestionUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProductQuestionUpdateWithWhereUniqueWithoutUserInput = {
+    where: ProductQuestionWhereUniqueInput
+    data: XOR<ProductQuestionUpdateWithoutUserInput, ProductQuestionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ProductQuestionUpdateManyWithWhereWithoutUserInput = {
+    where: ProductQuestionScalarWhereInput
+    data: XOR<ProductQuestionUpdateManyMutationInput, ProductQuestionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ProductQuestionScalarWhereInput = {
+    AND?: ProductQuestionScalarWhereInput | ProductQuestionScalarWhereInput[]
+    OR?: ProductQuestionScalarWhereInput[]
+    NOT?: ProductQuestionScalarWhereInput | ProductQuestionScalarWhereInput[]
+    id?: StringFilter<"ProductQuestion"> | string
+    productId?: StringFilter<"ProductQuestion"> | string
+    userId?: StringFilter<"ProductQuestion"> | string
+    content?: StringFilter<"ProductQuestion"> | string
+    isPublic?: BoolFilter<"ProductQuestion"> | boolean
+    createdAt?: DateTimeFilter<"ProductQuestion"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductQuestion"> | Date | string
+  }
+
+  export type ProductAnswerUpsertWithWhereUniqueWithoutSellerInput = {
+    where: ProductAnswerWhereUniqueInput
+    update: XOR<ProductAnswerUpdateWithoutSellerInput, ProductAnswerUncheckedUpdateWithoutSellerInput>
+    create: XOR<ProductAnswerCreateWithoutSellerInput, ProductAnswerUncheckedCreateWithoutSellerInput>
+  }
+
+  export type ProductAnswerUpdateWithWhereUniqueWithoutSellerInput = {
+    where: ProductAnswerWhereUniqueInput
+    data: XOR<ProductAnswerUpdateWithoutSellerInput, ProductAnswerUncheckedUpdateWithoutSellerInput>
+  }
+
+  export type ProductAnswerUpdateManyWithWhereWithoutSellerInput = {
+    where: ProductAnswerScalarWhereInput
+    data: XOR<ProductAnswerUpdateManyMutationInput, ProductAnswerUncheckedUpdateManyWithoutSellerInput>
+  }
+
+  export type ProductAnswerScalarWhereInput = {
+    AND?: ProductAnswerScalarWhereInput | ProductAnswerScalarWhereInput[]
+    OR?: ProductAnswerScalarWhereInput[]
+    NOT?: ProductAnswerScalarWhereInput | ProductAnswerScalarWhereInput[]
+    id?: StringFilter<"ProductAnswer"> | string
+    questionId?: StringFilter<"ProductAnswer"> | string
+    sellerId?: StringFilter<"ProductAnswer"> | string
+    content?: StringFilter<"ProductAnswer"> | string
+    createdAt?: DateTimeFilter<"ProductAnswer"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductAnswer"> | Date | string
+  }
+
   export type UserCreateWithoutRolesInput = {
     id?: string
     clerkId: string
@@ -60236,6 +63495,8 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutRolesInput = {
@@ -60266,6 +63527,8 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutRolesInput = {
@@ -60312,6 +63575,8 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRolesInput = {
@@ -60342,6 +63607,8 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type AddressCreateWithoutSellerPickupAddressesInput = {
@@ -60411,6 +63678,8 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutSellerProfileInput = {
@@ -60441,6 +63710,8 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutSellerProfileInput = {
@@ -60532,6 +63803,8 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSellerProfileInput = {
@@ -60562,6 +63835,8 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -60592,6 +63867,8 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -60622,6 +63899,8 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -60668,6 +63947,8 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -60698,6 +63979,8 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type ProductCreateWithoutConversationInput = {
@@ -60720,6 +64003,7 @@ export namespace Prisma {
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutConversationInput = {
@@ -60742,6 +64026,7 @@ export namespace Prisma {
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutConversationInput = {
@@ -60777,6 +64062,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutBuyerConversationsInput = {
@@ -60807,6 +64094,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutBuyerConversationsInput = {
@@ -60842,6 +64131,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutSellerConversationsInput = {
@@ -60872,6 +64163,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutSellerConversationsInput = {
@@ -60970,6 +64263,7 @@ export namespace Prisma {
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutConversationInput = {
@@ -60992,6 +64286,7 @@ export namespace Prisma {
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type UserUpsertWithoutBuyerConversationsInput = {
@@ -61033,6 +64328,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBuyerConversationsInput = {
@@ -61063,6 +64360,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUpsertWithoutSellerConversationsInput = {
@@ -61104,6 +64403,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSellerConversationsInput = {
@@ -61134,6 +64435,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -61225,6 +64528,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -61255,6 +64560,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -61362,6 +64669,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -61392,6 +64701,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type MessageAttachmentUpsertWithWhereUniqueWithoutMessageInput = {
@@ -61522,6 +64833,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutConversationParticipantInput = {
@@ -61552,6 +64865,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutConversationParticipantInput = {
@@ -61627,6 +64942,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConversationParticipantInput = {
@@ -61657,6 +64974,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type ConversationUpsertWithoutConversationParticipantInput = {
@@ -61722,6 +65041,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutAddressesInput = {
@@ -61752,6 +65073,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutAddressesInput = {
@@ -61864,6 +65187,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAddressesInput = {
@@ -61894,6 +65219,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type SellerProfileUpsertWithWhereUniqueWithoutPickupAddressInput = {
@@ -62107,6 +65434,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutCategoryInput = {
@@ -62129,6 +65457,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutCategoryInput = {
@@ -62551,6 +65880,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutProductOffersInput = {
@@ -62573,6 +65903,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutProductOffersInput = {
@@ -62654,6 +65985,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutProductOffersInput = {
@@ -62676,6 +66008,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type OfferCreateWithoutCategoryOffersInput = {
@@ -62850,6 +66183,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutDeliveryOptionsInput = {
@@ -62872,6 +66206,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutDeliveryOptionsInput = {
@@ -62910,6 +66245,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutDeliveryOptionsInput = {
@@ -62932,6 +66268,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateWithoutWarrantyInput = {
@@ -62954,6 +66291,7 @@ export namespace Prisma {
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutWarrantyInput = {
@@ -62976,6 +66314,7 @@ export namespace Prisma {
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutWarrantyInput = {
@@ -63014,6 +66353,7 @@ export namespace Prisma {
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutWarrantyInput = {
@@ -63036,6 +66376,7 @@ export namespace Prisma {
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateWithoutReturnPolicyInput = {
@@ -63058,6 +66399,7 @@ export namespace Prisma {
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutReturnPolicyInput = {
@@ -63080,6 +66422,7 @@ export namespace Prisma {
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutReturnPolicyInput = {
@@ -63118,6 +66461,7 @@ export namespace Prisma {
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutReturnPolicyInput = {
@@ -63140,6 +66484,7 @@ export namespace Prisma {
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type UserCreateWithoutProductsInput = {
@@ -63170,6 +66515,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutProductsInput = {
@@ -63200,6 +66547,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutProductsInput = {
@@ -63530,6 +66879,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ProductQuestionCreateWithoutProductInput = {
+    id?: string
+    content: string
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutProductQuestionsInput
+    answers?: ProductAnswerCreateNestedManyWithoutQuestionInput
+  }
+
+  export type ProductQuestionUncheckedCreateWithoutProductInput = {
+    id?: string
+    userId: string
+    content: string
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    answers?: ProductAnswerUncheckedCreateNestedManyWithoutQuestionInput
+  }
+
+  export type ProductQuestionCreateOrConnectWithoutProductInput = {
+    where: ProductQuestionWhereUniqueInput
+    create: XOR<ProductQuestionCreateWithoutProductInput, ProductQuestionUncheckedCreateWithoutProductInput>
+  }
+
+  export type ProductQuestionCreateManyProductInputEnvelope = {
+    data: ProductQuestionCreateManyProductInput | ProductQuestionCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutProductsInput = {
     update: XOR<UserUpdateWithoutProductsInput, UserUncheckedUpdateWithoutProductsInput>
     create: XOR<UserCreateWithoutProductsInput, UserUncheckedCreateWithoutProductsInput>
@@ -63569,6 +66948,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProductsInput = {
@@ -63599,6 +66980,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type ProductVariantUpsertWithWhereUniqueWithoutProductInput = {
@@ -63869,6 +67252,22 @@ export namespace Prisma {
     data: XOR<ConversationUpdateManyMutationInput, ConversationUncheckedUpdateManyWithoutProductInput>
   }
 
+  export type ProductQuestionUpsertWithWhereUniqueWithoutProductInput = {
+    where: ProductQuestionWhereUniqueInput
+    update: XOR<ProductQuestionUpdateWithoutProductInput, ProductQuestionUncheckedUpdateWithoutProductInput>
+    create: XOR<ProductQuestionCreateWithoutProductInput, ProductQuestionUncheckedCreateWithoutProductInput>
+  }
+
+  export type ProductQuestionUpdateWithWhereUniqueWithoutProductInput = {
+    where: ProductQuestionWhereUniqueInput
+    data: XOR<ProductQuestionUpdateWithoutProductInput, ProductQuestionUncheckedUpdateWithoutProductInput>
+  }
+
+  export type ProductQuestionUpdateManyWithWhereWithoutProductInput = {
+    where: ProductQuestionScalarWhereInput
+    data: XOR<ProductQuestionUpdateManyMutationInput, ProductQuestionUncheckedUpdateManyWithoutProductInput>
+  }
+
   export type ProductSpecificationCreateWithoutVariantInput = {
     id?: string
     key: string
@@ -63915,6 +67314,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutVariantsInput = {
@@ -63937,6 +67337,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutVariantsInput = {
@@ -64091,6 +67492,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutVariantsInput = {
@@ -64113,6 +67515,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type CartItemUpsertWithWhereUniqueWithoutVariantInput = {
@@ -64296,6 +67699,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutImagesInput = {
@@ -64318,6 +67722,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutImagesInput = {
@@ -64356,6 +67761,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutImagesInput = {
@@ -64378,6 +67784,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type UserCreateWithoutCartItemsInput = {
@@ -64408,6 +67815,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutCartItemsInput = {
@@ -64438,6 +67847,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutCartItemsInput = {
@@ -64523,6 +67934,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCartItemsInput = {
@@ -64553,6 +67966,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type ProductVariantUpsertWithoutCartItemsInput = {
@@ -64665,6 +68080,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -64695,6 +68112,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -64930,6 +68349,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -64960,6 +68381,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type OrderItemUpsertWithWhereUniqueWithoutOrderInput = {
@@ -65271,6 +68694,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutPaymentMethodsInput = {
@@ -65301,6 +68726,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutPaymentMethodsInput = {
@@ -65389,6 +68816,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPaymentMethodsInput = {
@@ -65419,6 +68848,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type PaymentUpsertWithWhereUniqueWithoutMethodInput = {
@@ -65729,6 +69160,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -65759,6 +69192,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -65786,6 +69221,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutReviewsInput = {
@@ -65808,6 +69244,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutReviewsInput = {
@@ -65906,6 +69343,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -65936,6 +69375,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type ProductUpsertWithoutReviewsInput = {
@@ -65969,6 +69410,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutReviewsInput = {
@@ -65991,6 +69433,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ReviewMediaUpsertWithWhereUniqueWithoutReviewInput = {
@@ -66102,6 +69545,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutReviewVoteInput = {
@@ -66132,6 +69577,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutReviewVoteInput = {
@@ -66221,6 +69668,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewVoteInput = {
@@ -66251,6 +69700,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type ReviewCreateWithoutMediaInput = {
@@ -66361,6 +69812,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutWishlistsInput = {
@@ -66391,6 +69844,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutWishlistsInput = {
@@ -66461,6 +69916,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWishlistsInput = {
@@ -66491,6 +69948,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type WishlistItemUpsertWithWhereUniqueWithoutWishlistInput = {
@@ -66550,6 +70009,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutWishlistItemsInput = {
@@ -66572,6 +70032,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutWishlistItemsInput = {
@@ -66637,6 +70098,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutWishlistItemsInput = {
@@ -66659,6 +70121,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type UserCreateWithoutSellerOrdersInput = {
@@ -66689,6 +70152,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutSellerOrdersInput = {
@@ -66719,6 +70184,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutSellerOrdersInput = {
@@ -66842,6 +70309,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSellerOrdersInput = {
@@ -66872,6 +70341,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
   export type SellerOrderItemUpsertWithWhereUniqueWithoutSellerOrderInput = {
@@ -67125,6 +70596,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
   export type UserUncheckedCreateWithoutPayoutsInput = {
@@ -67155,6 +70628,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
   export type UserCreateOrConnectWithoutPayoutsInput = {
@@ -67201,6 +70676,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPayoutsInput = {
@@ -67231,6 +70708,502 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+  }
+
+  export type ProductCreateWithoutQuestionsInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
+    status?: $Enums.ProductStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    brand: string
+    seller: UserCreateNestedOneWithoutProductsInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    reviews?: ReviewCreateNestedManyWithoutProductInput
+    category?: CategoryCreateNestedOneWithoutProductsInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutProductInput
+    productOffers?: ProductOfferCreateNestedManyWithoutProductInput
+    deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
+    warranty?: WarrantyCreateNestedManyWithoutProductInput
+    returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
+    Conversation?: ConversationCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutQuestionsInput = {
+    id?: string
+    sellerId: string
+    name: string
+    slug: string
+    description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
+    status?: $Enums.ProductStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categoryId?: string | null
+    brand: string
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutProductInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutProductInput
+    productOffers?: ProductOfferUncheckedCreateNestedManyWithoutProductInput
+    deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
+    warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
+    returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutQuestionsInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutQuestionsInput, ProductUncheckedCreateWithoutQuestionsInput>
+  }
+
+  export type UserCreateWithoutProductQuestionsInput = {
+    id?: string
+    clerkId: string
+    email: string
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    cartItems?: CartItemCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    products?: ProductCreateNestedManyWithoutSellerInput
+    payouts?: PayoutCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+  }
+
+  export type UserUncheckedCreateWithoutProductQuestionsInput = {
+    id?: string
+    clerkId: string
+    email: string
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput
+    payouts?: PayoutUncheckedCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteUncheckedCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationUncheckedCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+  }
+
+  export type UserCreateOrConnectWithoutProductQuestionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutProductQuestionsInput, UserUncheckedCreateWithoutProductQuestionsInput>
+  }
+
+  export type ProductAnswerCreateWithoutQuestionInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    seller: UserCreateNestedOneWithoutProductAnswersInput
+  }
+
+  export type ProductAnswerUncheckedCreateWithoutQuestionInput = {
+    id?: string
+    sellerId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductAnswerCreateOrConnectWithoutQuestionInput = {
+    where: ProductAnswerWhereUniqueInput
+    create: XOR<ProductAnswerCreateWithoutQuestionInput, ProductAnswerUncheckedCreateWithoutQuestionInput>
+  }
+
+  export type ProductAnswerCreateManyQuestionInputEnvelope = {
+    data: ProductAnswerCreateManyQuestionInput | ProductAnswerCreateManyQuestionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductUpsertWithoutQuestionsInput = {
+    update: XOR<ProductUpdateWithoutQuestionsInput, ProductUncheckedUpdateWithoutQuestionsInput>
+    create: XOR<ProductCreateWithoutQuestionsInput, ProductUncheckedCreateWithoutQuestionsInput>
+    where?: ProductWhereInput
+  }
+
+  export type ProductUpdateToOneWithWhereWithoutQuestionsInput = {
+    where?: ProductWhereInput
+    data: XOR<ProductUpdateWithoutQuestionsInput, ProductUncheckedUpdateWithoutQuestionsInput>
+  }
+
+  export type ProductUpdateWithoutQuestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: StringFieldUpdateOperationsInput | string
+    seller?: UserUpdateOneRequiredWithoutProductsNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    reviews?: ReviewUpdateManyWithoutProductNestedInput
+    category?: CategoryUpdateOneWithoutProductsNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutProductNestedInput
+    productOffers?: ProductOfferUpdateManyWithoutProductNestedInput
+    deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
+    warranty?: WarrantyUpdateManyWithoutProductNestedInput
+    returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
+    Conversation?: ConversationUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutQuestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sellerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    brand?: StringFieldUpdateOperationsInput | string
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutProductNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutProductNestedInput
+    productOffers?: ProductOfferUncheckedUpdateManyWithoutProductNestedInput
+    deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
+    warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
+    returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type UserUpsertWithoutProductQuestionsInput = {
+    update: XOR<UserUpdateWithoutProductQuestionsInput, UserUncheckedUpdateWithoutProductQuestionsInput>
+    create: XOR<UserCreateWithoutProductQuestionsInput, UserUncheckedCreateWithoutProductQuestionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutProductQuestionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutProductQuestionsInput, UserUncheckedUpdateWithoutProductQuestionsInput>
+  }
+
+  export type UserUpdateWithoutProductQuestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clerkId?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    products?: ProductUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutProductQuestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clerkId?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUncheckedUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUncheckedUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUncheckedUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUncheckedUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+  }
+
+  export type ProductAnswerUpsertWithWhereUniqueWithoutQuestionInput = {
+    where: ProductAnswerWhereUniqueInput
+    update: XOR<ProductAnswerUpdateWithoutQuestionInput, ProductAnswerUncheckedUpdateWithoutQuestionInput>
+    create: XOR<ProductAnswerCreateWithoutQuestionInput, ProductAnswerUncheckedCreateWithoutQuestionInput>
+  }
+
+  export type ProductAnswerUpdateWithWhereUniqueWithoutQuestionInput = {
+    where: ProductAnswerWhereUniqueInput
+    data: XOR<ProductAnswerUpdateWithoutQuestionInput, ProductAnswerUncheckedUpdateWithoutQuestionInput>
+  }
+
+  export type ProductAnswerUpdateManyWithWhereWithoutQuestionInput = {
+    where: ProductAnswerScalarWhereInput
+    data: XOR<ProductAnswerUpdateManyMutationInput, ProductAnswerUncheckedUpdateManyWithoutQuestionInput>
+  }
+
+  export type ProductQuestionCreateWithoutAnswersInput = {
+    id?: string
+    content: string
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    product: ProductCreateNestedOneWithoutQuestionsInput
+    user: UserCreateNestedOneWithoutProductQuestionsInput
+  }
+
+  export type ProductQuestionUncheckedCreateWithoutAnswersInput = {
+    id?: string
+    productId: string
+    userId: string
+    content: string
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductQuestionCreateOrConnectWithoutAnswersInput = {
+    where: ProductQuestionWhereUniqueInput
+    create: XOR<ProductQuestionCreateWithoutAnswersInput, ProductQuestionUncheckedCreateWithoutAnswersInput>
+  }
+
+  export type UserCreateWithoutProductAnswersInput = {
+    id?: string
+    clerkId: string
+    email: string
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    cartItems?: CartItemCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    products?: ProductCreateNestedManyWithoutSellerInput
+    payouts?: PayoutCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutProductAnswersInput = {
+    id?: string
+    clerkId: string
+    email: string
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput
+    payouts?: PayoutUncheckedCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteUncheckedCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationUncheckedCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutProductAnswersInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutProductAnswersInput, UserUncheckedCreateWithoutProductAnswersInput>
+  }
+
+  export type ProductQuestionUpsertWithoutAnswersInput = {
+    update: XOR<ProductQuestionUpdateWithoutAnswersInput, ProductQuestionUncheckedUpdateWithoutAnswersInput>
+    create: XOR<ProductQuestionCreateWithoutAnswersInput, ProductQuestionUncheckedCreateWithoutAnswersInput>
+    where?: ProductQuestionWhereInput
+  }
+
+  export type ProductQuestionUpdateToOneWithWhereWithoutAnswersInput = {
+    where?: ProductQuestionWhereInput
+    data: XOR<ProductQuestionUpdateWithoutAnswersInput, ProductQuestionUncheckedUpdateWithoutAnswersInput>
+  }
+
+  export type ProductQuestionUpdateWithoutAnswersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutQuestionsNestedInput
+    user?: UserUpdateOneRequiredWithoutProductQuestionsNestedInput
+  }
+
+  export type ProductQuestionUncheckedUpdateWithoutAnswersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutProductAnswersInput = {
+    update: XOR<UserUpdateWithoutProductAnswersInput, UserUncheckedUpdateWithoutProductAnswersInput>
+    create: XOR<UserCreateWithoutProductAnswersInput, UserUncheckedCreateWithoutProductAnswersInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutProductAnswersInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutProductAnswersInput, UserUncheckedUpdateWithoutProductAnswersInput>
+  }
+
+  export type UserUpdateWithoutProductAnswersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clerkId?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    products?: ProductUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutProductAnswersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clerkId?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUncheckedUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUncheckedUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUncheckedUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUncheckedUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AddressCreateManyUserInput = {
@@ -67405,6 +71378,23 @@ export namespace Prisma {
   export type UserRoleCreateManyUserInput = {
     id?: string
     role: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductQuestionCreateManyUserInput = {
+    id?: string
+    productId: string
+    content: string
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductAnswerCreateManySellerInput = {
+    id?: string
+    questionId: string
+    content: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -67646,6 +71636,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutSellerInput = {
@@ -67668,6 +71659,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutSellerInput = {
@@ -67981,6 +71973,59 @@ export namespace Prisma {
   export type UserRoleUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductQuestionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutQuestionsNestedInput
+    answers?: ProductAnswerUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type ProductQuestionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answers?: ProductAnswerUncheckedUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type ProductQuestionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductAnswerUpdateWithoutSellerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    question?: ProductQuestionUpdateOneRequiredWithoutAnswersNestedInput
+  }
+
+  export type ProductAnswerUncheckedUpdateWithoutSellerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    questionId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductAnswerUncheckedUpdateManyWithoutSellerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    questionId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -68305,6 +72350,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutCategoryInput = {
@@ -68327,6 +72373,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutCategoryInput = {
@@ -68609,6 +72656,15 @@ export namespace Prisma {
     recieverId: string
     title?: string | null
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductQuestionCreateManyProductInput = {
+    id?: string
+    userId: string
+    content: string
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -68901,6 +72957,35 @@ export namespace Prisma {
     recieverId?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductQuestionUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutProductQuestionsNestedInput
+    answers?: ProductAnswerUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type ProductQuestionUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answers?: ProductAnswerUncheckedUpdateManyWithoutQuestionNestedInput
+  }
+
+  export type ProductQuestionUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -69459,6 +73544,38 @@ export namespace Prisma {
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commission?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductAnswerCreateManyQuestionInput = {
+    id?: string
+    sellerId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductAnswerUpdateWithoutQuestionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    seller?: UserUpdateOneRequiredWithoutProductAnswersNestedInput
+  }
+
+  export type ProductAnswerUncheckedUpdateWithoutQuestionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sellerId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductAnswerUncheckedUpdateManyWithoutQuestionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sellerId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

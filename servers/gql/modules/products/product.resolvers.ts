@@ -1,4 +1,3 @@
-import { Prisma } from "@/app/generated/prisma";
 import { prisma } from "@/lib/db/prisma";
 import { getCache, setCache } from "@/services/redis.services";
 
@@ -27,6 +26,7 @@ export const productResolvers = {
               where: { slug },
               include: {
                 seller: true,
+                
                 variants: {
                   include: {
                     cartItems: { select: { userId: true, variantId: true } },
@@ -89,8 +89,10 @@ export const productResolvers = {
     getProductBySlug: async (_: any, { slug }: { slug: string }) => {
       if (!slug) throw new Error("Slug is required");
 
-      const productKey = `product:${slug}`;
+      const productKey = `product:details:${slug}`;
       const cached = await getCache(productKey);
+
+      console.log("request reciebed------------",slug)
 
       if (cached) {
         console.log(`⚡ Returning product ${slug} from Redis`);

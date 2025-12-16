@@ -13,6 +13,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SellerInfo from "./SellerInfo";
 import RecommendedProducts from "./RecommendedProducts";
 import ProductReviews from "@/components/page/product/ProductReviews";
+import FAQSection from "./FAQSection";
 
 interface ProductPageClientProps {
   product: TProduct | null;
@@ -224,6 +225,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
         <div className="mt-12 border-t pt-8">
           <ProductReviews />
+          <FAQSection productId={product.id || ""} />
         </div>
 
         <RecommendedProducts currentProductId={product.id || ""} title="Recommended for You" />
