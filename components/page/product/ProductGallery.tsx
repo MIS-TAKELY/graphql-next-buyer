@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import SmartMedia from "@/components/ui/SmartMedia";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState, useRef } from "react";
 import ImageZoomViewer from "./ImageZoomViewer";
 
 interface ProductImage {
@@ -25,8 +25,6 @@ interface ProductGalleryProps {
   }) => void;
 }
 
-const PLACEHOLDER_IMAGE = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTZlNmU2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBmaWxsPSIjOTA5MDkwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+";
-
 const ProductGallery = memo(function ProductGallery({
   images,
   productName,
@@ -35,7 +33,6 @@ const ProductGallery = memo(function ProductGallery({
   const [selectedImage, setSelectedImage] = useState(0);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [isDesktop, setIsDesktop] = useState(false);
-  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
   // Filter valid images
   const displayImages = useMemo<ProductImage[]>(() => {
@@ -54,7 +51,10 @@ const ProductGallery = memo(function ProductGallery({
   // Sync state with Embla
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
-    setSelectedImage(emblaApi.selectedScrollSnap());
+    const index = emblaApi.selectedScrollSnap();
+    setSelectedImage(index);
+
+    // Note: SmartMedia handles its own video state.
   }, [emblaApi]);
 
   useEffect(() => {
@@ -74,22 +74,26 @@ const ProductGallery = memo(function ProductGallery({
   // Desktop Hover Zoom Logic
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!isDesktop || !onImageHover) return;
+
+    const currentImg = displayImages[selectedImage];
+    const isVideo = currentImg?.mediaType === "VIDEO" || currentImg?.url?.toLowerCase().endsWith(".mp4") || currentImg?.url?.toLowerCase().endsWith(".webm");
+
+    if (isVideo) return;
+
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - left) / width) * 100;
     const y = ((e.clientY - top) / height) * 100;
 
-    // Use placeholder URL if the current image has failed
-    const currentId = displayImages[selectedImage]?.id;
-    const imageUrl = (currentId && failedImages[currentId])
-      ? PLACEHOLDER_IMAGE
-      : (displayImages[selectedImage]?.url || "");
+    const imageUrl = currentImg?.url || "";
+
+    if (!imageUrl) return;
 
     onImageHover({
       isHovering: true,
       imageUrl,
       position: { x, y }
     });
-  }, [isDesktop, onImageHover, displayImages, selectedImage, failedImages]);
+  }, [isDesktop, onImageHover, displayImages, selectedImage]);
 
   const handleMouseLeave = useCallback(() => {
     if (onImageHover) {
@@ -97,29 +101,24 @@ const ProductGallery = memo(function ProductGallery({
     }
   }, [onImageHover]);
 
-  const handleImageError = useCallback((id: string) => {
-    setFailedImages(prev => ({ ...prev, [id]: true }));
-  }, []);
-
   return (
     <div className="flex flex-col-reverse lg:flex-row gap-4 h-full">
-      {/* Thumbnails - Desktop (Vertical) / Mobile (Horizontal) */}
+      {/* Thumbnails */}
       {displayImages.length > 1 && (
         <div className="flex lg:flex-col gap-2 overflow-auto scrollbar-hide shrink-0 lg:w-20 lg:max-h-[600px]">
           {displayImages.map((image, index) => (
             <button
               key={image.id || index}
               onClick={() => scrollTo(index)}
-              className={`relative w-16 h-16 lg:w-20 lg:h-20 shrink-0 rounded-md overflow-hidden border-2 transition-all 
-                ${selectedImage === index ? "border-primary" : "border-transparent hover:border-gray-200"}`}
+              className={`relative w-16 h-16 lg:w-20 lg:h-20 shrink-0 rounded-md overflow-hidden border-2 transition-all group
+              ${selectedImage === index ? "border-primary" : "border-transparent hover:border-gray-200"}`}
             >
-              <Image
-                src={failedImages[image.id] ? PLACEHOLDER_IMAGE : image.url}
+              <SmartMedia
+                src={image.url}
                 alt={image.altText || `Thumbnail ${index + 1}`}
                 fill
                 className="object-cover"
                 sizes="80px"
-                onError={() => handleImageError(image.id)}
               />
             </button>
           ))}
@@ -137,15 +136,14 @@ const ProductGallery = memo(function ProductGallery({
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
               >
-                <div className="relative w-full h-full">
-                  <Image
-                    src={failedImages[image.id] ? PLACEHOLDER_IMAGE : image.url}
+                <div className="relative w-full h-full flex items-center justify-center p-2 group">
+                  <SmartMedia
+                    src={image.url}
                     alt={image.altText || productName}
                     fill
                     className="object-contain"
                     priority={index === 0}
                     sizes="(max-width: 768px) 100vw, 800px"
-                    onError={() => handleImageError(image.id)}
                   />
                 </div>
               </div>
@@ -174,7 +172,7 @@ const ProductGallery = memo(function ProductGallery({
         </div>
 
         {/* Counter Badge */}
-        <div className="absolute bottom-4 right-4 bg-black/60 text-white text-xs px-2 py-1 rounded-md backdrop-blur-md">
+        <div className="absolute bottom-4 right-4 bg-black/60 text-white text-xs px-2 py-1 rounded-md backdrop-blur-md z-10">
           {selectedImage + 1} / {displayImages.length}
         </div>
       </div>

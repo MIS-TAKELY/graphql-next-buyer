@@ -92,7 +92,30 @@ const typeDefs = mergeTypeDefs([
   sellerProfileTypeDefs,
 ]);
 
+import { GraphQLScalarType, Kind } from 'graphql';
+
+const DateTime = new GraphQLScalarType({
+  name: 'DateTime',
+  description: 'DateTime custom scalar type',
+  serialize(value: any) {
+    // value sent to the client
+    return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
+  },
+  parseValue(value: any) {
+    // value from the client
+    return new Date(value);
+  },
+  parseLiteral(ast) {
+    // value from the client query
+    if (ast.kind === Kind.STRING) {
+      return new Date(ast.value);
+    }
+    return null;
+  },
+});
+
 const resolvers = mergeResolvers([
+  { DateTime: DateTime }, // Add the scalar resolver here
   addressResolvers,
   productResolvers,
   categoryResolvers,

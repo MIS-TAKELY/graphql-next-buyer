@@ -75,15 +75,29 @@ export function ChatLayout({ userId }: ChatLayoutProps) {
                 className={`${showChat ? "flex" : "hidden"
                     } flex-1 flex-col min-w-0 bg-white dark:bg-slate-950`}
             >
-                <ChatWindow
-                    product={selectedChat?.product}
-                    otherUser={selectedChat?.otherUser}
-                    messages={activeMessages}
-                    isLoading={loadingChat}
-                    error={chatError}
-                    onSend={onSend}
-                    onBack={handleBack}
-                />
+                {selectedChat ? (
+                    <ChatWindow
+                        conversation={{
+                            id: selectedChat.id,
+                            product: selectedChat.product,
+                            sender: selectedChat.otherUser,
+                            reciever: selectedChat.otherUser,
+                        } as any}
+                        messages={activeMessages}
+                        isLoading={loadingChat}
+                        error={chatError}
+                        onSend={onSend}
+                        onBack={handleBack}
+                        currentUserId={userId}
+                    />
+                ) : (
+                    <div className="flex items-center justify-center h-full text-muted-foreground">
+                        <div className="text-center">
+                            <User className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                            <p>Select a conversation to start chatting</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -10,6 +10,7 @@ import ProductPageSkeleton from "@/components/page/product/ProductPageSkeleton";
 
 import { IProductVarient, TProduct } from "@/types/product";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 import SellerInfo from "./SellerInfo";
 import RecommendedProducts from "./RecommendedProducts";
 import ProductReviews from "@/components/page/product/ProductReviews";
@@ -171,6 +172,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     return <ProductPageSkeleton />;
   }
 
+  const { userId } = useAuth();
+  const isOwnProduct = userId === (product?.seller as any)?.clerkId;
+
   return (
     <div className="min-h-screen bg-background relative pb-20 lg:pb-0">
       <Breadcrumb
@@ -216,7 +220,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 returnPolicy={product.returnPolicy}
                 deliveryOptions={product.deliveryOptions}
               />
-              <SellerInfo sellerName={sellerName} sellerId={product?.seller?.id} />
+              <SellerInfo sellerName={sellerName} sellerId={product?.seller?.id} isOwnProduct={isOwnProduct} />
             </div>
           </div>
         </div>
@@ -225,7 +229,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
         <div className="mt-12 border-t pt-8">
           <ProductReviews />
-          <FAQSection productId={product.id || ""} />
+          <FAQSection productId={product.id || ""} isOwnProduct={isOwnProduct} />
         </div>
 
         <RecommendedProducts currentProductId={product.id || ""} title="Recommended for You" />

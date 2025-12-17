@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { LocalMessage } from "@/types/chat";
 import { File, Loader2, MessageCircle, Paperclip, Send, X } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import { MessageBubble } from "./MessageBubble";
+import MessageBubble from "./MessageBubble";
 
 interface SelectedFile {
   file: File;

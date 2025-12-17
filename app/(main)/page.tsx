@@ -5,7 +5,7 @@ import ProductCatagoryCardSection from "@/components/page/home/ProductCatagoryCa
 import ProductSection from "@/components/page/home/ProductSection";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
-import { IProducts } from "@/types/product";
+import { TProduct } from "@/types/product";
 import { CacheService } from "@/services/CacheService";
 import dynamic from "next/dynamic";
 
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 type SectionConfig = {
   name: string;
-  products: IProducts[];
+  products: TProduct[];
   count: number;
   layout: "grid" | "horizontal";
 };
@@ -34,7 +34,7 @@ export default async function HomePage() {
   const client = await getServerApolloClient();
 
   const CACHE_KEY = CacheService.getProductsListKey();
-  let products: IProducts[] = (await CacheService.get<IProducts[]>(CACHE_KEY)) || [];
+  let products: TProduct[] = (await CacheService.get<TProduct[]>(CACHE_KEY)) || [];
 
   if (products.length === 0) {
     try {

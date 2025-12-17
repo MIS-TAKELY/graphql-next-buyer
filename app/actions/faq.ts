@@ -1,50 +1,68 @@
 "use server";
 
 import { prisma } from "@/lib/db/prisma";
-import { realtime } from "@/lib/realtime";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 export async function askQuestion(productId: string, content: string) {
-    const { userId: clerkId } = await auth();
-    if (!clerkId) throw new Error("Unauthorized");
+    console.log("[FAQ] Starting askQuestion", { productId, content });
 
-    const currentUserData = await currentUser();
+    try {
+        const { userId: clerkId } = await auth();
+        console.log("[FAQ] Auth check", { clerkId });
 
-    const user = await prisma.user.findUnique({
-        where: { clerkId },
-        select: { id: true, firstName: true, lastName: true }
-    });
+        if (!clerkId) {
+            console.error("[FAQ] No clerkId found");
+            throw new Error("Unauthorized");
+        }
 
-    if (!user) throw new Error("User not found");
+        const currentUserData = await currentUser();
+        console.log("[FAQ] Current user data", { currentUserData: currentUserData?.id });
 
-    // @ts-ignore - Prisma types not generated yet
-    const question = await prisma.productQuestion.create({
-        data: {
-            productId,
-            userId: user.id,
-            content,
-        },
-        include: {
-            user: {
-                select: { firstName: true, lastName: true },
-            },
-        },
-    });
+        const user = await prisma.user.findUnique({
+            where: { clerkId },
+            select: { id: true, firstName: true, lastName: true }
+        });
+        console.log("[FAQ] User from DB", { user });
 
-    await realtime.channel(`product:${productId}:faq`).emit("faq.newQuestion", {
-        id: question.id,
-        productId: question.productId,
-        content: question.content,
-        createdAt: question.createdAt,
-        user: {
-            firstName: user.firstName,
-            lastName: user.lastName,
-        },
-    });
+        if (!user) {
+            console.error("[FAQ] User not found in database");
+            throw new Error("User not found");
+        }
 
-    revalidatePath(`/product/${productId}`); // Or whatever the dynamic path is
-    return question;
+        console.log("[FAQ] Creating question in database...");
+
+        // Wrap Prisma operation with timeout
+        const question = await Promise.race([
+            // @ts-ignore - Prisma types not generated yet
+            prisma.productQuestion.create({
+                data: {
+                    productId,
+                    userId: user.id,
+                    content,
+                },
+                include: {
+                    user: {
+                        select: { firstName: true, lastName: true },
+                    },
+                },
+            }),
+            new Promise((_, reject) =>
+                setTimeout(() => reject(new Error("Database operation timed out")), 10000)
+            )
+        ]) as any;
+
+        console.log("[FAQ] Question created successfully", { questionId: question.id });
+
+        // Revalidate the product page cache
+        revalidatePath(`/product/${productId}`);
+        console.log("[FAQ] Path revalidated, returning question");
+
+        return question;
+    } catch (error) {
+        console.error("[FAQ] Error in askQuestion:", error);
+        throw error;
+    }
 }
 
 export async function getQuestions(productId: string) {

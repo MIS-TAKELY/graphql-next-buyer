@@ -2,6 +2,7 @@
 export interface Product {
   id: string;
   name: string;
+  __typename?: "Product";
   variants: Array<{
     id: string;
     price: string;
@@ -17,6 +18,7 @@ export interface WishlistItem {
   id: string;
   wishlistId: string;
   productId: string;
+  __typename?: "WishlistItem";
   product: Product;
 }
 
@@ -177,9 +179,11 @@ export const useWishlist = (options: UseWishlistOptions = {}) => {
           id: `temp-${Date.now()}`,
           wishlistId: defaultWishlist?.id || "",
           productId,
+          __typename: "WishlistItem",
           product: {
             id: productId,
             name: product?.name || "",
+            __typename: "Product",
             variants: product?.variants || [],
             images: product?.images || [],
           },

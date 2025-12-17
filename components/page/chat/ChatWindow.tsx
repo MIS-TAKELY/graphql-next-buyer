@@ -1,245 +1,274 @@
 "use client";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
-import { LocalMessage } from "@/types/chat";
-import { File, Loader2, Paperclip, Send, X, ArrowLeft, FileText } from "lucide-react";
+import { LocalMessage } from "@/types/chat"; // MODIFIED for buyer
+import { Conversation } from "@/types/customer/customer.types";
+import {
+  ArrowLeft,
+  FileText,
+  Loader2,
+  MoreVertical,
+  Paperclip,
+  Send,
+  X,
+} from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import { MessageBubble } from "./MessageBubble";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-interface SelectedFile {
-    file: File;
-    preview?: string;
-    name: string;
-}
+import MessageBubble from "./MessageBubble";
 
 interface ChatWindowProps {
-    product: { id: string; name: string; slug: string } | null;
-    otherUser: { firstName: string; lastName: string; avatarImageUrl?: string } | null;
-    messages: LocalMessage[];
-    isLoading: boolean;
-    error: string | null;
-    onSend: (text: string, files?: File[]) => void;
-    onBack?: () => void; // For mobile
+  conversation?: Conversation;
+  messages: LocalMessage[];
+  onSend: (text: string, files?: File[]) => void;
+  isLoading: boolean;
+  error: string | null;
+  onBack: () => void;
+  currentUserId: string;
+}
+
+interface SelectedFile {
+  file: File;
+  preview?: string;
+  name: string;
 }
 
 export function ChatWindow({
-    product,
-    otherUser,
-    messages,
-    isLoading,
-    error,
-    onSend,
-    onBack,
+  conversation,
+  messages,
+  onSend,
+  isLoading,
+  error,
+  onBack,
+  currentUserId,
 }: ChatWindowProps) {
-    const [inputValue, setInputValue] = useState("");
-    const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Scroll to bottom on new messages
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, conversation?.id]);
 
+  const handleAttachClick = () => fileInputRef.current?.click();
 
-    // Cleanup previews on unmount or change
-    useEffect(() => {
-        return () => {
-            selectedFiles.forEach(f => {
-                if (f.preview) URL.revokeObjectURL(f.preview);
-            });
-        };
-    }, [selectedFiles]);
-
-    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const files = Array.from(e.target.files);
-            const newFiles = files.map((file) => ({
-                file,
-                name: file.name,
-                preview: file.type.startsWith("image/") || file.type.startsWith("video/")
-                    ? URL.createObjectURL(file)
-                    : undefined,
-            }));
-            setSelectedFiles((prev) => [...prev, ...newFiles]);
-            // Reset input so same file can be selected again if needed
-            e.target.value = "";
-        }
-    };
-
-    const handleRemoveFile = (index: number) => {
-        setSelectedFiles(prev => {
-            const newFiles = [...prev];
-            const removed = newFiles.splice(index, 1)[0];
-            if (removed.preview) URL.revokeObjectURL(removed.preview);
-            return newFiles;
-        });
-    };
-
-    const handleSubmit = () => {
-        if (!inputValue.trim() && !selectedFiles.length) return;
-        onSend(
-            inputValue,
-            selectedFiles.map((f) => f.file)
-        );
-        setInputValue("");
-        setSelectedFiles([]);
-    };
-
-    if (!product || !otherUser) {
-        return (
-            <div className="flex-1 flex flex-col items-center justify-center p-8 text-muted-foreground h-full bg-slate-50 dark:bg-slate-900/50">
-                <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-                    <Send className="w-8 h-8 opacity-50" />
-                </div>
-                <p>Select a conversation to start chatting</p>
-            </div>
-        );
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      const newFilesWithPreview = newFiles.map((file) => ({
+        file,
+        preview: file.type.startsWith("image/")
+          ? URL.createObjectURL(file)
+          : undefined,
+        name: file.name,
+      }));
+      setSelectedFiles((prev) => [...prev, ...newFilesWithPreview]);
+      e.target.value = "";
     }
+  };
 
-    const getFileIcon = (sf: SelectedFile) => {
-        if (sf.preview) return null; // Logic handled in render
-        const nameLower = sf.name.toLowerCase();
-        if (nameLower.endsWith(".pdf") || nameLower.endsWith(".doc") || nameLower.endsWith(".docx")) {
-            return <FileText className="h-full w-full p-4 text-muted-foreground" />;
-        }
-        return <File className="h-full w-full p-4 text-muted-foreground" />;
-    };
+  const handleRemoveFile = (index: number) => {
+    const file = selectedFiles[index];
+    if (file.preview) URL.revokeObjectURL(file.preview);
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
 
-    return (
-        <div className="flex flex-col h-full bg-background">
-            {/* Header */}
-            <div className="px-4 py-3 border-b flex items-center gap-3 shrink-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                {onBack && (
-                    <Button variant="ghost" size="icon" onClick={onBack} className="mr-1 lg:hidden">
-                        <ArrowLeft className="h-5 w-5" />
-                    </Button>
-                )}
-                <Avatar className="h-9 w-9 border">
-                    <AvatarImage src={otherUser.avatarImageUrl} />
-                    <AvatarFallback>{otherUser.firstName[0]}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                    <h2 className="text-sm font-semibold truncate">
-                        {otherUser.firstName} {otherUser.lastName}
-                    </h2>
-                    <p className="text-xs text-muted-foreground truncate flex items-center gap-1">
-                        Re: <span className="font-medium text-primary">{product.name}</span>
-                    </p>
-                </div>
-            </div>
-
-            {/* Messages Area */}
-            <div className="flex-1 overflow-hidden relative bg-slate-50 dark:bg-slate-950/50">
-                <ScrollArea className="h-full w-full">
-                    <div className="p-4 flex flex-col gap-4 min-h-full justify-end">
-                        {isLoading && messages.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center py-10 gap-2 text-muted-foreground">
-                                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                                <p className="text-sm">Loading messages...</p>
-                            </div>
-                        ) : messages.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center py-10 text-center gap-2 opacity-60">
-                                <p className="text-sm">Start the conversation!</p>
-                            </div>
-                        ) : (
-                            messages.map((msg, i) => {
-                                // Simple sequence check could go here if needed for styling
-                                return (
-                                    <MessageBubble
-                                        key={msg.clientId || msg.id}
-                                        message={msg}
-                                        isOwn={msg.sender === "user"}
-                                    />
-                                );
-                            })
-                        )}
-                        {error && (
-                            <div className="p-2 text-xs text-center text-red-500 bg-red-50 rounded">
-                                {error}
-                            </div>
-                        )}
-                        <div ref={scrollRef} />
-                    </div>
-                </ScrollArea>
-            </div>
-
-            {/* Input Area */}
-            <div className="p-3 bg-background border-t shrink-0">
-                {selectedFiles.length > 0 && (
-                    <div className="flex gap-2 mb-2 overflow-x-auto pb-2 scrollbar-none">
-                        {selectedFiles.map((f, i) => (
-                            <div
-                                key={i}
-                                className="relative h-16 w-16 shrink-0 rounded-lg border bg-muted flex items-center justify-center overflow-hidden group"
-                            >
-                                {f.preview ? (
-                                    f.file.type.startsWith("image/") ? (
-                                        <img
-                                            src={f.preview}
-                                            className="h-full w-full object-cover"
-                                            alt="preview"
-                                        />
-                                    ) : (
-                                        <video src={f.preview} className="h-full w-full object-cover" />
-                                    )
-                                ) : (
-                                    getFileIcon(f)
-                                )}
-                                <button
-                                    onClick={() => handleRemoveFile(i)}
-                                    className="absolute top-0.5 right-0.5 bg-black/50 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                                >
-                                    <X className="h-3 w-3" />
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                <div className="flex gap-2 items-end">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="shrink-0 text-muted-foreground hover:text-primary"
-                        onClick={() => fileInputRef.current?.click()}
-                    >
-                        <Paperclip className="h-5 w-5" />
-                    </Button>
-                    <input
-                        type="file"
-                        multiple
-                        className="hidden"
-                        ref={fileInputRef}
-                        onChange={handleFileSelect}
-                        accept="image/*,video/*,application/pdf,.doc,.docx"
-                    />
-
-                    <Input
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyDown={(e) =>
-                            e.key === "Enter" && !e.shiftKey && handleSubmit()
-                        }
-                        placeholder="Type a message..."
-                        className="flex-1 bg-muted/50 focus-visible:ring-1 focus-visible:ring-primary/20 border-0"
-                    />
-
-                    <Button
-                        onClick={handleSubmit}
-                        disabled={!inputValue && !selectedFiles.length}
-                        size="icon"
-                        className={cn(
-                            "shrink-0 transition-all",
-                            inputValue || selectedFiles.length
-                                ? "bg-primary"
-                                : "bg-muted text-muted-foreground"
-                        )}
-                    >
-                        <Send className="h-4 w-4" />
-                    </Button>
-                </div>
-            </div>
-        </div>
+  const handleSendMessage = () => {
+    if (!inputValue.trim() && selectedFiles.length === 0) return;
+    onSend(
+      inputValue.trim(),
+      selectedFiles.map((f) => f.file)
     );
+    setInputValue("");
+    setSelectedFiles([]);
+  };
+
+  const partner =
+    conversation?.sender?.id === currentUserId
+      ? conversation?.reciever
+      : conversation?.sender;
+
+  const partnerName = partner?.firstName || "User";
+  const productName = conversation?.product?.name;
+
+  return (
+    <div className="flex flex-col h-full bg-background relative">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 border-b shrink-0 bg-card/50 backdrop-blur-sm z-10">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden -ml-2"
+            onClick={onBack}
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+
+          <Avatar className="h-9 w-9 border">
+            <AvatarImage src={(partner as any)?.avatar || (partner as any)?.avatarImageUrl} />
+            <AvatarFallback className="text-xs bg-primary/10 text-primary">
+              {partnerName.substring(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+
+          <div className="flex flex-col">
+            <span className="font-semibold text-sm leading-none">
+              {partnerName}
+            </span>
+            {productName && (
+              <span className="text-xs text-muted-foreground mt-1 truncate max-w-[200px]">
+                Re: {productName}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>View Product</DropdownMenuItem>
+            <DropdownMenuItem>Report User</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* Chat Area */}
+      <div className="flex-1 overflow-hidden relative bg-muted/5">
+        <ScrollArea className="h-full px-4">
+          <div className="py-6 space-y-6">
+            {isLoading && messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-8 opacity-50">
+                <Loader2 className="h-8 w-8 animate-spin mb-2" />
+                <p className="text-xs">Loading history...</p>
+              </div>
+            ) : messages.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="bg-primary/5 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Send className="w-6 h-6 text-primary/60" />
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  Start a conversation with <strong>{partnerName}</strong>
+                </p>
+              </div>
+            ) : (
+              messages.map((msg, i) => {
+                // Check if previous message was from same sender to group visually
+                const isSequence =
+                  i > 0 && messages[i - 1].sender === msg.sender;
+                return (
+                  <div
+                    key={msg.clientId || msg.id}
+                    className={isSequence ? "mt-1" : "mt-4"}
+                  >
+                    <MessageBubble
+                      message={msg}
+                      isOwn={msg.sender === "user"}
+                    />
+                  </div>
+                );
+              })
+            )}
+            {error && (
+              <div className="text-center p-2 bg-destructive/10 text-destructive text-xs rounded mx-auto max-w-xs">
+                {error}
+              </div>
+            )}
+            <div ref={messagesEndRef} className="h-1" />
+          </div>
+        </ScrollArea>
+      </div>
+
+      {/* Input Area */}
+      <div className="p-4 border-t bg-background shrink-0">
+        {/* File Preview */}
+        {selectedFiles.length > 0 && (
+          <div className="flex gap-2 mb-3 overflow-x-auto pb-2 scrollbar-hide">
+            {selectedFiles.map((sf, index) => (
+              <div key={index} className="relative group shrink-0">
+                <div className="w-16 h-16 rounded-lg border overflow-hidden bg-muted flex items-center justify-center">
+                  {sf.preview ? (
+                    <img
+                      src={sf.preview}
+                      className="w-full h-full object-cover"
+                      alt="preview"
+                    />
+                  ) : (
+                    <FileText className="w-6 h-6 text-muted-foreground" />
+                  )}
+                </div>
+                <button
+                  onClick={() => handleRemoveFile(index)}
+                  className="absolute -top-1.5 -right-1.5 bg-destructive text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="flex gap-2 items-end bg-muted/30 p-1.5 rounded-xl border focus-within:ring-1 focus-within:ring-primary/20 focus-within:border-primary/50 transition-all">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 shrink-0 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10"
+            onClick={handleAttachClick}
+            disabled={isLoading}
+          >
+            <Paperclip className="w-4 h-4" />
+          </Button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            multiple
+            onChange={handleFileChange}
+          />
+
+          <Input
+            className="flex-1 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-1 min-h-[36px] max-h-[120px] py-2"
+            placeholder="Type a message..."
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) =>
+              e.key === "Enter" && !e.shiftKey && handleSendMessage()
+            }
+            disabled={isLoading}
+            autoComplete="off"
+          />
+
+          <Button
+            size="icon"
+            className={cn(
+              "h-9 w-9 shrink-0 rounded-lg transition-all",
+              inputValue.trim() || selectedFiles.length > 0
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            )}
+            onClick={handleSendMessage}
+            disabled={
+              isLoading || (!inputValue.trim() && selectedFiles.length === 0)
+            }
+          >
+            <Send className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 }

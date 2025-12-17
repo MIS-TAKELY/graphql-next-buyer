@@ -1,9 +1,7 @@
 "use client";
 
 import { askQuestion, getQuestions } from "@/app/actions/faq";
-import { NewAnswerPayload, NewQuestionPayload } from "@/lib/realtime";
-import { useRealtime } from "@upstash/realtime/client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export interface Answer {
@@ -54,73 +52,50 @@ export function useProductFAQ(productId: string) {
             .finally(() => setIsLoading(false));
     }, [productId]);
 
-    // Realtime Handlers
-    const handleNewQuestion = useCallback(
-        (payload: NewQuestionPayload) => {
-            if (payload.productId !== productId) return;
-            setQuestions((prev) => [
-                {
-                    id: payload.id,
-                    content: payload.content,
-                    createdAt: new Date(payload.createdAt), // Ensure date object
-                    user: payload.user as any,
-                    answers: [],
-                },
-                ...prev,
-            ]);
-        },
-        [productId]
-    );
-
-    const handleNewAnswer = useCallback((payload: NewAnswerPayload) => {
-        setQuestions((prev) =>
-            prev.map((q) => {
-                if (q.id === payload.questionId) {
-                    return {
-                        ...q,
-                        answers: [
-                            ...q.answers,
-                            {
-                                id: payload.id,
-                                content: payload.content,
-                                createdAt: new Date(payload.createdAt),
-                                seller: {
-                                    sellerProfile: { shopName: payload.seller.shopName },
-                                },
-                            },
-                        ],
-                    };
-                }
-                return q;
-            })
-        );
-    }, []);
-
-    const events = useMemo(
-        () => ({
-            faq: {
-                newQuestion: handleNewQuestion,
-                newAnswer: handleNewAnswer,
+    const submitQuestion = useCallback(async (content: string) => {
+        // Generate temporary ID for optimistic update
+        const tempId = `temp-${Date.now()}`;
+        const tempQuestion: Question = {
+            id: tempId,
+            content,
+            createdAt: new Date(),
+            user: {
+                firstName: "You",
+                lastName: null,
             },
-        }),
-        [handleNewQuestion, handleNewAnswer]
-    );
+            answers: [],
+        };
 
-    (useRealtime as any)({
-        channel: `product:${productId}:faq`,
-        events,
-    });
+        // Optimistic update - add question immediately
+        setQuestions((prev) => [tempQuestion, ...prev]);
 
-    const submitQuestion = async (content: string) => {
         try {
-            await askQuestion(productId, content);
+            const question = await askQuestion(productId, content);
+
+            // Replace temp question with real one
+            setQuestions((prev) =>
+                prev.map((q) =>
+                    q.id === tempId
+                        ? {
+                            id: question.id,
+                            content: question.content,
+                            createdAt: new Date(question.createdAt),
+                            user: question.user,
+                            answers: [],
+                        }
+                        : q
+                )
+            );
+
             toast.success("Question submitted!");
         } catch (error) {
+            // Remove temp question on error
+            setQuestions((prev) => prev.filter((q) => q.id !== tempId));
             toast.error("Failed to submit question");
             console.error(error);
             throw error;
         }
-    };
+    }, [productId]);
 
     return { questions, isLoading, submitQuestion };
 }

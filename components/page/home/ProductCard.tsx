@@ -1,158 +1,142 @@
 "use client";
-import { AddToCartButton } from "@/components/common";
-import { Card, CardContent } from "@/components/ui/card";
-import { formatPrice } from "@/lib/utils";
-import { IProducts } from "@/types/product";
-import Image from "next/image";
 
+import React from "react";
+import { Button } from "@/components/ui/button";
+import SmartMedia from "@/components/ui/SmartMedia";
+import { TProduct } from "@/types/product";
+import { Heart, ShoppingCart, Check } from "lucide-react";
 import Link from "next/link";
-import { memo, useMemo } from "react";
+import { toast } from "sonner";
+import { useCart } from "@/hooks/cart/useCart";
+import { formatPrice } from "@/lib/utils";
+import { useWishlist } from "@/hooks/wishlist/useWishlist";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
-  product: IProducts;
-  priority?: boolean;
-  sizes?: string;
+  product: TProduct;
 }
 
-const ProductCard = memo<ProductCardProps>(
-  ({
-    product,
-    priority = false,
-    sizes = "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 16vw",
-  }) => {
-    const productData = useMemo(() => {
-      const firstImage = product.images?.[0];
-      const firstVariant = product.variants?.[0];
-      const reviews = product.reviews;
+export default function ProductCard({ product }: ProductCardProps) {
+  const { addToCart, checkIsInCart, removeFromCart } = useCart();
+  const currentPrice = product.variants?.[0]?.price;
+  const originalPrice = product.variants?.[0]?.mrp;
 
-      return {
-        imageUrl: firstImage?.url ?? "/placeholder.svg",
-        imageAlt: firstImage?.altText ?? product.name ?? "Product image",
-        variantId: firstVariant?.id,
-        price: firstVariant ? parseFloat(firstVariant.price) : 0,
-        mrp: firstVariant ? parseFloat(firstVariant.mrp) : 0,
-        avgRating: reviews?.length
-          ? reviews.reduce((sum, review) => sum + (review.rating ?? 0), 0) /
-          reviews.length
-          : 0,
-        reviewCount: reviews?.length ?? 0,
-        hasReviews: (reviews?.length ?? 0) > 0,
-      };
-    }, [product]);
+  // Try to find default image, or first image
+  const defaultImage = product.images?.find((img) => img.mediaType !== "VIDEO")?.url || product.images?.[0]?.url;
 
-    const starRating = useMemo(() => {
-      if (!productData.hasReviews) return null;
+  const handleCartAction = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!product.variants?.[0]) return;
 
-      return (
-        <div className="flex items-center gap-1 text-[10px] text-muted-foreground mb-1">
-          <div
-            className="flex"
-            role="img"
-            aria-label={`${productData.avgRating} stars`}
-          >
-            <span className="text-amber-400 text-xs">★</span>
+    if (checkIsInCart(product.id)) {
+      removeFromCart(product.variants[0].id, product.id);
+      // Toast handeled in hook
+    } else {
+      addToCart(product.variants[0].id, product.id, 1);
+      // Toast handled in hook
+    }
+  };
+
+  const { isInWishlist, handleAddToWishlist, handleRemoveFromWishlist } = useWishlist();
+  const { userId } = useAuth();
+  const router = useRouter();
+
+  const checkIsWishlisted = (id: string) => isInWishlist(id);
+
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const handleWishlistAction = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!userId) {
+      router.push("/sign-in");
+      return;
+    }
+
+    if (checkIsWishlisted(product.id)) {
+      await handleRemoveFromWishlist(product.id);
+      toast.success("Removed from wishlist");
+    } else {
+      await handleAddToWishlist(product.id, product);
+      toast.success("Added to wishlist");
+    }
+  };
+
+  return (
+    <Link href={`/product/${product.slug}`} className="group relative block h-full">
+      <div className="relative rounded-2xl border bg-card p-3 transition-all duration-300 hover:shadow-lg h-full flex flex-col">
+        {/* Discount Badge */}
+        {currentPrice && originalPrice && Number(originalPrice) > Number(currentPrice) && (
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-red-500 px-2 py-1 text-[10px] font-bold text-white">
+            {Math.round(((Number(originalPrice) - Number(currentPrice)) / Number(originalPrice)) * 100)}% OFF
+          </span>
+        )}
+
+        {/* Image Container */}
+        <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
+          <SmartMedia
+            src={defaultImage}
+            alt={product.name}
+            fill
+            className="object-contain transition-transform duration-500 group-hover:scale-110"
+            sizes="(max-width: 768px) 50vw, 33vw"
+          />
+
+          {/* Quick Actions Overlay - Desktop */}
+          <div className="absolute right-3 top-3 z-20 flex translate-x-10 flex-col gap-2 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+            <Button
+              size="icon"
+              variant="secondary"
+              className={`h-8 w-8 rounded-full shadow-md bg-white/90 hover:bg-white cursor-pointer ${checkIsWishlisted(product.id) ? "text-red-500 bg-red-50 hover:bg-red-100" : "text-gray-700"
+                }`}
+              onClick={handleWishlistAction}
+            >
+              <Heart className={`h-4 w-4 ${checkIsWishlisted(product.id) ? "fill-current" : ""}`} />
+            </Button>
+            <Button
+              size="icon"
+              variant="secondary"
+              className={`h-8 w-8 rounded-full shadow-md bg-white/90 hover:bg-white cursor-pointer ${checkIsInCart(product.id) ? "text-green-600 bg-green-50 hover:bg-green-100" : "text-gray-700"
+                }`}
+              onClick={handleCartAction}
+            >
+              {checkIsInCart(product.id) ? <Check className="h-4 w-4" /> : <ShoppingCart className="h-4 w-4" />}
+            </Button>
           </div>
-          <span className="font-medium text-foreground">
-            {productData.avgRating.toFixed(1)}
-          </span>
-          <span className="text-[9px] text-muted-foreground">
-            ({productData.reviewCount})
-          </span>
         </div>
-      );
-    }, [productData]);
 
-    return (
-      <Card className="w-full h-full bg-card border border-border shadow-sm hover:shadow-lg transition-shadow duration-200 group overflow-hidden rounded-md flex flex-col">
-        <CardContent className="p-0 flex flex-col h-full">
-          <Link
-            href={`/product/${product.slug}`}
-            className="cursor-pointer block relative grow"
-          >
-            {/* Discount Badge */}
-            {productData.mrp > productData.price && (
-              <div className="absolute top-2 left-2 z-10 bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 shadow-sm">
-                {Math.round(
-                  ((productData.mrp - productData.price) / productData.mrp) *
-                  100
-                )}
-                % OFF
-              </div>
-            )}
-
-            {/* Image Container - Fixed aspect ratio */}
-            <div className="w-full aspect-[4/3] relative bg-white overflow-hidden">
-              <Image
-                src={productData.imageUrl}
-                alt={productData.imageAlt}
-                fill
-                sizes={sizes}
-                priority={priority}
-                className="object-cover"
-              />
-            </div>
-
-            <div className="p-3 flex flex-col gap-1.5 overflow-hidden">
-              <h3 className="font-medium text-[13px] sm:text-sm text-card-foreground line-clamp-2 h-9 sm:h-10 group-hover:text-primary transition-colors">
+        {/* Product Details */}
+        <div className="mt-4 space-y-2 flex-1 flex flex-col">
+          <div className="flex items-start justify-between gap-1">
+            <div>
+              <h3 className="line-clamp-2 text-sm font-medium text-foreground min-h-[40px]" title={product.name}>
                 {product.name}
               </h3>
-
-              {/* Always render this div with min-height to reserve space for consistency */}
-              <div className="flex items-center gap-2 min-h-[20px]">
-                {/* Green Star Rating Badge */}
-                {productData.hasReviews && (
-                  <div className="flex items-center gap-1 bg-green-700 text-white px-1.5 py-0.5 rounded-[2px] text-[10px] font-bold">
-                    <span>{productData.avgRating.toFixed(1)}</span>
-                    <span className="text-[10px]">★</span>
-                  </div>
-                )}
-                {productData.hasReviews && (
-                  <span className="text-[10px] text-muted-foreground font-medium">
-                    ({productData.reviewCount})
-                  </span>
-                )}
-              </div>
-
-              <div className="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
-                <span className="font-bold text-sm sm:text-base text-foreground whitespace-nowrap">
-                  {formatPrice(productData.price)}
-                </span>
-                {productData.mrp > productData.price && (
-                  <span className="text-[11px] text-muted-foreground line-through decoration-destructive/50 whitespace-nowrap">
-                    {formatPrice(productData.mrp)}
-                  </span>
-                )}
-                {productData.mrp > productData.price && (
-                  <span className="text-[10px] text-green-700 dark:text-green-400 font-bold whitespace-nowrap">
-                    {Math.round(
-                      ((productData.mrp - productData.price) /
-                        productData.mrp) *
-                      100
-                    )}
-                    % off
-                  </span>
-                )}
-              </div>
+              {/* Brand Name */}
+              <p className="text-xs text-muted-foreground mt-1">
+                {typeof product.brand === 'string' ? product.brand : product.brand?.name || 'Generic'}
+              </p>
             </div>
-          </Link>
-
-          <div className="px-3 pb-3 mt-auto">
-            <AddToCartButton
-              productId={product.id}
-              variantId={productData.variantId}
-              inStock={
-                product.status === "ACTIVE" || product.status === "available"
-              }
-              className="bg-white! dark:bg-gray-800! text-primary! border border-primary hover:bg-primary/5! text-[10px] sm:text-[11px] h-6 sm:h-7 py-0 font-medium w-full"
-              size="sm"
-            />
           </div>
-        </CardContent>
-      </Card>
-    );
-  }
-);
 
-ProductCard.displayName = "ProductCard";
-
-export default ProductCard;
+          <div className="flex items-center gap-2 mt-auto">
+            <p className="text-lg font-bold text-primary">
+              {formatPrice(Number(currentPrice))}
+            </p>
+            {originalPrice && Number(originalPrice) > Number(currentPrice) && (
+              <p className="text-xs text-muted-foreground line-through">
+                {formatPrice(Number(originalPrice))}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}

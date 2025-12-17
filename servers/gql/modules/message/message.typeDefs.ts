@@ -13,6 +13,7 @@ export const messageTypedefs = gql`
   enum FileType {
     IMAGE
     VIDEO
+    DOCUMENT
   }
 
   scalar DateTime

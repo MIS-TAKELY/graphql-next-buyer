@@ -3,7 +3,7 @@ import { GET_PRODUCTS_BY_SELLER } from "@/client/product/product.queries";
 import ProductCard from "@/components/page/home/ProductCard";
 import { Button } from "@/components/ui/button";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
-import { IProducts } from "@/types/product";
+import { TProduct } from "@/types/product";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -17,11 +17,11 @@ export default async function StorePage({ params }: PageProps) {
   const client = await getServerApolloClient();
   const { storeId } = await params;
 
-  let products: IProducts[] = [];
+  let products: TProduct[] = [];
   let sellerName = "Store";
   let error = null;
 
-  const groupedProducts: Record<string, IProducts[]> = {};
+  const groupedProducts: Record<string, TProduct[]> = {};
 
   try {
     const { data } = await client.query({

@@ -1,79 +1,39 @@
 export const dynamic = "force-dynamic";
-import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
-import { GET_USER_PROFILE_DETAILS } from "@/client/user/user.queries";
-import AccountClient from "@/components/page/account/AccountClient";
+
+import SidebarNav from "@/components/page/account/SidebarNav";
+import { ChatLayout } from "@/components/page/chat/ChatLayout";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
-import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
+import { GET_USER_PROFILE_DETAILS } from "@/client/user/user.queries";
 
-const mockUser = {
-  id: "1",
-  email: "john.doe@example.com",
-  firstName: "John",
-  lastName: "Doe",
-  phone: "+1234567890",
-};
-
-export default async function AccountPage() {
-  let initialData: { addresses?: any[]; userProfile?: any } = {};
+export default async function ChatPage() {
+  const client = await getServerApolloClient();
+  let user = null;
 
   try {
-    const client = await getServerApolloClient();
-
-    console.time("db-fetch");
-
-    const userProfileRes = await client.query({
+    const { data } = await client.query({
       query: GET_USER_PROFILE_DETAILS,
       fetchPolicy: "no-cache",
-      errorPolicy: "all",
     });
-
-    const userProfileDetails = userProfileRes.data;
-    const addressesData = userProfileRes.data.addresses;
-
-    console.log("user profile details", userProfileDetails);
-    // console.log("addressesData", addressesData);
-
-    // Write user profile to cache
-    if (userProfileDetails?.getUserProfileDetails) {
-      client.cache.writeQuery({
-        query: GET_USER_PROFILE_DETAILS,
-        data: userProfileDetails,
-      });
-    }
-
-    console.timeEnd("db-fetch");
-
-    // Clean & write addresses to cache
-    if (addressesData?.getAddressOfUser) {
-      const cleanedAddresses = addressesData.getAddressOfUser.map(
-        (addr: any) => {
-          const { ...clean } = addr;
-          return clean;
-        }
-      );
-
-      client.cache.writeQuery({
-        query: GET_ADDRESS_OF_USER,
-        data: { getAddressOfUser: cleanedAddresses },
-      });
-
-      initialData.addresses = cleanedAddresses;
-    }
-
-    // Keep hydrated user profile
-    if (userProfileDetails?.getUserProfileDetails) {
-      const { ...cleanProfile } = userProfileDetails.getUserProfileDetails;
-      initialData.userProfile = { getUserProfileDetails: cleanProfile };
-    }
+    user = data?.getUserProfileDetails;
   } catch (error) {
-    console.error("Server prefetch failed:", error);
+    console.error("Failed to fetch user profile:", error);
+  }
+
+  if (!user) {
+    return <div>Please log in to view messages.</div>;
   }
 
   return (
-    <div className="min-h-screen ">
-      <SSRApolloProvider initialData={initialData}>
-        <AccountClient user={mockUser} />
-      </SSRApolloProvider>
+    <div className="min-h-screen bg-muted/20">
+      <div className="flex flex-col lg:flex-row gap-6 w-full max-w-7xl mx-auto px-4 py-8">
+        <SidebarNav
+          user={user}
+          activeTab="chat"
+        />
+        <div className="flex-1 min-w-0 w-full">
+          <ChatLayout userId={user.id} />
+        </div>
+      </div>
     </div>
   );
 }

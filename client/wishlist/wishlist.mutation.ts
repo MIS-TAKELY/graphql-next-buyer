@@ -17,6 +17,8 @@ export const ADD_TO_WISHLIST = gql`
           variants {
             id
             price
+            mrp
+            stock
           }
           images {
             url

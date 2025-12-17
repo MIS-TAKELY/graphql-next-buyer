@@ -114,6 +114,7 @@ export const GET_PRODUCT_BY_SLUG = gql`
         id
         firstName
         lastName
+        clerkId
       }
       brand
       productOffers {
@@ -224,21 +225,34 @@ export const GET_PRODUCTS = gql`
       name
       description
       slug
+      status
       images {
         id
         url
         altText
         mediaType
       }
-      status
       variants {
         id
         price
         mrp
+        stock
+        isDefault
       }
       reviews {
         rating
       }
+      category {
+        id
+        name
+      }
+      seller {
+        id
+        firstName
+        lastName
+      }
+      brand
+      warranty
       productOffers {
         id
         offer {
@@ -262,6 +276,7 @@ export const GET_PRODUCTS_BY_SELLER = gql`
       name
       description
       slug
+      status
       images {
         id
         url
@@ -272,6 +287,8 @@ export const GET_PRODUCTS_BY_SELLER = gql`
         id
         price
         mrp
+        stock
+        isDefault
       }
       reviews {
         rating
@@ -279,6 +296,25 @@ export const GET_PRODUCTS_BY_SELLER = gql`
       category {
         id
         name
+      }
+      seller {
+        id
+        firstName
+        lastName
+      }
+      brand
+      warranty
+      productOffers {
+        id
+        offer {
+          description
+          endDate
+          isActive
+          startDate
+          title
+          type
+          value
+        }
       }
     }
   }

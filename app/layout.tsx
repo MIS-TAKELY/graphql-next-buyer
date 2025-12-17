@@ -5,6 +5,8 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
+import { NotificationListener } from "@/components/common/NotificationListener";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -87,6 +89,8 @@ export default function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
             </ThemeProvider>
+            <Toaster />
+            <NotificationListener />
           </ApolloWrapper>
         </body>
       </ClerkProvider>

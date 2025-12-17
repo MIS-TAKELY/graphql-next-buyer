@@ -4,9 +4,10 @@ import Link from "next/link";
 interface SellerInfoProps {
   sellerName: string;
   sellerId?: string;
+  isOwnProduct?: boolean;
 }
 
-export default function SellerInfo({ sellerName, sellerId }: SellerInfoProps) {
+export default function SellerInfo({ sellerName, sellerId, isOwnProduct }: SellerInfoProps) {
   return (
     <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 space-y-3 my-4 overflow-hidden h-full flex flex-col justify-center">
       <div className="flex items-center justify-between gap-3">
@@ -16,7 +17,7 @@ export default function SellerInfo({ sellerName, sellerId }: SellerInfoProps) {
             {sellerName}
           </p>
         </div>
-        {sellerId && (
+        {sellerId && !isOwnProduct && (
           <Link href={`/store/${sellerId}`}>
             <Button
               variant="outline"

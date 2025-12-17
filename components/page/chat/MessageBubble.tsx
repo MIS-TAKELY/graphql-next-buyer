@@ -1,114 +1,96 @@
-"use client";
-
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+// import { LocalMessage } from "@/hooks/chat/useSellerChat"; // Ensure this matches your hook filename
+import { LocalMessage } from "@/types/chat"; // MODIFIED for buyer
 import { cn } from "@/lib/utils";
-// IMPORTANT: Import from types/chat, not the hook
-import { LocalMessage } from "@/types/chat";
-import React from "react";
+import { format } from "date-fns";
+import { CheckCheck, FileIcon, FileText } from "lucide-react";
 
 interface MessageBubbleProps {
-  message: LocalMessage;
-  // Optional: If you pass isOwn from parent, use it.
-  // If not, we calculate it below.
-  isOwn?: boolean;
+    message: LocalMessage;
+    isOwn: boolean;
 }
 
-const MessageBubbleComponent = ({ message, isOwn }: MessageBubbleProps) => {
-  // Logic: either use the prop passed from parent OR check if sender is 'user'
-  const isUser = isOwn ?? message.sender === "user";
+export default function MessageBubble({ message, isOwn }: MessageBubbleProps) {
+    // Fix 1: Use 'timestamp' instead of 'createdAt'
+    const time = message.timestamp
+        ? format(new Date(message.timestamp), "HH:mm")
+        : "";
 
-  const renderAttachment = (att: { id: string; url: string; type: string }) => {
-    if (att.type === "IMAGE") {
-      return (
-        <img
-          key={att.id}
-          src={att.url}
-          alt="attachment"
-          className="w-48 h-48 rounded-lg object-cover border bg-black/10 cursor-pointer hover:opacity-95 transition-opacity"
-          onClick={() => window.open(att.url, "_blank")}
-        />
-      );
-    }
-    if (att.type === "VIDEO") {
-      return (
-        <video
-          key={att.id}
-          src={att.url}
-          controls
-          className="w-48 h-48 rounded-lg object-cover border bg-black/10"
-        />
-      );
-    }
+    const attachments = message.attachments || [];
+
     return (
-      <a
-        key={att.id}
-        href={att.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center gap-2 p-2 bg-background/10 rounded border hover:bg-background/20 transition-colors"
-      >
-        <span className="text-xs underline truncate max-w-[150px]">
-          {att.url.split("/").pop()}
-        </span>
-      </a>
-    );
-  };
+        <div className={cn("flex w-full", isOwn ? "justify-end" : "justify-start")}>
+            <div
+                className={cn(
+                    "relative max-w-[80%] sm:max-w-[70%] px-4 py-2 rounded-2xl text-sm shadow-sm",
+                    isOwn
+                        ? "bg-primary text-primary-foreground rounded-tr-sm"
+                        : "bg-card border rounded-tl-sm"
+                )}
+            >
+                {/* Fix 2: Map through 'attachments' array instead of using single 'fileUrl' */}
+                {attachments.length > 0 && (
+                    <div className="flex flex-col gap-2 mb-2">
+                        {attachments.map((attachment, index) => (
+                            <div key={attachment.id || index}>
+                                {attachment.type === "IMAGE" ||
+                                    (attachment.type === "VIDEO" && !attachment.url.endsWith(".pdf")) || // Fallback check
+                                    attachment.url.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+                                    <img
+                                        src={attachment.url}
+                                        alt="attachment"
+                                        className="rounded-lg max-h-60 w-full object-cover border bg-black/5"
+                                    />
+                                ) : (
+                                    <a
+                                        href={attachment.url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className={cn(
+                                            "flex items-center gap-2 p-3 rounded-lg transition-colors overflow-hidden",
+                                            isOwn
+                                                ? "bg-primary-foreground/10 hover:bg-primary-foreground/20"
+                                                : "bg-muted hover:bg-muted/80"
+                                        )}
+                                    >
+                                        <div className="shrink-0 bg-background/20 p-1 rounded">
+                                            <FileText className="h-5 w-5" />
+                                        </div>
+                                        <span className="underline truncate text-xs sm:text-sm">
+                                            {attachment.url.split("/").pop() || "Download File"}
+                                        </span>
+                                    </a>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
 
-  return (
-    <div className={cn("flex gap-2", isUser ? "justify-end" : "justify-start")}>
-      {!isUser && (
-        <Avatar className="w-7 h-7 sm:w-8 sm:h-8 shrink-0">
-          <AvatarFallback className="text-xs">S</AvatarFallback>
-        </Avatar>
-      )}
+                {/* Text */}
+                {message.text && (
+                    <p className="whitespace-pre-wrap leading-relaxed break-words">
+                        {message.text}
+                    </p>
+                )}
 
-      <div
-        className={cn(
-          "max-w-[75%] sm:max-w-[70%] px-3 py-2 rounded-2xl break-words",
-          isUser
-            ? "bg-primary text-primary-foreground rounded-br-sm"
-            : "bg-muted rounded-bl-sm"
-        )}
-      >
-        <p className="text-sm whitespace-pre-wrap break-words">
-          {message.text}
-        </p>
-
-        {message.attachments?.length ? (
-          <div className="mt-2 flex flex-wrap gap-2">
-            {message.attachments.map((att) => renderAttachment(att))}
-          </div>
-        ) : null}
-
-        <div
-          className={cn(
-            "text-[10px] sm:text-xs mt-1 flex items-center gap-1",
-            isUser ? "text-primary-foreground/70" : "text-muted-foreground"
-          )}
-        >
-          <span>
-            {new Date(message.timestamp).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </span>
-          {message.status === "sending" && (
-            <span className="opacity-70"> • Sending...</span>
-          )}
-          {message.status === "failed" && (
-            <span className="text-red-300"> • Failed</span>
-          )}
+                {/* Meta (Time & Status) */}
+                <div
+                    className={cn(
+                        "flex items-center justify-end gap-1 mt-1 select-none opacity-80",
+                        isOwn ? "text-primary-foreground" : "text-muted-foreground"
+                    )}
+                >
+                    <span className="text-[10px]">{time}</span>
+                    {isOwn && (
+                        // Status logic: sending -> clock?, sent -> check, read -> check-check
+                        <CheckCheck
+                            className={cn(
+                                "w-3 h-3",
+                                message.status === "sending" ? "opacity-50" : "opacity-100"
+                            )}
+                        />
+                    )}
+                </div>
+            </div>
         </div>
-      </div>
-
-      {isUser && (
-        <Avatar className="w-7 h-7 sm:w-8 sm:h-8 shrink-0">
-          <AvatarFallback className="text-xs">Me</AvatarFallback>
-        </Avatar>
-      )}
-    </div>
-  );
-};
-
-export const MessageBubble = React.memo(MessageBubbleComponent);
-MessageBubble.displayName = "MessageBubble";
+    );
+}

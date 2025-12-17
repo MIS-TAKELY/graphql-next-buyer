@@ -26,7 +26,7 @@ export const productResolvers = {
               where: { slug },
               include: {
                 seller: true,
-                
+
                 variants: {
                   include: {
                     cartItems: { select: { userId: true, variantId: true } },
@@ -92,7 +92,7 @@ export const productResolvers = {
       const productKey = `product:details:${slug}`;
       const cached = await getCache(productKey);
 
-      console.log("request reciebed------------",slug)
+      console.log("request reciebed------------", slug)
 
       if (cached) {
         console.log(`⚡ Returning product ${slug} from Redis`);
@@ -105,7 +105,7 @@ export const productResolvers = {
       const product = await prisma.product.findUnique({
         where: { slug },
         include: {
-          seller: { select: { id: true, firstName: true, lastName: true } },
+          seller: { select: { id: true, firstName: true, lastName: true, clerkId: true } },
           variants: {
             select: {
               id: true,
@@ -125,7 +125,7 @@ export const productResolvers = {
               rating: true,
               comment: true,
               createdAt: true,
-              user: { select: { firstName: true, lastName: true } },
+              user: { select: { id: true, firstName: true, lastName: true } },
               media: true,
             },
           },
