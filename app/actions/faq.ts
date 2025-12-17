@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/db/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { realtime } from "@/lib/realtime";
 
 export async function askQuestion(productId: string, content: string) {
     console.log("[FAQ] Starting askQuestion", { productId, content });
@@ -57,6 +58,23 @@ export async function askQuestion(productId: string, content: string) {
         // Revalidate the product page cache
         revalidatePath(`/product/${productId}`);
         console.log("[FAQ] Path revalidated, returning question");
+
+        try {
+            await realtime.channel(`product:${productId}:faq`).emit("faq.newQuestion", {
+                id: question.id,
+                productId: question.productId,
+                content: question.content,
+                createdAt: question.createdAt,
+                user: {
+                    firstName: question.user.firstName,
+                    lastName: question.user.lastName,
+                },
+            });
+            console.log("[FAQ] Realtime event emitted");
+        } catch (rtError) {
+            console.error("[FAQ] Failed to emit realtime event:", rtError);
+            // Don't fail the request if realtime fails
+        }
 
         return question;
     } catch (error) {

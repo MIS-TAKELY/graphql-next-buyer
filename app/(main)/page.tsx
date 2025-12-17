@@ -91,12 +91,7 @@ export default async function HomePage() {
       <HeroCarousel />
       <Main />
       <SSRApolloProvider initialData={{ products }}>
-        {/* Debug Info */}
-        <div className="bg-red-100 p-4 m-4 border border-red-500 text-red-700">
-          <h3 className="font-bold">Debug Info:</h3>
-          <p>Products Length: {products.length}</p>
-          {debugError && <p>Error: {debugError}</p>}
-        </div>
+        
         <div className="py-4 sm:py-6 md:py-8 lg:py-10">
           {sections.map((section) => (
             <ProductSection

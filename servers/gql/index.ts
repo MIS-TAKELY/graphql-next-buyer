@@ -13,6 +13,8 @@ import { categorySpecificationResolvers } from "./modules/categorySpecification/
 import { conversationResolvers } from "./modules/conversation/conversation.resolvers";
 import { conversationTypedefs } from "./modules/conversation/conversaton.typeDefs";
 import { deliveryTypedefs } from "./modules/delivery/delivery.typeDefs";
+import { faqResolvers } from "./modules/faq/faq.resolvers";
+import { faqTypeDefs } from "./modules/faq/faq.typeDefs";
 import { filterResolvers } from "./modules/filter/filter.resolvers";
 import { filterTypeDefs } from "./modules/filter/filter.typeDefs";
 import { topDealsResolvers } from "./modules/landingPage/topDeals/topDeals.resolvers";
@@ -87,6 +89,7 @@ const typeDefs = mergeTypeDefs([
   messageTypedefs,
   conversationTypedefs,
   searchTypeDef,
+  faqTypeDefs,
   filterTypeDefs,
   topDealsTypeDefs,
   sellerProfileTypeDefs,
@@ -130,6 +133,7 @@ const resolvers = mergeResolvers([
   wishlistResolvers,
   messageResolvers,
   searchResolvers,
+  faqResolvers,
   filterResolvers,
   topDealsResolvers,
 ]);
