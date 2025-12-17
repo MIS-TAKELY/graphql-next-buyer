@@ -8,18 +8,18 @@ interface SearchHeaderProps {
 
 export default function SearchHeader({ query, filteredCount, totalResults }: SearchHeaderProps) {
   return (
-    <div className="mb-4">
-      <h1 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+    <div className="mb-3"> {/* Reduced mb-4 to mb-3 */}
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1"> {/* text-xl to text-2xl, font-semibold to font-bold */}
         Search Results
       </h1>
-      <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"> {/* text-xs to text-sm */}
         <span>
           {filteredCount} of {totalResults.toLocaleString()} results for
         </span>
-        <Badge variant="outline" className="font-normal text-xs">
+        <Badge variant="outline" className="font-medium text-sm rounded-full px-3"> {/* font-normal to font-medium, text-xs to text-sm, added rounded-full px-3 */}
           "{query}"
         </Badge>
       </div>
     </div>
   );
-}
+} 

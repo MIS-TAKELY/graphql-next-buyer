@@ -7,6 +7,8 @@ interface ActiveFiltersProps {
   setMinRating: (rating: number) => void;
   clearFilters: () => void;
   filterOptions: { [key: string]: string[] };
+  selectedPriceRanges: string[];
+  togglePriceRange: (range: string) => void;
   dynamicSearchData: { category: string; filters: { key: string; label: string; type: string }[] } | null;
 }
 
@@ -17,6 +19,8 @@ export default function ActiveFilters({
   setMinRating,
   clearFilters,
   filterOptions,
+  selectedPriceRanges,
+  togglePriceRange,
   dynamicSearchData,
 }: ActiveFiltersProps) {
   return (
@@ -46,7 +50,7 @@ export default function ActiveFilters({
           />
         </div>
       )}
-      {Object.keys(dynamicFilters).length > 0 || minRating > 0 ? (
+      {Object.keys(dynamicFilters).length > 0 || minRating > 0 || selectedPriceRanges.length > 0 ? (
         <button
           onClick={clearFilters}
           className="text-xs text-blue-600 dark:text-blue-400 hover:underline"

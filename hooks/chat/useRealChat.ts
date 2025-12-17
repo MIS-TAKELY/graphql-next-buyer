@@ -48,7 +48,6 @@ const FETCH_POLICY_NO_CACHE: FetchPolicy = "no-cache";
 
 export const useRealChat = (
     productId?: string,
-    currentUserId?: string,
     initialConversationId?: string,
     onMessageReceived?: () => void
 ) => {
@@ -126,10 +125,8 @@ export const useRealChat = (
                 ];
             }
 
-            // Determine sender
-            const isMe =
-                (msg.sender?.id && msg.sender.id === currentUserId) ||
-                msg.senderId === currentUserId;
+            // Determine sender - use clerkId for comparison since currentUserId is Clerk ID
+            const isMe = clerkId && msg.sender?.clerkId === clerkId;
 
             return {
                 id: msg.id || crypto.randomUUID(),
@@ -142,7 +139,7 @@ export const useRealChat = (
                 attachments,
             };
         },
-        [currentUserId]
+        [clerkId]
     );
 
     const upsertMessage = useCallback((incoming: LocalMessage) => {
@@ -209,7 +206,7 @@ export const useRealChat = (
     const initializeChat = useCallback(async () => {
         if (
             (!productId && !initialConversationId) ||
-            !currentUserId ||
+            !clerkId ||
             isInitializingRef.current ||
             hasInitializedRef.current
         )
@@ -270,7 +267,7 @@ export const useRealChat = (
     }, [
         productId,
         initialConversationId,
-        currentUserId,
+        clerkId,
         getConversation,
         createConversation,
         fetchMessages,
@@ -301,7 +298,7 @@ export const useRealChat = (
                 clientId,
                 text: text.trim(),
                 sender: "user",
-                senderId: currentUserId,
+                senderId: clerkId || undefined,
                 timestamp: new Date(),
                 status: "sending",
                 attachments: optimisticAttachments.length
@@ -368,7 +365,7 @@ export const useRealChat = (
         },
         [
             conversationId,
-            currentUserId,
+            clerkId,
             sendMessageMutation,
             normalizeMessage,
             upsertMessage,

@@ -36,7 +36,7 @@ export function ChatLayout({ userId }: ChatLayoutProps) {
         handleSend: onSend,
         isLoading: loadingChat,
         error: chatError,
-    } = useRealChat(selectedChat?.product?.id, userId, selectedChat?.id, refetchConversations);
+    } = useRealChat(selectedChat?.product?.id, selectedChat?.id, refetchConversations);
 
     // Trigger init when selected chat changes
     useEffect(() => {

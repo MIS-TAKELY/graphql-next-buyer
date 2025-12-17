@@ -1,3 +1,4 @@
+// UserDropdown.tsx
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -6,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SignOutButton } from "@clerk/nextjs";
-import { User } from "lucide-react";
+import { User, Package, LogOut, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 interface UserDropdownProps {
@@ -16,33 +17,51 @@ interface UserDropdownProps {
 const UserDropdown = ({ isMobile = false }: UserDropdownProps) => {
   if (isMobile) {
     return (
-      <div className="space-y-2">
-        <Button
-          variant="ghost"
-          className="w-full justify-start gap-3 h-12 text-foreground hover:bg-secondary"
-          asChild
-        >
-          <Link href="/account">
-            <User className="w-4 h-4 text-muted-foreground" />
-            <span>My Account</span>
-          </Link>
-        </Button>
-        <Button
-          variant="ghost"
-          className="w-full justify-start gap-3 h-12 text-foreground hover:bg-secondary"
-          asChild
-        >
-          <Link href="/orders">
-            <span className="ml-7">Orders</span>
-          </Link>
-        </Button>
+      <div className="space-y-0.5">
+        {/* Account Section Header */}
+        <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          Account
+        </div>
+        
+        {/* My Account */}
+        <Link href="/account" className="block">
+          <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+                <User className="w-4 h-4 text-primary" />
+              </div>
+              <span className="text-sm font-medium text-foreground">My Account</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+          </div>
+        </Link>
+
+        {/* Orders */}
+        <Link href="/orders" className="block">
+          <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+                <Package className="w-4 h-4 text-primary" />
+              </div>
+              <span className="text-sm font-medium text-foreground">Orders</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+          </div>
+        </Link>
+
+        {/* Logout */}
         <SignOutButton>
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 h-12 text-foreground hover:bg-secondary"
-          >
-            <span className="ml-7">Logout</span>
-          </Button>
+          <button className="w-full">
+            <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-destructive/10 flex items-center justify-center">
+                  <LogOut className="w-4 h-4 text-destructive" />
+                </div>
+                <span className="text-sm font-medium text-foreground">Logout</span>
+              </div>
+              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+            </div>
+          </button>
         </SignOutButton>
       </div>
     );

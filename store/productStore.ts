@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 interface ProductFilters {
-    priceRange: [number, number];
+    selectedPriceRanges: string[];
     categories: string[];
     sort: string;
     searchQuery: string;
@@ -20,12 +20,12 @@ interface ProductStore {
 
     // Specific actions for better DX
     toggleDynamicFilter: (key: string, value: string) => void;
-    setPriceRange: (range: [number, number]) => void;
+    togglePriceRange: (range: string) => void;
     setMinRating: (rating: number) => void;
 }
 
 const initialFilters: ProductFilters = {
-    priceRange: [0, 100000], // Updated default range to match UI
+    selectedPriceRanges: [],
     categories: [],
     sort: "relevance", // Updated default sort
     searchQuery: "",
@@ -60,9 +60,15 @@ export const useProductStore = create<ProductStore>((set) => ({
         };
     }),
 
-    setPriceRange: (range) => set((state) => ({
-        filters: { ...state.filters, priceRange: range }
-    })),
+    togglePriceRange: (range) => set((state) => {
+        const currentRanges = state.filters.selectedPriceRanges;
+        const newRanges = currentRanges.includes(range)
+            ? currentRanges.filter((r) => r !== range)
+            : [...currentRanges, range];
+        return {
+            filters: { ...state.filters, selectedPriceRanges: newRanges }
+        };
+    }),
 
     setMinRating: (rating) => set((state) => ({
         filters: { ...state.filters, minRating: rating }

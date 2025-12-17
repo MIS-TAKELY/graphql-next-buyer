@@ -1,9 +1,11 @@
 import gql from "graphql-tag";
 
+
 export const MAKE_SEARCH_QUERY = gql`
-  query SearchProducts($query: String!) {
-    searchProducts(query: $query) {
+  query SearchProducts($query: String!, $page: Int, $limit: Int) {
+    searchProducts(query: $query, page: $page, limit: $limit) {
       products {
+        id
         name
         variants {
           price
@@ -21,10 +23,20 @@ export const MAKE_SEARCH_QUERY = gql`
         }
         description
         brand
+        features
         slug
         category {
           name
         }
+        deliveryOptions {
+          title
+        }
+      }
+      pagination {
+        page
+        limit
+        total
+        totalPages
       }
     }
   }

@@ -13,6 +13,7 @@ export const GET_MESSAGES = gql`
       sentAt
       sender {
         id
+        clerkId
         firstName
         lastName
         roles {

@@ -7,6 +7,8 @@ import { TProduct } from "@/types/product";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRealChat } from "@/hooks/chat/useRealChat";
+import { ChatModal } from "@/components/page/chat/ChatModal";
 
 interface ProductActionsClientProps {
   productId: string;
@@ -28,6 +30,25 @@ export function ProductActionsClient({
   const { userId } = useAuth();
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const {
+    conversationId,
+    messages,
+    initializeChat,
+    handleSend,
+    isLoading,
+    error,
+  } = useRealChat(productId, undefined);
+
+  const handleChatOpen = () => {
+    if (!userId) {
+      router.push("/sign-in");
+      return;
+    }
+    setIsChatOpen(true);
+    initializeChat();
+  };
 
   const isAdded = isInWishlist(productId);
 
@@ -64,9 +85,21 @@ export function ProductActionsClient({
             addedToWishlist={isAdded}
             toggleWishlist={toggleWishlist}
             itemId={productId}
+            onChatOpen={handleChatOpen}
           />
         </div>
       </div>
+
+      <ChatModal
+        open={isChatOpen}
+        onOpenChange={setIsChatOpen}
+        itemName={product?.name}
+        messages={messages}
+        isLoading={isLoading}
+        error={error}
+        onSend={handleSend}
+        hasActiveConversation={!!conversationId}
+      />
     </div>
   );
 }

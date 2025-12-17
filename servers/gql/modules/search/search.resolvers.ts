@@ -72,8 +72,8 @@ export const searchResolvers = {
           SELECT 
             id::text,
             1 - (embedding <=> ${Prisma.raw(
-              `'${vectorString}'::vector`
-            )}) AS similarity
+          `'${vectorString}'::vector`
+        )}) AS similarity
           FROM "products"
           WHERE ${Prisma.raw(whereClause)}
           ORDER BY similarity DESC
@@ -116,6 +116,7 @@ export const searchResolvers = {
             select: { rating: true },
           },
           category: true,
+          deliveryOptions: true,
         },
       });
 
@@ -172,8 +173,8 @@ export const searchResolvers = {
             c.name as categoryName,
             p.brand,
             1 - (p.embedding <=> ${Prisma.raw(
-              `'${vectorString}'::vector`
-            )}) AS similarity
+          `'${vectorString}'::vector`
+        )}) AS similarity
           FROM "products" p
           LEFT JOIN "categories" c ON p."categoryId" = c.id
           WHERE p.embedding IS NOT NULL

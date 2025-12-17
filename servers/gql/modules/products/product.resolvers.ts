@@ -188,6 +188,9 @@ export const productResolvers = {
                 id: true,
                 price: true,
                 mrp: true,
+                sku: true,
+                stock: true,
+                specifications: true,
               },
             },
             images: {
@@ -237,6 +240,9 @@ export const productResolvers = {
               id: true,
               price: true,
               mrp: true,
+              sku: true,
+              stock: true,
+              specifications: true,
             },
           },
           images: {

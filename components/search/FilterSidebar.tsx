@@ -8,8 +8,8 @@ import RatingFilter from "./RatingFilter";
 
 interface FilterSidebarProps {
   showFilters: boolean;
-  priceRange: [number, number];
-  setPriceRange: (range: [number, number]) => void;
+  selectedPriceRanges: string[];
+  togglePriceRange: (range: string) => void;
   minRating: number;
   setMinRating: (rating: number) => void;
   dynamicFilters: { [key: string]: string[] };
@@ -98,8 +98,8 @@ function DynamicFilter({
 
 export default function FilterSidebar({
   showFilters,
-  priceRange,
-  setPriceRange,
+  selectedPriceRanges,
+  togglePriceRange,
   minRating,
   setMinRating,
   dynamicFilters,
@@ -114,8 +114,8 @@ export default function FilterSidebar({
     >
       <div className="space-y-4">
         <PriceFilter
-          priceRange={priceRange}
-          setPriceRange={setPriceRange}
+          selectedPriceRanges={selectedPriceRanges}
+          togglePriceRange={togglePriceRange}
         />
         <RatingFilter minRating={minRating} setMinRating={setMinRating} />
         {dynamicSearchData?.filters?.map((filter) => (

@@ -27,6 +27,7 @@ interface Category {
 }
 
 interface SearchProduct {
+  id: string;
   name: string;
   variants: Variant[];
   images: Image[];
@@ -35,6 +36,7 @@ interface SearchProduct {
   brand: string;
   slug: string;
   category: Category;
+  deliveryOptions?: { title: string }[];
 }
 
 interface ProductGridProps {
@@ -66,7 +68,7 @@ export default function ProductGrid({ products, clearFilters, loading = false }:
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4">
+        <div className="flex flex-col gap-4">
           {products?.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}

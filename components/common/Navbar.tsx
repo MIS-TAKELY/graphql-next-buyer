@@ -1,7 +1,9 @@
+
+// Navbar.tsx (updated)
 "use client";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Logo from "../navbar/Logo";
 import SearchBar from "../navbar/SearchBar";
 import UserDropdown from "../navbar/UserDropdown";
@@ -11,6 +13,31 @@ import MobileMenu from "../navbar/MobileMenu";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu when screen becomes desktop size
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [mobileMenuOpen]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   return (
     <nav className="glass sticky top-0 z-50 border-b border-border/40 transition-all duration-300">
@@ -29,7 +56,6 @@ const Navbar = () => {
 
           {/* Actions - All in one row */}
           <div className="flex items-center gap-1 sm:gap-2">
-
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-2 lg:gap-4">
               <SellerDialog />
@@ -45,7 +71,8 @@ const Navbar = () => {
               variant="ghost"
               size="icon"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden h-9 w-9 text-foreground hover:bg-secondary/80"
+              className="md:hidden h-9 w-9 text-foreground hover:bg-secondary/80 transition-colors"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             >
               {mobileMenuOpen ? (
                 <X className="w-5 h-5" />
@@ -55,8 +82,6 @@ const Navbar = () => {
             </Button>
           </div>
         </div>
-
-
 
         {/* Mobile Dropdown Menu */}
         <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />

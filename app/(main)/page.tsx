@@ -3,6 +3,7 @@ import Main from "@/components/landingPage/Main";
 import HeroCarousel from "@/components/page/home/HeroCarousel";
 import ProductCatagoryCardSection from "@/components/page/home/ProductCatagoryCardSection";
 import ProductSection from "@/components/page/home/ProductSection";
+import CompareButtonBar from "@/components/compare/CompareButtonBar";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
 import { TProduct } from "@/types/product";
@@ -91,7 +92,7 @@ export default async function HomePage() {
       <HeroCarousel />
       <Main />
       <SSRApolloProvider initialData={{ products }}>
-        
+
         <div className="py-4 sm:py-6 md:py-8 lg:py-10">
           {sections.map((section) => (
             <ProductSection
@@ -105,6 +106,9 @@ export default async function HomePage() {
           <DynamicSections />
         </div>
       </SSRApolloProvider>
+
+      {/* Comparison Button Bar - Floating */}
+      <CompareButtonBar />
     </div>
   );
 }

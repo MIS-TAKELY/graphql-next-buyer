@@ -76,7 +76,9 @@ export default function FAQSection({ productId, isOwnProduct }: { productId: str
                 ) : questions.length === 0 ? (
                     <p className="text-muted-foreground">No questions yet. Be the first to ask!</p>
                 ) : (
-                    questions.map(q => (
+
+                    questions.map((q: any) => (
+
                         <div key={q.id} className="border p-4 rounded-lg bg-card space-y-3">
                             <div className="flex justify-between items-start gap-4">
                                 <h3 className="font-medium text-foreground text-lg">{q.content}</h3>
@@ -88,9 +90,11 @@ export default function FAQSection({ productId, isOwnProduct }: { productId: str
 
                             {q.answers.length > 0 && (
                                 <div className="mt-4 pl-4 border-l-2 border-primary/20 space-y-4">
-                                    {q.answers.map(a => (
+
+                                    {q.answers.map((a: any) => (
                                         <div key={a.id} className="space-y-1">
                                             <div className="flex items-center gap-2">
+
                                                 <span className="font-semibold text-primary">{a.seller.sellerProfile?.shopName || "Seller"}</span>
                                                 <span className="text-[10px] text-muted-foreground">• {formatDistanceToNow(new Date(a.createdAt))} ago</span>
                                             </div>
