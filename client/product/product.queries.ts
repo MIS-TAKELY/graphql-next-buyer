@@ -252,7 +252,10 @@ export const GET_PRODUCTS = gql`
         lastName
       }
       brand
-      warranty
+      warranty {
+      description
+      duration
+    }
       productOffers {
         id
         offer {

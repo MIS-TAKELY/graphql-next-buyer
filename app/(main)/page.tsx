@@ -36,6 +36,8 @@ export default async function HomePage() {
   const CACHE_KEY = CacheService.getProductsListKey();
   let products: TProduct[] = (await CacheService.get<TProduct[]>(CACHE_KEY)) || [];
 
+  let debugError = "";
+
   if (products.length === 0) {
     try {
       const productsResponse = await client.query({
@@ -47,13 +49,16 @@ export default async function HomePage() {
       if (products.length > 0) {
         await CacheService.set(CACHE_KEY, products, 3600); // Cache for 1 hour
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching products:", error);
+      debugError = error.message || JSON.stringify(error);
       products = []; // Ensure products is empty array on error
     }
   }
 
   const sharedSlice = products.slice(0, 8);
+
+  console.log("HomePage Debug: Products fetched:", products.length);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -86,6 +91,12 @@ export default async function HomePage() {
       <HeroCarousel />
       <Main />
       <SSRApolloProvider initialData={{ products }}>
+        {/* Debug Info */}
+        <div className="bg-red-100 p-4 m-4 border border-red-500 text-red-700">
+          <h3 className="font-bold">Debug Info:</h3>
+          <p>Products Length: {products.length}</p>
+          {debugError && <p>Error: {debugError}</p>}
+        </div>
         <div className="py-4 sm:py-6 md:py-8 lg:py-10">
           {sections.map((section) => (
             <ProductSection
