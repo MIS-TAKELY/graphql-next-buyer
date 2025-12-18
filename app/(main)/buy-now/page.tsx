@@ -3,13 +3,12 @@
 
 import { formatPrice } from "@/lib/utils";
 
-
 import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
 import { VERIFY_ESEWA_PAYMENT } from "@/client/payment/payment.mutations";
 import { GET_PRODUCT_BY_SLUG } from "@/client/product/product.queries";
 // NEW: Import cart query (add this if it doesn't exist)
 import { ICartItem } from "@/app/(main)/cart/page"; // Import cart item type
-import { GET_CART_ITEMS } from "@/client/cart/cart.queries"; // Assume this exists
+import { GET_MY_CART_ITEMS } from "@/client/cart/cart.queries"; // Assume this exists
 import { AddressStep } from "@/components/page/buy-now/AddressStep";
 import { BuyNowHeader } from "@/components/page/buy-now/BuyNowHeader";
 import { BuyNowSteps } from "@/components/page/buy-now/BuyNowSteps";
@@ -48,29 +47,26 @@ function BuyNowPageInner() {
     handlePaymentMethodSelect,
     handlePaymentSubmit,
     handleBackToAddress,
-    handleBackToPayment,
   } = useBuyNow();
 
   const [verifyEsewaPayment] = useMutation(VERIFY_ESEWA_PAYMENT);
 
   // NEW: Query cart if from cart
-  const { data: cartData, loading: cartLoading } = useQuery(GET_CART_ITEMS, {
+  const { data: cartData, loading: cartLoading } = useQuery(GET_MY_CART_ITEMS, {
     skip: !isFromCart, // Only run if from cart
     fetchPolicy: "cache-first",
     errorPolicy: "all",
   });
-
   // Existing product query (skip if from cart)
-  const {
-    data: productData,
-    loading: productLoading,
-    error: productDataError,
-  } = useQuery(GET_PRODUCT_BY_SLUG, {
-    variables: { slug: productSlug },
-    skip: isFromCart, // Skip if from cart
-    fetchPolicy: "cache-first",
-    errorPolicy: "all",
-  });
+  const { data: productData, loading: productLoading } = useQuery(
+    GET_PRODUCT_BY_SLUG,
+    {
+      variables: { slug: productSlug },
+      skip: isFromCart, // Skip if from cart
+      fetchPolicy: "cache-first",
+      errorPolicy: "all",
+    }
+  );
 
   // Existing address query (unchanged)
   const { data: addressData, loading: addressLoading } =
@@ -78,7 +74,7 @@ function BuyNowPageInner() {
 
   const product = productData?.getProductBySlug;
   const addresses = addressData?.getAddressOfUser || [];
-  const cartItems: ICartItem[] = cartData?.getCarts || []; // NEW: Cart items
+  const cartItems: ICartItem[] = cartData?.getMyCart || []; // NEW: Cart items
 
   // UPDATED: Calculate order amount (handle both single product and cart)
   const calculateOrderAmount = () => {
@@ -104,50 +100,54 @@ function BuyNowPageInner() {
 
   const orderAmount = calculateOrderAmount();
 
+  console.log("Cart items-->", cartItems);
+
   // UPDATED: Map cart items to OrderItem[] for OrderSummary (if from cart)
   const orderItemsForSummary = isFromCart
     ? cartItems.map((cartItem: ICartItem) => ({
-      id: cartItem.id,
-      quantity: cartItem.quantity,
-      price: cartItem.variant.price * cartItem.quantity, // Subtotal per item
-      variant: {
-        id: cartItem.variant.id,
-        price: cartItem.variant.price,
-        attributes: cartItem.variant.attributes,
-        product: {
-          name: cartItem.variant.product.name,
-          images: cartItem.variant.product.images || [],
-        },
-      },
-    }))
-    : [
-      // Fallback to single product (existing logic)
-      {
-        id: product?.id || "",
-        quantity,
-        price:
-          product?.variants?.find((v: any) => v.isDefault)?.price ||
-          product?.variants?.[0]?.price ||
-          0,
+        id: cartItem.id,
+        quantity: cartItem.quantity,
+        price: cartItem.variant.price * cartItem.quantity, // Subtotal per item
         variant: {
-          id:
-            product?.variants?.find((v: any) => v.isDefault)?.id ||
-            product?.variants?.[0]?.id ||
-            "1",
+          id: cartItem.variant.id,
+          price: cartItem.variant.price,
+          attributes: cartItem.variant.attributes,
+          product: {
+            name: cartItem.variant.product.name,
+            images: cartItem.variant.product.images || [],
+          },
+        },
+      }))
+    : [
+        // Fallback to single product (existing logic)
+        {
+          id: product?.id || "",
+          quantity,
           price:
             product?.variants?.find((v: any) => v.isDefault)?.price ||
             product?.variants?.[0]?.price ||
             0,
-          attributes:
-            product?.variants?.find((v: any) => v.isDefault)?.attributes ||
-            product?.variants?.[0]?.attributes,
-          product: {
-            name: product?.name || "",
-            images: product?.images || [],
+          variant: {
+            id:
+              product?.variants?.find((v: any) => v.isDefault)?.id ||
+              product?.variants?.[0]?.id ||
+              "1",
+            price:
+              product?.variants?.find((v: any) => v.isDefault)?.price ||
+              product?.variants?.[0]?.price ||
+              0,
+            attributes:
+              product?.variants?.find((v: any) => v.isDefault)?.attributes ||
+              product?.variants?.[0]?.attributes,
+            product: {
+              name: product?.name || "",
+              images: product?.images || [],
+            },
           },
         },
-      },
-    ];
+      ];
+
+  console.log("orderItemsForSummary-->", orderItemsForSummary);
 
   // NEW: Cart-specific totals (adapt from CartOrderSummary logic)
   const cartSubtotal =
@@ -267,8 +267,8 @@ function BuyNowPageInner() {
                       paymentData.method === "CASH_ON_DELIVERY"
                         ? "COD"
                         : paymentData.method === "WALLET"
-                          ? "ESEWA"
-                          : paymentData.method,
+                        ? "ESEWA"
+                        : paymentData.method,
                     paymentMethodId: selectedPaymentMethod?.id ?? null,
                     items: orderItemsForSummary, // Pass full cart items
                     shippingMethod: "STANDARD",
@@ -284,8 +284,8 @@ function BuyNowPageInner() {
                       paymentData.method === "CASH_ON_DELIVERY"
                         ? "COD"
                         : paymentData.method === "WALLET"
-                          ? "ESEWA"
-                          : paymentData.method,
+                        ? "ESEWA"
+                        : paymentData.method,
                     paymentMethodId: selectedPaymentMethod?.id ?? null,
                     variantId: defaultVariant?.id,
                     quantity,
