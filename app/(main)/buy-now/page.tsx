@@ -105,47 +105,47 @@ function BuyNowPageInner() {
   // UPDATED: Map cart items to OrderItem[] for OrderSummary (if from cart)
   const orderItemsForSummary = isFromCart
     ? cartItems.map((cartItem: ICartItem) => ({
-        id: cartItem.id,
-        quantity: cartItem.quantity,
-        price: cartItem.variant.price * cartItem.quantity, // Subtotal per item
-        variant: {
-          id: cartItem.variant.id,
-          price: cartItem.variant.price,
-          attributes: cartItem.variant.attributes,
-          product: {
-            name: cartItem.variant.product.name,
-            images: cartItem.variant.product.images || [],
-          },
+      id: cartItem.id,
+      quantity: cartItem.quantity,
+      price: cartItem.variant.price * cartItem.quantity, // Subtotal per item
+      variant: {
+        id: cartItem.variant.id,
+        price: cartItem.variant.price,
+        attributes: cartItem.variant.attributes,
+        product: {
+          name: cartItem.variant.product.name,
+          images: cartItem.variant.product.images || [],
         },
-      }))
+      },
+    }))
     : [
-        // Fallback to single product (existing logic)
-        {
-          id: product?.id || "",
-          quantity,
+      // Fallback to single product (existing logic)
+      {
+        id: product?.id || "",
+        quantity,
+        price:
+          product?.variants?.find((v: any) => v.isDefault)?.price ||
+          product?.variants?.[0]?.price ||
+          0,
+        variant: {
+          id:
+            product?.variants?.find((v: any) => v.isDefault)?.id ||
+            product?.variants?.[0]?.id ||
+            "1",
           price:
             product?.variants?.find((v: any) => v.isDefault)?.price ||
             product?.variants?.[0]?.price ||
             0,
-          variant: {
-            id:
-              product?.variants?.find((v: any) => v.isDefault)?.id ||
-              product?.variants?.[0]?.id ||
-              "1",
-            price:
-              product?.variants?.find((v: any) => v.isDefault)?.price ||
-              product?.variants?.[0]?.price ||
-              0,
-            attributes:
-              product?.variants?.find((v: any) => v.isDefault)?.attributes ||
-              product?.variants?.[0]?.attributes,
-            product: {
-              name: product?.name || "",
-              images: product?.images || [],
-            },
+          attributes:
+            product?.variants?.find((v: any) => v.isDefault)?.attributes ||
+            product?.variants?.[0]?.attributes,
+          product: {
+            name: product?.name || "",
+            images: product?.images || [],
           },
         },
-      ];
+      },
+    ];
 
   console.log("orderItemsForSummary-->", orderItemsForSummary);
 
@@ -155,13 +155,6 @@ function BuyNowPageInner() {
       (sum, item) => sum + item.variant.price * item.quantity * 100,
       0
     ) / 100; // In NPR
-  const cartOriginalTotal =
-    cartItems.reduce((sum, item) => {
-      const comparePrice =
-        item.variant.attributes?.comparePrice || item.variant.price;
-      return sum + comparePrice * item.quantity * 100;
-    }, 0) / 100;
-  const cartTotalSavings = cartOriginalTotal - cartSubtotal;
 
   // Handle eSewa callback (unchanged)
   useEffect(() => {
@@ -267,8 +260,8 @@ function BuyNowPageInner() {
                       paymentData.method === "CASH_ON_DELIVERY"
                         ? "COD"
                         : paymentData.method === "WALLET"
-                        ? "ESEWA"
-                        : paymentData.method,
+                          ? "ESEWA"
+                          : paymentData.method,
                     paymentMethodId: selectedPaymentMethod?.id ?? null,
                     items: orderItemsForSummary, // Pass full cart items
                     shippingMethod: "STANDARD",
@@ -284,8 +277,8 @@ function BuyNowPageInner() {
                       paymentData.method === "CASH_ON_DELIVERY"
                         ? "COD"
                         : paymentData.method === "WALLET"
-                        ? "ESEWA"
-                        : paymentData.method,
+                          ? "ESEWA"
+                          : paymentData.method,
                     paymentMethodId: selectedPaymentMethod?.id ?? null,
                     variantId: defaultVariant?.id,
                     quantity,

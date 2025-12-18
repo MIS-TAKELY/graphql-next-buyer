@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="bg-muted text-muted-foreground pt-12 md:pt-16 pb-8 border-t border-border">
       <div className="container-custom">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
           {/* Brand Column */}
           <div className="space-y-4">
             <h3 className="font-bold text-lg text-foreground">DAI Buyer</h3>

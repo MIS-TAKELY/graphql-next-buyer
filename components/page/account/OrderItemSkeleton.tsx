@@ -5,26 +5,32 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function OrderItemSkeleton() {
   return (
-    <Card className="border">
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between">
-          {/* Left side */}
-          <div>
-            <Skeleton className="h-4 w-32 mb-2" />
-            <Skeleton className="h-3 w-24" />
-          </div>
+    <Card className="border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
+      <CardContent className="p-0">
+        <div className="flex items-center p-4 gap-4">
+          {/* Thumbnail Skeleton */}
+          <Skeleton className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg shrink-0" />
 
-          {/* Right side */}
-          <div className="text-right">
-            <Skeleton className="h-4 w-16 mb-2" />
-            <Skeleton className="h-3 w-20" />
-          </div>
-        </div>
+          {/* Info Section Skeleton */}
+          <div className="flex-1 space-y-3 py-1">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1 space-y-2">
+                {/* Order Number */}
+                <Skeleton className="h-5 w-3/4 sm:w-1/2" />
+                {/* Date */}
+                <Skeleton className="h-3 w-24" />
+              </div>
+              {/* Status Badge */}
+              <Skeleton className="h-5 w-16 rounded-full" />
+            </div>
 
-        {/* Action buttons */}
-        <div className="flex justify-end mt-3 space-x-2">
-          <Skeleton className="h-8 w-20 rounded-md" />
-          <Skeleton className="h-8 w-20 rounded-md" />
+            <div className="flex items-center justify-between mt-auto">
+              {/* Price */}
+              <Skeleton className="h-5 w-20" />
+              {/* Details link */}
+              <Skeleton className="h-4 w-12" />
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>

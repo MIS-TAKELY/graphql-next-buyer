@@ -2,10 +2,10 @@ import { Prisma } from "@/app/generated/prisma";
 import { prisma } from "@/lib/db/prisma";
 import { generateOrderNumber } from "@/randomOrderNumber";
 import { senMail } from "@/services/nodeMailer.services";
+import { rateLimit } from "@/services/rateLimit.service";
+import { delCache } from "@/services/redis.services";
 import { requireAuth, requireBuyer } from "../../auth/auth";
 import { GraphQLContext } from "../../context";
-import { delCache } from "@/services/redis.services";
-import { rateLimit } from "@/services/rateLimit.service";
 
 // interface OrderInput {
 //   items: Array<{
@@ -97,22 +97,20 @@ export const orderResolvers = {
         take: limit,
         include: {
           items: {
-            select: {
-              order: {
-                select: {
-                  orderNumber: true,
-                  total: true,
-                  createdAt: true,
-                  status: true,
+            include: {
+              variant: {
+                include: {
+                  product: {
+                    include: {
+                      images: true,
+                    },
+                  },
                 },
               },
             },
           },
-          // payments: true,
-          // shipments: true,
-          // appliedDiscounts: true,
-          // discountUsage: true,
-          // buyer: true,
+          payments: true,
+          shipments: true,
         },
       });
     },
@@ -284,15 +282,17 @@ export const orderResolvers = {
                 const res = await tx.productVariant.updateMany({
                   where: {
                     id: ci.variantId,
-                    stock: { gte: ci.quantity }
+                    stock: { gte: ci.quantity },
                   },
                   data: {
-                    stock: { decrement: ci.quantity }
-                  }
+                    stock: { decrement: ci.quantity },
+                  },
                 });
 
                 if (res.count === 0) {
-                  throw new Error(`Insufficient stock for item (Race condition detected)`);
+                  throw new Error(
+                    `Insufficient stock for item (Race condition detected)`
+                  );
                 }
               }
             }
@@ -303,11 +303,11 @@ export const orderResolvers = {
         // Invalidate cache for affected products (Stock update)
         for (const orderInput of input) {
           const variantIds = orderInput.items.map((i) => i.variantId);
-          // We need to re-fetch or assume distinct slugs from the transaction block. 
+          // We need to re-fetch or assume distinct slugs from the transaction block.
           // Simpler to just re-fetch slugs for invalidation safely outside tx.
           const products = await prisma.product.findMany({
             where: { variants: { some: { id: { in: variantIds } } } },
-            select: { slug: true }
+            select: { slug: true },
           });
 
           for (const p of products) {
@@ -379,7 +379,7 @@ export const orderResolvers = {
 
               // Construct WhatsApp message - FIXED: Added backticks for template literal
               const message = `🛒 New Order Received!
-                Order Total: ₹${sellerTotal}
+                Order Total: रु${sellerTotal}
                 Customer: ${user.firstName || ""} ${user.lastName || ""}
                 Phone: ${user.phone || "N/A"}`;
 

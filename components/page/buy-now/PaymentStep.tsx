@@ -55,10 +55,10 @@ export function PaymentStep({
           amount={orderAmount}
         />
         <div className="mt-4">
-          <Button 
-            variant="outline" 
-            onClick={onBackToAddress} 
-            className="mr-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+          <Button
+            variant="outline"
+            onClick={onBackToAddress}
+            className="w-full sm:w-auto border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             Back to Address
           </Button>

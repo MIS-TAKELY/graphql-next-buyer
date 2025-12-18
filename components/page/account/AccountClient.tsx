@@ -9,6 +9,7 @@ import SecuritySection from "@/components/page/account/SecuritySection";
 import SettingsSection from "@/components/page/account/SettingsSection";
 import SidebarNav from "@/components/page/account/SidebarNav";
 import WishlistSection from "@/components/page/account/WishlistSection";
+import { ChatLayout } from "@/components/page/chat/ChatLayout";
 import { useAccount } from "@/hooks/account/useAccount";
 
 export default function AccountClient({ user }: { user: any }) {
@@ -32,6 +33,8 @@ export default function AccountClient({ user }: { user: any }) {
         return <SecuritySection />;
       case "settings":
         return <SettingsSection />;
+      case "chat":
+        return <ChatLayout userId={user.id} />;
       default:
         return null;
     }

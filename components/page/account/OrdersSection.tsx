@@ -61,10 +61,10 @@ export default function OrdersSection() {
             <div className="space-y-4 md:space-y-6">
               {loading
                 ? SKELETONS.map((_, i) => <OrderItemSkeleton key={i} />)
-                : orders.map((orderItem) => (
+                : orders.map((order) => (
                   <OrderItem
-                    key={orderItem.id}
-                    order={orderItem.items[0].order}
+                    key={order.id}
+                    order={order as any}
                   />
                 ))}
             </div>

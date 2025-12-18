@@ -1,10 +1,30 @@
 // OrderItem.tsx
 "use client";
 
+import OrderTracker from "@/components/order/OrderTracker";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import React from "react";
-import OrderTracker from "@/components/order/OrderTracker";
+import { Separator } from "@/components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import {
+  Calendar,
+  ChevronRight,
+  CreditCard,
+  MapPin,
+  Package,
+  Truck,
+} from "lucide-react";
+import Image from "next/image";
+import React, { useState } from "react";
 
 type OrderStatus =
   | "PENDING"
@@ -18,40 +38,40 @@ export interface Order {
   id: string;
   orderNumber: string;
   createdAt: string;
-  total: string;
+  total: number;
   status: OrderStatus;
+  shippingSnapshot: any;
+  items: Array<{
+    id: string;
+    quantity: number;
+    unitPrice: number;
+    totalPrice: number;
+    variant: {
+      id: string;
+      product: {
+        name: string;
+        images: Array<{ url: string }>;
+      };
+    };
+  }>;
 }
 
-// OrderItem returned from GraphQL
-export interface OrderItem {
-  id: string;
-  items: [
-    { order: Order }
-  ];
-}
-
-// export interface OrderItem {
-//   id: string;
-//   order: Order;
-// }
-
-// Root query response
 export interface GetMyOrderItemsResponse {
-  getMyOrderItems: OrderItem[];
+  getMyOrderItems: Order[];
 }
 
 function getStatusColor(status: OrderStatus) {
   switch (status) {
     case "DELIVERED":
-      return "text-green-600";
+      return "bg-green-100 text-green-700 border-green-200";
     case "SHIPPED":
-      return "text-blue-600";
+      return "bg-blue-100 text-blue-700 border-blue-200";
     case "PROCESSING":
-      return "text-yellow-600";
+      return "bg-yellow-100 text-yellow-700 border-yellow-200";
     case "CANCELLED":
-      return "text-red-600";
+      return "bg-red-100 text-red-700 border-red-200";
     default:
-      return "text-gray-600";
+      return "bg-gray-100 text-gray-700 border-gray-200";
   }
 }
 
@@ -60,45 +80,219 @@ interface OrderItemProps {
 }
 
 function OrderItemComponent({ order }: OrderItemProps) {
-  console.log("order-->", order)
+  const [isOpen, setIsOpen] = useState(false);
+
+  const firstItem = order.items?.[0];
+  const firstImage =
+    firstItem?.variant?.product?.images?.[0]?.url || "/placeholder-image.jpg";
+  const moreItemsCount = (order.items?.length || 0) - 1;
+
   return (
-    <Card className="border">
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-medium">Order #{order?.orderNumber}</p>
-            <p className="text-sm text-muted-foreground">
-              Placed on {new Date(order?.createdAt).toLocaleDateString()}
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="font-semibold">${order?.total}</p>
-            <p
-              className={`text-sm font-medium ${getStatusColor(order?.status)}`}
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetTrigger asChild>
+        <div className="cursor-pointer group">
+          <Card className="border-border/50 hover:border-primary/30 transition-all duration-300 overflow-hidden bg-card/50 backdrop-blur-sm">
+            <CardContent className="p-0">
+              <div className="flex items-center p-4 gap-4">
+                {/* Product Thumbnail / Image stack */}
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-lg overflow-hidden border bg-muted">
+                  <Image
+                    src={firstImage}
+                    alt={firstItem?.variant?.product?.name || "Order Image"}
+                    fill
+                    className="object-cover"
+                  />
+                  {moreItemsCount > 0 && (
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">
+                        +{moreItemsCount}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Info Section */}
+                <div className="flex-1 min-w-0 flex flex-col justify-between self-stretch py-0.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <h4 className="font-semibold text-sm sm:text-base truncate group-hover:text-primary transition-colors leading-tight">
+                        Order #{order.orderNumber}
+                      </h4>
+                      <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        {new Date(order.createdAt).toLocaleDateString(
+                          undefined,
+                          {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          }
+                        )}
+                      </p>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "text-[10px] sm:text-xs capitalize px-2 py-0 border",
+                        getStatusColor(order.status)
+                      )}
+                    >
+                      {order.status.toLowerCase()}
+                    </Badge>
+                  </div>
+
+                  <div className="flex items-center justify-between mt-auto">
+                    <p className="font-bold text-sm sm:text-base">
+                      रु{Number(order.total).toLocaleString()}
+                    </p>
+                    <div className="flex items-center text-primary text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                      Details <ChevronRight className="w-3 h-3" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </SheetTrigger>
+
+      <SheetContent
+        side="right"
+        className="w-full sm:max-w-md md:max-w-lg p-0 flex flex-col"
+      >
+        <SheetHeader className="p-6 pb-2 text-left shrink-0">
+          <div className="flex items-center justify-between mb-2">
+            <SheetTitle>Order Details</SheetTitle>
+            <Badge
+              variant="outline"
+              className={cn("capitalize px-3", getStatusColor(order.status))}
             >
-              {order?.status}
-            </p>
+              {order.status.toLowerCase()}
+            </Badge>
+          </div>
+          <SheetDescription className="flex items-center gap-1">
+            Order ID: {order.orderNumber} •{" "}
+            {new Date(order.createdAt).toLocaleDateString()}
+          </SheetDescription>
+        </SheetHeader>
+
+        <div className="flex-1 overflow-y-auto px-6 scrollbar-hide pb-8">
+          {/* Tracker Section */}
+          <div className="py-2 mb-6">
+            <h5 className="text-sm font-semibold mb-2 flex items-center gap-2">
+              <Truck className="w-4 h-4 text-primary" /> Delivery Status
+            </h5>
+            <div className="px-2">
+              <OrderTracker status={order.status as any} />
+            </div>
+          </div>
+
+          <Separator className="my-6" />
+
+          {/* Items Section */}
+          <div className="space-y-4">
+            <h5 className="text-sm font-semibold mb-4 flex items-center gap-2">
+              <Package className="w-4 h-4 text-primary" /> Ordered Items
+            </h5>
+            <div className="space-y-4">
+              {order.items.map((item) => (
+                <div key={item.id} className="flex gap-4 group/item">
+                  <div className="relative w-16 h-16 rounded-lg overflow-hidden border bg-muted shrink-0">
+                    <Image
+                      src={
+                        item.variant?.product?.images?.[0]?.url ||
+                        "/placeholder.jpg"
+                      }
+                      alt={item.variant?.product?.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium line-clamp-2 leading-tight">
+                      {item.variant.product.name}
+                    </p>
+                    <div className="flex items-center justify-between mt-1 text-xs text-muted-foreground">
+                      <span>Qty: {item.quantity}</span>
+                      <span className="font-semibold text-foreground">
+                        रु{item.totalPrice}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <Separator className="my-6" />
+
+          {/* Shipping Info Section */}
+          <div className="space-y-3">
+            <h5 className="text-sm font-semibold mb-2 flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-primary" /> Shipping Address
+            </h5>
+            <Card className="bg-muted/30 border-none shadow-none">
+              <CardContent className="p-3 text-sm leading-relaxed">
+                <p className="font-medium">
+                  {order.shippingSnapshot?.firstName}{" "}
+                  {order.shippingSnapshot?.lastName}
+                </p>
+                <p>{order.shippingSnapshot?.line1}</p>
+                {order.shippingSnapshot?.line2 && (
+                  <p>{order.shippingSnapshot?.line2}</p>
+                )}
+                <p>
+                  {order.shippingSnapshot?.city},{" "}
+                  {order.shippingSnapshot?.state}{" "}
+                  {order.shippingSnapshot?.postalCode}
+                </p>
+                <p className="mt-2 text-muted-foreground">
+                  {order.shippingSnapshot?.phone}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Separator className="my-6" />
+
+          {/* Payment Summary Section */}
+          <div className="space-y-3">
+            <h5 className="text-sm font-semibold mb-2 flex items-center gap-2">
+              <CreditCard className="w-4 h-4 text-primary" /> Payment Summary
+            </h5>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between text-muted-foreground">
+                <span>Items Subtotal</span>
+                <span>रु{Number(order.total) - 0}</span>{" "}
+                {/* Simplified for this view */}
+              </div>
+              <div className="flex justify-between text-muted-foreground">
+                <span>Shipping Fee</span>
+                <span className="text-green-600">Free</span>
+              </div>
+              <Separator className="my-2" />
+              <div className="flex justify-between font-bold text-base">
+                <span>Grand Total</span>
+                <span>रु{Number(order.total).toLocaleString()}</span>
+              </div>
+            </div>
           </div>
         </div>
 
-
-        <div className="mt-4 border-t pt-4">
-          <OrderTracker status={order?.status as any} />
-        </div>
-
-        <div className="flex justify-end mt-3 space-x-2">
-          <Button variant="outline" size="sm">
-            View Details
+        <div className="p-6 bg-background border-t mt-auto flex gap-3 shrink-0">
+          <Button
+            variant="outline"
+            className="flex-1"
+            onClick={() => setIsOpen(false)}
+          >
+            Close
           </Button>
-          {order?.status === "DELIVERED" && (
-            <Button variant="outline" size="sm">
-              Reorder
-            </Button>
-          )}
+          <Button className="flex-1">Reorder</Button>
         </div>
-      </CardContent>
-    </Card >
+      </SheetContent>
+    </Sheet>
   );
 }
 
+// React.memo used for performance
 export default React.memo(OrderItemComponent);

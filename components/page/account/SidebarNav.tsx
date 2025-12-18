@@ -14,7 +14,6 @@ import {
   Shield,
   User,
 } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 // Reusable SidebarNav component
@@ -38,7 +37,7 @@ export default function SidebarNav({
     { id: "addresses", label: "Addresses", icon: MapPin },
     { id: "orders", label: "My Orders", icon: Package },
     { id: "wishlist", label: "Wishlist", icon: Heart },
-    { id: "chat", label: "Messages", icon: MessageCircle, href: "/account/chat" }, // Added Chat
+    { id: "chat", label: "Messages", icon: MessageCircle }, // Added Chat
     { id: "payment", label: "Payment Methods", icon: CreditCard },
     { id: "notifications", label: "Notifications", icon: Bell },
     { id: "security", label: "Security", icon: Shield },
@@ -52,10 +51,10 @@ export default function SidebarNav({
       if (setActiveTab) {
         setActiveTab(item.id);
       }
-      // If we are on the separate chat page, we might want to navigate back to account 
-      // when clicking other tabs, but AccountClient handles internal state. 
+      // If we are on the separate chat page, we might want to navigate back to account
+      // when clicking other tabs, but AccountClient handles internal state.
       // If we are on /account/chat, clicking "Profile" should probably go to /account?tab=profile
-      // For now, let's assume the user is on /account for most tabs. 
+      // For now, let's assume the user is on /account for most tabs.
       // If they are on /account/chat, clicking a non-href item might not work if setActiveTab is a no-op.
       if (window.location.pathname.includes("/account/chat")) {
         router.push("/account");
@@ -77,7 +76,9 @@ export default function SidebarNav({
               <p className="font-medium truncate">
                 {user.firstName} {user.lastName}
               </p>
-              <p className="text-sm text-muted-foreground truncate">{user.email}</p>
+              <p className="text-sm text-muted-foreground truncate">
+                {user.email}
+              </p>
             </div>
           </div>
         </CardHeader>
@@ -92,8 +93,8 @@ export default function SidebarNav({
                   key={item.id}
                   onClick={() => handleNavigation(item)}
                   className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors whitespace-nowrap ${isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "hover:bg-muted"
+                      ? "bg-primary text-primary-foreground"
+                      : "hover:bg-muted"
                     } ${isActive ? "w-auto lg:w-full" : "w-auto lg:w-full"}`}
                 >
                   <Icon size={18} />

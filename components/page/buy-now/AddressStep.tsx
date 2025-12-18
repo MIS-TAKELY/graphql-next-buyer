@@ -122,11 +122,10 @@ export function AddressStep({
               {addresses.map((address) => (
                 <div
                   key={address.id}
-                  className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
-                    address.isDefault
+                  className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${address.isDefault
                       ? "border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/20"
                       : "border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600"
-                  }`}
+                    }`}
                   onClick={() => onSelectAddress(address)}
                 >
                   <div className="flex items-start justify-between">
@@ -142,8 +141,8 @@ export function AddressStep({
                           </Badge>
                         )}
                         {address.label && (
-                          <Badge 
-                            variant="outline" 
+                          <Badge
+                            variant="outline"
                             className="text-xs border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300"
                           >
                             {address.label}
@@ -200,11 +199,10 @@ export function AddressStep({
       <CardContent>
         <div className="space-y-4">
           <div
-            className={`p-4 border rounded-lg ${
-              selectedAddress.isDefault
+            className={`p-4 border rounded-lg ${selectedAddress.isDefault
                 ? "border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/20"
                 : "border-blue-300 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/20"
-            }`}
+              }`}
           >
             <div className="flex items-start justify-between mb-3">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white">
@@ -236,19 +234,19 @@ export function AddressStep({
               )}
             </div>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <Button
               type="button"
               variant="outline"
               onClick={() => setShowNewAddressForm(true)}
-              className="flex-1 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="w-full sm:flex-1 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <Plus className="w-4 h-4 mr-2 text-gray-900 dark:text-white" />
               Add Different Address
             </Button>
             <Button
               onClick={onUseDefaultAddress}
-              className="flex-1 bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-400"
+              className="w-full sm:flex-1 bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-400"
             >
               <CheckCircle className="w-4 h-4 mr-2 text-white" />
               Continue with This Address

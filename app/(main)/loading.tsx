@@ -30,15 +30,10 @@ export default function HomeLoading() {
 
                     {/* Product Grid Skeletons */}
                     <div className="container-custom">
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                            {[...Array(3)].map((_, gridIndex) => (
-                                <div key={gridIndex} className="space-y-3">
-                                    <div className="h-6 w-48 bg-secondary/20 rounded animate-pulse" />
-                                    <div className="grid grid-cols-2 gap-3">
-                                        {[...Array(4)].map((_, i) => (
-                                            <ProductCardSkeleton key={i} />
-                                        ))}
-                                    </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-3 sm:gap-4 justify-items-center">
+                            {[...Array(12)].map((_, gridIndex) => (
+                                <div key={gridIndex} className="w-full flex justify-center">
+                                    <ProductCardSkeleton />
                                 </div>
                             ))}
                         </div>

@@ -306,7 +306,10 @@ export const GET_PRODUCTS_BY_SELLER = gql`
         lastName
       }
       brand
-      warranty
+      warranty {
+        description
+        duration
+      }
       productOffers {
         id
         offer {

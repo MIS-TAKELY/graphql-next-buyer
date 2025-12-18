@@ -1,11 +1,11 @@
 export const dynamic = "force-dynamic";
 
-import SidebarNav from "@/components/page/account/SidebarNav";
-import { ChatLayout } from "@/components/page/chat/ChatLayout";
+import AccountClient from "@/components/page/account/AccountClient";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { GET_USER_PROFILE_DETAILS } from "@/client/user/user.queries";
+import { redirect } from "next/navigation";
 
-export default async function ChatPage() {
+export default async function AccountPage() {
   const client = await getServerApolloClient();
   let user = null;
 
@@ -20,20 +20,12 @@ export default async function ChatPage() {
   }
 
   if (!user) {
-    return <div>Please log in to view messages.</div>;
+    redirect("/");
   }
 
   return (
     <div className="min-h-screen bg-muted/20">
-      <div className="flex flex-col lg:flex-row gap-6 w-full max-w-7xl mx-auto px-4 py-8">
-        <SidebarNav
-          user={user}
-          activeTab="chat"
-        />
-        <div className="flex-1 min-w-0 w-full">
-          <ChatLayout userId={user.id} />
-        </div>
-      </div>
+      <AccountClient user={user} />
     </div>
   );
 }

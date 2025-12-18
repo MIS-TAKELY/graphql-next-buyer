@@ -16,7 +16,8 @@ export default function SearchHeader({ query, filteredCount, totalResults }: Sea
         <span>
           {filteredCount} of {totalResults.toLocaleString()} results for
         </span>
-        <Badge variant="outline" className="font-medium text-sm rounded-full px-3"> {/* font-normal to font-medium, text-xs to text-sm, added rounded-full px-3 */}
+        {/* <Badge variant="outline" className="font-medium text-sm rounded-full px-3 max-w-[150px] sm:max-w-md truncate align-bottom"> */}
+        <Badge variant="outline" className="font-medium text-sm rounded-full px-3 max-w-full flex-1  line-clamp-1"> {/* font-normal to font-medium, text-xs to text-sm, added rounded-full px-3 */}
           "{query}"
         </Badge>
       </div>

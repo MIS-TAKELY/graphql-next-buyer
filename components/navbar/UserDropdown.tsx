@@ -22,7 +22,7 @@ const UserDropdown = ({ isMobile = false }: UserDropdownProps) => {
         <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Account
         </div>
-        
+
         {/* My Account */}
         <Link href="/account" className="block">
           <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
@@ -37,7 +37,7 @@ const UserDropdown = ({ isMobile = false }: UserDropdownProps) => {
         </Link>
 
         {/* Orders */}
-        <Link href="/orders" className="block">
+        <Link href="/account" className="block">
           <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
@@ -83,7 +83,7 @@ const UserDropdown = ({ isMobile = false }: UserDropdownProps) => {
           <Link href="/account">My Account</Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent">
-          <Link href="/orders">Orders</Link>
+          <Link href="/account">Orders</Link>
         </DropdownMenuItem>
         <SignOutButton>
           <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent">
