@@ -2,6 +2,7 @@
 "use client";
 
 import { GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
+import { GET_PRODUCTS } from "@/client/product/product.queries";
 import CartEmpty from "@/components/cart/CartEmpty";
 import CartError from "@/components/cart/CartError";
 import CartHeader from "@/components/cart/CartHeader";
@@ -9,6 +10,7 @@ import CartItem from "@/components/cart/CartItem";
 import CartOrderSummary from "@/components/cart/CartOrderSummary";
 import { useCart } from "@/hooks/cart/useCart";
 import { useQuery } from "@apollo/client";
+import { useAuth } from "@clerk/nextjs";
 import { ShoppingBag } from "lucide-react";
 import { useMemo } from "react";
 
@@ -88,59 +90,111 @@ interface CartItemData {
 }
 
 export default function CartPage() {
+  const { userId } = useAuth();
   const {
     removeFromCart,
     updateQuantity,
     myCartItems: cartProductIds,
     cartLoading,
+    anonymousCart,
   } = useCart();
 
-  // Fetch products and filter by cart IDs
+  // Fetch products for logged-in user
   const { data: cartData, loading: cartDataLoading, error: cartDataError } = useQuery(GET_MY_CART_ITEMS, {
-    skip: !cartProductIds || cartProductIds.size === 0,
+    skip: !userId || !cartProductIds || cartProductIds.size === 0,
+    fetchPolicy: "cache-first",
+  });
+
+  // Fetch all products for guest user (to find details for anonymous cart items)
+  // Optimization: In a real app, we'd have a getProductsByIds query
+  const { data: allProductsData, loading: allProductsLoading } = useQuery(GET_PRODUCTS, {
+    skip: !!userId || !anonymousCart || anonymousCart.length === 0,
     fetchPolicy: "cache-first",
   });
 
   const cartItems = useMemo((): ICartItem[] => {
-    if (!cartData?.getMyCart) return [];
+    if (userId) {
+      if (!cartData?.getMyCart) return [];
 
-    return cartData.getMyCart.map((item: any) => {
-      const variant = item.variant;
-      const priceInCents = parseFloat(variant.price);
-      // We don't have comparePrice in the new query yet, but we can assume 0 or update query if needed.
-      // For now let's handle it gracefully.
-      const comparePrice = undefined;
+      return cartData.getMyCart.map((item: any) => {
+        const variant = item.variant;
+        const priceInCents = parseFloat(variant.price);
+        const comparePrice = variant.mrp ? parseFloat(variant.mrp) : undefined;
 
-      return {
-        id: item.id,
-        quantity: item.quantity,
-        createdAt: new Date(), // Item doesn't return createdAt, using current date or could add to query
-        variant: {
-          id: variant.id,
-          sku: variant.sku || `SKU-${variant.product.id}`,
-          price: priceInCents,
-          stock: variant.stock || 10,
-          attributes: { comparePrice },
+        return {
+          id: item.id,
+          quantity: item.quantity,
+          createdAt: new Date(),
+          variant: {
+            id: variant.id,
+            sku: variant.sku || `SKU-${variant.product.id}`,
+            price: priceInCents,
+            stock: variant.stock || 10,
+            attributes: { comparePrice },
+            product: {
+              ...variant.product,
+              status: "ACTIVE",
+              variants: [],
+              reviews: []
+            }
+          },
           product: {
             ...variant.product,
-            // Add missing fields required by Product interface if any, or cast
-            status: "ACTIVE", // Assumed active since in cart
-            variants: [], // Empty variants array to satisfy interface
+            salePrice: priceInCents,
+            returnPolicy: "30-day return policy",
+            warranty: "1 Year Warranty",
+            status: "ACTIVE",
+            variants: [],
             reviews: []
-          }
-        },
-        product: {
-          ...variant.product,
-          salePrice: priceInCents,
-          returnPolicy: "30-day return policy",
-          warranty: "1 Year Warranty",
-          status: "ACTIVE",
-          variants: [],
-          reviews: [] // Add missing fields
-        },
-      };
-    });
-  }, [cartData, cartDataLoading]);
+          },
+        };
+      });
+    } else {
+      // Guest User: Map anonymousCart to product details
+      if (!anonymousCart || !allProductsData?.getProducts) return [];
+
+      return anonymousCart.map((cartItem) => {
+        const product = allProductsData.getProducts.find((p: any) => p.id === cartItem.variant.product.id);
+        if (!product) return null;
+
+        // Use default variant or first variant
+        const variant = product.variants?.find((v: any) => v.isDefault) || product.variants?.[0];
+        if (!variant) return null;
+
+        const priceInCents = parseFloat(variant.price);
+        const comparePrice = variant.mrp ? parseFloat(variant.mrp) : undefined;
+
+        const cartItemResult: ICartItem = {
+          id: `guest-${product.id}`,
+          quantity: cartItem.quantity || 1,
+          createdAt: new Date(),
+          variant: {
+            id: variant.id,
+            sku: variant.sku || `SKU-${product.id}`,
+            price: priceInCents,
+            stock: variant.stock || 10,
+            attributes: { comparePrice },
+            product: {
+              ...product,
+              status: "ACTIVE",
+              variants: [],
+              reviews: []
+            }
+          },
+          product: {
+            ...product,
+            salePrice: priceInCents,
+            returnPolicy: "30-day return policy",
+            warranty: "1 Year Warranty",
+            status: "ACTIVE",
+            variants: [],
+            reviews: []
+          },
+        };
+        return cartItemResult;
+      }).filter((item): item is ICartItem => item !== null);
+    }
+  }, [cartData, userId, anonymousCart, allProductsData]);
 
   // Handle quantity update - calls mutation
   // Note: cartId passed here is actually the variantId from CartItem component

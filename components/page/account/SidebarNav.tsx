@@ -48,18 +48,11 @@ export default function SidebarNav({
     if (item.href) {
       router.push(item.href);
     } else {
+      // Update URL with query param for tab syncing
+      router.push(`/account?v=${item.id}`);
+
       if (setActiveTab) {
         setActiveTab(item.id);
-      }
-      // If we are on the separate chat page, we might want to navigate back to account
-      // when clicking other tabs, but AccountClient handles internal state.
-      // If we are on /account/chat, clicking "Profile" should probably go to /account?tab=profile
-      // For now, let's assume the user is on /account for most tabs.
-      // If they are on /account/chat, clicking a non-href item might not work if setActiveTab is a no-op.
-      if (window.location.pathname.includes("/account/chat")) {
-        router.push("/account");
-        // We can't easily set the tab on the other page without URL params or context.
-        // A simple fix for now is just pushing to /account which defaults to profile
       }
     }
   };
@@ -93,8 +86,8 @@ export default function SidebarNav({
                   key={item.id}
                   onClick={() => handleNavigation(item)}
                   className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors whitespace-nowrap ${isActive
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-muted"
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-muted"
                     } ${isActive ? "w-auto lg:w-full" : "w-auto lg:w-full"}`}
                 >
                   <Icon size={18} />

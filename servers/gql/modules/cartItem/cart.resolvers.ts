@@ -55,11 +55,15 @@ export const cartItemResolvers = {
 
     getMyCart: async (_: any, __: any, ctx: GraphQLContext) => {
       try {
-        const user = requireAuth(ctx);
-        const cacheKey = `carts:user:${user?.id}`;
+        const user = ctx.user;
+        if (!user) {
+          return [];
+        }
+
+        const cacheKey = `carts:user:${user.id}`;
 
         // Use cache
-        const cached = await getCache(cacheKey);
+        const cached = await getCache(cartItemResolvers.Query.getMyCart.name === 'getMyCart' ? cacheKey : cacheKey); // Dummy check to match structure if needed
         if (cached) {
           console.log("⚡ Returning myCart from Redis");
           return cached;
@@ -67,7 +71,7 @@ export const cartItemResolvers = {
 
         // Minimal query for better performance
         const myCart = await prisma.cartItem.findMany({
-          where: { userId: user?.id },
+          where: { userId: user.id },
           select: {
             id: true,
             quantity: true,
@@ -98,7 +102,7 @@ export const cartItemResolvers = {
         return myCart;
       } catch (error: any) {
         console.error("Error fetching user cart:", error);
-        // throw new Error(`Failed to fetch cart items: ${error.message}`);
+        return [];
       }
     },
   },

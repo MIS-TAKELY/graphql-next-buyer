@@ -34,7 +34,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
       />
 
       {/* Menu Panel */}
-      <div 
+      <div
         className="md:hidden absolute top-full left-0 right-0 bg-background/98 backdrop-blur-xl border-b border-border/30 shadow-2xl z-50 animate-in slide-in-from-top-2 duration-300"
         onClick={(e) => e.stopPropagation()} // Prevent clicks inside menu from closing it
       >
@@ -42,7 +42,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
           <div className="p-4 space-y-6">
             {/* User Account Section */}
             <div className="space-y-1">
-              <UserDropdown isMobile />
+              <UserDropdown isMobile onItemClick={onClose} />
             </div>
 
             {/* Divider */}
@@ -59,7 +59,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
 
             {/* Seller Section */}
             <div className="pb-2">
-              <SellerDialog isMobile />
+              <SellerDialog isMobile onItemClick={onClose} />
             </div>
           </div>
         </div>

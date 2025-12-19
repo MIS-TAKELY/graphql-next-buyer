@@ -11,11 +11,11 @@ export function BuyNowHeader({ productSlug, productName }: BuyNowHeaderProps) {
   return (
     <div className="mb-8">
       <Link
-        href={`/product/${productSlug}`}
+        href={`/cart`}
         className="inline-flex items-center text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white mb-4"
       >
         <ArrowLeft className="h-4 w-4 mr-2 text-gray-600 dark:text-gray-300" />
-        Back to Product
+        Back to Cart
       </Link>
       <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Buy Now</h1>
       <p className="text-gray-600 dark:text-gray-300 mt-2">

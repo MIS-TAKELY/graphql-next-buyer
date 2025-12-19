@@ -12,9 +12,10 @@ import Link from "next/link";
 
 interface UserDropdownProps {
   isMobile?: boolean;
+  onItemClick?: () => void;
 }
 
-const UserDropdown = ({ isMobile = false }: UserDropdownProps) => {
+const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
   if (isMobile) {
     return (
       <div className="space-y-0.5">
@@ -24,7 +25,7 @@ const UserDropdown = ({ isMobile = false }: UserDropdownProps) => {
         </div>
 
         {/* My Account */}
-        <Link href="/account" className="block">
+        <Link href="/account?v=profile" className="block" onClick={onItemClick}>
           <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
@@ -37,7 +38,7 @@ const UserDropdown = ({ isMobile = false }: UserDropdownProps) => {
         </Link>
 
         {/* Orders */}
-        <Link href="/account" className="block">
+        <Link href="/account?v=orders" className="block" onClick={onItemClick}>
           <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
@@ -51,7 +52,7 @@ const UserDropdown = ({ isMobile = false }: UserDropdownProps) => {
 
         {/* Logout */}
         <SignOutButton>
-          <button className="w-full">
+          <button className="w-full" onClick={onItemClick}>
             <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-destructive/10 flex items-center justify-center">
