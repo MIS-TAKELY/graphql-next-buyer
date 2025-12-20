@@ -1,3 +1,4 @@
+import { GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
 import { GET_PRODUCTS } from "@/client/product/product.queries";
 import { Button } from "@/components/ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -8,6 +9,7 @@ import { useQuery } from "@apollo/client";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 import { useMemo, useState } from "react";
 import QuantitySelector from "../page/product/QuantitySelector";
 
@@ -32,29 +34,57 @@ export default function CartSheetContent() {
   const [updatingItems, setUpdatingItems] = useState<Set<string>>(new Set());
   const [quantity, setQuantity] = useState(1);
 
-  // Fetch products and filter by cart IDs
-  const { data: productData, loading } = useQuery(GET_PRODUCTS, {
-    skip: !cartProductIds || cartProductIds.size === 0,
+  const { userId } = useAuth();
+  const { anonymousCart } = useCart(); // Get anonymous cart from hook
+
+  // Fetch items for logged-in user
+  const { data: cartData, loading: cartLoading } = useQuery(GET_MY_CART_ITEMS, {
+    skip: !userId || !cartProductIds || cartProductIds.size === 0,
+    fetchPolicy: "cache-first",
+  });
+
+  // Fetch items for guest user (if using anonymous cart)
+  const { data: allProductsData, loading: allProductsLoading } = useQuery(GET_PRODUCTS, {
+    skip: !!userId || !anonymousCart || anonymousCart.length === 0,
     fetchPolicy: "cache-first",
   });
 
   const cartItems = useMemo((): CartItemData[] => {
-    if (!productData?.getProducts || !cartProductIds) return [];
+    if (userId) {
+      if (!cartData?.getMyCart) return [];
 
-    return productData.getProducts
-      .filter((product: any) => cartProductIds.has(product.id))
-      .map((product: any) => {
-        const variant = product.variants?.[0];
+      return cartData.getMyCart.map((item: any) => ({
+        id: item.variant.product.id,
+        name: item.variant.product.name,
+        image: item.variant.product.images?.[0]?.url || "/placeholder.svg",
+        price: item.variant.price.toString(),
+        variantId: item.variant.id,
+        quantity: item.quantity,
+      }));
+    } else {
+      // Guest User logic (similar to CartPage)
+      if (!anonymousCart || !allProductsData?.getProducts) return [];
+
+      return anonymousCart.map((cartItem) => {
+        const product = allProductsData.getProducts.find((p: any) => p.id === cartItem.variant.product.id);
+        if (!product) return null;
+
+        const variant = product.variants?.find((v: any) => v.id === cartItem.variant.id) || product.variants?.[0];
+        if (!variant) return null;
+
         return {
           id: product.id,
           name: product.name,
           image: product.images?.[0]?.url || "/placeholder.svg",
-          price: variant?.price || "0",
-          variantId: variant?.id,
-          quantity: 1, // TODO: Get actual quantity from cart data
+          price: variant.price || "0",
+          variantId: variant.id,
+          quantity: cartItem.quantity || 1,
         };
-      });
-  }, [productData, cartProductIds]);
+      }).filter((item): item is CartItemData => item !== null);
+    }
+  }, [cartData, userId, anonymousCart, allProductsData]);
+
+  const loading = cartLoading || allProductsLoading;
 
   const displayedItemsCount = cartItems.length;
 

@@ -85,7 +85,7 @@ function BuyNowPageInner() {
         0
       ); // Assume price in cents
       const shipping = 0;
-      const tax = Math.round(subtotal * 0.18);
+      const tax = 0;
       return subtotal + shipping + tax;
     }
     if (!product || !product.variants) return 0;
@@ -94,7 +94,7 @@ function BuyNowPageInner() {
     if (!defaultVariant) return 0;
     const subtotal = defaultVariant.price * quantity;
     const shipping = 0;
-    const tax = Math.round(subtotal * 0.18);
+    const tax = 0;
     return subtotal + shipping + tax;
   };
 
@@ -301,7 +301,7 @@ function BuyNowPageInner() {
                 items={orderItemsForSummary}
                 subtotal={cartSubtotal} // From cart calc
                 shipping={0}
-                tax={Math.round(cartSubtotal * 0.18)}
+                tax={0}
                 total={orderAmount}
                 formatPrice={formatPrice}
               />
@@ -312,9 +312,9 @@ function BuyNowPageInner() {
             // Existing single-product OrderSummary
             <OrderSummary
               items={orderItemsForSummary}
-              subtotal={orderAmount - Math.round((orderAmount / 1.18) * 0.18)}
+              subtotal={orderAmount}
               shipping={0}
-              tax={Math.round((orderAmount / 1.18) * 0.18)}
+              tax={0}
               total={orderAmount}
               formatPrice={formatPrice}
             />

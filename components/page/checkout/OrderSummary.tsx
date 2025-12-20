@@ -137,15 +137,17 @@ export function OrderSummary({
             </span>
           </div>
 
-          <div className="flex items-center justify-between text-sm">
-            <span className="flex items-center gap-1 text-gray-600 dark:text-gray-300">
-              <Receipt className="w-4 h-4 text-gray-600 dark:text-gray-300" />
-              Tax (GST)
-            </span>
-            <span className="font-medium text-gray-900 dark:text-white">
-              {formatPrice(tax)}
-            </span>
-          </div>
+          {tax > 0 && (
+            <div className="flex items-center justify-between text-sm">
+              <span className="flex items-center gap-1 text-gray-600 dark:text-gray-300">
+                <Receipt className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                Tax (GST)
+              </span>
+              <span className="font-medium text-gray-900 dark:text-white">
+                {formatPrice(tax)}
+              </span>
+            </div>
+          )}
 
           {items.some((item) => item.variant.attributes?.comparePrice) && (
             <div className="flex items-center justify-between text-sm">
