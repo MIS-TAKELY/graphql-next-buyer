@@ -97,16 +97,16 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="block w-full h-full relative">
       <Link href={`/product/${product.slug}`} className="block h-full">
-        <Card className={`group cursor-pointer hover:shadow-lg transition-all duration-300 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 rounded-xl h-full flex flex-col overflow-hidden min-h-[320px] ${selected ? "ring-2 ring-blue-500 border-blue-500" : ""
+        <Card className={`group cursor-pointer hover:shadow-lg transition-all duration-300 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 rounded-xl h-full flex flex-col overflow-hidden min-h-[260px] p-0 ${selected ? "ring-2 ring-blue-500 border-blue-500" : ""
           }`}>
           <CardContent className="p-0 flex flex-col h-full">
             {/* Image Section - Fixed Aspect Ratio */}
-            <div className="relative w-full aspect-[4/3] bg-gray-50 dark:bg-gray-800 flex-shrink-0 overflow-hidden">
+            <div className="relative w-full aspect-[3/2] bg-gray-50 dark:bg-gray-800 flex-shrink-0 overflow-hidden">
               <SmartMedia
                 src={defaultImage}
                 alt={product.name}
                 fill
-                className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                className="object-contain p-2 transition-transform duration-500 group-hover:scale-105"
                 sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
               />
 
@@ -139,7 +139,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
 
             {/* Details Section */}
-            <div className="flex-1 flex flex-col p-3 sm:p-4 gap-1.5">
+            <div className="flex-1 flex flex-col p-2 sm:p-2.5 gap-1">
               {/* Brand */}
               <div className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wider font-medium">
                 {typeof product.brand === 'string' ? product.brand : product.brand?.name || 'Generic'}
@@ -151,7 +151,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               </h3>
 
               {/* Rating */}
-              <div className="flex items-center gap-1.5 mt-1">
+              <div className="flex items-center gap-1.5">
                 <span className="bg-green-600 text-white px-1.5 py-0.5 flex items-center gap-0.5 rounded text-[10px] sm:text-xs font-bold">
                   {averageRating > 0 ? averageRating.toFixed(1) : "New"}
                   <Star className="w-2.5 h-2.5 fill-white" />
@@ -166,7 +166,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               <div className="flex-1" />
 
               {/* Price */}
-              <div className="flex items-baseline gap-2 mt-2">
+              <div className="flex items-baseline gap-2">
                 <div className="text-base sm:text-lg font-bold text-foreground">
                   {formatPrice(Number(currentPrice || 0))}
                 </div>
@@ -188,10 +188,10 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       {/* Compare Checkbox */}
       <div
-        className="absolute bottom-3 right-3 z-10"
+        className="absolute bottom-1 right-1 z-10"
         onClick={handleCompareToggle}
       >
-        <div className="flex items-center gap-1.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded border border-border shadow-sm px-2 py-1.5 hover:bg-background transition-colors cursor-pointer">
+        <div className="flex items-center gap-1.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded border border-border shadow-sm px-2 py-1 hover:bg-background transition-colors cursor-pointer">
           <Checkbox
             id={`compare-${product.id}`}
             checked={selected}
@@ -199,7 +199,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
           <label
             htmlFor={`compare-${product.id}`}
-            className="text-[10px] sm:text-xs font-medium cursor-pointer select-none"
+            className="text-[7px] sm:text-xs font-medium cursor-pointer select-none"
           >
             Compare
           </label>

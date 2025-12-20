@@ -105,12 +105,12 @@ const ProductGallery = memo(function ProductGallery({
     <div className="flex flex-col-reverse lg:flex-row gap-4 h-full">
       {/* Thumbnails */}
       {displayImages.length > 1 && (
-        <div className="flex lg:flex-col gap-2 overflow-auto scrollbar-hide shrink-0 lg:w-20 lg:max-h-[600px]">
+        <div className="flex lg:flex-col gap-2 overflow-auto scrollbar-hide shrink-0 lg:w-16 lg:max-h-[480px]">
           {displayImages.map((image, index) => (
             <button
               key={image.id || index}
               onClick={() => scrollTo(index)}
-              className={`relative w-16 h-16 lg:w-20 lg:h-20 shrink-0 rounded-md overflow-hidden border-2 transition-all group
+              className={`relative w-14 h-14 lg:w-16 lg:h-16 shrink-0 rounded-md overflow-hidden border-2 transition-all group
               ${selectedImage === index ? "border-primary" : "border-transparent hover:border-gray-200"}`}
             >
               <SmartMedia
@@ -118,7 +118,7 @@ const ProductGallery = memo(function ProductGallery({
                 alt={image.altText || `Thumbnail ${index + 1}`}
                 fill
                 className="object-cover"
-                sizes="80px"
+                sizes="64px"
               />
             </button>
           ))}
@@ -132,7 +132,7 @@ const ProductGallery = memo(function ProductGallery({
             {displayImages.map((image, index) => (
               <div
                 key={image.id || index}
-                className="relative flex-[0_0_100%] min-w-0 h-[400px] sm:h-[500px] lg:h-[600px] bg-white dark:bg-gray-900"
+                className="relative flex-[0_0_100%] min-w-0 h-[300px] sm:h-[400px] lg:h-[480px] bg-white dark:bg-gray-900"
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
               >
@@ -143,7 +143,7 @@ const ProductGallery = memo(function ProductGallery({
                     fill
                     className="object-contain"
                     priority={index === 0}
-                    sizes="(max-width: 768px) 100vw, 800px"
+                    sizes="(max-width: 768px) 100vw, 600px"
                   />
                 </div>
               </div>

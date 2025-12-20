@@ -15,7 +15,7 @@ const ProductCategoryCardSection = memo(() => {
               className="
                 flex lg:grid lg:grid-cols-[repeat(auto-fit,minmax(80px,1fr))]
                 gap-2 xs:gap-3 sm:gap-4 md:gap-3 lg:gap-2 xl:gap-3 2xl:gap-4
-                py-2 xs:py-3 sm:py-4 md:py-6
+                pb-2 xs:pb-2 sm:pb-3 md:pb-4
                 px-2 xs:px-3 sm:px-4 md:px-0
                 min-w-max lg:min-w-0
               "
