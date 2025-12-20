@@ -61,9 +61,4 @@ export const productTypeDefs = gql`
     getRecommendedProducts(productId: ID!, limit: Int): [Product!]!
     getProductsBySeller(sellerId: ID!): [Product!]!
   }
-
-  type Mutation {
-    addProduct(input: CreateProductInput!): Product!
-    deleteProduct(productId: ID!): Product!
-  }
 `;

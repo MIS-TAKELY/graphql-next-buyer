@@ -89,7 +89,8 @@ export const productResolvers = {
     getProductBySlug: async (_: any, { slug }: { slug: string }) => {
       if (!slug) throw new Error("Slug is required");
 
-      const productKey = `product:details:${slug}`;
+      const PRODUCT_CACHE_VERSION = 'v2';
+      const productKey = `product:details:${PRODUCT_CACHE_VERSION}:${slug}`;
       const cached = await getCache(productKey);
 
       console.log("request reciebed------------", slug)
@@ -146,7 +147,7 @@ export const productResolvers = {
       console.log(`getProductBySlug query took ${Date.now() - start}ms`);
 
       if (product) {
-        await setCache(productKey, product, 86400); // Cache for 1 day
+        await setCache(productKey, product, 3600); // Match seller's 1-hour cache
       }
 
       return product;

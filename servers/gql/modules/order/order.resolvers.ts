@@ -187,7 +187,7 @@ export const orderResolvers = {
                 };
               });
 
-              const tax = Math.round(subtotal * 0.18);
+              const tax = 0; // Taxes removed per user request
               const shippingFee = 0;
               const discount = 0;
               const total = subtotal + tax + shippingFee - discount;
@@ -216,7 +216,7 @@ export const orderResolvers = {
                   payments: {
                     create: {
                       amount: total,
-                      currency: "INR",
+                      currency: "NPR", // Switched from INR to NPR
                       status: "PENDING",
                       provider: orderInput.paymentProvider,
                       methodId: orderInput.paymentMethodId ?? null,
@@ -251,8 +251,7 @@ export const orderResolvers = {
                   (acc, i) => acc + Number(i.totalPrice),
                   0
                 );
-                const commissionRate = 0.1;
-                const commission = Math.round(sellerSubtotal * commissionRate);
+                const commission = 0; // Commission removed per user request
 
                 await tx.sellerOrder.create({
                   data: {
@@ -268,9 +267,7 @@ export const orderResolvers = {
                         quantity: ci.quantity,
                         unitPrice: ci.unitPrice,
                         totalPrice: ci.totalPrice,
-                        commission: Math.round(
-                          Number(ci.totalPrice) * commissionRate
-                        ),
+                        commission: 0,
                       })),
                     },
                   },
@@ -312,7 +309,8 @@ export const orderResolvers = {
 
           for (const p of products) {
             console.log(`🗑️ Invalidating cache for product: ${p.slug}`);
-            await delCache(`product:${p.slug}`);
+            const PRODUCT_CACHE_VERSION = 'v2';
+            await delCache(`product:details:${PRODUCT_CACHE_VERSION}:${p.slug}`);
           }
         }
 
