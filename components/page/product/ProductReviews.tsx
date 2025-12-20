@@ -8,7 +8,7 @@ import { AddReviewForm } from "@/components/review/AddReviewForm";
 import { ReviewCard } from "@/components/review/ReviewCard";
 import ReviewGallery from "./ReviewGallery";
 import { FilterState, ReviewFilters } from "@/components/review/ReviewFilters";
-import ReviewSkeleton from "@/components/review/ReviewSkeleton ";
+import ReviewSkeleton from "@/components/review/ReviewSkeleton";
 import { ReviewSummary } from "@/components/review/ReviewSummary";
 import { MediaItem, Review } from "@/components/review/types";
 import { Button } from "@/components/ui/button";
