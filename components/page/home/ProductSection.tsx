@@ -21,7 +21,7 @@ export default function ProductSection({
 
   return (
     <section className="mb-8 md:mb-12">
-      <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16">
+      <div className="container-custom">
         <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground">
           {name}
         </h2>
