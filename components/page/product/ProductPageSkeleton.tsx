@@ -106,21 +106,21 @@ const ProductPageSkeleton = () => {
             </div>
           </div>
         </div>
-
-        {/* Recommended Sections Skeletons */}
-        {[0, 1].map((section) => (
-          <div key={section} className="mt-12">
-            <Skeleton className="h-8 w-64 mb-6" />
-            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-              {[0, 1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="flex-none w-[220px]">
-                  <ProductCardSkeleton />
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
       </div>
+
+      {/* Recommended Sections Skeletons */}
+      {[0, 1].map((section) => (
+        <div key={section} className="mt-12 container-custom">
+          <Skeleton className="h-8 w-64 mb-6" />
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="flex-none w-[220px]">
+                <ProductCardSkeleton />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
 
       {/* Mobile Actions Skeleton */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t p-3 flex gap-3 z-50">

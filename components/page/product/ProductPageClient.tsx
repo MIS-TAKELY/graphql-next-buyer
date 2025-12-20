@@ -245,16 +245,6 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           </div>
         </div>
 
-
-        <RecommendedProducts
-          currentProductId={product.id || ""}
-          title="Recommended for You"
-        />
-        <RecommendedProducts
-          currentProductId={product.id || ""}
-          title="Frequently Bought Together"
-        />
-
         {/* Zoom Viewer Overlay - Fixed Position over right column */}
         {imageHoverData.isHovering && (
           <ImageZoomViewer
@@ -265,6 +255,15 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           />
         )}
       </div>
+
+      <RecommendedProducts
+        currentProductId={product.id || ""}
+        title="Recommended for You"
+      />
+      <RecommendedProducts
+        currentProductId={product.id || ""}
+        title="Frequently Bought Together"
+      />
 
       {/* Sticky Mobile Buy Now Bar - Full width, Amazon/Flipkart style */}
       <div className="lg:hidden sticky-bottom-bar">
