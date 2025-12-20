@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
+import Link from "next/link";
 
 export default function FAQSection({ productId, isOwnProduct }: { productId: string; isOwnProduct?: boolean }) {
     const { questions, isLoading, submitQuestion } = useProductFAQ(productId);
@@ -63,7 +64,7 @@ export default function FAQSection({ productId, isOwnProduct }: { productId: str
                     <div className="bg-muted/50 p-4 rounded-lg text-center">
                         <p className="text-muted-foreground mb-2">Login to ask a question</p>
                         <Button variant="outline" asChild>
-                            <a href="/sign-in">Sign In</a>
+                            <Link href="/sign-in">Sign In</Link>
                         </Button>
                     </div>
                 )}

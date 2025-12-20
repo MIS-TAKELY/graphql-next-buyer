@@ -1,4 +1,5 @@
 import { Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -12,10 +13,10 @@ const Footer = () => {
               Experience the best in e-commerce with our premium selection of products. Quality, trust, and speed delivered to your doorstep.
             </p>
             <div className="flex items-center gap-4 pt-2">
-              <a href="#" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Facebook className="w-5 h-5" /></a>
-              <a href="#" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Instagram className="w-5 h-5" /></a>
-              <a href="#" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Twitter className="w-5 h-5" /></a>
-              <a href="#" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Linkedin className="w-5 h-5" /></a>
+              <Link href="/" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Facebook className="w-5 h-5" /></Link>
+              <Link href="/" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Instagram className="w-5 h-5" /></Link>
+              <Link href="/" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Twitter className="w-5 h-5" /></Link>
+              <Link href="/" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Linkedin className="w-5 h-5" /></Link>
             </div>
           </div>
 
@@ -23,30 +24,30 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-foreground mb-4">Company</h3>
             <ul className="space-y-3 text-sm">
-              <li><a href="#" className="hover:text-primary transition-colors">About Us</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Careers</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Press</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Blog</a></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">About Us</Link></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Careers</Link></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Press</Link></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Blog</Link></li>
             </ul>
           </div>
 
           <div>
             <h3 className="font-semibold text-foreground mb-4">Support</h3>
             <ul className="space-y-3 text-sm">
-              <li><a href="#" className="hover:text-primary transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Cancellation & Returns</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Shipping Info</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Contact Us</a></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Help Center</Link></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Cancellation & Returns</Link></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Shipping Info</Link></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Contact Us</Link></li>
             </ul>
           </div>
 
           <div>
             <h3 className="font-semibold text-foreground mb-4">Legal</h3>
             <ul className="space-y-3 text-sm">
-              <li><a href="#" className="hover:text-primary transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Cookie Policy</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Accessibility</a></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Terms of Service</Link></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Cookie Policy</Link></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Accessibility</Link></li>
             </ul>
           </div>
         </div>

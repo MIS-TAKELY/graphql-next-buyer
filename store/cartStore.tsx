@@ -2,15 +2,15 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export interface CartItemVariant {
+  id?: string;
   product: {
     id: string;
   };
-  // Add other variant properties if needed
 }
 
 export interface CartItem {
   variant: CartItemVariant;
-  quantity?: number;
+  quantity: number;
 }
 
 interface CartStore {
@@ -43,8 +43,8 @@ export const useCartStore = create<CartStore>()(
 
         const newItem: CartItem = {
           variant: {
+            id: variantId,
             product: { id: productId }
-            // We'd ideally need full variant details here, but for now matching existing logic 
           },
           quantity: 1
         };

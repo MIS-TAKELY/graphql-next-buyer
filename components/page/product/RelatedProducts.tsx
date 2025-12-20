@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Star } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface RelatedProduct {
   id: string;
@@ -24,11 +25,12 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
           <Link key={relatedProduct.id} href={`/product/${relatedProduct.id}`}>
             <Card className="group hover:shadow-lg transition-shadow duration-300 cursor-pointer">
               <CardContent className="p-4">
-                <div className="aspect-square mb-3 overflow-hidden rounded-lg bg-gray-100">
-                  <img
+                <div className="aspect-square mb-3 overflow-hidden rounded-lg bg-gray-100 relative">
+                  <Image
                     src={relatedProduct.image || "/placeholder.svg"}
                     alt={relatedProduct.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
                 <h3 className="font-medium text-sm mb-2 line-clamp-2">{relatedProduct.title}</h3>
@@ -37,9 +39,8 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 fill-current ${
-                          i < Math.floor(relatedProduct.rating) ? "text-yellow-400" : "text-gray-300"
-                        }`}
+                        className={`w-4 h-4 fill-current ${i < Math.floor(relatedProduct.rating) ? "text-yellow-400" : "text-gray-300"
+                          }`}
                       />
                     ))}
                   </div>

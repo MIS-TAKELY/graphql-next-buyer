@@ -245,8 +245,8 @@ export const ReviewCard = ({ review }: { review: Review }) => {
                           <Image
                             src={m.url}
                             alt="Review media"
-                            layout="fill"
-                            objectFit="cover"
+                            fill
+                            className="object-cover"
                           />
                         )}
                       </div>
@@ -341,14 +341,14 @@ export const ReviewCard = ({ review }: { review: Review }) => {
 
               <div className="w-full h-full flex items-center justify-center">
                 {review.media[currentMediaIndex].type === "VIDEO" ? (
-                  <video src={review.media[currentMediaIndex].url} controls autoPlay className="max-h-full max-w-full" />
+                  <video src={review.media[currentMediaIndex].url} controls autoPlay className="max-h-full max-w-full" preload="auto" />
                 ) : (
                   <div className="relative w-full h-full">
                     <Image
                       src={review.media[currentMediaIndex].url}
                       alt="Full size"
-                      layout="fill"
-                      objectFit="contain"
+                      fill
+                      className="object-contain"
                     />
                   </div>
                 )}

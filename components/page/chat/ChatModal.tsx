@@ -15,6 +15,7 @@ import { LocalMessage } from "@/types/chat";
 import { File, Loader2, MessageCircle, Paperclip, Send, X } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import MessageBubble from "./MessageBubble";
+import Image from "next/image";
 
 interface SelectedFile {
   file: File;
@@ -156,10 +157,12 @@ export function ChatModal({
                   className="relative h-16 w-16 shrink-0 rounded-lg border bg-muted flex items-center justify-center overflow-hidden group"
                 >
                   {f.preview ? (
-                    <img
+                    <Image
                       src={f.preview}
-                      className="h-full w-full object-cover"
+                      fill
+                      className="object-cover"
                       alt="preview"
+                      unoptimized
                     />
                   ) : (
                     <File className="h-6 w-6 text-muted-foreground" />

@@ -3,11 +3,12 @@ import { formatFileSize } from "@/utlis/dateHelpers";
 import {
   AlertCircle,
   CheckCircle,
-  Image,
+  Image as ImageIcon,
   Upload,
   Video,
   X,
 } from "lucide-react";
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { ReviewMedia } from "./types";
 
@@ -71,12 +72,12 @@ export const MediaUploader = ({
             prevValue.map((item) =>
               item.id === mediaItem.id
                 ? {
-                    ...item,
-                    url: result.url,
-                    status: "uploaded",
-                    publicId: result.publicId,
-                    size: result.size ?? item.size,
-                  }
+                  ...item,
+                  url: result.url,
+                  status: "uploaded",
+                  publicId: result.publicId,
+                  size: result.size ?? item.size,
+                }
                 : item
             )
           );
@@ -137,7 +138,7 @@ export const MediaUploader = ({
 
   const canUploadMore = value.length < 5;
 
-  console.log("value",value)
+  console.log("value", value)
 
   return (
     <div className="space-y-6">
@@ -155,11 +156,10 @@ export const MediaUploader = ({
             setIsDragOver(false);
           }}
           onDrop={onDrop}
-          className={`relative border-2 border-dashed rounded-xl p-8 transition-all duration-300 cursor-pointer group ${
-            isDragOver
-              ? "border-blue-400 bg-blue-50 scale-[1.02]"
-              : "border-gray-300 hover:border-blue-300 hover:bg-gray-800"
-          }`}
+          className={`relative border-2 border-dashed rounded-xl p-8 transition-all duration-300 cursor-pointer group ${isDragOver
+            ? "border-blue-400 bg-blue-50 scale-[1.02]"
+            : "border-gray-300 hover:border-blue-300 hover:bg-gray-800"
+            }`}
         >
           <input
             type="file"
@@ -171,18 +171,16 @@ export const MediaUploader = ({
           <div className="text-center">
             <div className="flex justify-center mb-4">
               <div
-                className={`p-4 rounded-full transition-colors ${
-                  isDragOver
-                    ? "bg-blue-100"
-                    : "bg-gray-100 group-hover:bg-blue-50"
-                }`}
+                className={`p-4 rounded-full transition-colors ${isDragOver
+                  ? "bg-blue-100"
+                  : "bg-gray-100 group-hover:bg-blue-50"
+                  }`}
               >
                 <Upload
-                  className={`w-8 h-8 transition-colors ${
-                    isDragOver
-                      ? "text-blue-600"
-                      : "text-gray-600 group-hover:text-blue-500"
-                  }`}
+                  className={`w-8 h-8 transition-colors ${isDragOver
+                    ? "text-blue-600"
+                    : "text-gray-600 group-hover:text-blue-500"
+                    }`}
                 />
               </div>
             </div>
@@ -195,7 +193,7 @@ export const MediaUploader = ({
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-gray-500">
               <div className="flex items-center gap-2">
-                <Image className="w-4 h-4" />
+                <ImageIcon className="w-4 h-4" />
                 <span>Images: JPG, PNG, GIF</span>
               </div>
               <div className="flex items-center gap-2">
@@ -230,18 +228,21 @@ export const MediaUploader = ({
               <div key={media.id} className="relative group">
                 <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 border-gray-200 group-hover:border-gray-300 transition-colors">
                   {media.type === "IMAGE" ? (
-                    <img
-                      src={media.url}
-                      alt={media.name}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={media.url}
+                        alt={media.name || "Preview image"}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    </div>
                   ) : (
                     <div className="relative w-full h-full bg-gray-900">
                       <video
                         src={media.url}
                         className="w-full h-full object-cover"
-                        preload="metadata"
+                        preload="none"
                       />
                       <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
                         <Video className="w-8 h-8 text-white" />

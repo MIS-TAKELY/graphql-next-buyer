@@ -1,16 +1,18 @@
 import { GET_PRODUCTS } from "@/client/product/product.queries";
+import CompareButtonBar from "@/components/compare/CompareButtonBar";
 import Main from "@/components/landingPage/Main";
 import HeroCarousel from "@/components/page/home/HeroCarousel";
 import ProductCatagoryCardSection from "@/components/page/home/ProductCatagoryCardSection";
 import ProductSection from "@/components/page/home/ProductSection";
-import CompareButtonBar from "@/components/compare/CompareButtonBar";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
-import { TProduct } from "@/types/product";
 import { CacheService } from "@/services/CacheService";
+import { TProduct } from "@/types/product";
 import dynamic from "next/dynamic";
 
-const DynamicSections = dynamic(() => import("@/components/page/home/DynamicSections"));
+const DynamicSections = dynamic(
+  () => import("@/components/page/home/DynamicSections")
+);
 
 import { Metadata } from "next";
 
@@ -18,7 +20,8 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Home", // Will be "Home | Vanijoy"
-  description: "Welcome to Vanijoy, your one-stop shop for the best products at unbeatable prices.",
+  description:
+    "Welcome to Vanijoy, your one-stop shop for the best products at unbeatable prices.",
   alternates: {
     canonical: "/",
   },
@@ -35,7 +38,8 @@ export default async function HomePage() {
   const client = await getServerApolloClient();
 
   const CACHE_KEY = CacheService.getProductsListKey();
-  let products: TProduct[] = (await CacheService.get<TProduct[]>(CACHE_KEY)) || [];
+  let products: TProduct[] =
+    (await CacheService.get<TProduct[]>(CACHE_KEY)) || [];
 
   let debugError = "";
 
@@ -64,22 +68,39 @@ export default async function HomePage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Vanijoy E-Commerce",
-    "url": process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com",
-    "potentialAction": {
+    name: "Vanijoy E-Commerce",
+    url: process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com",
+    potentialAction: {
       "@type": "SearchAction",
-      "target": {
+      target: {
         "@type": "EntryPoint",
-        "urlTemplate": `${process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"}/shop/search?q={search_term_string}`
+        urlTemplate: `${
+          process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"
+        }/shop/search?q={search_term_string}`,
       },
-      "query-input": "required name=search_term_string"
-    }
+      "query-input": "required name=search_term_string",
+    },
   };
 
   const sections: SectionConfig[] = [
-    { name: "Today's Best Deals", products: sharedSlice, count: 8, layout: "horizontal" },
-    { name: "Top Offers", products: sharedSlice, count: 8, layout: "horizontal" },
-    { name: "Recommended For You", products: sharedSlice, count: 8, layout: "horizontal" },
+    {
+      name: "Today's Best Deals",
+      products: sharedSlice,
+      count: 8,
+      layout: "horizontal",
+    },
+    {
+      name: "Top Offers",
+      products: sharedSlice,
+      count: 8,
+      layout: "horizontal",
+    },
+    {
+      name: "Recommended For You",
+      products: sharedSlice,
+      count: 8,
+      layout: "horizontal",
+    },
   ];
 
   return (
@@ -92,7 +113,6 @@ export default async function HomePage() {
       <HeroCarousel />
       <Main />
       <SSRApolloProvider initialData={{ products }}>
-
         <div className="py-4 sm:py-6 md:py-8 lg:py-10">
           {sections.map((section) => (
             <ProductSection

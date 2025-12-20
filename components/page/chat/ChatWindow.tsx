@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import MessageBubble from "./MessageBubble";
+import Image from "next/image";
 
 interface ChatWindowProps {
   conversation?: Conversation;
@@ -202,10 +203,12 @@ export function ChatWindow({
               <div key={index} className="relative group shrink-0">
                 <div className="w-16 h-16 rounded-lg border overflow-hidden bg-muted flex items-center justify-center">
                   {sf.preview ? (
-                    <img
+                    <Image
                       src={sf.preview}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
                       alt="preview"
+                      unoptimized
                     />
                   ) : (
                     <FileText className="w-6 h-6 text-muted-foreground" />

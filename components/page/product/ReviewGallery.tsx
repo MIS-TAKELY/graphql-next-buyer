@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 interface ReviewGalleryProps {
     images: string[];
@@ -38,7 +39,12 @@ export default function ReviewGallery({ images }: ReviewGalleryProps) {
                                 className="relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden cursor-pointer border hover:opacity-80 transition-opacity"
                                 onClick={() => setSelectedIndex(idx)}
                             >
-                                <img src={src} alt="Review attachment" className="w-full h-full object-cover" />
+                                <Image
+                                    src={src}
+                                    alt="Review attachment"
+                                    fill
+                                    className="object-cover"
+                                />
                             </div>
                         </DialogTrigger>
                         <DialogContent className="max-w-4xl w-full h-[80vh] p-0 bg-black/90 border-none flex items-center justify-center relative">
@@ -59,10 +65,11 @@ export default function ReviewGallery({ images }: ReviewGalleryProps) {
                             </Button>
 
                             <div className="relative w-full h-full p-12 flex items-center justify-center">
-                                <img
+                                <Image
                                     src={images[selectedIndex]}
                                     alt="Review full size"
-                                    className="max-h-full max-w-full object-contain"
+                                    fill
+                                    className="object-contain p-12"
                                 />
                             </div>
 

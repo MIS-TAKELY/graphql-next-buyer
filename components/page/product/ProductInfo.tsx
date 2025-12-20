@@ -7,6 +7,7 @@ import { memo, useEffect, useMemo, useRef, useState } from "react";
 import ShowProductSpecification from "./ShowProductSpecification";
 import { formatPrice } from "@/lib/utils";
 import VariantSelector from "./VariantSelector";
+import Image from "next/image";
 
 interface ProductInfoProps {
   product: TProduct;
@@ -198,11 +199,12 @@ const ProductInfo = memo(function ProductInfo({
               className="relative w-full overflow-hidden border border-border/50"
               style={{ height: teaserHeight || "500px" }}
             >
-              <img
+              <Image
                 ref={imgRef}
                 src={promotionalImages[0].url}
                 alt={promotionalImages[0].altText || "Highlight 1"}
-                className="w-full h-auto object-cover block"
+                fill
+                className="object-cover block"
                 loading="lazy"
                 onLoad={handleImageLoad}
               />
@@ -218,15 +220,18 @@ const ProductInfo = memo(function ProductInfo({
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col">
               {promotionalImages.map((image: any, index: number) => (
                 <div key={index} className="relative w-full overflow-hidden border border-border/50">
-                  <img
-                    src={image.url}
-                    alt={image.altText || `Highlight ${index + 1}`}
-                    className="w-full h-auto object-cover block"
-                    loading="lazy"
-                  />
+                  <div className="relative aspect-[16/9] w-full">
+                    <Image
+                      src={image.url}
+                      alt={image.altText || `Highlight ${index + 1}`}
+                      fill
+                      className="object-cover block"
+                      loading="lazy"
+                    />
+                  </div>
 
                   {/* Optional caption overlay */}
                   {image.caption && (

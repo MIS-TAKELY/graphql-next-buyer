@@ -1,6 +1,5 @@
 // components/page/product/ProductPageClient.tsx
 "use client";
-import Breadcrumb from "@/components/page/product/Breadcrumb";
 import DeliveryInfo from "@/components/page/product/DeliveryInfo";
 import ImageZoomViewer from "@/components/page/product/ImageZoomViewer";
 import { ProductActionsClient } from "@/components/page/product/ProductActionsClient";
@@ -8,13 +7,13 @@ import ProductGallery from "@/components/page/product/ProductGallery";
 import ProductInfo from "@/components/page/product/ProductInfo";
 import ProductPageSkeleton from "@/components/page/product/ProductPageSkeleton";
 
-import { IProductVarient, TProduct } from "@/types/product";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useAuth } from "@clerk/nextjs";
-import SellerInfo from "./SellerInfo";
-import RecommendedProducts from "./RecommendedProducts";
 import ProductReviews from "@/components/page/product/ProductReviews";
+import { IProductVarient, TProduct } from "@/types/product";
+import { useAuth } from "@clerk/nextjs";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import FAQSection from "./FAQSection";
+import RecommendedProducts from "./RecommendedProducts";
+import SellerInfo from "./SellerInfo";
 
 interface ProductPageClientProps {
   product: TProduct | null;
@@ -32,21 +31,24 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
   });
 
   // Initialize selectedAttributes based on the default variant or first variant
-  const [selectedAttributes, setSelectedAttributes] = useState<Record<string, string>>({});
+  const [selectedAttributes, setSelectedAttributes] = useState<
+    Record<string, string>
+  >({});
 
   useEffect(() => {
     if (product?.variants?.length) {
-      const defaultVar = (product.variants as IProductVarient[]).find((v) => v.isDefault) || product.variants[0];
+      const defaultVar =
+        (product.variants as IProductVarient[]).find((v) => v.isDefault) ||
+        product.variants[0];
       if (defaultVar && defaultVar.attributes) {
         // Ensure attributes are strings
         const initialAttrs: Record<string, string> = {};
         Object.entries(defaultVar.attributes).forEach(([key, value]) => {
-          if (typeof value === 'string') initialAttrs[key] = value;
+          if (typeof value === "string") initialAttrs[key] = value;
         });
         setSelectedAttributes(initialAttrs);
       }
     }
-
   }, [product]);
 
   // Save to Recently Viewed
@@ -55,7 +57,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
       const stored = localStorage.getItem("recentlyViewed");
       let ids: string[] = stored ? JSON.parse(stored) : [];
       // Remove if exists to push to top
-      ids = ids.filter(id => id !== product.id);
+      ids = ids.filter((id) => id !== product.id);
       ids.unshift(product.id);
       // Limit to 10
       ids = ids.slice(0, 10);
@@ -112,9 +114,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     () =>
       product?.reviews?.length
         ? product.reviews.reduce(
-          (sum: number, r: any) => sum + (r.rating || 0),
-          0
-        ) / product.reviews.length
+            (sum: number, r: any) => sum + (r.rating || 0),
+            0
+          ) / product.reviews.length
         : 0,
     [product?.reviews]
   );
@@ -123,10 +125,14 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     if (!product?.variants?.length) return null;
 
     // exact match
-    const exactMatch = (product.variants as IProductVarient[]).find((variant) => {
-      if (!variant.attributes) return false;
-      return Object.entries(selectedAttributes).every(([key, value]) => variant.attributes[key] === value);
-    });
+    const exactMatch = (product.variants as IProductVarient[]).find(
+      (variant) => {
+        if (!variant.attributes) return false;
+        return Object.entries(selectedAttributes).every(
+          ([key, value]) => variant.attributes[key] === value
+        );
+      }
+    );
 
     if (exactMatch) return exactMatch;
 
@@ -150,7 +156,8 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     () =>
       product?.brand?.name ||
       (product?.seller
-        ? `${product.seller.firstName || ""} ${product.seller.lastName || ""
+        ? `${product.seller.firstName || ""} ${
+            product.seller.lastName || ""
           }`.trim()
         : "Unknown Seller"),
     [product?.brand?.name, product?.seller]
@@ -160,11 +167,11 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     () =>
       Array.isArray(product?.images)
         ? [...product.images].sort(
-          (a: any, b: any) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)
-        )
+            (a: any, b: any) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)
+          )
         : product?.images
-          ? [product.images]
-          : [],
+        ? [product.images]
+        : [],
     [product?.images]
   );
 
@@ -177,10 +184,13 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
   return (
     <div className="min-h-screen bg-background relative pb-20 lg:pb-0">
-      <Breadcrumb
+      {/* <Breadcrumb
         category={product.category?.name || "Unknown Category"}
         name={product.name}
-      />
+      /> {/* <Breadcrumb
+        category={product.category?.name || "Unknown Category"}
+        name={product.name}
+      /> */}
 
       <div className="container-custom py-4 sm:py-6 lg:py-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-[4.5fr_5.5fr] gap-8 xl:gap-12 mb-12">
@@ -220,20 +230,31 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 returnPolicy={product.returnPolicy}
                 deliveryOptions={product.deliveryOptions}
               />
-              <SellerInfo sellerName={sellerName} sellerId={product?.seller?.id} isOwnProduct={isOwnProduct} />
+              <SellerInfo
+                sellerName={sellerName}
+                sellerId={product?.seller?.id}
+                isOwnProduct={isOwnProduct}
+              />
             </div>
           </div>
         </div>
 
-
-
         <div className="mt-12 border-t pt-8">
           <ProductReviews />
-          <FAQSection productId={product.id || ""} isOwnProduct={isOwnProduct} />
+          <FAQSection
+            productId={product.id || ""}
+            isOwnProduct={isOwnProduct}
+          />
         </div>
 
-        <RecommendedProducts currentProductId={product.id || ""} title="Recommended for You" />
-        <RecommendedProducts currentProductId={product.id || ""} title="Frequently Bought Together" />
+        <RecommendedProducts
+          currentProductId={product.id || ""}
+          title="Recommended for You"
+        />
+        <RecommendedProducts
+          currentProductId={product.id || ""}
+          title="Frequently Bought Together"
+        />
 
         {/* Zoom Viewer Overlay - Fixed Position over right column */}
         {imageHoverData.isHovering && (
@@ -259,4 +280,3 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     </div>
   );
 }
-

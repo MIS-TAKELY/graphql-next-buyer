@@ -1,8 +1,9 @@
-// import { LocalMessage } from "@/hooks/chat/useSellerChat"; // Ensure this matches your hook filename
 import { LocalMessage } from "@/types/chat"; // MODIFIED for buyer
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CheckCheck, FileIcon, FileText } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 interface MessageBubbleProps {
     message: LocalMessage;
@@ -35,13 +36,16 @@ export default function MessageBubble({ message, isOwn }: MessageBubbleProps) {
                                 {attachment.type === "IMAGE" ||
                                     (attachment.type === "VIDEO" && !attachment.url.endsWith(".pdf")) || // Fallback check
                                     attachment.url.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
-                                    <img
-                                        src={attachment.url}
-                                        alt="attachment"
-                                        className="rounded-lg max-h-60 w-full object-cover border bg-black/5"
-                                    />
+                                    <div className="relative h-60 w-full rounded-lg overflow-hidden border bg-black/5">
+                                        <Image
+                                            src={attachment.url}
+                                            alt="attachment"
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </div>
                                 ) : (
-                                    <a
+                                    <Link
                                         href={attachment.url}
                                         target="_blank"
                                         rel="noreferrer"
@@ -58,7 +62,7 @@ export default function MessageBubble({ message, isOwn }: MessageBubbleProps) {
                                         <span className="underline truncate text-xs sm:text-sm">
                                             {attachment.url.split("/").pop() || "Download File"}
                                         </span>
-                                    </a>
+                                    </Link>
                                 )}
                             </div>
                         ))}

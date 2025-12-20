@@ -83,6 +83,7 @@ export default function SmartMedia({
                     onPlay={() => setIsPlaying(true)}
                     onPause={() => setIsPlaying(false)}
                     onError={() => setError(true)}
+                    preload={autoPlayVideo ? "auto" : "none"}
                 />
 
                 {!isPlaying && !autoPlayVideo && (
