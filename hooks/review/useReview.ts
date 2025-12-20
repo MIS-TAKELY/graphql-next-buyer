@@ -19,15 +19,6 @@ export const useReview = () => {
   const params = useParams();
   const productSlug = params.slug as string;
   const [filterRating, setFilterRating] = useState<number | undefined>(undefined);
-
-  const [optimisticAdds, setOptimisticAdds] = useState<any[]>([]);
-  const [optimisticUpdates, setOptimisticUpdates] = useState<
-    Record<string, any>
-  >({});
-  const [optimisticDeletes] = useState<Set<string>>(
-    new Set()
-  );
-
   const [limit] = useState(5);
   // Using Apollo's fetchMore for pagination, so we don't need manual page state management for the query itself usually,
   // but we might want to track if there are more items.
@@ -96,38 +87,9 @@ export const useReview = () => {
 
     // Create optimistic review with a temporary ID
     const tempId = `optimistic-${Date.now()}`;
-    const optimisticReview = {
-      id: tempId,
-      rating: payload.rating,
-      comment: payload.comment,
-      user: {
-        id: "current-user",
-        firstName: "You",
-        lastName: "",
-      },
-      media: successfulMedia.map((m, index) => ({
-        id: `optimistic-media-${Date.now()}-${index}`,
-        reviewId: tempId,
-        url: m.url,
-        type: m.type,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      })),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      status: "PENDING",
-      verifiedPurchase: false,
-      isFeatured: false,
-      helpfulCount: 0,
-      votes: [],
-      isOptimistic: true, // Flag to identify optimistic reviews
-    };
-
-    // Add optimistic review immediately for instant UI feedback
-    setOptimisticAdds((prev) => [optimisticReview, ...prev]);
 
     try {
-      // Execute the mutation (this can take time, but UI already shows the review)
+      // Execute the mutation with optimistic response
       const result = await addReviewMutation({
         variables: {
           input: {
@@ -137,15 +99,69 @@ export const useReview = () => {
             media: successfulMedia.map(({ url, type }) => ({ url, type })),
           },
         },
+        optimisticResponse: {
+          addReview: true, // The mutation returns a boolean
+        },
+        update: (cache) => {
+          // Read existing reviews from cache
+          const existing: any = cache.readQuery({
+            query: GET_REVIEWS_BY_PRODUCT_BY_SLUG,
+            variables: { slug: productSlug, rating: filterRating, offset: 0, limit },
+          });
+
+          if (!existing?.getReviewsByProductSlug) {
+            console.warn("No reviews found in cache for slug:", productSlug);
+            return;
+          }
+
+          // Create optimistic review object
+          const optimisticReview = {
+            __typename: "Review",
+            id: tempId,
+            rating: payload.rating,
+            comment: payload.comment,
+            user: {
+              __typename: "User",
+              id: "current-user",
+              firstName: "You",
+              lastName: "",
+            },
+            media: successfulMedia.map((m, index) => ({
+              __typename: "ReviewMedia",
+              id: `optimistic-media-${Date.now()}-${index}`,
+              reviewId: tempId,
+              url: m.url,
+              type: m.type,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            })),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            status: "PENDING",
+            verifiedPurchase: false,
+            isFeatured: false,
+            helpfulCount: 0,
+            votes: [],
+          };
+
+          // Write updated reviews to cache
+          cache.writeQuery({
+            query: GET_REVIEWS_BY_PRODUCT_BY_SLUG,
+            variables: { slug: productSlug, rating: filterRating, offset: 0, limit },
+            data: {
+              getReviewsByProductSlug: [optimisticReview, ...existing.getReviewsByProductSlug],
+            },
+          });
+        },
       });
 
       console.log("Review submitted successfully:", result);
+      // Refetch to get the real review from server
       await refetch();
-      setOptimisticAdds((prev) => prev.filter((r) => r.id !== tempId));
       return result;
     } catch (error) {
       console.error("Review submission error:", error);
-      setOptimisticAdds((prev) => prev.filter((r) => r.id !== tempId));
+      // Apollo automatically reverts the optimistic update on error
       throw error;
     }
   };
@@ -178,24 +194,6 @@ export const useReview = () => {
     if (payload.media !== undefined && successfulMedia) {
       input.media = successfulMedia.map(({ url, type }) => ({ url, type }));
     }
-
-    // Store optimistic update locally
-    setOptimisticUpdates((prev) => ({
-      ...prev,
-      [id]: {
-        rating: input.rating ?? currentReview?.rating,
-        comment: input.comment ?? currentReview?.comment,
-        media:
-          input.media?.map((m: any, idx: number) => ({
-            id: `temp-${id}-${idx}`,
-            url: m.url,
-            type: m.type,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          })) ?? currentReview?.media,
-        updatedAt: new Date().toISOString(),
-      },
-    }));
 
     try {
       const result = await updateReviewMutation({
@@ -258,19 +256,9 @@ export const useReview = () => {
         },
       });
 
-      // Clear optimistic update after successful mutation
-      setOptimisticUpdates((prev) => {
-        const { [id]: _, ...rest } = prev;
-        return rest;
-      });
-
       return result;
     } catch (error) {
-      // Clear optimistic update on error
-      setOptimisticUpdates((prev) => {
-        const { [id]: _, ...rest } = prev;
-        return rest;
-      });
+      // Apollo automatically reverts the optimistic update on error
       throw error;
     }
   };
@@ -305,28 +293,13 @@ export const useReview = () => {
     });
   };
 
-  // Combine optimistic adds, updates, and deletes with real reviews
-  const baseReviews = data?.getReviewsByProductSlug || [];
-  const filteredReviews = baseReviews.filter(
-    (review: Review) => !optimisticDeletes.has(review.id)
-  );
-  const updatedReviews = filteredReviews.map((review: Review) => {
-    const update = optimisticUpdates[review.id];
-    if (update) {
-      return { ...review, ...update };
-    }
-    return review;
-  });
-  const allReviews = [...optimisticAdds, ...updatedReviews];
-
-  // Basic strict check: if we got fewer items than limit, we likely reached the end. 
-  // Ideally, API should return total count + list, but this is a common heuristic.
-  const hasMore = data?.getReviewsByProductSlug?.length >= limit; // Simplistic check, better to check total count if available
+  // Return data directly from Apollo cache
+  const reviews = data?.getReviewsByProductSlug || [];
 
   return {
-    data: allReviews,
+    data: reviews,
     stats: statsData?.getReviewStats,
-    loading: loading && optimisticAdds.length === 0,
+    loading,
     statsLoading,
     addReview,
     updateReview,

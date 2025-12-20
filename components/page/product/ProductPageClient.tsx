@@ -114,9 +114,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     () =>
       product?.reviews?.length
         ? product.reviews.reduce(
-            (sum: number, r: any) => sum + (r.rating || 0),
-            0
-          ) / product.reviews.length
+          (sum: number, r: any) => sum + (r.rating || 0),
+          0
+        ) / product.reviews.length
         : 0,
     [product?.reviews]
   );
@@ -156,8 +156,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     () =>
       product?.brand?.name ||
       (product?.seller
-        ? `${product.seller.firstName || ""} ${
-            product.seller.lastName || ""
+        ? `${product.seller.firstName || ""} ${product.seller.lastName || ""
           }`.trim()
         : "Unknown Seller"),
     [product?.brand?.name, product?.seller]
@@ -167,11 +166,11 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     () =>
       Array.isArray(product?.images)
         ? [...product.images].sort(
-            (a: any, b: any) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)
-          )
+          (a: any, b: any) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)
+        )
         : product?.images
-        ? [product.images]
-        : [],
+          ? [product.images]
+          : [],
     [product?.images]
   );
 
@@ -224,6 +223,13 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
               selectedAttributes={selectedAttributes}
               onAttributeSelect={handleAttributeSelect}
             />
+            <div className="space-y-4">
+              <ProductReviews isOwnProduct={isOwnProduct} />
+              <FAQSection
+                productId={product.id || ""}
+                isOwnProduct={isOwnProduct}
+              />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
               <DeliveryInfo
                 warranty={product.warranty || ""}
@@ -239,13 +245,6 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           </div>
         </div>
 
-        <div className="mt-12 border-t pt-8">
-          <ProductReviews />
-          <FAQSection
-            productId={product.id || ""}
-            isOwnProduct={isOwnProduct}
-          />
-        </div>
 
         <RecommendedProducts
           currentProductId={product.id || ""}
