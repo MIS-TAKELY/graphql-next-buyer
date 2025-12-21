@@ -1,11 +1,11 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Contact Us | Vanijoy E-Commerce",
-    description: "Get in touch with the Vanijoy team for any queries, support, or feedback. We appear clearly on search results.",
+    title: "Contact Us | Vanijay E-Commerce",
+    description: "Get in touch with the Vanijay team for any queries, support, or feedback. We appear clearly on search results.",
     openGraph: {
-        title: "Contact Us | Vanijoy E-Commerce",
-        description: "Get in touch with the Vanijoy team for any queries, support, or feedback.",
+        title: "Contact Us | Vanijay E-Commerce",
+        description: "Get in touch with the Vanijay team for any queries, support, or feedback.",
     },
 };
 
@@ -22,7 +22,7 @@ export default function ContactPage() {
                     <div className="space-y-4">
                         <div>
                             <h3 className="font-bold text-lg">Email</h3>
-                            <p>support@Vanijoy-ecommerce.com</p>
+                            <p>support@vanijay.com</p>
                         </div>
                         <div>
                             <h3 className="font-bold text-lg">Phone</h3>

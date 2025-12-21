@@ -21,8 +21,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Vanijoy - E-Commerce Platform",
-    template: "%s | Vanijoy",
+    default: "Vanijay - E-Commerce Platform",
+    template: "%s | Vanijay",
   },
   description: "Modern e-commerce platform for seamless online shopping. Discover the best deals on electronics, fashion, and more.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://www.vanijay.com"),
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "/",
-    title: "Vanijoy - E-Commerce Platform",
+    title: "Vanijay - E-Commerce Platform",
     description: "Modern e-commerce platform for seamless online shopping. Discover the best deals on electronics, fashion, and more.",
-    siteName: "Vanijoy",
+    siteName: "Vanijay",
     images: [
       {
         url: "/og-image.jpg", // Ensure this exists or fallback
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vanijoy - E-Commerce Platform",
+    title: "Vanijay - E-Commerce Platform",
     description: "Modern e-commerce platform for seamless online shopping.",
     images: ["/og-image.jpg"],
   },
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Vanijoy",
+    title: "Vanijay",
   },
 };
 

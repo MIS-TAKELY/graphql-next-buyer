@@ -161,9 +161,8 @@ export default async function ProductPage({
     },
     offers: {
       "@type": "Offer",
-      url: `${
-        process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"
-      }/shop/product/${slug}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"
+        }/shop/product/${slug}`,
       priceCurrency: "NPR",
       price: currentPrice,
       itemCondition: "https://schema.org/NewCondition",
@@ -183,23 +182,21 @@ export default async function ProductPage({
         position: 1,
         name: "Home",
         item:
-          process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com",
+          process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: product.category?.name || "Shop",
-        item: `${
-          process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"
-        }/shop`,
+        item: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"
+          }/shop`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: product.name,
-        item: `${
-          process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"
-        }/shop/product/${slug}`,
+        item: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"
+          }/shop/product/${slug}`,
       },
     ],
   };

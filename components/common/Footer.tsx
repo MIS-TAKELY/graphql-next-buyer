@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
           {/* Brand Column */}
           <div className="space-y-4">
-            <h3 className="font-bold text-lg text-foreground">DAI Buyer</h3>
+            <h3 className="font-bold text-lg text-foreground">Vanijay</h3>
             <p className="text-sm max-w-xs leading-relaxed">
               Experience the best in e-commerce with our premium selection of products. Quality, trust, and speed delivered to your doorstep.
             </p>
@@ -53,7 +53,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
-          <p>&copy; {new Date().getFullYear()} DAI Buyer. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Vanijay. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <span className="hover:text-primary cursor-pointer">Sitemap</span>
             <span className="hover:text-primary cursor-pointer">Security</span>
