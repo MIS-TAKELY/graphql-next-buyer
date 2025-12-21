@@ -1,5 +1,5 @@
-import { AddressType } from "@/app/generated/prisma";
-import { prisma } from "@/lib/db/prisma";
+import { AddressType } from "../../../../app/generated/prisma";
+import { prisma } from "../../../../lib/db/prisma";
 import { requireAuth } from "../../auth/auth";
 import { GraphQLContext } from "../../context";
 

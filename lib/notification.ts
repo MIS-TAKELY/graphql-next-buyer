@@ -1,5 +1,5 @@
 // lib/notifications.ts
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "../lib/db/prisma";
 import { realtime } from "@/lib/realtime";
 
 type NotificationType = "NEW_MESSAGE" | "NEW_ORDER" | "ORDER_STATUS" | "SYSTEM";

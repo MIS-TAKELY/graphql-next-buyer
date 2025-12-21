@@ -1,5 +1,5 @@
-import { Prisma } from "@/app/generated/prisma";
-import { prisma } from "@/lib/db/prisma";
+import { Prisma } from "../../../../app/generated/prisma";
+import { prisma } from "../../../../lib/db/prisma";
 import { generateEmbedding } from "@/lib/embemdind";
 
 export const searchResolvers = {

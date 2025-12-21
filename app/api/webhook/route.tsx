@@ -1,5 +1,5 @@
 // app/api/webhook/clerk/route.ts
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "../../../lib/db/prisma";
 import type { WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";

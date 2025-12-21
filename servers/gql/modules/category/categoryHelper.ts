@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "../../../../lib/db/prisma";
 import { getCache, setCache } from "@/services/redis.services";
 import { cache } from "react";
 

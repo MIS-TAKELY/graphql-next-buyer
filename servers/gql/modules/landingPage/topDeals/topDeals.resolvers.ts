@@ -1,6 +1,6 @@
-import { Prisma } from "@/app/generated/prisma";
+import { Prisma } from "../../../../../app/generated/prisma";
 import { detectCategory } from "@/filter/detectCategory";
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "../../../../../lib/db/prisma";
 import { generateEmbedding } from "@/lib/embemdind";
 import { GraphQLContext } from "@/servers/gql/context";
 import { getCache, setCache } from "@/services/redis.services";

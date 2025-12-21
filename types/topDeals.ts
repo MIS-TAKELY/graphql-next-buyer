@@ -1,4 +1,4 @@
-import { Prisma, ProductVariant } from "@/app/generated/prisma";
+import { Prisma, ProductVariant } from "../app/generated/prisma";
 
 export interface CategoryWithId {
   id: string;

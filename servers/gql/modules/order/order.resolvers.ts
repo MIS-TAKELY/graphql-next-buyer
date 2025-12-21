@@ -1,5 +1,5 @@
-import { Prisma } from "@/app/generated/prisma";
-import { prisma } from "@/lib/db/prisma";
+import { Prisma } from "../../../../app/generated/prisma";
+import { prisma } from "../../../../lib/db/prisma";
 import { generateOrderNumber } from "@/randomOrderNumber";
 import { senMail } from "@/services/nodeMailer.services";
 import { rateLimit } from "@/services/rateLimit.service";

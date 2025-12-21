@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "../../../../lib/db/prisma";
 import { setCache } from "@/services/redis.services";
 import { requireBuyer } from "../../auth/auth";
 import { GraphQLContext } from "../../context";

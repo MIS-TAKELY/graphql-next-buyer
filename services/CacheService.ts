@@ -40,8 +40,16 @@ export class CacheService {
     static async set(key: string, value: any, ttlSeconds: number = DEFAULT_TTL): Promise<void> {
         try {
             await redis.set(key, value, { ex: ttlSeconds });
-        } catch (error) {
-            console.error(`[CacheService] Error setting key ${key}:`, error);
+        } catch (error: any) {
+            if (process.env.NODE_ENV === "production") {
+                const isDynamicError = error?.message?.includes("Dynamic server usage") ||
+                    error?.digest === 'DYNAMIC_SERVER_USAGE';
+                if (!isDynamicError) {
+                    console.error(`[CacheService] Error setting key ${key}:`, error);
+                }
+            } else {
+                console.error(`[CacheService] Error setting key ${key}:`, error);
+            }
         }
     }
 
@@ -52,8 +60,16 @@ export class CacheService {
     static async del(key: string): Promise<void> {
         try {
             await redis.del(key);
-        } catch (error) {
-            console.error(`[CacheService] Error deleting key ${key}:`, error);
+        } catch (error: any) {
+            if (process.env.NODE_ENV === "production") {
+                const isDynamicError = error?.message?.includes("Dynamic server usage") ||
+                    error?.digest === 'DYNAMIC_SERVER_USAGE';
+                if (!isDynamicError) {
+                    console.error(`[CacheService] Error deleting key ${key}:`, error);
+                }
+            } else {
+                console.error(`[CacheService] Error deleting key ${key}:`, error);
+            }
         }
     }
 

@@ -1,5 +1,5 @@
-import { Gender } from "@/app/generated/prisma";
-import { prisma } from "@/lib/db/prisma";
+import { Gender } from "../../../../app/generated/prisma";
+import { prisma } from "../../../../lib/db/prisma";
 import { requireAuth } from "../../auth/auth";
 import { GraphQLContext } from "../../context";
 

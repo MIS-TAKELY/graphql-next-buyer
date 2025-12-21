@@ -1,5 +1,5 @@
-import { Category, Prisma } from "@/app/generated/prisma";
-import { prisma } from "@/lib/db/prisma";
+import { Category, Prisma } from "../../../../../app/generated/prisma";
+import { prisma } from "../../../../../lib/db/prisma";
 import { CategoryWithId } from "@/types/topDeals";
 
 // Helper function to get top-level parent category

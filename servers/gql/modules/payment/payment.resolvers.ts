@@ -1,4 +1,4 @@
-import { PrismaClient } from "@/app/generated/prisma";
+import { prisma } from "../../../../lib/db/prisma";
 import {
   generateTransactionUuid,
   prepareEsewaPaymentData,
@@ -6,7 +6,6 @@ import {
 } from "@/servers/gql/modules/payment/paymentHelper";
 import { GraphQLContext } from "../../context";
 
-const prisma = new PrismaClient();
 
 export const paymentResolvers = {
   Mutation: {
@@ -58,7 +57,7 @@ export const paymentResolvers = {
 
         // Create new payment record
         const transactionId = generateTransactionUuid();
-         await prisma.payment.create({
+        await prisma.payment.create({
           data: {
             orderId: order.id,
             amount: order.total,

@@ -1,6 +1,6 @@
 // lib/context.ts (or wherever you create context)
 import redisConfig from "@/config/redis";
-import { prisma } from "@/lib/db/prisma";
+import { prisma } from "../../lib/db/prisma";
 import { getAuth, clerkClient } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
 

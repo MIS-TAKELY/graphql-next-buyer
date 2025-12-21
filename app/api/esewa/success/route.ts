@@ -1,8 +1,6 @@
-import { PrismaClient } from "@/app/generated/prisma";
-import { verifyEsewaSignature } from "@/servers/gql/modules/payment/paymentHelper";
+import { prisma } from "../../../../lib/db/prisma";
+import { verifyEsewaSignature } from "../../../../servers/gql/modules/payment/paymentHelper";
 import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
   try {
