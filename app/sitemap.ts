@@ -1,5 +1,5 @@
 import { GET_PRODUCTS } from "@/client/product/product.queries";
-import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
+import { getPublicServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { IProducts } from "@/types/product";
 import { MetadataRoute } from "next";
 
@@ -9,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     let products: IProducts[] = [];
 
     try {
-        const client = await getServerApolloClient();
+        const client = await getPublicServerApolloClient();
         const { data } = await client.query({
             query: GET_PRODUCTS,
             fetchPolicy: "no-cache",
