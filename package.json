@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:server": "tsx watch index.ts",
-    "build": "prisma generate && NEXT_DISABLE_ESLINT=1 next build --webpack",
+    "build": "prisma generate && NEXT_DISABLE_ESLINT=1 next build",
     "postinstall": "prisma generate",
     "start": "next start",
     "lint": "eslint"

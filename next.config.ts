@@ -18,7 +18,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  transpilePackages: ["@clerk/nextjs"],
   typescript: {
     ignoreBuildErrors: true,
   },
