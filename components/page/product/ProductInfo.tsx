@@ -32,6 +32,7 @@ const ProductInfo = memo(function ProductInfo({
 
   const [showAllHighlights, setShowAllHighlights] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
+  const highlightsRef = useRef<HTMLElement>(null);
   const [teaserHeight, setTeaserHeight] = useState(0);
 
   const reviewCount = product.reviews?.length || 0;
@@ -63,6 +64,17 @@ const ProductInfo = memo(function ProductInfo({
     if (imgRef.current && !showAllHighlights && promotionalImages.length > 0) {
       setTeaserHeight(Math.round(imgRef.current.naturalHeight * 0.9));
     }
+  };
+
+  const scrollToHighlights = () => {
+    setShowAllHighlights(false);
+    // Use a small timeout to allow the DOM to update before scrolling
+    setTimeout(() => {
+      if (highlightsRef.current) {
+        const topOffset = highlightsRef.current.getBoundingClientRect().top + window.pageYOffset - 100;
+        window.scrollTo({ top: topOffset, behavior: "smooth" });
+      }
+    }, 10);
   };
 
   return (
@@ -189,7 +201,7 @@ const ProductInfo = memo(function ProductInfo({
 
       {/* 🌟 Seamless Product Highlights (Continuous Stack) */}
       {promotionalImages && promotionalImages.length > 0 && (
-        <section className="mt-12 pt-6 border-t border-border">
+        <section ref={highlightsRef} className="mt-12 pt-6 border-t border-border">
           <h2 className="text-xl font-semibold text-foreground mb-6">
             Product Highlights
           </h2>
@@ -245,7 +257,7 @@ const ProductInfo = memo(function ProductInfo({
               {/* Show Less button */}
               <div className="flex justify-center pt-4">
                 <button
-                  onClick={() => setShowAllHighlights(false)}
+                  onClick={scrollToHighlights}
                   className="text-muted-foreground hover:text-foreground text-sm font-medium underline transition-colors"
                 >
                   Show less

@@ -16,11 +16,14 @@ export async function getServerApolloClient() {
     }
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
+
+  const uri = `${baseUrl}/api/graphql`;
 
   const httpLink = createHttpLink({
-    uri: `${baseUrl}/api/graphql`,
+    uri,
   });
 
   const authLink = setContext((_, { headers }) => ({

@@ -119,9 +119,37 @@ export default async function ProductPage({
 
       product = data?.getProductBySlug;
       console.log("product frmo db-->", product);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Caught exception during GraphQL query:", err);
-      return <div>Exception: {String(err)}</div>;
+      // Log more details if it's a network error
+      if (err.networkError) {
+        console.error("Network error details:", err.networkError);
+      }
+      return (
+        <div className="flex flex-col items-center justify-center min-h-[50vh] p-8 text-center">
+          <div className="p-6 bg-red-50 dark:bg-red-950/20 rounded-xl border border-red-100 dark:border-red-900/30 max-w-2xl w-full">
+            <h2 className="text-xl font-bold text-red-600 dark:text-red-400">
+              {err.name === "ApolloError" ? "Fetch Failed" : "Something went wrong"}
+            </h2>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">
+              We encountered an issue while loading this product. This is often a temporary network issue.
+            </p>
+            {process.env.NODE_ENV !== "production" && (
+              <pre className="mt-4 p-4 bg-white dark:bg-black/40 rounded border border-red-100 dark:border-red-900/30 overflow-auto text-left text-xs text-red-500 font-mono">
+                {err.message}
+                {"\n\n"}
+                {JSON.stringify(err, null, 2)}
+              </pre>
+            )}
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-6 px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      );
     }
 
     if (product) {
