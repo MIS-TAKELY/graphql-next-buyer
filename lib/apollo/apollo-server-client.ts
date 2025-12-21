@@ -39,20 +39,3 @@ export async function getServerApolloClient() {
     defaultOptions: APOLLO_DEFAULT_OPTIONS,
   });
 }
-export async function getPublicServerApolloClient() {
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
-
-  const uri = `${baseUrl}/api/graphql`;
-
-  const httpLink = createHttpLink({
-    uri,
-  });
-
-  return new ApolloClient({
-    link: httpLink,
-    cache: APOLLO_CONFIG.cache,
-    defaultOptions: APOLLO_DEFAULT_OPTIONS,
-  });
-}

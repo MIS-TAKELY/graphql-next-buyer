@@ -1,20 +1,20 @@
-import { GET_PRODUCTS } from "@/client/product/product.queries";
-import { getPublicServerApolloClient } from "@/lib/apollo/apollo-server-client";
-import { IProducts } from "@/types/product";
+import { prisma } from "@/lib/db/prisma";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://dai-ecommerce.com";
 
-    let products: IProducts[] = [];
+    let products: { slug: string }[] = [];
 
     try {
-        const client = await getPublicServerApolloClient();
-        const { data } = await client.query({
-            query: GET_PRODUCTS,
-            fetchPolicy: "no-cache",
+        products = await prisma.product.findMany({
+            where: {
+                status: "ACTIVE",
+            },
+            select: {
+                slug: true,
+            },
         });
-        products = data?.getProducts || [];
     } catch (error) {
         console.error("Error fetching products for sitemap:", error);
     }
