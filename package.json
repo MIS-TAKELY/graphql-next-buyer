@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@apollo/client": "latest",
-    "@clerk/nextjs": "latest",
+    "@clerk/nextjs": "^6.36.5",
     "@next/third-parties": "latest",
     "@prisma/client": "latest",
     "@prisma/extension-accelerate": "latest",
