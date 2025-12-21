@@ -34,9 +34,9 @@ export function SSRApolloProvider({
     // console.log("auth link-->", authLink);
 
     const httpLink = createHttpLink({
-      uri:
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/graphql` ||
-        "http://localhost:3000/api/graphql",
+      uri: typeof window !== "undefined"
+        ? "/api/graphql"
+        : `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/graphql`,
     });
 
     const client = new ApolloClient({

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | Vanijoy",
   },
   description: "Modern e-commerce platform for seamless online shopping. Discover the best deals on electronics, fashion, and more.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://Vanijoy-ecommerce.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://www.vanijay.com"),
   keywords: ["ecommerce", "shopping", "electronics", "fashion", "online store"],
   openGraph: {
     type: "website",

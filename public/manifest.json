@@ -1,6 +1,6 @@
 {
-    "name": "Dai - E-Commerce Platform",
-    "short_name": "Dai",
+    "name": "Vanijay - E-Commerce Platform",
+    "short_name": "Vanijay",
     "description": "Modern e-commerce platform for seamless online shopping",
     "start_url": "/",
     "display": "standalone",
@@ -24,19 +24,5 @@
     "categories": [
         "shopping",
         "business"
-    ],
-    "screenshots": [
-        {
-            "src": "/screenshot-mobile.png",
-            "sizes": "540x720",
-            "type": "image/png",
-            "form_factor": "narrow"
-        },
-        {
-            "src": "/screenshot-desktop.png",
-            "sizes": "1920x1080",
-            "type": "image/png",
-            "form_factor": "wide"
-        }
     ]
 }

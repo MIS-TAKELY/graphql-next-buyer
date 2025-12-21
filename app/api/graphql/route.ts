@@ -16,9 +16,10 @@ const yoga = createYoga<{
     origin:
       process.env.NODE_ENV === "production"
         ? [
-          "https://graphql-next-buyer-hmu9c58z1-mailitttome-4974s-projects.vercel.app", // frontend
-          "https://graphql-next-buyer.vercel.app", // API itself (optional, in case of same-origin requests)
-          "https://vanijay.com/", // API itself (optional, in case of same-origin requests)
+          "https://vanijay.com",
+          "https://www.vanijay.com",
+          "https://graphql-next-buyer.vercel.app",
+          "https://graphql-next-buyer-hmu9c58z1-mailitttome-4974s-projects.vercel.app",
         ]
         : ["http://localhost:3000", "http://localhost:3001"],
     credentials: true,
