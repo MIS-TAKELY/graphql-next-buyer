@@ -14,47 +14,35 @@ import {
   Shield,
   User,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 // Reusable SidebarNav component
-// Props: user, activeTab, setActiveTab
+// Props: user
 // This can be reused in other dashboard-like pages
 interface SidebarNavProps {
   user: { firstName?: string; lastName?: string; email?: string };
-  activeTab: string;
-  setActiveTab?: (tab: string) => void;
 }
 
 export default function SidebarNav({
   user,
-  activeTab,
-  setActiveTab,
 }: SidebarNavProps) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const sidebarItems = [
-    { id: "profile", label: "Profile", icon: User },
-    { id: "addresses", label: "Addresses", icon: MapPin },
-    { id: "orders", label: "My Orders", icon: Package },
-    { id: "wishlist", label: "Wishlist", icon: Heart },
-    { id: "chat", label: "Messages", icon: MessageCircle }, // Added Chat
-    { id: "payment", label: "Payment Methods", icon: CreditCard },
-    { id: "notifications", label: "Notifications", icon: Bell },
-    { id: "security", label: "Security", icon: Shield },
-    { id: "settings", label: "Settings", icon: Settings },
+    { id: "profile", label: "Profile", icon: User, href: "/account/profile" },
+    { id: "addresses", label: "Addresses", icon: MapPin, href: "/account/addresses" },
+    { id: "orders", label: "My Orders", icon: Package, href: "/account/orders" },
+    { id: "wishlist", label: "Wishlist", icon: Heart, href: "/account/wishlist" },
+    { id: "chat", label: "Messages", icon: MessageCircle, href: "/account/chat" }, // Added Chat
+    { id: "payment", label: "Payment Methods", icon: CreditCard, href: "/account/payment" },
+    { id: "notifications", label: "Notifications", icon: Bell, href: "/account/notifications" },
+    { id: "security", label: "Security", icon: Shield, href: "/account/security" },
+    { id: "settings", label: "Settings", icon: Settings, href: "/account/settings" },
   ];
 
   const handleNavigation = (item: any) => {
-    if (item.href) {
-      router.push(item.href);
-    } else {
-      // Update URL with query param for tab syncing
-      router.push(`/account?v=${item.id}`);
-
-      if (setActiveTab) {
-        setActiveTab(item.id);
-      }
-    }
+    router.push(item.href);
   };
 
   return (
@@ -79,7 +67,7 @@ export default function SidebarNav({
           <nav className="flex lg:flex-col overflow-x-auto lg:overflow-visible space-x-2 lg:space-x-0 lg:space-y-1 pb-2 lg:pb-0 scrollbar-hide">
             {sidebarItems.map((item) => {
               const Icon = item.icon;
-              const isActive = activeTab === item.id;
+              const isActive = pathname === item.href;
 
               return (
                 <button

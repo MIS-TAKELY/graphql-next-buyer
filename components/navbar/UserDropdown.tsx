@@ -25,7 +25,7 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
         </div>
 
         {/* My Account */}
-        <Link href="/account?v=profile" className="block" onClick={onItemClick}>
+        <Link href="/account/profile" className="block" onClick={onItemClick}>
           <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
@@ -38,7 +38,7 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
         </Link>
 
         {/* Orders */}
-        <Link href="/account?v=orders" className="block" onClick={onItemClick}>
+        <Link href="/account/orders" className="block" onClick={onItemClick}>
           <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
@@ -81,10 +81,10 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-popover border-border">
         <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent">
-          <Link href="/account">My Account</Link>
+          <Link href="/account/profile">My Account</Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent">
-          <Link href="/account">Orders</Link>
+          <Link href="/account/orders">Orders</Link>
         </DropdownMenuItem>
         <SignOutButton>
           <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent">
