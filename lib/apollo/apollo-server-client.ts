@@ -5,22 +5,21 @@ import { auth } from "@clerk/nextjs/server";
 import { APOLLO_CONFIG, APOLLO_DEFAULT_OPTIONS } from "./config";
 
 export async function getServerApolloClient() {
-  const { getToken } = await auth();
   let token: string | null = null;
 
   try {
-    token = await getToken();
+    const authData = await auth();
+    token = await authData.getToken();
   } catch (err) {
-    if (process.env.NODE_ENV !== "production") {
-      console.error("Server token fetch error:", err);
-    }
+    console.error("[Apollo Server] Auth error:", err);
   }
 
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
-
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")).replace(/\/$/, "");
   const uri = `${baseUrl}/api/graphql`;
+
+  if (process.env.NODE_ENV === "production") {
+    console.log(`[Apollo Server] Constructing URI: ${uri}`);
+  }
 
   const httpLink = createHttpLink({
     uri,

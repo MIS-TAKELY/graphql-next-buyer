@@ -33,9 +33,7 @@ export function SSRApolloProvider({
 
     // console.log("auth link-->", authLink);
 
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
+    const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")).replace(/\/$/, "");
 
     const httpLink = createHttpLink({
       uri: typeof window !== "undefined"

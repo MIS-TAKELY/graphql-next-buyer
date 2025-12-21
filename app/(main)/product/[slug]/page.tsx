@@ -19,8 +19,8 @@ async function getProduct(slug: string) {
 
   if (product) return product;
 
-  const client = await getServerApolloClient();
   try {
+    const client = await getServerApolloClient();
     const { data } = await client.query({
       query: GET_PRODUCT_BY_SLUG,
       variables: { slug },
@@ -86,111 +86,105 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const client = await getServerApolloClient();
-
   let product: TProduct | null = null;
   const CACHE_KEY = CacheService.getProductDetailKey(slug);
 
-  product = await CacheService.get<TProduct>(CACHE_KEY);
+  try {
+    // 1. Try Cache First
+    product = await CacheService.get<TProduct>(CACHE_KEY);
 
-  console.log("product frmo sache-->", product);
-
-  if (!product) {
-    console.log("calling bds");
-    try {
+    // 2. If not in Cache, fetch from DB
+    if (!product) {
+      const client = await getServerApolloClient();
       const { data, error, errors } = await client.query({
         query: GET_PRODUCT_BY_SLUG,
         variables: { slug },
-        fetchPolicy: "no-cache", // fetch fresh if no redis cache
+        fetchPolicy: "no-cache",
       });
 
-      console.log("GraphQL Response:", { data, error, errors });
-
-      if (error) {
-        console.log("error-->", error);
-        console.error("Error fetching product by slug:", error);
-        return <div>Error: {error.message}</div>;
-      }
-
-      if (errors && errors.length > 0) {
-        console.error("GraphQL errors:", errors);
-        return <div>GraphQL Error: {errors[0].message}</div>;
+      if (error || (errors && errors.length > 0)) {
+        const errorMsg = error?.message || errors?.[0]?.message || "GraphQL Error";
+        console.error("GraphQL error:", errorMsg);
+        // We return a small error UI here instead of crashing
+        return <div className="p-8 text-center text-red-500">Error: {errorMsg}</div>;
       }
 
       product = data?.getProductBySlug;
-      console.log("product frmo db-->", product);
-    } catch (err: any) {
-      console.error("Caught exception during GraphQL query:", err);
-      // Log more details if it's a network error
-      if (err.networkError) {
-        console.error("Network error details:", err.networkError);
-      }
-      return (
-        <div className="flex flex-col items-center justify-center min-h-[50vh] p-8 text-center">
-          <div className="p-6 bg-red-50 dark:bg-red-950/20 rounded-xl border border-red-100 dark:border-red-900/30 max-w-2xl w-full">
-            <h2 className="text-xl font-bold text-red-600 dark:text-red-400">
-              {err.name === "ApolloError" ? "Fetch Failed" : "Something went wrong"}
-            </h2>
-            <p className="mt-3 text-gray-600 dark:text-gray-400">
-              We encountered an issue while loading this product. This is often a temporary network issue.
-            </p>
-            {process.env.NODE_ENV !== "production" && (
-              <pre className="mt-4 p-4 bg-white dark:bg-black/40 rounded border border-red-100 dark:border-red-900/30 overflow-auto text-left text-xs text-red-500 font-mono">
-                {err.message}
-                {"\n\n"}
-                {JSON.stringify(err, null, 2)}
-              </pre>
-            )}
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-6 px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
-            >
-              Try Again
-            </button>
-          </div>
-        </div>
-      );
-    }
 
-    if (product) {
-      await CacheService.set(CACHE_KEY, product, 3600);
+      if (product) {
+        await CacheService.set(CACHE_KEY, product, 3600);
+      }
     }
+  } catch (err: any) {
+    console.error("Caught exception during ProductPage data fetching:", err);
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] p-8 text-center">
+        <div className="p-6 bg-red-50 dark:bg-red-950/20 rounded-xl border border-red-100 dark:border-red-900/30 max-w-2xl w-full">
+          <h2 className="text-xl font-bold text-red-600 dark:text-red-400">
+            {err.name === "ApolloError" ? "Fetch Failed" : "Something went wrong"}
+          </h2>
+          <p className="mt-3 text-gray-600 dark:text-gray-400">
+            We encountered an issue while loading this product. This may be a temporary network issue.
+          </p>
+          {process.env.NODE_ENV !== "production" && (
+            <pre className="mt-4 p-4 bg-white dark:bg-black/40 rounded border border-red-100 dark:border-red-900/30 overflow-auto text-left text-xs text-red-500 font-mono">
+              {err.message}
+            </pre>
+          )}
+          <a
+            href={`/product/${slug}`}
+            className="mt-6 inline-block px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
+          >
+            Try Again
+          </a>
+        </div>
+      </div>
+    );
   }
 
   // Handle case where product is still null (from DB and no error)
   if (!product) {
-    return <div>Product not found</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] p-8 text-center">
+        <h2 className="text-2xl font-bold">Product not found</h2>
+        <p className="text-gray-500 mt-2">The product you're looking for doesn't exist or is unavailable.</p>
+        <a href="/" className="mt-6 text-primary hover:underline">Return Home</a>
+      </div>
+    );
   }
 
+  // Force serialize product to ensure it's a plain object for Client Components
+  // This prevents crashes in production due to non-serializable fields like Dates or Decimals
+  const serializableProduct = JSON.parse(JSON.stringify(product));
+
   const initialCacheData = {
-    currentProduct: product,
+    currentProduct: serializableProduct,
   };
 
-  const currentPrice = product.variants?.[0]?.price
-    ? Number(product.variants[0].price)
+  const currentPrice = serializableProduct.variants?.[0]?.price
+    ? Number(serializableProduct.variants[0].price)
     : 0;
   // Ensure stock is treated as a number
-  const stockValue = product.variants?.[0]?.stock;
+  const stockValue = serializableProduct.variants?.[0]?.stock;
   const stock = stockValue ? Number(stockValue) : 0;
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: product.name,
-    image: product.images?.map((img) => img.url) || [],
-    description: product.description,
-    sku: product.variants?.[0]?.sku || "",
+    name: serializableProduct.name,
+    image: serializableProduct.images?.map((img: any) => img.url) || [],
+    description: serializableProduct.description,
+    sku: serializableProduct.variants?.[0]?.sku || "",
     brand: {
       "@type": "Brand",
       name:
-        typeof product.brand === "string"
-          ? product.brand
-          : product.brand?.name || "Generic",
+        typeof serializableProduct.brand === "string"
+          ? serializableProduct.brand
+          : serializableProduct.brand?.name || "Generic",
     },
     offers: {
       "@type": "Offer",
-      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"
-        }/shop/product/${slug}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/product/${slug}`,
       priceCurrency: "NPR",
       price: currentPrice,
       itemCondition: "https://schema.org/NewCondition",
@@ -209,22 +203,19 @@ export default async function ProductPage({
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item:
-          process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com",
+        item: process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com",
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: product.category?.name || "Shop",
-        item: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"
-          }/shop`,
+        name: serializableProduct.category?.name || "Shop",
+        item: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/shop`,
       },
       {
         "@type": "ListItem",
         position: 3,
-        name: product.name,
-        item: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"
-          }/shop/product/${slug}`,
+        name: serializableProduct.name,
+        item: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/product/${slug}`,
       },
     ],
   };
@@ -239,7 +230,7 @@ export default async function ProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
-      <ProductPageClient product={product} />
+      <ProductPageClient product={serializableProduct} />
     </SSRApolloProvider>
   );
 }
