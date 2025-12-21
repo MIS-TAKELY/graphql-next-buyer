@@ -34,6 +34,7 @@ const ProductInfo = memo(function ProductInfo({
   const imgRef = useRef<HTMLImageElement>(null);
   const highlightsRef = useRef<HTMLElement>(null);
   const [teaserHeight, setTeaserHeight] = useState(0);
+  const [isDescExpanded, setIsDescExpanded] = useState(false);
 
   const reviewCount = product.reviews?.length || 0;
 
@@ -108,9 +109,17 @@ const ProductInfo = memo(function ProductInfo({
 
         {product.description && (
           <div className="mt-4">
-            <p className="text-muted-foreground text-base leading-relaxed line-clamp-3 hover:line-clamp-none transition-all duration-300">
+            <p className={`text-muted-foreground text-base leading-relaxed ${!isDescExpanded ? 'line-clamp-3' : ''} transition-all duration-300`}>
               {product.description}
             </p>
+            {product.description.length > 150 && (
+              <button
+                onClick={() => setIsDescExpanded(!isDescExpanded)}
+                className="text-primary text-sm font-semibold mt-1 hover:underline focus:outline-none"
+              >
+                {isDescExpanded ? 'See less' : 'See more'}
+              </button>
+            )}
           </div>
         )}
 
