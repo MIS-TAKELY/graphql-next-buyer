@@ -8,7 +8,7 @@ import { APOLLO_CONFIG, APOLLO_DEFAULT_OPTIONS } from "./config";
 const httpLink = createHttpLink({
   uri: typeof window !== "undefined"
     ? "/api/graphql"
-    : `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/api/graphql`,
+    : `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/graphql`,
 });
 
 export function useApolloClientWrapper() {

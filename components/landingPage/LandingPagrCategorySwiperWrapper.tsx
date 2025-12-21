@@ -37,7 +37,7 @@ const LandingPagrCategorySwiperWrapper = async ({ title, category }: Props) => {
 
   return (
     <LandingPagrCategorySwiper
-      data={data || { getTopDealSaveUpTo: [] }}
+      data={JSON.parse(JSON.stringify(data || { getTopDealSaveUpTo: [] }))}
       title={title}
     />
   );

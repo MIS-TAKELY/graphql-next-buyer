@@ -15,8 +15,18 @@ export class CacheService {
             // Redis clients might return the object directly if it's JSON, 
             // but Upstash Redis REST client usually handles JSON parsing automatically.
             return data as T;
-        } catch (error) {
-            console.error(`[CacheService] Error getting key ${key}:`, error);
+        } catch (error: any) {
+            // In Next.js 15, certain fetch calls (like those used by Upstash Redis REST)
+            // can trigger "Dynamic server usage" errors during static generation.
+            if (process.env.NODE_ENV === "production") {
+                const isDynamicError = error?.message?.includes("Dynamic server usage") ||
+                    error?.digest === 'DYNAMIC_SERVER_USAGE';
+                if (!isDynamicError) {
+                    console.error(`[CacheService] Error getting key ${key}:`, error);
+                }
+            } else {
+                console.error(`[CacheService] Error getting key ${key}:`, error);
+            }
             return null;
         }
     }

@@ -49,8 +49,8 @@ export const LandingPageProductGridWrapper = async ({
   return (
     <LandingPageProductGrid
       title={title}
-      data={data}
-      error={error}
+      data={JSON.parse(JSON.stringify(data || null))}
+      error={JSON.parse(JSON.stringify(error || null))}
       // Force horizontal layout for the last item when it's alone in a row on md screens
       forceHorizontal={isLast}
     />

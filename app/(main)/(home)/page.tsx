@@ -61,7 +61,9 @@ export default async function HomePage() {
     }
   }
 
-  const sharedSlice = products.slice(0, 8);
+  // Ensure products is a plain serializable array of objects
+  const serializableProducts = JSON.parse(JSON.stringify(products));
+  const sharedSlice = serializableProducts.slice(0, 8);
 
   console.log("HomePage Debug: Products fetched:", products.length);
 
@@ -111,7 +113,7 @@ export default async function HomePage() {
       <ProductCatagoryCardSection />
       <HeroCarousel />
       <Main />
-      <SSRApolloProvider initialData={{ products }}>
+      <SSRApolloProvider initialData={{ products: serializableProducts }}>
         <div className="py-4 sm:py-6 md:py-8 lg:py-10">
           {sections.map((section) => (
             <ProductSection

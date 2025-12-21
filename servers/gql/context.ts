@@ -24,10 +24,19 @@ export interface GraphQLContext {
 }
 
 export async function createContext(
-  request: NextRequest
+  request?: NextRequest
 ): Promise<GraphQLContext> {
   try {
-    const { userId: clerkId } = await getAuth(request);
+    let clerkId: string | null = null;
+
+    if (request) {
+      try {
+        const authData = await getAuth(request);
+        clerkId = authData.userId;
+      } catch (authErr) {
+        // Silent auth failure during build or for guest users
+      }
+    }
 
     // console.log("clerk id--->", clerkId);
 
