@@ -7,12 +7,11 @@ interface SellerButtonProps {
 }
 
 const SellerButton = ({ isMobile = false, onItemClick }: SellerButtonProps) => {
-  const sellerDashboard = process.env.NEXT_PUBLIC_SELLER_URL;
-
-  // If the env var is not set, don't render the button at all (or show fallback)
-  if (!sellerDashboard) {
-    return null; // or return a disabled button, or a placeholder
-  }
+  // Determine the seller dashboard URL with fallback
+  const sellerDashboard = process.env.NEXT_PUBLIC_SELLER_URL ||
+    (process.env.NODE_ENV === "production"
+      ? "https://seller.vanijay.com"
+      : "http://localhost:3001");
 
   return (
     <Button
