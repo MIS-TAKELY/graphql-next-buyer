@@ -14,7 +14,11 @@ export async function getServerApolloClient() {
     console.error("[Apollo Server] Auth error:", err);
   }
 
-  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")).replace(/\/$/, "");
+  const baseUrl = (
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://vanijay.com")
+  ).replace(/\/$/, "");
+
   const uri = `${baseUrl}/api/graphql`;
 
   if (process.env.NODE_ENV === "production") {
