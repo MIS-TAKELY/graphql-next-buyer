@@ -19,6 +19,18 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Phone number is required" }, { status: 400 });
         }
 
+        // Check if phone number is already registered to another user
+        const existingUser = await prisma.user.findUnique({
+            where: { phone },
+            select: { id: true },
+        });
+
+        if (existingUser && existingUser.id !== session.user.id) {
+            return NextResponse.json({
+                error: "This phone number is already registered to another account"
+            }, { status: 400 });
+        }
+
         // Generate a 6-digit OTP
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const expiresAt = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes from now

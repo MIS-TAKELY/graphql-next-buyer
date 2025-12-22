@@ -14,9 +14,19 @@ const PUBLIC_ROUTES = [
     "/sign-in",
     "/sign-up",
     "/verify-phone",
-    // Add other public routes here if needed (e.g. "/", "/product", etc.)
-    // However, the user said "until email is verified no other component should be show"
-    // so we might want to restrict most things.
+    "/", // Landing page
+    "/compare",
+    "/cart",
+    "/search",
+    "/product",
+    "/category",
+    "/store",
+    "/about",
+    "/contact",
+    "/blog",
+    "/account", // Account pages are now public (will show guest user)
+    "/checkout", // Checkout is public
+    "/payment", // Payment status pages
 ];
 
 export default function AuthGate({ children }: AuthGateProps) {

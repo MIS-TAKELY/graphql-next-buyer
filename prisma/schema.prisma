@@ -150,13 +150,13 @@ model User {
     id             String    @id @default(cuid())
     name           String    @default("")
     username       String    @unique @db.VarChar(255)
-    email          String    @db.VarChar(255)
+    email          String    @unique @db.VarChar(255)
     emailVerified  Boolean   @default(false)
     image          String?
     firstName      String?
     lastName       String?
     avatarImageUrl String?
-    phone          String?   @db.VarChar(20)
+    phone          String?   @unique @db.VarChar(20)
     phoneVerified  Boolean   @default(false) // Custom for WhatsApp OTP
     otp            String?   // Custom for WhatsApp OTP
     otpExpiresAt   DateTime? // OTP expiry

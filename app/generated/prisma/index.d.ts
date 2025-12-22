@@ -53348,17 +53348,17 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     username?: string
+    email?: string
+    phone?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringFilter<"User"> | string
-    email?: StringFilter<"User"> | string
     emailVerified?: BoolFilter<"User"> | boolean
     image?: StringNullableFilter<"User"> | string | null
     firstName?: StringNullableFilter<"User"> | string | null
     lastName?: StringNullableFilter<"User"> | string | null
     avatarImageUrl?: StringNullableFilter<"User"> | string | null
-    phone?: StringNullableFilter<"User"> | string | null
     phoneVerified?: BoolFilter<"User"> | boolean
     otp?: StringNullableFilter<"User"> | string | null
     otpExpiresAt?: DateTimeNullableFilter<"User"> | Date | string | null
@@ -53387,7 +53387,7 @@ export namespace Prisma {
     roles?: UserRoleListRelationFilter
     productQuestions?: ProductQuestionListRelationFilter
     productAnswers?: ProductAnswerListRelationFilter
-  }, "id" | "username">
+  }, "id" | "username" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
