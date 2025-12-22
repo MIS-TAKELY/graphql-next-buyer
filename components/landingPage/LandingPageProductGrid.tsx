@@ -68,13 +68,13 @@ const LandingPageProductGrid = ({
           <h2 className="font-semibold text-base sm:text-lg md:text-xl text-card-foreground">
             {title}
           </h2>
-          <button
+          {/* <button
             onClick={(e) => e.preventDefault()}
             className="bg-primary flex justify-center items-center p-1 hover:bg-primary-hover transition-colors"
             aria-label={`View more ${title}`}
           >
             <ChevronRight className="text-primary-foreground" size={20} />
-          </button>
+          </button> */}
         </div>
 
         {/* Desktop View (≥1366px): 2x2 Grid */}
