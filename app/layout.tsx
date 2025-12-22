@@ -81,7 +81,22 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="preconnect" href="https://placehold.co" />
       </head>
-      <ClerkProvider>
+      <ClerkProvider
+        appearance={{
+          variables: {
+            colorPrimary: "#6366f1", // Approximate indigo-500
+            borderRadius: "0.75rem",
+            fontFamily: "var(--font-geist-sans)",
+          },
+          elements: {
+            formButtonPrimary: "bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm transition-all",
+            card: "shadow-xl border border-border/50 bg-card/80 backdrop-blur-sm",
+            footerActionLink: "text-primary hover:text-primary/80 font-medium",
+            identityPreviewEditButtonIcon: "text-primary",
+            formFieldInput: "rounded-md border-border bg-background focus:ring-2 focus:ring-primary/20",
+          },
+        }}
+      >
         <AuthSync />
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}

@@ -170,6 +170,20 @@
     @apply bg-background text-foreground antialiased font-sans selection:bg-primary/20 selection:text-primary overflow-x-hidden;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* Hide Clerk Branding and Development Badge */
+  .cl-internal-b3fm6y,
+  .cl-internal-ph678i,
+  .cl-internal-17fy96a,
+  .cl-internal-dfyv3,
+  .cl-internal-12ocwih,
+  #clerk-development-badge,
+  [href*="clerk.com?utm_source=vercel"],
+  [href*="clerk.com?utm_campaign=branding"],
+  [href*="clerk.com?utm_source=clerk"],
+  .cl-footer>div:last-child {
+    display: none !important;
+  }
 }
 
 /* ---------------- Utilities ---------------- */
