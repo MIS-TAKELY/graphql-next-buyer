@@ -1,7 +1,8 @@
 "use server";
 
 import { prisma } from "../../lib/db/prisma";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { realtime } from "@/lib/realtime";
 
@@ -9,19 +10,17 @@ export async function askQuestion(productId: string, content: string) {
     console.log("[FAQ] Starting askQuestion", { productId, content });
 
     try {
-        const { userId: clerkId } = await auth();
-        console.log("[FAQ] Auth check", { clerkId });
+        const session = await auth.api.getSession({
+            headers: await headers(),
+        });
 
-        if (!clerkId) {
-            console.error("[FAQ] No clerkId found");
+        if (!session) {
+            console.error("[FAQ] Unauthorized: No session found");
             throw new Error("Unauthorized");
         }
 
-        const currentUserData = await currentUser();
-        console.log("[FAQ] Current user data", { currentUserData: currentUserData?.id });
-
         const user = await prisma.user.findUnique({
-            where: { clerkId },
+            where: { id: session.user.id },
             select: { id: true, firstName: true, lastName: true }
         });
         console.log("[FAQ] User from DB", { user });

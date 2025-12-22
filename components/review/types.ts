@@ -43,7 +43,6 @@ export interface ReviewUser {
   firstName?: string; // optional because second query uses "name"
   lastName?: string;
   name?: string;
-  clerkId?: string;
 }
 
 export interface MediaItem {

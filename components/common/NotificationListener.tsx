@@ -1,13 +1,14 @@
 "use client";
 
 import { useRealtime } from "@upstash/realtime/client";
-import { useAuth } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 export function NotificationListener() {
-    const { userId } = useAuth();
+    const { data: session } = useSession();
+    const userId = session?.user?.id;
     const router = useRouter();
 
     // Correctly call the hook at the top level

@@ -9,7 +9,7 @@ import ProductPageSkeleton from "@/components/page/product/ProductPageSkeleton";
 
 import ProductReviews from "@/components/page/product/ProductReviews";
 import { IProductVarient, TProduct } from "@/types/product";
-import { useAuth } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import FAQSection from "./FAQSection";
 import RecommendedProducts from "./RecommendedProducts";
@@ -178,8 +178,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     return <ProductPageSkeleton />;
   }
 
-  const { userId } = useAuth();
-  const isOwnProduct = userId === (product?.seller as any)?.clerkId;
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+  const isOwnProduct = userId === product?.seller?.id;
 
   return (
     <div className="min-h-screen bg-background relative pb-20 lg:pb-0">

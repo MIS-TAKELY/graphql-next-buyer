@@ -1,4 +1,3 @@
-// UserDropdown.tsx
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -6,9 +5,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SignOutButton } from "@clerk/nextjs";
+import { signOut } from "@/lib/auth-client";
 import { User, Package, LogOut, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface UserDropdownProps {
   isMobile?: boolean;
@@ -16,6 +16,20 @@ interface UserDropdownProps {
 }
 
 const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/sign-in");
+          router.refresh();
+        },
+      },
+    });
+    if (onItemClick) onItemClick();
+  };
+
   if (isMobile) {
     return (
       <div className="space-y-0.5">
@@ -51,19 +65,17 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
         </Link>
 
         {/* Logout */}
-        <SignOutButton>
-          <button className="w-full" onClick={onItemClick}>
-            <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-destructive/10 flex items-center justify-center">
-                  <LogOut className="w-4 h-4 text-destructive" />
-                </div>
-                <span className="text-sm font-medium text-foreground">Logout</span>
+        <button className="w-full text-left" onClick={handleSignOut}>
+          <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-destructive/10 flex items-center justify-center">
+                <LogOut className="w-4 h-4 text-destructive" />
               </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+              <span className="text-sm font-medium text-foreground">Logout</span>
             </div>
-          </button>
-        </SignOutButton>
+            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+          </div>
+        </button>
       </div>
     );
   }
@@ -80,17 +92,18 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-popover border-border">
-        <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent">
+        <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent" asChild>
           <Link href="/account/profile">My Account</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent">
+        <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent" asChild>
           <Link href="/account/orders">Orders</Link>
         </DropdownMenuItem>
-        <SignOutButton>
-          <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent">
-            Logout
-          </DropdownMenuItem>
-        </SignOutButton>
+        <DropdownMenuItem
+          className="text-popover-foreground hover:bg-accent focus:bg-accent cursor-pointer"
+          onClick={handleSignOut}
+        >
+          Logout
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

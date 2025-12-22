@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useCart } from "@/hooks/cart/useCart";
 import { formatPrice } from "@/lib/utils";
 import { useWishlist } from "@/hooks/wishlist/useWishlist";
-import { useAuth } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useCompareStore } from "@/store/compareStore";
 import { Badge } from "@/components/ui/badge";
@@ -40,7 +40,8 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   const { isInWishlist, handleAddToWishlist, handleRemoveFromWishlist } = useWishlist();
-  const { userId } = useAuth();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
   const router = useRouter();
 
   const checkIsWishlisted = (id: string) => isInWishlist(id);

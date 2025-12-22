@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useReview } from "@/hooks/review/useReview";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/utlis/dateHelpers";
-import { useAuth } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 import {
   CheckCircle2,
   Edit2,
@@ -39,7 +39,8 @@ import {
 
 export const ReviewCard = ({ review }: { review: Review }) => {
   const { updateReview, removeReview, isUpdating, isDeleting } = useReview();
-  const { userId } = useAuth();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -81,7 +82,7 @@ export const ReviewCard = ({ review }: { review: Review }) => {
     isEditing ? convertToMediaItems(review.media) : []
   );
 
-  const isOwnReview = userId === review.user?.clerkId;
+  const isOwnReview = userId === review.user?.id;
 
   const handleEdit = async () => {
     if (isUploading) return;

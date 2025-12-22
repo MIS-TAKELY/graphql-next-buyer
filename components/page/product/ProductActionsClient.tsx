@@ -4,7 +4,7 @@ import WishlistShareButtons from "@/components/page/product/ProductActions";
 import QuantitySelector from "@/components/page/product/QuantitySelector";
 import { useWishlist } from "@/hooks/wishlist/useWishlist";
 import { TProduct } from "@/types/product";
-import { useAuth } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useRealChat } from "@/hooks/chat/useRealChat";
@@ -27,7 +27,8 @@ export function ProductActionsClient({
 }: ProductActionsClientProps) {
   const { isInWishlist, handleAddToWishlist, handleRemoveFromWishlist } =
     useWishlist();
-  const { userId } = useAuth();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
   const [isChatOpen, setIsChatOpen] = useState(false);

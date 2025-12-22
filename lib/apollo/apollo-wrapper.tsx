@@ -1,9 +1,5 @@
-// lib/apollo/ssr-provider.tsx (Most robust version)
 "use client";
-
 import { ApolloClient, ApolloProvider, createHttpLink } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
-import { useAuth } from "@clerk/nextjs";
 import { useMemo } from "react";
 import { APOLLO_CONFIG, APOLLO_DEFAULT_OPTIONS } from "./config";
 
@@ -21,18 +17,7 @@ export function SSRApolloProvider({
   children,
   initialData,
 }: SSRApolloProviderProps) {
-  const { getToken } = useAuth();
-
   const client = useMemo(() => {
-    const authLink = setContext(async (_, { headers }) => {
-      const token = await getToken();
-      return {
-        headers: { ...headers, authorization: token ? `Bearer ${token}` : "" },
-      };
-    });
-
-    // console.log("auth link-->", authLink);
-
     const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")).replace(/\/$/, "");
 
     const httpLink = createHttpLink({
@@ -42,7 +27,7 @@ export function SSRApolloProvider({
     });
 
     const client = new ApolloClient({
-      link: authLink.concat(httpLink),
+      link: httpLink,
       cache: APOLLO_CONFIG.cache,
       defaultOptions: APOLLO_DEFAULT_OPTIONS,
     });
@@ -99,7 +84,6 @@ export function SSRApolloProvider({
 
     return client;
   }, [
-    getToken,
     initialData?.addresses,
     initialData?.userProfile,
     initialData?.products,

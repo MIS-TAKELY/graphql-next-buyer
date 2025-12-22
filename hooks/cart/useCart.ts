@@ -4,7 +4,7 @@ import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART_QUANTITY } from "@/client/ca
 import { GET_CART_PRODUCT_IDS, GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
 import { useCartStore } from "@/store/cartStore";
 import { useMutation, useQuery } from "@apollo/client";
-import { useAuth } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -30,7 +30,8 @@ export type TGetCartIdResponse = IGetCartIdResponse | null;
 export type TGetCartId = IGetCartId | null;
 
 export const useCart = () => {
-  const { userId } = useAuth();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
   const [loading, setLoading] = useState<boolean>(false);
 
   const { anonymousCart, addInAnonymousCart, removeFromAnonymousCart } =

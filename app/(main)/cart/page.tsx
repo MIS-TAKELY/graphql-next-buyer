@@ -10,7 +10,7 @@ import CartItem from "@/components/cart/CartItem";
 import CartOrderSummary from "@/components/cart/CartOrderSummary";
 import { useCart } from "@/hooks/cart/useCart";
 import { useQuery } from "@apollo/client";
-import { useAuth } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 import { ShoppingBag } from "lucide-react";
 import { useMemo } from "react";
 
@@ -90,7 +90,8 @@ interface CartItemData {
 }
 
 export default function CartPage() {
-  const { userId } = useAuth();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
   const {
     removeFromCart,
     updateQuantity,

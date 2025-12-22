@@ -10,8 +10,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { SignOutButton } from "@clerk/nextjs";
+import { signOut } from "@/lib/auth-client";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function SettingsSection() {
@@ -35,9 +36,17 @@ export default function SettingsSection() {
     // Add API call to persist theme preference if needed
   };
 
-  const handleDeleteAccount = () => {
-    // Add account deletion logic (e.g., API call)
-    // Possibly show a confirmation modal
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/sign-in");
+          router.refresh();
+        },
+      },
+    });
   };
 
   // Ensure component is mounted before rendering theme-related UI
@@ -116,8 +125,8 @@ export default function SettingsSection() {
             <p className="text-sm text-muted-foreground mb-3">
               Permanently delete your account and all associated data
             </p>
-            <Button className="bg-red-600" onClick={handleDeleteAccount}>
-              <SignOutButton>Delete Account</SignOutButton>
+            <Button className="bg-red-600" onClick={handleLogout}>
+              Logout / Delete Account
             </Button>
           </div>
         </div>

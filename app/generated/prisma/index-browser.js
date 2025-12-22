@@ -123,12 +123,18 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  clerkId: 'clerkId',
+  name: 'name',
+  username: 'username',
   email: 'email',
+  emailVerified: 'emailVerified',
+  image: 'image',
   firstName: 'firstName',
   lastName: 'lastName',
   avatarImageUrl: 'avatarImageUrl',
   phone: 'phone',
+  phoneVerified: 'phoneVerified',
+  otp: 'otp',
+  otpExpiresAt: 'otpExpiresAt',
   gender: 'gender',
   dob: 'dob',
   createdAt: 'createdAt',
@@ -564,6 +570,42 @@ exports.Prisma.ProductAnswerScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SessionScalarFieldEnum = {
+  id: 'id',
+  expiresAt: 'expiresAt',
+  token: 'token',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  userId: 'userId'
+};
+
+exports.Prisma.AccountScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  providerId: 'providerId',
+  userId: 'userId',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  idToken: 'idToken',
+  accessTokenExpiresAt: 'accessTokenExpiresAt',
+  refreshTokenExpiresAt: 'refreshTokenExpiresAt',
+  scope: 'scope',
+  password: 'password',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.VerificationScalarFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -751,7 +793,10 @@ exports.Prisma.ModelName = {
   SellerOrderItem: 'SellerOrderItem',
   Payout: 'Payout',
   ProductQuestion: 'ProductQuestion',
-  ProductAnswer: 'ProductAnswer'
+  ProductAnswer: 'ProductAnswer',
+  Session: 'Session',
+  Account: 'Account',
+  Verification: 'Verification'
 };
 
 /**

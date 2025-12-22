@@ -1,0 +1,61 @@
+"use client";
+
+import { useSession } from "@/lib/auth-client";
+import UnifiedAuth from "./UnifiedAuth";
+import { usePathname } from "next/navigation";
+import { Loader2 } from "lucide-react";
+
+interface AuthGateProps {
+    children: React.ReactNode;
+}
+
+// Routes that don't require full verification
+const PUBLIC_ROUTES = [
+    "/sign-in",
+    "/sign-up",
+    "/verify-phone",
+    // Add other public routes here if needed (e.g. "/", "/product", etc.)
+    // However, the user said "until email is verified no other component should be show"
+    // so we might want to restrict most things.
+];
+
+export default function AuthGate({ children }: AuthGateProps) {
+    const { data: session, isPending } = useSession();
+    const pathname = usePathname();
+
+    const isPublicRoute = PUBLIC_ROUTES.some(route => pathname.startsWith(route));
+
+    if (isPending) {
+        return (
+            <div className="flex h-screen w-full items-center justify-center bg-background">
+                <div className="flex flex-col items-center space-y-4">
+                    <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                    <p className="text-muted-foreground animate-pulse font-medium">Loading Vanijay...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // If the user is on a public route (like sign-in page itself), let them see it
+    if (isPublicRoute) {
+        return <>{children}</>;
+    }
+
+    // Check if user is fully verified
+    const isEmailVerified = session?.user?.emailVerified;
+    const isPhoneVerified = (session?.user as any)?.phoneVerified;
+
+    if (!session || !isEmailVerified || !isPhoneVerified) {
+        return (
+            <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-background via-secondary/10 to-primary/5 p-4">
+                <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl opacity-50" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-secondary/20 rounded-full blur-3xl opacity-50" />
+                <div className="relative z-10 w-full animate-fade-in">
+                    <UnifiedAuth />
+                </div>
+            </div>
+        );
+    }
+
+    return <>{children}</>;
+}

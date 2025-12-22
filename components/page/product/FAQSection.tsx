@@ -5,13 +5,14 @@ import { formatDistanceToNow } from "date-fns";
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useUser } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import Link from "next/link";
 
 export default function FAQSection({ productId, isOwnProduct }: { productId: string; isOwnProduct?: boolean }) {
     const { questions, isLoading, submitQuestion } = useProductFAQ(productId);
-    const { isSignedIn } = useUser();
+    const { data: session } = useSession();
+    const isSignedIn = !!session;
     const [content, setContent] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showAskForm, setShowAskForm] = useState(false);

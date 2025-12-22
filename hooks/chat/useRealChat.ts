@@ -16,7 +16,7 @@ import {
     useLazyQuery,
     useMutation,
 } from "@apollo/client";
-import { useAuth } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 import { useRealtime } from "@upstash/realtime/client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -51,7 +51,8 @@ export const useRealChat = (
     initialConversationId?: string,
     onMessageReceived?: () => void
 ) => {
-    const { userId: clerkId } = useAuth();
+    const { data: session } = useSession();
+    const userId = session?.user?.id;
     const [conversationId, setConversationId] = useState<string | null>(initialConversationId || null);
     const [messages, setMessages] = useState<LocalMessage[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -125,8 +126,8 @@ export const useRealChat = (
                 ];
             }
 
-            // Determine sender - use clerkId for comparison since currentUserId is Clerk ID
-            const isMe = clerkId && msg.sender?.clerkId === clerkId;
+            // Determine sender
+            const isMe = userId && msg.sender?.id === userId;
 
             return {
                 id: msg.id || crypto.randomUUID(),
@@ -139,7 +140,7 @@ export const useRealChat = (
                 attachments,
             };
         },
-        [clerkId]
+        [userId]
     );
 
     const upsertMessage = useCallback((incoming: LocalMessage) => {
@@ -206,7 +207,7 @@ export const useRealChat = (
     const initializeChat = useCallback(async () => {
         if (
             (!productId && !initialConversationId) ||
-            !clerkId ||
+            !userId ||
             isInitializingRef.current ||
             hasInitializedRef.current
         )
@@ -267,7 +268,7 @@ export const useRealChat = (
     }, [
         productId,
         initialConversationId,
-        clerkId,
+        userId,
         getConversation,
         createConversation,
         fetchMessages,
@@ -298,7 +299,7 @@ export const useRealChat = (
                 clientId,
                 text: text.trim(),
                 sender: "user",
-                senderId: clerkId || undefined,
+                senderId: userId || undefined,
                 timestamp: new Date(),
                 status: "sending",
                 attachments: optimisticAttachments.length
@@ -365,7 +366,7 @@ export const useRealChat = (
         },
         [
             conversationId,
-            clerkId,
+            userId,
             sendMessageMutation,
             normalizeMessage,
             upsertMessage,
@@ -376,7 +377,7 @@ export const useRealChat = (
     useRealtime({
         channels: [
             conversationId ? `conversation:${conversationId}` : undefined,
-            clerkId ? `user:${clerkId}` : undefined
+            userId ? `user:${userId}` : undefined
         ].filter(Boolean) as string[],
         event: "message.newMessage",
         onData: (payload: any) => {

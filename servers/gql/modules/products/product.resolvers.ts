@@ -106,7 +106,7 @@ export const productResolvers = {
       const product = await prisma.product.findUnique({
         where: { slug },
         include: {
-          seller: { select: { id: true, firstName: true, lastName: true, clerkId: true } },
+          seller: { select: { id: true, firstName: true, lastName: true } },
           variants: {
             select: {
               id: true,

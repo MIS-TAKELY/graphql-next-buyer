@@ -15,9 +15,6 @@ export const GET_REVIEWS_BY_PRODUCT_BY_SLUG = gql`
       updatedAt
       user {
         id
-        firstName
-        lastName
-        clerkId
       }
       media {
         id

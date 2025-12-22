@@ -148,16 +148,25 @@ enum VerificationStatus {
 
 model User {
   id             String    @id @default(cuid())
-  clerkId        String    @unique
-  email          String    @unique @db.VarChar(255)
+  name           String    @default("")
+  username       String    @unique @db.VarChar(255)
+  email          String    @db.VarChar(255)
+  emailVerified  Boolean   @default(false)
+  image          String?
   firstName      String?
   lastName       String?
   avatarImageUrl String?
   phone          String?   @db.VarChar(20)
+  phoneVerified  Boolean   @default(false) // Custom for WhatsApp OTP
+  otp            String? // Custom for WhatsApp OTP
+  otpExpiresAt   DateTime? // OTP expiry
   gender         Gender?
   dob            DateTime?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+
+  sessions Session[]
+  accounts Account[]
 
   addresses               Address[]                 @relation("UserAddresses")
   paymentMethods          PaymentMethod[]           @relation("UserPayments")
@@ -182,7 +191,7 @@ model User {
   productAnswers   ProductAnswer[]   @relation("SellerAnswers")
 
   @@index([email])
-  @@map("users")
+  @@map("user")
 }
 
 model UserRole {
@@ -504,14 +513,14 @@ model Product {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  seller          User                         @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
+  seller          User              @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
   variants        ProductVariant[]
   images          ProductImage[]
   reviews         Review[]
-  category        Category?                    @relation(fields: [categoryId], references: [id])
+  category        Category?         @relation(fields: [categoryId], references: [id])
   categoryId      String?
   brand           String
-  embedding       Unsupported("vector(3072)")?
+  // embedding       Unsupported("vector(3072)")?
   wishlistItems   WishlistItem[]
   productOffers   ProductOffer[]
   deliveryOptions DeliveryOption[]
@@ -878,4 +887,50 @@ model ProductAnswer {
 
   @@index([questionId])
   @@map("product_answers")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@unique([providerId, accountId])
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
 }

@@ -21,7 +21,9 @@ export default function ProductActions({
   itemId,
   onChatOpen,
 }: ProductActionsProps) {
-  const { userId, isLoaded } = useAuth();
+  const { data: session, isPending } = useSession();
+  const userId = session?.user?.id;
+  const isLoaded = !isPending;
 
   return (
     <TooltipProvider>

@@ -1,24 +1,53 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { auth } from "@/lib/auth";
+import { NextResponse, type NextRequest } from "next/server";
 
-const isPublicRoute = createRouteMatcher([
-  "/sign-in(.*)",
-  "/sign-up(.*)",
+const publicRoutes = [
+  "/sign-in",
+  "/sign-up",
+  "/api/auth",
+  "/api/otp",
   "/api/webhook",
-  "/api(.*)",
+  "/api/products",
+  "/api/graphql",
   "/cart",
   "/",
-  "/search(.*)",
-  "/cateygory(.*)",
-  "/product(.*)",
-  "/store(.*)",
-  "/compare(.*)",
-]);
+  "/search",
+  "/category",
+  "/product",
+  "/store",
+  "/compare",
+];
 
-export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req)) {
-    await auth.protect();
+export default async function middleware(request: NextRequest) {
+  const { nextUrl } = request;
+
+  // 0. Early return for public routes - DO NOT check session
+  const isPublicRoute = publicRoutes.some(route =>
+    nextUrl.pathname === route || nextUrl.pathname.startsWith(`${route}/`)
+  );
+
+  if (isPublicRoute || nextUrl.pathname === "/verify-phone") {
+    return NextResponse.next();
   }
-});
+
+  // 1. Direct session check via better-auth API (faster than fetch)
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  });
+
+  // 2. If not logged in and trying to access a protected route
+  if (!session) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
+  }
+
+  // 3. If logged in but phone is not verified
+  if (session.user && !session.user.phoneVerified) {
+    // middleware matcher already excludes static assets, so we just check for non-public routes
+    return NextResponse.redirect(new URL("/verify-phone", request.url));
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [

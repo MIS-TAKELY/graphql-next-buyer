@@ -23,8 +23,12 @@ export default async function AccountLayout({
         console.error("Failed to fetch user profile:", error);
     }
 
-    if (!user) {
-        redirect("/");
+    // Ensure user object is plain and serializable
+    const serializableUser = user ? JSON.parse(JSON.stringify(user)) : null;
+
+    if (!serializableUser) {
+        // Redundant with middleware but good as a fallback
+        return redirect("/sign-in");
     }
 
     return (
@@ -33,7 +37,7 @@ export default async function AccountLayout({
                 <div className="py-8">
                     <h1 className="text-3xl font-bold mb-8">My Account</h1>
                     <div className="flex flex-col lg:flex-row gap-8">
-                        <SidebarNav user={user} />
+                        <SidebarNav user={serializableUser} />
                         <main className="flex-1 min-w-0">
                             {children}
                         </main>

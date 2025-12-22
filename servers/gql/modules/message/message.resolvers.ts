@@ -44,7 +44,6 @@ export const messageResolvers = {
               firstName: true,
               lastName: true,
               email: true,
-              clerkId: true,
               roles: {
                 select: {
                   role: true,
@@ -106,11 +105,11 @@ export const messageResolvers = {
         const conversation = await prisma.conversation.findUnique({
           where: { id: conversationId },
           include: {
-            sender: { select: { id: true, clerkId: true } },
-            reciever: { select: { id: true, clerkId: true } },
+            sender: { select: { id: true } },
+            reciever: { select: { id: true } },
             ConversationParticipant: {
               include: {
-                user: { select: { id: true, clerkId: true } },
+                user: { select: { id: true } },
               },
             },
           },
@@ -146,7 +145,6 @@ export const messageResolvers = {
                   firstName: true,
                   lastName: true,
                   email: true,
-                  clerkId: true,
                   roles: {
                     select: {
                       role: true,
@@ -181,7 +179,6 @@ export const messageResolvers = {
                     firstName: true,
                     lastName: true,
                     email: true,
-                    clerkId: true,
                     roles: {
                       select: {
                         role: true,
@@ -230,35 +227,35 @@ export const messageResolvers = {
             .channel(`conversation:${conversationId}`)
             .emit("message.newMessage", realtimePayload);
 
-          const participantClerkIds = new Set<string>();
-          if (conversation.sender?.clerkId) {
-            participantClerkIds.add(conversation.sender.clerkId);
+          const participantIds = new Set<string>();
+          if (conversation.sender?.id) {
+            participantIds.add(conversation.sender.id);
           }
-          if (conversation.reciever?.clerkId) {
-            participantClerkIds.add(conversation.reciever.clerkId);
+          if (conversation.reciever?.id) {
+            participantIds.add(conversation.reciever.id);
           }
           conversation.ConversationParticipant?.forEach((participant) => {
-            const clerkId = participant.user?.clerkId;
-            if (clerkId) participantClerkIds.add(clerkId);
+            const userId = participant.user?.id;
+            if (userId) participantIds.add(userId);
           });
 
-          console.log(`[BACKEND] 👥 All participant clerk IDs:`, Array.from(participantClerkIds));
-          console.log(`[BACKEND] 🔑 Current user clerk ID:`, user.clerkId);
+          console.log(`[BACKEND] 👥 All participant user IDs:`, Array.from(participantIds));
+          console.log(`[BACKEND] 🔑 Current user ID:`, user.id);
 
-          for (const clerkId of participantClerkIds) {
-            if (!clerkId || clerkId === user.clerkId) {
-              console.log(`[BACKEND] ⏭️  Skipping clerk ID: ${clerkId} (${clerkId === user.clerkId ? 'is sender' : 'invalid'})`);
+          for (const userId of participantIds) {
+            if (!userId || userId === user.id) {
+              console.log(`[BACKEND] ⏭️  Skipping user ID: ${userId} (${userId === user.id ? 'is sender' : 'invalid'})`);
               continue;
             }
-            console.log(`[BACKEND] 📤 Publishing message to user channel: user:${clerkId}`);
+            console.log(`[BACKEND] 📤 Publishing message to user channel: user:${userId}`);
 
             // We don't await this one to avoid slowing down the response too much if one fails
             realtime
-              .channel(`user:${clerkId}`)
+              .channel(`user:${userId}`)
               .emit("message.newMessage", realtimePayload)
               .catch((error) => {
                 console.error(
-                  `[BACKEND] ⚠️ Failed to publish user-level message notification for ${clerkId}:`,
+                  `[BACKEND] ⚠️ Failed to publish user-level message notification for ${userId}:`,
                   error
                 );
               });
@@ -276,9 +273,6 @@ export const messageResolvers = {
         console.log("sender id-->", conversation.recieverId);
         console.log("rec id-->", conversation.senderId);
         console.log("cons sender id-->", conversation.sender.id);
-        console.log("cons reciever clerkid-->", conversation.reciever.clerkId);
-
-        console.log("reciever id--->", conversation.reciever.clerkId);
 
         const buyerName =
           `${result.sender?.firstName || ""} ${result.sender?.lastName || ""
@@ -286,7 +280,6 @@ export const messageResolvers = {
 
         createAndPushNotification({
           userId: receiverId,
-          recieverClerkId: conversation.reciever.clerkId,
           title: "New Message",
           body: `${buyerName} sent you a message`,
           type: "NEW_MESSAGE",

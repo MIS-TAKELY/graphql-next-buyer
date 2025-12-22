@@ -27,7 +27,6 @@ export const GET_CONVERSATION_BY_PRODUCT = gql`
         sentAt
         sender {
           id
-          clerkId
           firstName
           lastName
           roles {

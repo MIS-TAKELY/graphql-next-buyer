@@ -17,6 +17,7 @@ export const userResolvers = {
           },
           include: {
             addresses: true,
+            roles: true,
             // paymentMethods: true,
             // cartItems: true,
             orders: true,
@@ -30,6 +31,7 @@ export const userResolvers = {
       } catch (error: any) {
         console.log("error while fetching user profile details", error.message);
         console.error(error);
+        throw new Error(error.message);
       }
     },
   },

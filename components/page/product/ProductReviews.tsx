@@ -13,7 +13,7 @@ import { MediaItem, Review } from "@/components/review/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import Image from "next/image";
 
@@ -33,7 +33,8 @@ const sortFns: Record<string, (a: Review, b: Review) => number> = {
 };
 
 const ProductReviews = ({ isOwnProduct }: { isOwnProduct?: boolean }) => {
-  const { userId } = useAuth();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
   const [filters, setFilters] = useState<FilterState>({
     activeTab: "all",
     sortBy: "newest",
@@ -50,7 +51,7 @@ const ProductReviews = ({ isOwnProduct }: { isOwnProduct?: boolean }) => {
   // Find user's own review
   const userReview = useMemo(() => {
     if (!userId) return null;
-    return reviews.find((r) => r.user?.clerkId === userId);
+    return reviews.find((r) => r.user?.id === userId);
   }, [reviews, userId]);
 
   // Filter out user's review from the main list

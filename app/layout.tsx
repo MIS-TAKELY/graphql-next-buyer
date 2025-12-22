@@ -1,12 +1,11 @@
-import { AuthSync } from '@/components/auth/AuthSync';
 import ApolloWrapper from "@/lib/apollo/apollo-provider";
-import { ClerkProvider } from "@clerk/nextjs";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata, Viewport } from "next";
 import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { NotificationListener } from "@/components/common/NotificationListener";
+import AuthGate from "@/components/auth/AuthGate";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -81,35 +80,19 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="preconnect" href="https://placehold.co" />
       </head>
-      <ClerkProvider
-        appearance={{
-          variables: {
-            colorPrimary: "#6366f1", // Approximate indigo-500
-            borderRadius: "0.75rem",
-            fontFamily: "var(--font-geist-sans)",
-          },
-          elements: {
-            formButtonPrimary: "bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm transition-all",
-            card: "shadow-xl border border-border/50 bg-card/80 backdrop-blur-sm",
-            footerActionLink: "text-primary hover:text-primary/80 font-medium",
-            identityPreviewEditButtonIcon: "text-primary",
-            formFieldInput: "rounded-md border-border bg-background focus:ring-2 focus:ring-primary/20",
-          },
-        }}
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthSync />
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <ApolloWrapper>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ApolloWrapper>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <AuthGate>
               {children}
-            </ThemeProvider>
-            <Toaster position="top-right" />
-            <NotificationListener />
-          </ApolloWrapper>
-        </body>
-      </ClerkProvider>
+            </AuthGate>
+          </ThemeProvider>
+          <Toaster position="top-right" />
+          <NotificationListener />
+        </ApolloWrapper>
+      </body>
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "G-R7VFCZNSEQ"} />
     </html>
   );

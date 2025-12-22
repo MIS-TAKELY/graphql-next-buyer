@@ -1,20 +1,21 @@
 // lib/context.ts (or wherever you create context)
 import redisConfig from "@/config/redis";
 import { prisma } from "../../lib/db/prisma";
-import { getAuth, clerkClient } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-// Updated context type — no more `role: string`
+// Updated context type
 export interface GraphQLContext {
   prisma: typeof prisma;
   user: {
     id: string;
-    clerkId: string;
     email: string;
     firstName: string;
     lastName: string;
-    phone?: string | null; // Added phone
-    roles: string[]; // ← Now an array of roles
+    phone?: string | null;
+    roles: string[];
+    phoneVerified: boolean;
   } | null;
   publish: (evt: {
     type: string;
@@ -27,34 +28,24 @@ export async function createContext(
   request?: NextRequest
 ): Promise<GraphQLContext> {
   try {
-    let clerkId: string | null = null;
-
-    if (request) {
-      try {
-        const authData = await getAuth(request);
-        clerkId = authData.userId;
-      } catch (authErr) {
-        // Silent auth failure during build or for guest users
-      }
-    }
-
-    // console.log("clerk id--->", clerkId);
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
 
     let user = null;
 
-    if (clerkId) {
-      // Fetch user + their roles in a single query using Prisma's nested read
+    if (session) {
       const dbUser = await prisma.user.findUnique({
-        where: { clerkId },
+        where: { id: session.user.id },
         select: {
           id: true,
-          clerkId: true,
           email: true,
           firstName: true,
           lastName: true,
-          phone: true, // Fetch phone
+          phone: true,
+          phoneVerified: true,
           roles: {
-            select: { role: true }, // This pulls from UserRole table
+            select: { role: true },
           },
         },
       });
@@ -62,74 +53,13 @@ export async function createContext(
       if (dbUser) {
         user = {
           id: dbUser.id,
-          clerkId: dbUser.clerkId,
           email: dbUser.email,
-          roles: dbUser.roles.map((r) => r.role), // ← array of roles
+          roles: dbUser.roles.map((r) => r.role),
           firstName: dbUser.firstName ?? "",
           lastName: dbUser.lastName ?? "",
-          phone: dbUser.phone, // Assign phone
+          phone: dbUser.phone,
+          phoneVerified: dbUser.phoneVerified,
         };
-      } else {
-        // Fallback: JIT Sync if user exists in Clerk but not in DB yet
-        try {
-          console.log(
-            `[GraphQL Context] User ${clerkId} not found in DB, attempting JIT sync...`
-          );
-          const client = await clerkClient();
-          const cUser = await client.users.getUser(clerkId);
-          const email = cUser.emailAddresses[0]?.emailAddress;
-          const phone = cUser.phoneNumbers?.[0]?.phoneNumber || null; // Extract phone
-
-          if (email) {
-            const firstName = cUser.firstName ?? "";
-            const lastName = cUser.lastName ?? "";
-
-            // Upsert User
-            const newUser = await prisma.user.upsert({
-              where: { clerkId },
-              create: {
-                clerkId,
-                email,
-                firstName,
-                lastName,
-                phone, // Save phone
-                avatarImageUrl: cUser.imageUrl,
-              },
-              update: {
-                email, // Sync latest email
-              },
-            });
-
-            // Ensure BUYER role
-            await prisma.userRole.upsert({
-              where: {
-                userId_role: {
-                  userId: newUser.id,
-                  role: "BUYER",
-                },
-              },
-              create: {
-                userId: newUser.id,
-                role: "BUYER",
-              },
-              update: {},
-            });
-
-            user = {
-              id: newUser.id,
-              clerkId: newUser.clerkId,
-              email: newUser.email,
-              roles: ["BUYER"],
-              firstName: newUser.firstName ?? "",
-              lastName: newUser.lastName ?? "",
-              phone: newUser.phone,
-            };
-
-            console.log(`[GraphQL Context] JIT Sync successful for ${email}`);
-          }
-        } catch (err) {
-          console.error("[GraphQL Context] JIT Sync failed:", err);
-        }
       }
     }
 

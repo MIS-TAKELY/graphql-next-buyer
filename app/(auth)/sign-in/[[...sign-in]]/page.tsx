@@ -1,13 +1,11 @@
-import { SignIn } from "@clerk/nextjs";
+"use client";
 
-export default function Page() {
+import UnifiedAuth from "@/components/auth/UnifiedAuth";
+
+export default function SignInPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-soft px-4 py-12">
-      <SignIn
-        routing="path"
-        path="/sign-in"
-        signUpUrl="/sign-up"
-      />
+    <div className="flex min-h-screen items-center justify-center p-4">
+      <UnifiedAuth />
     </div>
   );
 }

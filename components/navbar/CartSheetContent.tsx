@@ -9,7 +9,7 @@ import { useQuery } from "@apollo/client";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 import { useMemo, useState } from "react";
 import QuantitySelector from "../page/product/QuantitySelector";
 
@@ -34,7 +34,8 @@ export default function CartSheetContent() {
   const [updatingItems, setUpdatingItems] = useState<Set<string>>(new Set());
   const [quantity, setQuantity] = useState(1);
 
-  const { userId } = useAuth();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
   const { anonymousCart } = useCart(); // Get anonymous cart from hook
 
   // Fetch items for logged-in user
