@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@apollo/client": "latest",
-    "@clerk/nextjs": "^6.36.5",
     "@next/third-parties": "latest",
     "@prisma/client": "latest",
     "@prisma/extension-accelerate": "latest",
@@ -54,7 +53,6 @@
     "react-server-dom-turbopack": "latest",
     "react-server-dom-webpack": "latest",
     "sonner": "latest",
-    "svix": "latest",
     "tailwind-merge": "latest",
     "tailwindcss-animate": "latest",
     "zod": "latest",
