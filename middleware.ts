@@ -20,6 +20,11 @@ const publicRoutes = [
 export default async function middleware(request: NextRequest) {
   const { nextUrl } = request;
 
+  // Enforce canonical domain (www.vanijay.com)
+  if (process.env.NODE_ENV === "production" && nextUrl.hostname === "vanijay.com") {
+    return NextResponse.redirect(new URL(`https://www.vanijay.com${nextUrl.pathname}${nextUrl.search}`));
+  }
+
   // 0. Early return for public routes - DO NOT check session
   const isPublicRoute = publicRoutes.some(route =>
     nextUrl.pathname === route || nextUrl.pathname.startsWith(`${route}/`)
