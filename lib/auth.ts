@@ -34,7 +34,7 @@ export const auth = betterAuth({
     trustedOrigins: [
         "https://www.vanijay.com",
         "https://vanijay.com",
-
+        "http://localhost:3000",
     ],
     advanced: {
         useSecureCookies: true,
