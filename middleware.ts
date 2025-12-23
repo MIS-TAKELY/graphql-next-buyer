@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth";
 import { NextResponse, type NextRequest } from "next/server";
 
 const publicRoutes = [
@@ -30,13 +29,18 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 1. Direct session check via better-auth API (faster than fetch)
-  const session = await auth.api.getSession({
-    headers: request.headers,
+  // 1. Check session via fetch (edge-compatible)
+  // Note: We use fetch instead of auth.api.getSession to avoid importing Prisma in the Edge runtime
+  const sessionResponse = await fetch(`${nextUrl.origin}/api/auth/get-session`, {
+    headers: {
+      cookie: request.headers.get("cookie") || "",
+    },
   });
 
+  const session = await sessionResponse.json();
+
   // 2. If not logged in and trying to access a protected route
-  if (!session) {
+  if (!session || !session.user) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 

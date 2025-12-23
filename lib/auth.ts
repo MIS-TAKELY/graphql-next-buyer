@@ -25,6 +25,10 @@ export const auth = betterAuth({
         },
     },
     baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+    trustedOrigins: [
+        "https://www.vanijay.com",
+        "https://vanijay.com",
+    ],
     emailAndPassword: {
         enabled: true,
     },
