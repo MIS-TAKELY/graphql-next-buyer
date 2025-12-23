@@ -17,7 +17,7 @@
     "@graphql-tools/schema": "^10.0.30",
     "@graphql-tools/utils": "^10.11.0",
     "@next/third-parties": "latest",
-    "@prisma/client": "^6.19.0",
+    "@prisma/client": "^5.22.0",
     "@prisma/extension-accelerate": "latest",
     "@radix-ui/react-accordion": "latest",
     "@radix-ui/react-alert-dialog": "latest",
@@ -73,7 +73,7 @@
     "concurrently": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
-    "prisma": "^6.19.0",
+    "prisma": "^5.22.0",
     "tailwindcss": "latest",
     "tsx": "latest",
     "typescript": "latest"
