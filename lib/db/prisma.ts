@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../app/generated/prisma";
+import { PrismaClient } from "../../app/generated/prisma/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
 const prismaClientSingleton = () => {
@@ -23,13 +23,6 @@ const globalForPrisma = globalThis as unknown as {
 
 export const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
-if (process.env.NODE_ENV === "development") {
-  process.on("beforeExit", async () => {
-    // console.log("Process is exiting, disconnecting Prisma...");
-    // @ts-ignore
-    await prisma.$disconnect();
-  });
-}
 
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
