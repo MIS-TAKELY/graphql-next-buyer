@@ -41,7 +41,6 @@ export const userTypeDefs = gql`
 
   type User {
     id: ID!
-    clerkId: String!
     email: String!
     firstName: String
     lastName: String

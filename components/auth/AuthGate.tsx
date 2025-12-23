@@ -33,7 +33,6 @@ export default function AuthGate({ children }: AuthGateProps) {
     const { data: session, isPending } = useSession();
     const pathname = usePathname();
 
-    const isPublicRoute = PUBLIC_ROUTES.some(route => pathname.startsWith(route));
 
     if (isPending) {
         console.log("AuthGate: Session pending...");
@@ -47,26 +46,47 @@ export default function AuthGate({ children }: AuthGateProps) {
         );
     }
 
-    // If the user is on a public route (like sign-in page itself), let them see it
-    if (isPublicRoute) {
-        return <>{children}</>;
-    }
+    const isPublicRoute = PUBLIC_ROUTES.some(route => {
+        if (route === "/") return pathname === "/";
+        return pathname.startsWith(route);
+    });
 
     // Check if user is fully verified
     const isEmailVerified = session?.user?.emailVerified;
     const isPhoneVerified = (session?.user as any)?.phoneVerified;
 
-    if (!session || !isEmailVerified || !isPhoneVerified) {
-        console.log("AuthGate: Access denied/incomplete profile", {
-            hasSession: !!session,
-            isEmailVerified,
-            isPhoneVerified,
-            pathname
-        });
+    // If session exists, they MUST be verified even for public routes (except auth routes)
+    if (session) {
+        if (!isEmailVerified || !isPhoneVerified) {
+            // Allow them to see /sign-in, /sign-up, /verify-phone without AuthGate interference
+            const isAuthRoute = ["/sign-in", "/sign-up", "/verify-phone"].some(route => pathname.startsWith(route));
+
+            if (isAuthRoute) {
+                return <>{children}</>;
+            }
+
+            console.log("AuthGate: Authenticated but not verified. Enforcing verification UI.");
+            return (
+                <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-background via-secondary/10 to-primary/5 p-4">
+                    <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl opacity-50" />
+                    <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-secondary/20 rounded-full blur-3xl opacity-50" />
+                    <div className="relative z-10 w-full animate-fade-in">
+                        <UnifiedAuth />
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    // If not logged in, allow public routes
+    if (!session && isPublicRoute) {
+        return <>{children}</>;
+    }
+
+    // If not logged in and private route
+    if (!session) {
         return (
             <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-background via-secondary/10 to-primary/5 p-4">
-                <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl opacity-50" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-secondary/20 rounded-full blur-3xl opacity-50" />
                 <div className="relative z-10 w-full animate-fade-in">
                     <UnifiedAuth />
                 </div>
@@ -74,6 +94,5 @@ export default function AuthGate({ children }: AuthGateProps) {
         );
     }
 
-    console.log("AuthGate: Rendering children for", pathname);
     return <>{children}</>;
 }

@@ -17,7 +17,6 @@
 
 //  type Vote = { id: string; vote: boolean; userId: string };
 
-//  type User = { firstName: string; lastName: string; clerkId: string };
 
 // export type Review = {
 //   id: string;

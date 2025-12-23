@@ -45,13 +45,10 @@
 //   console.warn("Redis subscriber not available; events won't be processed.");
 // }
 
-// // Optional: authenticate users via Clerk token passed in the handshake
-// io.use(async (socket, next) => {
+// // io.use(async (socket, next) => {
 //   try {
 //     const token = socket.handshake.auth?.token;
-//     // TODO: verify token with Clerk if you need auth
-//     // const session = await clerkClient.verifyToken(token) ...
-//     // socket.data.userId = session.sub
+//     // TODO: verify token with auth client if needed
 //     return next();
 //   } catch (err) {
 //     return next(new Error("Unauthorized"));

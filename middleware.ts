@@ -25,34 +25,42 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(`https://www.vanijay.com${nextUrl.pathname}${nextUrl.search}`));
   }
 
-  // 0. Early return for public routes - DO NOT check session
-  const isPublicRoute = publicRoutes.some(route =>
-    nextUrl.pathname === route || nextUrl.pathname.startsWith(`${route}/`)
-  );
-
-  if (isPublicRoute || nextUrl.pathname === "/verify-phone") {
+  // 0. Early return for auth API routes and verify-phone
+  if (nextUrl.pathname.startsWith("/api/auth") || nextUrl.pathname === "/verify-phone") {
     return NextResponse.next();
   }
 
   // 1. Check session via fetch (edge-compatible)
-  // Note: We use fetch instead of auth.api.getSession to avoid importing Prisma in the Edge runtime
   const sessionResponse = await fetch(`${nextUrl.origin}/api/auth/get-session`, {
     headers: {
       cookie: request.headers.get("cookie") || "",
     },
   });
 
-  const session = await sessionResponse.json();
+  let session = null;
+  try {
+    session = await sessionResponse.json();
+  } catch (e) {
+    // Session fetch failed or returned invalid JSON
+  }
 
-  // 2. If not logged in and trying to access a protected route
+  const isPublicRoute = publicRoutes.some(route =>
+    nextUrl.pathname === route || nextUrl.pathname.startsWith(`${route}/`)
+  );
+
+  // 2. If not logged in
   if (!session || !session.user) {
+    if (isPublicRoute) {
+      return NextResponse.next();
+    }
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
   // 3. If logged in but phone is not verified
   if (session.user && !session.user.phoneVerified) {
-    // middleware matcher already excludes static assets, so we just check for non-public routes
-    return NextResponse.redirect(new URL("/verify-phone", request.url));
+    if (nextUrl.pathname !== "/verify-phone") {
+      return NextResponse.redirect(new URL("/verify-phone", request.url));
+    }
   }
 
   return NextResponse.next();
