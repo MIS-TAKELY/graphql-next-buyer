@@ -152,31 +152,37 @@ export const conversationResolvers = {
       }
 
       // 2. Create new
-      return await prisma.$transaction(async (tx) => {
-        const newConversation = await tx.conversation.create({
-          data: {
-            productId,
-            senderId,
-            recieverId,
-            title: `Inquiry about ${product.name}`,
-            isActive: true,
-          },
-          include: {
-            product: true,
-            sender: true,
-            reciever: true,
-          },
-        });
+      return await prisma.$transaction(
+        async (tx) => {
+          const newConversation = await tx.conversation.create({
+            data: {
+              productId,
+              senderId,
+              recieverId,
+              title: `Inquiry about ${product.name}`,
+              isActive: true,
+            },
+            include: {
+              product: true,
+              sender: true,
+              reciever: true,
+            },
+          });
 
-        await tx.conversationParticipant.createMany({
-          data: [
-            { conversationId: newConversation.id, userId: senderId },
-            { conversationId: newConversation.id, userId: recieverId },
-          ],
-        });
+          await tx.conversationParticipant.createMany({
+            data: [
+              { conversationId: newConversation.id, userId: senderId },
+              { conversationId: newConversation.id, userId: recieverId },
+            ],
+            skipDuplicates: true,
+          });
 
-        return newConversation;
-      });
+          return newConversation;
+        },
+        {
+          timeout: 30000,
+        }
+      );
     },
   },
 };

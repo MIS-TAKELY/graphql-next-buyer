@@ -34,7 +34,7 @@ export async function createContext(
 
     let user = null;
 
-    if (session) {
+    if (session && session.user && session.user.id) {
       const dbUser = await prisma.user.findUnique({
         where: { id: session.user.id },
         select: {

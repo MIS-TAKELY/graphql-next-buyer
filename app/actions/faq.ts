@@ -14,13 +14,14 @@ export async function askQuestion(productId: string, content: string) {
             headers: await headers(),
         });
 
-        if (!session) {
-            console.error("[FAQ] Unauthorized: No session found");
+        if (!session || !session.user || !session.user.id) {
+            console.error("[FAQ] Unauthorized: User ID missing or no session");
             throw new Error("Unauthorized");
         }
 
+        const userId = session.user.id;
         const user = await prisma.user.findUnique({
-            where: { id: session.user.id },
+            where: { id: userId },
             select: { id: true, firstName: true, lastName: true }
         });
         console.log("[FAQ] User from DB", { user });

@@ -8,9 +8,8 @@ export const userResolvers = {
     getUserProfileDetails: async (_: any, __: any, ctx: GraphQLContext) => {
       try {
         const user = requireAuth(ctx);
-        if (!user) throw new Error("unauthorize user");
+        if (!user || !user.id) throw new Error("Unauthorized user: missing ID");
         const userId = user.id;
-        if (!userId) throw new Error("User id is required");
         return prisma.user.findUnique({
           where: {
             id: userId,
@@ -53,9 +52,8 @@ export const userResolvers = {
     ) => {
       try {
         const user = requireAuth(ctx);
-        if (!user) throw new Error("Unauthorized User");
+        if (!user || !user.id) throw new Error("Unauthorized User: missing ID");
         const userId = user.id;
-        if (!userId) throw new Error("User id is required");
 
         const data: Record<string, any> = {};
         Object.entries(input).forEach(([key, value]) => {

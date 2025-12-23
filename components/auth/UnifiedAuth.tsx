@@ -56,16 +56,22 @@ export default function UnifiedAuth() {
             const { error } = await signIn.username({
                 username,
                 password,
-                callbackURL: "/",
             });
             if (error) {
-                toast.error(error.message || "Failed to sign in");
+                const errorMessage = error.message || "Failed to sign in";
+                if (errorMessage.includes("Invalid")) {
+                    toast.error("Invalid username or password. Please try again.");
+                } else {
+                    toast.error(errorMessage);
+                }
             } else {
                 toast.success("Signed in successfully");
                 await refetch();
+                // AuthGate will handle redirect based on verification status
             }
-        } catch (err) {
-            toast.error("An unexpected error occurred");
+        } catch (err: any) {
+            console.error("Sign in error:", err);
+            toast.error("Unable to connect. Please check your internet connection.");
         } finally {
             setLoading(false);
         }
@@ -80,17 +86,22 @@ export default function UnifiedAuth() {
                 password,
                 username,
                 name,
-                callbackURL: "/",
             });
             if (error) {
-                toast.error(error.message || "Failed to sign up");
+                const errorMessage = error.message || "Failed to sign up";
+                if (errorMessage.includes("already exists") || errorMessage.includes("duplicate")) {
+                    toast.error("This username or email is already registered. Please try another.");
+                } else {
+                    toast.error(errorMessage);
+                }
             } else {
-                toast.success("Account created successfully");
+                toast.success("Account created! Please check your email to verify.");
                 setStep("EMAIL_PENDING");
                 await refetch();
             }
-        } catch (err) {
-            toast.error("An unexpected error occurred");
+        } catch (err: any) {
+            console.error("Sign up error:", err);
+            toast.error("Unable to connect. Please check your internet connection.");
         } finally {
             setLoading(false);
         }
@@ -101,10 +112,10 @@ export default function UnifiedAuth() {
             setLoading(true);
             await signIn.social({
                 provider: "google",
-                callbackURL: "/",
             });
         } catch (error: any) {
-            toast.error("Google sign-in failed. Please try again.");
+            console.error("Google sign-in error:", error);
+            toast.error("Google sign-in failed. Please try again or use email/password.");
         } finally {
             setLoading(false);
         }
@@ -112,6 +123,14 @@ export default function UnifiedAuth() {
 
     const sendOtp = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
+
+        // Validate phone number format
+        const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+        if (!phone || !phoneRegex.test(phone)) {
+            toast.error("Please enter a valid phone number (e.g., +9779812345678)");
+            return;
+        }
+
         setLoading(true);
         try {
             const res = await fetch("/api/otp/send", {
@@ -126,10 +145,18 @@ export default function UnifiedAuth() {
                 setTimer(120);
                 setCanResend(false);
             } else {
-                toast.error(data.error || "Failed to send OTP");
+                const errorMessage = data.error || "Failed to send OTP";
+                if (errorMessage.includes("already registered")) {
+                    toast.error("This phone number is already registered to another account.");
+                } else if (errorMessage.includes("Unauthorized")) {
+                    toast.error("Your session has expired. Please sign in again.");
+                } else {
+                    toast.error(errorMessage);
+                }
             }
         } catch (error) {
-            toast.error("An error occurred. Please try again.");
+            console.error("Send OTP error:", error);
+            toast.error("Unable to send OTP. Please check your internet connection.");
         } finally {
             setLoading(false);
         }
@@ -137,6 +164,12 @@ export default function UnifiedAuth() {
 
     const verifyOtp = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!otp || otp.length !== 6) {
+            toast.error("Please enter a valid 6-digit code");
+            return;
+        }
+
         setLoading(true);
         try {
             const res = await fetch("/api/otp/verify", {
@@ -146,14 +179,32 @@ export default function UnifiedAuth() {
             });
             const data = await res.json();
             if (res.ok) {
-                toast.success("Phone verified successfully");
+                toast.success("Phone verified successfully! Redirecting...");
+                // Refetch session to update phoneVerified status
                 await refetch();
+                // Trigger server-side redirect check
                 router.refresh();
+                // Small delay to ensure session is updated
+                setTimeout(() => {
+                    router.push("/");
+                }, 500);
             } else {
-                toast.error(data.error || "Invalid OTP");
+                const errorMessage = data.error || "Invalid OTP";
+                if (errorMessage.includes("expired")) {
+                    toast.error("This code has expired. Please request a new one.");
+                    setTimer(0);
+                    setCanResend(true);
+                } else if (errorMessage.includes("Invalid")) {
+                    toast.error("Invalid code. Please check and try again.");
+                } else if (errorMessage.includes("Unauthorized")) {
+                    toast.error("Your session has expired. Please sign in again.");
+                } else {
+                    toast.error(errorMessage);
+                }
             }
         } catch (error) {
-            toast.error("An error occurred. Please try again.");
+            console.error("Verify OTP error:", error);
+            toast.error("Unable to verify OTP. Please check your internet connection.");
         } finally {
             setLoading(false);
         }

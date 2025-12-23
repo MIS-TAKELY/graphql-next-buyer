@@ -19,6 +19,14 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Phone number is required" }, { status: 400 });
         }
 
+        // Validate phone number format (E.164 format)
+        const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+        if (!phoneRegex.test(phone)) {
+            return NextResponse.json({
+                error: "Invalid phone number format. Please use international format (e.g., +9779812345678)"
+            }, { status: 400 });
+        }
+
         // Check if phone number is already registered to another user
         const existingUser = await prisma.user.findUnique({
             where: { phone },
@@ -35,15 +43,19 @@ export async function POST(req: Request) {
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const expiresAt = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes from now
 
-        // Save OTP and phone to user
-        await prisma.user.update({
-            where: { id: session.user.id },
-            data: {
-                otp,
-                phone,
-                otpExpiresAt: expiresAt
-            },
-        });
+        if (session.user && session.user.id) {
+            // Save OTP and phone to user
+            await prisma.user.update({
+                where: { id: session.user.id },
+                data: {
+                    otp,
+                    phone,
+                    otpExpiresAt: expiresAt
+                },
+            });
+        } else {
+            return NextResponse.json({ error: "User session is invalid" }, { status: 400 });
+        }
 
         // Send OTP via WhatsApp
         await sendWhatsAppOTP(phone, otp);

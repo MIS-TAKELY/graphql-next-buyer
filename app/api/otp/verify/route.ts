@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db/prisma";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: Request) {
     const session = await auth.api.getSession({
@@ -16,6 +17,10 @@ export async function POST(req: Request) {
         const { otp } = await req.json();
         if (!otp) {
             return NextResponse.json({ error: "OTP is required" }, { status: 400 });
+        }
+
+        if (!session.user || !session.user.id) {
+            return NextResponse.json({ error: "User session is invalid" }, { status: 400 });
         }
 
         const user = await prisma.user.findUnique({
@@ -40,6 +45,9 @@ export async function POST(req: Request) {
                 otpExpiresAt: null
             },
         });
+
+        // Revalidate the cache to ensure session is updated
+        revalidatePath('/');
 
         return NextResponse.json({ success: true, message: "Phone verified successfully" });
     } catch (error: any) {

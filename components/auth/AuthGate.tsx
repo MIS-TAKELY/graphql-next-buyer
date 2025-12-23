@@ -36,6 +36,7 @@ export default function AuthGate({ children }: AuthGateProps) {
     const isPublicRoute = PUBLIC_ROUTES.some(route => pathname.startsWith(route));
 
     if (isPending) {
+        console.log("AuthGate: Session pending...");
         return (
             <div className="flex h-screen w-full items-center justify-center bg-background">
                 <div className="flex flex-col items-center space-y-4">
@@ -56,6 +57,12 @@ export default function AuthGate({ children }: AuthGateProps) {
     const isPhoneVerified = (session?.user as any)?.phoneVerified;
 
     if (!session || !isEmailVerified || !isPhoneVerified) {
+        console.log("AuthGate: Access denied/incomplete profile", {
+            hasSession: !!session,
+            isEmailVerified,
+            isPhoneVerified,
+            pathname
+        });
         return (
             <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-background via-secondary/10 to-primary/5 p-4">
                 <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl opacity-50" />
@@ -67,5 +74,6 @@ export default function AuthGate({ children }: AuthGateProps) {
         );
     }
 
+    console.log("AuthGate: Rendering children for", pathname);
     return <>{children}</>;
 }
