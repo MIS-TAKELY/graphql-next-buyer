@@ -30,7 +30,7 @@ export const auth = betterAuth({
             },
         },
     },
-    baseURL: process.env.BETTER_AUTH_URL || (process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : "http://localhost:3000"),
+    baseURL: process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.BETTER_AUTH_URL || "http://localhost:3000"),
     trustedOrigins: [
         "https://www.vanijay.com",
         "https://vanijay.com",
