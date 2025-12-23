@@ -20,7 +20,6 @@ const publicRoutes = [
 export default async function middleware(request: NextRequest) {
   const { nextUrl } = request;
 
-
   // 0. Early return for auth API routes, OTP routes, and verify-phone
   if (
     nextUrl.pathname.startsWith("/api/auth") ||
@@ -35,26 +34,19 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(`https://www.vanijay.com${nextUrl.pathname}${nextUrl.search}`));
   }
 
-  // 1. Check session via fetch (edge-compatible)
-  const sessionResponse = await fetch(`${nextUrl.origin}/api/auth/get-session`, {
-    headers: {
-      cookie: request.headers.get("cookie") || "",
-    },
-  });
+  // 1. Check session existence via cookie (optimistic check)
+  // We check for both standard and secure cookies to support dev and prod
+  const sessionToken = request.cookies.get("better-auth.session_token") ||
+    request.cookies.get("__Secure-better-auth.session_token");
 
-  let session = null;
-  try {
-    session = await sessionResponse.json();
-  } catch (e) {
-    // Session fetch failed or returned invalid JSON
-  }
+  const isLoggedIn = !!sessionToken;
 
   const isPublicRoute = publicRoutes.some(route =>
     nextUrl.pathname === route || nextUrl.pathname.startsWith(`${route}/`)
   );
 
   // 2. If not logged in
-  if (!session || !session.user) {
+  if (!isLoggedIn) {
     if (isPublicRoute) {
       return NextResponse.next();
     }
@@ -66,12 +58,8 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  // 3. If logged in but phone is not verified
-  if (session.user && !session.user.phoneVerified) {
-    if (nextUrl.pathname !== "/verify-phone") {
-      return NextResponse.redirect(new URL("/verify-phone", request.url));
-    }
-  }
+  // Note: Phone verification check is handled in AuthGate (client-side) 
+  // to avoid expensive and fragile database/API calls in Edge Middleware.
 
   return NextResponse.next();
 }
