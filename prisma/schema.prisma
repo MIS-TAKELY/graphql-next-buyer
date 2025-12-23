@@ -508,7 +508,8 @@ model Product {
     slug        String        @unique
     description String?
     features    String[]
-    status      ProductStatus @default(INACTIVE)
+    status             ProductStatus @default(INACTIVE)
+    specificationTable Json?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -520,7 +521,7 @@ model Product {
     category        Category?                    @relation(fields: [categoryId], references: [id])
     categoryId      String?
     brand           String
-    // embedding       Unsupported("vector(3072)")?
+    embedding       Unsupported("vector(3072)")?
     wishlistItems   WishlistItem[]
     productOffers   ProductOffer[]
     deliveryOptions DeliveryOption[]
@@ -542,7 +543,8 @@ model ProductVariant {
     stock      Int      @default(0)
     soldCount  Int      @default(0)
     attributes Json?
-    isDefault  Boolean  @default(false)
+    isDefault          Boolean  @default(false)
+    specificationTable Json?
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
 

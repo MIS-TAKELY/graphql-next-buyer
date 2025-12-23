@@ -70,9 +70,6 @@ export const useRealChat = (
 
     const [fetchMessages] = useLazyQuery(GET_MESSAGES, {
         fetchPolicy: FETCH_POLICY_NO_CACHE,
-        onError: (error) => {
-            console.error("Failed to fetch messages:", error);
-        },
     });
 
     const [createConversation] = useMutation(CREATE_CONVERSATION);

@@ -340,6 +340,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   description: 'description',
   features: 'features',
   status: 'status',
+  specificationTable: 'specificationTable',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   categoryId: 'categoryId',
@@ -356,6 +357,7 @@ exports.Prisma.ProductVariantScalarFieldEnum = {
   soldCount: 'soldCount',
   attributes: 'attributes',
   isDefault: 'isDefault',
+  specificationTable: 'specificationTable',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

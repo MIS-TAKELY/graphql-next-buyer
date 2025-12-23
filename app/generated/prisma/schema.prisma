@@ -502,25 +502,26 @@ model ReturnPolicy {
 }
 
 model Product {
-  id          String        @id @default(cuid())
-  sellerId    String
-  name        String
-  slug        String        @unique
-  description String?
-  features    String[]
-  status      ProductStatus @default(INACTIVE)
+  id                 String        @id @default(cuid())
+  sellerId           String
+  name               String
+  slug               String        @unique
+  description        String?
+  features           String[]
+  status             ProductStatus @default(INACTIVE)
+  specificationTable Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  seller          User              @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
+  seller          User                         @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
   variants        ProductVariant[]
   images          ProductImage[]
   reviews         Review[]
-  category        Category?         @relation(fields: [categoryId], references: [id])
+  category        Category?                    @relation(fields: [categoryId], references: [id])
   categoryId      String?
   brand           String
-  // embedding       Unsupported("vector(3072)")?
+  embedding       Unsupported("vector(3072)")?
   wishlistItems   WishlistItem[]
   productOffers   ProductOffer[]
   deliveryOptions DeliveryOption[]
@@ -534,17 +535,18 @@ model Product {
 }
 
 model ProductVariant {
-  id         String   @id @default(cuid())
-  productId  String
-  sku        String   @unique
-  price      Decimal  @db.Money //highlighted price
-  mrp        Decimal  @db.Money //cute price
-  stock      Int      @default(0)
-  soldCount  Int      @default(0)
-  attributes Json?
-  isDefault  Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  productId          String
+  sku                String   @unique
+  price              Decimal  @db.Money //highlighted price
+  mrp                Decimal  @db.Money //cute price
+  stock              Int      @default(0)
+  soldCount          Int      @default(0)
+  attributes         Json?
+  isDefault          Boolean  @default(false)
+  specificationTable Json?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   specifications  ProductSpecification[]
   product         Product                @relation(fields: [productId], references: [id], onDelete: Cascade)

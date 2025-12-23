@@ -25588,6 +25588,7 @@ export namespace Prisma {
     description: number
     features: number
     status: number
+    specificationTable: number
     createdAt: number
     updatedAt: number
     categoryId: number
@@ -25630,6 +25631,7 @@ export namespace Prisma {
     description?: true
     features?: true
     status?: true
+    specificationTable?: true
     createdAt?: true
     updatedAt?: true
     categoryId?: true
@@ -25717,6 +25719,7 @@ export namespace Prisma {
     description: string | null
     features: string[]
     status: $Enums.ProductStatus
+    specificationTable: JsonValue | null
     createdAt: Date
     updatedAt: Date
     categoryId: string | null
@@ -25748,6 +25751,7 @@ export namespace Prisma {
     description?: boolean
     features?: boolean
     status?: boolean
+    specificationTable?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     categoryId?: boolean
@@ -25775,6 +25779,7 @@ export namespace Prisma {
     description?: boolean
     features?: boolean
     status?: boolean
+    specificationTable?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     categoryId?: boolean
@@ -25791,6 +25796,7 @@ export namespace Prisma {
     description?: boolean
     features?: boolean
     status?: boolean
+    specificationTable?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     categoryId?: boolean
@@ -25807,13 +25813,14 @@ export namespace Prisma {
     description?: boolean
     features?: boolean
     status?: boolean
+    specificationTable?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     categoryId?: boolean
     brand?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "name" | "slug" | "description" | "features" | "status" | "createdAt" | "updatedAt" | "categoryId" | "brand", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "name" | "slug" | "description" | "features" | "status" | "specificationTable" | "createdAt" | "updatedAt" | "categoryId" | "brand", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     seller?: boolean | UserDefaultArgs<ExtArgs>
     variants?: boolean | Product$variantsArgs<ExtArgs>
@@ -25862,6 +25869,7 @@ export namespace Prisma {
       description: string | null
       features: string[]
       status: $Enums.ProductStatus
+      specificationTable: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
       categoryId: string | null
@@ -26308,6 +26316,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Product", 'String'>
     readonly features: FieldRef<"Product", 'String[]'>
     readonly status: FieldRef<"Product", 'ProductStatus'>
+    readonly specificationTable: FieldRef<"Product", 'Json'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
     readonly categoryId: FieldRef<"Product", 'String'>
@@ -27047,6 +27056,7 @@ export namespace Prisma {
     soldCount: number
     attributes: number
     isDefault: number
+    specificationTable: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -27103,6 +27113,7 @@ export namespace Prisma {
     soldCount?: true
     attributes?: true
     isDefault?: true
+    specificationTable?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -27204,6 +27215,7 @@ export namespace Prisma {
     soldCount: number
     attributes: JsonValue | null
     isDefault: boolean
+    specificationTable: JsonValue | null
     createdAt: Date
     updatedAt: Date
     _count: ProductVariantCountAggregateOutputType | null
@@ -27237,6 +27249,7 @@ export namespace Prisma {
     soldCount?: boolean
     attributes?: boolean
     isDefault?: boolean
+    specificationTable?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     specifications?: boolean | ProductVariant$specificationsArgs<ExtArgs>
@@ -27257,6 +27270,7 @@ export namespace Prisma {
     soldCount?: boolean
     attributes?: boolean
     isDefault?: boolean
+    specificationTable?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -27272,6 +27286,7 @@ export namespace Prisma {
     soldCount?: boolean
     attributes?: boolean
     isDefault?: boolean
+    specificationTable?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -27287,11 +27302,12 @@ export namespace Prisma {
     soldCount?: boolean
     attributes?: boolean
     isDefault?: boolean
+    specificationTable?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProductVariantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "sku" | "price" | "mrp" | "stock" | "soldCount" | "attributes" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>
+  export type ProductVariantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "sku" | "price" | "mrp" | "stock" | "soldCount" | "attributes" | "isDefault" | "specificationTable" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>
   export type ProductVariantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     specifications?: boolean | ProductVariant$specificationsArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -27326,6 +27342,7 @@ export namespace Prisma {
       soldCount: number
       attributes: Prisma.JsonValue | null
       isDefault: boolean
+      specificationTable: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["productVariant"]>
@@ -27765,6 +27782,7 @@ export namespace Prisma {
     readonly soldCount: FieldRef<"ProductVariant", 'Int'>
     readonly attributes: FieldRef<"ProductVariant", 'Json'>
     readonly isDefault: FieldRef<"ProductVariant", 'Boolean'>
+    readonly specificationTable: FieldRef<"ProductVariant", 'Json'>
     readonly createdAt: FieldRef<"ProductVariant", 'DateTime'>
     readonly updatedAt: FieldRef<"ProductVariant", 'DateTime'>
   }
@@ -52540,6 +52558,7 @@ export namespace Prisma {
     description: 'description',
     features: 'features',
     status: 'status',
+    specificationTable: 'specificationTable',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     categoryId: 'categoryId',
@@ -52559,6 +52578,7 @@ export namespace Prisma {
     soldCount: 'soldCount',
     attributes: 'attributes',
     isDefault: 'isDefault',
+    specificationTable: 'specificationTable',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -54706,6 +54726,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Product"> | string | null
     features?: StringNullableListFilter<"Product">
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
+    specificationTable?: JsonNullableFilter<"Product">
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     categoryId?: StringNullableFilter<"Product"> | string | null
@@ -54732,6 +54753,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     features?: SortOrder
     status?: SortOrder
+    specificationTable?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     categoryId?: SortOrderInput | SortOrder
@@ -54761,6 +54783,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Product"> | string | null
     features?: StringNullableListFilter<"Product">
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
+    specificationTable?: JsonNullableFilter<"Product">
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     categoryId?: StringNullableFilter<"Product"> | string | null
@@ -54787,6 +54810,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     features?: SortOrder
     status?: SortOrder
+    specificationTable?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     categoryId?: SortOrderInput | SortOrder
@@ -54807,6 +54831,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Product"> | string | null
     features?: StringNullableListFilter<"Product">
     status?: EnumProductStatusWithAggregatesFilter<"Product"> | $Enums.ProductStatus
+    specificationTable?: JsonNullableWithAggregatesFilter<"Product">
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     categoryId?: StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -54826,6 +54851,7 @@ export namespace Prisma {
     soldCount?: IntFilter<"ProductVariant"> | number
     attributes?: JsonNullableFilter<"ProductVariant">
     isDefault?: BoolFilter<"ProductVariant"> | boolean
+    specificationTable?: JsonNullableFilter<"ProductVariant">
     createdAt?: DateTimeFilter<"ProductVariant"> | Date | string
     updatedAt?: DateTimeFilter<"ProductVariant"> | Date | string
     specifications?: ProductSpecificationListRelationFilter
@@ -54845,6 +54871,7 @@ export namespace Prisma {
     soldCount?: SortOrder
     attributes?: SortOrderInput | SortOrder
     isDefault?: SortOrder
+    specificationTable?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     specifications?: ProductSpecificationOrderByRelationAggregateInput
@@ -54867,6 +54894,7 @@ export namespace Prisma {
     soldCount?: IntFilter<"ProductVariant"> | number
     attributes?: JsonNullableFilter<"ProductVariant">
     isDefault?: BoolFilter<"ProductVariant"> | boolean
+    specificationTable?: JsonNullableFilter<"ProductVariant">
     createdAt?: DateTimeFilter<"ProductVariant"> | Date | string
     updatedAt?: DateTimeFilter<"ProductVariant"> | Date | string
     specifications?: ProductSpecificationListRelationFilter
@@ -54886,6 +54914,7 @@ export namespace Prisma {
     soldCount?: SortOrder
     attributes?: SortOrderInput | SortOrder
     isDefault?: SortOrder
+    specificationTable?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProductVariantCountOrderByAggregateInput
@@ -54908,6 +54937,7 @@ export namespace Prisma {
     soldCount?: IntWithAggregatesFilter<"ProductVariant"> | number
     attributes?: JsonNullableWithAggregatesFilter<"ProductVariant">
     isDefault?: BoolWithAggregatesFilter<"ProductVariant"> | boolean
+    specificationTable?: JsonNullableWithAggregatesFilter<"ProductVariant">
     createdAt?: DateTimeWithAggregatesFilter<"ProductVariant"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ProductVariant"> | Date | string
   }
@@ -58133,6 +58163,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -58158,6 +58189,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -58181,6 +58213,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -58206,6 +58239,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -58230,6 +58264,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -58243,6 +58278,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -58256,6 +58292,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -58271,6 +58308,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     specifications?: ProductSpecificationCreateNestedManyWithoutVariantInput
@@ -58290,6 +58328,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     specifications?: ProductSpecificationUncheckedCreateNestedManyWithoutVariantInput
@@ -58307,6 +58346,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     specifications?: ProductSpecificationUpdateManyWithoutVariantNestedInput
@@ -58326,6 +58366,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     specifications?: ProductSpecificationUncheckedUpdateManyWithoutVariantNestedInput
@@ -58344,6 +58385,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -58357,6 +58399,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -58371,6 +58414,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61597,6 +61641,7 @@ export namespace Prisma {
     description?: SortOrder
     features?: SortOrder
     status?: SortOrder
+    specificationTable?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     categoryId?: SortOrder
@@ -61690,6 +61735,7 @@ export namespace Prisma {
     soldCount?: SortOrder
     attributes?: SortOrder
     isDefault?: SortOrder
+    specificationTable?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -67024,6 +67070,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -67047,6 +67094,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -67755,6 +67803,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Product"> | string | null
     features?: StringNullableListFilter<"Product">
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
+    specificationTable?: JsonNullableFilter<"Product">
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     categoryId?: StringNullableFilter<"Product"> | string | null
@@ -68786,6 +68835,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -68810,6 +68860,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -69078,6 +69129,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -69102,6 +69154,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70377,6 +70430,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -70401,6 +70455,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -70823,6 +70878,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -70847,6 +70903,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -70928,6 +70985,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -70952,6 +71010,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71126,6 +71185,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -71150,6 +71210,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -71188,6 +71249,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -71212,6 +71274,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71234,6 +71297,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -71258,6 +71322,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -71296,6 +71361,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -71320,6 +71386,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71342,6 +71409,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -71366,6 +71434,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -71404,6 +71473,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -71428,6 +71498,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71537,6 +71608,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     specifications?: ProductSpecificationCreateNestedManyWithoutVariantInput
@@ -71554,6 +71626,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     specifications?: ProductSpecificationUncheckedCreateNestedManyWithoutVariantInput
@@ -72001,6 +72074,7 @@ export namespace Prisma {
     soldCount?: IntFilter<"ProductVariant"> | number
     attributes?: JsonNullableFilter<"ProductVariant">
     isDefault?: BoolFilter<"ProductVariant"> | boolean
+    specificationTable?: JsonNullableFilter<"ProductVariant">
     createdAt?: DateTimeFilter<"ProductVariant"> | Date | string
     updatedAt?: DateTimeFilter<"ProductVariant"> | Date | string
   }
@@ -72289,6 +72363,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -72313,6 +72388,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -72467,6 +72543,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -72491,6 +72568,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72592,6 +72670,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     product: ProductCreateNestedOneWithoutVariantsInput
@@ -72610,6 +72689,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     cartItems?: CartItemUncheckedCreateNestedManyWithoutVariantInput
@@ -72642,6 +72722,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutVariantsNestedInput
@@ -72660,6 +72741,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cartItems?: CartItemUncheckedUpdateManyWithoutVariantNestedInput
@@ -72674,6 +72756,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -72698,6 +72781,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -72736,6 +72820,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -72760,6 +72845,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72869,6 +72955,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     specifications?: ProductSpecificationCreateNestedManyWithoutVariantInput
@@ -72887,6 +72974,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     specifications?: ProductSpecificationUncheckedCreateNestedManyWithoutVariantInput
@@ -73010,6 +73098,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     specifications?: ProductSpecificationUpdateManyWithoutVariantNestedInput
@@ -73028,6 +73117,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     specifications?: ProductSpecificationUncheckedUpdateManyWithoutVariantNestedInput
@@ -73592,6 +73682,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     specifications?: ProductSpecificationCreateNestedManyWithoutVariantInput
@@ -73610,6 +73701,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     specifications?: ProductSpecificationUncheckedCreateNestedManyWithoutVariantInput
@@ -73693,6 +73785,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     specifications?: ProductSpecificationUpdateManyWithoutVariantNestedInput
@@ -73711,6 +73804,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     specifications?: ProductSpecificationUncheckedUpdateManyWithoutVariantNestedInput
@@ -74308,6 +74402,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -74332,6 +74427,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -74513,6 +74609,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -74537,6 +74634,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75176,6 +75274,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -75200,6 +75299,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -75265,6 +75365,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -75289,6 +75390,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75666,6 +75768,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     specifications?: ProductSpecificationCreateNestedManyWithoutVariantInput
@@ -75684,6 +75787,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     specifications?: ProductSpecificationUncheckedCreateNestedManyWithoutVariantInput
@@ -75755,6 +75859,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     specifications?: ProductSpecificationUpdateManyWithoutVariantNestedInput
@@ -75773,6 +75878,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     specifications?: ProductSpecificationUncheckedUpdateManyWithoutVariantNestedInput
@@ -75963,6 +76069,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -75987,6 +76094,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -76136,6 +76244,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -76160,6 +76269,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76965,6 +77075,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -77383,6 +77494,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -77406,6 +77518,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77429,6 +77542,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78030,6 +78144,7 @@ export namespace Prisma {
     description?: string | null
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -78097,6 +78212,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -78121,6 +78237,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -78144,6 +78261,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -78337,6 +78455,7 @@ export namespace Prisma {
     soldCount?: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -78438,6 +78557,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     specifications?: ProductSpecificationUpdateManyWithoutVariantNestedInput
@@ -78455,6 +78575,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     specifications?: ProductSpecificationUncheckedUpdateManyWithoutVariantNestedInput
@@ -78472,6 +78593,7 @@ export namespace Prisma {
     soldCount?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

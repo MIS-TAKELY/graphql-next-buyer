@@ -4,7 +4,7 @@ import { ShareButton } from "@/components/common/ShareButton";
 import { MessageButton } from "@/components/common/MessageButton";
 import { WishlistButton } from "@/components/common/WishlistButton";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useAuth } from "@clerk/nextjs";
+import { useSession } from "@/lib/auth-client";
 
 interface ProductActionsProps {
   addedToWishlist: boolean;

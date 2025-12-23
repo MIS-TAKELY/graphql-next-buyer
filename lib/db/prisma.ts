@@ -16,14 +16,6 @@ export const prisma =
         url: process.env.DATABASE_URL,
       },
     },
-    // Add connection pool configuration
-    // @ts-ignore - These options exist but may not be in types
-    __internal: {
-      engine: {
-        connection_limit: 10,
-        pool_timeout: 10,
-      },
-    },
   });
 
 if (process.env.NODE_ENV === "development") {
