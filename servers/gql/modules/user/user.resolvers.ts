@@ -28,8 +28,10 @@ export const userResolvers = {
           },
         });
       } catch (error: any) {
-        console.log("error while fetching user profile details", error.message);
-        console.error(error);
+        if (error.message !== "Authentication required") {
+          console.log("error while fetching user profile details", error.message);
+          console.error(error);
+        }
         throw new Error(error.message);
       }
     },
