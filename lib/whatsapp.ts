@@ -1,9 +1,9 @@
 export async function sendWhatsAppOTP(phone: string, otp: string) {
-    const wppConnectUrl = process.env.WPP_CONNECT;
-    if (!wppConnectUrl) {
-        console.error("❌ WPP_CONNECT URL is missing");
-        throw new Error("WhatsApp provider URL is not configured");
-    }
+    // Use the provided URL or fallback to environment variable
+    const wppConnectUrl = "https://watsappwebjs.onrender.com/send-message";
+
+    // Clean phone number: remove all non-digits
+    const cleanPhone = phone.toString().replace(/\D/g, "");
 
     const message = `Your verification code is: ${otp}`;
     const MAX_RETRIES = 2;
@@ -11,12 +11,12 @@ export async function sendWhatsAppOTP(phone: string, otp: string) {
 
     while (attempt <= MAX_RETRIES) {
         try {
-            console.log(`📱 Sending OTP to ${phone} (Attempt ${attempt + 1}/${MAX_RETRIES + 1})...`);
+            console.log(`📱 Sending OTP to ${cleanPhone} (Attempt ${attempt + 1}/${MAX_RETRIES + 1})...`);
             const response = await fetch(wppConnectUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    phone: phone.toString(),
+                    phone: cleanPhone,
                     message,
                 }),
             });

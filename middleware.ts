@@ -20,14 +20,19 @@ const publicRoutes = [
 export default async function middleware(request: NextRequest) {
   const { nextUrl } = request;
 
+
+  // 0. Early return for auth API routes, OTP routes, and verify-phone
+  if (
+    nextUrl.pathname.startsWith("/api/auth") ||
+    nextUrl.pathname.startsWith("/api/otp") ||
+    nextUrl.pathname === "/verify-phone"
+  ) {
+    return NextResponse.next();
+  }
+
   // Enforce canonical domain (www.vanijay.com)
   if (process.env.NODE_ENV === "production" && nextUrl.hostname === "vanijay.com") {
     return NextResponse.redirect(new URL(`https://www.vanijay.com${nextUrl.pathname}${nextUrl.search}`));
-  }
-
-  // 0. Early return for auth API routes and verify-phone
-  if (nextUrl.pathname.startsWith("/api/auth") || nextUrl.pathname === "/verify-phone") {
-    return NextResponse.next();
   }
 
   // 1. Check session via fetch (edge-compatible)
@@ -54,6 +59,11 @@ export default async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
     return NextResponse.redirect(new URL("/sign-in", request.url));
+  }
+
+  // 2.5 If logged in, don't allow access to sign-in/sign-up
+  if (nextUrl.pathname.startsWith("/sign-in") || nextUrl.pathname.startsWith("/sign-up")) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // 3. If logged in but phone is not verified

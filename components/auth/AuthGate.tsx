@@ -52,12 +52,11 @@ export default function AuthGate({ children }: AuthGateProps) {
     });
 
     // Check if user is fully verified
-    const isEmailVerified = session?.user?.emailVerified;
     const isPhoneVerified = (session?.user as any)?.phoneVerified;
 
     // If session exists, they MUST be verified even for public routes (except auth routes)
     if (session) {
-        if (!isEmailVerified || !isPhoneVerified) {
+        if (!isPhoneVerified) {
             // Allow them to see /sign-in, /sign-up, /verify-phone without AuthGate interference
             const isAuthRoute = ["/sign-in", "/sign-up", "/verify-phone"].some(route => pathname.startsWith(route));
 

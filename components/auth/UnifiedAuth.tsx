@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { signIn, signUp, useSession, signOut } from "@/lib/auth-client";
+import { signIn, signUp, useSession, signOut, sendVerificationEmail } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { CheckCircle2, Mail, Phone, Loader2 } from "lucide-react";
+import { CheckCircle2, Mail, Phone, Loader2, Eye, EyeOff } from "lucide-react";
+import Logo from "../navbar/Logo";
 
-type AuthStep = "SIGN_IN" | "SIGN_UP" | "EMAIL_PENDING" | "PHONE_OTP" | "PHONE_NUMBER";
+type AuthStep = "SIGN_IN" | "SIGN_UP" | "PHONE_OTP" | "PHONE_NUMBER" | "EMAIL_SENT";
 
 export default function UnifiedAuth() {
     const { data: session, isPending, refetch } = useSession();
@@ -17,8 +18,8 @@ export default function UnifiedAuth() {
     const [identifier, setIdentifier] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [name, setName] = useState("");
-    const [username, setUsername] = useState(""); // For sign up
     const [phone, setPhone] = useState("");
     const [otp, setOtp] = useState("");
     const [loading, setLoading] = useState(false);
@@ -29,9 +30,7 @@ export default function UnifiedAuth() {
     // Handle step transitions based on session state
     useEffect(() => {
         if (!isPending && session) {
-            if (!session.user.emailVerified) {
-                setStep("EMAIL_PENDING");
-            } else if (!(session.user as any).phoneVerified) {
+            if (!(session.user as any).phoneVerified) {
                 setStep("PHONE_NUMBER");
             }
         }
@@ -67,7 +66,13 @@ export default function UnifiedAuth() {
 
             if (error) {
                 const errorMessage = error.message || "Failed to sign in";
-                if (errorMessage.includes("Invalid")) {
+                if (errorMessage.toLowerCase().includes("verify") || errorMessage.toLowerCase().includes("verified")) {
+                    toast.error("Please verify your email before signing in.");
+                    if (isEmail) {
+                        setEmail(identifier);
+                        setStep("EMAIL_SENT");
+                    }
+                } else if (errorMessage.includes("Invalid")) {
                     toast.error("Invalid credentials. Please try again.");
                 } else {
                     toast.error(errorMessage);
@@ -84,16 +89,41 @@ export default function UnifiedAuth() {
         }
     };
 
+    const handleResendVerification = async () => {
+        setLoading(true);
+        try {
+            const { error } = await sendVerificationEmail({
+                email,
+                callbackURL: window.location.origin
+            });
+            if (error) {
+                toast.error(error.message || "Failed to resend email");
+            } else {
+                toast.success("Verification email resent!");
+            }
+        } catch (err) {
+            toast.error("An error occurred. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         try {
+            const nameParts = name.trim().split(/\s+/);
+            const firstName = nameParts[0] || "";
+            const lastName = nameParts.slice(1).join(" ") || "";
+
             const { error } = await signUp.email({
                 email,
                 password,
-                username,
-                name,
-            });
+                name: name.trim(),
+                username: email.split("@")[0] + "_" + Math.random().toString(36).slice(-5),
+                firstName,
+                lastName,
+            } as any);
             if (error) {
                 const errorMessage = error.message || "Failed to sign up";
                 if (errorMessage.includes("already exists") || errorMessage.includes("duplicate")) {
@@ -102,8 +132,8 @@ export default function UnifiedAuth() {
                     toast.error(errorMessage);
                 }
             } else {
-                toast.success("Account created! Please check your email to verify.");
-                setStep("EMAIL_PENDING");
+                toast.success("Account created! Please check your email for verification.");
+                setStep("EMAIL_SENT");
                 await refetch();
             }
         } catch (err: any) {
@@ -262,7 +292,10 @@ export default function UnifiedAuth() {
 
     const renderSignIn = () => (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="text-center">
+            <div className="text-center flex flex-col items-center">
+                <div className="mb-4">
+                    <Logo />
+                </div>
                 <h2 className="text-3xl font-bold tracking-tight text-foreground">Welcome Back</h2>
                 <p className="mt-2 text-sm text-muted-foreground">Sign in to your account to continue</p>
             </div>
@@ -273,7 +306,28 @@ export default function UnifiedAuth() {
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
-                    <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+                    <div className="relative">
+                        <Input
+                            id="password"
+                            type={showPassword ? "text" : "password"}
+                            required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="••••••••"
+                            className="pr-10"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            {showPassword ? (
+                                <EyeOff className="h-4 w-4" />
+                            ) : (
+                                <Eye className="h-4 w-4" />
+                            )}
+                        </button>
+                    </div>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
@@ -307,15 +361,14 @@ export default function UnifiedAuth() {
 
     const renderSignUp = () => (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="text-center">
+            <div className="text-center flex flex-col items-center">
+                <div className="mb-4">
+                    <Logo />
+                </div>
                 <h2 className="text-3xl font-bold tracking-tight text-foreground">Create Account</h2>
                 <p className="mt-2 text-sm text-muted-foreground">Join Vanijay today</p>
             </div>
             <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="space-y-2">
-                    <Label htmlFor="username_signup">Username</Label>
-                    <Input id="username_signup" type="text" required value={username} onChange={(e) => setUsername(e.target.value)} placeholder="johndoe123" />
-                </div>
                 <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input id="name" type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="John Doe" />
@@ -326,7 +379,28 @@ export default function UnifiedAuth() {
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="password_signup">Password</Label>
-                    <Input id="password_signup" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+                    <div className="relative">
+                        <Input
+                            id="password_signup"
+                            type={showPassword ? "text" : "password"}
+                            required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="••••••••"
+                            className="pr-10"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            {showPassword ? (
+                                <EyeOff className="h-4 w-4" />
+                            ) : (
+                                <Eye className="h-4 w-4" />
+                            )}
+                        </button>
+                    </div>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
@@ -340,34 +414,36 @@ export default function UnifiedAuth() {
         </div>
     );
 
-    const renderEmailPending = () => (
-        <div className="text-center space-y-6 animate-in fade-in zoom-in duration-500">
-            <div className="flex justify-center">
+
+    const renderEmailSent = () => (
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
+            <div className="flex justify-center mb-4">
                 <div className="rounded-full bg-primary/10 p-4">
                     <Mail className="h-10 w-10 text-primary" />
                 </div>
             </div>
-            <div className="space-y-2">
-                <h2 className="text-2xl font-bold">Verify your email</h2>
-                <p className="text-muted-foreground">
-                    We've sent a verification link to <span className="font-medium text-foreground">{session?.user.email}</span>.
-                    Please check your inbox and click the link to continue.
-                </p>
-            </div>
+            <h2 className="text-2xl font-bold">Check your email</h2>
+            <p className="text-muted-foreground">
+                We've sent a verification link to <span className="font-medium text-foreground">{email}</span>.
+                Please click the link in the email to verify your account.
+            </p>
             <div className="space-y-4">
-                <Button variant="outline" className="w-full" onClick={() => refetch()} disabled={loading}>
-                    {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                    I've verified my email
+                <Button onClick={() => setStep("PHONE_NUMBER")} className="w-full">
+                    Continue to Phone Verification
                 </Button>
-                <p className="text-xs text-muted-foreground">
-                    Didn't receive the email? Check your spam folder or contact support.
-                </p>
-                <div className="pt-4 border-t border-border/50">
+                <div className="flex flex-col gap-2">
                     <button
-                        onClick={() => signOut({ fetchOptions: { onSuccess: () => router.push("/") } })}
+                        onClick={handleResendVerification}
+                        disabled={loading}
+                        className="text-sm font-medium text-primary hover:underline disabled:opacity-50"
+                    >
+                        {loading ? "Sending..." : "Resend verification email"}
+                    </button>
+                    <button
+                        onClick={() => setStep("SIGN_UP")}
                         className="text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
-                        Sign out and try another email
+                        Back to Sign Up
                     </button>
                 </div>
             </div>
@@ -443,7 +519,7 @@ export default function UnifiedAuth() {
             <div className="bg-card/80 border border-border/50 rounded-xl shadow-2xl backdrop-blur-md p-8">
                 {step === "SIGN_IN" && renderSignIn()}
                 {step === "SIGN_UP" && renderSignUp()}
-                {step === "EMAIL_PENDING" && renderEmailPending()}
+                {step === "EMAIL_SENT" && renderEmailSent()}
                 {step === "PHONE_NUMBER" && renderPhoneNumber()}
                 {step === "PHONE_OTP" && renderPhoneOtp()}
             </div>
