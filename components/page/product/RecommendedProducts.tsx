@@ -23,7 +23,6 @@ export default function RecommendedProducts({
 
   const { data, loading } = useQuery(QUERY, {
     variables: { productId: currentProductId },
-    skip: !currentProductId,
   });
 
   if (loading) return null; // Or a skeleton

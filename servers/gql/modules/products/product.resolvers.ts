@@ -370,7 +370,7 @@ export const productResolvers = {
       return views.map(v => v.product);
     },
     getFrequentlyBoughtTogether: async (_: any, { productId, limit = 5 }: { productId: string, limit?: number }) => {
-      // Find orders that contain this product
+      // 1. Try Order History (Existing Logic)
       const orders = await prisma.order.findMany({
         where: {
           items: { some: { variant: { productId } } },
@@ -404,10 +404,61 @@ export const productResolvers = {
         .slice(0, limit)
         .map(([id]) => id);
 
-      if (sortedIds.length === 0) return [];
+      let resultIds = [...sortedIds];
+
+      // 2. AI Fallback: Vector Similarity (If not enough bought together)
+      if (resultIds.length < limit) {
+        // Get the current product's embedding
+        const currentProduct = await prisma.$queryRaw<Array<{ embedding: string }>>`
+            SELECT embedding::text FROM "products" WHERE id = ${productId} AND embedding IS NOT NULL
+          `;
+
+        if (currentProduct?.[0]?.embedding) {
+          const embedding = currentProduct[0].embedding;
+          // Find similar products using vector similarity
+          const excludedIds = [productId, ...resultIds];
+
+          // Fetch more results than needed and filter in JavaScript to avoid SQL array issues
+          const allSimilarProducts = await prisma.$queryRaw<Array<{ id: string; similarity: number }>>`
+                SELECT id::text, 1 - (embedding::text::vector <=> ${embedding}::vector) AS similarity
+                FROM "products"
+                WHERE embedding IS NOT NULL 
+                AND status = 'ACTIVE'
+                ORDER BY similarity DESC
+                LIMIT ${(limit - resultIds.length) * 2}
+            `;
+
+          // Filter out excluded IDs in JavaScript
+          const similarProducts = allSimilarProducts
+            .filter(p => !excludedIds.includes(p.id))
+            .slice(0, limit - resultIds.length);
+
+          const similarIds = similarProducts.map(p => p.id);
+          resultIds = [...resultIds, ...similarIds];
+        }
+
+        // 3. Category Fallback: Same category (If still not enough)
+        if (resultIds.length < limit) {
+          const product = await prisma.product.findUnique({ where: { id: productId }, select: { categoryId: true } });
+          if (product?.categoryId) {
+            const categoryProducts = await prisma.product.findMany({
+              where: {
+                categoryId: product.categoryId,
+                id: { notIn: [productId, ...resultIds] },
+                status: 'ACTIVE'
+              },
+              take: limit - resultIds.length,
+              select: { id: true }
+            });
+            resultIds = [...resultIds, ...categoryProducts.map(p => p.id)];
+          }
+        }
+      }
+
+      if (resultIds.length === 0) return [];
 
       const products = await prisma.product.findMany({
-        where: { id: { in: sortedIds } },
+        where: { id: { in: resultIds } },
         include: {
           variants: {
             select: {
@@ -426,9 +477,9 @@ export const productResolvers = {
         }
       });
 
-      // Sort back to frequency order
+      // Sort back to the hybrid order (bought together first, then AI/Category)
       const productMap = new Map(products.map(p => [p.id, p]));
-      return sortedIds.map(id => productMap.get(id)).filter(Boolean);
+      return resultIds.map(id => productMap.get(id)).filter(Boolean);
     }
   },
   Mutation: {

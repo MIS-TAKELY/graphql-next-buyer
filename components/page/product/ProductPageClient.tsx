@@ -14,6 +14,7 @@ import { useMutation } from "@apollo/client";
 import { RECORD_PRODUCT_VIEW } from "@/client/product/product.queries";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import FAQSection from "./FAQSection";
+import FrequentlyBoughtTogether from "./FrequentlyBoughtTogether";
 import RecommendedProducts from "./RecommendedProducts";
 import SellerInfo from "./SellerInfo";
 
@@ -265,13 +266,16 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         )}
       </div>
 
-      <RecommendedProducts
-        currentProductId={product.id || ""}
-        title="Recommended for You"
+      <FrequentlyBoughtTogether
+        currentProduct={product}
       />
       <RecommendedProducts
         currentProductId={product.id || ""}
-        title="Frequently Bought Together"
+        title="Similar Products"
+      />
+      <RecommendedProducts
+        currentProductId=""
+        title="Recommended for You"
       />
 
       {/* Sticky Mobile Buy Now Bar - Full width, Amazon/Flipkart style */}
