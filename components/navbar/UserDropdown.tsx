@@ -23,7 +23,7 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
     await signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/sign-in");
+          router.push("/");
           router.refresh();
         },
       },

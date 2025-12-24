@@ -33,8 +33,8 @@ export async function createContext(
       session = await auth.api.getSession({
         headers: await headers(),
       });
-    } catch (error: any) {
-      if (error.digest === "DYNAMIC_SERVER_USAGE") {
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'digest' in error && error.digest === "DYNAMIC_SERVER_USAGE") {
         // Ignore headers during static generation
       } else {
         throw error;
@@ -90,8 +90,8 @@ export async function createContext(
         }
       },
     };
-  } catch (error: any) {
-    if (error.digest !== "DYNAMIC_SERVER_USAGE") {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'digest' in error && error.digest !== "DYNAMIC_SERVER_USAGE") {
       console.error("Error creating GraphQL context:", error);
     }
     return {

@@ -364,8 +364,15 @@ export const orderResolvers = {
               ?.product.seller;
 
             if (seller?.email) {
+              const sellerTotal = items.reduce(
+                (acc, i) => acc + Number(i.totalPrice),
+                0
+              );
               console.log("sending mail to seller:", seller.email);
-              const info = await senMail(seller.email);
+              const info = await senMail(seller.email, "NEW_ORDER", {
+                total: sellerTotal.toString(),
+                name: "Seller",
+              });
               console.log("mail response-->", info);
             }
 

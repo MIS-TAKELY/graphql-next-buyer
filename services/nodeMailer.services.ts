@@ -65,6 +65,23 @@ const TEMPLATES: Record<string, EmailTemplate> = {
       </div>
     `,
   },
+  NEW_ORDER: {
+    subject: "New Order Received! - Vanijay",
+    text: (ctx) => `You have received a new order. Total: ${ctx.total}`,
+    html: (ctx) => `
+      <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #333;">New Order Received!</h2>
+        <p>Hello ${ctx.name || 'Seller'},</p>
+        <p>You have received a new order on Vanijay.</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 0; font-size: 1.1em; font-weight: bold;">Order Summary:</p>
+          <p style="margin: 10px 0 0 0;">Total Amount: NPR ${ctx.total}</p>
+        </div>
+        <p>Please log in to your dashboard to process the order.</p>
+        <p style="color: #666; font-size: 0.9em;">Thank you for selling on Vanijay!</p>
+      </div>
+    `,
+  },
 };
 
 export const senMail = async (

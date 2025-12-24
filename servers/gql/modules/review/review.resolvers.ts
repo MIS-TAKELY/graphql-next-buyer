@@ -192,14 +192,14 @@ export const reviewResolvers = {
           },
         });
 
-        const total = aggregations.reduce((acc, curr) => acc + curr._count._all, 0);
-        const weightedSum = aggregations.reduce(
+        const total = (aggregations as any[]).reduce((acc, curr) => acc + curr._count._all, 0);
+        const weightedSum = (aggregations as any[]).reduce(
           (acc, curr) => acc + curr.rating * curr._count._all,
           0
         );
         const average = total > 0 ? weightedSum / total : 0;
 
-        const counts = aggregations.map((agg) => ({
+        const counts = (aggregations as any[]).map((agg) => ({
           rating: agg.rating,
           count: agg._count._all,
         }));

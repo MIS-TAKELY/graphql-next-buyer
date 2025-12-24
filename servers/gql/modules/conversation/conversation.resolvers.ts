@@ -95,9 +95,9 @@ export const conversationResolvers = {
       });
 
       // Transform to match the schema
-      return conversations.map((conv) => ({
+      return conversations.map((conv: any) => ({
         ...conv,
-        lastMessage: conv.messages[0],
+        lastMessage: conv.messages?.[0],
         unreadCount: 0, // Placeholder, can be implemented later
       }));
     },

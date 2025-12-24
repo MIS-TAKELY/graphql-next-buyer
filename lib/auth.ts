@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./db/prisma";
 import { username } from "better-auth/plugins";
 import { senMail } from "@/services/nodeMailer.services";
+import { AuthUser, GoogleProfile, FacebookProfile, TikTokProfile } from "@/types/auth";
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
@@ -42,11 +43,11 @@ export const auth = betterAuth({
     emailVerification: {
         sendOnSignUp: true,
         autoSignInAfterVerification: true,
-        sendVerificationEmail: async ({ user, url }: { user: any; url: string }) => {
+        sendVerificationEmail: async ({ user, url }: { user: AuthUser; url: string }) => {
             console.log("BETTER-AUTH: triggering sendVerificationEmail for", user.email);
             console.log("BETTER-AUTH: verification URL:", url);
             try {
-                await senMail(user.email, "VERIFICATION", { url, name: user.name || user.firstName });
+                await senMail(user.email, "VERIFICATION", { url, name: (user.name || user.firstName || "User") as string });
                 console.log("BETTER-AUTH: senMail call completed");
             } catch (err) {
                 console.error("BETTER-AUTH: Error in sendVerificationEmail hook:", err);
@@ -91,7 +92,7 @@ export const auth = betterAuth({
         google: {
             clientId: process.env.GOOGLE_CLIENT_ID as string,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-            mapProfileToUser: (profile: any) => {
+            mapProfileToUser: (profile: GoogleProfile) => {
                 const uniqueId = profile.id || profile.sub || Math.random().toString(36).slice(-5);
                 return {
                     username: (profile.email.split("@")[0] + "_" + uniqueId.slice(-5)).toLowerCase(),
@@ -104,7 +105,7 @@ export const auth = betterAuth({
         facebook: {
             clientId: process.env.FACEBOOK_CLIENT_ID as string,
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
-            mapProfileToUser: (profile: any) => {
+            mapProfileToUser: (profile: FacebookProfile) => {
                 const uniqueId = profile.id || Math.random().toString(36).slice(-5);
                 const email = profile.email || `${uniqueId}@facebook.com`;
                 return {
@@ -118,7 +119,7 @@ export const auth = betterAuth({
         tiktok: {
             clientId: process.env.TIKTOK_CLIENT_ID as string,
             clientSecret: process.env.TIKTOK_CLIENT_SECRET as string,
-            mapProfileToUser: (profile: any) => {
+            mapProfileToUser: (profile: TikTokProfile) => {
                 const uniqueId = profile.open_id || profile.id || Math.random().toString(36).slice(-5);
                 const display_name = profile.display_name || "TikTok User";
                 return {
