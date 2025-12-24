@@ -58,7 +58,13 @@ export const productTypeDefs = gql`
     getProducts: [Product!]!
     getProduct(productId: ID!): Product!
     getProductBySlug(slug: String!): Product!
-    getRecommendedProducts(productId: ID!, limit: Int): [Product!]!
+    getRecommendedProducts(productId: ID, limit: Int): [Product!]!
     getProductsBySeller(sellerId: ID!): [Product!]!
+    getRecentlyViewed: [Product!]!
+    getFrequentlyBoughtTogether(productId: ID!, limit: Int): [Product!]!
+  }
+
+  type Mutation {
+    recordProductView(productId: ID!): Boolean
   }
 `;

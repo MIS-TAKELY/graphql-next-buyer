@@ -218,6 +218,11 @@ export type Verification = $Result.DefaultSelection<Prisma.$VerificationPayload>
  * 
  */
 export type OrderDispute = $Result.DefaultSelection<Prisma.$OrderDisputePayload>
+/**
+ * Model RecentlyViewed
+ * 
+ */
+export type RecentlyViewed = $Result.DefaultSelection<Prisma.$RecentlyViewedPayload>
 
 /**
  * Enums
@@ -1046,6 +1051,16 @@ export class PrismaClient<
     * ```
     */
   get orderDispute(): Prisma.OrderDisputeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.recentlyViewed`: Exposes CRUD operations for the **RecentlyViewed** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RecentlyVieweds
+    * const recentlyVieweds = await prisma.recentlyViewed.findMany()
+    * ```
+    */
+  get recentlyViewed(): Prisma.RecentlyViewedDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1527,7 +1542,8 @@ export namespace Prisma {
     Session: 'Session',
     Account: 'Account',
     Verification: 'Verification',
-    OrderDispute: 'OrderDispute'
+    OrderDispute: 'OrderDispute',
+    RecentlyViewed: 'RecentlyViewed'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1546,7 +1562,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout" | "productQuestion" | "productAnswer" | "session" | "account" | "verification" | "orderDispute"
+      modelProps: "user" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout" | "productQuestion" | "productAnswer" | "session" | "account" | "verification" | "orderDispute" | "recentlyViewed"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4584,6 +4600,80 @@ export namespace Prisma {
           }
         }
       }
+      RecentlyViewed: {
+        payload: Prisma.$RecentlyViewedPayload<ExtArgs>
+        fields: Prisma.RecentlyViewedFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RecentlyViewedFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecentlyViewedPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RecentlyViewedFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecentlyViewedPayload>
+          }
+          findFirst: {
+            args: Prisma.RecentlyViewedFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecentlyViewedPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RecentlyViewedFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecentlyViewedPayload>
+          }
+          findMany: {
+            args: Prisma.RecentlyViewedFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecentlyViewedPayload>[]
+          }
+          create: {
+            args: Prisma.RecentlyViewedCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecentlyViewedPayload>
+          }
+          createMany: {
+            args: Prisma.RecentlyViewedCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RecentlyViewedCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecentlyViewedPayload>[]
+          }
+          delete: {
+            args: Prisma.RecentlyViewedDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecentlyViewedPayload>
+          }
+          update: {
+            args: Prisma.RecentlyViewedUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecentlyViewedPayload>
+          }
+          deleteMany: {
+            args: Prisma.RecentlyViewedDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RecentlyViewedUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RecentlyViewedUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecentlyViewedPayload>[]
+          }
+          upsert: {
+            args: Prisma.RecentlyViewedUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecentlyViewedPayload>
+          }
+          aggregate: {
+            args: Prisma.RecentlyViewedAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRecentlyViewed>
+          }
+          groupBy: {
+            args: Prisma.RecentlyViewedGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RecentlyViewedGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RecentlyViewedCountArgs<ExtArgs>
+            result: $Utils.Optional<RecentlyViewedCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4721,6 +4811,7 @@ export namespace Prisma {
     account?: AccountOmit
     verification?: VerificationOmit
     orderDispute?: OrderDisputeOmit
+    recentlyViewed?: RecentlyViewedOmit
   }
 
   /* Types for Logging */
@@ -4822,6 +4913,7 @@ export namespace Prisma {
     disputes: number
     productQuestions: number
     productAnswers: number
+    recentlyViewed: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4846,6 +4938,7 @@ export namespace Prisma {
     disputes?: boolean | UserCountOutputTypeCountDisputesArgs
     productQuestions?: boolean | UserCountOutputTypeCountProductQuestionsArgs
     productAnswers?: boolean | UserCountOutputTypeCountProductAnswersArgs
+    recentlyViewed?: boolean | UserCountOutputTypeCountRecentlyViewedArgs
   }
 
   // Custom InputTypes
@@ -5004,6 +5097,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountProductAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductAnswerWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountRecentlyViewedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecentlyViewedWhereInput
   }
 
 
@@ -5231,6 +5331,7 @@ export namespace Prisma {
     returnPolicy: number
     Conversation: number
     questions: number
+    recentlyViewed: number
   }
 
   export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5244,6 +5345,7 @@ export namespace Prisma {
     returnPolicy?: boolean | ProductCountOutputTypeCountReturnPolicyArgs
     Conversation?: boolean | ProductCountOutputTypeCountConversationArgs
     questions?: boolean | ProductCountOutputTypeCountQuestionsArgs
+    recentlyViewed?: boolean | ProductCountOutputTypeCountRecentlyViewedArgs
   }
 
   // Custom InputTypes
@@ -5325,6 +5427,13 @@ export namespace Prisma {
    */
   export type ProductCountOutputTypeCountQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductQuestionWhereInput
+  }
+
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeCountRecentlyViewedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecentlyViewedWhereInput
   }
 
 
@@ -5936,6 +6045,7 @@ export namespace Prisma {
     disputes?: boolean | User$disputesArgs<ExtArgs>
     productQuestions?: boolean | User$productQuestionsArgs<ExtArgs>
     productAnswers?: boolean | User$productAnswersArgs<ExtArgs>
+    recentlyViewed?: boolean | User$recentlyViewedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6032,6 +6142,7 @@ export namespace Prisma {
     disputes?: boolean | User$disputesArgs<ExtArgs>
     productQuestions?: boolean | User$productQuestionsArgs<ExtArgs>
     productAnswers?: boolean | User$productAnswersArgs<ExtArgs>
+    recentlyViewed?: boolean | User$recentlyViewedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -6062,6 +6173,7 @@ export namespace Prisma {
       disputes: Prisma.$OrderDisputePayload<ExtArgs>[]
       productQuestions: Prisma.$ProductQuestionPayload<ExtArgs>[]
       productAnswers: Prisma.$ProductAnswerPayload<ExtArgs>[]
+      recentlyViewed: Prisma.$RecentlyViewedPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6500,6 +6612,7 @@ export namespace Prisma {
     disputes<T extends User$disputesArgs<ExtArgs> = {}>(args?: Subset<T, User$disputesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     productQuestions<T extends User$productQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, User$productQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     productAnswers<T extends User$productAnswersArgs<ExtArgs> = {}>(args?: Subset<T, User$productAnswersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    recentlyViewed<T extends User$recentlyViewedArgs<ExtArgs> = {}>(args?: Subset<T, User$recentlyViewedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7457,6 +7570,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductAnswerScalarFieldEnum | ProductAnswerScalarFieldEnum[]
+  }
+
+  /**
+   * User.recentlyViewed
+   */
+  export type User$recentlyViewedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedInclude<ExtArgs> | null
+    where?: RecentlyViewedWhereInput
+    orderBy?: RecentlyViewedOrderByWithRelationInput | RecentlyViewedOrderByWithRelationInput[]
+    cursor?: RecentlyViewedWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RecentlyViewedScalarFieldEnum | RecentlyViewedScalarFieldEnum[]
   }
 
   /**
@@ -25979,6 +26116,7 @@ export namespace Prisma {
     returnPolicy?: boolean | Product$returnPolicyArgs<ExtArgs>
     Conversation?: boolean | Product$ConversationArgs<ExtArgs>
     questions?: boolean | Product$questionsArgs<ExtArgs>
+    recentlyViewed?: boolean | Product$recentlyViewedArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
@@ -26045,6 +26183,7 @@ export namespace Prisma {
     returnPolicy?: boolean | Product$returnPolicyArgs<ExtArgs>
     Conversation?: boolean | Product$ConversationArgs<ExtArgs>
     questions?: boolean | Product$questionsArgs<ExtArgs>
+    recentlyViewed?: boolean | Product$recentlyViewedArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -26071,6 +26210,7 @@ export namespace Prisma {
       returnPolicy: Prisma.$ReturnPolicyPayload<ExtArgs>[]
       Conversation: Prisma.$ConversationPayload<ExtArgs>[]
       questions: Prisma.$ProductQuestionPayload<ExtArgs>[]
+      recentlyViewed: Prisma.$RecentlyViewedPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -26491,6 +26631,7 @@ export namespace Prisma {
     returnPolicy<T extends Product$returnPolicyArgs<ExtArgs> = {}>(args?: Subset<T, Product$returnPolicyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReturnPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Conversation<T extends Product$ConversationArgs<ExtArgs> = {}>(args?: Subset<T, Product$ConversationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     questions<T extends Product$questionsArgs<ExtArgs> = {}>(args?: Subset<T, Product$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    recentlyViewed<T extends Product$recentlyViewedArgs<ExtArgs> = {}>(args?: Subset<T, Product$recentlyViewedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -27184,6 +27325,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductQuestionScalarFieldEnum | ProductQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * Product.recentlyViewed
+   */
+  export type Product$recentlyViewedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedInclude<ExtArgs> | null
+    where?: RecentlyViewedWhereInput
+    orderBy?: RecentlyViewedOrderByWithRelationInput | RecentlyViewedOrderByWithRelationInput[]
+    cursor?: RecentlyViewedWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RecentlyViewedScalarFieldEnum | RecentlyViewedScalarFieldEnum[]
   }
 
   /**
@@ -53709,6 +53874,1059 @@ export namespace Prisma {
 
 
   /**
+   * Model RecentlyViewed
+   */
+
+  export type AggregateRecentlyViewed = {
+    _count: RecentlyViewedCountAggregateOutputType | null
+    _min: RecentlyViewedMinAggregateOutputType | null
+    _max: RecentlyViewedMaxAggregateOutputType | null
+  }
+
+  export type RecentlyViewedMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    productId: string | null
+    viewedAt: Date | null
+  }
+
+  export type RecentlyViewedMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    productId: string | null
+    viewedAt: Date | null
+  }
+
+  export type RecentlyViewedCountAggregateOutputType = {
+    id: number
+    userId: number
+    productId: number
+    viewedAt: number
+    _all: number
+  }
+
+
+  export type RecentlyViewedMinAggregateInputType = {
+    id?: true
+    userId?: true
+    productId?: true
+    viewedAt?: true
+  }
+
+  export type RecentlyViewedMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    productId?: true
+    viewedAt?: true
+  }
+
+  export type RecentlyViewedCountAggregateInputType = {
+    id?: true
+    userId?: true
+    productId?: true
+    viewedAt?: true
+    _all?: true
+  }
+
+  export type RecentlyViewedAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RecentlyViewed to aggregate.
+     */
+    where?: RecentlyViewedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecentlyVieweds to fetch.
+     */
+    orderBy?: RecentlyViewedOrderByWithRelationInput | RecentlyViewedOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RecentlyViewedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecentlyVieweds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecentlyVieweds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RecentlyVieweds
+    **/
+    _count?: true | RecentlyViewedCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RecentlyViewedMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RecentlyViewedMaxAggregateInputType
+  }
+
+  export type GetRecentlyViewedAggregateType<T extends RecentlyViewedAggregateArgs> = {
+        [P in keyof T & keyof AggregateRecentlyViewed]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRecentlyViewed[P]>
+      : GetScalarType<T[P], AggregateRecentlyViewed[P]>
+  }
+
+
+
+
+  export type RecentlyViewedGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecentlyViewedWhereInput
+    orderBy?: RecentlyViewedOrderByWithAggregationInput | RecentlyViewedOrderByWithAggregationInput[]
+    by: RecentlyViewedScalarFieldEnum[] | RecentlyViewedScalarFieldEnum
+    having?: RecentlyViewedScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RecentlyViewedCountAggregateInputType | true
+    _min?: RecentlyViewedMinAggregateInputType
+    _max?: RecentlyViewedMaxAggregateInputType
+  }
+
+  export type RecentlyViewedGroupByOutputType = {
+    id: string
+    userId: string
+    productId: string
+    viewedAt: Date
+    _count: RecentlyViewedCountAggregateOutputType | null
+    _min: RecentlyViewedMinAggregateOutputType | null
+    _max: RecentlyViewedMaxAggregateOutputType | null
+  }
+
+  type GetRecentlyViewedGroupByPayload<T extends RecentlyViewedGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RecentlyViewedGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RecentlyViewedGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RecentlyViewedGroupByOutputType[P]>
+            : GetScalarType<T[P], RecentlyViewedGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RecentlyViewedSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    productId?: boolean
+    viewedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recentlyViewed"]>
+
+  export type RecentlyViewedSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    productId?: boolean
+    viewedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recentlyViewed"]>
+
+  export type RecentlyViewedSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    productId?: boolean
+    viewedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recentlyViewed"]>
+
+  export type RecentlyViewedSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    productId?: boolean
+    viewedAt?: boolean
+  }
+
+  export type RecentlyViewedOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "productId" | "viewedAt", ExtArgs["result"]["recentlyViewed"]>
+  export type RecentlyViewedInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }
+  export type RecentlyViewedIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }
+  export type RecentlyViewedIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }
+
+  export type $RecentlyViewedPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RecentlyViewed"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      product: Prisma.$ProductPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      productId: string
+      viewedAt: Date
+    }, ExtArgs["result"]["recentlyViewed"]>
+    composites: {}
+  }
+
+  type RecentlyViewedGetPayload<S extends boolean | null | undefined | RecentlyViewedDefaultArgs> = $Result.GetResult<Prisma.$RecentlyViewedPayload, S>
+
+  type RecentlyViewedCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RecentlyViewedFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RecentlyViewedCountAggregateInputType | true
+    }
+
+  export interface RecentlyViewedDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RecentlyViewed'], meta: { name: 'RecentlyViewed' } }
+    /**
+     * Find zero or one RecentlyViewed that matches the filter.
+     * @param {RecentlyViewedFindUniqueArgs} args - Arguments to find a RecentlyViewed
+     * @example
+     * // Get one RecentlyViewed
+     * const recentlyViewed = await prisma.recentlyViewed.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RecentlyViewedFindUniqueArgs>(args: SelectSubset<T, RecentlyViewedFindUniqueArgs<ExtArgs>>): Prisma__RecentlyViewedClient<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RecentlyViewed that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RecentlyViewedFindUniqueOrThrowArgs} args - Arguments to find a RecentlyViewed
+     * @example
+     * // Get one RecentlyViewed
+     * const recentlyViewed = await prisma.recentlyViewed.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RecentlyViewedFindUniqueOrThrowArgs>(args: SelectSubset<T, RecentlyViewedFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RecentlyViewedClient<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RecentlyViewed that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecentlyViewedFindFirstArgs} args - Arguments to find a RecentlyViewed
+     * @example
+     * // Get one RecentlyViewed
+     * const recentlyViewed = await prisma.recentlyViewed.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RecentlyViewedFindFirstArgs>(args?: SelectSubset<T, RecentlyViewedFindFirstArgs<ExtArgs>>): Prisma__RecentlyViewedClient<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RecentlyViewed that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecentlyViewedFindFirstOrThrowArgs} args - Arguments to find a RecentlyViewed
+     * @example
+     * // Get one RecentlyViewed
+     * const recentlyViewed = await prisma.recentlyViewed.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RecentlyViewedFindFirstOrThrowArgs>(args?: SelectSubset<T, RecentlyViewedFindFirstOrThrowArgs<ExtArgs>>): Prisma__RecentlyViewedClient<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RecentlyVieweds that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecentlyViewedFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RecentlyVieweds
+     * const recentlyVieweds = await prisma.recentlyViewed.findMany()
+     * 
+     * // Get first 10 RecentlyVieweds
+     * const recentlyVieweds = await prisma.recentlyViewed.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const recentlyViewedWithIdOnly = await prisma.recentlyViewed.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RecentlyViewedFindManyArgs>(args?: SelectSubset<T, RecentlyViewedFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RecentlyViewed.
+     * @param {RecentlyViewedCreateArgs} args - Arguments to create a RecentlyViewed.
+     * @example
+     * // Create one RecentlyViewed
+     * const RecentlyViewed = await prisma.recentlyViewed.create({
+     *   data: {
+     *     // ... data to create a RecentlyViewed
+     *   }
+     * })
+     * 
+     */
+    create<T extends RecentlyViewedCreateArgs>(args: SelectSubset<T, RecentlyViewedCreateArgs<ExtArgs>>): Prisma__RecentlyViewedClient<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RecentlyVieweds.
+     * @param {RecentlyViewedCreateManyArgs} args - Arguments to create many RecentlyVieweds.
+     * @example
+     * // Create many RecentlyVieweds
+     * const recentlyViewed = await prisma.recentlyViewed.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RecentlyViewedCreateManyArgs>(args?: SelectSubset<T, RecentlyViewedCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RecentlyVieweds and returns the data saved in the database.
+     * @param {RecentlyViewedCreateManyAndReturnArgs} args - Arguments to create many RecentlyVieweds.
+     * @example
+     * // Create many RecentlyVieweds
+     * const recentlyViewed = await prisma.recentlyViewed.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RecentlyVieweds and only return the `id`
+     * const recentlyViewedWithIdOnly = await prisma.recentlyViewed.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RecentlyViewedCreateManyAndReturnArgs>(args?: SelectSubset<T, RecentlyViewedCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RecentlyViewed.
+     * @param {RecentlyViewedDeleteArgs} args - Arguments to delete one RecentlyViewed.
+     * @example
+     * // Delete one RecentlyViewed
+     * const RecentlyViewed = await prisma.recentlyViewed.delete({
+     *   where: {
+     *     // ... filter to delete one RecentlyViewed
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RecentlyViewedDeleteArgs>(args: SelectSubset<T, RecentlyViewedDeleteArgs<ExtArgs>>): Prisma__RecentlyViewedClient<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RecentlyViewed.
+     * @param {RecentlyViewedUpdateArgs} args - Arguments to update one RecentlyViewed.
+     * @example
+     * // Update one RecentlyViewed
+     * const recentlyViewed = await prisma.recentlyViewed.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RecentlyViewedUpdateArgs>(args: SelectSubset<T, RecentlyViewedUpdateArgs<ExtArgs>>): Prisma__RecentlyViewedClient<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RecentlyVieweds.
+     * @param {RecentlyViewedDeleteManyArgs} args - Arguments to filter RecentlyVieweds to delete.
+     * @example
+     * // Delete a few RecentlyVieweds
+     * const { count } = await prisma.recentlyViewed.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RecentlyViewedDeleteManyArgs>(args?: SelectSubset<T, RecentlyViewedDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RecentlyVieweds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecentlyViewedUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RecentlyVieweds
+     * const recentlyViewed = await prisma.recentlyViewed.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RecentlyViewedUpdateManyArgs>(args: SelectSubset<T, RecentlyViewedUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RecentlyVieweds and returns the data updated in the database.
+     * @param {RecentlyViewedUpdateManyAndReturnArgs} args - Arguments to update many RecentlyVieweds.
+     * @example
+     * // Update many RecentlyVieweds
+     * const recentlyViewed = await prisma.recentlyViewed.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RecentlyVieweds and only return the `id`
+     * const recentlyViewedWithIdOnly = await prisma.recentlyViewed.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RecentlyViewedUpdateManyAndReturnArgs>(args: SelectSubset<T, RecentlyViewedUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RecentlyViewed.
+     * @param {RecentlyViewedUpsertArgs} args - Arguments to update or create a RecentlyViewed.
+     * @example
+     * // Update or create a RecentlyViewed
+     * const recentlyViewed = await prisma.recentlyViewed.upsert({
+     *   create: {
+     *     // ... data to create a RecentlyViewed
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RecentlyViewed we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RecentlyViewedUpsertArgs>(args: SelectSubset<T, RecentlyViewedUpsertArgs<ExtArgs>>): Prisma__RecentlyViewedClient<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RecentlyVieweds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecentlyViewedCountArgs} args - Arguments to filter RecentlyVieweds to count.
+     * @example
+     * // Count the number of RecentlyVieweds
+     * const count = await prisma.recentlyViewed.count({
+     *   where: {
+     *     // ... the filter for the RecentlyVieweds we want to count
+     *   }
+     * })
+    **/
+    count<T extends RecentlyViewedCountArgs>(
+      args?: Subset<T, RecentlyViewedCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RecentlyViewedCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RecentlyViewed.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecentlyViewedAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RecentlyViewedAggregateArgs>(args: Subset<T, RecentlyViewedAggregateArgs>): Prisma.PrismaPromise<GetRecentlyViewedAggregateType<T>>
+
+    /**
+     * Group by RecentlyViewed.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecentlyViewedGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RecentlyViewedGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RecentlyViewedGroupByArgs['orderBy'] }
+        : { orderBy?: RecentlyViewedGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RecentlyViewedGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRecentlyViewedGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RecentlyViewed model
+   */
+  readonly fields: RecentlyViewedFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RecentlyViewed.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RecentlyViewedClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RecentlyViewed model
+   */
+  interface RecentlyViewedFieldRefs {
+    readonly id: FieldRef<"RecentlyViewed", 'String'>
+    readonly userId: FieldRef<"RecentlyViewed", 'String'>
+    readonly productId: FieldRef<"RecentlyViewed", 'String'>
+    readonly viewedAt: FieldRef<"RecentlyViewed", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RecentlyViewed findUnique
+   */
+  export type RecentlyViewedFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedInclude<ExtArgs> | null
+    /**
+     * Filter, which RecentlyViewed to fetch.
+     */
+    where: RecentlyViewedWhereUniqueInput
+  }
+
+  /**
+   * RecentlyViewed findUniqueOrThrow
+   */
+  export type RecentlyViewedFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedInclude<ExtArgs> | null
+    /**
+     * Filter, which RecentlyViewed to fetch.
+     */
+    where: RecentlyViewedWhereUniqueInput
+  }
+
+  /**
+   * RecentlyViewed findFirst
+   */
+  export type RecentlyViewedFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedInclude<ExtArgs> | null
+    /**
+     * Filter, which RecentlyViewed to fetch.
+     */
+    where?: RecentlyViewedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecentlyVieweds to fetch.
+     */
+    orderBy?: RecentlyViewedOrderByWithRelationInput | RecentlyViewedOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RecentlyVieweds.
+     */
+    cursor?: RecentlyViewedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecentlyVieweds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecentlyVieweds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RecentlyVieweds.
+     */
+    distinct?: RecentlyViewedScalarFieldEnum | RecentlyViewedScalarFieldEnum[]
+  }
+
+  /**
+   * RecentlyViewed findFirstOrThrow
+   */
+  export type RecentlyViewedFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedInclude<ExtArgs> | null
+    /**
+     * Filter, which RecentlyViewed to fetch.
+     */
+    where?: RecentlyViewedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecentlyVieweds to fetch.
+     */
+    orderBy?: RecentlyViewedOrderByWithRelationInput | RecentlyViewedOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RecentlyVieweds.
+     */
+    cursor?: RecentlyViewedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecentlyVieweds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecentlyVieweds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RecentlyVieweds.
+     */
+    distinct?: RecentlyViewedScalarFieldEnum | RecentlyViewedScalarFieldEnum[]
+  }
+
+  /**
+   * RecentlyViewed findMany
+   */
+  export type RecentlyViewedFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedInclude<ExtArgs> | null
+    /**
+     * Filter, which RecentlyVieweds to fetch.
+     */
+    where?: RecentlyViewedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecentlyVieweds to fetch.
+     */
+    orderBy?: RecentlyViewedOrderByWithRelationInput | RecentlyViewedOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RecentlyVieweds.
+     */
+    cursor?: RecentlyViewedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecentlyVieweds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecentlyVieweds.
+     */
+    skip?: number
+    distinct?: RecentlyViewedScalarFieldEnum | RecentlyViewedScalarFieldEnum[]
+  }
+
+  /**
+   * RecentlyViewed create
+   */
+  export type RecentlyViewedCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RecentlyViewed.
+     */
+    data: XOR<RecentlyViewedCreateInput, RecentlyViewedUncheckedCreateInput>
+  }
+
+  /**
+   * RecentlyViewed createMany
+   */
+  export type RecentlyViewedCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RecentlyVieweds.
+     */
+    data: RecentlyViewedCreateManyInput | RecentlyViewedCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RecentlyViewed createManyAndReturn
+   */
+  export type RecentlyViewedCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * The data used to create many RecentlyVieweds.
+     */
+    data: RecentlyViewedCreateManyInput | RecentlyViewedCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RecentlyViewed update
+   */
+  export type RecentlyViewedUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RecentlyViewed.
+     */
+    data: XOR<RecentlyViewedUpdateInput, RecentlyViewedUncheckedUpdateInput>
+    /**
+     * Choose, which RecentlyViewed to update.
+     */
+    where: RecentlyViewedWhereUniqueInput
+  }
+
+  /**
+   * RecentlyViewed updateMany
+   */
+  export type RecentlyViewedUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RecentlyVieweds.
+     */
+    data: XOR<RecentlyViewedUpdateManyMutationInput, RecentlyViewedUncheckedUpdateManyInput>
+    /**
+     * Filter which RecentlyVieweds to update
+     */
+    where?: RecentlyViewedWhereInput
+    /**
+     * Limit how many RecentlyVieweds to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RecentlyViewed updateManyAndReturn
+   */
+  export type RecentlyViewedUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * The data used to update RecentlyVieweds.
+     */
+    data: XOR<RecentlyViewedUpdateManyMutationInput, RecentlyViewedUncheckedUpdateManyInput>
+    /**
+     * Filter which RecentlyVieweds to update
+     */
+    where?: RecentlyViewedWhereInput
+    /**
+     * Limit how many RecentlyVieweds to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RecentlyViewed upsert
+   */
+  export type RecentlyViewedUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RecentlyViewed to update in case it exists.
+     */
+    where: RecentlyViewedWhereUniqueInput
+    /**
+     * In case the RecentlyViewed found by the `where` argument doesn't exist, create a new RecentlyViewed with this data.
+     */
+    create: XOR<RecentlyViewedCreateInput, RecentlyViewedUncheckedCreateInput>
+    /**
+     * In case the RecentlyViewed was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RecentlyViewedUpdateInput, RecentlyViewedUncheckedUpdateInput>
+  }
+
+  /**
+   * RecentlyViewed delete
+   */
+  export type RecentlyViewedDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedInclude<ExtArgs> | null
+    /**
+     * Filter which RecentlyViewed to delete.
+     */
+    where: RecentlyViewedWhereUniqueInput
+  }
+
+  /**
+   * RecentlyViewed deleteMany
+   */
+  export type RecentlyViewedDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RecentlyVieweds to delete
+     */
+    where?: RecentlyViewedWhereInput
+    /**
+     * Limit how many RecentlyVieweds to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RecentlyViewed without action
+   */
+  export type RecentlyViewedDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecentlyViewed
+     */
+    select?: RecentlyViewedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecentlyViewed
+     */
+    omit?: RecentlyViewedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecentlyViewedInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -54349,6 +55567,16 @@ export namespace Prisma {
   export type OrderDisputeScalarFieldEnum = (typeof OrderDisputeScalarFieldEnum)[keyof typeof OrderDisputeScalarFieldEnum]
 
 
+  export const RecentlyViewedScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    productId: 'productId',
+    viewedAt: 'viewedAt'
+  };
+
+  export type RecentlyViewedScalarFieldEnum = (typeof RecentlyViewedScalarFieldEnum)[keyof typeof RecentlyViewedScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -54808,6 +56036,7 @@ export namespace Prisma {
     disputes?: OrderDisputeListRelationFilter
     productQuestions?: ProductQuestionListRelationFilter
     productAnswers?: ProductAnswerListRelationFilter
+    recentlyViewed?: RecentlyViewedListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -54853,6 +56082,7 @@ export namespace Prisma {
     disputes?: OrderDisputeOrderByRelationAggregateInput
     productQuestions?: ProductQuestionOrderByRelationAggregateInput
     productAnswers?: ProductAnswerOrderByRelationAggregateInput
+    recentlyViewed?: RecentlyViewedOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -54901,6 +56131,7 @@ export namespace Prisma {
     disputes?: OrderDisputeListRelationFilter
     productQuestions?: ProductQuestionListRelationFilter
     productAnswers?: ProductAnswerListRelationFilter
+    recentlyViewed?: RecentlyViewedListRelationFilter
   }, "id" | "username" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -56243,6 +57474,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyListRelationFilter
     Conversation?: ConversationListRelationFilter
     questions?: ProductQuestionListRelationFilter
+    recentlyViewed?: RecentlyViewedListRelationFilter
   }
 
   export type ProductOrderByWithRelationInput = {
@@ -56270,6 +57502,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyOrderByRelationAggregateInput
     Conversation?: ConversationOrderByRelationAggregateInput
     questions?: ProductQuestionOrderByRelationAggregateInput
+    recentlyViewed?: RecentlyViewedOrderByRelationAggregateInput
   }
 
   export type ProductWhereUniqueInput = Prisma.AtLeast<{
@@ -56300,6 +57533,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyListRelationFilter
     Conversation?: ConversationListRelationFilter
     questions?: ProductQuestionListRelationFilter
+    recentlyViewed?: RecentlyViewedListRelationFilter
   }, "id" | "slug">
 
   export type ProductOrderByWithAggregationInput = {
@@ -58170,6 +59404,60 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"OrderDispute"> | Date | string
   }
 
+  export type RecentlyViewedWhereInput = {
+    AND?: RecentlyViewedWhereInput | RecentlyViewedWhereInput[]
+    OR?: RecentlyViewedWhereInput[]
+    NOT?: RecentlyViewedWhereInput | RecentlyViewedWhereInput[]
+    id?: StringFilter<"RecentlyViewed"> | string
+    userId?: StringFilter<"RecentlyViewed"> | string
+    productId?: StringFilter<"RecentlyViewed"> | string
+    viewedAt?: DateTimeFilter<"RecentlyViewed"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+  }
+
+  export type RecentlyViewedOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    productId?: SortOrder
+    viewedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    product?: ProductOrderByWithRelationInput
+  }
+
+  export type RecentlyViewedWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_productId?: RecentlyViewedUserIdProductIdCompoundUniqueInput
+    AND?: RecentlyViewedWhereInput | RecentlyViewedWhereInput[]
+    OR?: RecentlyViewedWhereInput[]
+    NOT?: RecentlyViewedWhereInput | RecentlyViewedWhereInput[]
+    userId?: StringFilter<"RecentlyViewed"> | string
+    productId?: StringFilter<"RecentlyViewed"> | string
+    viewedAt?: DateTimeFilter<"RecentlyViewed"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+  }, "id" | "userId_productId">
+
+  export type RecentlyViewedOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    productId?: SortOrder
+    viewedAt?: SortOrder
+    _count?: RecentlyViewedCountOrderByAggregateInput
+    _max?: RecentlyViewedMaxOrderByAggregateInput
+    _min?: RecentlyViewedMinOrderByAggregateInput
+  }
+
+  export type RecentlyViewedScalarWhereWithAggregatesInput = {
+    AND?: RecentlyViewedScalarWhereWithAggregatesInput | RecentlyViewedScalarWhereWithAggregatesInput[]
+    OR?: RecentlyViewedScalarWhereWithAggregatesInput[]
+    NOT?: RecentlyViewedScalarWhereWithAggregatesInput | RecentlyViewedScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"RecentlyViewed"> | string
+    userId?: StringWithAggregatesFilter<"RecentlyViewed"> | string
+    productId?: StringWithAggregatesFilter<"RecentlyViewed"> | string
+    viewedAt?: DateTimeWithAggregatesFilter<"RecentlyViewed"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string
@@ -58213,6 +59501,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -58258,6 +59547,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -58303,6 +59593,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -58348,6 +59639,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -59801,6 +61093,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateInput = {
@@ -59826,6 +61119,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUpdateInput = {
@@ -59851,6 +61145,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateInput = {
@@ -59876,6 +61171,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateManyInput = {
@@ -61875,6 +63171,53 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type RecentlyViewedCreateInput = {
+    id?: string
+    viewedAt?: Date | string
+    user: UserCreateNestedOneWithoutRecentlyViewedInput
+    product: ProductCreateNestedOneWithoutRecentlyViewedInput
+  }
+
+  export type RecentlyViewedUncheckedCreateInput = {
+    id?: string
+    userId: string
+    productId: string
+    viewedAt?: Date | string
+  }
+
+  export type RecentlyViewedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutRecentlyViewedNestedInput
+    product?: ProductUpdateOneRequiredWithoutRecentlyViewedNestedInput
+  }
+
+  export type RecentlyViewedUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecentlyViewedCreateManyInput = {
+    id?: string
+    userId: string
+    productId: string
+    viewedAt?: Date | string
+  }
+
+  export type RecentlyViewedUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecentlyViewedUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -62064,6 +63407,12 @@ export namespace Prisma {
     none?: ProductAnswerWhereInput
   }
 
+  export type RecentlyViewedListRelationFilter = {
+    every?: RecentlyViewedWhereInput
+    some?: RecentlyViewedWhereInput
+    none?: RecentlyViewedWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -62146,6 +63495,10 @@ export namespace Prisma {
   }
 
   export type ProductAnswerOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RecentlyViewedOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -64744,6 +66097,32 @@ export namespace Prisma {
     _max?: NestedEnumDisputeTypeFilter<$PrismaModel>
   }
 
+  export type RecentlyViewedUserIdProductIdCompoundUniqueInput = {
+    userId: string
+    productId: string
+  }
+
+  export type RecentlyViewedCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    productId?: SortOrder
+    viewedAt?: SortOrder
+  }
+
+  export type RecentlyViewedMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    productId?: SortOrder
+    viewedAt?: SortOrder
+  }
+
+  export type RecentlyViewedMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    productId?: SortOrder
+    viewedAt?: SortOrder
+  }
+
   export type SessionCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -64897,6 +66276,13 @@ export namespace Prisma {
     connect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
   }
 
+  export type RecentlyViewedCreateNestedManyWithoutUserInput = {
+    create?: XOR<RecentlyViewedCreateWithoutUserInput, RecentlyViewedUncheckedCreateWithoutUserInput> | RecentlyViewedCreateWithoutUserInput[] | RecentlyViewedUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RecentlyViewedCreateOrConnectWithoutUserInput | RecentlyViewedCreateOrConnectWithoutUserInput[]
+    createMany?: RecentlyViewedCreateManyUserInputEnvelope
+    connect?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+  }
+
   export type SessionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -65048,6 +66434,13 @@ export namespace Prisma {
     connectOrCreate?: ProductAnswerCreateOrConnectWithoutSellerInput | ProductAnswerCreateOrConnectWithoutSellerInput[]
     createMany?: ProductAnswerCreateManySellerInputEnvelope
     connect?: ProductAnswerWhereUniqueInput | ProductAnswerWhereUniqueInput[]
+  }
+
+  export type RecentlyViewedUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<RecentlyViewedCreateWithoutUserInput, RecentlyViewedUncheckedCreateWithoutUserInput> | RecentlyViewedCreateWithoutUserInput[] | RecentlyViewedUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RecentlyViewedCreateOrConnectWithoutUserInput | RecentlyViewedCreateOrConnectWithoutUserInput[]
+    createMany?: RecentlyViewedCreateManyUserInputEnvelope
+    connect?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -65378,6 +66771,20 @@ export namespace Prisma {
     deleteMany?: ProductAnswerScalarWhereInput | ProductAnswerScalarWhereInput[]
   }
 
+  export type RecentlyViewedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RecentlyViewedCreateWithoutUserInput, RecentlyViewedUncheckedCreateWithoutUserInput> | RecentlyViewedCreateWithoutUserInput[] | RecentlyViewedUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RecentlyViewedCreateOrConnectWithoutUserInput | RecentlyViewedCreateOrConnectWithoutUserInput[]
+    upsert?: RecentlyViewedUpsertWithWhereUniqueWithoutUserInput | RecentlyViewedUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RecentlyViewedCreateManyUserInputEnvelope
+    set?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    disconnect?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    delete?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    connect?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    update?: RecentlyViewedUpdateWithWhereUniqueWithoutUserInput | RecentlyViewedUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RecentlyViewedUpdateManyWithWhereWithoutUserInput | RecentlyViewedUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RecentlyViewedScalarWhereInput | RecentlyViewedScalarWhereInput[]
+  }
+
   export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -65680,6 +67087,20 @@ export namespace Prisma {
     update?: ProductAnswerUpdateWithWhereUniqueWithoutSellerInput | ProductAnswerUpdateWithWhereUniqueWithoutSellerInput[]
     updateMany?: ProductAnswerUpdateManyWithWhereWithoutSellerInput | ProductAnswerUpdateManyWithWhereWithoutSellerInput[]
     deleteMany?: ProductAnswerScalarWhereInput | ProductAnswerScalarWhereInput[]
+  }
+
+  export type RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RecentlyViewedCreateWithoutUserInput, RecentlyViewedUncheckedCreateWithoutUserInput> | RecentlyViewedCreateWithoutUserInput[] | RecentlyViewedUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RecentlyViewedCreateOrConnectWithoutUserInput | RecentlyViewedCreateOrConnectWithoutUserInput[]
+    upsert?: RecentlyViewedUpsertWithWhereUniqueWithoutUserInput | RecentlyViewedUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RecentlyViewedCreateManyUserInputEnvelope
+    set?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    disconnect?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    delete?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    connect?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    update?: RecentlyViewedUpdateWithWhereUniqueWithoutUserInput | RecentlyViewedUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RecentlyViewedUpdateManyWithWhereWithoutUserInput | RecentlyViewedUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RecentlyViewedScalarWhereInput | RecentlyViewedScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutRolesInput = {
@@ -66598,6 +68019,13 @@ export namespace Prisma {
     connect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
   }
 
+  export type RecentlyViewedCreateNestedManyWithoutProductInput = {
+    create?: XOR<RecentlyViewedCreateWithoutProductInput, RecentlyViewedUncheckedCreateWithoutProductInput> | RecentlyViewedCreateWithoutProductInput[] | RecentlyViewedUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: RecentlyViewedCreateOrConnectWithoutProductInput | RecentlyViewedCreateOrConnectWithoutProductInput[]
+    createMany?: RecentlyViewedCreateManyProductInputEnvelope
+    connect?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+  }
+
   export type ProductVariantUncheckedCreateNestedManyWithoutProductInput = {
     create?: XOR<ProductVariantCreateWithoutProductInput, ProductVariantUncheckedCreateWithoutProductInput> | ProductVariantCreateWithoutProductInput[] | ProductVariantUncheckedCreateWithoutProductInput[]
     connectOrCreate?: ProductVariantCreateOrConnectWithoutProductInput | ProductVariantCreateOrConnectWithoutProductInput[]
@@ -66666,6 +68094,13 @@ export namespace Prisma {
     connectOrCreate?: ProductQuestionCreateOrConnectWithoutProductInput | ProductQuestionCreateOrConnectWithoutProductInput[]
     createMany?: ProductQuestionCreateManyProductInputEnvelope
     connect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+  }
+
+  export type RecentlyViewedUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<RecentlyViewedCreateWithoutProductInput, RecentlyViewedUncheckedCreateWithoutProductInput> | RecentlyViewedCreateWithoutProductInput[] | RecentlyViewedUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: RecentlyViewedCreateOrConnectWithoutProductInput | RecentlyViewedCreateOrConnectWithoutProductInput[]
+    createMany?: RecentlyViewedCreateManyProductInputEnvelope
+    connect?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
   }
 
   export type ProductUpdatefeaturesInput = {
@@ -66835,6 +68270,20 @@ export namespace Prisma {
     deleteMany?: ProductQuestionScalarWhereInput | ProductQuestionScalarWhereInput[]
   }
 
+  export type RecentlyViewedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<RecentlyViewedCreateWithoutProductInput, RecentlyViewedUncheckedCreateWithoutProductInput> | RecentlyViewedCreateWithoutProductInput[] | RecentlyViewedUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: RecentlyViewedCreateOrConnectWithoutProductInput | RecentlyViewedCreateOrConnectWithoutProductInput[]
+    upsert?: RecentlyViewedUpsertWithWhereUniqueWithoutProductInput | RecentlyViewedUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: RecentlyViewedCreateManyProductInputEnvelope
+    set?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    disconnect?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    delete?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    connect?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    update?: RecentlyViewedUpdateWithWhereUniqueWithoutProductInput | RecentlyViewedUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: RecentlyViewedUpdateManyWithWhereWithoutProductInput | RecentlyViewedUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: RecentlyViewedScalarWhereInput | RecentlyViewedScalarWhereInput[]
+  }
+
   export type ProductVariantUncheckedUpdateManyWithoutProductNestedInput = {
     create?: XOR<ProductVariantCreateWithoutProductInput, ProductVariantUncheckedCreateWithoutProductInput> | ProductVariantCreateWithoutProductInput[] | ProductVariantUncheckedCreateWithoutProductInput[]
     connectOrCreate?: ProductVariantCreateOrConnectWithoutProductInput | ProductVariantCreateOrConnectWithoutProductInput[]
@@ -66973,6 +68422,20 @@ export namespace Prisma {
     update?: ProductQuestionUpdateWithWhereUniqueWithoutProductInput | ProductQuestionUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: ProductQuestionUpdateManyWithWhereWithoutProductInput | ProductQuestionUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: ProductQuestionScalarWhereInput | ProductQuestionScalarWhereInput[]
+  }
+
+  export type RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<RecentlyViewedCreateWithoutProductInput, RecentlyViewedUncheckedCreateWithoutProductInput> | RecentlyViewedCreateWithoutProductInput[] | RecentlyViewedUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: RecentlyViewedCreateOrConnectWithoutProductInput | RecentlyViewedCreateOrConnectWithoutProductInput[]
+    upsert?: RecentlyViewedUpsertWithWhereUniqueWithoutProductInput | RecentlyViewedUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: RecentlyViewedCreateManyProductInputEnvelope
+    set?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    disconnect?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    delete?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    connect?: RecentlyViewedWhereUniqueInput | RecentlyViewedWhereUniqueInput[]
+    update?: RecentlyViewedUpdateWithWhereUniqueWithoutProductInput | RecentlyViewedUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: RecentlyViewedUpdateManyWithWhereWithoutProductInput | RecentlyViewedUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: RecentlyViewedScalarWhereInput | RecentlyViewedScalarWhereInput[]
   }
 
   export type ProductSpecificationCreateNestedManyWithoutVariantInput = {
@@ -68200,6 +69663,34 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDisputesInput, UserUpdateWithoutDisputesInput>, UserUncheckedUpdateWithoutDisputesInput>
   }
 
+  export type UserCreateNestedOneWithoutRecentlyViewedInput = {
+    create?: XOR<UserCreateWithoutRecentlyViewedInput, UserUncheckedCreateWithoutRecentlyViewedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRecentlyViewedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ProductCreateNestedOneWithoutRecentlyViewedInput = {
+    create?: XOR<ProductCreateWithoutRecentlyViewedInput, ProductUncheckedCreateWithoutRecentlyViewedInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutRecentlyViewedInput
+    connect?: ProductWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutRecentlyViewedNestedInput = {
+    create?: XOR<UserCreateWithoutRecentlyViewedInput, UserUncheckedCreateWithoutRecentlyViewedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRecentlyViewedInput
+    upsert?: UserUpsertWithoutRecentlyViewedInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRecentlyViewedInput, UserUpdateWithoutRecentlyViewedInput>, UserUncheckedUpdateWithoutRecentlyViewedInput>
+  }
+
+  export type ProductUpdateOneRequiredWithoutRecentlyViewedNestedInput = {
+    create?: XOR<ProductCreateWithoutRecentlyViewedInput, ProductUncheckedCreateWithoutRecentlyViewedInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutRecentlyViewedInput
+    upsert?: ProductUpsertWithoutRecentlyViewedInput
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutRecentlyViewedInput, ProductUpdateWithoutRecentlyViewedInput>, ProductUncheckedUpdateWithoutRecentlyViewedInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -69131,6 +70622,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutSellerInput = {
@@ -69155,6 +70647,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutSellerInput = {
@@ -69625,6 +71118,28 @@ export namespace Prisma {
 
   export type ProductAnswerCreateManySellerInputEnvelope = {
     data: ProductAnswerCreateManySellerInput | ProductAnswerCreateManySellerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RecentlyViewedCreateWithoutUserInput = {
+    id?: string
+    viewedAt?: Date | string
+    product: ProductCreateNestedOneWithoutRecentlyViewedInput
+  }
+
+  export type RecentlyViewedUncheckedCreateWithoutUserInput = {
+    id?: string
+    productId: string
+    viewedAt?: Date | string
+  }
+
+  export type RecentlyViewedCreateOrConnectWithoutUserInput = {
+    where: RecentlyViewedWhereUniqueInput
+    create: XOR<RecentlyViewedCreateWithoutUserInput, RecentlyViewedUncheckedCreateWithoutUserInput>
+  }
+
+  export type RecentlyViewedCreateManyUserInputEnvelope = {
+    data: RecentlyViewedCreateManyUserInput | RecentlyViewedCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -70333,6 +71848,32 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ProductAnswer"> | Date | string
   }
 
+  export type RecentlyViewedUpsertWithWhereUniqueWithoutUserInput = {
+    where: RecentlyViewedWhereUniqueInput
+    update: XOR<RecentlyViewedUpdateWithoutUserInput, RecentlyViewedUncheckedUpdateWithoutUserInput>
+    create: XOR<RecentlyViewedCreateWithoutUserInput, RecentlyViewedUncheckedCreateWithoutUserInput>
+  }
+
+  export type RecentlyViewedUpdateWithWhereUniqueWithoutUserInput = {
+    where: RecentlyViewedWhereUniqueInput
+    data: XOR<RecentlyViewedUpdateWithoutUserInput, RecentlyViewedUncheckedUpdateWithoutUserInput>
+  }
+
+  export type RecentlyViewedUpdateManyWithWhereWithoutUserInput = {
+    where: RecentlyViewedScalarWhereInput
+    data: XOR<RecentlyViewedUpdateManyMutationInput, RecentlyViewedUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type RecentlyViewedScalarWhereInput = {
+    AND?: RecentlyViewedScalarWhereInput | RecentlyViewedScalarWhereInput[]
+    OR?: RecentlyViewedScalarWhereInput[]
+    NOT?: RecentlyViewedScalarWhereInput | RecentlyViewedScalarWhereInput[]
+    id?: StringFilter<"RecentlyViewed"> | string
+    userId?: StringFilter<"RecentlyViewed"> | string
+    productId?: StringFilter<"RecentlyViewed"> | string
+    viewedAt?: DateTimeFilter<"RecentlyViewed"> | Date | string
+  }
+
   export type UserCreateWithoutRolesInput = {
     id?: string
     name?: string
@@ -70375,6 +71916,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRolesInput = {
@@ -70419,6 +71961,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRolesInput = {
@@ -70479,6 +72022,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRolesInput = {
@@ -70523,6 +72067,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AddressCreateWithoutSellerPickupAddressesInput = {
@@ -70606,6 +72151,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSellerProfileInput = {
@@ -70650,6 +72196,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSellerProfileInput = {
@@ -70755,6 +72302,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSellerProfileInput = {
@@ -70799,6 +72347,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -70843,6 +72392,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -70887,6 +72437,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -70947,6 +72498,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -70991,6 +72543,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductCreateWithoutConversationInput = {
@@ -71015,6 +72568,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutConversationInput = {
@@ -71039,6 +72593,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutConversationInput = {
@@ -71088,6 +72643,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBuyerConversationsInput = {
@@ -71132,6 +72688,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBuyerConversationsInput = {
@@ -71181,6 +72738,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSellerConversationsInput = {
@@ -71225,6 +72783,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSellerConversationsInput = {
@@ -71325,6 +72884,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutConversationInput = {
@@ -71349,6 +72909,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type UserUpsertWithoutBuyerConversationsInput = {
@@ -71404,6 +72965,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBuyerConversationsInput = {
@@ -71448,6 +73010,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSellerConversationsInput = {
@@ -71503,6 +73066,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSellerConversationsInput = {
@@ -71547,6 +73111,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -71652,6 +73217,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -71696,6 +73262,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -71817,6 +73384,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -71861,6 +73429,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessageAttachmentUpsertWithWhereUniqueWithoutMessageInput = {
@@ -72005,6 +73574,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConversationParticipantInput = {
@@ -72049,6 +73619,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConversationParticipantInput = {
@@ -72138,6 +73709,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConversationParticipantInput = {
@@ -72182,6 +73754,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ConversationUpsertWithoutConversationParticipantInput = {
@@ -72261,6 +73834,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAddressesInput = {
@@ -72305,6 +73879,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAddressesInput = {
@@ -72431,6 +74006,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAddressesInput = {
@@ -72475,6 +74051,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SellerProfileUpsertWithWhereUniqueWithoutPickupAddressInput = {
@@ -72690,6 +74267,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutCategoryInput = {
@@ -72714,6 +74292,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutCategoryInput = {
@@ -73140,6 +74719,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutProductOffersInput = {
@@ -73164,6 +74744,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutProductOffersInput = {
@@ -73247,6 +74828,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutProductOffersInput = {
@@ -73271,6 +74853,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type OfferCreateWithoutCategoryOffersInput = {
@@ -73447,6 +75030,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutDeliveryOptionsInput = {
@@ -73471,6 +75055,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutDeliveryOptionsInput = {
@@ -73511,6 +75096,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutDeliveryOptionsInput = {
@@ -73535,6 +75121,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateWithoutWarrantyInput = {
@@ -73559,6 +75146,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutWarrantyInput = {
@@ -73583,6 +75171,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutWarrantyInput = {
@@ -73623,6 +75212,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutWarrantyInput = {
@@ -73647,6 +75237,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateWithoutReturnPolicyInput = {
@@ -73671,6 +75262,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutReturnPolicyInput = {
@@ -73695,6 +75287,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutReturnPolicyInput = {
@@ -73735,6 +75328,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutReturnPolicyInput = {
@@ -73759,6 +75353,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type UserCreateWithoutProductsInput = {
@@ -73803,6 +75398,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProductsInput = {
@@ -73847,6 +75443,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProductsInput = {
@@ -74209,6 +75806,28 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type RecentlyViewedCreateWithoutProductInput = {
+    id?: string
+    viewedAt?: Date | string
+    user: UserCreateNestedOneWithoutRecentlyViewedInput
+  }
+
+  export type RecentlyViewedUncheckedCreateWithoutProductInput = {
+    id?: string
+    userId: string
+    viewedAt?: Date | string
+  }
+
+  export type RecentlyViewedCreateOrConnectWithoutProductInput = {
+    where: RecentlyViewedWhereUniqueInput
+    create: XOR<RecentlyViewedCreateWithoutProductInput, RecentlyViewedUncheckedCreateWithoutProductInput>
+  }
+
+  export type RecentlyViewedCreateManyProductInputEnvelope = {
+    data: RecentlyViewedCreateManyProductInput | RecentlyViewedCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutProductsInput = {
     update: XOR<UserUpdateWithoutProductsInput, UserUncheckedUpdateWithoutProductsInput>
     create: XOR<UserCreateWithoutProductsInput, UserUncheckedCreateWithoutProductsInput>
@@ -74262,6 +75881,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProductsInput = {
@@ -74306,6 +75926,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductVariantUpsertWithWhereUniqueWithoutProductInput = {
@@ -74593,6 +76214,22 @@ export namespace Prisma {
     data: XOR<ProductQuestionUpdateManyMutationInput, ProductQuestionUncheckedUpdateManyWithoutProductInput>
   }
 
+  export type RecentlyViewedUpsertWithWhereUniqueWithoutProductInput = {
+    where: RecentlyViewedWhereUniqueInput
+    update: XOR<RecentlyViewedUpdateWithoutProductInput, RecentlyViewedUncheckedUpdateWithoutProductInput>
+    create: XOR<RecentlyViewedCreateWithoutProductInput, RecentlyViewedUncheckedCreateWithoutProductInput>
+  }
+
+  export type RecentlyViewedUpdateWithWhereUniqueWithoutProductInput = {
+    where: RecentlyViewedWhereUniqueInput
+    data: XOR<RecentlyViewedUpdateWithoutProductInput, RecentlyViewedUncheckedUpdateWithoutProductInput>
+  }
+
+  export type RecentlyViewedUpdateManyWithWhereWithoutProductInput = {
+    where: RecentlyViewedScalarWhereInput
+    data: XOR<RecentlyViewedUpdateManyMutationInput, RecentlyViewedUncheckedUpdateManyWithoutProductInput>
+  }
+
   export type ProductSpecificationCreateWithoutVariantInput = {
     id?: string
     key: string
@@ -74641,6 +76278,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutVariantsInput = {
@@ -74665,6 +76303,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutVariantsInput = {
@@ -74821,6 +76460,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutVariantsInput = {
@@ -74845,6 +76485,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type CartItemUpsertWithWhereUniqueWithoutVariantInput = {
@@ -75034,6 +76675,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutImagesInput = {
@@ -75058,6 +76700,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutImagesInput = {
@@ -75098,6 +76741,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutImagesInput = {
@@ -75122,6 +76766,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type UserCreateWithoutCartItemsInput = {
@@ -75166,6 +76811,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCartItemsInput = {
@@ -75210,6 +76856,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCartItemsInput = {
@@ -75311,6 +76958,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCartItemsInput = {
@@ -75355,6 +77003,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductVariantUpsertWithoutCartItemsInput = {
@@ -75483,6 +77132,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -75527,6 +77177,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -75814,6 +77465,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -75858,6 +77510,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderItemUpsertWithWhereUniqueWithoutOrderInput = {
@@ -76207,6 +77860,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPaymentMethodsInput = {
@@ -76251,6 +77905,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPaymentMethodsInput = {
@@ -76353,6 +78008,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPaymentMethodsInput = {
@@ -76397,6 +78053,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PaymentUpsertWithWhereUniqueWithoutMethodInput = {
@@ -76729,6 +78386,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -76773,6 +78431,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -76802,6 +78461,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutReviewsInput = {
@@ -76826,6 +78486,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutReviewsInput = {
@@ -76938,6 +78599,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -76982,6 +78644,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductUpsertWithoutReviewsInput = {
@@ -77017,6 +78680,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutReviewsInput = {
@@ -77041,6 +78705,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ReviewMediaUpsertWithWhereUniqueWithoutReviewInput = {
@@ -77166,6 +78831,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewVoteInput = {
@@ -77210,6 +78876,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewVoteInput = {
@@ -77313,6 +78980,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewVoteInput = {
@@ -77357,6 +79025,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ReviewCreateWithoutMediaInput = {
@@ -77481,6 +79150,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWishlistsInput = {
@@ -77525,6 +79195,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWishlistsInput = {
@@ -77609,6 +79280,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWishlistsInput = {
@@ -77653,6 +79325,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WishlistItemUpsertWithWhereUniqueWithoutWishlistInput = {
@@ -77714,6 +79387,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutWishlistItemsInput = {
@@ -77738,6 +79412,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutWishlistItemsInput = {
@@ -77805,6 +79480,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutWishlistItemsInput = {
@@ -77829,6 +79505,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type OrderDisputeCreateWithoutSellerOrderInput = {
@@ -77909,6 +79586,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSellerOrdersInput = {
@@ -77953,6 +79631,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSellerOrdersInput = {
@@ -78108,6 +79787,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSellerOrdersInput = {
@@ -78152,6 +79832,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SellerOrderItemUpsertWithWhereUniqueWithoutSellerOrderInput = {
@@ -78429,6 +80110,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPayoutsInput = {
@@ -78473,6 +80155,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPayoutsInput = {
@@ -78533,6 +80216,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPayoutsInput = {
@@ -78577,6 +80261,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductCreateWithoutQuestionsInput = {
@@ -78601,6 +80286,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutQuestionsInput = {
@@ -78625,6 +80311,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutQuestionsInput = {
@@ -78674,6 +80361,7 @@ export namespace Prisma {
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProductQuestionsInput = {
@@ -78718,6 +80406,7 @@ export namespace Prisma {
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProductQuestionsInput = {
@@ -78784,6 +80473,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutQuestionsInput = {
@@ -78808,6 +80498,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type UserUpsertWithoutProductQuestionsInput = {
@@ -78863,6 +80554,7 @@ export namespace Prisma {
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProductQuestionsInput = {
@@ -78907,6 +80599,7 @@ export namespace Prisma {
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductAnswerUpsertWithWhereUniqueWithoutQuestionInput = {
@@ -78992,6 +80685,7 @@ export namespace Prisma {
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProductAnswersInput = {
@@ -79036,6 +80730,7 @@ export namespace Prisma {
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProductAnswersInput = {
@@ -79127,6 +80822,7 @@ export namespace Prisma {
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProductAnswersInput = {
@@ -79171,6 +80867,7 @@ export namespace Prisma {
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -79215,6 +80912,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -79259,6 +80957,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -79319,6 +81018,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -79363,6 +81063,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -79407,6 +81108,7 @@ export namespace Prisma {
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -79451,6 +81153,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -79511,6 +81214,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -79555,6 +81259,7 @@ export namespace Prisma {
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderCreateWithoutDisputesInput = {
@@ -79681,6 +81386,7 @@ export namespace Prisma {
     roles?: UserRoleCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDisputesInput = {
@@ -79725,6 +81431,7 @@ export namespace Prisma {
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDisputesInput = {
@@ -79879,6 +81586,7 @@ export namespace Prisma {
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDisputesInput = {
@@ -79923,6 +81631,319 @@ export namespace Prisma {
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutRecentlyViewedInput = {
+    id?: string
+    name?: string
+    username: string
+    displayUsername?: string | null
+    email: string
+    emailVerified?: boolean
+    password?: string | null
+    image?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    phoneVerified?: boolean
+    hasProfile?: boolean
+    otp?: string | null
+    otpExpiresAt?: Date | string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    cartItems?: CartItemCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    products?: ProductCreateNestedManyWithoutSellerInput
+    payouts?: PayoutCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+  }
+
+  export type UserUncheckedCreateWithoutRecentlyViewedInput = {
+    id?: string
+    name?: string
+    username: string
+    displayUsername?: string | null
+    email: string
+    emailVerified?: boolean
+    password?: string | null
+    image?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    phoneVerified?: boolean
+    hasProfile?: boolean
+    otp?: string | null
+    otpExpiresAt?: Date | string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput
+    payouts?: PayoutUncheckedCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteUncheckedCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationUncheckedCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+  }
+
+  export type UserCreateOrConnectWithoutRecentlyViewedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutRecentlyViewedInput, UserUncheckedCreateWithoutRecentlyViewedInput>
+  }
+
+  export type ProductCreateWithoutRecentlyViewedInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
+    status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    brand: string
+    seller: UserCreateNestedOneWithoutProductsInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    reviews?: ReviewCreateNestedManyWithoutProductInput
+    category?: CategoryCreateNestedOneWithoutProductsInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutProductInput
+    productOffers?: ProductOfferCreateNestedManyWithoutProductInput
+    deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
+    warranty?: WarrantyCreateNestedManyWithoutProductInput
+    returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
+    Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutRecentlyViewedInput = {
+    id?: string
+    sellerId: string
+    name: string
+    slug: string
+    description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
+    status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categoryId?: string | null
+    brand: string
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutProductInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutProductInput
+    productOffers?: ProductOfferUncheckedCreateNestedManyWithoutProductInput
+    deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
+    warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
+    returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutRecentlyViewedInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutRecentlyViewedInput, ProductUncheckedCreateWithoutRecentlyViewedInput>
+  }
+
+  export type UserUpsertWithoutRecentlyViewedInput = {
+    update: XOR<UserUpdateWithoutRecentlyViewedInput, UserUncheckedUpdateWithoutRecentlyViewedInput>
+    create: XOR<UserCreateWithoutRecentlyViewedInput, UserUncheckedCreateWithoutRecentlyViewedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutRecentlyViewedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutRecentlyViewedInput, UserUncheckedUpdateWithoutRecentlyViewedInput>
+  }
+
+  export type UserUpdateWithoutRecentlyViewedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    products?: ProductUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutRecentlyViewedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUncheckedUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUncheckedUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUncheckedUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUncheckedUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+  }
+
+  export type ProductUpsertWithoutRecentlyViewedInput = {
+    update: XOR<ProductUpdateWithoutRecentlyViewedInput, ProductUncheckedUpdateWithoutRecentlyViewedInput>
+    create: XOR<ProductCreateWithoutRecentlyViewedInput, ProductUncheckedCreateWithoutRecentlyViewedInput>
+    where?: ProductWhereInput
+  }
+
+  export type ProductUpdateToOneWithWhereWithoutRecentlyViewedInput = {
+    where?: ProductWhereInput
+    data: XOR<ProductUpdateWithoutRecentlyViewedInput, ProductUncheckedUpdateWithoutRecentlyViewedInput>
+  }
+
+  export type ProductUpdateWithoutRecentlyViewedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: StringFieldUpdateOperationsInput | string
+    seller?: UserUpdateOneRequiredWithoutProductsNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    reviews?: ReviewUpdateManyWithoutProductNestedInput
+    category?: CategoryUpdateOneWithoutProductsNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutProductNestedInput
+    productOffers?: ProductOfferUpdateManyWithoutProductNestedInput
+    deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
+    warranty?: WarrantyUpdateManyWithoutProductNestedInput
+    returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
+    Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutRecentlyViewedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sellerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    brand?: StringFieldUpdateOperationsInput | string
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutProductNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutProductNestedInput
+    productOffers?: ProductOfferUncheckedUpdateManyWithoutProductNestedInput
+    deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
+    warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
+    returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type SessionCreateManyUserInput = {
@@ -80155,6 +82176,12 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type RecentlyViewedCreateManyUserInput = {
+    id?: string
+    productId: string
+    viewedAt?: Date | string
   }
 
   export type SessionUpdateWithoutUserInput = {
@@ -80473,6 +82500,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutSellerInput = {
@@ -80497,6 +82525,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutSellerInput = {
@@ -80909,6 +82938,24 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type RecentlyViewedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutRecentlyViewedNestedInput
+  }
+
+  export type RecentlyViewedUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecentlyViewedUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type MessageCreateManyConversationInput = {
     id?: string
     senderId: string
@@ -81232,6 +83279,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutCategoryInput = {
@@ -81256,6 +83304,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutCategoryInput = {
@@ -81553,6 +83602,12 @@ export namespace Prisma {
     isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type RecentlyViewedCreateManyProductInput = {
+    id?: string
+    userId: string
+    viewedAt?: Date | string
   }
 
   export type ProductVariantUpdateWithoutProductInput = {
@@ -81877,6 +83932,24 @@ export namespace Prisma {
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecentlyViewedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutRecentlyViewedNestedInput
+  }
+
+  export type RecentlyViewedUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecentlyViewedUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductSpecificationCreateManyVariantInput = {

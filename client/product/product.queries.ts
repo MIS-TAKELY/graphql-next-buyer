@@ -324,3 +324,104 @@ export const GET_PRODUCTS_BY_SELLER = gql`
     }
   }
 `;
+
+export const RECORD_PRODUCT_VIEW = gql`
+  mutation RecordProductView($productId: ID!) {
+    recordProductView(productId: $productId)
+  }
+`;
+
+export const GET_RECENTLY_VIEWED = gql`
+  query GetRecentlyViewed {
+    getRecentlyViewed {
+      id
+      name
+      description
+      slug
+      status
+      images {
+        id
+        url
+        altText
+        mediaType
+      }
+      variants {
+        id
+        price
+        mrp
+        stock
+        isDefault
+      }
+      reviews {
+        rating
+      }
+      category {
+        id
+        name
+      }
+      seller {
+        id
+        firstName
+        lastName
+      }
+      brand
+    }
+  }
+`;
+
+export const GET_FREQUENTLY_BOUGHT_TOGETHER = gql`
+  query GetFrequentlyBoughtTogether($productId: ID!, $limit: Int) {
+    getFrequentlyBoughtTogether(productId: $productId, limit: $limit) {
+      id
+      name
+      description
+      slug
+      images {
+        url
+        altText
+      }
+      reviews {
+        rating
+      }
+      variants {
+        price
+        mrp
+        stock
+        specifications {
+          key
+          value
+        }
+      }
+      brand
+    }
+  }
+`;
+
+export const GET_RECOMMENDED_PRODUCTS = gql`
+  query GetRecommendedProducts($productId: ID) {
+    getRecommendedProducts(productId: $productId) {
+      id
+      name
+      description
+      brand
+      slug
+      images {
+        url
+        altText
+      }
+      reviews {
+        rating
+      }
+      variants {
+        price
+        mrp
+        sku
+        stock
+        specifications {
+          key
+          value
+        }
+      }
+    }
+  }
+`;

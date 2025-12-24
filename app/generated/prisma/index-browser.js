@@ -625,6 +625,13 @@ exports.Prisma.OrderDisputeScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.RecentlyViewedScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  productId: 'productId',
+  viewedAt: 'viewedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -828,7 +835,8 @@ exports.Prisma.ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  OrderDispute: 'OrderDispute'
+  OrderDispute: 'OrderDispute',
+  RecentlyViewed: 'RecentlyViewed'
 };
 
 /**

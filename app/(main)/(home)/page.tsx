@@ -13,6 +13,11 @@ import dynamic from "next/dynamic";
 const DynamicSections = dynamic(
   () => import("@/components/page/home/DynamicSections")
 );
+import { Suspense } from "react";
+import HeroCarouselSkeleton from "@/components/page/home/HeroCarouselSkeleton";
+import CategorySectionSkeleton from "@/components/page/home/CategorySectionSkeleton";
+import { ProductCardSkeleton } from "@/components/page/home/ProductCardSkeleton";
+import { PlainProductCardSkeleton, LandingPageProductGridSkeleton } from "@/components/landingPage/LandingPageSkeletons";
 
 import { Metadata } from "next";
 
@@ -34,39 +39,7 @@ type SectionConfig = {
   layout: "grid" | "horizontal";
 };
 
-export default async function HomePage() {
-  const client = await getServerApolloClient();
-
-  const CACHE_KEY = CacheService.getProductsListKey();
-  let products: TProduct[] =
-    (await CacheService.get<TProduct[]>(CACHE_KEY)) || [];
-
-  let debugError = "";
-
-  if (products.length === 0) {
-    try {
-      const productsResponse = await client.query({
-        query: GET_PRODUCTS,
-        fetchPolicy: "no-cache",
-        errorPolicy: "all",
-      });
-      products = productsResponse?.data?.getProducts || [];
-      if (products.length > 0) {
-        await CacheService.set(CACHE_KEY, products, 3600); // Cache for 1 hour
-      }
-    } catch (error: any) {
-      console.error("Error fetching products:", error);
-      debugError = error.message || JSON.stringify(error);
-      products = []; // Ensure products is empty array on error
-    }
-  }
-
-  // Ensure products is a plain serializable array of objects
-  const serializableProducts = JSON.parse(JSON.stringify(products));
-  const sharedSlice = serializableProducts.slice(0, 8);
-
-  console.log("HomePage Debug: Products fetched:", products.length);
-
+export default function HomePage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -82,6 +55,54 @@ export default async function HomePage() {
       "query-input": "required name=search_term_string",
     },
   };
+
+  return (
+    <div className="bg-background text-foreground min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ProductCatagoryCardSection />
+      <HeroCarousel />
+
+      <Suspense fallback={<MainSkeleton />}>
+        <Main />
+      </Suspense>
+
+      <Suspense fallback={<ProductSectionsSkeleton />}>
+        <HomeProductSections />
+      </Suspense>
+
+      {/* Comparison Button Bar - Floating */}
+      <CompareButtonBar />
+    </div>
+  );
+}
+
+async function HomeProductSections() {
+  const client = await getServerApolloClient();
+  const CACHE_KEY = CacheService.getProductsListKey();
+  let products: TProduct[] = (await CacheService.get<TProduct[]>(CACHE_KEY)) || [];
+
+  if (products.length === 0) {
+    try {
+      const productsResponse = await client.query({
+        query: GET_PRODUCTS,
+        fetchPolicy: "no-cache",
+        errorPolicy: "all",
+      });
+      products = productsResponse?.data?.getProducts || [];
+      if (products.length > 0) {
+        await CacheService.set(CACHE_KEY, products, 3600);
+      }
+    } catch (error: any) {
+      console.error("Error fetching products:", error);
+      products = [];
+    }
+  }
+
+  const serializableProducts = JSON.parse(JSON.stringify(products));
+  const sharedSlice = serializableProducts.slice(0, 8);
 
   const sections: SectionConfig[] = [
     {
@@ -105,31 +126,72 @@ export default async function HomePage() {
   ];
 
   return (
-    <div className="bg-background text-foreground min-h-screen">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <ProductCatagoryCardSection />
-      <HeroCarousel />
-      <Main />
-      <SSRApolloProvider initialData={{ products: serializableProducts }}>
-        <div className="py-4 sm:py-6 md:py-8 lg:py-10">
-          {sections.map((section) => (
-            <ProductSection
-              key={section.name}
-              name={section.name}
-              products={section.products}
-              count={section.count}
-              layout={section.layout}
-            />
-          ))}
-          <DynamicSections />
-        </div>
-      </SSRApolloProvider>
+    <SSRApolloProvider initialData={{ products: serializableProducts }}>
+      <div className="py-4 sm:py-6 md:py-8 lg:py-10">
+        {sections.map((section) => (
+          <ProductSection
+            key={section.name}
+            name={section.name}
+            products={section.products}
+            count={section.count}
+            layout={section.layout}
+          />
+        ))}
+        <DynamicSections />
+      </div>
+    </SSRApolloProvider>
+  );
+}
 
-      {/* Comparison Button Bar - Floating */}
-      <CompareButtonBar />
+function MainSkeleton() {
+  return (
+    <main className="bg-background pt-2 sm:pt-4 pb-4 sm:pb-8">
+      <div className="space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-12">
+        {[...Array(3)].map((_, sectionIndex) => (
+          <section key={sectionIndex} className="container-custom">
+            <div className="flex justify-between items-center mb-6">
+              <div className="h-7 w-64 bg-secondary/20 rounded animate-pulse" />
+            </div>
+            <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-4 scrollbar-hide">
+              {[...Array(8)].map((_, i) => (
+                <PlainProductCardSkeleton key={i} />
+              ))}
+            </div>
+          </section>
+        ))}
+        <div className="container-custom">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {[...Array(6)].map((_, gridIndex) => (
+              <LandingPageProductGridSkeleton key={gridIndex} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function ProductSectionsSkeleton() {
+  return (
+    <div className="py-4 sm:py-6 md:py-8 lg:py-10">
+      {[
+        { name: "Today's Best Deals", count: 8 },
+        { name: "Top Offers", count: 6 },
+        { name: "Recommended For You", count: 12 },
+      ].map((section, idx) => (
+        <section key={idx} className="mb-8 xs:mb-10 sm:mb-12 md:mb-16">
+          <div className="container-custom">
+            <div className="h-8 w-64 bg-secondary/20 rounded animate-pulse mb-4 sm:mb-6 px-1" />
+            <div className={idx === 0 ? "flex gap-3 xs:gap-4 sm:gap-5 md:gap-6 overflow-x-auto pb-4 sm:pb-6 horizontal-scroll scrollbar-hide" : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6"}>
+              {[...Array(section.count)].map((_, i) => (
+                <div key={i} className={idx === 0 ? "flex-none w-[220px]" : ""}>
+                  <ProductCardSkeleton />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ))}
     </div>
   );
 }

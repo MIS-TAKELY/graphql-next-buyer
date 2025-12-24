@@ -10,6 +10,8 @@ import ProductPageSkeleton from "@/components/page/product/ProductPageSkeleton";
 import ProductReviews from "@/components/page/product/ProductReviews";
 import { IProductVarient, TProduct } from "@/types/product";
 import { useSession } from "@/lib/auth-client";
+import { useMutation } from "@apollo/client";
+import { RECORD_PRODUCT_VIEW } from "@/client/product/product.queries";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import FAQSection from "./FAQSection";
 import RecommendedProducts from "./RecommendedProducts";
@@ -20,6 +22,7 @@ interface ProductPageClientProps {
 }
 
 export default function ProductPageClient({ product }: ProductPageClientProps) {
+  const { data: session } = useSession();
   const [imageHoverData, setImageHoverData] = useState<{
     isHovering: boolean;
     imageUrl: string;
@@ -52,18 +55,24 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
   }, [product]);
 
   // Save to Recently Viewed
+  const [recordView] = useMutation(RECORD_PRODUCT_VIEW);
+
   useEffect(() => {
     if (product?.id) {
+      // 1. Guest/Local Storage (Always do this for immediate UI feedback or fallback)
       const stored = localStorage.getItem("recentlyViewed");
       let ids: string[] = stored ? JSON.parse(stored) : [];
-      // Remove if exists to push to top
       ids = ids.filter((id) => id !== product.id);
       ids.unshift(product.id);
-      // Limit to 10
       ids = ids.slice(0, 10);
       localStorage.setItem("recentlyViewed", JSON.stringify(ids));
+
+      // 2. Authenticated User (Sync with Backend)
+      if (session?.user) {
+        recordView({ variables: { productId: product.id } }).catch(console.error);
+      }
     }
-  }, [product?.id]);
+  }, [product?.id, session?.user]);
 
   // Force scroll to top on mount
   useEffect(() => {
@@ -178,7 +187,6 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     return <ProductPageSkeleton />;
   }
 
-  const { data: session } = useSession();
   const userId = session?.user?.id;
   const isOwnProduct = userId === product?.seller?.id;
 

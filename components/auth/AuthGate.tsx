@@ -34,17 +34,6 @@ export default function AuthGate({ children }: AuthGateProps) {
     const pathname = usePathname();
 
 
-    if (isPending) {
-        console.log("AuthGate: Session pending...");
-        return (
-            <div className="flex h-screen w-full items-center justify-center bg-background">
-                <div className="flex flex-col items-center space-y-4">
-                    <Loader2 className="h-10 w-10 animate-spin text-primary" />
-                    <p className="text-muted-foreground animate-pulse font-medium">Loading Vanijay...</p>
-                </div>
-            </div>
-        );
-    }
 
     const isPublicRoute = PUBLIC_ROUTES.some(route => {
         if (route === "/") return pathname === "/";
