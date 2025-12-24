@@ -1,5 +1,5 @@
-import HeroCarousel from "@/components/page/home/HeroCarousel";
-import ProductCatagoryCardSection from "@/components/page/home/ProductCatagoryCardSection";
+import CategorySectionSkeleton from "@/components/page/home/CategorySectionSkeleton";
+import HeroCarouselSkeleton from "@/components/page/home/HeroCarouselSkeleton";
 import { ProductCardSkeleton } from "@/components/page/home/ProductCardSkeleton";
 import { PlainProductCardSkeleton, LandingPageProductGridSkeleton } from "@/components/landingPage/LandingPageSkeletons";
 
@@ -7,10 +7,10 @@ export default function HomeLoading() {
     return (
         <div className="bg-background text-foreground min-h-screen">
             {/* Category section - static, loads fast */}
-            <ProductCatagoryCardSection />
+            <CategorySectionSkeleton />
 
             {/* Hero carousel - static, loads fast */}
-            <HeroCarousel />
+            <HeroCarouselSkeleton />
 
             {/* Main content skeleton */}
             <main className="bg-background pt-2 sm:pt-4 pb-4 sm:pb-8">
