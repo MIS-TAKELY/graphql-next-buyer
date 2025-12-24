@@ -156,7 +156,7 @@ export const cartItemResolvers = {
             return true;
           },
           {
-            timeout: 20000,
+            timeout: 15000,
             maxWait: 5000,
           }
         );

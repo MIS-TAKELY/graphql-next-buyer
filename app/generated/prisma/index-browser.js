@@ -135,6 +135,7 @@ exports.Prisma.UserScalarFieldEnum = {
   avatarImageUrl: 'avatarImageUrl',
   phone: 'phone',
   phoneVerified: 'phoneVerified',
+  hasProfile: 'hasProfile',
   otp: 'otp',
   otpExpiresAt: 'otpExpiresAt',
   gender: 'gender',
@@ -610,6 +611,20 @@ exports.Prisma.VerificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.OrderDisputeScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  sellerOrderId: 'sellerOrderId',
+  userId: 'userId',
+  reason: 'reason',
+  description: 'description',
+  images: 'images',
+  status: 'status',
+  type: 'type',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -760,6 +775,18 @@ exports.ReviewStatus = exports.$Enums.ReviewStatus = {
   REJECTED: 'REJECTED'
 };
 
+exports.DisputeStatus = exports.$Enums.DisputeStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  RESOLVED: 'RESOLVED'
+};
+
+exports.DisputeType = exports.$Enums.DisputeType = {
+  CANCEL: 'CANCEL',
+  RETURN: 'RETURN'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   UserRole: 'UserRole',
@@ -800,7 +827,8 @@ exports.Prisma.ModelName = {
   ProductAnswer: 'ProductAnswer',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  OrderDispute: 'OrderDispute'
 };
 
 /**

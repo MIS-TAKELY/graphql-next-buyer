@@ -23,14 +23,14 @@ export default function OrdersSection() {
     }
   );
 
-  if (error) {
-    return <div className="text-red-500">Failed to load orders</div>;
-  }
-
   const orders = useMemo(
     () => data?.getMyOrderItems ?? [],
     [data?.getMyOrderItems]
   );
+
+  if (error) {
+    return <div className="text-red-500">Failed to load orders</div>;
+  }
 
   const handleNext = () => {
     setPage((prev) => prev + 1);

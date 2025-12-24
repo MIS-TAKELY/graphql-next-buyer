@@ -28,6 +28,34 @@ export const GET_MY_ORDER_ITEMS = gql`
           }
         }
       }
+      disputes {
+        id
+        status
+        type
+        reason
+        description
+        images
+      }
+    }
+  }
+`;
+
+export const CANCEL_ORDER = gql`
+  mutation CancelOrder($input: CancelOrderInput!) {
+    cancelOrder(input: $input) {
+      id
+      status
+      type
+    }
+  }
+`;
+
+export const REQUEST_RETURN = gql`
+  mutation RequestReturn($input: RequestReturnInput!) {
+    requestReturn(input: $input) {
+      id
+      status
+      type
     }
   }
 `;

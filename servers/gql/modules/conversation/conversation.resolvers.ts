@@ -180,7 +180,7 @@ export const conversationResolvers = {
           return newConversation;
         },
         {
-          timeout: 30000,
+          timeout: 15000,
         }
       );
     },

@@ -213,6 +213,11 @@ export type Account = $Result.DefaultSelection<Prisma.$AccountPayload>
  * 
  */
 export type Verification = $Result.DefaultSelection<Prisma.$VerificationPayload>
+/**
+ * Model OrderDispute
+ * 
+ */
+export type OrderDispute = $Result.DefaultSelection<Prisma.$OrderDisputePayload>
 
 /**
  * Enums
@@ -410,6 +415,24 @@ export const VerificationStatus: {
 
 export type VerificationStatus = (typeof VerificationStatus)[keyof typeof VerificationStatus]
 
+
+export const DisputeStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  RESOLVED: 'RESOLVED'
+};
+
+export type DisputeStatus = (typeof DisputeStatus)[keyof typeof DisputeStatus]
+
+
+export const DisputeType: {
+  CANCEL: 'CANCEL',
+  RETURN: 'RETURN'
+};
+
+export type DisputeType = (typeof DisputeType)[keyof typeof DisputeType]
+
 }
 
 export type Role = $Enums.Role
@@ -487,6 +510,14 @@ export const ReturnType: typeof $Enums.ReturnType
 export type VerificationStatus = $Enums.VerificationStatus
 
 export const VerificationStatus: typeof $Enums.VerificationStatus
+
+export type DisputeStatus = $Enums.DisputeStatus
+
+export const DisputeStatus: typeof $Enums.DisputeStatus
+
+export type DisputeType = $Enums.DisputeType
+
+export const DisputeType: typeof $Enums.DisputeType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1005,6 +1036,16 @@ export class PrismaClient<
     * ```
     */
   get verification(): Prisma.VerificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.orderDispute`: Exposes CRUD operations for the **OrderDispute** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OrderDisputes
+    * const orderDisputes = await prisma.orderDispute.findMany()
+    * ```
+    */
+  get orderDispute(): Prisma.OrderDisputeDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1485,7 +1526,8 @@ export namespace Prisma {
     ProductAnswer: 'ProductAnswer',
     Session: 'Session',
     Account: 'Account',
-    Verification: 'Verification'
+    Verification: 'Verification',
+    OrderDispute: 'OrderDispute'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1504,7 +1546,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout" | "productQuestion" | "productAnswer" | "session" | "account" | "verification"
+      modelProps: "user" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout" | "productQuestion" | "productAnswer" | "session" | "account" | "verification" | "orderDispute"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4468,6 +4510,80 @@ export namespace Prisma {
           }
         }
       }
+      OrderDispute: {
+        payload: Prisma.$OrderDisputePayload<ExtArgs>
+        fields: Prisma.OrderDisputeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OrderDisputeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDisputePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OrderDisputeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDisputePayload>
+          }
+          findFirst: {
+            args: Prisma.OrderDisputeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDisputePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OrderDisputeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDisputePayload>
+          }
+          findMany: {
+            args: Prisma.OrderDisputeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDisputePayload>[]
+          }
+          create: {
+            args: Prisma.OrderDisputeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDisputePayload>
+          }
+          createMany: {
+            args: Prisma.OrderDisputeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OrderDisputeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDisputePayload>[]
+          }
+          delete: {
+            args: Prisma.OrderDisputeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDisputePayload>
+          }
+          update: {
+            args: Prisma.OrderDisputeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDisputePayload>
+          }
+          deleteMany: {
+            args: Prisma.OrderDisputeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OrderDisputeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OrderDisputeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDisputePayload>[]
+          }
+          upsert: {
+            args: Prisma.OrderDisputeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderDisputePayload>
+          }
+          aggregate: {
+            args: Prisma.OrderDisputeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOrderDispute>
+          }
+          groupBy: {
+            args: Prisma.OrderDisputeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OrderDisputeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OrderDisputeCountArgs<ExtArgs>
+            result: $Utils.Optional<OrderDisputeCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4604,6 +4720,7 @@ export namespace Prisma {
     session?: SessionOmit
     account?: AccountOmit
     verification?: VerificationOmit
+    orderDispute?: OrderDisputeOmit
   }
 
   /* Types for Logging */
@@ -4702,6 +4819,7 @@ export namespace Prisma {
     ConversationParticipant: number
     notifications: number
     roles: number
+    disputes: number
     productQuestions: number
     productAnswers: number
   }
@@ -4725,6 +4843,7 @@ export namespace Prisma {
     ConversationParticipant?: boolean | UserCountOutputTypeCountConversationParticipantArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     roles?: boolean | UserCountOutputTypeCountRolesArgs
+    disputes?: boolean | UserCountOutputTypeCountDisputesArgs
     productQuestions?: boolean | UserCountOutputTypeCountProductQuestionsArgs
     productAnswers?: boolean | UserCountOutputTypeCountProductAnswersArgs
   }
@@ -4864,6 +4983,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountRolesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserRoleWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountDisputesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderDisputeWhereInput
   }
 
   /**
@@ -5268,6 +5394,7 @@ export namespace Prisma {
     items: number
     payments: number
     shipments: number
+    disputes: number
     sellerOrders: number
   }
 
@@ -5275,6 +5402,7 @@ export namespace Prisma {
     items?: boolean | OrderCountOutputTypeCountItemsArgs
     payments?: boolean | OrderCountOutputTypeCountPaymentsArgs
     shipments?: boolean | OrderCountOutputTypeCountShipmentsArgs
+    disputes?: boolean | OrderCountOutputTypeCountDisputesArgs
     sellerOrders?: boolean | OrderCountOutputTypeCountSellerOrdersArgs
   }
 
@@ -5308,6 +5436,13 @@ export namespace Prisma {
    */
   export type OrderCountOutputTypeCountShipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ShipmentWhereInput
+  }
+
+  /**
+   * OrderCountOutputType without action
+   */
+  export type OrderCountOutputTypeCountDisputesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderDisputeWhereInput
   }
 
   /**
@@ -5425,10 +5560,12 @@ export namespace Prisma {
    */
 
   export type SellerOrderCountOutputType = {
+    disputes: number
     items: number
   }
 
   export type SellerOrderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    disputes?: boolean | SellerOrderCountOutputTypeCountDisputesArgs
     items?: boolean | SellerOrderCountOutputTypeCountItemsArgs
   }
 
@@ -5441,6 +5578,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the SellerOrderCountOutputType
      */
     select?: SellerOrderCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SellerOrderCountOutputType without action
+   */
+  export type SellerOrderCountOutputTypeCountDisputesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderDisputeWhereInput
   }
 
   /**
@@ -5510,6 +5654,7 @@ export namespace Prisma {
     avatarImageUrl: string | null
     phone: string | null
     phoneVerified: boolean | null
+    hasProfile: boolean | null
     otp: string | null
     otpExpiresAt: Date | null
     gender: $Enums.Gender | null
@@ -5532,6 +5677,7 @@ export namespace Prisma {
     avatarImageUrl: string | null
     phone: string | null
     phoneVerified: boolean | null
+    hasProfile: boolean | null
     otp: string | null
     otpExpiresAt: Date | null
     gender: $Enums.Gender | null
@@ -5554,6 +5700,7 @@ export namespace Prisma {
     avatarImageUrl: number
     phone: number
     phoneVerified: number
+    hasProfile: number
     otp: number
     otpExpiresAt: number
     gender: number
@@ -5578,6 +5725,7 @@ export namespace Prisma {
     avatarImageUrl?: true
     phone?: true
     phoneVerified?: true
+    hasProfile?: true
     otp?: true
     otpExpiresAt?: true
     gender?: true
@@ -5600,6 +5748,7 @@ export namespace Prisma {
     avatarImageUrl?: true
     phone?: true
     phoneVerified?: true
+    hasProfile?: true
     otp?: true
     otpExpiresAt?: true
     gender?: true
@@ -5622,6 +5771,7 @@ export namespace Prisma {
     avatarImageUrl?: true
     phone?: true
     phoneVerified?: true
+    hasProfile?: true
     otp?: true
     otpExpiresAt?: true
     gender?: true
@@ -5717,6 +5867,7 @@ export namespace Prisma {
     avatarImageUrl: string | null
     phone: string | null
     phoneVerified: boolean
+    hasProfile: boolean
     otp: string | null
     otpExpiresAt: Date | null
     gender: $Enums.Gender | null
@@ -5756,6 +5907,7 @@ export namespace Prisma {
     avatarImageUrl?: boolean
     phone?: boolean
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: boolean
     otpExpiresAt?: boolean
     gender?: boolean
@@ -5781,6 +5933,7 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     sellerProfile?: boolean | User$sellerProfileArgs<ExtArgs>
     roles?: boolean | User$rolesArgs<ExtArgs>
+    disputes?: boolean | User$disputesArgs<ExtArgs>
     productQuestions?: boolean | User$productQuestionsArgs<ExtArgs>
     productAnswers?: boolean | User$productAnswersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -5800,6 +5953,7 @@ export namespace Prisma {
     avatarImageUrl?: boolean
     phone?: boolean
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: boolean
     otpExpiresAt?: boolean
     gender?: boolean
@@ -5822,6 +5976,7 @@ export namespace Prisma {
     avatarImageUrl?: boolean
     phone?: boolean
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: boolean
     otpExpiresAt?: boolean
     gender?: boolean
@@ -5844,6 +5999,7 @@ export namespace Prisma {
     avatarImageUrl?: boolean
     phone?: boolean
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: boolean
     otpExpiresAt?: boolean
     gender?: boolean
@@ -5852,7 +6008,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "displayUsername" | "email" | "emailVerified" | "password" | "image" | "firstName" | "lastName" | "avatarImageUrl" | "phone" | "phoneVerified" | "otp" | "otpExpiresAt" | "gender" | "dob" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "displayUsername" | "email" | "emailVerified" | "password" | "image" | "firstName" | "lastName" | "avatarImageUrl" | "phone" | "phoneVerified" | "hasProfile" | "otp" | "otpExpiresAt" | "gender" | "dob" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
@@ -5873,6 +6029,7 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     sellerProfile?: boolean | User$sellerProfileArgs<ExtArgs>
     roles?: boolean | User$rolesArgs<ExtArgs>
+    disputes?: boolean | User$disputesArgs<ExtArgs>
     productQuestions?: boolean | User$productQuestionsArgs<ExtArgs>
     productAnswers?: boolean | User$productAnswersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -5902,6 +6059,7 @@ export namespace Prisma {
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       sellerProfile: Prisma.$SellerProfilePayload<ExtArgs> | null
       roles: Prisma.$UserRolePayload<ExtArgs>[]
+      disputes: Prisma.$OrderDisputePayload<ExtArgs>[]
       productQuestions: Prisma.$ProductQuestionPayload<ExtArgs>[]
       productAnswers: Prisma.$ProductAnswerPayload<ExtArgs>[]
     }
@@ -5919,6 +6077,7 @@ export namespace Prisma {
       avatarImageUrl: string | null
       phone: string | null
       phoneVerified: boolean
+      hasProfile: boolean
       otp: string | null
       otpExpiresAt: Date | null
       gender: $Enums.Gender | null
@@ -6338,6 +6497,7 @@ export namespace Prisma {
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sellerProfile<T extends User$sellerProfileArgs<ExtArgs> = {}>(args?: Subset<T, User$sellerProfileArgs<ExtArgs>>): Prisma__SellerProfileClient<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     roles<T extends User$rolesArgs<ExtArgs> = {}>(args?: Subset<T, User$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    disputes<T extends User$disputesArgs<ExtArgs> = {}>(args?: Subset<T, User$disputesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     productQuestions<T extends User$productQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, User$productQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     productAnswers<T extends User$productAnswersArgs<ExtArgs> = {}>(args?: Subset<T, User$productAnswersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -6382,6 +6542,7 @@ export namespace Prisma {
     readonly avatarImageUrl: FieldRef<"User", 'String'>
     readonly phone: FieldRef<"User", 'String'>
     readonly phoneVerified: FieldRef<"User", 'Boolean'>
+    readonly hasProfile: FieldRef<"User", 'Boolean'>
     readonly otp: FieldRef<"User", 'String'>
     readonly otpExpiresAt: FieldRef<"User", 'DateTime'>
     readonly gender: FieldRef<"User", 'Gender'>
@@ -7224,6 +7385,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserRoleScalarFieldEnum | UserRoleScalarFieldEnum[]
+  }
+
+  /**
+   * User.disputes
+   */
+  export type User$disputesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+    where?: OrderDisputeWhereInput
+    orderBy?: OrderDisputeOrderByWithRelationInput | OrderDisputeOrderByWithRelationInput[]
+    cursor?: OrderDisputeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderDisputeScalarFieldEnum | OrderDisputeScalarFieldEnum[]
   }
 
   /**
@@ -31945,6 +32130,7 @@ export namespace Prisma {
     items?: boolean | Order$itemsArgs<ExtArgs>
     payments?: boolean | Order$paymentsArgs<ExtArgs>
     shipments?: boolean | Order$shipmentsArgs<ExtArgs>
+    disputes?: boolean | Order$disputesArgs<ExtArgs>
     sellerOrders?: boolean | Order$sellerOrdersArgs<ExtArgs>
     _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["order"]>
@@ -32011,6 +32197,7 @@ export namespace Prisma {
     items?: boolean | Order$itemsArgs<ExtArgs>
     payments?: boolean | Order$paymentsArgs<ExtArgs>
     shipments?: boolean | Order$shipmentsArgs<ExtArgs>
+    disputes?: boolean | Order$disputesArgs<ExtArgs>
     sellerOrders?: boolean | Order$sellerOrdersArgs<ExtArgs>
     _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -32031,6 +32218,7 @@ export namespace Prisma {
       items: Prisma.$OrderItemPayload<ExtArgs>[]
       payments: Prisma.$PaymentPayload<ExtArgs>[]
       shipments: Prisma.$ShipmentPayload<ExtArgs>[]
+      disputes: Prisma.$OrderDisputePayload<ExtArgs>[]
       sellerOrders: Prisma.$SellerOrderPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -32447,6 +32635,7 @@ export namespace Prisma {
     items<T extends Order$itemsArgs<ExtArgs> = {}>(args?: Subset<T, Order$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     payments<T extends Order$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Order$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     shipments<T extends Order$shipmentsArgs<ExtArgs> = {}>(args?: Subset<T, Order$shipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    disputes<T extends Order$disputesArgs<ExtArgs> = {}>(args?: Subset<T, Order$disputesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sellerOrders<T extends Order$sellerOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Order$sellerOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SellerOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -32975,6 +33164,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ShipmentScalarFieldEnum | ShipmentScalarFieldEnum[]
+  }
+
+  /**
+   * Order.disputes
+   */
+  export type Order$disputesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+    where?: OrderDisputeWhereInput
+    orderBy?: OrderDisputeOrderByWithRelationInput | OrderDisputeOrderByWithRelationInput[]
+    cursor?: OrderDisputeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderDisputeScalarFieldEnum | OrderDisputeScalarFieldEnum[]
   }
 
   /**
@@ -43562,6 +43775,7 @@ export namespace Prisma {
     total?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    disputes?: boolean | SellerOrder$disputesArgs<ExtArgs>
     seller?: boolean | UserDefaultArgs<ExtArgs>
     items?: boolean | SellerOrder$itemsArgs<ExtArgs>
     order?: boolean | OrderDefaultArgs<ExtArgs>
@@ -43616,6 +43830,7 @@ export namespace Prisma {
 
   export type SellerOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "buyerOrderId" | "status" | "subtotal" | "tax" | "shippingFee" | "commission" | "total" | "createdAt" | "updatedAt", ExtArgs["result"]["sellerOrder"]>
   export type SellerOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    disputes?: boolean | SellerOrder$disputesArgs<ExtArgs>
     seller?: boolean | UserDefaultArgs<ExtArgs>
     items?: boolean | SellerOrder$itemsArgs<ExtArgs>
     order?: boolean | OrderDefaultArgs<ExtArgs>
@@ -43633,6 +43848,7 @@ export namespace Prisma {
   export type $SellerOrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SellerOrder"
     objects: {
+      disputes: Prisma.$OrderDisputePayload<ExtArgs>[]
       seller: Prisma.$UserPayload<ExtArgs>
       items: Prisma.$SellerOrderItemPayload<ExtArgs>[]
       order: Prisma.$OrderPayload<ExtArgs>
@@ -44043,6 +44259,7 @@ export namespace Prisma {
    */
   export interface Prisma__SellerOrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    disputes<T extends SellerOrder$disputesArgs<ExtArgs> = {}>(args?: Subset<T, SellerOrder$disputesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     seller<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     items<T extends SellerOrder$itemsArgs<ExtArgs> = {}>(args?: Subset<T, SellerOrder$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SellerOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     order<T extends OrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrderDefaultArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -44479,6 +44696,30 @@ export namespace Prisma {
      * Limit how many SellerOrders to delete.
      */
     limit?: number
+  }
+
+  /**
+   * SellerOrder.disputes
+   */
+  export type SellerOrder$disputesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+    where?: OrderDisputeWhereInput
+    orderBy?: OrderDisputeOrderByWithRelationInput | OrderDisputeOrderByWithRelationInput[]
+    cursor?: OrderDisputeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderDisputeScalarFieldEnum | OrderDisputeScalarFieldEnum[]
   }
 
   /**
@@ -52301,6 +52542,1173 @@ export namespace Prisma {
 
 
   /**
+   * Model OrderDispute
+   */
+
+  export type AggregateOrderDispute = {
+    _count: OrderDisputeCountAggregateOutputType | null
+    _min: OrderDisputeMinAggregateOutputType | null
+    _max: OrderDisputeMaxAggregateOutputType | null
+  }
+
+  export type OrderDisputeMinAggregateOutputType = {
+    id: string | null
+    orderId: string | null
+    sellerOrderId: string | null
+    userId: string | null
+    reason: string | null
+    description: string | null
+    status: $Enums.DisputeStatus | null
+    type: $Enums.DisputeType | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OrderDisputeMaxAggregateOutputType = {
+    id: string | null
+    orderId: string | null
+    sellerOrderId: string | null
+    userId: string | null
+    reason: string | null
+    description: string | null
+    status: $Enums.DisputeStatus | null
+    type: $Enums.DisputeType | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OrderDisputeCountAggregateOutputType = {
+    id: number
+    orderId: number
+    sellerOrderId: number
+    userId: number
+    reason: number
+    description: number
+    images: number
+    status: number
+    type: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OrderDisputeMinAggregateInputType = {
+    id?: true
+    orderId?: true
+    sellerOrderId?: true
+    userId?: true
+    reason?: true
+    description?: true
+    status?: true
+    type?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OrderDisputeMaxAggregateInputType = {
+    id?: true
+    orderId?: true
+    sellerOrderId?: true
+    userId?: true
+    reason?: true
+    description?: true
+    status?: true
+    type?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OrderDisputeCountAggregateInputType = {
+    id?: true
+    orderId?: true
+    sellerOrderId?: true
+    userId?: true
+    reason?: true
+    description?: true
+    images?: true
+    status?: true
+    type?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OrderDisputeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrderDispute to aggregate.
+     */
+    where?: OrderDisputeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderDisputes to fetch.
+     */
+    orderBy?: OrderDisputeOrderByWithRelationInput | OrderDisputeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrderDisputeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderDisputes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderDisputes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OrderDisputes
+    **/
+    _count?: true | OrderDisputeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrderDisputeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrderDisputeMaxAggregateInputType
+  }
+
+  export type GetOrderDisputeAggregateType<T extends OrderDisputeAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrderDispute]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrderDispute[P]>
+      : GetScalarType<T[P], AggregateOrderDispute[P]>
+  }
+
+
+
+
+  export type OrderDisputeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderDisputeWhereInput
+    orderBy?: OrderDisputeOrderByWithAggregationInput | OrderDisputeOrderByWithAggregationInput[]
+    by: OrderDisputeScalarFieldEnum[] | OrderDisputeScalarFieldEnum
+    having?: OrderDisputeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrderDisputeCountAggregateInputType | true
+    _min?: OrderDisputeMinAggregateInputType
+    _max?: OrderDisputeMaxAggregateInputType
+  }
+
+  export type OrderDisputeGroupByOutputType = {
+    id: string
+    orderId: string
+    sellerOrderId: string | null
+    userId: string
+    reason: string
+    description: string | null
+    images: string[]
+    status: $Enums.DisputeStatus
+    type: $Enums.DisputeType
+    createdAt: Date
+    updatedAt: Date
+    _count: OrderDisputeCountAggregateOutputType | null
+    _min: OrderDisputeMinAggregateOutputType | null
+    _max: OrderDisputeMaxAggregateOutputType | null
+  }
+
+  type GetOrderDisputeGroupByPayload<T extends OrderDisputeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OrderDisputeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrderDisputeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrderDisputeGroupByOutputType[P]>
+            : GetScalarType<T[P], OrderDisputeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrderDisputeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    orderId?: boolean
+    sellerOrderId?: boolean
+    userId?: boolean
+    reason?: boolean
+    description?: boolean
+    images?: boolean
+    status?: boolean
+    type?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+    sellerOrder?: boolean | OrderDispute$sellerOrderArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orderDispute"]>
+
+  export type OrderDisputeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    orderId?: boolean
+    sellerOrderId?: boolean
+    userId?: boolean
+    reason?: boolean
+    description?: boolean
+    images?: boolean
+    status?: boolean
+    type?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+    sellerOrder?: boolean | OrderDispute$sellerOrderArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orderDispute"]>
+
+  export type OrderDisputeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    orderId?: boolean
+    sellerOrderId?: boolean
+    userId?: boolean
+    reason?: boolean
+    description?: boolean
+    images?: boolean
+    status?: boolean
+    type?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+    sellerOrder?: boolean | OrderDispute$sellerOrderArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orderDispute"]>
+
+  export type OrderDisputeSelectScalar = {
+    id?: boolean
+    orderId?: boolean
+    sellerOrderId?: boolean
+    userId?: boolean
+    reason?: boolean
+    description?: boolean
+    images?: boolean
+    status?: boolean
+    type?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OrderDisputeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "sellerOrderId" | "userId" | "reason" | "description" | "images" | "status" | "type" | "createdAt" | "updatedAt", ExtArgs["result"]["orderDispute"]>
+  export type OrderDisputeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+    sellerOrder?: boolean | OrderDispute$sellerOrderArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OrderDisputeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+    sellerOrder?: boolean | OrderDispute$sellerOrderArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OrderDisputeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+    sellerOrder?: boolean | OrderDispute$sellerOrderArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $OrderDisputePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OrderDispute"
+    objects: {
+      order: Prisma.$OrderPayload<ExtArgs>
+      sellerOrder: Prisma.$SellerOrderPayload<ExtArgs> | null
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      orderId: string
+      sellerOrderId: string | null
+      userId: string
+      reason: string
+      description: string | null
+      images: string[]
+      status: $Enums.DisputeStatus
+      type: $Enums.DisputeType
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["orderDispute"]>
+    composites: {}
+  }
+
+  type OrderDisputeGetPayload<S extends boolean | null | undefined | OrderDisputeDefaultArgs> = $Result.GetResult<Prisma.$OrderDisputePayload, S>
+
+  type OrderDisputeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OrderDisputeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OrderDisputeCountAggregateInputType | true
+    }
+
+  export interface OrderDisputeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OrderDispute'], meta: { name: 'OrderDispute' } }
+    /**
+     * Find zero or one OrderDispute that matches the filter.
+     * @param {OrderDisputeFindUniqueArgs} args - Arguments to find a OrderDispute
+     * @example
+     * // Get one OrderDispute
+     * const orderDispute = await prisma.orderDispute.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OrderDisputeFindUniqueArgs>(args: SelectSubset<T, OrderDisputeFindUniqueArgs<ExtArgs>>): Prisma__OrderDisputeClient<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OrderDispute that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OrderDisputeFindUniqueOrThrowArgs} args - Arguments to find a OrderDispute
+     * @example
+     * // Get one OrderDispute
+     * const orderDispute = await prisma.orderDispute.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OrderDisputeFindUniqueOrThrowArgs>(args: SelectSubset<T, OrderDisputeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrderDisputeClient<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrderDispute that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDisputeFindFirstArgs} args - Arguments to find a OrderDispute
+     * @example
+     * // Get one OrderDispute
+     * const orderDispute = await prisma.orderDispute.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OrderDisputeFindFirstArgs>(args?: SelectSubset<T, OrderDisputeFindFirstArgs<ExtArgs>>): Prisma__OrderDisputeClient<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrderDispute that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDisputeFindFirstOrThrowArgs} args - Arguments to find a OrderDispute
+     * @example
+     * // Get one OrderDispute
+     * const orderDispute = await prisma.orderDispute.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OrderDisputeFindFirstOrThrowArgs>(args?: SelectSubset<T, OrderDisputeFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrderDisputeClient<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OrderDisputes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDisputeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OrderDisputes
+     * const orderDisputes = await prisma.orderDispute.findMany()
+     * 
+     * // Get first 10 OrderDisputes
+     * const orderDisputes = await prisma.orderDispute.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const orderDisputeWithIdOnly = await prisma.orderDispute.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OrderDisputeFindManyArgs>(args?: SelectSubset<T, OrderDisputeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OrderDispute.
+     * @param {OrderDisputeCreateArgs} args - Arguments to create a OrderDispute.
+     * @example
+     * // Create one OrderDispute
+     * const OrderDispute = await prisma.orderDispute.create({
+     *   data: {
+     *     // ... data to create a OrderDispute
+     *   }
+     * })
+     * 
+     */
+    create<T extends OrderDisputeCreateArgs>(args: SelectSubset<T, OrderDisputeCreateArgs<ExtArgs>>): Prisma__OrderDisputeClient<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OrderDisputes.
+     * @param {OrderDisputeCreateManyArgs} args - Arguments to create many OrderDisputes.
+     * @example
+     * // Create many OrderDisputes
+     * const orderDispute = await prisma.orderDispute.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OrderDisputeCreateManyArgs>(args?: SelectSubset<T, OrderDisputeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OrderDisputes and returns the data saved in the database.
+     * @param {OrderDisputeCreateManyAndReturnArgs} args - Arguments to create many OrderDisputes.
+     * @example
+     * // Create many OrderDisputes
+     * const orderDispute = await prisma.orderDispute.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OrderDisputes and only return the `id`
+     * const orderDisputeWithIdOnly = await prisma.orderDispute.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OrderDisputeCreateManyAndReturnArgs>(args?: SelectSubset<T, OrderDisputeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OrderDispute.
+     * @param {OrderDisputeDeleteArgs} args - Arguments to delete one OrderDispute.
+     * @example
+     * // Delete one OrderDispute
+     * const OrderDispute = await prisma.orderDispute.delete({
+     *   where: {
+     *     // ... filter to delete one OrderDispute
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OrderDisputeDeleteArgs>(args: SelectSubset<T, OrderDisputeDeleteArgs<ExtArgs>>): Prisma__OrderDisputeClient<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OrderDispute.
+     * @param {OrderDisputeUpdateArgs} args - Arguments to update one OrderDispute.
+     * @example
+     * // Update one OrderDispute
+     * const orderDispute = await prisma.orderDispute.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OrderDisputeUpdateArgs>(args: SelectSubset<T, OrderDisputeUpdateArgs<ExtArgs>>): Prisma__OrderDisputeClient<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OrderDisputes.
+     * @param {OrderDisputeDeleteManyArgs} args - Arguments to filter OrderDisputes to delete.
+     * @example
+     * // Delete a few OrderDisputes
+     * const { count } = await prisma.orderDispute.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OrderDisputeDeleteManyArgs>(args?: SelectSubset<T, OrderDisputeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrderDisputes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDisputeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OrderDisputes
+     * const orderDispute = await prisma.orderDispute.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OrderDisputeUpdateManyArgs>(args: SelectSubset<T, OrderDisputeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrderDisputes and returns the data updated in the database.
+     * @param {OrderDisputeUpdateManyAndReturnArgs} args - Arguments to update many OrderDisputes.
+     * @example
+     * // Update many OrderDisputes
+     * const orderDispute = await prisma.orderDispute.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OrderDisputes and only return the `id`
+     * const orderDisputeWithIdOnly = await prisma.orderDispute.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OrderDisputeUpdateManyAndReturnArgs>(args: SelectSubset<T, OrderDisputeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OrderDispute.
+     * @param {OrderDisputeUpsertArgs} args - Arguments to update or create a OrderDispute.
+     * @example
+     * // Update or create a OrderDispute
+     * const orderDispute = await prisma.orderDispute.upsert({
+     *   create: {
+     *     // ... data to create a OrderDispute
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OrderDispute we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OrderDisputeUpsertArgs>(args: SelectSubset<T, OrderDisputeUpsertArgs<ExtArgs>>): Prisma__OrderDisputeClient<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OrderDisputes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDisputeCountArgs} args - Arguments to filter OrderDisputes to count.
+     * @example
+     * // Count the number of OrderDisputes
+     * const count = await prisma.orderDispute.count({
+     *   where: {
+     *     // ... the filter for the OrderDisputes we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrderDisputeCountArgs>(
+      args?: Subset<T, OrderDisputeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrderDisputeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OrderDispute.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDisputeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrderDisputeAggregateArgs>(args: Subset<T, OrderDisputeAggregateArgs>): Prisma.PrismaPromise<GetOrderDisputeAggregateType<T>>
+
+    /**
+     * Group by OrderDispute.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderDisputeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrderDisputeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrderDisputeGroupByArgs['orderBy'] }
+        : { orderBy?: OrderDisputeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrderDisputeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrderDisputeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OrderDispute model
+   */
+  readonly fields: OrderDisputeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OrderDispute.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OrderDisputeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    order<T extends OrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrderDefaultArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sellerOrder<T extends OrderDispute$sellerOrderArgs<ExtArgs> = {}>(args?: Subset<T, OrderDispute$sellerOrderArgs<ExtArgs>>): Prisma__SellerOrderClient<$Result.GetResult<Prisma.$SellerOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OrderDispute model
+   */
+  interface OrderDisputeFieldRefs {
+    readonly id: FieldRef<"OrderDispute", 'String'>
+    readonly orderId: FieldRef<"OrderDispute", 'String'>
+    readonly sellerOrderId: FieldRef<"OrderDispute", 'String'>
+    readonly userId: FieldRef<"OrderDispute", 'String'>
+    readonly reason: FieldRef<"OrderDispute", 'String'>
+    readonly description: FieldRef<"OrderDispute", 'String'>
+    readonly images: FieldRef<"OrderDispute", 'String[]'>
+    readonly status: FieldRef<"OrderDispute", 'DisputeStatus'>
+    readonly type: FieldRef<"OrderDispute", 'DisputeType'>
+    readonly createdAt: FieldRef<"OrderDispute", 'DateTime'>
+    readonly updatedAt: FieldRef<"OrderDispute", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OrderDispute findUnique
+   */
+  export type OrderDisputeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderDispute to fetch.
+     */
+    where: OrderDisputeWhereUniqueInput
+  }
+
+  /**
+   * OrderDispute findUniqueOrThrow
+   */
+  export type OrderDisputeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderDispute to fetch.
+     */
+    where: OrderDisputeWhereUniqueInput
+  }
+
+  /**
+   * OrderDispute findFirst
+   */
+  export type OrderDisputeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderDispute to fetch.
+     */
+    where?: OrderDisputeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderDisputes to fetch.
+     */
+    orderBy?: OrderDisputeOrderByWithRelationInput | OrderDisputeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrderDisputes.
+     */
+    cursor?: OrderDisputeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderDisputes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderDisputes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrderDisputes.
+     */
+    distinct?: OrderDisputeScalarFieldEnum | OrderDisputeScalarFieldEnum[]
+  }
+
+  /**
+   * OrderDispute findFirstOrThrow
+   */
+  export type OrderDisputeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderDispute to fetch.
+     */
+    where?: OrderDisputeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderDisputes to fetch.
+     */
+    orderBy?: OrderDisputeOrderByWithRelationInput | OrderDisputeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrderDisputes.
+     */
+    cursor?: OrderDisputeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderDisputes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderDisputes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrderDisputes.
+     */
+    distinct?: OrderDisputeScalarFieldEnum | OrderDisputeScalarFieldEnum[]
+  }
+
+  /**
+   * OrderDispute findMany
+   */
+  export type OrderDisputeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderDisputes to fetch.
+     */
+    where?: OrderDisputeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderDisputes to fetch.
+     */
+    orderBy?: OrderDisputeOrderByWithRelationInput | OrderDisputeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OrderDisputes.
+     */
+    cursor?: OrderDisputeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderDisputes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderDisputes.
+     */
+    skip?: number
+    distinct?: OrderDisputeScalarFieldEnum | OrderDisputeScalarFieldEnum[]
+  }
+
+  /**
+   * OrderDispute create
+   */
+  export type OrderDisputeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OrderDispute.
+     */
+    data: XOR<OrderDisputeCreateInput, OrderDisputeUncheckedCreateInput>
+  }
+
+  /**
+   * OrderDispute createMany
+   */
+  export type OrderDisputeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OrderDisputes.
+     */
+    data: OrderDisputeCreateManyInput | OrderDisputeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OrderDispute createManyAndReturn
+   */
+  export type OrderDisputeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * The data used to create many OrderDisputes.
+     */
+    data: OrderDisputeCreateManyInput | OrderDisputeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrderDispute update
+   */
+  export type OrderDisputeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OrderDispute.
+     */
+    data: XOR<OrderDisputeUpdateInput, OrderDisputeUncheckedUpdateInput>
+    /**
+     * Choose, which OrderDispute to update.
+     */
+    where: OrderDisputeWhereUniqueInput
+  }
+
+  /**
+   * OrderDispute updateMany
+   */
+  export type OrderDisputeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OrderDisputes.
+     */
+    data: XOR<OrderDisputeUpdateManyMutationInput, OrderDisputeUncheckedUpdateManyInput>
+    /**
+     * Filter which OrderDisputes to update
+     */
+    where?: OrderDisputeWhereInput
+    /**
+     * Limit how many OrderDisputes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrderDispute updateManyAndReturn
+   */
+  export type OrderDisputeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * The data used to update OrderDisputes.
+     */
+    data: XOR<OrderDisputeUpdateManyMutationInput, OrderDisputeUncheckedUpdateManyInput>
+    /**
+     * Filter which OrderDisputes to update
+     */
+    where?: OrderDisputeWhereInput
+    /**
+     * Limit how many OrderDisputes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrderDispute upsert
+   */
+  export type OrderDisputeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OrderDispute to update in case it exists.
+     */
+    where: OrderDisputeWhereUniqueInput
+    /**
+     * In case the OrderDispute found by the `where` argument doesn't exist, create a new OrderDispute with this data.
+     */
+    create: XOR<OrderDisputeCreateInput, OrderDisputeUncheckedCreateInput>
+    /**
+     * In case the OrderDispute was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrderDisputeUpdateInput, OrderDisputeUncheckedUpdateInput>
+  }
+
+  /**
+   * OrderDispute delete
+   */
+  export type OrderDisputeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+    /**
+     * Filter which OrderDispute to delete.
+     */
+    where: OrderDisputeWhereUniqueInput
+  }
+
+  /**
+   * OrderDispute deleteMany
+   */
+  export type OrderDisputeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrderDisputes to delete
+     */
+    where?: OrderDisputeWhereInput
+    /**
+     * Limit how many OrderDisputes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrderDispute.sellerOrder
+   */
+  export type OrderDispute$sellerOrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SellerOrder
+     */
+    select?: SellerOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SellerOrder
+     */
+    omit?: SellerOrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SellerOrderInclude<ExtArgs> | null
+    where?: SellerOrderWhereInput
+  }
+
+  /**
+   * OrderDispute without action
+   */
+  export type OrderDisputeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderDispute
+     */
+    select?: OrderDisputeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderDispute
+     */
+    omit?: OrderDisputeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderDisputeInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -52328,6 +53736,7 @@ export namespace Prisma {
     avatarImageUrl: 'avatarImageUrl',
     phone: 'phone',
     phoneVerified: 'phoneVerified',
+    hasProfile: 'hasProfile',
     otp: 'otp',
     otpExpiresAt: 'otpExpiresAt',
     gender: 'gender',
@@ -52923,6 +54332,23 @@ export namespace Prisma {
   export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
+  export const OrderDisputeScalarFieldEnum: {
+    id: 'id',
+    orderId: 'orderId',
+    sellerOrderId: 'sellerOrderId',
+    userId: 'userId',
+    reason: 'reason',
+    description: 'description',
+    images: 'images',
+    status: 'status',
+    type: 'type',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OrderDisputeScalarFieldEnum = (typeof OrderDisputeScalarFieldEnum)[keyof typeof OrderDisputeScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -53292,6 +54718,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'DisputeStatus'
+   */
+  export type EnumDisputeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DisputeStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'DisputeStatus[]'
+   */
+  export type ListEnumDisputeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DisputeStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DisputeType'
+   */
+  export type EnumDisputeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DisputeType'>
+    
+
+
+  /**
+   * Reference to a field of type 'DisputeType[]'
+   */
+  export type ListEnumDisputeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DisputeType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -53325,6 +54779,7 @@ export namespace Prisma {
     avatarImageUrl?: StringNullableFilter<"User"> | string | null
     phone?: StringNullableFilter<"User"> | string | null
     phoneVerified?: BoolFilter<"User"> | boolean
+    hasProfile?: BoolFilter<"User"> | boolean
     otp?: StringNullableFilter<"User"> | string | null
     otpExpiresAt?: DateTimeNullableFilter<"User"> | Date | string | null
     gender?: EnumGenderNullableFilter<"User"> | $Enums.Gender | null
@@ -53350,6 +54805,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     sellerProfile?: XOR<SellerProfileNullableScalarRelationFilter, SellerProfileWhereInput> | null
     roles?: UserRoleListRelationFilter
+    disputes?: OrderDisputeListRelationFilter
     productQuestions?: ProductQuestionListRelationFilter
     productAnswers?: ProductAnswerListRelationFilter
   }
@@ -53368,6 +54824,7 @@ export namespace Prisma {
     avatarImageUrl?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     phoneVerified?: SortOrder
+    hasProfile?: SortOrder
     otp?: SortOrderInput | SortOrder
     otpExpiresAt?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
@@ -53393,6 +54850,7 @@ export namespace Prisma {
     notifications?: NotificationOrderByRelationAggregateInput
     sellerProfile?: SellerProfileOrderByWithRelationInput
     roles?: UserRoleOrderByRelationAggregateInput
+    disputes?: OrderDisputeOrderByRelationAggregateInput
     productQuestions?: ProductQuestionOrderByRelationAggregateInput
     productAnswers?: ProductAnswerOrderByRelationAggregateInput
   }
@@ -53414,6 +54872,7 @@ export namespace Prisma {
     lastName?: StringNullableFilter<"User"> | string | null
     avatarImageUrl?: StringNullableFilter<"User"> | string | null
     phoneVerified?: BoolFilter<"User"> | boolean
+    hasProfile?: BoolFilter<"User"> | boolean
     otp?: StringNullableFilter<"User"> | string | null
     otpExpiresAt?: DateTimeNullableFilter<"User"> | Date | string | null
     gender?: EnumGenderNullableFilter<"User"> | $Enums.Gender | null
@@ -53439,6 +54898,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     sellerProfile?: XOR<SellerProfileNullableScalarRelationFilter, SellerProfileWhereInput> | null
     roles?: UserRoleListRelationFilter
+    disputes?: OrderDisputeListRelationFilter
     productQuestions?: ProductQuestionListRelationFilter
     productAnswers?: ProductAnswerListRelationFilter
   }, "id" | "username" | "email" | "phone">
@@ -53457,6 +54917,7 @@ export namespace Prisma {
     avatarImageUrl?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     phoneVerified?: SortOrder
+    hasProfile?: SortOrder
     otp?: SortOrderInput | SortOrder
     otpExpiresAt?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
@@ -53485,6 +54946,7 @@ export namespace Prisma {
     avatarImageUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
     phone?: StringNullableWithAggregatesFilter<"User"> | string | null
     phoneVerified?: BoolWithAggregatesFilter<"User"> | boolean
+    hasProfile?: BoolWithAggregatesFilter<"User"> | boolean
     otp?: StringNullableWithAggregatesFilter<"User"> | string | null
     otpExpiresAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     gender?: EnumGenderNullableWithAggregatesFilter<"User"> | $Enums.Gender | null
@@ -55212,6 +56674,7 @@ export namespace Prisma {
     items?: OrderItemListRelationFilter
     payments?: PaymentListRelationFilter
     shipments?: ShipmentListRelationFilter
+    disputes?: OrderDisputeListRelationFilter
     sellerOrders?: SellerOrderListRelationFilter
   }
 
@@ -55235,6 +56698,7 @@ export namespace Prisma {
     items?: OrderItemOrderByRelationAggregateInput
     payments?: PaymentOrderByRelationAggregateInput
     shipments?: ShipmentOrderByRelationAggregateInput
+    disputes?: OrderDisputeOrderByRelationAggregateInput
     sellerOrders?: SellerOrderOrderByRelationAggregateInput
   }
 
@@ -55261,6 +56725,7 @@ export namespace Prisma {
     items?: OrderItemListRelationFilter
     payments?: PaymentListRelationFilter
     shipments?: ShipmentListRelationFilter
+    disputes?: OrderDisputeListRelationFilter
     sellerOrders?: SellerOrderListRelationFilter
   }, "id" | "orderNumber">
 
@@ -56019,6 +57484,7 @@ export namespace Prisma {
     total?: DecimalFilter<"SellerOrder"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"SellerOrder"> | Date | string
     updatedAt?: DateTimeFilter<"SellerOrder"> | Date | string
+    disputes?: OrderDisputeListRelationFilter
     seller?: XOR<UserScalarRelationFilter, UserWhereInput>
     items?: SellerOrderItemListRelationFilter
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
@@ -56036,6 +57502,7 @@ export namespace Prisma {
     total?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    disputes?: OrderDisputeOrderByRelationAggregateInput
     seller?: UserOrderByWithRelationInput
     items?: SellerOrderItemOrderByRelationAggregateInput
     order?: OrderOrderByWithRelationInput
@@ -56056,6 +57523,7 @@ export namespace Prisma {
     total?: DecimalFilter<"SellerOrder"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"SellerOrder"> | Date | string
     updatedAt?: DateTimeFilter<"SellerOrder"> | Date | string
+    disputes?: OrderDisputeListRelationFilter
     seller?: XOR<UserScalarRelationFilter, UserWhereInput>
     items?: SellerOrderItemListRelationFilter
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
@@ -56611,6 +58079,97 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Verification"> | Date | string | null
   }
 
+  export type OrderDisputeWhereInput = {
+    AND?: OrderDisputeWhereInput | OrderDisputeWhereInput[]
+    OR?: OrderDisputeWhereInput[]
+    NOT?: OrderDisputeWhereInput | OrderDisputeWhereInput[]
+    id?: StringFilter<"OrderDispute"> | string
+    orderId?: StringFilter<"OrderDispute"> | string
+    sellerOrderId?: StringNullableFilter<"OrderDispute"> | string | null
+    userId?: StringFilter<"OrderDispute"> | string
+    reason?: StringFilter<"OrderDispute"> | string
+    description?: StringNullableFilter<"OrderDispute"> | string | null
+    images?: StringNullableListFilter<"OrderDispute">
+    status?: EnumDisputeStatusFilter<"OrderDispute"> | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFilter<"OrderDispute"> | $Enums.DisputeType
+    createdAt?: DateTimeFilter<"OrderDispute"> | Date | string
+    updatedAt?: DateTimeFilter<"OrderDispute"> | Date | string
+    order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
+    sellerOrder?: XOR<SellerOrderNullableScalarRelationFilter, SellerOrderWhereInput> | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type OrderDisputeOrderByWithRelationInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    sellerOrderId?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    reason?: SortOrder
+    description?: SortOrderInput | SortOrder
+    images?: SortOrder
+    status?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    order?: OrderOrderByWithRelationInput
+    sellerOrder?: SellerOrderOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type OrderDisputeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: OrderDisputeWhereInput | OrderDisputeWhereInput[]
+    OR?: OrderDisputeWhereInput[]
+    NOT?: OrderDisputeWhereInput | OrderDisputeWhereInput[]
+    orderId?: StringFilter<"OrderDispute"> | string
+    sellerOrderId?: StringNullableFilter<"OrderDispute"> | string | null
+    userId?: StringFilter<"OrderDispute"> | string
+    reason?: StringFilter<"OrderDispute"> | string
+    description?: StringNullableFilter<"OrderDispute"> | string | null
+    images?: StringNullableListFilter<"OrderDispute">
+    status?: EnumDisputeStatusFilter<"OrderDispute"> | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFilter<"OrderDispute"> | $Enums.DisputeType
+    createdAt?: DateTimeFilter<"OrderDispute"> | Date | string
+    updatedAt?: DateTimeFilter<"OrderDispute"> | Date | string
+    order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
+    sellerOrder?: XOR<SellerOrderNullableScalarRelationFilter, SellerOrderWhereInput> | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type OrderDisputeOrderByWithAggregationInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    sellerOrderId?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    reason?: SortOrder
+    description?: SortOrderInput | SortOrder
+    images?: SortOrder
+    status?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OrderDisputeCountOrderByAggregateInput
+    _max?: OrderDisputeMaxOrderByAggregateInput
+    _min?: OrderDisputeMinOrderByAggregateInput
+  }
+
+  export type OrderDisputeScalarWhereWithAggregatesInput = {
+    AND?: OrderDisputeScalarWhereWithAggregatesInput | OrderDisputeScalarWhereWithAggregatesInput[]
+    OR?: OrderDisputeScalarWhereWithAggregatesInput[]
+    NOT?: OrderDisputeScalarWhereWithAggregatesInput | OrderDisputeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"OrderDispute"> | string
+    orderId?: StringWithAggregatesFilter<"OrderDispute"> | string
+    sellerOrderId?: StringNullableWithAggregatesFilter<"OrderDispute"> | string | null
+    userId?: StringWithAggregatesFilter<"OrderDispute"> | string
+    reason?: StringWithAggregatesFilter<"OrderDispute"> | string
+    description?: StringNullableWithAggregatesFilter<"OrderDispute"> | string | null
+    images?: StringNullableListFilter<"OrderDispute">
+    status?: EnumDisputeStatusWithAggregatesFilter<"OrderDispute"> | $Enums.DisputeStatus
+    type?: EnumDisputeTypeWithAggregatesFilter<"OrderDispute"> | $Enums.DisputeType
+    createdAt?: DateTimeWithAggregatesFilter<"OrderDispute"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"OrderDispute"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string
@@ -56625,6 +58184,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -56650,6 +58210,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -56668,6 +58229,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -56693,6 +58255,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -56711,6 +58274,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -56736,6 +58300,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -56754,6 +58319,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -56779,6 +58345,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -56797,6 +58364,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -56819,6 +58387,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -56841,6 +58410,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -58702,6 +60272,7 @@ export namespace Prisma {
     items?: OrderItemCreateNestedManyWithoutOrderInput
     payments?: PaymentCreateNestedManyWithoutOrderInput
     shipments?: ShipmentCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeCreateNestedManyWithoutOrderInput
     sellerOrders?: SellerOrderCreateNestedManyWithoutOrderInput
   }
 
@@ -58723,6 +60294,7 @@ export namespace Prisma {
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     shipments?: ShipmentUncheckedCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutOrderInput
     sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -58744,6 +60316,7 @@ export namespace Prisma {
     items?: OrderItemUpdateManyWithoutOrderNestedInput
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     shipments?: ShipmentUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutOrderNestedInput
     sellerOrders?: SellerOrderUpdateManyWithoutOrderNestedInput
   }
 
@@ -58765,6 +60338,7 @@ export namespace Prisma {
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     shipments?: ShipmentUncheckedUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutOrderNestedInput
     sellerOrders?: SellerOrderUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -59564,6 +61138,7 @@ export namespace Prisma {
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    disputes?: OrderDisputeCreateNestedManyWithoutSellerOrderInput
     seller: UserCreateNestedOneWithoutSellerOrdersInput
     items?: SellerOrderItemCreateNestedManyWithoutSellerOrderInput
     order: OrderCreateNestedOneWithoutSellerOrdersInput
@@ -59581,6 +61156,7 @@ export namespace Prisma {
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutSellerOrderInput
     items?: SellerOrderItemUncheckedCreateNestedManyWithoutSellerOrderInput
   }
 
@@ -59594,6 +61170,7 @@ export namespace Prisma {
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    disputes?: OrderDisputeUpdateManyWithoutSellerOrderNestedInput
     seller?: UserUpdateOneRequiredWithoutSellerOrdersNestedInput
     items?: SellerOrderItemUpdateManyWithoutSellerOrderNestedInput
     order?: OrderUpdateOneRequiredWithoutSellerOrdersNestedInput
@@ -59611,6 +61188,7 @@ export namespace Prisma {
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutSellerOrderNestedInput
     items?: SellerOrderItemUncheckedUpdateManyWithoutSellerOrderNestedInput
   }
 
@@ -60202,6 +61780,101 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type OrderDisputeCreateInput = {
+    id?: string
+    reason: string
+    description?: string | null
+    images?: OrderDisputeCreateimagesInput | string[]
+    status?: $Enums.DisputeStatus
+    type?: $Enums.DisputeType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    order: OrderCreateNestedOneWithoutDisputesInput
+    sellerOrder?: SellerOrderCreateNestedOneWithoutDisputesInput
+    user: UserCreateNestedOneWithoutDisputesInput
+  }
+
+  export type OrderDisputeUncheckedCreateInput = {
+    id?: string
+    orderId: string
+    sellerOrderId?: string | null
+    userId: string
+    reason: string
+    description?: string | null
+    images?: OrderDisputeCreateimagesInput | string[]
+    status?: $Enums.DisputeStatus
+    type?: $Enums.DisputeType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderDisputeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: OrderUpdateOneRequiredWithoutDisputesNestedInput
+    sellerOrder?: SellerOrderUpdateOneWithoutDisputesNestedInput
+    user?: UserUpdateOneRequiredWithoutDisputesNestedInput
+  }
+
+  export type OrderDisputeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    sellerOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderDisputeCreateManyInput = {
+    id?: string
+    orderId: string
+    sellerOrderId?: string | null
+    userId: string
+    reason: string
+    description?: string | null
+    images?: OrderDisputeCreateimagesInput | string[]
+    status?: $Enums.DisputeStatus
+    type?: $Enums.DisputeType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderDisputeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderDisputeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    sellerOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -60373,6 +62046,12 @@ export namespace Prisma {
     none?: UserRoleWhereInput
   }
 
+  export type OrderDisputeListRelationFilter = {
+    every?: OrderDisputeWhereInput
+    some?: OrderDisputeWhereInput
+    none?: OrderDisputeWhereInput
+  }
+
   export type ProductQuestionListRelationFilter = {
     every?: ProductQuestionWhereInput
     some?: ProductQuestionWhereInput
@@ -60458,6 +62137,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type OrderDisputeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ProductQuestionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -60480,6 +62163,7 @@ export namespace Prisma {
     avatarImageUrl?: SortOrder
     phone?: SortOrder
     phoneVerified?: SortOrder
+    hasProfile?: SortOrder
     otp?: SortOrder
     otpExpiresAt?: SortOrder
     gender?: SortOrder
@@ -60502,6 +62186,7 @@ export namespace Prisma {
     avatarImageUrl?: SortOrder
     phone?: SortOrder
     phoneVerified?: SortOrder
+    hasProfile?: SortOrder
     otp?: SortOrder
     otpExpiresAt?: SortOrder
     gender?: SortOrder
@@ -60524,6 +62209,7 @@ export namespace Prisma {
     avatarImageUrl?: SortOrder
     phone?: SortOrder
     phoneVerified?: SortOrder
+    hasProfile?: SortOrder
     otp?: SortOrder
     otpExpiresAt?: SortOrder
     gender?: SortOrder
@@ -62979,6 +64665,85 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type EnumDisputeStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DisputeStatus | EnumDisputeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DisputeStatus[] | ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DisputeStatus[] | ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisputeStatusFilter<$PrismaModel> | $Enums.DisputeStatus
+  }
+
+  export type EnumDisputeTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.DisputeType | EnumDisputeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.DisputeType[] | ListEnumDisputeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DisputeType[] | ListEnumDisputeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisputeTypeFilter<$PrismaModel> | $Enums.DisputeType
+  }
+
+  export type SellerOrderNullableScalarRelationFilter = {
+    is?: SellerOrderWhereInput | null
+    isNot?: SellerOrderWhereInput | null
+  }
+
+  export type OrderDisputeCountOrderByAggregateInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    sellerOrderId?: SortOrder
+    userId?: SortOrder
+    reason?: SortOrder
+    description?: SortOrder
+    images?: SortOrder
+    status?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OrderDisputeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    sellerOrderId?: SortOrder
+    userId?: SortOrder
+    reason?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OrderDisputeMinOrderByAggregateInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    sellerOrderId?: SortOrder
+    userId?: SortOrder
+    reason?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumDisputeStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DisputeStatus | EnumDisputeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DisputeStatus[] | ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DisputeStatus[] | ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisputeStatusWithAggregatesFilter<$PrismaModel> | $Enums.DisputeStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDisputeStatusFilter<$PrismaModel>
+    _max?: NestedEnumDisputeStatusFilter<$PrismaModel>
+  }
+
+  export type EnumDisputeTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DisputeType | EnumDisputeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.DisputeType[] | ListEnumDisputeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DisputeType[] | ListEnumDisputeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisputeTypeWithAggregatesFilter<$PrismaModel> | $Enums.DisputeType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDisputeTypeFilter<$PrismaModel>
+    _max?: NestedEnumDisputeTypeFilter<$PrismaModel>
+  }
+
   export type SessionCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -63109,6 +64874,13 @@ export namespace Prisma {
     connectOrCreate?: UserRoleCreateOrConnectWithoutUserInput | UserRoleCreateOrConnectWithoutUserInput[]
     createMany?: UserRoleCreateManyUserInputEnvelope
     connect?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+  }
+
+  export type OrderDisputeCreateNestedManyWithoutUserInput = {
+    create?: XOR<OrderDisputeCreateWithoutUserInput, OrderDisputeUncheckedCreateWithoutUserInput> | OrderDisputeCreateWithoutUserInput[] | OrderDisputeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderDisputeCreateOrConnectWithoutUserInput | OrderDisputeCreateOrConnectWithoutUserInput[]
+    createMany?: OrderDisputeCreateManyUserInputEnvelope
+    connect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
   }
 
   export type ProductQuestionCreateNestedManyWithoutUserInput = {
@@ -63255,6 +65027,13 @@ export namespace Prisma {
     connectOrCreate?: UserRoleCreateOrConnectWithoutUserInput | UserRoleCreateOrConnectWithoutUserInput[]
     createMany?: UserRoleCreateManyUserInputEnvelope
     connect?: UserRoleWhereUniqueInput | UserRoleWhereUniqueInput[]
+  }
+
+  export type OrderDisputeUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<OrderDisputeCreateWithoutUserInput, OrderDisputeUncheckedCreateWithoutUserInput> | OrderDisputeCreateWithoutUserInput[] | OrderDisputeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderDisputeCreateOrConnectWithoutUserInput | OrderDisputeCreateOrConnectWithoutUserInput[]
+    createMany?: OrderDisputeCreateManyUserInputEnvelope
+    connect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
   }
 
   export type ProductQuestionUncheckedCreateNestedManyWithoutUserInput = {
@@ -63557,6 +65336,20 @@ export namespace Prisma {
     deleteMany?: UserRoleScalarWhereInput | UserRoleScalarWhereInput[]
   }
 
+  export type OrderDisputeUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OrderDisputeCreateWithoutUserInput, OrderDisputeUncheckedCreateWithoutUserInput> | OrderDisputeCreateWithoutUserInput[] | OrderDisputeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderDisputeCreateOrConnectWithoutUserInput | OrderDisputeCreateOrConnectWithoutUserInput[]
+    upsert?: OrderDisputeUpsertWithWhereUniqueWithoutUserInput | OrderDisputeUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OrderDisputeCreateManyUserInputEnvelope
+    set?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    disconnect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    delete?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    connect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    update?: OrderDisputeUpdateWithWhereUniqueWithoutUserInput | OrderDisputeUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OrderDisputeUpdateManyWithWhereWithoutUserInput | OrderDisputeUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OrderDisputeScalarWhereInput | OrderDisputeScalarWhereInput[]
+  }
+
   export type ProductQuestionUpdateManyWithoutUserNestedInput = {
     create?: XOR<ProductQuestionCreateWithoutUserInput, ProductQuestionUncheckedCreateWithoutUserInput> | ProductQuestionCreateWithoutUserInput[] | ProductQuestionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProductQuestionCreateOrConnectWithoutUserInput | ProductQuestionCreateOrConnectWithoutUserInput[]
@@ -63845,6 +65638,20 @@ export namespace Prisma {
     update?: UserRoleUpdateWithWhereUniqueWithoutUserInput | UserRoleUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserRoleUpdateManyWithWhereWithoutUserInput | UserRoleUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserRoleScalarWhereInput | UserRoleScalarWhereInput[]
+  }
+
+  export type OrderDisputeUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OrderDisputeCreateWithoutUserInput, OrderDisputeUncheckedCreateWithoutUserInput> | OrderDisputeCreateWithoutUserInput[] | OrderDisputeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderDisputeCreateOrConnectWithoutUserInput | OrderDisputeCreateOrConnectWithoutUserInput[]
+    upsert?: OrderDisputeUpsertWithWhereUniqueWithoutUserInput | OrderDisputeUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OrderDisputeCreateManyUserInputEnvelope
+    set?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    disconnect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    delete?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    connect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    update?: OrderDisputeUpdateWithWhereUniqueWithoutUserInput | OrderDisputeUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OrderDisputeUpdateManyWithWhereWithoutUserInput | OrderDisputeUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OrderDisputeScalarWhereInput | OrderDisputeScalarWhereInput[]
   }
 
   export type ProductQuestionUncheckedUpdateManyWithoutUserNestedInput = {
@@ -65451,6 +67258,13 @@ export namespace Prisma {
     connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
   }
 
+  export type OrderDisputeCreateNestedManyWithoutOrderInput = {
+    create?: XOR<OrderDisputeCreateWithoutOrderInput, OrderDisputeUncheckedCreateWithoutOrderInput> | OrderDisputeCreateWithoutOrderInput[] | OrderDisputeUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: OrderDisputeCreateOrConnectWithoutOrderInput | OrderDisputeCreateOrConnectWithoutOrderInput[]
+    createMany?: OrderDisputeCreateManyOrderInputEnvelope
+    connect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+  }
+
   export type SellerOrderCreateNestedManyWithoutOrderInput = {
     create?: XOR<SellerOrderCreateWithoutOrderInput, SellerOrderUncheckedCreateWithoutOrderInput> | SellerOrderCreateWithoutOrderInput[] | SellerOrderUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: SellerOrderCreateOrConnectWithoutOrderInput | SellerOrderCreateOrConnectWithoutOrderInput[]
@@ -65477,6 +67291,13 @@ export namespace Prisma {
     connectOrCreate?: ShipmentCreateOrConnectWithoutOrderInput | ShipmentCreateOrConnectWithoutOrderInput[]
     createMany?: ShipmentCreateManyOrderInputEnvelope
     connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+  }
+
+  export type OrderDisputeUncheckedCreateNestedManyWithoutOrderInput = {
+    create?: XOR<OrderDisputeCreateWithoutOrderInput, OrderDisputeUncheckedCreateWithoutOrderInput> | OrderDisputeCreateWithoutOrderInput[] | OrderDisputeUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: OrderDisputeCreateOrConnectWithoutOrderInput | OrderDisputeCreateOrConnectWithoutOrderInput[]
+    createMany?: OrderDisputeCreateManyOrderInputEnvelope
+    connect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
   }
 
   export type SellerOrderUncheckedCreateNestedManyWithoutOrderInput = {
@@ -65550,6 +67371,20 @@ export namespace Prisma {
     deleteMany?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
   }
 
+  export type OrderDisputeUpdateManyWithoutOrderNestedInput = {
+    create?: XOR<OrderDisputeCreateWithoutOrderInput, OrderDisputeUncheckedCreateWithoutOrderInput> | OrderDisputeCreateWithoutOrderInput[] | OrderDisputeUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: OrderDisputeCreateOrConnectWithoutOrderInput | OrderDisputeCreateOrConnectWithoutOrderInput[]
+    upsert?: OrderDisputeUpsertWithWhereUniqueWithoutOrderInput | OrderDisputeUpsertWithWhereUniqueWithoutOrderInput[]
+    createMany?: OrderDisputeCreateManyOrderInputEnvelope
+    set?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    disconnect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    delete?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    connect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    update?: OrderDisputeUpdateWithWhereUniqueWithoutOrderInput | OrderDisputeUpdateWithWhereUniqueWithoutOrderInput[]
+    updateMany?: OrderDisputeUpdateManyWithWhereWithoutOrderInput | OrderDisputeUpdateManyWithWhereWithoutOrderInput[]
+    deleteMany?: OrderDisputeScalarWhereInput | OrderDisputeScalarWhereInput[]
+  }
+
   export type SellerOrderUpdateManyWithoutOrderNestedInput = {
     create?: XOR<SellerOrderCreateWithoutOrderInput, SellerOrderUncheckedCreateWithoutOrderInput> | SellerOrderCreateWithoutOrderInput[] | SellerOrderUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: SellerOrderCreateOrConnectWithoutOrderInput | SellerOrderCreateOrConnectWithoutOrderInput[]
@@ -65604,6 +67439,20 @@ export namespace Prisma {
     update?: ShipmentUpdateWithWhereUniqueWithoutOrderInput | ShipmentUpdateWithWhereUniqueWithoutOrderInput[]
     updateMany?: ShipmentUpdateManyWithWhereWithoutOrderInput | ShipmentUpdateManyWithWhereWithoutOrderInput[]
     deleteMany?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
+  }
+
+  export type OrderDisputeUncheckedUpdateManyWithoutOrderNestedInput = {
+    create?: XOR<OrderDisputeCreateWithoutOrderInput, OrderDisputeUncheckedCreateWithoutOrderInput> | OrderDisputeCreateWithoutOrderInput[] | OrderDisputeUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: OrderDisputeCreateOrConnectWithoutOrderInput | OrderDisputeCreateOrConnectWithoutOrderInput[]
+    upsert?: OrderDisputeUpsertWithWhereUniqueWithoutOrderInput | OrderDisputeUpsertWithWhereUniqueWithoutOrderInput[]
+    createMany?: OrderDisputeCreateManyOrderInputEnvelope
+    set?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    disconnect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    delete?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    connect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    update?: OrderDisputeUpdateWithWhereUniqueWithoutOrderInput | OrderDisputeUpdateWithWhereUniqueWithoutOrderInput[]
+    updateMany?: OrderDisputeUpdateManyWithWhereWithoutOrderInput | OrderDisputeUpdateManyWithWhereWithoutOrderInput[]
+    deleteMany?: OrderDisputeScalarWhereInput | OrderDisputeScalarWhereInput[]
   }
 
   export type SellerOrderUncheckedUpdateManyWithoutOrderNestedInput = {
@@ -66010,6 +67859,13 @@ export namespace Prisma {
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutWishlistItemsInput, ProductUpdateWithoutWishlistItemsInput>, ProductUncheckedUpdateWithoutWishlistItemsInput>
   }
 
+  export type OrderDisputeCreateNestedManyWithoutSellerOrderInput = {
+    create?: XOR<OrderDisputeCreateWithoutSellerOrderInput, OrderDisputeUncheckedCreateWithoutSellerOrderInput> | OrderDisputeCreateWithoutSellerOrderInput[] | OrderDisputeUncheckedCreateWithoutSellerOrderInput[]
+    connectOrCreate?: OrderDisputeCreateOrConnectWithoutSellerOrderInput | OrderDisputeCreateOrConnectWithoutSellerOrderInput[]
+    createMany?: OrderDisputeCreateManySellerOrderInputEnvelope
+    connect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutSellerOrdersInput = {
     create?: XOR<UserCreateWithoutSellerOrdersInput, UserUncheckedCreateWithoutSellerOrdersInput>
     connectOrCreate?: UserCreateOrConnectWithoutSellerOrdersInput
@@ -66029,11 +67885,32 @@ export namespace Prisma {
     connect?: OrderWhereUniqueInput
   }
 
+  export type OrderDisputeUncheckedCreateNestedManyWithoutSellerOrderInput = {
+    create?: XOR<OrderDisputeCreateWithoutSellerOrderInput, OrderDisputeUncheckedCreateWithoutSellerOrderInput> | OrderDisputeCreateWithoutSellerOrderInput[] | OrderDisputeUncheckedCreateWithoutSellerOrderInput[]
+    connectOrCreate?: OrderDisputeCreateOrConnectWithoutSellerOrderInput | OrderDisputeCreateOrConnectWithoutSellerOrderInput[]
+    createMany?: OrderDisputeCreateManySellerOrderInputEnvelope
+    connect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+  }
+
   export type SellerOrderItemUncheckedCreateNestedManyWithoutSellerOrderInput = {
     create?: XOR<SellerOrderItemCreateWithoutSellerOrderInput, SellerOrderItemUncheckedCreateWithoutSellerOrderInput> | SellerOrderItemCreateWithoutSellerOrderInput[] | SellerOrderItemUncheckedCreateWithoutSellerOrderInput[]
     connectOrCreate?: SellerOrderItemCreateOrConnectWithoutSellerOrderInput | SellerOrderItemCreateOrConnectWithoutSellerOrderInput[]
     createMany?: SellerOrderItemCreateManySellerOrderInputEnvelope
     connect?: SellerOrderItemWhereUniqueInput | SellerOrderItemWhereUniqueInput[]
+  }
+
+  export type OrderDisputeUpdateManyWithoutSellerOrderNestedInput = {
+    create?: XOR<OrderDisputeCreateWithoutSellerOrderInput, OrderDisputeUncheckedCreateWithoutSellerOrderInput> | OrderDisputeCreateWithoutSellerOrderInput[] | OrderDisputeUncheckedCreateWithoutSellerOrderInput[]
+    connectOrCreate?: OrderDisputeCreateOrConnectWithoutSellerOrderInput | OrderDisputeCreateOrConnectWithoutSellerOrderInput[]
+    upsert?: OrderDisputeUpsertWithWhereUniqueWithoutSellerOrderInput | OrderDisputeUpsertWithWhereUniqueWithoutSellerOrderInput[]
+    createMany?: OrderDisputeCreateManySellerOrderInputEnvelope
+    set?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    disconnect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    delete?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    connect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    update?: OrderDisputeUpdateWithWhereUniqueWithoutSellerOrderInput | OrderDisputeUpdateWithWhereUniqueWithoutSellerOrderInput[]
+    updateMany?: OrderDisputeUpdateManyWithWhereWithoutSellerOrderInput | OrderDisputeUpdateManyWithWhereWithoutSellerOrderInput[]
+    deleteMany?: OrderDisputeScalarWhereInput | OrderDisputeScalarWhereInput[]
   }
 
   export type UserUpdateOneRequiredWithoutSellerOrdersNestedInput = {
@@ -66064,6 +67941,20 @@ export namespace Prisma {
     upsert?: OrderUpsertWithoutSellerOrdersInput
     connect?: OrderWhereUniqueInput
     update?: XOR<XOR<OrderUpdateToOneWithWhereWithoutSellerOrdersInput, OrderUpdateWithoutSellerOrdersInput>, OrderUncheckedUpdateWithoutSellerOrdersInput>
+  }
+
+  export type OrderDisputeUncheckedUpdateManyWithoutSellerOrderNestedInput = {
+    create?: XOR<OrderDisputeCreateWithoutSellerOrderInput, OrderDisputeUncheckedCreateWithoutSellerOrderInput> | OrderDisputeCreateWithoutSellerOrderInput[] | OrderDisputeUncheckedCreateWithoutSellerOrderInput[]
+    connectOrCreate?: OrderDisputeCreateOrConnectWithoutSellerOrderInput | OrderDisputeCreateOrConnectWithoutSellerOrderInput[]
+    upsert?: OrderDisputeUpsertWithWhereUniqueWithoutSellerOrderInput | OrderDisputeUpsertWithWhereUniqueWithoutSellerOrderInput[]
+    createMany?: OrderDisputeCreateManySellerOrderInputEnvelope
+    set?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    disconnect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    delete?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    connect?: OrderDisputeWhereUniqueInput | OrderDisputeWhereUniqueInput[]
+    update?: OrderDisputeUpdateWithWhereUniqueWithoutSellerOrderInput | OrderDisputeUpdateWithWhereUniqueWithoutSellerOrderInput[]
+    updateMany?: OrderDisputeUpdateManyWithWhereWithoutSellerOrderInput | OrderDisputeUpdateManyWithWhereWithoutSellerOrderInput[]
+    deleteMany?: OrderDisputeScalarWhereInput | OrderDisputeScalarWhereInput[]
   }
 
   export type SellerOrderItemUncheckedUpdateManyWithoutSellerOrderNestedInput = {
@@ -66246,6 +68137,67 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutAccountsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAccountsInput, UserUpdateWithoutAccountsInput>, UserUncheckedUpdateWithoutAccountsInput>
+  }
+
+  export type OrderDisputeCreateimagesInput = {
+    set: string[]
+  }
+
+  export type OrderCreateNestedOneWithoutDisputesInput = {
+    create?: XOR<OrderCreateWithoutDisputesInput, OrderUncheckedCreateWithoutDisputesInput>
+    connectOrCreate?: OrderCreateOrConnectWithoutDisputesInput
+    connect?: OrderWhereUniqueInput
+  }
+
+  export type SellerOrderCreateNestedOneWithoutDisputesInput = {
+    create?: XOR<SellerOrderCreateWithoutDisputesInput, SellerOrderUncheckedCreateWithoutDisputesInput>
+    connectOrCreate?: SellerOrderCreateOrConnectWithoutDisputesInput
+    connect?: SellerOrderWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutDisputesInput = {
+    create?: XOR<UserCreateWithoutDisputesInput, UserUncheckedCreateWithoutDisputesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDisputesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type OrderDisputeUpdateimagesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type EnumDisputeStatusFieldUpdateOperationsInput = {
+    set?: $Enums.DisputeStatus
+  }
+
+  export type EnumDisputeTypeFieldUpdateOperationsInput = {
+    set?: $Enums.DisputeType
+  }
+
+  export type OrderUpdateOneRequiredWithoutDisputesNestedInput = {
+    create?: XOR<OrderCreateWithoutDisputesInput, OrderUncheckedCreateWithoutDisputesInput>
+    connectOrCreate?: OrderCreateOrConnectWithoutDisputesInput
+    upsert?: OrderUpsertWithoutDisputesInput
+    connect?: OrderWhereUniqueInput
+    update?: XOR<XOR<OrderUpdateToOneWithWhereWithoutDisputesInput, OrderUpdateWithoutDisputesInput>, OrderUncheckedUpdateWithoutDisputesInput>
+  }
+
+  export type SellerOrderUpdateOneWithoutDisputesNestedInput = {
+    create?: XOR<SellerOrderCreateWithoutDisputesInput, SellerOrderUncheckedCreateWithoutDisputesInput>
+    connectOrCreate?: SellerOrderCreateOrConnectWithoutDisputesInput
+    upsert?: SellerOrderUpsertWithoutDisputesInput
+    disconnect?: SellerOrderWhereInput | boolean
+    delete?: SellerOrderWhereInput | boolean
+    connect?: SellerOrderWhereUniqueInput
+    update?: XOR<XOR<SellerOrderUpdateToOneWithWhereWithoutDisputesInput, SellerOrderUpdateWithoutDisputesInput>, SellerOrderUncheckedUpdateWithoutDisputesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutDisputesNestedInput = {
+    create?: XOR<UserCreateWithoutDisputesInput, UserUncheckedCreateWithoutDisputesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDisputesInput
+    upsert?: UserUpsertWithoutDisputesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDisputesInput, UserUpdateWithoutDisputesInput>, UserUncheckedUpdateWithoutDisputesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -66851,6 +68803,40 @@ export namespace Prisma {
     _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumDisputeStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DisputeStatus | EnumDisputeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DisputeStatus[] | ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DisputeStatus[] | ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisputeStatusFilter<$PrismaModel> | $Enums.DisputeStatus
+  }
+
+  export type NestedEnumDisputeTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.DisputeType | EnumDisputeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.DisputeType[] | ListEnumDisputeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DisputeType[] | ListEnumDisputeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisputeTypeFilter<$PrismaModel> | $Enums.DisputeType
+  }
+
+  export type NestedEnumDisputeStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DisputeStatus | EnumDisputeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DisputeStatus[] | ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DisputeStatus[] | ListEnumDisputeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisputeStatusWithAggregatesFilter<$PrismaModel> | $Enums.DisputeStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDisputeStatusFilter<$PrismaModel>
+    _max?: NestedEnumDisputeStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDisputeTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DisputeType | EnumDisputeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.DisputeType[] | ListEnumDisputeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DisputeType[] | ListEnumDisputeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisputeTypeWithAggregatesFilter<$PrismaModel> | $Enums.DisputeType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDisputeTypeFilter<$PrismaModel>
+    _max?: NestedEnumDisputeTypeFilter<$PrismaModel>
+  }
+
   export type SessionCreateWithoutUserInput = {
     id?: string
     expiresAt: Date | string
@@ -67046,6 +69032,7 @@ export namespace Prisma {
     items?: OrderItemCreateNestedManyWithoutOrderInput
     payments?: PaymentCreateNestedManyWithoutOrderInput
     shipments?: ShipmentCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeCreateNestedManyWithoutOrderInput
     sellerOrders?: SellerOrderCreateNestedManyWithoutOrderInput
   }
 
@@ -67066,6 +69053,7 @@ export namespace Prisma {
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     shipments?: ShipmentUncheckedCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutOrderInput
     sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -67221,6 +69209,7 @@ export namespace Prisma {
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    disputes?: OrderDisputeCreateNestedManyWithoutSellerOrderInput
     items?: SellerOrderItemCreateNestedManyWithoutSellerOrderInput
     order: OrderCreateNestedOneWithoutSellerOrdersInput
   }
@@ -67236,6 +69225,7 @@ export namespace Prisma {
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutSellerOrderInput
     items?: SellerOrderItemUncheckedCreateNestedManyWithoutSellerOrderInput
   }
 
@@ -67543,6 +69533,42 @@ export namespace Prisma {
 
   export type UserRoleCreateManyUserInputEnvelope = {
     data: UserRoleCreateManyUserInput | UserRoleCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrderDisputeCreateWithoutUserInput = {
+    id?: string
+    reason: string
+    description?: string | null
+    images?: OrderDisputeCreateimagesInput | string[]
+    status?: $Enums.DisputeStatus
+    type?: $Enums.DisputeType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    order: OrderCreateNestedOneWithoutDisputesInput
+    sellerOrder?: SellerOrderCreateNestedOneWithoutDisputesInput
+  }
+
+  export type OrderDisputeUncheckedCreateWithoutUserInput = {
+    id?: string
+    orderId: string
+    sellerOrderId?: string | null
+    reason: string
+    description?: string | null
+    images?: OrderDisputeCreateimagesInput | string[]
+    status?: $Enums.DisputeStatus
+    type?: $Enums.DisputeType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderDisputeCreateOrConnectWithoutUserInput = {
+    where: OrderDisputeWhereUniqueInput
+    create: XOR<OrderDisputeCreateWithoutUserInput, OrderDisputeUncheckedCreateWithoutUserInput>
+  }
+
+  export type OrderDisputeCreateManyUserInputEnvelope = {
+    data: OrderDisputeCreateManyUserInput | OrderDisputeCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -68217,6 +70243,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"UserRole"> | Date | string
   }
 
+  export type OrderDisputeUpsertWithWhereUniqueWithoutUserInput = {
+    where: OrderDisputeWhereUniqueInput
+    update: XOR<OrderDisputeUpdateWithoutUserInput, OrderDisputeUncheckedUpdateWithoutUserInput>
+    create: XOR<OrderDisputeCreateWithoutUserInput, OrderDisputeUncheckedCreateWithoutUserInput>
+  }
+
+  export type OrderDisputeUpdateWithWhereUniqueWithoutUserInput = {
+    where: OrderDisputeWhereUniqueInput
+    data: XOR<OrderDisputeUpdateWithoutUserInput, OrderDisputeUncheckedUpdateWithoutUserInput>
+  }
+
+  export type OrderDisputeUpdateManyWithWhereWithoutUserInput = {
+    where: OrderDisputeScalarWhereInput
+    data: XOR<OrderDisputeUpdateManyMutationInput, OrderDisputeUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type OrderDisputeScalarWhereInput = {
+    AND?: OrderDisputeScalarWhereInput | OrderDisputeScalarWhereInput[]
+    OR?: OrderDisputeScalarWhereInput[]
+    NOT?: OrderDisputeScalarWhereInput | OrderDisputeScalarWhereInput[]
+    id?: StringFilter<"OrderDispute"> | string
+    orderId?: StringFilter<"OrderDispute"> | string
+    sellerOrderId?: StringNullableFilter<"OrderDispute"> | string | null
+    userId?: StringFilter<"OrderDispute"> | string
+    reason?: StringFilter<"OrderDispute"> | string
+    description?: StringNullableFilter<"OrderDispute"> | string | null
+    images?: StringNullableListFilter<"OrderDispute">
+    status?: EnumDisputeStatusFilter<"OrderDispute"> | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFilter<"OrderDispute"> | $Enums.DisputeType
+    createdAt?: DateTimeFilter<"OrderDispute"> | Date | string
+    updatedAt?: DateTimeFilter<"OrderDispute"> | Date | string
+  }
+
   export type ProductQuestionUpsertWithWhereUniqueWithoutUserInput = {
     where: ProductQuestionWhereUniqueInput
     update: XOR<ProductQuestionUpdateWithoutUserInput, ProductQuestionUncheckedUpdateWithoutUserInput>
@@ -68288,6 +70347,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -68312,6 +70372,7 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -68330,6 +70391,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -68354,6 +70416,7 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -68388,6 +70451,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -68412,6 +70476,7 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -68430,6 +70495,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -68454,6 +70520,7 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -68511,6 +70578,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -68535,6 +70603,7 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -68553,6 +70622,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -68577,6 +70647,7 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -68656,6 +70727,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -68680,6 +70752,7 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -68698,6 +70771,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -68722,6 +70796,7 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -68740,6 +70815,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -68764,6 +70840,7 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -68782,6 +70859,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -68806,6 +70884,7 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -68840,6 +70919,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -68864,6 +70944,7 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -68882,6 +70963,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -68906,6 +70988,7 @@ export namespace Prisma {
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -68977,6 +71060,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -69001,6 +71085,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -69019,6 +71104,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -69043,6 +71129,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -69066,6 +71153,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -69090,6 +71178,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -69108,6 +71197,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -69132,6 +71222,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -69285,6 +71376,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -69309,6 +71401,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -69327,6 +71420,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -69351,6 +71445,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -69380,6 +71475,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -69404,6 +71500,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -69422,6 +71519,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -69446,6 +71544,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -69525,6 +71624,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -69549,6 +71649,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -69567,6 +71668,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -69591,6 +71693,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -69686,6 +71789,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -69710,6 +71814,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -69728,6 +71833,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -69752,6 +71858,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -69870,6 +71977,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -69894,6 +72002,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -69912,6 +72021,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -69936,6 +72046,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -69999,6 +72110,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -70023,6 +72135,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -70041,6 +72154,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -70065,6 +72179,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -70118,6 +72233,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -70142,6 +72258,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -70160,6 +72277,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -70184,6 +72302,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -70284,6 +72403,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -70308,6 +72428,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -70326,6 +72447,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -70350,6 +72472,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -70864,6 +72987,7 @@ export namespace Prisma {
     items?: OrderItemCreateNestedManyWithoutOrderInput
     payments?: PaymentCreateNestedManyWithoutOrderInput
     shipments?: ShipmentCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeCreateNestedManyWithoutOrderInput
     sellerOrders?: SellerOrderCreateNestedManyWithoutOrderInput
   }
 
@@ -70884,6 +73008,7 @@ export namespace Prisma {
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     shipments?: ShipmentUncheckedCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutOrderInput
     sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -71650,6 +73775,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -71674,6 +73800,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -71692,6 +73819,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -71716,6 +73844,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -72105,6 +74234,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -72129,6 +74259,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -72147,6 +74278,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -72171,6 +74303,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -73005,6 +75138,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -73029,6 +75163,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -73047,6 +75182,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -73071,6 +75207,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -73146,6 +75283,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -73170,6 +75308,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -73188,6 +75327,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -73212,6 +75352,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -73314,6 +75455,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -73338,6 +75480,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -73356,6 +75499,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -73380,6 +75524,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -73497,6 +75642,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OrderDisputeCreateWithoutOrderInput = {
+    id?: string
+    reason: string
+    description?: string | null
+    images?: OrderDisputeCreateimagesInput | string[]
+    status?: $Enums.DisputeStatus
+    type?: $Enums.DisputeType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sellerOrder?: SellerOrderCreateNestedOneWithoutDisputesInput
+    user: UserCreateNestedOneWithoutDisputesInput
+  }
+
+  export type OrderDisputeUncheckedCreateWithoutOrderInput = {
+    id?: string
+    sellerOrderId?: string | null
+    userId: string
+    reason: string
+    description?: string | null
+    images?: OrderDisputeCreateimagesInput | string[]
+    status?: $Enums.DisputeStatus
+    type?: $Enums.DisputeType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderDisputeCreateOrConnectWithoutOrderInput = {
+    where: OrderDisputeWhereUniqueInput
+    create: XOR<OrderDisputeCreateWithoutOrderInput, OrderDisputeUncheckedCreateWithoutOrderInput>
+  }
+
+  export type OrderDisputeCreateManyOrderInputEnvelope = {
+    data: OrderDisputeCreateManyOrderInput | OrderDisputeCreateManyOrderInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SellerOrderCreateWithoutOrderInput = {
     id?: string
     status?: $Enums.OrderStatus
@@ -73507,6 +75688,7 @@ export namespace Prisma {
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    disputes?: OrderDisputeCreateNestedManyWithoutSellerOrderInput
     seller: UserCreateNestedOneWithoutSellerOrdersInput
     items?: SellerOrderItemCreateNestedManyWithoutSellerOrderInput
   }
@@ -73522,6 +75704,7 @@ export namespace Prisma {
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutSellerOrderInput
     items?: SellerOrderItemUncheckedCreateNestedManyWithoutSellerOrderInput
   }
 
@@ -73603,6 +75786,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -73627,6 +75811,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -73645,6 +75830,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -73669,6 +75855,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -73758,6 +75945,22 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Shipment"> | Date | string
   }
 
+  export type OrderDisputeUpsertWithWhereUniqueWithoutOrderInput = {
+    where: OrderDisputeWhereUniqueInput
+    update: XOR<OrderDisputeUpdateWithoutOrderInput, OrderDisputeUncheckedUpdateWithoutOrderInput>
+    create: XOR<OrderDisputeCreateWithoutOrderInput, OrderDisputeUncheckedCreateWithoutOrderInput>
+  }
+
+  export type OrderDisputeUpdateWithWhereUniqueWithoutOrderInput = {
+    where: OrderDisputeWhereUniqueInput
+    data: XOR<OrderDisputeUpdateWithoutOrderInput, OrderDisputeUncheckedUpdateWithoutOrderInput>
+  }
+
+  export type OrderDisputeUpdateManyWithWhereWithoutOrderInput = {
+    where: OrderDisputeScalarWhereInput
+    data: XOR<OrderDisputeUpdateManyMutationInput, OrderDisputeUncheckedUpdateManyWithoutOrderInput>
+  }
+
   export type SellerOrderUpsertWithWhereUniqueWithoutOrderInput = {
     where: SellerOrderWhereUniqueInput
     update: XOR<SellerOrderUpdateWithoutOrderInput, SellerOrderUncheckedUpdateWithoutOrderInput>
@@ -73791,6 +75994,7 @@ export namespace Prisma {
     buyer: UserCreateNestedOneWithoutOrdersInput
     payments?: PaymentCreateNestedManyWithoutOrderInput
     shipments?: ShipmentCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeCreateNestedManyWithoutOrderInput
     sellerOrders?: SellerOrderCreateNestedManyWithoutOrderInput
   }
 
@@ -73811,6 +76015,7 @@ export namespace Prisma {
     offerId?: string | null
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     shipments?: ShipmentUncheckedCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutOrderInput
     sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -73888,6 +76093,7 @@ export namespace Prisma {
     buyer?: UserUpdateOneRequiredWithoutOrdersNestedInput
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     shipments?: ShipmentUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutOrderNestedInput
     sellerOrders?: SellerOrderUpdateManyWithoutOrderNestedInput
   }
 
@@ -73908,6 +76114,7 @@ export namespace Prisma {
     offerId?: NullableStringFieldUpdateOperationsInput | string | null
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     shipments?: ShipmentUncheckedUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutOrderNestedInput
     sellerOrders?: SellerOrderUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -73972,6 +76179,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -73996,6 +76204,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -74014,6 +76223,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -74038,6 +76248,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -74114,6 +76325,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -74138,6 +76350,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -74156,6 +76369,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -74180,6 +76394,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -74217,6 +76432,7 @@ export namespace Prisma {
     buyer: UserCreateNestedOneWithoutOrdersInput
     items?: OrderItemCreateNestedManyWithoutOrderInput
     shipments?: ShipmentCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeCreateNestedManyWithoutOrderInput
     sellerOrders?: SellerOrderCreateNestedManyWithoutOrderInput
   }
 
@@ -74237,6 +76453,7 @@ export namespace Prisma {
     offerId?: string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
     shipments?: ShipmentUncheckedCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutOrderInput
     sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -74306,6 +76523,7 @@ export namespace Prisma {
     buyer?: UserUpdateOneRequiredWithoutOrdersNestedInput
     items?: OrderItemUpdateManyWithoutOrderNestedInput
     shipments?: ShipmentUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutOrderNestedInput
     sellerOrders?: SellerOrderUpdateManyWithoutOrderNestedInput
   }
 
@@ -74326,6 +76544,7 @@ export namespace Prisma {
     offerId?: NullableStringFieldUpdateOperationsInput | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
     shipments?: ShipmentUncheckedUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutOrderNestedInput
     sellerOrders?: SellerOrderUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -74385,6 +76604,7 @@ export namespace Prisma {
     buyer: UserCreateNestedOneWithoutOrdersInput
     items?: OrderItemCreateNestedManyWithoutOrderInput
     payments?: PaymentCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeCreateNestedManyWithoutOrderInput
     sellerOrders?: SellerOrderCreateNestedManyWithoutOrderInput
   }
 
@@ -74405,6 +76625,7 @@ export namespace Prisma {
     offerId?: string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutOrderInput
     sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -74441,6 +76662,7 @@ export namespace Prisma {
     buyer?: UserUpdateOneRequiredWithoutOrdersNestedInput
     items?: OrderItemUpdateManyWithoutOrderNestedInput
     payments?: PaymentUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutOrderNestedInput
     sellerOrders?: SellerOrderUpdateManyWithoutOrderNestedInput
   }
 
@@ -74461,6 +76683,7 @@ export namespace Prisma {
     offerId?: NullableStringFieldUpdateOperationsInput | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutOrderNestedInput
     sellerOrders?: SellerOrderUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -74478,6 +76701,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -74502,6 +76726,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -74520,6 +76745,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -74544,6 +76770,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -74683,6 +76910,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -74707,6 +76935,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -74725,6 +76954,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -74749,6 +76979,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -74907,6 +77138,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -74931,6 +77163,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -74949,6 +77182,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -74973,6 +77207,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -75050,6 +77285,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -75074,6 +77310,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -75092,6 +77329,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -75116,6 +77354,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -75214,6 +77453,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -75238,6 +77478,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -75256,6 +77497,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -75280,6 +77522,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -75338,6 +77581,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -75362,6 +77606,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -75380,6 +77625,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -75404,6 +77650,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -75584,6 +77831,42 @@ export namespace Prisma {
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
+  export type OrderDisputeCreateWithoutSellerOrderInput = {
+    id?: string
+    reason: string
+    description?: string | null
+    images?: OrderDisputeCreateimagesInput | string[]
+    status?: $Enums.DisputeStatus
+    type?: $Enums.DisputeType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    order: OrderCreateNestedOneWithoutDisputesInput
+    user: UserCreateNestedOneWithoutDisputesInput
+  }
+
+  export type OrderDisputeUncheckedCreateWithoutSellerOrderInput = {
+    id?: string
+    orderId: string
+    userId: string
+    reason: string
+    description?: string | null
+    images?: OrderDisputeCreateimagesInput | string[]
+    status?: $Enums.DisputeStatus
+    type?: $Enums.DisputeType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderDisputeCreateOrConnectWithoutSellerOrderInput = {
+    where: OrderDisputeWhereUniqueInput
+    create: XOR<OrderDisputeCreateWithoutSellerOrderInput, OrderDisputeUncheckedCreateWithoutSellerOrderInput>
+  }
+
+  export type OrderDisputeCreateManySellerOrderInputEnvelope = {
+    data: OrderDisputeCreateManySellerOrderInput | OrderDisputeCreateManySellerOrderInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserCreateWithoutSellerOrdersInput = {
     id?: string
     name?: string
@@ -75598,6 +77881,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -75622,6 +77906,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -75640,6 +77925,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -75664,6 +77950,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -75723,6 +78010,7 @@ export namespace Prisma {
     items?: OrderItemCreateNestedManyWithoutOrderInput
     payments?: PaymentCreateNestedManyWithoutOrderInput
     shipments?: ShipmentCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutSellerOrdersInput = {
@@ -75743,11 +78031,28 @@ export namespace Prisma {
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     shipments?: ShipmentUncheckedCreateNestedManyWithoutOrderInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutSellerOrdersInput = {
     where: OrderWhereUniqueInput
     create: XOR<OrderCreateWithoutSellerOrdersInput, OrderUncheckedCreateWithoutSellerOrdersInput>
+  }
+
+  export type OrderDisputeUpsertWithWhereUniqueWithoutSellerOrderInput = {
+    where: OrderDisputeWhereUniqueInput
+    update: XOR<OrderDisputeUpdateWithoutSellerOrderInput, OrderDisputeUncheckedUpdateWithoutSellerOrderInput>
+    create: XOR<OrderDisputeCreateWithoutSellerOrderInput, OrderDisputeUncheckedCreateWithoutSellerOrderInput>
+  }
+
+  export type OrderDisputeUpdateWithWhereUniqueWithoutSellerOrderInput = {
+    where: OrderDisputeWhereUniqueInput
+    data: XOR<OrderDisputeUpdateWithoutSellerOrderInput, OrderDisputeUncheckedUpdateWithoutSellerOrderInput>
+  }
+
+  export type OrderDisputeUpdateManyWithWhereWithoutSellerOrderInput = {
+    where: OrderDisputeScalarWhereInput
+    data: XOR<OrderDisputeUpdateManyMutationInput, OrderDisputeUncheckedUpdateManyWithoutSellerOrderInput>
   }
 
   export type UserUpsertWithoutSellerOrdersInput = {
@@ -75775,6 +78080,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -75799,6 +78105,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -75817,6 +78124,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -75841,6 +78149,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -75890,6 +78199,7 @@ export namespace Prisma {
     items?: OrderItemUpdateManyWithoutOrderNestedInput
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     shipments?: ShipmentUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutSellerOrdersInput = {
@@ -75910,6 +78220,7 @@ export namespace Prisma {
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     shipments?: ShipmentUncheckedUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type SellerOrderCreateWithoutItemsInput = {
@@ -75922,6 +78233,7 @@ export namespace Prisma {
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    disputes?: OrderDisputeCreateNestedManyWithoutSellerOrderInput
     seller: UserCreateNestedOneWithoutSellerOrdersInput
     order: OrderCreateNestedOneWithoutSellerOrdersInput
   }
@@ -75938,6 +78250,7 @@ export namespace Prisma {
     total: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutSellerOrderInput
   }
 
   export type SellerOrderCreateOrConnectWithoutItemsInput = {
@@ -76007,6 +78320,7 @@ export namespace Prisma {
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    disputes?: OrderDisputeUpdateManyWithoutSellerOrderNestedInput
     seller?: UserUpdateOneRequiredWithoutSellerOrdersNestedInput
     order?: OrderUpdateOneRequiredWithoutSellerOrdersNestedInput
   }
@@ -76023,6 +78337,7 @@ export namespace Prisma {
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutSellerOrderNestedInput
   }
 
   export type ProductVariantUpsertWithoutSellerOrderItemInput = {
@@ -76086,6 +78401,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -76110,6 +78426,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -76128,6 +78445,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -76152,6 +78470,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -76186,6 +78505,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -76210,6 +78530,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -76228,6 +78549,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -76252,6 +78574,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -76323,6 +78646,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -76348,6 +78672,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
 
@@ -76365,6 +78690,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -76390,6 +78716,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
 
@@ -76508,6 +78835,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -76533,6 +78861,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
 
@@ -76550,6 +78879,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -76575,6 +78905,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
 
@@ -76633,6 +78964,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -76658,6 +78990,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
   }
 
@@ -76675,6 +79008,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -76700,6 +79034,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -76764,6 +79099,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -76789,6 +79125,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
   }
 
@@ -76806,6 +79143,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -76831,6 +79169,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -76848,6 +79187,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -76872,6 +79212,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -76890,6 +79231,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -76914,6 +79256,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -76948,6 +79291,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -76972,6 +79316,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -76990,6 +79335,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -77014,6 +79360,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
   }
@@ -77032,6 +79379,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -77056,6 +79404,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
   }
@@ -77074,6 +79423,7 @@ export namespace Prisma {
     avatarImageUrl?: string | null
     phone?: string | null
     phoneVerified?: boolean
+    hasProfile?: boolean
     otp?: string | null
     otpExpiresAt?: Date | string | null
     gender?: $Enums.Gender | null
@@ -77098,6 +79448,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
     productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
   }
@@ -77132,6 +79483,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -77156,6 +79508,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
     productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
   }
@@ -77174,6 +79527,7 @@ export namespace Prisma {
     avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -77181,6 +79535,375 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUncheckedUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUncheckedUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUncheckedUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUncheckedUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+  }
+
+  export type OrderCreateWithoutDisputesInput = {
+    id?: string
+    orderNumber: string
+    status?: $Enums.OrderStatus
+    shippingSnapshot: JsonNullValueInput | InputJsonValue
+    billingSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    subtotal: Decimal | DecimalJsLike | number | string
+    tax?: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    offer?: OfferCreateNestedOneWithoutOrderInput
+    buyer: UserCreateNestedOneWithoutOrdersInput
+    items?: OrderItemCreateNestedManyWithoutOrderInput
+    payments?: PaymentCreateNestedManyWithoutOrderInput
+    shipments?: ShipmentCreateNestedManyWithoutOrderInput
+    sellerOrders?: SellerOrderCreateNestedManyWithoutOrderInput
+  }
+
+  export type OrderUncheckedCreateWithoutDisputesInput = {
+    id?: string
+    orderNumber: string
+    buyerId: string
+    status?: $Enums.OrderStatus
+    shippingSnapshot: JsonNullValueInput | InputJsonValue
+    billingSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    subtotal: Decimal | DecimalJsLike | number | string
+    tax?: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    offerId?: string | null
+    items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
+    shipments?: ShipmentUncheckedCreateNestedManyWithoutOrderInput
+    sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutOrderInput
+  }
+
+  export type OrderCreateOrConnectWithoutDisputesInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutDisputesInput, OrderUncheckedCreateWithoutDisputesInput>
+  }
+
+  export type SellerOrderCreateWithoutDisputesInput = {
+    id?: string
+    status?: $Enums.OrderStatus
+    subtotal: Decimal | DecimalJsLike | number | string
+    tax?: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    commission?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    seller: UserCreateNestedOneWithoutSellerOrdersInput
+    items?: SellerOrderItemCreateNestedManyWithoutSellerOrderInput
+    order: OrderCreateNestedOneWithoutSellerOrdersInput
+  }
+
+  export type SellerOrderUncheckedCreateWithoutDisputesInput = {
+    id?: string
+    sellerId: string
+    buyerOrderId: string
+    status?: $Enums.OrderStatus
+    subtotal: Decimal | DecimalJsLike | number | string
+    tax?: Decimal | DecimalJsLike | number | string
+    shippingFee?: Decimal | DecimalJsLike | number | string
+    commission?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: SellerOrderItemUncheckedCreateNestedManyWithoutSellerOrderInput
+  }
+
+  export type SellerOrderCreateOrConnectWithoutDisputesInput = {
+    where: SellerOrderWhereUniqueInput
+    create: XOR<SellerOrderCreateWithoutDisputesInput, SellerOrderUncheckedCreateWithoutDisputesInput>
+  }
+
+  export type UserCreateWithoutDisputesInput = {
+    id?: string
+    name?: string
+    username: string
+    displayUsername?: string | null
+    email: string
+    emailVerified?: boolean
+    password?: string | null
+    image?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    phoneVerified?: boolean
+    hasProfile?: boolean
+    otp?: string | null
+    otpExpiresAt?: Date | string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    cartItems?: CartItemCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    products?: ProductCreateNestedManyWithoutSellerInput
+    payouts?: PayoutCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+  }
+
+  export type UserUncheckedCreateWithoutDisputesInput = {
+    id?: string
+    name?: string
+    username: string
+    displayUsername?: string | null
+    email: string
+    emailVerified?: boolean
+    password?: string | null
+    image?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    phoneVerified?: boolean
+    hasProfile?: boolean
+    otp?: string | null
+    otpExpiresAt?: Date | string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput
+    payouts?: PayoutUncheckedCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteUncheckedCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationUncheckedCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+  }
+
+  export type UserCreateOrConnectWithoutDisputesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDisputesInput, UserUncheckedCreateWithoutDisputesInput>
+  }
+
+  export type OrderUpsertWithoutDisputesInput = {
+    update: XOR<OrderUpdateWithoutDisputesInput, OrderUncheckedUpdateWithoutDisputesInput>
+    create: XOR<OrderCreateWithoutDisputesInput, OrderUncheckedCreateWithoutDisputesInput>
+    where?: OrderWhereInput
+  }
+
+  export type OrderUpdateToOneWithWhereWithoutDisputesInput = {
+    where?: OrderWhereInput
+    data: XOR<OrderUpdateWithoutDisputesInput, OrderUncheckedUpdateWithoutDisputesInput>
+  }
+
+  export type OrderUpdateWithoutDisputesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    shippingSnapshot?: JsonNullValueInput | InputJsonValue
+    billingSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    offer?: OfferUpdateOneWithoutOrderNestedInput
+    buyer?: UserUpdateOneRequiredWithoutOrdersNestedInput
+    items?: OrderItemUpdateManyWithoutOrderNestedInput
+    payments?: PaymentUpdateManyWithoutOrderNestedInput
+    shipments?: ShipmentUpdateManyWithoutOrderNestedInput
+    sellerOrders?: SellerOrderUpdateManyWithoutOrderNestedInput
+  }
+
+  export type OrderUncheckedUpdateWithoutDisputesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    buyerId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    shippingSnapshot?: JsonNullValueInput | InputJsonValue
+    billingSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    offerId?: NullableStringFieldUpdateOperationsInput | string | null
+    items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
+    shipments?: ShipmentUncheckedUpdateManyWithoutOrderNestedInput
+    sellerOrders?: SellerOrderUncheckedUpdateManyWithoutOrderNestedInput
+  }
+
+  export type SellerOrderUpsertWithoutDisputesInput = {
+    update: XOR<SellerOrderUpdateWithoutDisputesInput, SellerOrderUncheckedUpdateWithoutDisputesInput>
+    create: XOR<SellerOrderCreateWithoutDisputesInput, SellerOrderUncheckedCreateWithoutDisputesInput>
+    where?: SellerOrderWhereInput
+  }
+
+  export type SellerOrderUpdateToOneWithWhereWithoutDisputesInput = {
+    where?: SellerOrderWhereInput
+    data: XOR<SellerOrderUpdateWithoutDisputesInput, SellerOrderUncheckedUpdateWithoutDisputesInput>
+  }
+
+  export type SellerOrderUpdateWithoutDisputesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commission?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    seller?: UserUpdateOneRequiredWithoutSellerOrdersNestedInput
+    items?: SellerOrderItemUpdateManyWithoutSellerOrderNestedInput
+    order?: OrderUpdateOneRequiredWithoutSellerOrdersNestedInput
+  }
+
+  export type SellerOrderUncheckedUpdateWithoutDisputesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sellerId?: StringFieldUpdateOperationsInput | string
+    buyerOrderId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    shippingFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commission?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: SellerOrderItemUncheckedUpdateManyWithoutSellerOrderNestedInput
+  }
+
+  export type UserUpsertWithoutDisputesInput = {
+    update: XOR<UserUpdateWithoutDisputesInput, UserUncheckedUpdateWithoutDisputesInput>
+    create: XOR<UserCreateWithoutDisputesInput, UserUncheckedCreateWithoutDisputesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutDisputesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutDisputesInput, UserUncheckedUpdateWithoutDisputesInput>
+  }
+
+  export type UserUpdateWithoutDisputesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    products?: ProductUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutDisputesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -77400,6 +80123,19 @@ export namespace Prisma {
   export type UserRoleCreateManyUserInput = {
     id?: string
     role: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderDisputeCreateManyUserInput = {
+    id?: string
+    orderId: string
+    sellerOrderId?: string | null
+    reason: string
+    description?: string | null
+    images?: OrderDisputeCreateimagesInput | string[]
+    status?: $Enums.DisputeStatus
+    type?: $Enums.DisputeType
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -77628,6 +80364,7 @@ export namespace Prisma {
     items?: OrderItemUpdateManyWithoutOrderNestedInput
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     shipments?: ShipmentUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutOrderNestedInput
     sellerOrders?: SellerOrderUpdateManyWithoutOrderNestedInput
   }
 
@@ -77648,6 +80385,7 @@ export namespace Prisma {
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     shipments?: ShipmentUncheckedUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutOrderNestedInput
     sellerOrders?: SellerOrderUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -77818,6 +80556,7 @@ export namespace Prisma {
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    disputes?: OrderDisputeUpdateManyWithoutSellerOrderNestedInput
     items?: SellerOrderItemUpdateManyWithoutSellerOrderNestedInput
     order?: OrderUpdateOneRequiredWithoutSellerOrdersNestedInput
   }
@@ -77833,6 +80572,7 @@ export namespace Prisma {
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutSellerOrderNestedInput
     items?: SellerOrderItemUncheckedUpdateManyWithoutSellerOrderNestedInput
   }
 
@@ -78073,6 +80813,45 @@ export namespace Prisma {
   export type UserRoleUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderDisputeUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: OrderUpdateOneRequiredWithoutDisputesNestedInput
+    sellerOrder?: SellerOrderUpdateOneWithoutDisputesNestedInput
+  }
+
+  export type OrderDisputeUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    sellerOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderDisputeUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    sellerOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -78633,6 +81412,7 @@ export namespace Prisma {
     items?: OrderItemUpdateManyWithoutOrderNestedInput
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     shipments?: ShipmentUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutOrderNestedInput
     sellerOrders?: SellerOrderUpdateManyWithoutOrderNestedInput
   }
 
@@ -78653,6 +81433,7 @@ export namespace Prisma {
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     shipments?: ShipmentUncheckedUpdateManyWithoutOrderNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutOrderNestedInput
     sellerOrders?: SellerOrderUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -79285,6 +82066,19 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type OrderDisputeCreateManyOrderInput = {
+    id?: string
+    sellerOrderId?: string | null
+    userId: string
+    reason: string
+    description?: string | null
+    images?: OrderDisputeCreateimagesInput | string[]
+    status?: $Enums.DisputeStatus
+    type?: $Enums.DisputeType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type SellerOrderCreateManyOrderInput = {
     id?: string
     sellerId: string
@@ -79415,6 +82209,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OrderDisputeUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sellerOrder?: SellerOrderUpdateOneWithoutDisputesNestedInput
+    user?: UserUpdateOneRequiredWithoutDisputesNestedInput
+  }
+
+  export type OrderDisputeUncheckedUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sellerOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderDisputeUncheckedUpdateManyWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sellerOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SellerOrderUpdateWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
@@ -79425,6 +82258,7 @@ export namespace Prisma {
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    disputes?: OrderDisputeUpdateManyWithoutSellerOrderNestedInput
     seller?: UserUpdateOneRequiredWithoutSellerOrdersNestedInput
     items?: SellerOrderItemUpdateManyWithoutSellerOrderNestedInput
   }
@@ -79440,6 +82274,7 @@ export namespace Prisma {
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutSellerOrderNestedInput
     items?: SellerOrderItemUncheckedUpdateManyWithoutSellerOrderNestedInput
   }
 
@@ -79612,6 +82447,19 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OrderDisputeCreateManySellerOrderInput = {
+    id?: string
+    orderId: string
+    userId: string
+    reason: string
+    description?: string | null
+    images?: OrderDisputeCreateimagesInput | string[]
+    status?: $Enums.DisputeStatus
+    type?: $Enums.DisputeType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type SellerOrderItemCreateManySellerOrderInput = {
     id?: string
     variantId: string
@@ -79621,6 +82469,45 @@ export namespace Prisma {
     commission: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type OrderDisputeUpdateWithoutSellerOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: OrderUpdateOneRequiredWithoutDisputesNestedInput
+    user?: UserUpdateOneRequiredWithoutDisputesNestedInput
+  }
+
+  export type OrderDisputeUncheckedUpdateWithoutSellerOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderDisputeUncheckedUpdateManyWithoutSellerOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: OrderDisputeUpdateimagesInput | string[]
+    status?: EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+    type?: EnumDisputeTypeFieldUpdateOperationsInput | $Enums.DisputeType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SellerOrderItemUpdateWithoutSellerOrderInput = {

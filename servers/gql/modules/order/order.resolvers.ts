@@ -4,7 +4,7 @@ import { generateOrderNumber } from "@/randomOrderNumber";
 import { senMail } from "@/services/nodeMailer.services";
 import { rateLimit } from "@/services/rateLimit.service";
 import { delCache } from "@/services/redis.services";
-import { requireAuth, requireBuyer } from "../../auth/auth";
+import { requireAuth, requireBuyer, requireSeller } from "../../auth/auth";
 import { GraphQLContext } from "../../context";
 
 // interface OrderInput {
@@ -111,6 +111,44 @@ export const orderResolvers = {
           },
           payments: true,
           shipments: true,
+          disputes: true,
+        },
+      });
+    },
+    getDisputes: async (
+      _: any,
+      { limit, offset }: { limit: number; offset: number },
+      ctx: GraphQLContext
+    ) => {
+      const user = requireBuyer(ctx);
+      return prisma.orderDispute.findMany({
+        where: { userId: user.id },
+        orderBy: { createdAt: "desc" },
+        skip: offset,
+        take: limit,
+        include: {
+          order: true,
+        },
+      });
+    },
+    getSellerDisputes: async (
+      _: any,
+      { limit, offset }: { limit: number; offset: number },
+      ctx: GraphQLContext
+    ) => {
+      const user = requireSeller(ctx);
+      return prisma.orderDispute.findMany({
+        where: {
+          sellerOrder: {
+            sellerId: user.id,
+          },
+        },
+        orderBy: { createdAt: "desc" },
+        skip: offset,
+        take: limit,
+        include: {
+          order: true,
+          user: true,
         },
       });
     },
@@ -294,7 +332,7 @@ export const orderResolvers = {
               }
             }
           },
-          { timeout: 60000 }
+          { timeout: 15000 }
         );
 
         // Invalidate cache for affected products (Stock update)
@@ -421,6 +459,134 @@ export const orderResolvers = {
         console.error("Error while creating orders:", error.message);
         throw new Error("Failed to create orders");
       }
+    },
+    cancelOrder: async (
+      _: any,
+      { input }: { input: { orderId: string; reason: string } },
+      ctx: GraphQLContext
+    ) => {
+      const user = requireBuyer(ctx);
+      const order = await prisma.order.findUnique({
+        where: { id: input.orderId },
+        include: { shipments: true },
+      });
+
+      if (!order) throw new Error("Order not found");
+      if (order.buyerId !== user.id) throw new Error("Unauthorized");
+
+      // Check if any shipment is already shipped
+      const isShipped = order.shipments.some((s) =>
+        ["SHIPPED", "IN_TRANSIT", "OUT_FOR_DELIVERY", "DELIVERED"].includes(
+          s.status
+        )
+      );
+
+      if (isShipped) {
+        throw new Error("Cannot cancel order after it has been shipped");
+      }
+
+      return prisma.orderDispute.create({
+        data: {
+          orderId: input.orderId,
+          userId: user.id,
+          reason: input.reason,
+          type: "CANCEL",
+          status: "PENDING",
+        },
+      });
+    },
+    requestReturn: async (
+      _: any,
+      {
+        input,
+      }: {
+        input: {
+          orderId: string;
+          reason: string;
+          description?: string;
+          images?: string[];
+        };
+      },
+      ctx: GraphQLContext
+    ) => {
+      const user = requireBuyer(ctx);
+      const order = await prisma.order.findUnique({
+        where: { id: input.orderId },
+        include: { shipments: true },
+      });
+
+      if (!order) throw new Error("Order not found");
+      if (order.buyerId !== user.id) throw new Error("Unauthorized");
+
+      // Check if order is delivered
+      const isDelivered = order.status === "DELIVERED" || order.shipments.some((s) => s.status === "DELIVERED");
+
+      if (!isDelivered) {
+        throw new Error("Can only request return for delivered orders");
+      }
+
+      return prisma.orderDispute.create({
+        data: {
+          orderId: input.orderId,
+          userId: user.id,
+          reason: input.reason,
+          description: input.description,
+          images: input.images || [],
+          type: "RETURN",
+          status: "PENDING",
+        },
+      });
+    },
+    updateDisputeStatus: async (
+      _: any,
+      { disputeId, status }: { disputeId: string; status: any },
+      ctx: GraphQLContext
+    ) => {
+      const user = requireSeller(ctx);
+
+      const dispute = await prisma.orderDispute.findUnique({
+        where: { id: disputeId },
+        include: { order: { include: { sellerOrders: true } } },
+      });
+
+      if (!dispute) throw new Error("Dispute not found");
+
+      // Ensure the seller owns one of the sellerOrders in this order
+      const isMyOrder = dispute.order.sellerOrders.some(
+        (so) => so.sellerId === user.id
+      );
+      if (!isMyOrder) throw new Error("Unauthorized");
+
+      const updatedDispute = await prisma.orderDispute.update({
+        where: { id: disputeId },
+        data: { status },
+      });
+
+      // If approved and type is CANCEL, update order status
+      if (status === "APPROVED") {
+        if (updatedDispute.type === "CANCEL") {
+          await prisma.order.update({
+            where: { id: updatedDispute.orderId },
+            data: { status: "CANCELLED" },
+          });
+          // Also update seller orders
+          await prisma.sellerOrder.updateMany({
+            where: { buyerOrderId: updatedDispute.orderId, sellerId: user.id },
+            data: { status: "CANCELLED" },
+          });
+        } else if (updatedDispute.type === "RETURN") {
+          await prisma.order.update({
+            where: { id: updatedDispute.orderId },
+            data: { status: "RETURNED" },
+          });
+          await prisma.sellerOrder.updateMany({
+            where: { buyerOrderId: updatedDispute.orderId, sellerId: user.id },
+            data: { status: "RETURNED" },
+          });
+        }
+      }
+
+      return updatedDispute;
     },
   },
 };

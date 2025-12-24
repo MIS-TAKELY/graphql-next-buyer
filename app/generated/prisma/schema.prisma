@@ -148,6 +148,18 @@ enum VerificationStatus {
   REJECTED
 }
 
+enum DisputeStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  RESOLVED
+}
+
+enum DisputeType {
+  CANCEL
+  RETURN
+}
+
 model User {
   id              String    @id @default(cuid())
   name            String    @default("")
@@ -162,6 +174,7 @@ model User {
   avatarImageUrl  String?
   phone           String?   @unique @db.VarChar(20)
   phoneVerified   Boolean   @default(false) // Custom for WhatsApp OTP
+  hasProfile      Boolean   @default(false) // To track if seller has set up profile
   otp             String? // Custom for WhatsApp OTP
   otpExpiresAt    DateTime? // OTP expiry
   gender          Gender?
@@ -190,6 +203,7 @@ model User {
   notifications           Notification[]
   sellerProfile           SellerProfile?
   roles                   UserRole[]
+  disputes                OrderDispute[]
 
   productQuestions ProductQuestion[]
   productAnswers   ProductAnswer[]   @relation("SellerAnswers")
@@ -627,11 +641,12 @@ model Order {
   updatedAt        DateTime    @updatedAt
   offerId          String?
 
-  offer        Offer?        @relation(fields: [offerId], references: [id], onDelete: SetNull)
-  buyer        User          @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
+  offer        Offer?         @relation(fields: [offerId], references: [id], onDelete: SetNull)
+  buyer        User           @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
   items        OrderItem[]
   payments     Payment[]
   shipments    Shipment[]
+  disputes     OrderDispute[]
   // appliedDiscounts AppliedDiscount[] // Add this line
   // discountUsage    DiscountUsage[]
   sellerOrders SellerOrder[]
@@ -807,17 +822,18 @@ model WishlistItem {
 }
 
 model SellerOrder {
-  id           String      @id @default(cuid())
+  id           String         @id @default(cuid())
   sellerId     String
   buyerOrderId String
-  status       OrderStatus @default(PENDING)
-  subtotal     Decimal     @db.Money
-  tax          Decimal     @default(0) @db.Money
-  shippingFee  Decimal     @default(0) @db.Money
-  commission   Decimal     @default(0) @db.Money
-  total        Decimal     @db.Money
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  status       OrderStatus    @default(PENDING)
+  subtotal     Decimal        @db.Money
+  tax          Decimal        @default(0) @db.Money
+  shippingFee  Decimal        @default(0) @db.Money
+  commission   Decimal        @default(0) @db.Money
+  total        Decimal        @db.Money
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  disputes     OrderDispute[]
 
   // Relations
   seller User              @relation("SellerOrders", fields: [sellerId], references: [id], onDelete: Cascade)
@@ -939,4 +955,24 @@ model Verification {
   updatedAt  DateTime? @updatedAt
 
   @@map("verification")
+}
+
+model OrderDispute {
+  id            String        @id @default(cuid())
+  orderId       String
+  sellerOrderId String?
+  userId        String
+  reason        String
+  description   String?       @db.Text
+  images        String[]
+  status        DisputeStatus @default(PENDING)
+  type          DisputeType   @default(RETURN)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  order       Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  sellerOrder SellerOrder? @relation(fields: [sellerOrderId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("order_disputes")
 }

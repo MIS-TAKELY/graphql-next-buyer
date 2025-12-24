@@ -89,7 +89,7 @@ export default function RootLayout({
               {children}
             </AuthGate>
           </ThemeProvider>
-          <Toaster position="top-right" />
+          <Toaster position="top-right" duration={2500} richColors closeButton />
           <NotificationListener />
         </ApolloWrapper>
       </body>

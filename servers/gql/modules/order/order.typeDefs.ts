@@ -35,6 +35,7 @@ export const orderTypeDefs = gql`
     items: [OrderItem]
     payments: [Payment]
     shipments: [Shipment]
+    disputes: [OrderDispute]
   }
 
   input OrderItemInput {
@@ -62,10 +63,55 @@ export const orderTypeDefs = gql`
     paymentProvider: String!
     paymentMethodId: ID
   }
+  enum DisputeStatus {
+    PENDING
+    APPROVED
+    REJECTED
+    RESOLVED
+  }
+
+  enum DisputeType {
+    CANCEL
+    RETURN
+  }
+
+  type OrderDispute {
+    id: ID!
+    orderId: ID!
+    sellerOrderId: ID
+    userId: ID!
+    reason: String!
+    description: String
+    images: [String]
+    status: DisputeStatus!
+    type: DisputeType!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    order: Order
+    user: User
+  }
+
+  input RequestReturnInput {
+    orderId: ID!
+    reason: String!
+    description: String
+    images: [String]
+  }
+
+  input CancelOrderInput {
+    orderId: ID!
+    reason: String!
+  }
+
   extend type Query {
     getMyOrderItems(limit: Int!, offset: Int!): [Order!]!
+    getDisputes(limit: Int!, offset: Int!): [OrderDispute!]!
+    getSellerDisputes(limit: Int!, offset: Int!): [OrderDispute!]!
   }
   extend type Mutation {
     createOrder(input: [CreateOrderInput!]!): [Order!]!
+    cancelOrder(input: CancelOrderInput!): OrderDispute!
+    requestReturn(input: RequestReturnInput!): OrderDispute!
+    updateDisputeStatus(disputeId: ID!, status: DisputeStatus!): OrderDispute!
   }
 `;

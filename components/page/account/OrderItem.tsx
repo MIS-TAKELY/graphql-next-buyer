@@ -22,9 +22,28 @@ import {
   MapPin,
   Package,
   Truck,
+  RotateCcw,
+  XCircle,
 } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { CANCEL_ORDER, REQUEST_RETURN, GET_MY_ORDER_ITEMS } from "@/client/order/order.queries";
+import { ADD_TO_CART } from "@/client/cart/cart.mutations";
+import { GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
+import { useRouter } from "next/navigation";
+import { MediaUploader } from "@/components/review/MediaUploader";
+import { ReviewMedia } from "@/components/review/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 type OrderStatus =
   | "PENDING"
@@ -54,6 +73,14 @@ export interface Order {
       };
     };
   }>;
+  disputes?: Array<{
+    id: string;
+    status: string;
+    type: string;
+    reason: string;
+    description?: string;
+    images?: string[];
+  }>;
 }
 
 export interface GetMyOrderItemsResponse {
@@ -81,6 +108,95 @@ interface OrderItemProps {
 
 function OrderItemComponent({ order }: OrderItemProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showReturnDialog, setShowReturnDialog] = useState(false);
+  const [reason, setReason] = useState("");
+  const [description, setDescription] = useState("");
+  const [images, setImages] = useState<ReviewMedia[]>([]);
+
+  const [cancelOrder, { loading: cancelLoading }] = useMutation(CANCEL_ORDER, {
+    refetchQueries: [GET_MY_ORDER_ITEMS],
+    onCompleted: () => {
+      toast.success("Order cancellation request submitted");
+      setShowCancelDialog(false);
+      setReason("");
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      const message = error.graphQLErrors?.[0]?.message || "Failed to cancel order. Please try again.";
+      toast.error(message);
+    }
+  });
+
+  const [requestReturn, { loading: returnLoading }] = useMutation(REQUEST_RETURN, {
+    refetchQueries: [GET_MY_ORDER_ITEMS],
+    onCompleted: () => {
+      toast.success("Return request submitted successfully");
+      setShowReturnDialog(false);
+      setReason("");
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      const message = error.graphQLErrors?.[0]?.message || "Something went wrong. Please try again.";
+      toast.error(message);
+    }
+  });
+
+  const handleCancelOrder = () => {
+    cancelOrder({
+      variables: {
+        input: {
+          orderId: order.id,
+          reason,
+        }
+      }
+    });
+  };
+
+  const handleRequestReturn = () => {
+    requestReturn({
+      variables: {
+        input: {
+          orderId: order.id,
+          reason,
+          description,
+          images: images.map((img) => img.url),
+        }
+      }
+    });
+  };
+
+  const router = useRouter();
+  const [addToCart, { loading: addToCartLoading }] = useMutation(ADD_TO_CART, {
+    refetchQueries: [GET_MY_CART_ITEMS],
+  });
+
+  const [reorderLoading, setReorderLoading] = useState(false);
+
+  const handleReorder = async () => {
+    setReorderLoading(true);
+    try {
+      // Create an array of promises to add each item to the cart
+      const promises = order.items.map((item) =>
+        addToCart({
+          variables: {
+            variantId: item.variant.id,
+            quantity: item.quantity,
+          }
+        })
+      );
+
+      // Wait for all add-to-cart operations to complete
+      await Promise.all(promises);
+
+      toast.success("All items added to cart successfully");
+      router.push("/cart");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to add items to cart");
+    } finally {
+      setReorderLoading(false);
+    }
+  };
 
   const firstItem = order.items?.[0];
   const firstImage =
@@ -174,8 +290,20 @@ function OrderItemComponent({ order }: OrderItemProps) {
             Order ID: {order.orderNumber} •{" "}
             {new Date(order.createdAt).toLocaleDateString()}
           </SheetDescription>
+          {order.disputes && order.disputes.length > 0 && (
+            <div className="mt-4 p-3 bg-muted rounded-md text-sm">
+              <p className="font-semibold text-foreground">Return/Dispute Status:</p>
+              {order.disputes.map(d => (
+                <div key={d.id} className="flex items-center gap-2 mt-1 mx-2">
+                  <Badge variant={d.status === 'APPROVED' ? 'default' : d.status === 'REJECTED' ? 'destructive' : 'secondary'}>
+                    {d.status}
+                  </Badge>
+                  <span className="text-muted-foreground text-xs">{d.type}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </SheetHeader>
-
         <div className="flex-1 overflow-y-auto px-6 scrollbar-hide pb-8">
           {/* Tracker Section */}
           <div className="py-2 mb-6">
@@ -279,7 +407,7 @@ function OrderItemComponent({ order }: OrderItemProps) {
           </div>
         </div>
 
-        <div className="p-6 bg-background border-t mt-auto flex gap-3 shrink-0">
+        <div className="p-6 bg-background border-t mt-auto flex flex-wrap gap-3 shrink-0">
           <Button
             variant="outline"
             className="flex-1"
@@ -287,10 +415,104 @@ function OrderItemComponent({ order }: OrderItemProps) {
           >
             Close
           </Button>
-          <Button className="flex-1">Reorder</Button>
+
+          {/* Cancel Button */}
+          {["PENDING", "CONFIRMED", "PROCESSING"].includes(order.status) && (
+            <Button
+              variant="destructive"
+              className="flex-1 gap-2"
+              onClick={() => setShowCancelDialog(true)}
+            >
+              <XCircle className="w-4 h-4" /> Cancel Order
+            </Button>
+          )}
+
+          {/* Return Button */}
+          {order.status === "DELIVERED" && (!order.disputes || order.disputes.length === 0) && (
+            <Button
+              variant="secondary"
+              className="flex-1 gap-2"
+              onClick={() => setShowReturnDialog(true)}
+            >
+              <RotateCcw className="w-4 h-4" /> Return Items
+            </Button>
+          )}
+
+          <Button
+            className="flex-1"
+            onClick={handleReorder}
+            disabled={reorderLoading}
+          >
+            {reorderLoading ? "Adding to Cart..." : "Reorder"}
+          </Button>
         </div>
       </SheetContent>
-    </Sheet>
+
+      {/* Cancel Order Dialog */}
+      <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Cancel Order</DialogTitle>
+            <DialogDescription>
+              Please provide a reason for cancelling your order.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            placeholder="Reason for cancellation..."
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowCancelDialog(false)}>Cancel</Button>
+            <Button
+              variant="destructive"
+              onClick={handleCancelOrder}
+              disabled={cancelLoading || !reason.trim()}
+            >
+              {cancelLoading ? "Cancelling..." : "Confirm Cancellation"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Return Order Dialog */}
+      <Dialog open={showReturnDialog} onOpenChange={setShowReturnDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Return Items</DialogTitle>
+            <DialogDescription>
+              Please provide a reason for returning the items.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            onChange={(e) => setReason(e.target.value)}
+          />
+          <Textarea
+            placeholder="Additional description (optional)..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="mt-2"
+          />
+          <div className="mt-4">
+            <label className="text-sm font-medium mb-2 block">Upload Images</label>
+            <MediaUploader
+              value={images}
+              onChange={setImages}
+              maxSizeMB={5}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowReturnDialog(false)}>Cancel</Button>
+            <Button
+              onClick={handleRequestReturn}
+              disabled={returnLoading || !reason.trim()}
+            >
+              {returnLoading ? "Submitting..." : "Submit Return Request"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </Sheet >
   );
 }
 
