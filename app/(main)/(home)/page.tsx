@@ -117,12 +117,6 @@ async function HomeProductSections() {
       count: 8,
       layout: "horizontal",
     },
-    {
-      name: "Recommended For You",
-      products: sharedSlice,
-      count: 8,
-      layout: "horizontal",
-    },
   ];
 
   return (
