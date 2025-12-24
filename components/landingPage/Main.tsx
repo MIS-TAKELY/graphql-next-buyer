@@ -23,8 +23,8 @@ const Main = async () => {
           category="Fashion"
         />
 
-        {/* Product Grid Section */}
-        <div className="container-custom">
+        {/* Product Grid Section - Full Width aligned with container */}
+        <div className="container-custom bg-card py-2 sm:py-4 md:py-6">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {/* Featured Products */}
             <LandingPageProductGridWrapper
@@ -46,7 +46,7 @@ const Main = async () => {
           </div>
         </div>
 
-        <div className="container-custom">
+        <div className="container-custom bg-card py-2 sm:py-4 md:py-6">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {/* Featured Products */}
             <LandingPageProductGridWrapper

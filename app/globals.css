@@ -190,7 +190,7 @@
 
 /* Layout */
 .container-custom {
-  @apply w-full mx-auto px-4 sm:px-6 lg:px-8 max-w-[1600px];
+  @apply w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1920px];
 }
 
 .container-wide {

@@ -348,6 +348,13 @@ export const productResolvers = {
         include: {
           product: {
             include: {
+              seller: {
+                select: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                }
+              },
               variants: {
                 select: {
                   id: true,

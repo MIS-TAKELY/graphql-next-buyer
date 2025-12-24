@@ -53,11 +53,11 @@ export default function LandingPagrCategorySwiper({ title, onViewAll, data }: Pr
   return (
     <section className="relative py-2 sm:py-4 md:py-6 container-custom bg-card">
       {/* Header */}
-      <div className="flex justify-between items-center mb-3 px-2 sm:px-0">
+      <div className="flex justify-between items-center mb-3">
         {/* ✅ Wrapped Title in a Link */}
         <Link
           href={`/search?q=${encodeURIComponent(title)}`}
-          className="text-lg p-4 sm:text-xl md:text-2xl font-bold text-card-foreground hover:text-primary transition-colors"
+          className="text-lg py-4 sm:text-xl md:text-2xl font-bold text-card-foreground hover:text-primary transition-colors"
         >
           {title}
         </Link>

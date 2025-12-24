@@ -6,7 +6,7 @@ import { memo } from "react";
 
 const ProductCategoryCardSection = memo(() => {
   return (
-    <section className="bg transition-colors duration-300 w-full">
+    <section className="bg transition-colors duration-300 w-full py-2">
       <div className="container-custom">
         <div className="bg-card w-full">
           {/* Scrollable container for mobile, grid for lg+ */}

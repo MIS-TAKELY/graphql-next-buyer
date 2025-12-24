@@ -20,7 +20,7 @@ export default function ProductSection({
   if (displayProducts.length === 0) return null;
 
   return (
-    <section className="mb-8 md:mb-12">
+    <section className="mb-8 md:mb-12 bg-card w-full shadow-sm py-6 md:py-8">
       <div className="container-custom">
         <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground">
           {name}
@@ -29,7 +29,7 @@ export default function ProductSection({
           className={
             layout === "horizontal"
               ? "flex gap-3 sm:gap-4 overflow-x-auto pb-4 scrollbar-hide"
-              : "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-3 sm:gap-4 justify-items-center"
+              : "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 justify-items-center"
           }
         >
           {displayProducts.map((product, index) => (

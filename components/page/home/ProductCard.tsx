@@ -99,7 +99,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="block w-full h-full relative">
       <Link href={`/product/${product.slug}`} className="block h-full">
-        <Card className={`group cursor-pointer hover:shadow-lg transition-all duration-300 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 rounded-xl h-full flex flex-col overflow-hidden min-h-[260px] p-0 ${selected ? "ring-2 ring-blue-500 border-blue-500" : ""
+        <Card className={`group cursor-pointer transition-all duration-300 bg-white dark:bg-gray-900 border-none shadow-none rounded-xl h-full flex flex-col overflow-hidden min-h-[260px] p-0 ${selected ? "ring-2 ring-blue-500 border-blue-500" : ""
           }`}>
           <CardContent className="p-0 flex flex-col h-full">
             {/* Image Section - Fixed Aspect Ratio */}
@@ -201,7 +201,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
           <label
             htmlFor={`compare-${product.id}`}
-            className="text-[7px] sm:text-xs font-medium cursor-pointer select-none"
+            className="text-[10px] sm:text-sm font-medium cursor-pointer select-none"
           >
             Compare
           </label>
