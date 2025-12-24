@@ -23,8 +23,9 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { addToCart, checkIsInCart, removeFromCart } = useCart();
-  const currentPrice = product.variants?.[0]?.price;
-  const originalPrice = product.variants?.[0]?.mrp;
+  const defaultVariant = product.variants?.find((v) => v.isDefault) || product.variants?.[0];
+  const currentPrice = defaultVariant?.price;
+  const originalPrice = defaultVariant?.mrp;
 
   const defaultImage = product.images?.find((img) => img.mediaType !== "VIDEO")?.url || product.images?.[0]?.url;
 

@@ -111,6 +111,7 @@ export const productResolvers = {
             select: {
               id: true,
               price: true,
+              sku: true,
               stock: true,
               isDefault: true,
               mrp: true,
@@ -227,7 +228,7 @@ export const productResolvers = {
               take: limit,
               orderBy: { createdAt: 'desc' },
               include: {
-                variants: { select: { id: true, price: true, mrp: true, stock: true, specifications: true } },
+                variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
                 images: { select: { url: true, altText: true } },
                 reviews: { select: { rating: true } },
                 category: true,
@@ -243,7 +244,7 @@ export const productResolvers = {
             take: limit,
             orderBy: { createdAt: 'desc' }, // Newest or random
             include: {
-              variants: { select: { id: true, price: true, mrp: true, stock: true, specifications: true } },
+              variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
               images: { select: { url: true, altText: true } },
               reviews: { select: { rating: true } },
               category: true,
@@ -276,7 +277,7 @@ export const productResolvers = {
           let products = await prisma.product.findMany({
             where: { id: { in: productIds } },
             include: {
-              variants: { select: { id: true, price: true, mrp: true, stock: true, specifications: true } },
+              variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
               images: { select: { url: true, altText: true } },
               reviews: { select: { rating: true } },
               category: true,
@@ -303,7 +304,7 @@ export const productResolvers = {
             where: { status: "ACTIVE", id: { not: productId } },
             take: limit,
             include: {
-              variants: { select: { id: true, price: true, mrp: true, stock: true, specifications: true } },
+              variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
               images: { select: { url: true, altText: true } },
               reviews: { select: { rating: true } },
               category: true,
@@ -352,7 +353,9 @@ export const productResolvers = {
                   id: true,
                   price: true,
                   mrp: true,
+                  sku: true,
                   stock: true,
+                  isDefault: true,
                   specifications: true,
                 }
               },
@@ -411,7 +414,9 @@ export const productResolvers = {
               id: true,
               price: true,
               mrp: true,
+              sku: true,
               stock: true,
+              isDefault: true,
               specifications: true,
             }
           },

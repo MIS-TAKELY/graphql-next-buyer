@@ -384,9 +384,11 @@ export const GET_FREQUENTLY_BOUGHT_TOGETHER = gql`
         rating
       }
       variants {
+        id
         price
         mrp
         stock
+        isDefault
         specifications {
           key
           value
@@ -413,10 +415,12 @@ export const GET_RECOMMENDED_PRODUCTS = gql`
         rating
       }
       variants {
+        id
         price
         mrp
         sku
         stock
+        isDefault
         specifications {
           key
           value
