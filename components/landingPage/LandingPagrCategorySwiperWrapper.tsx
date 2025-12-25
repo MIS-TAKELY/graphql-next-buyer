@@ -22,7 +22,7 @@ const LandingPagrCategorySwiperWrapper = async ({ title, category }: Props) => {
     } else {
       const response = await client.query<{ getTopDealSaveUpTo: TopDeal[] }>({
         query: GET_TOP_DEALS,
-        variables: { topDealAbout: category, limit: 10 },
+        variables: { topDealAbout: category, limit: 8 },
         fetchPolicy: "no-cache",
       });
       data = response.data;

@@ -55,7 +55,7 @@ export const productTypeDefs = gql`
   }
 
   type Query {
-    getProducts: [Product!]!
+    getProducts(limit: Int, offset: Int): [Product!]!
     getProduct(productId: ID!): Product!
     getProductBySlug(slug: String!): Product!
     getRecommendedProducts(productId: ID, limit: Int): [Product!]!

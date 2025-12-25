@@ -3,8 +3,8 @@ import { getCache, setCache } from "@/services/redis.services";
 
 export const productResolvers = {
   Query: {
-    getProducts: async (_: any, __: any) => {
-      const cacheKey = "products:all";
+    getProducts: async (_: any, { limit, offset }: { limit?: number; offset?: number }) => {
+      const cacheKey = limit ? `products:limited:${limit}:${offset || 0}` : "products:all";
 
       // Try cache for the list of product slugs
       const cachedSlugs = await getCache<string[]>(`${cacheKey}:slugs`);
@@ -70,6 +70,8 @@ export const productResolvers = {
           wishlistItems: true,
         },
         orderBy: { createdAt: "desc" },
+        ...(limit && { take: limit }),
+        ...(offset && { skip: offset }),
       });
 
       // Cache individual products and slugs

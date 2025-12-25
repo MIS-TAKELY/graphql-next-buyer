@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import ProductSection from "./ProductSection";
 import { TProduct } from "@/types/product";
 import { useQuery } from "@apollo/client";
-import { GET_PRODUCTS, GET_RECENTLY_VIEWED, GET_RECOMMENDED_PRODUCTS } from "@/client/product/product.queries";
+import { GET_PRODUCTS_MINIMAL, GET_RECENTLY_VIEWED, GET_RECOMMENDED_PRODUCTS } from "@/client/product/product.queries";
 import { useSession } from "@/lib/auth-client";
 
 export default function DynamicSections() {
@@ -21,8 +21,10 @@ export default function DynamicSections() {
         fetchPolicy: "network-only"
     });
 
-    // Fetch all products for fallback recommendations
-    const { data, loading, error } = useQuery(GET_PRODUCTS);
+    // Fetch limited products for fallback recommendations
+    const { data, loading, error } = useQuery(GET_PRODUCTS_MINIMAL, {
+        variables: { limit: 12 }
+    });
     const allProducts = (data?.getProducts || []) as TProduct[];
 
     useEffect(() => {

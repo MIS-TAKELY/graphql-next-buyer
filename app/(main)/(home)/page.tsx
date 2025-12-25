@@ -1,5 +1,4 @@
-import { GET_PRODUCTS } from "@/client/product/product.queries";
-import CompareButtonBar from "@/components/compare/CompareButtonBar";
+import { GET_PRODUCTS_MINIMAL } from "@/client/product/product.queries";
 import Main from "@/components/landingPage/Main";
 import HeroCarousel from "@/components/page/home/HeroCarousel";
 import ProductCatagoryCardSection from "@/components/page/home/ProductCatagoryCardSection";
@@ -9,11 +8,13 @@ import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
 import { CacheService } from "@/services/CacheService";
 import { TProduct } from "@/types/product";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
+import CompareFloater from "@/components/compare/CompareFloater";
 const DynamicSections = dynamic(
   () => import("@/components/page/home/DynamicSections")
 );
-import { Suspense } from "react";
+
 import HeroCarouselSkeleton from "@/components/page/home/HeroCarouselSkeleton";
 import CategorySectionSkeleton from "@/components/page/home/CategorySectionSkeleton";
 import { ProductCardSkeleton } from "@/components/page/home/ProductCardSkeleton";
@@ -74,7 +75,7 @@ export default function HomePage() {
       </Suspense>
 
       {/* Comparison Button Bar - Floating */}
-      <CompareButtonBar />
+      <CompareFloater />
     </div>
   );
 }
@@ -87,7 +88,8 @@ async function HomeProductSections() {
   if (products.length === 0) {
     try {
       const productsResponse = await client.query({
-        query: GET_PRODUCTS,
+        query: GET_PRODUCTS_MINIMAL,
+        variables: { limit: 24 },
         fetchPolicy: "no-cache",
         errorPolicy: "all",
       });

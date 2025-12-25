@@ -40,7 +40,7 @@ export const LandingPageProductGridWrapper = async ({
       }
     }
 
-    console.log("data-->", data)
+
   } catch (err) {
     console.error("Error fetching top deals:", err);
     error = err;

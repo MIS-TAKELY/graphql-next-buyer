@@ -218,8 +218,8 @@ export const GET_PRODUCT_DETAILS = gql`
 `;
 
 export const GET_PRODUCTS = gql`
-  query GetProducts {
-    getProducts {
+  query GetProducts($limit: Int, $offset: Int) {
+    getProducts(limit: $limit, offset: $offset) {
       id
       name
       description
@@ -267,6 +267,33 @@ export const GET_PRODUCTS = gql`
           value
         }
       }
+    }
+  }
+`;
+
+export const GET_PRODUCTS_MINIMAL = gql`
+  query GetProductsMinimal($limit: Int, $offset: Int) {
+    getProducts(limit: $limit, offset: $offset) {
+      id
+      name
+      slug
+      status
+      images {
+        id
+        url
+        altText
+      }
+      variants {
+        id
+        price
+        mrp
+        stock
+        isDefault
+      }
+      reviews {
+        rating
+      }
+      brand
     }
   }
 `;

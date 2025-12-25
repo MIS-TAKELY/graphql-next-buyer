@@ -46,27 +46,7 @@ const Main = async () => {
           </div>
         </div>
 
-        <div className="container-custom bg-card py-2 sm:py-4 md:py-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {/* Featured Products */}
-            <LandingPageProductGridWrapper
-              title="Featured Products"
-              topDealAbout="kitchen"
-            />
 
-            {/* Top Rated */}
-            <LandingPageProductGridWrapper
-              title="Top Rated"
-              topDealAbout="medicine"
-            />
-
-            {/* Best Deals */}
-            <LandingPageProductGridWrapper
-              title="Best Deals"
-              topDealAbout="books"
-            />
-          </div>
-        </div>
       </div>
     </main>
   );

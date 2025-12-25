@@ -2,7 +2,7 @@
 "use client";
 
 import { GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
-import { GET_PRODUCTS } from "@/client/product/product.queries";
+import { GET_PRODUCTS_MINIMAL } from "@/client/product/product.queries";
 import CartEmpty from "@/components/cart/CartEmpty";
 import CartError from "@/components/cart/CartError";
 import CartHeader from "@/components/cart/CartHeader";
@@ -108,7 +108,7 @@ export default function CartPage() {
 
   // Fetch all products for guest user (to find details for anonymous cart items)
   // Optimization: In a real app, we'd have a getProductsByIds query
-  const { data: allProductsData, loading: allProductsLoading } = useQuery(GET_PRODUCTS, {
+  const { data: allProductsData, loading: allProductsLoading } = useQuery(GET_PRODUCTS_MINIMAL, {
     skip: !!userId || !anonymousCart || anonymousCart.length === 0,
     fetchPolicy: "cache-first",
   });

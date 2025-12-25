@@ -1,6 +1,8 @@
-import Footer from "@/components/common/Footer";
-import Navbar from "@/components/common/Navbar";
 import React from "react";
+import dynamic from "next/dynamic";
+import Navbar from "@/components/common/Navbar";
+
+const Footer = dynamic(() => import("@/components/common/Footer"));
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (

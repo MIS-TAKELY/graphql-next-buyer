@@ -1,5 +1,5 @@
 import { GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
-import { GET_PRODUCTS } from "@/client/product/product.queries";
+import { GET_PRODUCTS_MINIMAL } from "@/client/product/product.queries";
 import { Button } from "@/components/ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useCart } from "@/hooks/cart/useCart";
@@ -45,7 +45,7 @@ export default function CartSheetContent() {
   });
 
   // Fetch items for guest user (if using anonymous cart)
-  const { data: allProductsData, loading: allProductsLoading } = useQuery(GET_PRODUCTS, {
+  const { data: allProductsData, loading: allProductsLoading } = useQuery(GET_PRODUCTS_MINIMAL, {
     skip: !!userId || !anonymousCart || anonymousCart.length === 0,
     fetchPolicy: "cache-first",
   });
