@@ -98,9 +98,9 @@ export function OrderSummary({
                           return (
                             <span
                               key={key}
-                              className="text-xs text-gray-500 dark:text-gray-400"
+                              className="text-xs text-gray-500 dark:text-gray-400 capitalize"
                             >
-                              {value}
+                              {key}: {value}
                             </span>
                           );
                         }

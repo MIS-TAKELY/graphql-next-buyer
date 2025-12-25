@@ -15,6 +15,10 @@ import {
   User,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { useNotificationStore } from "@/store/notificationStore";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_CONVERSATIONS } from "@/client/conversatation/conversatation.query";
+import { useSession } from "@/lib/auth-client";
 
 // Reusable SidebarNav component
 // Props: user
@@ -29,12 +33,25 @@ export default function SidebarNav({
   const router = useRouter();
   const pathname = usePathname();
 
+  const { hasNewOrderUpdate } = useNotificationStore();
+  const { data: session } = useSession();
+
+  const { data: conversationsData } = useQuery(GET_ALL_CONVERSATIONS, {
+    skip: !session,
+    fetchPolicy: "cache-and-network",
+  });
+
+  const totalUnread = conversationsData?.conversations?.reduce(
+    (acc: number, conv: any) => acc + (conv.unreadCount || 0),
+    0
+  ) || 0;
+
   const sidebarItems = [
     { id: "profile", label: "Profile", icon: User, href: "/account/profile" },
     { id: "addresses", label: "Addresses", icon: MapPin, href: "/account/addresses" },
-    { id: "orders", label: "My Orders", icon: Package, href: "/account/orders" },
+    { id: "orders", label: "My Orders", icon: Package, href: "/account/orders", hasNotification: hasNewOrderUpdate },
     { id: "wishlist", label: "Wishlist", icon: Heart, href: "/account/wishlist" },
-    { id: "chat", label: "Messages", icon: MessageCircle, href: "/account/chat" }, // Added Chat
+    { id: "chat", label: "Messages", icon: MessageCircle, href: "/account/chat", hasNotification: totalUnread > 0 }, // Added Chat
     { id: "payment", label: "Payment Methods", icon: CreditCard, href: "/account/payment" },
     { id: "notifications", label: "Notifications", icon: Bell, href: "/account/notifications" },
     { id: "security", label: "Security", icon: Shield, href: "/account/security" },
@@ -79,7 +96,10 @@ export default function SidebarNav({
                     } ${isActive ? "w-auto lg:w-full" : "w-auto lg:w-full"}`}
                 >
                   <Icon size={18} />
-                  <span className="text-sm font-medium">{item.label}</span>
+                  <span className="text-sm font-medium flex-1">{item.label}</span>
+                  {item.hasNotification && (
+                    <span className="w-2 h-2 bg-red-600 rounded-full" />
+                  )}
                 </button>
               );
             })}

@@ -25,7 +25,7 @@ export const searchResolvers = {
       const vectorString = `[${vector.join(",")}]`;
 
       // ✅ Step 2: Build WHERE conditions dynamically
-      const whereConditions: string[] = ["embedding IS NOT NULL"];
+      const whereConditions: string[] = ["embedding IS NOT NULL", "status = 'ACTIVE'"];
       const params: any[] = [];
 
       if (filters?.categories?.length) {
@@ -177,7 +177,7 @@ export const searchResolvers = {
         )}) AS similarity
           FROM "products" p
           LEFT JOIN "categories" c ON p."categoryId" = c.id
-          WHERE p.embedding IS NOT NULL
+          WHERE p.embedding IS NOT NULL AND p.status = 'ACTIVE'
           ORDER BY similarity DESC
           LIMIT 6
         `

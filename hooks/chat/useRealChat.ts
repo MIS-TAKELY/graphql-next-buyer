@@ -1,7 +1,7 @@
 // hooks/chat/useRealChat.ts
 "use client";
 
-import { CREATE_CONVERSATION } from "@/client/conversatation/conversatatioln.mutatio";
+import { CREATE_CONVERSATION, MARK_AS_READ } from "@/client/conversatation/conversatatioln.mutatio";
 import {
     GET_CONVERSATION_BY_PRODUCT,
     GET_ALL_CONVERSATIONS
@@ -73,6 +73,9 @@ export const useRealChat = (
     });
 
     const [createConversation] = useMutation(CREATE_CONVERSATION);
+    const [markAsReadMutation] = useMutation(MARK_AS_READ, {
+        refetchQueries: [{ query: GET_ALL_CONVERSATIONS }],
+    });
 
     const [sendMessageMutation] = useMutation(SEND_MESSAGE, {
         onError: (error) => {
@@ -99,6 +102,14 @@ export const useRealChat = (
         }
     }, [productId, initialConversationId]);
 
+    // Mark as read when conversation is active
+    useEffect(() => {
+        if (conversationId && userId) {
+            markAsReadMutation({ variables: { conversationId } })
+                .catch(err => console.error("[BUYER] Failed to mark as read:", err));
+        }
+    }, [conversationId, userId, markAsReadMutation]);
+
     const normalizeMessage = useCallback(
         (msg: any): LocalMessage => {
             // Logic to resolve timestamp
@@ -123,17 +134,21 @@ export const useRealChat = (
                 ];
             }
 
-            // Determine sender
-            const isMe = userId && msg.sender?.id === userId;
+            // Robust sender check using Database ID
+            const msgSenderId = (msg as any).senderId || (msg.sender && (msg.sender.id || (msg.sender as any)._id));
+            const myId = userId; // Assuming userId is the current user's DB ID
+
+            const isMe = !!(myId && msgSenderId && msgSenderId.toString() === myId.toString());
 
             return {
                 id: msg.id || crypto.randomUUID(),
-                clientId: msg.clientId,
-                text: msg.content || "",
+                clientId: (msg as any).clientId,
+                text: (msg as any).content || (msg as any).text || "",
                 sender: isMe ? "user" : "seller",
-                senderId: msg.sender?.id || msg.senderId,
+                senderId: msgSenderId,
                 timestamp,
                 status: "sent",
+                isRead: !!msg.isRead,
                 attachments,
             };
         },
@@ -382,6 +397,13 @@ export const useRealChat = (
             if (!payload) return;
             const normalized = normalizeMessage(payload);
             upsertMessage(normalized);
+
+            // If we are currently viewing this conversation, mark it as read immediately
+            if (conversationId && (payload.conversationId === conversationId)) {
+                markAsReadMutation({ variables: { conversationId } })
+                    .catch(err => console.warn("[BUYER] Failed to mark realtime message as read:", err));
+            }
+
             if (onMessageReceived) {
                 onMessageReceived();
             }

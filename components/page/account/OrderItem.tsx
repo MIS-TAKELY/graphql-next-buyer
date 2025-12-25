@@ -57,6 +57,7 @@ export interface Order {
   id: string;
   orderNumber: string;
   createdAt: string;
+  updatedAt: string;
   total: number;
   status: OrderStatus;
   shippingSnapshot: any;
@@ -67,6 +68,7 @@ export interface Order {
     totalPrice: number;
     variant: {
       id: string;
+      attributes?: Record<string, any>; // Added attributes
       product: {
         name: string;
         images: Array<{ url: string }>;
@@ -340,6 +342,18 @@ function OrderItemComponent({ order }: OrderItemProps) {
                     <p className="text-sm font-medium line-clamp-2 leading-tight">
                       {item.variant.product.name}
                     </p>
+                    {item.variant.attributes && (
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {Object.entries(item.variant.attributes).map(([key, value]) => {
+                          if (key === 'comparePrice') return null;
+                          return (
+                            <span key={key} className="text-xs text-muted-foreground capitalize">
+                              {key}: {value}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
                     <div className="flex items-center justify-between mt-1 text-xs text-muted-foreground">
                       <span>Qty: {item.quantity}</span>
                       <span className="font-semibold text-foreground">

@@ -74,40 +74,60 @@ export function ChatList({ selectedId, onSelect, userId, conversations, loading,
                             const otherUser =
                                 conv.sender.id === userId ? conv.reciever : conv.sender;
                             const isSelected = selectedId === conv.id;
+                            const hasUnread = conv.unreadCount > 0 && !isSelected;
 
                             return (
                                 <button
                                     key={conv.id}
                                     onClick={() => onSelect(conv.id, conv.product, otherUser)}
                                     className={cn(
-                                        "flex items-start gap-3 p-3 text-left transition-all rounded-lg hover:bg-muted/50",
+                                        "flex items-start gap-3 p-3 text-left transition-all rounded-lg hover:bg-muted/50 w-full group relative",
                                         isSelected && "bg-muted"
                                     )}
                                 >
-                                    <Avatar className="h-10 w-10 border">
+                                    <Avatar className="h-10 w-10 border shrink-0">
                                         <AvatarImage src={otherUser.avatarImageUrl} />
-                                        <AvatarFallback>{otherUser.firstName[0]}</AvatarFallback>
+                                        <AvatarFallback className="bg-primary/5">{otherUser.firstName[0]}</AvatarFallback>
                                     </Avatar>
-                                    <div className="flex-1 min-w-0 overflow-hidden">
-                                        <div className="flex items-center justify-between mb-0.5">
-                                            <span className="font-semibold text-sm truncate">
+                                    <div className="flex-1 min-w-0 overflow-hidden pr-2">
+                                        <div className="flex items-center justify-between mb-0.5 mt-0.5">
+                                            <span className={cn(
+                                                "text-sm truncate leading-none",
+                                                hasUnread ? "font-bold text-foreground" : "font-semibold text-foreground/90"
+                                            )}>
                                                 {otherUser.firstName} {otherUser.lastName}
                                             </span>
                                             {conv.lastMessage && (
-                                                <span className="text-[10px] text-muted-foreground shrink-0 tabular-nums">
+                                                <span className={cn(
+                                                    "text-[10px] shrink-0 tabular-nums",
+                                                    hasUnread ? "font-bold text-primary" : "text-muted-foreground/70"
+                                                )}>
                                                     {formatDistanceToNow(new Date(conv.lastMessage.sentAt), {
                                                         addSuffix: false,
                                                     })}
                                                 </span>
                                             )}
                                         </div>
-                                        <div className="text-xs text-muted-foreground truncate font-medium text-primary/80 mb-0.5">
+                                        <div className="text-[11px] text-muted-foreground/60 truncate font-medium mb-0.5">
                                             {conv.product.name}
                                         </div>
-                                        <p className="text-xs text-muted-foreground/80 truncate">
-                                            {conv.lastMessage?.content || "Sent an attachment"}
-                                        </p>
+                                        <div className="flex items-center justify-between gap-2">
+                                            <p className={cn(
+                                                "text-xs truncate transition-colors",
+                                                hasUnread ? "font-semibold text-foreground" : "text-muted-foreground/70"
+                                            )}>
+                                                {conv.lastMessage?.content || "Sent an attachment"}
+                                            </p>
+                                            {hasUnread && (
+                                                <div className="h-5 min-w-[20px] px-1.5 flex items-center justify-center bg-primary text-primary-foreground text-[10px] font-bold rounded-full shadow-sm animate-in zoom-in duration-300">
+                                                    {conv.unreadCount}
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
+                                    {hasUnread && !isSelected && (
+                                        <div className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-full opacity-100 group-hover:h-10 transition-all duration-200" />
+                                    )}
                                 </button>
                             );
                         })

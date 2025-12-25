@@ -3,6 +3,7 @@
 import { useRealChat } from "@/hooks/chat/useRealChat";
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { ChatList } from "./ChatList";
 import { ChatWindow } from "./ChatWindow";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -23,6 +24,19 @@ export function ChatLayout({ userId }: ChatLayoutProps) {
         product: any;
         otherUser: any;
     } | null>(null);
+
+    const searchParams = useSearchParams();
+    const urlConvId = searchParams.get("conversation");
+
+    useEffect(() => {
+        if (urlConvId && convData?.conversations) {
+            const conv = convData.conversations.find((c: any) => c.id === urlConvId);
+            if (conv) {
+                const otherUser = conv.sender.id === userId ? conv.reciever : conv.sender;
+                setSelectedChat({ id: conv.id, product: conv.product, otherUser });
+            }
+        }
+    }, [urlConvId, convData, userId]);
 
     const isDesktop = useMediaQuery("(min-width: 1024px)");
     const showList = !selectedChat || isDesktop;

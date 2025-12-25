@@ -9,6 +9,11 @@ import { signOut, useSession } from "@/lib/auth-client";
 import { User, Package, LogOut, ChevronRight, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_CONVERSATIONS } from "@/client/conversatation/conversatation.query";
+import { useNotificationStore } from "@/store/notificationStore";
+import { GET_MY_ORDER_ITEMS } from "@/client/order/order.queries";
+import { useEffect } from "react";
 
 interface UserDropdownProps {
   isMobile?: boolean;
@@ -18,6 +23,38 @@ interface UserDropdownProps {
 const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
   const router = useRouter();
   const { data: session, isPending } = useSession();
+
+  const { data: conversationsData } = useQuery(GET_ALL_CONVERSATIONS, {
+    skip: !session,
+    fetchPolicy: "network-only",
+  });
+
+  const totalUnread = conversationsData?.conversations?.reduce(
+    (acc: number, conv: any) => acc + (conv.unreadCount || 0),
+    0
+  ) || 0;
+
+  const { hasNewOrderUpdate, lastSeenOrderUpdate, setHasNewOrderUpdate } = useNotificationStore();
+
+  const { data: ordersData } = useQuery(GET_MY_ORDER_ITEMS, {
+    variables: { limit: 10, offset: 0 },
+    skip: !session,
+    fetchPolicy: "network-only",
+  });
+
+  useEffect(() => {
+    if (ordersData?.getMyOrderItems) {
+      const latestOrderUpdate = ordersData.getMyOrderItems.reduce((latest: string, order: any) => {
+        return !latest || new Date(order.updatedAt) > new Date(latest) ? order.updatedAt : latest;
+      }, "");
+
+      if (latestOrderUpdate && (!lastSeenOrderUpdate || new Date(latestOrderUpdate) > new Date(lastSeenOrderUpdate))) {
+        setHasNewOrderUpdate(true);
+      }
+    }
+  }, [ordersData, lastSeenOrderUpdate, setHasNewOrderUpdate]);
+
+  const hasAnyNotification = totalUnread > 0 || hasNewOrderUpdate;
 
   const handleSignOut = async () => {
     await signOut({
@@ -81,10 +118,18 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
         <Link href="/account/profile" className="block" onClick={onItemClick}>
           <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center relative">
                 <User className="w-4 h-4 text-primary" />
+                {hasAnyNotification && (
+                  <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-600 rounded-full border-2 border-background animate-in zoom-in duration-300" />
+                )}
               </div>
-              <span className="text-sm font-medium text-foreground">My Account</span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-foreground">My Account</span>
+                {hasAnyNotification && (
+                  <span className="w-2 h-2 bg-red-600 rounded-full" />
+                )}
+              </div>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
           </div>
@@ -126,13 +171,23 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
           variant="ghost"
           className="flex items-center gap-1 lg:gap-2 text-sm lg:text-base text-foreground hover:bg-secondary"
         >
-          <User className="w-4 h-4 lg:w-5 lg:h-5 text-muted-foreground" />
+          <div className="relative">
+            <User className="w-4 h-4 lg:w-5 lg:h-5 text-muted-foreground" />
+            {hasAnyNotification && (
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-600 rounded-full border-2 border-background animate-in zoom-in duration-300" />
+            )}
+          </div>
           <span className="hidden lg:inline">{session.user.name || "Account"}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-popover border-border">
-        <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent" asChild>
-          <Link href="/account/profile">My Account</Link>
+        <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent flex items-center justify-between" asChild>
+          <Link href="/account/profile">
+            <span>My Account</span>
+            {hasAnyNotification && (
+              <span className="w-2 h-2 bg-red-600 rounded-full ml-2" />
+            )}
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="text-popover-foreground hover:bg-accent focus:bg-accent" asChild>
           <Link href="/account/orders">Orders</Link>

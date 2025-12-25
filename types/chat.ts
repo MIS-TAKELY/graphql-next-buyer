@@ -20,5 +20,6 @@ export interface LocalMessage {
   senderId?: string;
   timestamp: Date;
   status?: "sending" | "sent" | "failed";
+  isRead?: boolean;
   attachments?: MessageAttachment[];
 }

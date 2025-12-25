@@ -24,6 +24,7 @@ function BuyNowPageInner() {
   const searchParams = useSearchParams();
   const productSlug = searchParams.get("product");
   const quantity = parseInt(searchParams.get("quantity") || "1");
+  const variantId = searchParams.get("variant"); // NEW: Get variant ID
   const isFromCart = searchParams.get("from") === "cart"; // NEW: Detect cart mode
 
   // eSewa callback parameters (unchanged)
@@ -89,10 +90,14 @@ function BuyNowPageInner() {
       return subtotal + shipping + tax;
     }
     if (!product || !product.variants) return 0;
-    const defaultVariant =
-      product.variants.find((v: any) => v.isDefault) || product.variants[0];
-    if (!defaultVariant) return 0;
-    const subtotal = defaultVariant.price * quantity;
+
+    // Use selected variant if available, otherwise default
+    const selectedVariant = variantId
+      ? product.variants.find((v: any) => v.id === variantId)
+      : (product.variants.find((v: any) => v.isDefault) || product.variants[0]);
+
+    if (!selectedVariant) return 0;
+    const subtotal = selectedVariant.price * quantity;
     const shipping = 0;
     const tax = 0;
     return subtotal + shipping + tax;
@@ -103,6 +108,12 @@ function BuyNowPageInner() {
   console.log("Cart items-->", cartItems);
 
   // UPDATED: Map cart items to OrderItem[] for OrderSummary (if from cart)
+  const selectedVariant = !isFromCart && product?.variants
+    ? (variantId
+      ? product.variants.find((v: any) => v.id === variantId)
+      : (product.variants.find((v: any) => v.isDefault) || product.variants[0]))
+    : null;
+
   const orderItemsForSummary = isFromCart
     ? cartItems.map((cartItem: ICartItem) => ({
       id: cartItem.id,
@@ -123,22 +134,11 @@ function BuyNowPageInner() {
       {
         id: product?.id || "",
         quantity,
-        price:
-          product?.variants?.find((v: any) => v.isDefault)?.price ||
-          product?.variants?.[0]?.price ||
-          0,
+        price: selectedVariant?.price || 0,
         variant: {
-          id:
-            product?.variants?.find((v: any) => v.isDefault)?.id ||
-            product?.variants?.[0]?.id ||
-            "1",
-          price:
-            product?.variants?.find((v: any) => v.isDefault)?.price ||
-            product?.variants?.[0]?.price ||
-            0,
-          attributes:
-            product?.variants?.find((v: any) => v.isDefault)?.attributes ||
-            product?.variants?.[0]?.attributes,
+          id: selectedVariant?.id || "1",
+          price: selectedVariant?.price || 0,
+          attributes: selectedVariant?.attributes,
           product: {
             name: product?.name || "",
             images: product?.images || [],
@@ -268,9 +268,11 @@ function BuyNowPageInner() {
                   });
                 } else {
                   // Existing single-product logic
-                  const defaultVariant =
-                    product.variants?.find((v: any) => v.isDefault) ||
-                    product.variants?.[0];
+                  // Use selected variant if available, otherwise default
+                  const selectedVariant = variantId
+                    ? product.variants?.find((v: any) => v.id === variantId)
+                    : (product.variants?.find((v: any) => v.isDefault) || product.variants?.[0]);
+
                   handlePaymentSubmit({
                     ...paymentData,
                     paymentProvider:
@@ -280,7 +282,7 @@ function BuyNowPageInner() {
                           ? "ESEWA"
                           : paymentData.method,
                     paymentMethodId: selectedPaymentMethod?.id ?? null,
-                    variantId: defaultVariant?.id,
+                    variantId: selectedVariant?.id,
                     quantity,
                     shippingMethod: "STANDARD",
                   });

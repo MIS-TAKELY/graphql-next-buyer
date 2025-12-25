@@ -8,6 +8,8 @@ import { useQuery } from "@apollo/client";
 import { useMemo, useState } from "react";
 import OrderItem, { GetMyOrderItemsResponse } from "./OrderItem";
 import OrderItemSkeleton from "./OrderItemSkeleton";
+import { useNotificationStore } from "@/store/notificationStore";
+import { useEffect } from "react";
 
 const SKELETONS = Array.from({ length: 2 });
 const PAGE_SIZE = 5; // number of orders per page
@@ -27,6 +29,19 @@ export default function OrdersSection() {
     () => data?.getMyOrderItems ?? [],
     [data?.getMyOrderItems]
   );
+
+  const { setLastSeenOrderUpdate } = useNotificationStore();
+
+  useEffect(() => {
+    if (orders.length > 0) {
+      const latestOrderUpdate = orders.reduce((latest: string, order: any) => {
+        return !latest || new Date(order.updatedAt) > new Date(latest) ? order.updatedAt : latest;
+      }, "");
+      if (latestOrderUpdate) {
+        setLastSeenOrderUpdate(latestOrderUpdate);
+      }
+    }
+  }, [orders, setLastSeenOrderUpdate]);
 
   if (error) {
     return <div className="text-red-500">Failed to load orders</div>;

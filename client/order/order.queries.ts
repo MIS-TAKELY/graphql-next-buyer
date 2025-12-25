@@ -6,6 +6,7 @@ export const GET_MY_ORDER_ITEMS = gql`
       id
       orderNumber
       createdAt
+      updatedAt
       total
       status
       shippingSnapshot
@@ -18,6 +19,7 @@ export const GET_MY_ORDER_ITEMS = gql`
           id
           sku
           price
+          attributes
           product {
             id
             name

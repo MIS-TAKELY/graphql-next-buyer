@@ -80,12 +80,50 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleAttributeSelect = useCallback((key: string, value: string) => {
-    setSelectedAttributes((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  }, []);
+  const handleAttributeSelect = useCallback(
+    (key: string, value: string) => {
+      // 1. Construct new potential attributes based on user selection
+      const newAttributes = {
+        ...selectedAttributes,
+        [key]: value,
+      };
+
+      // 2. Check if this exact combination exists in any variant
+      const exactMatch = (product?.variants as IProductVarient[]).find(
+        (variant) => {
+          if (!variant.attributes) return false;
+          return Object.entries(newAttributes).every(
+            ([k, v]) => variant.attributes[k] === v
+          );
+        }
+      );
+
+      if (exactMatch) {
+        // Perfect match found, update state normally
+        setSelectedAttributes(newAttributes);
+      } else {
+        // 3. No exact match - "Smart Switch" logic
+        // Find ANY variant that has the *newly selected* attribute value.
+        // This prevents the "silent fallback to default" issue.
+        const bestMatch = (product?.variants as IProductVarient[]).find(
+          (variant) => variant.attributes?.[key] === value
+        );
+
+        if (bestMatch && bestMatch.attributes) {
+          // Switch to this variant's full attributes to ensure a valid state
+          const validAttributes: Record<string, string> = {};
+          Object.entries(bestMatch.attributes).forEach(([k, v]) => {
+            if (typeof v === "string") validAttributes[k] = v;
+          });
+          setSelectedAttributes(validAttributes);
+        } else {
+          // Should rarely happen if UI options are valid
+          setSelectedAttributes(newAttributes);
+        }
+      }
+    },
+    [product?.variants, selectedAttributes]
+  );
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 

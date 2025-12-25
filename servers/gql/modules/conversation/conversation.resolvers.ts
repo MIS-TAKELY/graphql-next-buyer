@@ -36,13 +36,32 @@ export const conversationResolvers = {
               avatarImageUrl: true,
             },
           },
-          messages: {
-            take: 1, // Only need to check existence, messages fetched separately
+        },
+      });
+
+      if (!conversation) return null;
+
+      const participantRaw = await prisma.conversationParticipant.findUnique({
+        where: {
+          conversationId_userId: {
+            conversationId: conversation.id,
+            userId: user.id,
           },
         },
       });
 
-      return conversation;
+      const unreadCount = await prisma.message.count({
+        where: {
+          conversationId: conversation.id,
+          senderId: { not: user.id },
+          isRead: false,
+        },
+      });
+
+      return {
+        ...conversation,
+        unreadCount,
+      };
     },
     conversations: async (
       _parent: any,
@@ -76,6 +95,9 @@ export const conversationResolvers = {
               avatarImageUrl: true,
             },
           },
+          ConversationParticipant: {
+            where: { userId: user.id },
+          },
           messages: {
             include: {
               sender: {
@@ -95,14 +117,67 @@ export const conversationResolvers = {
       });
 
       // Transform to match the schema
-      return conversations.map((conv: any) => ({
-        ...conv,
-        lastMessage: conv.messages?.[0],
-        unreadCount: 0, // Placeholder, can be implemented later
-      }));
+      const conversationsWithUnread = await Promise.all(
+        conversations.map(async (conv: any) => {
+          const participant = conv.ConversationParticipant?.[0];
+          const unreadCount = await prisma.message.count({
+            where: {
+              conversationId: conv.id,
+              senderId: { not: user.id },
+              isRead: false,
+            },
+          });
+
+          return {
+            ...conv,
+            lastMessage: conv.messages?.[0],
+            unreadCount,
+          };
+        })
+      );
+
+      return conversationsWithUnread;
     },
   },
   Mutation: {
+    markAsRead: async (
+      _parent: any,
+      { conversationId }: { conversationId: string },
+      { prisma, user }: GraphQLContext
+    ) => {
+      if (!user) throw new Error("Unauthorized");
+
+      await prisma.conversationParticipant.upsert({
+        where: {
+          conversationId_userId: {
+            conversationId,
+            userId: user.id,
+          },
+        },
+        update: {
+          lastReadAt: new Date(),
+        },
+        create: {
+          conversationId,
+          userId: user.id,
+          lastReadAt: new Date(),
+        },
+      });
+
+      // Mark individual messages as read too
+      await prisma.message.updateMany({
+        where: {
+          conversationId,
+          senderId: { not: user.id },
+          isRead: false,
+        },
+        data: {
+          isRead: true,
+        },
+      });
+
+      return true;
+    },
     createConversation: async (
       _parent: any,
       { input }: { input: { productId: string } },

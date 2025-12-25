@@ -18,6 +18,7 @@ interface BuyNowButtonProps {
   children?: React.ReactNode;
   onClick?: () => void;
   isFromCart: boolean;
+  variantId?: string;
 }
 
 export function BuyNowButton({
@@ -33,6 +34,7 @@ export function BuyNowButton({
   children,
   onClick,
   isFromCart,
+  variantId,
 }: BuyNowButtonProps) {
   const router = useRouter();
 
@@ -51,6 +53,9 @@ export function BuyNowButton({
         product: productSlug,
         quantity: quantity.toString(),
       });
+      if (variantId) {
+        searchParams.append("variant", variantId);
+      }
       router.push(`/buy-now?${searchParams.toString()}`);
     }
   }, [disabled, inStock, productSlug, quantity, router, onClick, isFromCart]);

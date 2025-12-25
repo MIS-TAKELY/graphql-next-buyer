@@ -457,7 +457,7 @@ export const orderResolvers = {
         return createdOrders;
       } catch (error: any) {
         console.error("Error while creating orders:", error.message);
-        throw new Error("Failed to create orders");
+        throw new Error(error.message || "Failed to create orders");
       }
     },
     cancelOrder: async (

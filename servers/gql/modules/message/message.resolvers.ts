@@ -242,6 +242,7 @@ export const messageResolvers = {
           console.log(`[BACKEND] 👥 All participant user IDs:`, Array.from(participantIds));
           console.log(`[BACKEND] 🔑 Current user ID:`, user.id);
 
+          const userEmits: Promise<void>[] = [];
           for (const userId of participantIds) {
             if (!userId || userId === user.id) {
               console.log(`[BACKEND] ⏭️  Skipping user ID: ${userId} (${userId === user.id ? 'is sender' : 'invalid'})`);
@@ -249,17 +250,19 @@ export const messageResolvers = {
             }
             console.log(`[BACKEND] 📤 Publishing message to user channel: user:${userId}`);
 
-            // We don't await this one to avoid slowing down the response too much if one fails
-            realtime
-              .channel(`user:${userId}`)
-              .emit("message.newMessage", realtimePayload)
-              .catch((error) => {
-                console.error(
-                  `[BACKEND] ⚠️ Failed to publish user-level message notification for ${userId}:`,
-                  error
-                );
-              });
+            userEmits.push(
+              realtime
+                .channel(`user:${userId}`)
+                .emit("message.newMessage", realtimePayload)
+                .catch((error) => {
+                  console.error(
+                    `[BACKEND] ⚠️ Failed to publish user-level message notification for ${userId}:`,
+                    error
+                  );
+                })
+            );
           }
+          await Promise.all(userEmits);
         } catch (error) {
           console.error('[BACKEND] ⚠️ Realtime publishing failed (non-fatal):', error);
           // We continue execution so the message is still returned to the user

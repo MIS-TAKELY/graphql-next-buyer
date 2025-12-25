@@ -104,7 +104,7 @@ export const productResolvers = {
 
       const start = Date.now();
       const product = await prisma.product.findUnique({
-        where: { slug },
+        where: { slug, status: "ACTIVE" },
         include: {
           seller: { select: { id: true, firstName: true, lastName: true } },
           variants: {
@@ -465,7 +465,7 @@ export const productResolvers = {
       if (resultIds.length === 0) return [];
 
       const products = await prisma.product.findMany({
-        where: { id: { in: resultIds } },
+        where: { id: { in: resultIds }, status: "ACTIVE" },
         include: {
           variants: {
             select: {
