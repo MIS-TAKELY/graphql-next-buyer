@@ -196,7 +196,7 @@ export default function UnifiedAuth() {
         // Validate phone number format
         const phoneRegex = /^\+?[1-9]\d{1,14}$/;
         if (!phone || !phoneRegex.test(phone)) {
-            toast.error("Please enter a valid phone number (e.g., +9779812345678)");
+            toast.error("Please enter a valid phone number (e.g., 9812345678)");
             return;
         }
 
@@ -483,7 +483,7 @@ export default function UnifiedAuth() {
             <form onSubmit={sendOtp} className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="phone">WhatsApp Number</Label>
-                    <Input id="phone" type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g. +9779812345678" />
+                    <Input id="phone" type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="e.g. 9812345678" />
                 </div>
                 <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white" disabled={loading}>
                     {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
