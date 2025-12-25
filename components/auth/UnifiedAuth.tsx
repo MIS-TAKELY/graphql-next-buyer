@@ -450,9 +450,6 @@ export default function UnifiedAuth() {
                 Please click the link in the email to verify your account.
             </p>
             <div className="space-y-4">
-                <Button onClick={() => setStep("PHONE_NUMBER")} className="w-full">
-                    Continue to Phone Verification
-                </Button>
                 <div className="flex flex-col gap-2">
                     <button
                         onClick={handleResendVerification}
