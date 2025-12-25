@@ -31,10 +31,14 @@ export default function UnifiedAuth() {
     useEffect(() => {
         if (!isPending && session) {
             if (!(session.user as any).phoneVerified) {
-                setStep("PHONE_NUMBER");
+                // Only set to PHONE_NUMBER if we're not already in the OTP verification flow
+                // This prevents the OTP page from disappearing when users switch to WhatsApp
+                if (step !== "PHONE_OTP") {
+                    setStep("PHONE_NUMBER");
+                }
             }
         }
-    }, [session, isPending]);
+    }, [session, isPending, step]);
 
     // Timer for OTP
     useEffect(() => {
