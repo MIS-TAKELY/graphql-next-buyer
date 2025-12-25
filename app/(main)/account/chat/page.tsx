@@ -9,5 +9,9 @@ export default async function ChatPage() {
         fetchPolicy: "no-cache",
     });
 
-    return <ChatLayout userId={data?.getUserProfileDetails?.id} />;
+    return (
+        <div className="h-full">
+            <ChatLayout userId={data?.getUserProfileDetails?.id} />
+        </div>
+    );
 }

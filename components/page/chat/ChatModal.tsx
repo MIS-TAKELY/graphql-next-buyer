@@ -46,12 +46,16 @@ export function ChatModal({
   const [inputValue, setInputValue] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Auto scroll
   useEffect(() => {
-    if (open && scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    if (!open || !scrollAreaRef.current) return;
+
+    const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+    if (viewport) {
+      viewport.scrollTop = viewport.scrollHeight;
     }
   }, [messages, open]);
 
@@ -113,7 +117,7 @@ export function ChatModal({
 
         {/* Messages Area */}
         <div className="flex-1 overflow-hidden relative bg-slate-50 dark:bg-slate-950/50">
-          <ScrollArea className="h-full w-full">
+          <ScrollArea ref={scrollAreaRef} className="h-full w-full">
             <div className="p-4 flex flex-col gap-4 min-h-full justify-end">
               {isLoading && messages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-10 gap-2 text-muted-foreground">

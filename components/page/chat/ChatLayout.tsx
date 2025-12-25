@@ -49,6 +49,9 @@ export function ChatLayout({ userId }: ChatLayoutProps) {
         initializeChat,
         handleSend: onSend,
         isLoading: loadingChat,
+        isLoadingMore,
+        hasMore,
+        loadMoreMessages,
         error: chatError,
     } = useRealChat(selectedChat?.product?.id, selectedChat?.id, refetchConversations);
 
@@ -68,7 +71,7 @@ export function ChatLayout({ userId }: ChatLayoutProps) {
     };
 
     return (
-        <div className="flex h-[calc(100vh-8rem)] w-full max-w-7xl mx-auto border rounded-xl overflow-hidden shadow-sm bg-background">
+        <div className="flex h-[calc(100vh-280px)] min-h-[500px] w-full max-w-7xl mx-auto border rounded-xl overflow-hidden shadow-sm bg-background">
             {/* Sidebar / List */}
             <div
                 className={`${showList ? "block" : "hidden"
@@ -87,7 +90,7 @@ export function ChatLayout({ userId }: ChatLayoutProps) {
             {/* Main Chat Window */}
             <div
                 className={`${showChat ? "flex" : "hidden"
-                    } flex-1 flex-col min-w-0 bg-white dark:bg-slate-950`}
+                    } flex flex-1 flex-col min-w-0 bg-white dark:bg-slate-950`}
             >
                 {selectedChat ? (
                     <ChatWindow
@@ -99,6 +102,9 @@ export function ChatLayout({ userId }: ChatLayoutProps) {
                         } as any}
                         messages={activeMessages}
                         isLoading={loadingChat}
+                        isLoadingMore={isLoadingMore}
+                        hasMore={hasMore}
+                        onLoadMore={loadMoreMessages}
                         error={chatError}
                         onSend={onSend}
                         onBack={handleBack}

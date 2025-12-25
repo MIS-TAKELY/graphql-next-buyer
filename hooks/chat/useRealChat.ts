@@ -56,6 +56,8 @@ export const useRealChat = (
     const [conversationId, setConversationId] = useState<string | null>(initialConversationId || null);
     const [messages, setMessages] = useState<LocalMessage[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [hasShownError, setHasShownError] = useState(false);
 
@@ -97,6 +99,8 @@ export const useRealChat = (
             setMessages([]);
             setError(null);
             setIsLoading(false);
+            setIsLoadingMore(false);
+            setHasMore(true);
             setHasShownError(false);
             hasInitializedRef.current = false;
         }
@@ -255,9 +259,9 @@ export const useRealChat = (
             setConversationId(convId);
             hasInitializedRef.current = true;
 
-            // Initial load
+            // Initial load - fetch last 20 messages
             const { data: msgData } = await fetchMessages({
-                variables: { conversationId: convId, limit: 50, offset: 0 },
+                variables: { conversationId: convId, limit: 20, offset: 0 },
             });
 
             if (msgData?.messages) {
@@ -267,6 +271,8 @@ export const useRealChat = (
                         (a: any, b: any) => a.timestamp.getTime() - b.timestamp.getTime()
                     )
                 );
+                // If we got fewer than 20 messages, there's no more to load
+                setHasMore(msgData.messages.length >= 20);
             }
         } catch (e: any) {
             console.error(e);
@@ -288,6 +294,37 @@ export const useRealChat = (
     ]);
 
     // Polling removed as per user request
+
+    const loadMoreMessages = useCallback(async () => {
+        if (!conversationId || isLoadingMore || !hasMore) return;
+
+        try {
+            setIsLoadingMore(true);
+            const currentOffset = messages.length;
+
+            const { data: msgData } = await fetchMessages({
+                variables: { conversationId, limit: 20, offset: currentOffset },
+            });
+
+            if (msgData?.messages && msgData.messages.length > 0) {
+                const normalized = msgData.messages.map(normalizeMessage);
+                setMessages((prev) => {
+                    const combined = [...normalized, ...prev];
+                    return combined.sort(
+                        (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
+                    );
+                });
+                // If we got fewer than 20 messages, there's no more to load
+                setHasMore(msgData.messages.length >= 20);
+            } else {
+                setHasMore(false);
+            }
+        } catch (e: any) {
+            console.error("Failed to load more messages:", e);
+        } finally {
+            setIsLoadingMore(false);
+        }
+    }, [conversationId, isLoadingMore, hasMore, messages.length, fetchMessages, normalizeMessage]);
 
     const handleSend = useCallback(
         async (text: string, files: File[] = []) => {
@@ -416,6 +453,9 @@ export const useRealChat = (
         initializeChat,
         handleSend,
         isLoading,
+        isLoadingMore,
+        hasMore,
+        loadMoreMessages,
         error,
     };
 };
