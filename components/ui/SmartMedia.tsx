@@ -42,11 +42,7 @@ export default function SmartMedia({
 
     const isVideo = explicitIsVideo ?? isVideoUrl;
 
-    // Check for optimized providers (Cloudinary, Unsplash)
-    // We want to skip Next.js optimization for these to avoid double-optimization timeouts
-    const isCloudinary = src && src.includes("res.cloudinary.com");
-    const isUnsplash = src && src.includes("images.unsplash.com");
-    const shouldUnoptimize = !!(isCloudinary || isUnsplash);
+
 
     useEffect(() => {
         // Reset error when src changes
@@ -115,7 +111,7 @@ export default function SmartMedia({
                 alt={alt || "Media"}
                 className={cn("object-cover", className)}
                 fill={fill}
-                unoptimized={shouldUnoptimize} // Critical optimization fix
+                unoptimized={false}
                 onError={() => setError(true)}
                 priority={priority}
                 {...props}
