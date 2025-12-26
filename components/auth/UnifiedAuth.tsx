@@ -84,6 +84,7 @@ export default function UnifiedAuth() {
                     toast.error(errorMessage);
                 }
             } else {
+                router.refresh()
                 router.push("/")
                 toast.success("Signed in successfully");
                 await refetch();
@@ -123,7 +124,7 @@ export default function UnifiedAuth() {
             const firstName = nameParts[0] || "";
             const lastName = nameParts.slice(1).join(" ") || "";
 
-            const { error } = await signUp.email({
+            const { error, data } = await signUp.email({
                 email,
                 password,
                 name: name.trim(),
@@ -139,9 +140,16 @@ export default function UnifiedAuth() {
                     toast.error(errorMessage);
                 }
             } else {
-                toast.success("Account created! Please check your email for verification.");
-                setStep("EMAIL_SENT");
-                await refetch();
+                if (data?.token) {
+                    router.refresh()
+                    router.push("/")
+                    toast.success("Account created! Signed in successfully.");
+                    await refetch();
+                } else {
+                    toast.success("Account created! Please check your email for verification.");
+                    setStep("EMAIL_SENT");
+                    await refetch();
+                }
             }
         } catch (err: any) {
             console.error("Sign up error:", err);

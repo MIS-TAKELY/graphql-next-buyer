@@ -55,26 +55,45 @@ export function SSRApolloProvider({
           });
         }
 
-        // Write products (most important for your case)
-        if (initialData.products && Array.isArray(initialData.products)) {
-          let productsToCache = [...initialData.products];
+        // Write products
+        const productsArray = Array.isArray(initialData.products) ? initialData.products : [];
+        let productsToCache = [...productsArray];
 
-          // If we have a current product that's not in the products array, add it
-          if (initialData.currentProduct) {
-            const productExists = productsToCache.some(
-              (p) => p.id === initialData.currentProduct.id
-            );
-            if (!productExists) {
-              productsToCache.push(initialData.currentProduct);
+        // If we have a current product, ensure it's in the cache for multiple queries
+        if (initialData.currentProduct) {
+          const product = initialData.currentProduct;
+
+          // 1. Write to GET_PRODUCT_BY_SLUG for the detail page
+          if (product.slug) {
+            try {
+              client.cache.writeQuery({
+                query: require("@/client/product/product.queries").GET_PRODUCT_BY_SLUG,
+                variables: { slug: product.slug },
+                data: { getProductBySlug: product },
+              });
+            } catch (e) {
+              console.error("Error writing current product to GET_PRODUCT_BY_SLUG:", e);
             }
           }
 
-          client.cache.writeQuery({
-            query: require("@/client/product/product.queries").GET_PRODUCTS,
-            data: { getProducts: productsToCache },
-          });
+          // 2. Also ensure it's in the main products list if we're hydrating that
+          if (productsArray.length > 0) {
+            const productExists = productsToCache.some((p) => p.id === product.id);
+            if (!productExists) {
+              productsToCache.push(product);
+            }
+          }
+        }
 
-          // console.log(`✅ Cached ${productsToCache.length} products`);
+        if (productsToCache.length > 0) {
+          try {
+            client.cache.writeQuery({
+              query: require("@/client/product/product.queries").GET_PRODUCTS,
+              data: { getProducts: productsToCache },
+            });
+          } catch (e) {
+            console.error("Error writing products to GET_PRODUCTS:", e);
+          }
         }
       } catch (error) {
         console.error("❌ Error hydrating Apollo cache:", error);
