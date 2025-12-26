@@ -60,22 +60,32 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
     }
   }
 
-  // Combine attributes and specifications
-  // Priority: Product Specs -> Variant Specs -> Variant Attributes
-  const combinedData = [
-    ...productSpecs.map((spec) => ({
-      key: spec.key,
-      value: spec.value,
-    })),
-    ...filteredSpecifications.map((spec) => ({
-      key: spec.key,
-      value: spec.value,
-    })),
-    ...filteredAttributes.map(([key, value]) => ({
-      key,
-      value: value?.toString?.() ?? "-",
-    })),
-  ];
+  // Combine attributes and specifications with de-duplication
+  // Priority: Variant Attributes -> Variant Specs -> Product Specs
+  // We use a Map to ensure unique keys, with later entries overwriting earlier ones.
+  // So we add them in REVERSE priority order.
+
+  const specsMap = new Map<string, string>();
+
+  // 1. Lowest priority: Filtered Attributes
+  filteredAttributes.forEach(([key, value]) => {
+    specsMap.set(key, value?.toString?.() ?? "-");
+  });
+
+  // 2. Medium priority: Filtered Specifications (Variant level)
+  filteredSpecifications.forEach((spec) => {
+    specsMap.set(spec.key, spec.value?.toString?.() ?? "-");
+  });
+
+  // 3. Highest priority: Product Specs (Table from Admin)
+  productSpecs.forEach((spec) => {
+    specsMap.set(spec.key, spec.value);
+  });
+
+  const combinedData = Array.from(specsMap.entries()).map(([key, value]) => ({
+    key,
+    value,
+  }));
 
   const [showAll, setShowAll] = useState(false);
   const visibleData = showAll ? combinedData : combinedData.slice(0, 5);
