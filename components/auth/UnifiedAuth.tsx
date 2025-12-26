@@ -36,9 +36,11 @@ export default function UnifiedAuth() {
                 if (step !== "PHONE_OTP") {
                     setStep("PHONE_NUMBER");
                 }
+            } else {
+                router.push("/");
             }
         }
-    }, [session, isPending, step]);
+    }, [session, isPending, step, router]);
 
     // Timer for OTP
     useEffect(() => {

@@ -15,10 +15,11 @@ const DynamicSections = dynamic(
   () => import("@/components/page/home/DynamicSections")
 );
 
-import HeroCarouselSkeleton from "@/components/page/home/HeroCarouselSkeleton";
-import CategorySectionSkeleton from "@/components/page/home/CategorySectionSkeleton";
+import {
+  LandingPageProductGridSkeleton,
+  PlainProductCardSkeleton,
+} from "@/components/landingPage/LandingPageSkeletons";
 import { ProductCardSkeleton } from "@/components/page/home/ProductCardSkeleton";
-import { PlainProductCardSkeleton, LandingPageProductGridSkeleton } from "@/components/landingPage/LandingPageSkeletons";
 
 import { Metadata } from "next";
 
@@ -50,8 +51,9 @@ export default function HomePage() {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"
-          }/shop/search?q={search_term_string}`,
+        urlTemplate: `${
+          process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"
+        }/shop/search?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },
@@ -63,17 +65,29 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ProductCatagoryCardSection />
-      <HeroCarousel />
-
+      <ProductCatagoryCardSection />{" "}
+      {/* can be contrlled by admin if data in database is set in con: Smartphone,
+        name: "Electronics",
+        count: "2,500+ items",
+        color: "from-blue-500 to-purple-600",
+        darkColor: "from-blue-600 to-purple-700",
+     this format
+    */}
+      <HeroCarousel />{" "}
+      {/* can be contrlled by admin if data in database is set in con: Smartphone,
+        id: 1,
+        image: festivalSale,
+        title: "Festival Sale",
+        subtitle: "Up to 70% Off",
+        description: "Biggest sale of the year on all categories",
+     this format
+    */}
       <Suspense fallback={<MainSkeleton />}>
         <Main />
       </Suspense>
-
       <Suspense fallback={<ProductSectionsSkeleton />}>
         <HomeProductSections />
       </Suspense>
-
       {/* Comparison Button Bar - Floating */}
       <CompareFloater />
     </div>
@@ -83,7 +97,8 @@ export default function HomePage() {
 async function HomeProductSections() {
   const client = await getServerApolloClient();
   const CACHE_KEY = CacheService.getProductsListKey();
-  let products: TProduct[] = (await CacheService.get<TProduct[]>(CACHE_KEY)) || [];
+  let products: TProduct[] =
+    (await CacheService.get<TProduct[]>(CACHE_KEY)) || [];
 
   if (products.length === 0) {
     try {
@@ -178,7 +193,13 @@ function ProductSectionsSkeleton() {
         <section key={idx} className="mb-8 xs:mb-10 sm:mb-12 md:mb-16">
           <div className="container-custom">
             <div className="h-8 w-64 bg-secondary/20 rounded animate-pulse mb-4 sm:mb-6 px-1" />
-            <div className={idx === 0 ? "flex gap-3 xs:gap-4 sm:gap-5 md:gap-6 overflow-x-auto pb-4 sm:pb-6 horizontal-scroll scrollbar-hide" : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6"}>
+            <div
+              className={
+                idx === 0
+                  ? "flex gap-3 xs:gap-4 sm:gap-5 md:gap-6 overflow-x-auto pb-4 sm:pb-6 horizontal-scroll scrollbar-hide"
+                  : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6"
+              }
+            >
               {[...Array(section.count)].map((_, i) => (
                 <div key={i} className={idx === 0 ? "flex-none w-[220px]" : ""}>
                   <ProductCardSkeleton />
