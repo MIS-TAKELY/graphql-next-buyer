@@ -6,7 +6,7 @@ import { CacheService } from "@/services/CacheService";
 import { TProduct } from "@/types/product";
 import { Metadata, ResolvingMetadata } from "next";
 
-export const revalidate = 3600;
+export const revalidate = 0;
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -90,8 +90,10 @@ export default async function ProductPage({
   const CACHE_KEY = CacheService.getProductDetailKey(slug);
 
   try {
+    /*
     // 1. Try Cache First
     product = await CacheService.get<TProduct>(CACHE_KEY);
+    */
 
     // 2. If not in Cache, fetch from DB
     if (!product) {

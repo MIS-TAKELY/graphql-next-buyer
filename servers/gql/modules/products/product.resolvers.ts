@@ -97,10 +97,12 @@ export const productResolvers = {
 
       console.log("request reciebed------------", slug)
 
+      /*
       if (cached) {
         console.log(`⚡ Returning product ${slug} from Redis`);
         return cached;
       }
+      */
 
       console.log("returning from database");
 

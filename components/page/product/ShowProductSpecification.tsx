@@ -12,6 +12,7 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
   defaultVariant,
   productSpecificationTable = [],
 }) => {
+  console.log("ShowProductSpecification - productSpecificationTable:", productSpecificationTable);
   const attributes = defaultVariant?.attributes || {};
   const specifications = defaultVariant?.specifications || [];
 
@@ -31,9 +32,33 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
   );
 
   // Parse product specification table if it's not an array (just in case)
-  const productSpecs = Array.isArray(productSpecificationTable)
-    ? productSpecificationTable
-    : [];
+  // Parse product specification table
+  // Admin saves it as { headers: string[], rows: string[][] }
+  let productSpecs: Array<{ key: string; value: string }> = [];
+
+  if (productSpecificationTable) {
+    if (Array.isArray(productSpecificationTable)) {
+      // Legacy or simple format
+      productSpecs = productSpecificationTable;
+    } else if (typeof productSpecificationTable === 'object') {
+      // Table format from Admin: { headers, rows }
+      const tableData = productSpecificationTable as any;
+      if (Array.isArray(tableData.rows)) {
+        productSpecs = tableData.rows.map((row: string[]) => {
+          // Assume 2-column format: [Feature, Value]
+          const key = row[0] || "Feature";
+          const value = row.slice(1).join(" ") || "-";
+          return { key, value };
+        }).filter((item: any) => item.key && item.key.trim() !== "");
+      } else {
+        // Simple Object format: { Key: Value }
+        productSpecs = Object.entries(tableData).map(([key, value]) => ({
+          key: key,
+          value: value?.toString?.() ?? "-",
+        }));
+      }
+    }
+  }
 
   // Combine attributes and specifications
   // Priority: Product Specs -> Variant Specs -> Variant Attributes
@@ -70,8 +95,8 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
               <tr
                 key={index}
                 className={`${index % 2 === 0
-                    ? "bg-gray-50 dark:bg-gray-800/50"
-                    : "bg-white dark:bg-gray-900"
+                  ? "bg-gray-50 dark:bg-gray-800/50"
+                  : "bg-white dark:bg-gray-900"
                   }`}
               >
                 <td className="px-4 py-2 font-medium text-gray-900 dark:text-gray-100 capitalize w-1/3">
