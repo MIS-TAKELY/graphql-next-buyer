@@ -206,7 +206,10 @@ const ProductInfo = memo(function ProductInfo({
       />
 
       {/* Specifications Table */}
-      <ShowProductSpecification defaultVariant={defaultVariant} />
+      <ShowProductSpecification
+        defaultVariant={defaultVariant}
+        productSpecificationTable={product.specificationTable}
+      />
 
       {/* 🌟 Seamless Product Highlights (Continuous Stack) */}
       {promotionalImages && promotionalImages.length > 0 && (

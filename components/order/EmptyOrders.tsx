@@ -2,6 +2,7 @@
 
 import { Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const EmptyOrders = () => {
   return (
@@ -13,10 +14,12 @@ const EmptyOrders = () => {
       <p className="text-muted-foreground max-w-sm">
         Start shopping and your orders will appear here!
       </p>
+      <Link href={"/"}>
       <Button variant="outline" className="mt-6 gap-2">
         <Package className="h-4 w-4" />
         Continue Shopping
       </Button>
+      </Link>
     </div>
   );
 };

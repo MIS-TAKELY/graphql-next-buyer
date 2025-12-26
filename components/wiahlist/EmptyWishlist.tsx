@@ -1,4 +1,5 @@
 import { Heart, ShoppingBag } from "lucide-react";
+import Link from "next/link";
 import { Button } from "../ui/button";
 
 const EmptyWishlist = () => {
@@ -11,10 +12,12 @@ const EmptyWishlist = () => {
       <p className="text-muted-foreground max-w-sm">
         Start adding items you love and they'll appear here!
       </p>
-      <Button variant="outline" className="mt-6 gap-2">
-        <ShoppingBag className="h-4 w-4" />
-        Continue Shopping
-      </Button>
+      <Link href={"/"}>
+        <Button variant="outline" className="mt-6 gap-2">
+          <ShoppingBag className="h-4 w-4" />
+          Continue Shopping
+        </Button>
+      </Link>
     </div>
   );
 };

@@ -78,9 +78,10 @@ export interface IProducts {
   images: IProductsImages[];
   reviews: IProductsReview[];
   variants: IProductsVarient[];
-  returnPolicy?: string;
+  returnPolicy?: any; // Using any to match usage or verify type later
   category?: ICategory;
   productOffers?: IProductOffer[];
+  specificationTable?: { key: string; value: string }[];
 }
 export interface IProductVarient extends IProductsVarient {
   stock: string;

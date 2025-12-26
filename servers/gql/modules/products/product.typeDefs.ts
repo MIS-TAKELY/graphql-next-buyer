@@ -14,6 +14,7 @@ export const productTypeDefs = gql`
     FREE_SHIPPING
   }
   scalar DateTime
+  scalar JSON
 
   type Product {
     id: ID!
@@ -39,6 +40,7 @@ export const productTypeDefs = gql`
 
     returnPolicy: [ReturnPolicy!]
     features: [String]
+    specificationTable: JSON
   }
 
   input CreateProductInput {

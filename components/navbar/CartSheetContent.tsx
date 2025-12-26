@@ -3,15 +3,15 @@ import { GET_PRODUCTS_MINIMAL } from "@/client/product/product.queries";
 import { Button } from "@/components/ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useCart } from "@/hooks/cart/useCart";
+import { useSession } from "@/lib/auth-client";
 import { formatPrice } from "@/lib/utils";
 import { useUIStore } from "@/store/uiStore";
 import { useQuery } from "@apollo/client";
-import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
+import { ShoppingCart, Trash2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSession } from "@/lib/auth-client";
 import { useMemo, useState } from "react";
-import QuantitySelector from "../page/product/QuantitySelector";
 
 interface CartItemData {
   id: string;
@@ -45,10 +45,13 @@ export default function CartSheetContent() {
   });
 
   // Fetch items for guest user (if using anonymous cart)
-  const { data: allProductsData, loading: allProductsLoading } = useQuery(GET_PRODUCTS_MINIMAL, {
-    skip: !!userId || !anonymousCart || anonymousCart.length === 0,
-    fetchPolicy: "cache-first",
-  });
+  const { data: allProductsData, loading: allProductsLoading } = useQuery(
+    GET_PRODUCTS_MINIMAL,
+    {
+      skip: !!userId || !anonymousCart || anonymousCart.length === 0,
+      fetchPolicy: "cache-first",
+    }
+  );
 
   const cartItems = useMemo((): CartItemData[] => {
     if (userId) {
@@ -66,22 +69,28 @@ export default function CartSheetContent() {
       // Guest User logic (similar to CartPage)
       if (!anonymousCart || !allProductsData?.getProducts) return [];
 
-      return anonymousCart.map((cartItem) => {
-        const product = allProductsData.getProducts.find((p: any) => p.id === cartItem.variant.product.id);
-        if (!product) return null;
+      return anonymousCart
+        .map((cartItem) => {
+          const product = allProductsData.getProducts.find(
+            (p: any) => p.id === cartItem.variant.product.id
+          );
+          if (!product) return null;
 
-        const variant = product.variants?.find((v: any) => v.id === cartItem.variant.id) || product.variants?.[0];
-        if (!variant) return null;
+          const variant =
+            product.variants?.find((v: any) => v.id === cartItem.variant.id) ||
+            product.variants?.[0];
+          if (!variant) return null;
 
-        return {
-          id: product.id,
-          name: product.name,
-          image: product.images?.[0]?.url || "/placeholder.svg",
-          price: variant.price || "0",
-          variantId: variant.id,
-          quantity: cartItem.quantity || 1,
-        };
-      }).filter((item): item is CartItemData => item !== null);
+          return {
+            id: product.id,
+            name: product.name,
+            image: product.images?.[0]?.url || "/placeholder.svg",
+            price: variant.price || "0",
+            variantId: variant.id,
+            quantity: cartItem.quantity || 1,
+          };
+        })
+        .filter((item): item is CartItemData => item !== null);
     }
   }, [cartData, userId, anonymousCart, allProductsData]);
 
@@ -151,9 +160,11 @@ export default function CartSheetContent() {
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground space-y-4">
             <ShoppingCart className="h-12 w-12 opacity-20" />
             <p>Your cart is empty</p>
-            <Button variant="outline" onClick={() => closeCart()}>
-              Continue Shopping
-            </Button>
+            <Link href={"/"}>
+              <Button variant="outline" onClick={() => closeCart()}>
+                Continue Shopping
+              </Button>
+            </Link>
           </div>
         ) : (
           <div className="space-y-4">
@@ -164,8 +175,9 @@ export default function CartSheetContent() {
               return (
                 <div
                   key={item.id}
-                  className={`flex gap-4 items-start border-b pb-4 transition-opacity ${isRemoving ? "opacity-50" : ""
-                    }`}
+                  className={`flex gap-4 items-start border-b pb-4 transition-opacity ${
+                    isRemoving ? "opacity-50" : ""
+                  }`}
                 >
                   <div className="h-20 w-20 bg-muted rounded-md overflow-hidden relative flex-shrink-0">
                     <Image

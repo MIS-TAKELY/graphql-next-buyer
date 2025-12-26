@@ -5,10 +5,12 @@ interface ShowProductSpecificationProps {
     attributes?: Record<string, string | number | boolean>;
     specifications?: Array<{ key: string; value: string | number }>;
   };
+  productSpecificationTable?: Array<{ key: string; value: string }>;
 }
 
 const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
   defaultVariant,
+  productSpecificationTable = [],
 }) => {
   const attributes = defaultVariant?.attributes || {};
   const specifications = defaultVariant?.specifications || [];
@@ -23,13 +25,23 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
     ([key]) => !excludedKeys.includes(key)
   );
 
-  // Filter specifications if needed (optional — only if you want to exclude specific keys there too)
+  // Filter specifications from variant
   const filteredSpecifications = specifications.filter(
     (spec) => !excludedKeys.includes(spec.key)
   );
 
+  // Parse product specification table if it's not an array (just in case)
+  const productSpecs = Array.isArray(productSpecificationTable)
+    ? productSpecificationTable
+    : [];
+
   // Combine attributes and specifications
+  // Priority: Product Specs -> Variant Specs -> Variant Attributes
   const combinedData = [
+    ...productSpecs.map((spec) => ({
+      key: spec.key,
+      value: spec.value,
+    })),
     ...filteredSpecifications.map((spec) => ({
       key: spec.key,
       value: spec.value,
@@ -57,11 +69,10 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
             {visibleData.map((item, index) => (
               <tr
                 key={index}
-                className={`${
-                  index % 2 === 0
+                className={`${index % 2 === 0
                     ? "bg-gray-50 dark:bg-gray-800/50"
                     : "bg-white dark:bg-gray-900"
-                }`}
+                  }`}
               >
                 <td className="px-4 py-2 font-medium text-gray-900 dark:text-gray-100 capitalize w-1/3">
                   {item.key}
