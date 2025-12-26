@@ -84,6 +84,7 @@ export default function UnifiedAuth() {
                     toast.error(errorMessage);
                 }
             } else {
+                router.push("/")
                 toast.success("Signed in successfully");
                 await refetch();
             }
