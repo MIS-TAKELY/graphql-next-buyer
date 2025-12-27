@@ -1,10 +1,15 @@
 "use client";
 
-import { categories } from "@/data/catagory";
+import { categories as defaultCategories } from "@/data/catagory";
 import Link from "next/link";
 import { memo } from "react";
+import * as Icons from "lucide-react";
 
-const ProductCategoryCardSection = memo(() => {
+type Props = {
+  categories?: any[];
+};
+
+const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Props) => {
   return (
     <section className="bg transition-colors duration-300 w-full py-2">
       <div className="container-custom">
@@ -20,10 +25,9 @@ const ProductCategoryCardSection = memo(() => {
                 min-w-max lg:min-w-0
               "
             >
-              {categories.slice(0, 10).map((category, index) => {
-                const Icon = category.icon;
+              {categories.map((category: any, index: number) => {
                 return (
-                  <Link key={index} href={`/search?q=${category.name}`}>
+                  <Link key={category.id || index} href={`/search?q=${category.categoryName || category.name}`}>
                     <button
                       className="
                         flex flex-col items-center justify-center
@@ -32,7 +36,7 @@ const ProductCategoryCardSection = memo(() => {
                         flex-shrink-0 lg:flex-shrink
                         w-20 xs:w-24 sm:w-28 md:w-24 lg:w-full
                       "
-                      aria-label={`Go to ${category.name} category`}
+                      aria-label={`Go to ${category.categoryName || category.name} category`}
                     >
                       <div
                         className={`
@@ -42,15 +46,27 @@ const ProductCategoryCardSection = memo(() => {
                           flex items-center justify-center
                           shadow-sm group-hover:shadow-lg
                           transition-all duration-200
+                          overflow-hidden
+                          ${!category.image ? 'rounded-none' : ''} 
                         `}
+                      // Note: Added overflow-hidden to clip image if needed, though they are usually icons.
+                      // Removed dynamic icon logic.
                       >
-                        <Icon
-                          className="
-                            text-white
-                            w-5 xs:w-6 sm:w-7 md:w-6 lg:w-7 xl:w-8
-                            h-5 xs:h-6 sm:h-7 md:h-6 lg:h-7 xl:h-8
-                          "
-                        />
+                        {category.image ? (
+                          <img
+                            src={category.image}
+                            alt={category.categoryName}
+                            className="w-full h-full object-cover p-2"
+                          />
+                        ) : (
+                          <Icons.LayoutGrid
+                            className="
+                              text-white
+                              w-5 xs:w-6 sm:w-7 md:w-6 lg:w-7 xl:w-8
+                              h-5 xs:h-6 sm:h-7 md:h-6 lg:h-7 xl:h-8
+                            "
+                          />
+                        )}
                       </div>
                       <h3
                         className="
@@ -62,7 +78,7 @@ const ProductCategoryCardSection = memo(() => {
                           px-0.5
                         "
                       >
-                        {category.name}
+                        {category.categoryName || category.name}
                       </h3>
                       {category.count && (
                         <p

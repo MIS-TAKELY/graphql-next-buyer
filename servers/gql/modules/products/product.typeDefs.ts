@@ -64,6 +64,7 @@ export const productTypeDefs = gql`
     getProductsBySeller(sellerId: ID!): [Product!]!
     getRecentlyViewed: [Product!]!
     getFrequentlyBoughtTogether(productId: ID!, limit: Int): [Product!]!
+    getProductsByIds(ids: [ID!]!): [Product!]!
   }
 
   type Mutation {

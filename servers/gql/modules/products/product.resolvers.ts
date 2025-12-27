@@ -491,6 +491,34 @@ export const productResolvers = {
       // Sort back to the hybrid order (bought together first, then AI/Category)
       const productMap = new Map(products.map(p => [p.id, p]));
       return resultIds.map(id => productMap.get(id)).filter(Boolean);
+    },
+    getProductsByIds: async (_: any, { ids }: { ids: string[] }) => {
+      if (!ids || ids.length === 0) return [];
+
+      const products = await prisma.product.findMany({
+        where: {
+          id: { in: ids },
+          status: "ACTIVE"
+        },
+        include: {
+          variants: {
+            select: {
+              id: true,
+              price: true,
+              sku: true,
+              stock: true,
+              isDefault: true,
+              mrp: true,
+              specifications: true,
+            }
+          },
+          images: true,
+          reviews: { select: { rating: true } },
+          category: true,
+        }
+      });
+
+      return products;
     }
   },
   Mutation: {

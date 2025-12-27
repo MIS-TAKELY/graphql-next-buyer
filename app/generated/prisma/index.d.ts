@@ -223,6 +223,21 @@ export type OrderDispute = $Result.DefaultSelection<Prisma.$OrderDisputePayload>
  * 
  */
 export type RecentlyViewed = $Result.DefaultSelection<Prisma.$RecentlyViewedPayload>
+/**
+ * Model LandingPageCategoryCard
+ * 
+ */
+export type LandingPageCategoryCard = $Result.DefaultSelection<Prisma.$LandingPageCategoryCardPayload>
+/**
+ * Model LandingPageCategorySwiper
+ * 
+ */
+export type LandingPageCategorySwiper = $Result.DefaultSelection<Prisma.$LandingPageCategorySwiperPayload>
+/**
+ * Model LandingPageProductGrid
+ * 
+ */
+export type LandingPageProductGrid = $Result.DefaultSelection<Prisma.$LandingPageProductGridPayload>
 
 /**
  * Enums
@@ -1061,6 +1076,36 @@ export class PrismaClient<
     * ```
     */
   get recentlyViewed(): Prisma.RecentlyViewedDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.landingPageCategoryCard`: Exposes CRUD operations for the **LandingPageCategoryCard** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LandingPageCategoryCards
+    * const landingPageCategoryCards = await prisma.landingPageCategoryCard.findMany()
+    * ```
+    */
+  get landingPageCategoryCard(): Prisma.LandingPageCategoryCardDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.landingPageCategorySwiper`: Exposes CRUD operations for the **LandingPageCategorySwiper** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LandingPageCategorySwipers
+    * const landingPageCategorySwipers = await prisma.landingPageCategorySwiper.findMany()
+    * ```
+    */
+  get landingPageCategorySwiper(): Prisma.LandingPageCategorySwiperDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.landingPageProductGrid`: Exposes CRUD operations for the **LandingPageProductGrid** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LandingPageProductGrids
+    * const landingPageProductGrids = await prisma.landingPageProductGrid.findMany()
+    * ```
+    */
+  get landingPageProductGrid(): Prisma.LandingPageProductGridDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1543,7 +1588,10 @@ export namespace Prisma {
     Account: 'Account',
     Verification: 'Verification',
     OrderDispute: 'OrderDispute',
-    RecentlyViewed: 'RecentlyViewed'
+    RecentlyViewed: 'RecentlyViewed',
+    LandingPageCategoryCard: 'LandingPageCategoryCard',
+    LandingPageCategorySwiper: 'LandingPageCategorySwiper',
+    LandingPageProductGrid: 'LandingPageProductGrid'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1562,7 +1610,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout" | "productQuestion" | "productAnswer" | "session" | "account" | "verification" | "orderDispute" | "recentlyViewed"
+      modelProps: "user" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout" | "productQuestion" | "productAnswer" | "session" | "account" | "verification" | "orderDispute" | "recentlyViewed" | "landingPageCategoryCard" | "landingPageCategorySwiper" | "landingPageProductGrid"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4674,6 +4722,228 @@ export namespace Prisma {
           }
         }
       }
+      LandingPageCategoryCard: {
+        payload: Prisma.$LandingPageCategoryCardPayload<ExtArgs>
+        fields: Prisma.LandingPageCategoryCardFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LandingPageCategoryCardFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategoryCardPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LandingPageCategoryCardFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategoryCardPayload>
+          }
+          findFirst: {
+            args: Prisma.LandingPageCategoryCardFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategoryCardPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LandingPageCategoryCardFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategoryCardPayload>
+          }
+          findMany: {
+            args: Prisma.LandingPageCategoryCardFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategoryCardPayload>[]
+          }
+          create: {
+            args: Prisma.LandingPageCategoryCardCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategoryCardPayload>
+          }
+          createMany: {
+            args: Prisma.LandingPageCategoryCardCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LandingPageCategoryCardCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategoryCardPayload>[]
+          }
+          delete: {
+            args: Prisma.LandingPageCategoryCardDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategoryCardPayload>
+          }
+          update: {
+            args: Prisma.LandingPageCategoryCardUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategoryCardPayload>
+          }
+          deleteMany: {
+            args: Prisma.LandingPageCategoryCardDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LandingPageCategoryCardUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LandingPageCategoryCardUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategoryCardPayload>[]
+          }
+          upsert: {
+            args: Prisma.LandingPageCategoryCardUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategoryCardPayload>
+          }
+          aggregate: {
+            args: Prisma.LandingPageCategoryCardAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLandingPageCategoryCard>
+          }
+          groupBy: {
+            args: Prisma.LandingPageCategoryCardGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LandingPageCategoryCardGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LandingPageCategoryCardCountArgs<ExtArgs>
+            result: $Utils.Optional<LandingPageCategoryCardCountAggregateOutputType> | number
+          }
+        }
+      }
+      LandingPageCategorySwiper: {
+        payload: Prisma.$LandingPageCategorySwiperPayload<ExtArgs>
+        fields: Prisma.LandingPageCategorySwiperFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LandingPageCategorySwiperFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategorySwiperPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LandingPageCategorySwiperFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategorySwiperPayload>
+          }
+          findFirst: {
+            args: Prisma.LandingPageCategorySwiperFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategorySwiperPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LandingPageCategorySwiperFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategorySwiperPayload>
+          }
+          findMany: {
+            args: Prisma.LandingPageCategorySwiperFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategorySwiperPayload>[]
+          }
+          create: {
+            args: Prisma.LandingPageCategorySwiperCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategorySwiperPayload>
+          }
+          createMany: {
+            args: Prisma.LandingPageCategorySwiperCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LandingPageCategorySwiperCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategorySwiperPayload>[]
+          }
+          delete: {
+            args: Prisma.LandingPageCategorySwiperDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategorySwiperPayload>
+          }
+          update: {
+            args: Prisma.LandingPageCategorySwiperUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategorySwiperPayload>
+          }
+          deleteMany: {
+            args: Prisma.LandingPageCategorySwiperDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LandingPageCategorySwiperUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LandingPageCategorySwiperUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategorySwiperPayload>[]
+          }
+          upsert: {
+            args: Prisma.LandingPageCategorySwiperUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageCategorySwiperPayload>
+          }
+          aggregate: {
+            args: Prisma.LandingPageCategorySwiperAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLandingPageCategorySwiper>
+          }
+          groupBy: {
+            args: Prisma.LandingPageCategorySwiperGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LandingPageCategorySwiperGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LandingPageCategorySwiperCountArgs<ExtArgs>
+            result: $Utils.Optional<LandingPageCategorySwiperCountAggregateOutputType> | number
+          }
+        }
+      }
+      LandingPageProductGrid: {
+        payload: Prisma.$LandingPageProductGridPayload<ExtArgs>
+        fields: Prisma.LandingPageProductGridFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LandingPageProductGridFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageProductGridPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LandingPageProductGridFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageProductGridPayload>
+          }
+          findFirst: {
+            args: Prisma.LandingPageProductGridFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageProductGridPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LandingPageProductGridFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageProductGridPayload>
+          }
+          findMany: {
+            args: Prisma.LandingPageProductGridFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageProductGridPayload>[]
+          }
+          create: {
+            args: Prisma.LandingPageProductGridCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageProductGridPayload>
+          }
+          createMany: {
+            args: Prisma.LandingPageProductGridCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LandingPageProductGridCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageProductGridPayload>[]
+          }
+          delete: {
+            args: Prisma.LandingPageProductGridDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageProductGridPayload>
+          }
+          update: {
+            args: Prisma.LandingPageProductGridUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageProductGridPayload>
+          }
+          deleteMany: {
+            args: Prisma.LandingPageProductGridDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LandingPageProductGridUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LandingPageProductGridUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageProductGridPayload>[]
+          }
+          upsert: {
+            args: Prisma.LandingPageProductGridUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LandingPageProductGridPayload>
+          }
+          aggregate: {
+            args: Prisma.LandingPageProductGridAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLandingPageProductGrid>
+          }
+          groupBy: {
+            args: Prisma.LandingPageProductGridGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LandingPageProductGridGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LandingPageProductGridCountArgs<ExtArgs>
+            result: $Utils.Optional<LandingPageProductGridCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4812,6 +5082,9 @@ export namespace Prisma {
     verification?: VerificationOmit
     orderDispute?: OrderDisputeOmit
     recentlyViewed?: RecentlyViewedOmit
+    landingPageCategoryCard?: LandingPageCategoryCardOmit
+    landingPageCategorySwiper?: LandingPageCategorySwiperOmit
+    landingPageProductGrid?: LandingPageProductGridOmit
   }
 
   /* Types for Logging */
@@ -5218,6 +5491,7 @@ export namespace Prisma {
     products: number
     categorySpecification: number
     categoryOffers: number
+    landingPageCategoryCards: number
   }
 
   export type CategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5225,6 +5499,7 @@ export namespace Prisma {
     products?: boolean | CategoryCountOutputTypeCountProductsArgs
     categorySpecification?: boolean | CategoryCountOutputTypeCountCategorySpecificationArgs
     categoryOffers?: boolean | CategoryCountOutputTypeCountCategoryOffersArgs
+    landingPageCategoryCards?: boolean | CategoryCountOutputTypeCountLandingPageCategoryCardsArgs
   }
 
   // Custom InputTypes
@@ -5264,6 +5539,13 @@ export namespace Prisma {
    */
   export type CategoryCountOutputTypeCountCategoryOffersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CategoryOfferWhereInput
+  }
+
+  /**
+   * CategoryCountOutputType without action
+   */
+  export type CategoryCountOutputTypeCountLandingPageCategoryCardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LandingPageCategoryCardWhereInput
   }
 
 
@@ -18139,6 +18421,7 @@ export namespace Prisma {
     products?: boolean | Category$productsArgs<ExtArgs>
     categorySpecification?: boolean | Category$categorySpecificationArgs<ExtArgs>
     categoryOffers?: boolean | Category$categoryOffersArgs<ExtArgs>
+    landingPageCategoryCards?: boolean | Category$landingPageCategoryCardsArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["category"]>
 
@@ -18184,6 +18467,7 @@ export namespace Prisma {
     products?: boolean | Category$productsArgs<ExtArgs>
     categorySpecification?: boolean | Category$categorySpecificationArgs<ExtArgs>
     categoryOffers?: boolean | Category$categoryOffersArgs<ExtArgs>
+    landingPageCategoryCards?: boolean | Category$landingPageCategoryCardsArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18201,6 +18485,7 @@ export namespace Prisma {
       products: Prisma.$ProductPayload<ExtArgs>[]
       categorySpecification: Prisma.$CategorySpecificationPayload<ExtArgs>[]
       categoryOffers: Prisma.$CategoryOfferPayload<ExtArgs>[]
+      landingPageCategoryCards: Prisma.$LandingPageCategoryCardPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -18610,6 +18895,7 @@ export namespace Prisma {
     products<T extends Category$productsArgs<ExtArgs> = {}>(args?: Subset<T, Category$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     categorySpecification<T extends Category$categorySpecificationArgs<ExtArgs> = {}>(args?: Subset<T, Category$categorySpecificationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategorySpecificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     categoryOffers<T extends Category$categoryOffersArgs<ExtArgs> = {}>(args?: Subset<T, Category$categoryOffersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryOfferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    landingPageCategoryCards<T extends Category$landingPageCategoryCardsArgs<ExtArgs> = {}>(args?: Subset<T, Category$landingPageCategoryCardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LandingPageCategoryCardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19155,6 +19441,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CategoryOfferScalarFieldEnum | CategoryOfferScalarFieldEnum[]
+  }
+
+  /**
+   * Category.landingPageCategoryCards
+   */
+  export type Category$landingPageCategoryCardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardInclude<ExtArgs> | null
+    where?: LandingPageCategoryCardWhereInput
+    orderBy?: LandingPageCategoryCardOrderByWithRelationInput | LandingPageCategoryCardOrderByWithRelationInput[]
+    cursor?: LandingPageCategoryCardWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LandingPageCategoryCardScalarFieldEnum | LandingPageCategoryCardScalarFieldEnum[]
   }
 
   /**
@@ -54927,6 +55237,3269 @@ export namespace Prisma {
 
 
   /**
+   * Model LandingPageCategoryCard
+   */
+
+  export type AggregateLandingPageCategoryCard = {
+    _count: LandingPageCategoryCardCountAggregateOutputType | null
+    _avg: LandingPageCategoryCardAvgAggregateOutputType | null
+    _sum: LandingPageCategoryCardSumAggregateOutputType | null
+    _min: LandingPageCategoryCardMinAggregateOutputType | null
+    _max: LandingPageCategoryCardMaxAggregateOutputType | null
+  }
+
+  export type LandingPageCategoryCardAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type LandingPageCategoryCardSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type LandingPageCategoryCardMinAggregateOutputType = {
+    id: string | null
+    categoryId: string | null
+    image: string | null
+    color: string | null
+    darkColor: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LandingPageCategoryCardMaxAggregateOutputType = {
+    id: string | null
+    categoryId: string | null
+    image: string | null
+    color: string | null
+    darkColor: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LandingPageCategoryCardCountAggregateOutputType = {
+    id: number
+    categoryId: number
+    image: number
+    color: number
+    darkColor: number
+    sortOrder: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LandingPageCategoryCardAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type LandingPageCategoryCardSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type LandingPageCategoryCardMinAggregateInputType = {
+    id?: true
+    categoryId?: true
+    image?: true
+    color?: true
+    darkColor?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LandingPageCategoryCardMaxAggregateInputType = {
+    id?: true
+    categoryId?: true
+    image?: true
+    color?: true
+    darkColor?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LandingPageCategoryCardCountAggregateInputType = {
+    id?: true
+    categoryId?: true
+    image?: true
+    color?: true
+    darkColor?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LandingPageCategoryCardAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LandingPageCategoryCard to aggregate.
+     */
+    where?: LandingPageCategoryCardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LandingPageCategoryCards to fetch.
+     */
+    orderBy?: LandingPageCategoryCardOrderByWithRelationInput | LandingPageCategoryCardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LandingPageCategoryCardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LandingPageCategoryCards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LandingPageCategoryCards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LandingPageCategoryCards
+    **/
+    _count?: true | LandingPageCategoryCardCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LandingPageCategoryCardAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LandingPageCategoryCardSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LandingPageCategoryCardMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LandingPageCategoryCardMaxAggregateInputType
+  }
+
+  export type GetLandingPageCategoryCardAggregateType<T extends LandingPageCategoryCardAggregateArgs> = {
+        [P in keyof T & keyof AggregateLandingPageCategoryCard]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLandingPageCategoryCard[P]>
+      : GetScalarType<T[P], AggregateLandingPageCategoryCard[P]>
+  }
+
+
+
+
+  export type LandingPageCategoryCardGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LandingPageCategoryCardWhereInput
+    orderBy?: LandingPageCategoryCardOrderByWithAggregationInput | LandingPageCategoryCardOrderByWithAggregationInput[]
+    by: LandingPageCategoryCardScalarFieldEnum[] | LandingPageCategoryCardScalarFieldEnum
+    having?: LandingPageCategoryCardScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LandingPageCategoryCardCountAggregateInputType | true
+    _avg?: LandingPageCategoryCardAvgAggregateInputType
+    _sum?: LandingPageCategoryCardSumAggregateInputType
+    _min?: LandingPageCategoryCardMinAggregateInputType
+    _max?: LandingPageCategoryCardMaxAggregateInputType
+  }
+
+  export type LandingPageCategoryCardGroupByOutputType = {
+    id: string
+    categoryId: string
+    image: string | null
+    color: string
+    darkColor: string | null
+    sortOrder: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: LandingPageCategoryCardCountAggregateOutputType | null
+    _avg: LandingPageCategoryCardAvgAggregateOutputType | null
+    _sum: LandingPageCategoryCardSumAggregateOutputType | null
+    _min: LandingPageCategoryCardMinAggregateOutputType | null
+    _max: LandingPageCategoryCardMaxAggregateOutputType | null
+  }
+
+  type GetLandingPageCategoryCardGroupByPayload<T extends LandingPageCategoryCardGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LandingPageCategoryCardGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LandingPageCategoryCardGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LandingPageCategoryCardGroupByOutputType[P]>
+            : GetScalarType<T[P], LandingPageCategoryCardGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LandingPageCategoryCardSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    categoryId?: boolean
+    image?: boolean
+    color?: boolean
+    darkColor?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    category?: boolean | CategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["landingPageCategoryCard"]>
+
+  export type LandingPageCategoryCardSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    categoryId?: boolean
+    image?: boolean
+    color?: boolean
+    darkColor?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    category?: boolean | CategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["landingPageCategoryCard"]>
+
+  export type LandingPageCategoryCardSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    categoryId?: boolean
+    image?: boolean
+    color?: boolean
+    darkColor?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    category?: boolean | CategoryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["landingPageCategoryCard"]>
+
+  export type LandingPageCategoryCardSelectScalar = {
+    id?: boolean
+    categoryId?: boolean
+    image?: boolean
+    color?: boolean
+    darkColor?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LandingPageCategoryCardOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "categoryId" | "image" | "color" | "darkColor" | "sortOrder" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["landingPageCategoryCard"]>
+  export type LandingPageCategoryCardInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | CategoryDefaultArgs<ExtArgs>
+  }
+  export type LandingPageCategoryCardIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | CategoryDefaultArgs<ExtArgs>
+  }
+  export type LandingPageCategoryCardIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | CategoryDefaultArgs<ExtArgs>
+  }
+
+  export type $LandingPageCategoryCardPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LandingPageCategoryCard"
+    objects: {
+      category: Prisma.$CategoryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      categoryId: string
+      image: string | null
+      color: string
+      darkColor: string | null
+      sortOrder: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["landingPageCategoryCard"]>
+    composites: {}
+  }
+
+  type LandingPageCategoryCardGetPayload<S extends boolean | null | undefined | LandingPageCategoryCardDefaultArgs> = $Result.GetResult<Prisma.$LandingPageCategoryCardPayload, S>
+
+  type LandingPageCategoryCardCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LandingPageCategoryCardFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LandingPageCategoryCardCountAggregateInputType | true
+    }
+
+  export interface LandingPageCategoryCardDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LandingPageCategoryCard'], meta: { name: 'LandingPageCategoryCard' } }
+    /**
+     * Find zero or one LandingPageCategoryCard that matches the filter.
+     * @param {LandingPageCategoryCardFindUniqueArgs} args - Arguments to find a LandingPageCategoryCard
+     * @example
+     * // Get one LandingPageCategoryCard
+     * const landingPageCategoryCard = await prisma.landingPageCategoryCard.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LandingPageCategoryCardFindUniqueArgs>(args: SelectSubset<T, LandingPageCategoryCardFindUniqueArgs<ExtArgs>>): Prisma__LandingPageCategoryCardClient<$Result.GetResult<Prisma.$LandingPageCategoryCardPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LandingPageCategoryCard that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LandingPageCategoryCardFindUniqueOrThrowArgs} args - Arguments to find a LandingPageCategoryCard
+     * @example
+     * // Get one LandingPageCategoryCard
+     * const landingPageCategoryCard = await prisma.landingPageCategoryCard.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LandingPageCategoryCardFindUniqueOrThrowArgs>(args: SelectSubset<T, LandingPageCategoryCardFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LandingPageCategoryCardClient<$Result.GetResult<Prisma.$LandingPageCategoryCardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LandingPageCategoryCard that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategoryCardFindFirstArgs} args - Arguments to find a LandingPageCategoryCard
+     * @example
+     * // Get one LandingPageCategoryCard
+     * const landingPageCategoryCard = await prisma.landingPageCategoryCard.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LandingPageCategoryCardFindFirstArgs>(args?: SelectSubset<T, LandingPageCategoryCardFindFirstArgs<ExtArgs>>): Prisma__LandingPageCategoryCardClient<$Result.GetResult<Prisma.$LandingPageCategoryCardPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LandingPageCategoryCard that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategoryCardFindFirstOrThrowArgs} args - Arguments to find a LandingPageCategoryCard
+     * @example
+     * // Get one LandingPageCategoryCard
+     * const landingPageCategoryCard = await prisma.landingPageCategoryCard.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LandingPageCategoryCardFindFirstOrThrowArgs>(args?: SelectSubset<T, LandingPageCategoryCardFindFirstOrThrowArgs<ExtArgs>>): Prisma__LandingPageCategoryCardClient<$Result.GetResult<Prisma.$LandingPageCategoryCardPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LandingPageCategoryCards that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategoryCardFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LandingPageCategoryCards
+     * const landingPageCategoryCards = await prisma.landingPageCategoryCard.findMany()
+     * 
+     * // Get first 10 LandingPageCategoryCards
+     * const landingPageCategoryCards = await prisma.landingPageCategoryCard.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const landingPageCategoryCardWithIdOnly = await prisma.landingPageCategoryCard.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LandingPageCategoryCardFindManyArgs>(args?: SelectSubset<T, LandingPageCategoryCardFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LandingPageCategoryCardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LandingPageCategoryCard.
+     * @param {LandingPageCategoryCardCreateArgs} args - Arguments to create a LandingPageCategoryCard.
+     * @example
+     * // Create one LandingPageCategoryCard
+     * const LandingPageCategoryCard = await prisma.landingPageCategoryCard.create({
+     *   data: {
+     *     // ... data to create a LandingPageCategoryCard
+     *   }
+     * })
+     * 
+     */
+    create<T extends LandingPageCategoryCardCreateArgs>(args: SelectSubset<T, LandingPageCategoryCardCreateArgs<ExtArgs>>): Prisma__LandingPageCategoryCardClient<$Result.GetResult<Prisma.$LandingPageCategoryCardPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LandingPageCategoryCards.
+     * @param {LandingPageCategoryCardCreateManyArgs} args - Arguments to create many LandingPageCategoryCards.
+     * @example
+     * // Create many LandingPageCategoryCards
+     * const landingPageCategoryCard = await prisma.landingPageCategoryCard.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LandingPageCategoryCardCreateManyArgs>(args?: SelectSubset<T, LandingPageCategoryCardCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LandingPageCategoryCards and returns the data saved in the database.
+     * @param {LandingPageCategoryCardCreateManyAndReturnArgs} args - Arguments to create many LandingPageCategoryCards.
+     * @example
+     * // Create many LandingPageCategoryCards
+     * const landingPageCategoryCard = await prisma.landingPageCategoryCard.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LandingPageCategoryCards and only return the `id`
+     * const landingPageCategoryCardWithIdOnly = await prisma.landingPageCategoryCard.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LandingPageCategoryCardCreateManyAndReturnArgs>(args?: SelectSubset<T, LandingPageCategoryCardCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LandingPageCategoryCardPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LandingPageCategoryCard.
+     * @param {LandingPageCategoryCardDeleteArgs} args - Arguments to delete one LandingPageCategoryCard.
+     * @example
+     * // Delete one LandingPageCategoryCard
+     * const LandingPageCategoryCard = await prisma.landingPageCategoryCard.delete({
+     *   where: {
+     *     // ... filter to delete one LandingPageCategoryCard
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LandingPageCategoryCardDeleteArgs>(args: SelectSubset<T, LandingPageCategoryCardDeleteArgs<ExtArgs>>): Prisma__LandingPageCategoryCardClient<$Result.GetResult<Prisma.$LandingPageCategoryCardPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LandingPageCategoryCard.
+     * @param {LandingPageCategoryCardUpdateArgs} args - Arguments to update one LandingPageCategoryCard.
+     * @example
+     * // Update one LandingPageCategoryCard
+     * const landingPageCategoryCard = await prisma.landingPageCategoryCard.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LandingPageCategoryCardUpdateArgs>(args: SelectSubset<T, LandingPageCategoryCardUpdateArgs<ExtArgs>>): Prisma__LandingPageCategoryCardClient<$Result.GetResult<Prisma.$LandingPageCategoryCardPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LandingPageCategoryCards.
+     * @param {LandingPageCategoryCardDeleteManyArgs} args - Arguments to filter LandingPageCategoryCards to delete.
+     * @example
+     * // Delete a few LandingPageCategoryCards
+     * const { count } = await prisma.landingPageCategoryCard.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LandingPageCategoryCardDeleteManyArgs>(args?: SelectSubset<T, LandingPageCategoryCardDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LandingPageCategoryCards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategoryCardUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LandingPageCategoryCards
+     * const landingPageCategoryCard = await prisma.landingPageCategoryCard.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LandingPageCategoryCardUpdateManyArgs>(args: SelectSubset<T, LandingPageCategoryCardUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LandingPageCategoryCards and returns the data updated in the database.
+     * @param {LandingPageCategoryCardUpdateManyAndReturnArgs} args - Arguments to update many LandingPageCategoryCards.
+     * @example
+     * // Update many LandingPageCategoryCards
+     * const landingPageCategoryCard = await prisma.landingPageCategoryCard.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LandingPageCategoryCards and only return the `id`
+     * const landingPageCategoryCardWithIdOnly = await prisma.landingPageCategoryCard.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LandingPageCategoryCardUpdateManyAndReturnArgs>(args: SelectSubset<T, LandingPageCategoryCardUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LandingPageCategoryCardPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LandingPageCategoryCard.
+     * @param {LandingPageCategoryCardUpsertArgs} args - Arguments to update or create a LandingPageCategoryCard.
+     * @example
+     * // Update or create a LandingPageCategoryCard
+     * const landingPageCategoryCard = await prisma.landingPageCategoryCard.upsert({
+     *   create: {
+     *     // ... data to create a LandingPageCategoryCard
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LandingPageCategoryCard we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LandingPageCategoryCardUpsertArgs>(args: SelectSubset<T, LandingPageCategoryCardUpsertArgs<ExtArgs>>): Prisma__LandingPageCategoryCardClient<$Result.GetResult<Prisma.$LandingPageCategoryCardPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LandingPageCategoryCards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategoryCardCountArgs} args - Arguments to filter LandingPageCategoryCards to count.
+     * @example
+     * // Count the number of LandingPageCategoryCards
+     * const count = await prisma.landingPageCategoryCard.count({
+     *   where: {
+     *     // ... the filter for the LandingPageCategoryCards we want to count
+     *   }
+     * })
+    **/
+    count<T extends LandingPageCategoryCardCountArgs>(
+      args?: Subset<T, LandingPageCategoryCardCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LandingPageCategoryCardCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LandingPageCategoryCard.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategoryCardAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LandingPageCategoryCardAggregateArgs>(args: Subset<T, LandingPageCategoryCardAggregateArgs>): Prisma.PrismaPromise<GetLandingPageCategoryCardAggregateType<T>>
+
+    /**
+     * Group by LandingPageCategoryCard.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategoryCardGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LandingPageCategoryCardGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LandingPageCategoryCardGroupByArgs['orderBy'] }
+        : { orderBy?: LandingPageCategoryCardGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LandingPageCategoryCardGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLandingPageCategoryCardGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LandingPageCategoryCard model
+   */
+  readonly fields: LandingPageCategoryCardFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LandingPageCategoryCard.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LandingPageCategoryCardClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LandingPageCategoryCard model
+   */
+  interface LandingPageCategoryCardFieldRefs {
+    readonly id: FieldRef<"LandingPageCategoryCard", 'String'>
+    readonly categoryId: FieldRef<"LandingPageCategoryCard", 'String'>
+    readonly image: FieldRef<"LandingPageCategoryCard", 'String'>
+    readonly color: FieldRef<"LandingPageCategoryCard", 'String'>
+    readonly darkColor: FieldRef<"LandingPageCategoryCard", 'String'>
+    readonly sortOrder: FieldRef<"LandingPageCategoryCard", 'Int'>
+    readonly isActive: FieldRef<"LandingPageCategoryCard", 'Boolean'>
+    readonly createdAt: FieldRef<"LandingPageCategoryCard", 'DateTime'>
+    readonly updatedAt: FieldRef<"LandingPageCategoryCard", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LandingPageCategoryCard findUnique
+   */
+  export type LandingPageCategoryCardFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardInclude<ExtArgs> | null
+    /**
+     * Filter, which LandingPageCategoryCard to fetch.
+     */
+    where: LandingPageCategoryCardWhereUniqueInput
+  }
+
+  /**
+   * LandingPageCategoryCard findUniqueOrThrow
+   */
+  export type LandingPageCategoryCardFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardInclude<ExtArgs> | null
+    /**
+     * Filter, which LandingPageCategoryCard to fetch.
+     */
+    where: LandingPageCategoryCardWhereUniqueInput
+  }
+
+  /**
+   * LandingPageCategoryCard findFirst
+   */
+  export type LandingPageCategoryCardFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardInclude<ExtArgs> | null
+    /**
+     * Filter, which LandingPageCategoryCard to fetch.
+     */
+    where?: LandingPageCategoryCardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LandingPageCategoryCards to fetch.
+     */
+    orderBy?: LandingPageCategoryCardOrderByWithRelationInput | LandingPageCategoryCardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LandingPageCategoryCards.
+     */
+    cursor?: LandingPageCategoryCardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LandingPageCategoryCards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LandingPageCategoryCards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LandingPageCategoryCards.
+     */
+    distinct?: LandingPageCategoryCardScalarFieldEnum | LandingPageCategoryCardScalarFieldEnum[]
+  }
+
+  /**
+   * LandingPageCategoryCard findFirstOrThrow
+   */
+  export type LandingPageCategoryCardFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardInclude<ExtArgs> | null
+    /**
+     * Filter, which LandingPageCategoryCard to fetch.
+     */
+    where?: LandingPageCategoryCardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LandingPageCategoryCards to fetch.
+     */
+    orderBy?: LandingPageCategoryCardOrderByWithRelationInput | LandingPageCategoryCardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LandingPageCategoryCards.
+     */
+    cursor?: LandingPageCategoryCardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LandingPageCategoryCards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LandingPageCategoryCards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LandingPageCategoryCards.
+     */
+    distinct?: LandingPageCategoryCardScalarFieldEnum | LandingPageCategoryCardScalarFieldEnum[]
+  }
+
+  /**
+   * LandingPageCategoryCard findMany
+   */
+  export type LandingPageCategoryCardFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardInclude<ExtArgs> | null
+    /**
+     * Filter, which LandingPageCategoryCards to fetch.
+     */
+    where?: LandingPageCategoryCardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LandingPageCategoryCards to fetch.
+     */
+    orderBy?: LandingPageCategoryCardOrderByWithRelationInput | LandingPageCategoryCardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LandingPageCategoryCards.
+     */
+    cursor?: LandingPageCategoryCardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LandingPageCategoryCards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LandingPageCategoryCards.
+     */
+    skip?: number
+    distinct?: LandingPageCategoryCardScalarFieldEnum | LandingPageCategoryCardScalarFieldEnum[]
+  }
+
+  /**
+   * LandingPageCategoryCard create
+   */
+  export type LandingPageCategoryCardCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LandingPageCategoryCard.
+     */
+    data: XOR<LandingPageCategoryCardCreateInput, LandingPageCategoryCardUncheckedCreateInput>
+  }
+
+  /**
+   * LandingPageCategoryCard createMany
+   */
+  export type LandingPageCategoryCardCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LandingPageCategoryCards.
+     */
+    data: LandingPageCategoryCardCreateManyInput | LandingPageCategoryCardCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LandingPageCategoryCard createManyAndReturn
+   */
+  export type LandingPageCategoryCardCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * The data used to create many LandingPageCategoryCards.
+     */
+    data: LandingPageCategoryCardCreateManyInput | LandingPageCategoryCardCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LandingPageCategoryCard update
+   */
+  export type LandingPageCategoryCardUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LandingPageCategoryCard.
+     */
+    data: XOR<LandingPageCategoryCardUpdateInput, LandingPageCategoryCardUncheckedUpdateInput>
+    /**
+     * Choose, which LandingPageCategoryCard to update.
+     */
+    where: LandingPageCategoryCardWhereUniqueInput
+  }
+
+  /**
+   * LandingPageCategoryCard updateMany
+   */
+  export type LandingPageCategoryCardUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LandingPageCategoryCards.
+     */
+    data: XOR<LandingPageCategoryCardUpdateManyMutationInput, LandingPageCategoryCardUncheckedUpdateManyInput>
+    /**
+     * Filter which LandingPageCategoryCards to update
+     */
+    where?: LandingPageCategoryCardWhereInput
+    /**
+     * Limit how many LandingPageCategoryCards to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LandingPageCategoryCard updateManyAndReturn
+   */
+  export type LandingPageCategoryCardUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * The data used to update LandingPageCategoryCards.
+     */
+    data: XOR<LandingPageCategoryCardUpdateManyMutationInput, LandingPageCategoryCardUncheckedUpdateManyInput>
+    /**
+     * Filter which LandingPageCategoryCards to update
+     */
+    where?: LandingPageCategoryCardWhereInput
+    /**
+     * Limit how many LandingPageCategoryCards to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LandingPageCategoryCard upsert
+   */
+  export type LandingPageCategoryCardUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LandingPageCategoryCard to update in case it exists.
+     */
+    where: LandingPageCategoryCardWhereUniqueInput
+    /**
+     * In case the LandingPageCategoryCard found by the `where` argument doesn't exist, create a new LandingPageCategoryCard with this data.
+     */
+    create: XOR<LandingPageCategoryCardCreateInput, LandingPageCategoryCardUncheckedCreateInput>
+    /**
+     * In case the LandingPageCategoryCard was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LandingPageCategoryCardUpdateInput, LandingPageCategoryCardUncheckedUpdateInput>
+  }
+
+  /**
+   * LandingPageCategoryCard delete
+   */
+  export type LandingPageCategoryCardDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardInclude<ExtArgs> | null
+    /**
+     * Filter which LandingPageCategoryCard to delete.
+     */
+    where: LandingPageCategoryCardWhereUniqueInput
+  }
+
+  /**
+   * LandingPageCategoryCard deleteMany
+   */
+  export type LandingPageCategoryCardDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LandingPageCategoryCards to delete
+     */
+    where?: LandingPageCategoryCardWhereInput
+    /**
+     * Limit how many LandingPageCategoryCards to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LandingPageCategoryCard without action
+   */
+  export type LandingPageCategoryCardDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategoryCard
+     */
+    select?: LandingPageCategoryCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategoryCard
+     */
+    omit?: LandingPageCategoryCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LandingPageCategoryCardInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LandingPageCategorySwiper
+   */
+
+  export type AggregateLandingPageCategorySwiper = {
+    _count: LandingPageCategorySwiperCountAggregateOutputType | null
+    _avg: LandingPageCategorySwiperAvgAggregateOutputType | null
+    _sum: LandingPageCategorySwiperSumAggregateOutputType | null
+    _min: LandingPageCategorySwiperMinAggregateOutputType | null
+    _max: LandingPageCategorySwiperMaxAggregateOutputType | null
+  }
+
+  export type LandingPageCategorySwiperAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type LandingPageCategorySwiperSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type LandingPageCategorySwiperMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    category: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LandingPageCategorySwiperMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    category: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LandingPageCategorySwiperCountAggregateOutputType = {
+    id: number
+    title: number
+    category: number
+    sortOrder: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LandingPageCategorySwiperAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type LandingPageCategorySwiperSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type LandingPageCategorySwiperMinAggregateInputType = {
+    id?: true
+    title?: true
+    category?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LandingPageCategorySwiperMaxAggregateInputType = {
+    id?: true
+    title?: true
+    category?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LandingPageCategorySwiperCountAggregateInputType = {
+    id?: true
+    title?: true
+    category?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LandingPageCategorySwiperAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LandingPageCategorySwiper to aggregate.
+     */
+    where?: LandingPageCategorySwiperWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LandingPageCategorySwipers to fetch.
+     */
+    orderBy?: LandingPageCategorySwiperOrderByWithRelationInput | LandingPageCategorySwiperOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LandingPageCategorySwiperWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LandingPageCategorySwipers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LandingPageCategorySwipers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LandingPageCategorySwipers
+    **/
+    _count?: true | LandingPageCategorySwiperCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LandingPageCategorySwiperAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LandingPageCategorySwiperSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LandingPageCategorySwiperMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LandingPageCategorySwiperMaxAggregateInputType
+  }
+
+  export type GetLandingPageCategorySwiperAggregateType<T extends LandingPageCategorySwiperAggregateArgs> = {
+        [P in keyof T & keyof AggregateLandingPageCategorySwiper]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLandingPageCategorySwiper[P]>
+      : GetScalarType<T[P], AggregateLandingPageCategorySwiper[P]>
+  }
+
+
+
+
+  export type LandingPageCategorySwiperGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LandingPageCategorySwiperWhereInput
+    orderBy?: LandingPageCategorySwiperOrderByWithAggregationInput | LandingPageCategorySwiperOrderByWithAggregationInput[]
+    by: LandingPageCategorySwiperScalarFieldEnum[] | LandingPageCategorySwiperScalarFieldEnum
+    having?: LandingPageCategorySwiperScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LandingPageCategorySwiperCountAggregateInputType | true
+    _avg?: LandingPageCategorySwiperAvgAggregateInputType
+    _sum?: LandingPageCategorySwiperSumAggregateInputType
+    _min?: LandingPageCategorySwiperMinAggregateInputType
+    _max?: LandingPageCategorySwiperMaxAggregateInputType
+  }
+
+  export type LandingPageCategorySwiperGroupByOutputType = {
+    id: string
+    title: string
+    category: string
+    sortOrder: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: LandingPageCategorySwiperCountAggregateOutputType | null
+    _avg: LandingPageCategorySwiperAvgAggregateOutputType | null
+    _sum: LandingPageCategorySwiperSumAggregateOutputType | null
+    _min: LandingPageCategorySwiperMinAggregateOutputType | null
+    _max: LandingPageCategorySwiperMaxAggregateOutputType | null
+  }
+
+  type GetLandingPageCategorySwiperGroupByPayload<T extends LandingPageCategorySwiperGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LandingPageCategorySwiperGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LandingPageCategorySwiperGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LandingPageCategorySwiperGroupByOutputType[P]>
+            : GetScalarType<T[P], LandingPageCategorySwiperGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LandingPageCategorySwiperSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    category?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["landingPageCategorySwiper"]>
+
+  export type LandingPageCategorySwiperSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    category?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["landingPageCategorySwiper"]>
+
+  export type LandingPageCategorySwiperSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    category?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["landingPageCategorySwiper"]>
+
+  export type LandingPageCategorySwiperSelectScalar = {
+    id?: boolean
+    title?: boolean
+    category?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LandingPageCategorySwiperOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "category" | "sortOrder" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["landingPageCategorySwiper"]>
+
+  export type $LandingPageCategorySwiperPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LandingPageCategorySwiper"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      category: string
+      sortOrder: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["landingPageCategorySwiper"]>
+    composites: {}
+  }
+
+  type LandingPageCategorySwiperGetPayload<S extends boolean | null | undefined | LandingPageCategorySwiperDefaultArgs> = $Result.GetResult<Prisma.$LandingPageCategorySwiperPayload, S>
+
+  type LandingPageCategorySwiperCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LandingPageCategorySwiperFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LandingPageCategorySwiperCountAggregateInputType | true
+    }
+
+  export interface LandingPageCategorySwiperDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LandingPageCategorySwiper'], meta: { name: 'LandingPageCategorySwiper' } }
+    /**
+     * Find zero or one LandingPageCategorySwiper that matches the filter.
+     * @param {LandingPageCategorySwiperFindUniqueArgs} args - Arguments to find a LandingPageCategorySwiper
+     * @example
+     * // Get one LandingPageCategorySwiper
+     * const landingPageCategorySwiper = await prisma.landingPageCategorySwiper.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LandingPageCategorySwiperFindUniqueArgs>(args: SelectSubset<T, LandingPageCategorySwiperFindUniqueArgs<ExtArgs>>): Prisma__LandingPageCategorySwiperClient<$Result.GetResult<Prisma.$LandingPageCategorySwiperPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LandingPageCategorySwiper that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LandingPageCategorySwiperFindUniqueOrThrowArgs} args - Arguments to find a LandingPageCategorySwiper
+     * @example
+     * // Get one LandingPageCategorySwiper
+     * const landingPageCategorySwiper = await prisma.landingPageCategorySwiper.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LandingPageCategorySwiperFindUniqueOrThrowArgs>(args: SelectSubset<T, LandingPageCategorySwiperFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LandingPageCategorySwiperClient<$Result.GetResult<Prisma.$LandingPageCategorySwiperPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LandingPageCategorySwiper that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategorySwiperFindFirstArgs} args - Arguments to find a LandingPageCategorySwiper
+     * @example
+     * // Get one LandingPageCategorySwiper
+     * const landingPageCategorySwiper = await prisma.landingPageCategorySwiper.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LandingPageCategorySwiperFindFirstArgs>(args?: SelectSubset<T, LandingPageCategorySwiperFindFirstArgs<ExtArgs>>): Prisma__LandingPageCategorySwiperClient<$Result.GetResult<Prisma.$LandingPageCategorySwiperPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LandingPageCategorySwiper that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategorySwiperFindFirstOrThrowArgs} args - Arguments to find a LandingPageCategorySwiper
+     * @example
+     * // Get one LandingPageCategorySwiper
+     * const landingPageCategorySwiper = await prisma.landingPageCategorySwiper.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LandingPageCategorySwiperFindFirstOrThrowArgs>(args?: SelectSubset<T, LandingPageCategorySwiperFindFirstOrThrowArgs<ExtArgs>>): Prisma__LandingPageCategorySwiperClient<$Result.GetResult<Prisma.$LandingPageCategorySwiperPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LandingPageCategorySwipers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategorySwiperFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LandingPageCategorySwipers
+     * const landingPageCategorySwipers = await prisma.landingPageCategorySwiper.findMany()
+     * 
+     * // Get first 10 LandingPageCategorySwipers
+     * const landingPageCategorySwipers = await prisma.landingPageCategorySwiper.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const landingPageCategorySwiperWithIdOnly = await prisma.landingPageCategorySwiper.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LandingPageCategorySwiperFindManyArgs>(args?: SelectSubset<T, LandingPageCategorySwiperFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LandingPageCategorySwiperPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LandingPageCategorySwiper.
+     * @param {LandingPageCategorySwiperCreateArgs} args - Arguments to create a LandingPageCategorySwiper.
+     * @example
+     * // Create one LandingPageCategorySwiper
+     * const LandingPageCategorySwiper = await prisma.landingPageCategorySwiper.create({
+     *   data: {
+     *     // ... data to create a LandingPageCategorySwiper
+     *   }
+     * })
+     * 
+     */
+    create<T extends LandingPageCategorySwiperCreateArgs>(args: SelectSubset<T, LandingPageCategorySwiperCreateArgs<ExtArgs>>): Prisma__LandingPageCategorySwiperClient<$Result.GetResult<Prisma.$LandingPageCategorySwiperPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LandingPageCategorySwipers.
+     * @param {LandingPageCategorySwiperCreateManyArgs} args - Arguments to create many LandingPageCategorySwipers.
+     * @example
+     * // Create many LandingPageCategorySwipers
+     * const landingPageCategorySwiper = await prisma.landingPageCategorySwiper.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LandingPageCategorySwiperCreateManyArgs>(args?: SelectSubset<T, LandingPageCategorySwiperCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LandingPageCategorySwipers and returns the data saved in the database.
+     * @param {LandingPageCategorySwiperCreateManyAndReturnArgs} args - Arguments to create many LandingPageCategorySwipers.
+     * @example
+     * // Create many LandingPageCategorySwipers
+     * const landingPageCategorySwiper = await prisma.landingPageCategorySwiper.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LandingPageCategorySwipers and only return the `id`
+     * const landingPageCategorySwiperWithIdOnly = await prisma.landingPageCategorySwiper.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LandingPageCategorySwiperCreateManyAndReturnArgs>(args?: SelectSubset<T, LandingPageCategorySwiperCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LandingPageCategorySwiperPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LandingPageCategorySwiper.
+     * @param {LandingPageCategorySwiperDeleteArgs} args - Arguments to delete one LandingPageCategorySwiper.
+     * @example
+     * // Delete one LandingPageCategorySwiper
+     * const LandingPageCategorySwiper = await prisma.landingPageCategorySwiper.delete({
+     *   where: {
+     *     // ... filter to delete one LandingPageCategorySwiper
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LandingPageCategorySwiperDeleteArgs>(args: SelectSubset<T, LandingPageCategorySwiperDeleteArgs<ExtArgs>>): Prisma__LandingPageCategorySwiperClient<$Result.GetResult<Prisma.$LandingPageCategorySwiperPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LandingPageCategorySwiper.
+     * @param {LandingPageCategorySwiperUpdateArgs} args - Arguments to update one LandingPageCategorySwiper.
+     * @example
+     * // Update one LandingPageCategorySwiper
+     * const landingPageCategorySwiper = await prisma.landingPageCategorySwiper.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LandingPageCategorySwiperUpdateArgs>(args: SelectSubset<T, LandingPageCategorySwiperUpdateArgs<ExtArgs>>): Prisma__LandingPageCategorySwiperClient<$Result.GetResult<Prisma.$LandingPageCategorySwiperPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LandingPageCategorySwipers.
+     * @param {LandingPageCategorySwiperDeleteManyArgs} args - Arguments to filter LandingPageCategorySwipers to delete.
+     * @example
+     * // Delete a few LandingPageCategorySwipers
+     * const { count } = await prisma.landingPageCategorySwiper.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LandingPageCategorySwiperDeleteManyArgs>(args?: SelectSubset<T, LandingPageCategorySwiperDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LandingPageCategorySwipers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategorySwiperUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LandingPageCategorySwipers
+     * const landingPageCategorySwiper = await prisma.landingPageCategorySwiper.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LandingPageCategorySwiperUpdateManyArgs>(args: SelectSubset<T, LandingPageCategorySwiperUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LandingPageCategorySwipers and returns the data updated in the database.
+     * @param {LandingPageCategorySwiperUpdateManyAndReturnArgs} args - Arguments to update many LandingPageCategorySwipers.
+     * @example
+     * // Update many LandingPageCategorySwipers
+     * const landingPageCategorySwiper = await prisma.landingPageCategorySwiper.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LandingPageCategorySwipers and only return the `id`
+     * const landingPageCategorySwiperWithIdOnly = await prisma.landingPageCategorySwiper.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LandingPageCategorySwiperUpdateManyAndReturnArgs>(args: SelectSubset<T, LandingPageCategorySwiperUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LandingPageCategorySwiperPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LandingPageCategorySwiper.
+     * @param {LandingPageCategorySwiperUpsertArgs} args - Arguments to update or create a LandingPageCategorySwiper.
+     * @example
+     * // Update or create a LandingPageCategorySwiper
+     * const landingPageCategorySwiper = await prisma.landingPageCategorySwiper.upsert({
+     *   create: {
+     *     // ... data to create a LandingPageCategorySwiper
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LandingPageCategorySwiper we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LandingPageCategorySwiperUpsertArgs>(args: SelectSubset<T, LandingPageCategorySwiperUpsertArgs<ExtArgs>>): Prisma__LandingPageCategorySwiperClient<$Result.GetResult<Prisma.$LandingPageCategorySwiperPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LandingPageCategorySwipers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategorySwiperCountArgs} args - Arguments to filter LandingPageCategorySwipers to count.
+     * @example
+     * // Count the number of LandingPageCategorySwipers
+     * const count = await prisma.landingPageCategorySwiper.count({
+     *   where: {
+     *     // ... the filter for the LandingPageCategorySwipers we want to count
+     *   }
+     * })
+    **/
+    count<T extends LandingPageCategorySwiperCountArgs>(
+      args?: Subset<T, LandingPageCategorySwiperCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LandingPageCategorySwiperCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LandingPageCategorySwiper.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategorySwiperAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LandingPageCategorySwiperAggregateArgs>(args: Subset<T, LandingPageCategorySwiperAggregateArgs>): Prisma.PrismaPromise<GetLandingPageCategorySwiperAggregateType<T>>
+
+    /**
+     * Group by LandingPageCategorySwiper.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageCategorySwiperGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LandingPageCategorySwiperGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LandingPageCategorySwiperGroupByArgs['orderBy'] }
+        : { orderBy?: LandingPageCategorySwiperGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LandingPageCategorySwiperGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLandingPageCategorySwiperGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LandingPageCategorySwiper model
+   */
+  readonly fields: LandingPageCategorySwiperFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LandingPageCategorySwiper.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LandingPageCategorySwiperClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LandingPageCategorySwiper model
+   */
+  interface LandingPageCategorySwiperFieldRefs {
+    readonly id: FieldRef<"LandingPageCategorySwiper", 'String'>
+    readonly title: FieldRef<"LandingPageCategorySwiper", 'String'>
+    readonly category: FieldRef<"LandingPageCategorySwiper", 'String'>
+    readonly sortOrder: FieldRef<"LandingPageCategorySwiper", 'Int'>
+    readonly isActive: FieldRef<"LandingPageCategorySwiper", 'Boolean'>
+    readonly createdAt: FieldRef<"LandingPageCategorySwiper", 'DateTime'>
+    readonly updatedAt: FieldRef<"LandingPageCategorySwiper", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LandingPageCategorySwiper findUnique
+   */
+  export type LandingPageCategorySwiperFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategorySwiper
+     */
+    select?: LandingPageCategorySwiperSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategorySwiper
+     */
+    omit?: LandingPageCategorySwiperOmit<ExtArgs> | null
+    /**
+     * Filter, which LandingPageCategorySwiper to fetch.
+     */
+    where: LandingPageCategorySwiperWhereUniqueInput
+  }
+
+  /**
+   * LandingPageCategorySwiper findUniqueOrThrow
+   */
+  export type LandingPageCategorySwiperFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategorySwiper
+     */
+    select?: LandingPageCategorySwiperSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategorySwiper
+     */
+    omit?: LandingPageCategorySwiperOmit<ExtArgs> | null
+    /**
+     * Filter, which LandingPageCategorySwiper to fetch.
+     */
+    where: LandingPageCategorySwiperWhereUniqueInput
+  }
+
+  /**
+   * LandingPageCategorySwiper findFirst
+   */
+  export type LandingPageCategorySwiperFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategorySwiper
+     */
+    select?: LandingPageCategorySwiperSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategorySwiper
+     */
+    omit?: LandingPageCategorySwiperOmit<ExtArgs> | null
+    /**
+     * Filter, which LandingPageCategorySwiper to fetch.
+     */
+    where?: LandingPageCategorySwiperWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LandingPageCategorySwipers to fetch.
+     */
+    orderBy?: LandingPageCategorySwiperOrderByWithRelationInput | LandingPageCategorySwiperOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LandingPageCategorySwipers.
+     */
+    cursor?: LandingPageCategorySwiperWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LandingPageCategorySwipers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LandingPageCategorySwipers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LandingPageCategorySwipers.
+     */
+    distinct?: LandingPageCategorySwiperScalarFieldEnum | LandingPageCategorySwiperScalarFieldEnum[]
+  }
+
+  /**
+   * LandingPageCategorySwiper findFirstOrThrow
+   */
+  export type LandingPageCategorySwiperFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategorySwiper
+     */
+    select?: LandingPageCategorySwiperSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategorySwiper
+     */
+    omit?: LandingPageCategorySwiperOmit<ExtArgs> | null
+    /**
+     * Filter, which LandingPageCategorySwiper to fetch.
+     */
+    where?: LandingPageCategorySwiperWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LandingPageCategorySwipers to fetch.
+     */
+    orderBy?: LandingPageCategorySwiperOrderByWithRelationInput | LandingPageCategorySwiperOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LandingPageCategorySwipers.
+     */
+    cursor?: LandingPageCategorySwiperWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LandingPageCategorySwipers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LandingPageCategorySwipers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LandingPageCategorySwipers.
+     */
+    distinct?: LandingPageCategorySwiperScalarFieldEnum | LandingPageCategorySwiperScalarFieldEnum[]
+  }
+
+  /**
+   * LandingPageCategorySwiper findMany
+   */
+  export type LandingPageCategorySwiperFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategorySwiper
+     */
+    select?: LandingPageCategorySwiperSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategorySwiper
+     */
+    omit?: LandingPageCategorySwiperOmit<ExtArgs> | null
+    /**
+     * Filter, which LandingPageCategorySwipers to fetch.
+     */
+    where?: LandingPageCategorySwiperWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LandingPageCategorySwipers to fetch.
+     */
+    orderBy?: LandingPageCategorySwiperOrderByWithRelationInput | LandingPageCategorySwiperOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LandingPageCategorySwipers.
+     */
+    cursor?: LandingPageCategorySwiperWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LandingPageCategorySwipers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LandingPageCategorySwipers.
+     */
+    skip?: number
+    distinct?: LandingPageCategorySwiperScalarFieldEnum | LandingPageCategorySwiperScalarFieldEnum[]
+  }
+
+  /**
+   * LandingPageCategorySwiper create
+   */
+  export type LandingPageCategorySwiperCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategorySwiper
+     */
+    select?: LandingPageCategorySwiperSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategorySwiper
+     */
+    omit?: LandingPageCategorySwiperOmit<ExtArgs> | null
+    /**
+     * The data needed to create a LandingPageCategorySwiper.
+     */
+    data: XOR<LandingPageCategorySwiperCreateInput, LandingPageCategorySwiperUncheckedCreateInput>
+  }
+
+  /**
+   * LandingPageCategorySwiper createMany
+   */
+  export type LandingPageCategorySwiperCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LandingPageCategorySwipers.
+     */
+    data: LandingPageCategorySwiperCreateManyInput | LandingPageCategorySwiperCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LandingPageCategorySwiper createManyAndReturn
+   */
+  export type LandingPageCategorySwiperCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategorySwiper
+     */
+    select?: LandingPageCategorySwiperSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategorySwiper
+     */
+    omit?: LandingPageCategorySwiperOmit<ExtArgs> | null
+    /**
+     * The data used to create many LandingPageCategorySwipers.
+     */
+    data: LandingPageCategorySwiperCreateManyInput | LandingPageCategorySwiperCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LandingPageCategorySwiper update
+   */
+  export type LandingPageCategorySwiperUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategorySwiper
+     */
+    select?: LandingPageCategorySwiperSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategorySwiper
+     */
+    omit?: LandingPageCategorySwiperOmit<ExtArgs> | null
+    /**
+     * The data needed to update a LandingPageCategorySwiper.
+     */
+    data: XOR<LandingPageCategorySwiperUpdateInput, LandingPageCategorySwiperUncheckedUpdateInput>
+    /**
+     * Choose, which LandingPageCategorySwiper to update.
+     */
+    where: LandingPageCategorySwiperWhereUniqueInput
+  }
+
+  /**
+   * LandingPageCategorySwiper updateMany
+   */
+  export type LandingPageCategorySwiperUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LandingPageCategorySwipers.
+     */
+    data: XOR<LandingPageCategorySwiperUpdateManyMutationInput, LandingPageCategorySwiperUncheckedUpdateManyInput>
+    /**
+     * Filter which LandingPageCategorySwipers to update
+     */
+    where?: LandingPageCategorySwiperWhereInput
+    /**
+     * Limit how many LandingPageCategorySwipers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LandingPageCategorySwiper updateManyAndReturn
+   */
+  export type LandingPageCategorySwiperUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategorySwiper
+     */
+    select?: LandingPageCategorySwiperSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategorySwiper
+     */
+    omit?: LandingPageCategorySwiperOmit<ExtArgs> | null
+    /**
+     * The data used to update LandingPageCategorySwipers.
+     */
+    data: XOR<LandingPageCategorySwiperUpdateManyMutationInput, LandingPageCategorySwiperUncheckedUpdateManyInput>
+    /**
+     * Filter which LandingPageCategorySwipers to update
+     */
+    where?: LandingPageCategorySwiperWhereInput
+    /**
+     * Limit how many LandingPageCategorySwipers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LandingPageCategorySwiper upsert
+   */
+  export type LandingPageCategorySwiperUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategorySwiper
+     */
+    select?: LandingPageCategorySwiperSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategorySwiper
+     */
+    omit?: LandingPageCategorySwiperOmit<ExtArgs> | null
+    /**
+     * The filter to search for the LandingPageCategorySwiper to update in case it exists.
+     */
+    where: LandingPageCategorySwiperWhereUniqueInput
+    /**
+     * In case the LandingPageCategorySwiper found by the `where` argument doesn't exist, create a new LandingPageCategorySwiper with this data.
+     */
+    create: XOR<LandingPageCategorySwiperCreateInput, LandingPageCategorySwiperUncheckedCreateInput>
+    /**
+     * In case the LandingPageCategorySwiper was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LandingPageCategorySwiperUpdateInput, LandingPageCategorySwiperUncheckedUpdateInput>
+  }
+
+  /**
+   * LandingPageCategorySwiper delete
+   */
+  export type LandingPageCategorySwiperDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategorySwiper
+     */
+    select?: LandingPageCategorySwiperSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategorySwiper
+     */
+    omit?: LandingPageCategorySwiperOmit<ExtArgs> | null
+    /**
+     * Filter which LandingPageCategorySwiper to delete.
+     */
+    where: LandingPageCategorySwiperWhereUniqueInput
+  }
+
+  /**
+   * LandingPageCategorySwiper deleteMany
+   */
+  export type LandingPageCategorySwiperDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LandingPageCategorySwipers to delete
+     */
+    where?: LandingPageCategorySwiperWhereInput
+    /**
+     * Limit how many LandingPageCategorySwipers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LandingPageCategorySwiper without action
+   */
+  export type LandingPageCategorySwiperDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageCategorySwiper
+     */
+    select?: LandingPageCategorySwiperSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageCategorySwiper
+     */
+    omit?: LandingPageCategorySwiperOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LandingPageProductGrid
+   */
+
+  export type AggregateLandingPageProductGrid = {
+    _count: LandingPageProductGridCountAggregateOutputType | null
+    _avg: LandingPageProductGridAvgAggregateOutputType | null
+    _sum: LandingPageProductGridSumAggregateOutputType | null
+    _min: LandingPageProductGridMinAggregateOutputType | null
+    _max: LandingPageProductGridMaxAggregateOutputType | null
+  }
+
+  export type LandingPageProductGridAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type LandingPageProductGridSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type LandingPageProductGridMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    topDealAbout: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LandingPageProductGridMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    topDealAbout: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LandingPageProductGridCountAggregateOutputType = {
+    id: number
+    title: number
+    topDealAbout: number
+    productIds: number
+    sortOrder: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LandingPageProductGridAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type LandingPageProductGridSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type LandingPageProductGridMinAggregateInputType = {
+    id?: true
+    title?: true
+    topDealAbout?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LandingPageProductGridMaxAggregateInputType = {
+    id?: true
+    title?: true
+    topDealAbout?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LandingPageProductGridCountAggregateInputType = {
+    id?: true
+    title?: true
+    topDealAbout?: true
+    productIds?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LandingPageProductGridAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LandingPageProductGrid to aggregate.
+     */
+    where?: LandingPageProductGridWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LandingPageProductGrids to fetch.
+     */
+    orderBy?: LandingPageProductGridOrderByWithRelationInput | LandingPageProductGridOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LandingPageProductGridWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LandingPageProductGrids from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LandingPageProductGrids.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LandingPageProductGrids
+    **/
+    _count?: true | LandingPageProductGridCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LandingPageProductGridAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LandingPageProductGridSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LandingPageProductGridMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LandingPageProductGridMaxAggregateInputType
+  }
+
+  export type GetLandingPageProductGridAggregateType<T extends LandingPageProductGridAggregateArgs> = {
+        [P in keyof T & keyof AggregateLandingPageProductGrid]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLandingPageProductGrid[P]>
+      : GetScalarType<T[P], AggregateLandingPageProductGrid[P]>
+  }
+
+
+
+
+  export type LandingPageProductGridGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LandingPageProductGridWhereInput
+    orderBy?: LandingPageProductGridOrderByWithAggregationInput | LandingPageProductGridOrderByWithAggregationInput[]
+    by: LandingPageProductGridScalarFieldEnum[] | LandingPageProductGridScalarFieldEnum
+    having?: LandingPageProductGridScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LandingPageProductGridCountAggregateInputType | true
+    _avg?: LandingPageProductGridAvgAggregateInputType
+    _sum?: LandingPageProductGridSumAggregateInputType
+    _min?: LandingPageProductGridMinAggregateInputType
+    _max?: LandingPageProductGridMaxAggregateInputType
+  }
+
+  export type LandingPageProductGridGroupByOutputType = {
+    id: string
+    title: string
+    topDealAbout: string
+    productIds: string[]
+    sortOrder: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: LandingPageProductGridCountAggregateOutputType | null
+    _avg: LandingPageProductGridAvgAggregateOutputType | null
+    _sum: LandingPageProductGridSumAggregateOutputType | null
+    _min: LandingPageProductGridMinAggregateOutputType | null
+    _max: LandingPageProductGridMaxAggregateOutputType | null
+  }
+
+  type GetLandingPageProductGridGroupByPayload<T extends LandingPageProductGridGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LandingPageProductGridGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LandingPageProductGridGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LandingPageProductGridGroupByOutputType[P]>
+            : GetScalarType<T[P], LandingPageProductGridGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LandingPageProductGridSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    topDealAbout?: boolean
+    productIds?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["landingPageProductGrid"]>
+
+  export type LandingPageProductGridSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    topDealAbout?: boolean
+    productIds?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["landingPageProductGrid"]>
+
+  export type LandingPageProductGridSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    topDealAbout?: boolean
+    productIds?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["landingPageProductGrid"]>
+
+  export type LandingPageProductGridSelectScalar = {
+    id?: boolean
+    title?: boolean
+    topDealAbout?: boolean
+    productIds?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LandingPageProductGridOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "topDealAbout" | "productIds" | "sortOrder" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["landingPageProductGrid"]>
+
+  export type $LandingPageProductGridPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LandingPageProductGrid"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      topDealAbout: string
+      productIds: string[]
+      sortOrder: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["landingPageProductGrid"]>
+    composites: {}
+  }
+
+  type LandingPageProductGridGetPayload<S extends boolean | null | undefined | LandingPageProductGridDefaultArgs> = $Result.GetResult<Prisma.$LandingPageProductGridPayload, S>
+
+  type LandingPageProductGridCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LandingPageProductGridFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LandingPageProductGridCountAggregateInputType | true
+    }
+
+  export interface LandingPageProductGridDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LandingPageProductGrid'], meta: { name: 'LandingPageProductGrid' } }
+    /**
+     * Find zero or one LandingPageProductGrid that matches the filter.
+     * @param {LandingPageProductGridFindUniqueArgs} args - Arguments to find a LandingPageProductGrid
+     * @example
+     * // Get one LandingPageProductGrid
+     * const landingPageProductGrid = await prisma.landingPageProductGrid.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LandingPageProductGridFindUniqueArgs>(args: SelectSubset<T, LandingPageProductGridFindUniqueArgs<ExtArgs>>): Prisma__LandingPageProductGridClient<$Result.GetResult<Prisma.$LandingPageProductGridPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LandingPageProductGrid that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LandingPageProductGridFindUniqueOrThrowArgs} args - Arguments to find a LandingPageProductGrid
+     * @example
+     * // Get one LandingPageProductGrid
+     * const landingPageProductGrid = await prisma.landingPageProductGrid.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LandingPageProductGridFindUniqueOrThrowArgs>(args: SelectSubset<T, LandingPageProductGridFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LandingPageProductGridClient<$Result.GetResult<Prisma.$LandingPageProductGridPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LandingPageProductGrid that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageProductGridFindFirstArgs} args - Arguments to find a LandingPageProductGrid
+     * @example
+     * // Get one LandingPageProductGrid
+     * const landingPageProductGrid = await prisma.landingPageProductGrid.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LandingPageProductGridFindFirstArgs>(args?: SelectSubset<T, LandingPageProductGridFindFirstArgs<ExtArgs>>): Prisma__LandingPageProductGridClient<$Result.GetResult<Prisma.$LandingPageProductGridPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LandingPageProductGrid that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageProductGridFindFirstOrThrowArgs} args - Arguments to find a LandingPageProductGrid
+     * @example
+     * // Get one LandingPageProductGrid
+     * const landingPageProductGrid = await prisma.landingPageProductGrid.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LandingPageProductGridFindFirstOrThrowArgs>(args?: SelectSubset<T, LandingPageProductGridFindFirstOrThrowArgs<ExtArgs>>): Prisma__LandingPageProductGridClient<$Result.GetResult<Prisma.$LandingPageProductGridPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LandingPageProductGrids that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageProductGridFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LandingPageProductGrids
+     * const landingPageProductGrids = await prisma.landingPageProductGrid.findMany()
+     * 
+     * // Get first 10 LandingPageProductGrids
+     * const landingPageProductGrids = await prisma.landingPageProductGrid.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const landingPageProductGridWithIdOnly = await prisma.landingPageProductGrid.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LandingPageProductGridFindManyArgs>(args?: SelectSubset<T, LandingPageProductGridFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LandingPageProductGridPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LandingPageProductGrid.
+     * @param {LandingPageProductGridCreateArgs} args - Arguments to create a LandingPageProductGrid.
+     * @example
+     * // Create one LandingPageProductGrid
+     * const LandingPageProductGrid = await prisma.landingPageProductGrid.create({
+     *   data: {
+     *     // ... data to create a LandingPageProductGrid
+     *   }
+     * })
+     * 
+     */
+    create<T extends LandingPageProductGridCreateArgs>(args: SelectSubset<T, LandingPageProductGridCreateArgs<ExtArgs>>): Prisma__LandingPageProductGridClient<$Result.GetResult<Prisma.$LandingPageProductGridPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LandingPageProductGrids.
+     * @param {LandingPageProductGridCreateManyArgs} args - Arguments to create many LandingPageProductGrids.
+     * @example
+     * // Create many LandingPageProductGrids
+     * const landingPageProductGrid = await prisma.landingPageProductGrid.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LandingPageProductGridCreateManyArgs>(args?: SelectSubset<T, LandingPageProductGridCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LandingPageProductGrids and returns the data saved in the database.
+     * @param {LandingPageProductGridCreateManyAndReturnArgs} args - Arguments to create many LandingPageProductGrids.
+     * @example
+     * // Create many LandingPageProductGrids
+     * const landingPageProductGrid = await prisma.landingPageProductGrid.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LandingPageProductGrids and only return the `id`
+     * const landingPageProductGridWithIdOnly = await prisma.landingPageProductGrid.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LandingPageProductGridCreateManyAndReturnArgs>(args?: SelectSubset<T, LandingPageProductGridCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LandingPageProductGridPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LandingPageProductGrid.
+     * @param {LandingPageProductGridDeleteArgs} args - Arguments to delete one LandingPageProductGrid.
+     * @example
+     * // Delete one LandingPageProductGrid
+     * const LandingPageProductGrid = await prisma.landingPageProductGrid.delete({
+     *   where: {
+     *     // ... filter to delete one LandingPageProductGrid
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LandingPageProductGridDeleteArgs>(args: SelectSubset<T, LandingPageProductGridDeleteArgs<ExtArgs>>): Prisma__LandingPageProductGridClient<$Result.GetResult<Prisma.$LandingPageProductGridPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LandingPageProductGrid.
+     * @param {LandingPageProductGridUpdateArgs} args - Arguments to update one LandingPageProductGrid.
+     * @example
+     * // Update one LandingPageProductGrid
+     * const landingPageProductGrid = await prisma.landingPageProductGrid.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LandingPageProductGridUpdateArgs>(args: SelectSubset<T, LandingPageProductGridUpdateArgs<ExtArgs>>): Prisma__LandingPageProductGridClient<$Result.GetResult<Prisma.$LandingPageProductGridPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LandingPageProductGrids.
+     * @param {LandingPageProductGridDeleteManyArgs} args - Arguments to filter LandingPageProductGrids to delete.
+     * @example
+     * // Delete a few LandingPageProductGrids
+     * const { count } = await prisma.landingPageProductGrid.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LandingPageProductGridDeleteManyArgs>(args?: SelectSubset<T, LandingPageProductGridDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LandingPageProductGrids.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageProductGridUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LandingPageProductGrids
+     * const landingPageProductGrid = await prisma.landingPageProductGrid.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LandingPageProductGridUpdateManyArgs>(args: SelectSubset<T, LandingPageProductGridUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LandingPageProductGrids and returns the data updated in the database.
+     * @param {LandingPageProductGridUpdateManyAndReturnArgs} args - Arguments to update many LandingPageProductGrids.
+     * @example
+     * // Update many LandingPageProductGrids
+     * const landingPageProductGrid = await prisma.landingPageProductGrid.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LandingPageProductGrids and only return the `id`
+     * const landingPageProductGridWithIdOnly = await prisma.landingPageProductGrid.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LandingPageProductGridUpdateManyAndReturnArgs>(args: SelectSubset<T, LandingPageProductGridUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LandingPageProductGridPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LandingPageProductGrid.
+     * @param {LandingPageProductGridUpsertArgs} args - Arguments to update or create a LandingPageProductGrid.
+     * @example
+     * // Update or create a LandingPageProductGrid
+     * const landingPageProductGrid = await prisma.landingPageProductGrid.upsert({
+     *   create: {
+     *     // ... data to create a LandingPageProductGrid
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LandingPageProductGrid we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LandingPageProductGridUpsertArgs>(args: SelectSubset<T, LandingPageProductGridUpsertArgs<ExtArgs>>): Prisma__LandingPageProductGridClient<$Result.GetResult<Prisma.$LandingPageProductGridPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LandingPageProductGrids.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageProductGridCountArgs} args - Arguments to filter LandingPageProductGrids to count.
+     * @example
+     * // Count the number of LandingPageProductGrids
+     * const count = await prisma.landingPageProductGrid.count({
+     *   where: {
+     *     // ... the filter for the LandingPageProductGrids we want to count
+     *   }
+     * })
+    **/
+    count<T extends LandingPageProductGridCountArgs>(
+      args?: Subset<T, LandingPageProductGridCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LandingPageProductGridCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LandingPageProductGrid.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageProductGridAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LandingPageProductGridAggregateArgs>(args: Subset<T, LandingPageProductGridAggregateArgs>): Prisma.PrismaPromise<GetLandingPageProductGridAggregateType<T>>
+
+    /**
+     * Group by LandingPageProductGrid.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LandingPageProductGridGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LandingPageProductGridGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LandingPageProductGridGroupByArgs['orderBy'] }
+        : { orderBy?: LandingPageProductGridGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LandingPageProductGridGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLandingPageProductGridGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LandingPageProductGrid model
+   */
+  readonly fields: LandingPageProductGridFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LandingPageProductGrid.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LandingPageProductGridClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LandingPageProductGrid model
+   */
+  interface LandingPageProductGridFieldRefs {
+    readonly id: FieldRef<"LandingPageProductGrid", 'String'>
+    readonly title: FieldRef<"LandingPageProductGrid", 'String'>
+    readonly topDealAbout: FieldRef<"LandingPageProductGrid", 'String'>
+    readonly productIds: FieldRef<"LandingPageProductGrid", 'String[]'>
+    readonly sortOrder: FieldRef<"LandingPageProductGrid", 'Int'>
+    readonly isActive: FieldRef<"LandingPageProductGrid", 'Boolean'>
+    readonly createdAt: FieldRef<"LandingPageProductGrid", 'DateTime'>
+    readonly updatedAt: FieldRef<"LandingPageProductGrid", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LandingPageProductGrid findUnique
+   */
+  export type LandingPageProductGridFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageProductGrid
+     */
+    select?: LandingPageProductGridSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageProductGrid
+     */
+    omit?: LandingPageProductGridOmit<ExtArgs> | null
+    /**
+     * Filter, which LandingPageProductGrid to fetch.
+     */
+    where: LandingPageProductGridWhereUniqueInput
+  }
+
+  /**
+   * LandingPageProductGrid findUniqueOrThrow
+   */
+  export type LandingPageProductGridFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageProductGrid
+     */
+    select?: LandingPageProductGridSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageProductGrid
+     */
+    omit?: LandingPageProductGridOmit<ExtArgs> | null
+    /**
+     * Filter, which LandingPageProductGrid to fetch.
+     */
+    where: LandingPageProductGridWhereUniqueInput
+  }
+
+  /**
+   * LandingPageProductGrid findFirst
+   */
+  export type LandingPageProductGridFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageProductGrid
+     */
+    select?: LandingPageProductGridSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageProductGrid
+     */
+    omit?: LandingPageProductGridOmit<ExtArgs> | null
+    /**
+     * Filter, which LandingPageProductGrid to fetch.
+     */
+    where?: LandingPageProductGridWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LandingPageProductGrids to fetch.
+     */
+    orderBy?: LandingPageProductGridOrderByWithRelationInput | LandingPageProductGridOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LandingPageProductGrids.
+     */
+    cursor?: LandingPageProductGridWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LandingPageProductGrids from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LandingPageProductGrids.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LandingPageProductGrids.
+     */
+    distinct?: LandingPageProductGridScalarFieldEnum | LandingPageProductGridScalarFieldEnum[]
+  }
+
+  /**
+   * LandingPageProductGrid findFirstOrThrow
+   */
+  export type LandingPageProductGridFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageProductGrid
+     */
+    select?: LandingPageProductGridSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageProductGrid
+     */
+    omit?: LandingPageProductGridOmit<ExtArgs> | null
+    /**
+     * Filter, which LandingPageProductGrid to fetch.
+     */
+    where?: LandingPageProductGridWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LandingPageProductGrids to fetch.
+     */
+    orderBy?: LandingPageProductGridOrderByWithRelationInput | LandingPageProductGridOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LandingPageProductGrids.
+     */
+    cursor?: LandingPageProductGridWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LandingPageProductGrids from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LandingPageProductGrids.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LandingPageProductGrids.
+     */
+    distinct?: LandingPageProductGridScalarFieldEnum | LandingPageProductGridScalarFieldEnum[]
+  }
+
+  /**
+   * LandingPageProductGrid findMany
+   */
+  export type LandingPageProductGridFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageProductGrid
+     */
+    select?: LandingPageProductGridSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageProductGrid
+     */
+    omit?: LandingPageProductGridOmit<ExtArgs> | null
+    /**
+     * Filter, which LandingPageProductGrids to fetch.
+     */
+    where?: LandingPageProductGridWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LandingPageProductGrids to fetch.
+     */
+    orderBy?: LandingPageProductGridOrderByWithRelationInput | LandingPageProductGridOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LandingPageProductGrids.
+     */
+    cursor?: LandingPageProductGridWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LandingPageProductGrids from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LandingPageProductGrids.
+     */
+    skip?: number
+    distinct?: LandingPageProductGridScalarFieldEnum | LandingPageProductGridScalarFieldEnum[]
+  }
+
+  /**
+   * LandingPageProductGrid create
+   */
+  export type LandingPageProductGridCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageProductGrid
+     */
+    select?: LandingPageProductGridSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageProductGrid
+     */
+    omit?: LandingPageProductGridOmit<ExtArgs> | null
+    /**
+     * The data needed to create a LandingPageProductGrid.
+     */
+    data: XOR<LandingPageProductGridCreateInput, LandingPageProductGridUncheckedCreateInput>
+  }
+
+  /**
+   * LandingPageProductGrid createMany
+   */
+  export type LandingPageProductGridCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LandingPageProductGrids.
+     */
+    data: LandingPageProductGridCreateManyInput | LandingPageProductGridCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LandingPageProductGrid createManyAndReturn
+   */
+  export type LandingPageProductGridCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageProductGrid
+     */
+    select?: LandingPageProductGridSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageProductGrid
+     */
+    omit?: LandingPageProductGridOmit<ExtArgs> | null
+    /**
+     * The data used to create many LandingPageProductGrids.
+     */
+    data: LandingPageProductGridCreateManyInput | LandingPageProductGridCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LandingPageProductGrid update
+   */
+  export type LandingPageProductGridUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageProductGrid
+     */
+    select?: LandingPageProductGridSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageProductGrid
+     */
+    omit?: LandingPageProductGridOmit<ExtArgs> | null
+    /**
+     * The data needed to update a LandingPageProductGrid.
+     */
+    data: XOR<LandingPageProductGridUpdateInput, LandingPageProductGridUncheckedUpdateInput>
+    /**
+     * Choose, which LandingPageProductGrid to update.
+     */
+    where: LandingPageProductGridWhereUniqueInput
+  }
+
+  /**
+   * LandingPageProductGrid updateMany
+   */
+  export type LandingPageProductGridUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LandingPageProductGrids.
+     */
+    data: XOR<LandingPageProductGridUpdateManyMutationInput, LandingPageProductGridUncheckedUpdateManyInput>
+    /**
+     * Filter which LandingPageProductGrids to update
+     */
+    where?: LandingPageProductGridWhereInput
+    /**
+     * Limit how many LandingPageProductGrids to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LandingPageProductGrid updateManyAndReturn
+   */
+  export type LandingPageProductGridUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageProductGrid
+     */
+    select?: LandingPageProductGridSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageProductGrid
+     */
+    omit?: LandingPageProductGridOmit<ExtArgs> | null
+    /**
+     * The data used to update LandingPageProductGrids.
+     */
+    data: XOR<LandingPageProductGridUpdateManyMutationInput, LandingPageProductGridUncheckedUpdateManyInput>
+    /**
+     * Filter which LandingPageProductGrids to update
+     */
+    where?: LandingPageProductGridWhereInput
+    /**
+     * Limit how many LandingPageProductGrids to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LandingPageProductGrid upsert
+   */
+  export type LandingPageProductGridUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageProductGrid
+     */
+    select?: LandingPageProductGridSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageProductGrid
+     */
+    omit?: LandingPageProductGridOmit<ExtArgs> | null
+    /**
+     * The filter to search for the LandingPageProductGrid to update in case it exists.
+     */
+    where: LandingPageProductGridWhereUniqueInput
+    /**
+     * In case the LandingPageProductGrid found by the `where` argument doesn't exist, create a new LandingPageProductGrid with this data.
+     */
+    create: XOR<LandingPageProductGridCreateInput, LandingPageProductGridUncheckedCreateInput>
+    /**
+     * In case the LandingPageProductGrid was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LandingPageProductGridUpdateInput, LandingPageProductGridUncheckedUpdateInput>
+  }
+
+  /**
+   * LandingPageProductGrid delete
+   */
+  export type LandingPageProductGridDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageProductGrid
+     */
+    select?: LandingPageProductGridSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageProductGrid
+     */
+    omit?: LandingPageProductGridOmit<ExtArgs> | null
+    /**
+     * Filter which LandingPageProductGrid to delete.
+     */
+    where: LandingPageProductGridWhereUniqueInput
+  }
+
+  /**
+   * LandingPageProductGrid deleteMany
+   */
+  export type LandingPageProductGridDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LandingPageProductGrids to delete
+     */
+    where?: LandingPageProductGridWhereInput
+    /**
+     * Limit how many LandingPageProductGrids to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LandingPageProductGrid without action
+   */
+  export type LandingPageProductGridDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LandingPageProductGrid
+     */
+    select?: LandingPageProductGridSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LandingPageProductGrid
+     */
+    omit?: LandingPageProductGridOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -55575,6 +59148,48 @@ export namespace Prisma {
   };
 
   export type RecentlyViewedScalarFieldEnum = (typeof RecentlyViewedScalarFieldEnum)[keyof typeof RecentlyViewedScalarFieldEnum]
+
+
+  export const LandingPageCategoryCardScalarFieldEnum: {
+    id: 'id',
+    categoryId: 'categoryId',
+    image: 'image',
+    color: 'color',
+    darkColor: 'darkColor',
+    sortOrder: 'sortOrder',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LandingPageCategoryCardScalarFieldEnum = (typeof LandingPageCategoryCardScalarFieldEnum)[keyof typeof LandingPageCategoryCardScalarFieldEnum]
+
+
+  export const LandingPageCategorySwiperScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    category: 'category',
+    sortOrder: 'sortOrder',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LandingPageCategorySwiperScalarFieldEnum = (typeof LandingPageCategorySwiperScalarFieldEnum)[keyof typeof LandingPageCategorySwiperScalarFieldEnum]
+
+
+  export const LandingPageProductGridScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    topDealAbout: 'topDealAbout',
+    productIds: 'productIds',
+    sortOrder: 'sortOrder',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LandingPageProductGridScalarFieldEnum = (typeof LandingPageProductGridScalarFieldEnum)[keyof typeof LandingPageProductGridScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -56961,6 +60576,7 @@ export namespace Prisma {
     products?: ProductListRelationFilter
     categorySpecification?: CategorySpecificationListRelationFilter
     categoryOffers?: CategoryOfferListRelationFilter
+    landingPageCategoryCards?: LandingPageCategoryCardListRelationFilter
   }
 
   export type CategoryOrderByWithRelationInput = {
@@ -56977,6 +60593,7 @@ export namespace Prisma {
     products?: ProductOrderByRelationAggregateInput
     categorySpecification?: CategorySpecificationOrderByRelationAggregateInput
     categoryOffers?: CategoryOfferOrderByRelationAggregateInput
+    landingPageCategoryCards?: LandingPageCategoryCardOrderByRelationAggregateInput
   }
 
   export type CategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -56996,6 +60613,7 @@ export namespace Prisma {
     products?: ProductListRelationFilter
     categorySpecification?: CategorySpecificationListRelationFilter
     categoryOffers?: CategoryOfferListRelationFilter
+    landingPageCategoryCards?: LandingPageCategoryCardListRelationFilter
   }, "id" | "name" | "slug">
 
   export type CategoryOrderByWithAggregationInput = {
@@ -59458,6 +63076,216 @@ export namespace Prisma {
     viewedAt?: DateTimeWithAggregatesFilter<"RecentlyViewed"> | Date | string
   }
 
+  export type LandingPageCategoryCardWhereInput = {
+    AND?: LandingPageCategoryCardWhereInput | LandingPageCategoryCardWhereInput[]
+    OR?: LandingPageCategoryCardWhereInput[]
+    NOT?: LandingPageCategoryCardWhereInput | LandingPageCategoryCardWhereInput[]
+    id?: StringFilter<"LandingPageCategoryCard"> | string
+    categoryId?: StringFilter<"LandingPageCategoryCard"> | string
+    image?: StringNullableFilter<"LandingPageCategoryCard"> | string | null
+    color?: StringFilter<"LandingPageCategoryCard"> | string
+    darkColor?: StringNullableFilter<"LandingPageCategoryCard"> | string | null
+    sortOrder?: IntFilter<"LandingPageCategoryCard"> | number
+    isActive?: BoolFilter<"LandingPageCategoryCard"> | boolean
+    createdAt?: DateTimeFilter<"LandingPageCategoryCard"> | Date | string
+    updatedAt?: DateTimeFilter<"LandingPageCategoryCard"> | Date | string
+    category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
+  }
+
+  export type LandingPageCategoryCardOrderByWithRelationInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    image?: SortOrderInput | SortOrder
+    color?: SortOrder
+    darkColor?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    category?: CategoryOrderByWithRelationInput
+  }
+
+  export type LandingPageCategoryCardWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LandingPageCategoryCardWhereInput | LandingPageCategoryCardWhereInput[]
+    OR?: LandingPageCategoryCardWhereInput[]
+    NOT?: LandingPageCategoryCardWhereInput | LandingPageCategoryCardWhereInput[]
+    categoryId?: StringFilter<"LandingPageCategoryCard"> | string
+    image?: StringNullableFilter<"LandingPageCategoryCard"> | string | null
+    color?: StringFilter<"LandingPageCategoryCard"> | string
+    darkColor?: StringNullableFilter<"LandingPageCategoryCard"> | string | null
+    sortOrder?: IntFilter<"LandingPageCategoryCard"> | number
+    isActive?: BoolFilter<"LandingPageCategoryCard"> | boolean
+    createdAt?: DateTimeFilter<"LandingPageCategoryCard"> | Date | string
+    updatedAt?: DateTimeFilter<"LandingPageCategoryCard"> | Date | string
+    category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
+  }, "id">
+
+  export type LandingPageCategoryCardOrderByWithAggregationInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    image?: SortOrderInput | SortOrder
+    color?: SortOrder
+    darkColor?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LandingPageCategoryCardCountOrderByAggregateInput
+    _avg?: LandingPageCategoryCardAvgOrderByAggregateInput
+    _max?: LandingPageCategoryCardMaxOrderByAggregateInput
+    _min?: LandingPageCategoryCardMinOrderByAggregateInput
+    _sum?: LandingPageCategoryCardSumOrderByAggregateInput
+  }
+
+  export type LandingPageCategoryCardScalarWhereWithAggregatesInput = {
+    AND?: LandingPageCategoryCardScalarWhereWithAggregatesInput | LandingPageCategoryCardScalarWhereWithAggregatesInput[]
+    OR?: LandingPageCategoryCardScalarWhereWithAggregatesInput[]
+    NOT?: LandingPageCategoryCardScalarWhereWithAggregatesInput | LandingPageCategoryCardScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LandingPageCategoryCard"> | string
+    categoryId?: StringWithAggregatesFilter<"LandingPageCategoryCard"> | string
+    image?: StringNullableWithAggregatesFilter<"LandingPageCategoryCard"> | string | null
+    color?: StringWithAggregatesFilter<"LandingPageCategoryCard"> | string
+    darkColor?: StringNullableWithAggregatesFilter<"LandingPageCategoryCard"> | string | null
+    sortOrder?: IntWithAggregatesFilter<"LandingPageCategoryCard"> | number
+    isActive?: BoolWithAggregatesFilter<"LandingPageCategoryCard"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"LandingPageCategoryCard"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LandingPageCategoryCard"> | Date | string
+  }
+
+  export type LandingPageCategorySwiperWhereInput = {
+    AND?: LandingPageCategorySwiperWhereInput | LandingPageCategorySwiperWhereInput[]
+    OR?: LandingPageCategorySwiperWhereInput[]
+    NOT?: LandingPageCategorySwiperWhereInput | LandingPageCategorySwiperWhereInput[]
+    id?: StringFilter<"LandingPageCategorySwiper"> | string
+    title?: StringFilter<"LandingPageCategorySwiper"> | string
+    category?: StringFilter<"LandingPageCategorySwiper"> | string
+    sortOrder?: IntFilter<"LandingPageCategorySwiper"> | number
+    isActive?: BoolFilter<"LandingPageCategorySwiper"> | boolean
+    createdAt?: DateTimeFilter<"LandingPageCategorySwiper"> | Date | string
+    updatedAt?: DateTimeFilter<"LandingPageCategorySwiper"> | Date | string
+  }
+
+  export type LandingPageCategorySwiperOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    category?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandingPageCategorySwiperWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LandingPageCategorySwiperWhereInput | LandingPageCategorySwiperWhereInput[]
+    OR?: LandingPageCategorySwiperWhereInput[]
+    NOT?: LandingPageCategorySwiperWhereInput | LandingPageCategorySwiperWhereInput[]
+    title?: StringFilter<"LandingPageCategorySwiper"> | string
+    category?: StringFilter<"LandingPageCategorySwiper"> | string
+    sortOrder?: IntFilter<"LandingPageCategorySwiper"> | number
+    isActive?: BoolFilter<"LandingPageCategorySwiper"> | boolean
+    createdAt?: DateTimeFilter<"LandingPageCategorySwiper"> | Date | string
+    updatedAt?: DateTimeFilter<"LandingPageCategorySwiper"> | Date | string
+  }, "id">
+
+  export type LandingPageCategorySwiperOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    category?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LandingPageCategorySwiperCountOrderByAggregateInput
+    _avg?: LandingPageCategorySwiperAvgOrderByAggregateInput
+    _max?: LandingPageCategorySwiperMaxOrderByAggregateInput
+    _min?: LandingPageCategorySwiperMinOrderByAggregateInput
+    _sum?: LandingPageCategorySwiperSumOrderByAggregateInput
+  }
+
+  export type LandingPageCategorySwiperScalarWhereWithAggregatesInput = {
+    AND?: LandingPageCategorySwiperScalarWhereWithAggregatesInput | LandingPageCategorySwiperScalarWhereWithAggregatesInput[]
+    OR?: LandingPageCategorySwiperScalarWhereWithAggregatesInput[]
+    NOT?: LandingPageCategorySwiperScalarWhereWithAggregatesInput | LandingPageCategorySwiperScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LandingPageCategorySwiper"> | string
+    title?: StringWithAggregatesFilter<"LandingPageCategorySwiper"> | string
+    category?: StringWithAggregatesFilter<"LandingPageCategorySwiper"> | string
+    sortOrder?: IntWithAggregatesFilter<"LandingPageCategorySwiper"> | number
+    isActive?: BoolWithAggregatesFilter<"LandingPageCategorySwiper"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"LandingPageCategorySwiper"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LandingPageCategorySwiper"> | Date | string
+  }
+
+  export type LandingPageProductGridWhereInput = {
+    AND?: LandingPageProductGridWhereInput | LandingPageProductGridWhereInput[]
+    OR?: LandingPageProductGridWhereInput[]
+    NOT?: LandingPageProductGridWhereInput | LandingPageProductGridWhereInput[]
+    id?: StringFilter<"LandingPageProductGrid"> | string
+    title?: StringFilter<"LandingPageProductGrid"> | string
+    topDealAbout?: StringFilter<"LandingPageProductGrid"> | string
+    productIds?: StringNullableListFilter<"LandingPageProductGrid">
+    sortOrder?: IntFilter<"LandingPageProductGrid"> | number
+    isActive?: BoolFilter<"LandingPageProductGrid"> | boolean
+    createdAt?: DateTimeFilter<"LandingPageProductGrid"> | Date | string
+    updatedAt?: DateTimeFilter<"LandingPageProductGrid"> | Date | string
+  }
+
+  export type LandingPageProductGridOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    topDealAbout?: SortOrder
+    productIds?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandingPageProductGridWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LandingPageProductGridWhereInput | LandingPageProductGridWhereInput[]
+    OR?: LandingPageProductGridWhereInput[]
+    NOT?: LandingPageProductGridWhereInput | LandingPageProductGridWhereInput[]
+    title?: StringFilter<"LandingPageProductGrid"> | string
+    topDealAbout?: StringFilter<"LandingPageProductGrid"> | string
+    productIds?: StringNullableListFilter<"LandingPageProductGrid">
+    sortOrder?: IntFilter<"LandingPageProductGrid"> | number
+    isActive?: BoolFilter<"LandingPageProductGrid"> | boolean
+    createdAt?: DateTimeFilter<"LandingPageProductGrid"> | Date | string
+    updatedAt?: DateTimeFilter<"LandingPageProductGrid"> | Date | string
+  }, "id">
+
+  export type LandingPageProductGridOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    topDealAbout?: SortOrder
+    productIds?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LandingPageProductGridCountOrderByAggregateInput
+    _avg?: LandingPageProductGridAvgOrderByAggregateInput
+    _max?: LandingPageProductGridMaxOrderByAggregateInput
+    _min?: LandingPageProductGridMinOrderByAggregateInput
+    _sum?: LandingPageProductGridSumOrderByAggregateInput
+  }
+
+  export type LandingPageProductGridScalarWhereWithAggregatesInput = {
+    AND?: LandingPageProductGridScalarWhereWithAggregatesInput | LandingPageProductGridScalarWhereWithAggregatesInput[]
+    OR?: LandingPageProductGridScalarWhereWithAggregatesInput[]
+    NOT?: LandingPageProductGridScalarWhereWithAggregatesInput | LandingPageProductGridScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LandingPageProductGrid"> | string
+    title?: StringWithAggregatesFilter<"LandingPageProductGrid"> | string
+    topDealAbout?: StringWithAggregatesFilter<"LandingPageProductGrid"> | string
+    productIds?: StringNullableListFilter<"LandingPageProductGrid">
+    sortOrder?: IntWithAggregatesFilter<"LandingPageProductGrid"> | number
+    isActive?: BoolWithAggregatesFilter<"LandingPageProductGrid"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"LandingPageProductGrid"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LandingPageProductGrid"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string
@@ -60552,6 +64380,7 @@ export namespace Prisma {
     products?: ProductCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationCreateNestedManyWithoutCategoryInput
     categoryOffers?: CategoryOfferCreateNestedManyWithoutCategoryInput
+    landingPageCategoryCards?: LandingPageCategoryCardCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateInput = {
@@ -60567,6 +64396,7 @@ export namespace Prisma {
     products?: ProductUncheckedCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationUncheckedCreateNestedManyWithoutCategoryInput
     categoryOffers?: CategoryOfferUncheckedCreateNestedManyWithoutCategoryInput
+    landingPageCategoryCards?: LandingPageCategoryCardUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUpdateInput = {
@@ -60582,6 +64412,7 @@ export namespace Prisma {
     products?: ProductUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUpdateManyWithoutCategoryNestedInput
     categoryOffers?: CategoryOfferUpdateManyWithoutCategoryNestedInput
+    landingPageCategoryCards?: LandingPageCategoryCardUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateInput = {
@@ -60597,6 +64428,7 @@ export namespace Prisma {
     products?: ProductUncheckedUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
     categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
+    landingPageCategoryCards?: LandingPageCategoryCardUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryCreateManyInput = {
@@ -63218,6 +67050,236 @@ export namespace Prisma {
     viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LandingPageCategoryCardCreateInput = {
+    id?: string
+    image?: string | null
+    color: string
+    darkColor?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    category: CategoryCreateNestedOneWithoutLandingPageCategoryCardsInput
+  }
+
+  export type LandingPageCategoryCardUncheckedCreateInput = {
+    id?: string
+    categoryId: string
+    image?: string | null
+    color: string
+    darkColor?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LandingPageCategoryCardUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    darkColor?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: CategoryUpdateOneRequiredWithoutLandingPageCategoryCardsNestedInput
+  }
+
+  export type LandingPageCategoryCardUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    darkColor?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageCategoryCardCreateManyInput = {
+    id?: string
+    categoryId: string
+    image?: string | null
+    color: string
+    darkColor?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LandingPageCategoryCardUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    darkColor?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageCategoryCardUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    darkColor?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageCategorySwiperCreateInput = {
+    id?: string
+    title: string
+    category: string
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LandingPageCategorySwiperUncheckedCreateInput = {
+    id?: string
+    title: string
+    category: string
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LandingPageCategorySwiperUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageCategorySwiperUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageCategorySwiperCreateManyInput = {
+    id?: string
+    title: string
+    category: string
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LandingPageCategorySwiperUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageCategorySwiperUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageProductGridCreateInput = {
+    id?: string
+    title: string
+    topDealAbout: string
+    productIds?: LandingPageProductGridCreateproductIdsInput | string[]
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LandingPageProductGridUncheckedCreateInput = {
+    id?: string
+    title: string
+    topDealAbout: string
+    productIds?: LandingPageProductGridCreateproductIdsInput | string[]
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LandingPageProductGridUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topDealAbout?: StringFieldUpdateOperationsInput | string
+    productIds?: LandingPageProductGridUpdateproductIdsInput | string[]
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageProductGridUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topDealAbout?: StringFieldUpdateOperationsInput | string
+    productIds?: LandingPageProductGridUpdateproductIdsInput | string[]
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageProductGridCreateManyInput = {
+    id?: string
+    title: string
+    topDealAbout: string
+    productIds?: LandingPageProductGridCreateproductIdsInput | string[]
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LandingPageProductGridUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topDealAbout?: StringFieldUpdateOperationsInput | string
+    productIds?: LandingPageProductGridUpdateproductIdsInput | string[]
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageProductGridUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topDealAbout?: StringFieldUpdateOperationsInput | string
+    productIds?: LandingPageProductGridUpdateproductIdsInput | string[]
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -64297,6 +68359,12 @@ export namespace Prisma {
     none?: CategoryOfferWhereInput
   }
 
+  export type LandingPageCategoryCardListRelationFilter = {
+    every?: LandingPageCategoryCardWhereInput
+    some?: LandingPageCategoryCardWhereInput
+    none?: LandingPageCategoryCardWhereInput
+  }
+
   export type CategoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -64306,6 +68374,10 @@ export namespace Prisma {
   }
 
   export type CategoryOfferOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LandingPageCategoryCardOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -66123,6 +70195,127 @@ export namespace Prisma {
     viewedAt?: SortOrder
   }
 
+  export type LandingPageCategoryCardCountOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    image?: SortOrder
+    color?: SortOrder
+    darkColor?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandingPageCategoryCardAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type LandingPageCategoryCardMaxOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    image?: SortOrder
+    color?: SortOrder
+    darkColor?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandingPageCategoryCardMinOrderByAggregateInput = {
+    id?: SortOrder
+    categoryId?: SortOrder
+    image?: SortOrder
+    color?: SortOrder
+    darkColor?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandingPageCategoryCardSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type LandingPageCategorySwiperCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    category?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandingPageCategorySwiperAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type LandingPageCategorySwiperMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    category?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandingPageCategorySwiperMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    category?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandingPageCategorySwiperSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type LandingPageProductGridCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    topDealAbout?: SortOrder
+    productIds?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandingPageProductGridAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type LandingPageProductGridMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    topDealAbout?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandingPageProductGridMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    topDealAbout?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LandingPageProductGridSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
   export type SessionCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -67539,6 +71732,13 @@ export namespace Prisma {
     connect?: CategoryOfferWhereUniqueInput | CategoryOfferWhereUniqueInput[]
   }
 
+  export type LandingPageCategoryCardCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<LandingPageCategoryCardCreateWithoutCategoryInput, LandingPageCategoryCardUncheckedCreateWithoutCategoryInput> | LandingPageCategoryCardCreateWithoutCategoryInput[] | LandingPageCategoryCardUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: LandingPageCategoryCardCreateOrConnectWithoutCategoryInput | LandingPageCategoryCardCreateOrConnectWithoutCategoryInput[]
+    createMany?: LandingPageCategoryCardCreateManyCategoryInputEnvelope
+    connect?: LandingPageCategoryCardWhereUniqueInput | LandingPageCategoryCardWhereUniqueInput[]
+  }
+
   export type CategoryUncheckedCreateNestedManyWithoutParentInput = {
     create?: XOR<CategoryCreateWithoutParentInput, CategoryUncheckedCreateWithoutParentInput> | CategoryCreateWithoutParentInput[] | CategoryUncheckedCreateWithoutParentInput[]
     connectOrCreate?: CategoryCreateOrConnectWithoutParentInput | CategoryCreateOrConnectWithoutParentInput[]
@@ -67565,6 +71765,13 @@ export namespace Prisma {
     connectOrCreate?: CategoryOfferCreateOrConnectWithoutCategoryInput | CategoryOfferCreateOrConnectWithoutCategoryInput[]
     createMany?: CategoryOfferCreateManyCategoryInputEnvelope
     connect?: CategoryOfferWhereUniqueInput | CategoryOfferWhereUniqueInput[]
+  }
+
+  export type LandingPageCategoryCardUncheckedCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<LandingPageCategoryCardCreateWithoutCategoryInput, LandingPageCategoryCardUncheckedCreateWithoutCategoryInput> | LandingPageCategoryCardCreateWithoutCategoryInput[] | LandingPageCategoryCardUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: LandingPageCategoryCardCreateOrConnectWithoutCategoryInput | LandingPageCategoryCardCreateOrConnectWithoutCategoryInput[]
+    createMany?: LandingPageCategoryCardCreateManyCategoryInputEnvelope
+    connect?: LandingPageCategoryCardWhereUniqueInput | LandingPageCategoryCardWhereUniqueInput[]
   }
 
   export type CategoryUpdateOneWithoutChildrenNestedInput = {
@@ -67633,6 +71840,20 @@ export namespace Prisma {
     deleteMany?: CategoryOfferScalarWhereInput | CategoryOfferScalarWhereInput[]
   }
 
+  export type LandingPageCategoryCardUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<LandingPageCategoryCardCreateWithoutCategoryInput, LandingPageCategoryCardUncheckedCreateWithoutCategoryInput> | LandingPageCategoryCardCreateWithoutCategoryInput[] | LandingPageCategoryCardUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: LandingPageCategoryCardCreateOrConnectWithoutCategoryInput | LandingPageCategoryCardCreateOrConnectWithoutCategoryInput[]
+    upsert?: LandingPageCategoryCardUpsertWithWhereUniqueWithoutCategoryInput | LandingPageCategoryCardUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: LandingPageCategoryCardCreateManyCategoryInputEnvelope
+    set?: LandingPageCategoryCardWhereUniqueInput | LandingPageCategoryCardWhereUniqueInput[]
+    disconnect?: LandingPageCategoryCardWhereUniqueInput | LandingPageCategoryCardWhereUniqueInput[]
+    delete?: LandingPageCategoryCardWhereUniqueInput | LandingPageCategoryCardWhereUniqueInput[]
+    connect?: LandingPageCategoryCardWhereUniqueInput | LandingPageCategoryCardWhereUniqueInput[]
+    update?: LandingPageCategoryCardUpdateWithWhereUniqueWithoutCategoryInput | LandingPageCategoryCardUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: LandingPageCategoryCardUpdateManyWithWhereWithoutCategoryInput | LandingPageCategoryCardUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: LandingPageCategoryCardScalarWhereInput | LandingPageCategoryCardScalarWhereInput[]
+  }
+
   export type CategoryUncheckedUpdateManyWithoutParentNestedInput = {
     create?: XOR<CategoryCreateWithoutParentInput, CategoryUncheckedCreateWithoutParentInput> | CategoryCreateWithoutParentInput[] | CategoryUncheckedCreateWithoutParentInput[]
     connectOrCreate?: CategoryCreateOrConnectWithoutParentInput | CategoryCreateOrConnectWithoutParentInput[]
@@ -67687,6 +71908,20 @@ export namespace Prisma {
     update?: CategoryOfferUpdateWithWhereUniqueWithoutCategoryInput | CategoryOfferUpdateWithWhereUniqueWithoutCategoryInput[]
     updateMany?: CategoryOfferUpdateManyWithWhereWithoutCategoryInput | CategoryOfferUpdateManyWithWhereWithoutCategoryInput[]
     deleteMany?: CategoryOfferScalarWhereInput | CategoryOfferScalarWhereInput[]
+  }
+
+  export type LandingPageCategoryCardUncheckedUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<LandingPageCategoryCardCreateWithoutCategoryInput, LandingPageCategoryCardUncheckedCreateWithoutCategoryInput> | LandingPageCategoryCardCreateWithoutCategoryInput[] | LandingPageCategoryCardUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: LandingPageCategoryCardCreateOrConnectWithoutCategoryInput | LandingPageCategoryCardCreateOrConnectWithoutCategoryInput[]
+    upsert?: LandingPageCategoryCardUpsertWithWhereUniqueWithoutCategoryInput | LandingPageCategoryCardUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: LandingPageCategoryCardCreateManyCategoryInputEnvelope
+    set?: LandingPageCategoryCardWhereUniqueInput | LandingPageCategoryCardWhereUniqueInput[]
+    disconnect?: LandingPageCategoryCardWhereUniqueInput | LandingPageCategoryCardWhereUniqueInput[]
+    delete?: LandingPageCategoryCardWhereUniqueInput | LandingPageCategoryCardWhereUniqueInput[]
+    connect?: LandingPageCategoryCardWhereUniqueInput | LandingPageCategoryCardWhereUniqueInput[]
+    update?: LandingPageCategoryCardUpdateWithWhereUniqueWithoutCategoryInput | LandingPageCategoryCardUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: LandingPageCategoryCardUpdateManyWithWhereWithoutCategoryInput | LandingPageCategoryCardUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: LandingPageCategoryCardScalarWhereInput | LandingPageCategoryCardScalarWhereInput[]
   }
 
   export type ProductOfferCreateNestedManyWithoutOfferInput = {
@@ -69689,6 +73924,29 @@ export namespace Prisma {
     upsert?: ProductUpsertWithoutRecentlyViewedInput
     connect?: ProductWhereUniqueInput
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutRecentlyViewedInput, ProductUpdateWithoutRecentlyViewedInput>, ProductUncheckedUpdateWithoutRecentlyViewedInput>
+  }
+
+  export type CategoryCreateNestedOneWithoutLandingPageCategoryCardsInput = {
+    create?: XOR<CategoryCreateWithoutLandingPageCategoryCardsInput, CategoryUncheckedCreateWithoutLandingPageCategoryCardsInput>
+    connectOrCreate?: CategoryCreateOrConnectWithoutLandingPageCategoryCardsInput
+    connect?: CategoryWhereUniqueInput
+  }
+
+  export type CategoryUpdateOneRequiredWithoutLandingPageCategoryCardsNestedInput = {
+    create?: XOR<CategoryCreateWithoutLandingPageCategoryCardsInput, CategoryUncheckedCreateWithoutLandingPageCategoryCardsInput>
+    connectOrCreate?: CategoryCreateOrConnectWithoutLandingPageCategoryCardsInput
+    upsert?: CategoryUpsertWithoutLandingPageCategoryCardsInput
+    connect?: CategoryWhereUniqueInput
+    update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutLandingPageCategoryCardsInput, CategoryUpdateWithoutLandingPageCategoryCardsInput>, CategoryUncheckedUpdateWithoutLandingPageCategoryCardsInput>
+  }
+
+  export type LandingPageProductGridCreateproductIdsInput = {
+    set: string[]
+  }
+
+  export type LandingPageProductGridUpdateproductIdsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -74114,6 +78372,7 @@ export namespace Prisma {
     children?: CategoryCreateNestedManyWithoutParentInput
     products?: ProductCreateNestedManyWithoutCategoryInput
     categoryOffers?: CategoryOfferCreateNestedManyWithoutCategoryInput
+    landingPageCategoryCards?: LandingPageCategoryCardCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutCategorySpecificationInput = {
@@ -74128,6 +78387,7 @@ export namespace Prisma {
     children?: CategoryUncheckedCreateNestedManyWithoutParentInput
     products?: ProductUncheckedCreateNestedManyWithoutCategoryInput
     categoryOffers?: CategoryOfferUncheckedCreateNestedManyWithoutCategoryInput
+    landingPageCategoryCards?: LandingPageCategoryCardUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutCategorySpecificationInput = {
@@ -74158,6 +78418,7 @@ export namespace Prisma {
     children?: CategoryUpdateManyWithoutParentNestedInput
     products?: ProductUpdateManyWithoutCategoryNestedInput
     categoryOffers?: CategoryOfferUpdateManyWithoutCategoryNestedInput
+    landingPageCategoryCards?: LandingPageCategoryCardUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutCategorySpecificationInput = {
@@ -74172,6 +78433,7 @@ export namespace Prisma {
     children?: CategoryUncheckedUpdateManyWithoutParentNestedInput
     products?: ProductUncheckedUpdateManyWithoutCategoryNestedInput
     categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
+    landingPageCategoryCards?: LandingPageCategoryCardUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryCreateWithoutChildrenInput = {
@@ -74186,6 +78448,7 @@ export namespace Prisma {
     products?: ProductCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationCreateNestedManyWithoutCategoryInput
     categoryOffers?: CategoryOfferCreateNestedManyWithoutCategoryInput
+    landingPageCategoryCards?: LandingPageCategoryCardCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutChildrenInput = {
@@ -74200,6 +78463,7 @@ export namespace Prisma {
     products?: ProductUncheckedCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationUncheckedCreateNestedManyWithoutCategoryInput
     categoryOffers?: CategoryOfferUncheckedCreateNestedManyWithoutCategoryInput
+    landingPageCategoryCards?: LandingPageCategoryCardUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutChildrenInput = {
@@ -74219,6 +78483,7 @@ export namespace Prisma {
     products?: ProductCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationCreateNestedManyWithoutCategoryInput
     categoryOffers?: CategoryOfferCreateNestedManyWithoutCategoryInput
+    landingPageCategoryCards?: LandingPageCategoryCardCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutParentInput = {
@@ -74233,6 +78498,7 @@ export namespace Prisma {
     products?: ProductUncheckedCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationUncheckedCreateNestedManyWithoutCategoryInput
     categoryOffers?: CategoryOfferUncheckedCreateNestedManyWithoutCategoryInput
+    landingPageCategoryCards?: LandingPageCategoryCardUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutParentInput = {
@@ -74359,6 +78625,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LandingPageCategoryCardCreateWithoutCategoryInput = {
+    id?: string
+    image?: string | null
+    color: string
+    darkColor?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LandingPageCategoryCardUncheckedCreateWithoutCategoryInput = {
+    id?: string
+    image?: string | null
+    color: string
+    darkColor?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LandingPageCategoryCardCreateOrConnectWithoutCategoryInput = {
+    where: LandingPageCategoryCardWhereUniqueInput
+    create: XOR<LandingPageCategoryCardCreateWithoutCategoryInput, LandingPageCategoryCardUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type LandingPageCategoryCardCreateManyCategoryInputEnvelope = {
+    data: LandingPageCategoryCardCreateManyCategoryInput | LandingPageCategoryCardCreateManyCategoryInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CategoryUpsertWithoutChildrenInput = {
     update: XOR<CategoryUpdateWithoutChildrenInput, CategoryUncheckedUpdateWithoutChildrenInput>
     create: XOR<CategoryCreateWithoutChildrenInput, CategoryUncheckedCreateWithoutChildrenInput>
@@ -74382,6 +78680,7 @@ export namespace Prisma {
     products?: ProductUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUpdateManyWithoutCategoryNestedInput
     categoryOffers?: CategoryOfferUpdateManyWithoutCategoryNestedInput
+    landingPageCategoryCards?: LandingPageCategoryCardUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutChildrenInput = {
@@ -74396,6 +78695,7 @@ export namespace Prisma {
     products?: ProductUncheckedUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
     categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
+    landingPageCategoryCards?: LandingPageCategoryCardUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUpsertWithWhereUniqueWithoutParentInput = {
@@ -74499,6 +78799,37 @@ export namespace Prisma {
     categoryId?: StringFilter<"CategoryOffer"> | string
     createdAt?: DateTimeFilter<"CategoryOffer"> | Date | string
     updatedAt?: DateTimeFilter<"CategoryOffer"> | Date | string
+  }
+
+  export type LandingPageCategoryCardUpsertWithWhereUniqueWithoutCategoryInput = {
+    where: LandingPageCategoryCardWhereUniqueInput
+    update: XOR<LandingPageCategoryCardUpdateWithoutCategoryInput, LandingPageCategoryCardUncheckedUpdateWithoutCategoryInput>
+    create: XOR<LandingPageCategoryCardCreateWithoutCategoryInput, LandingPageCategoryCardUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type LandingPageCategoryCardUpdateWithWhereUniqueWithoutCategoryInput = {
+    where: LandingPageCategoryCardWhereUniqueInput
+    data: XOR<LandingPageCategoryCardUpdateWithoutCategoryInput, LandingPageCategoryCardUncheckedUpdateWithoutCategoryInput>
+  }
+
+  export type LandingPageCategoryCardUpdateManyWithWhereWithoutCategoryInput = {
+    where: LandingPageCategoryCardScalarWhereInput
+    data: XOR<LandingPageCategoryCardUpdateManyMutationInput, LandingPageCategoryCardUncheckedUpdateManyWithoutCategoryInput>
+  }
+
+  export type LandingPageCategoryCardScalarWhereInput = {
+    AND?: LandingPageCategoryCardScalarWhereInput | LandingPageCategoryCardScalarWhereInput[]
+    OR?: LandingPageCategoryCardScalarWhereInput[]
+    NOT?: LandingPageCategoryCardScalarWhereInput | LandingPageCategoryCardScalarWhereInput[]
+    id?: StringFilter<"LandingPageCategoryCard"> | string
+    categoryId?: StringFilter<"LandingPageCategoryCard"> | string
+    image?: StringNullableFilter<"LandingPageCategoryCard"> | string | null
+    color?: StringFilter<"LandingPageCategoryCard"> | string
+    darkColor?: StringNullableFilter<"LandingPageCategoryCard"> | string | null
+    sortOrder?: IntFilter<"LandingPageCategoryCard"> | number
+    isActive?: BoolFilter<"LandingPageCategoryCard"> | boolean
+    createdAt?: DateTimeFilter<"LandingPageCategoryCard"> | Date | string
+    updatedAt?: DateTimeFilter<"LandingPageCategoryCard"> | Date | string
   }
 
   export type ProductOfferCreateWithoutOfferInput = {
@@ -74905,6 +79236,7 @@ export namespace Prisma {
     children?: CategoryCreateNestedManyWithoutParentInput
     products?: ProductCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationCreateNestedManyWithoutCategoryInput
+    landingPageCategoryCards?: LandingPageCategoryCardCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutCategoryOffersInput = {
@@ -74919,6 +79251,7 @@ export namespace Prisma {
     children?: CategoryUncheckedCreateNestedManyWithoutParentInput
     products?: ProductUncheckedCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationUncheckedCreateNestedManyWithoutCategoryInput
+    landingPageCategoryCards?: LandingPageCategoryCardUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutCategoryOffersInput = {
@@ -74992,6 +79325,7 @@ export namespace Prisma {
     children?: CategoryUpdateManyWithoutParentNestedInput
     products?: ProductUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUpdateManyWithoutCategoryNestedInput
+    landingPageCategoryCards?: LandingPageCategoryCardUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutCategoryOffersInput = {
@@ -75006,6 +79340,7 @@ export namespace Prisma {
     children?: CategoryUncheckedUpdateManyWithoutParentNestedInput
     products?: ProductUncheckedUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
+    landingPageCategoryCards?: LandingPageCategoryCardUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type ProductCreateWithoutDeliveryOptionsInput = {
@@ -75585,6 +79920,7 @@ export namespace Prisma {
     children?: CategoryCreateNestedManyWithoutParentInput
     categorySpecification?: CategorySpecificationCreateNestedManyWithoutCategoryInput
     categoryOffers?: CategoryOfferCreateNestedManyWithoutCategoryInput
+    landingPageCategoryCards?: LandingPageCategoryCardCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUncheckedCreateWithoutProductsInput = {
@@ -75599,6 +79935,7 @@ export namespace Prisma {
     children?: CategoryUncheckedCreateNestedManyWithoutParentInput
     categorySpecification?: CategorySpecificationUncheckedCreateNestedManyWithoutCategoryInput
     categoryOffers?: CategoryOfferUncheckedCreateNestedManyWithoutCategoryInput
+    landingPageCategoryCards?: LandingPageCategoryCardUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryCreateOrConnectWithoutProductsInput = {
@@ -76034,6 +80371,7 @@ export namespace Prisma {
     children?: CategoryUpdateManyWithoutParentNestedInput
     categorySpecification?: CategorySpecificationUpdateManyWithoutCategoryNestedInput
     categoryOffers?: CategoryOfferUpdateManyWithoutCategoryNestedInput
+    landingPageCategoryCards?: LandingPageCategoryCardUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutProductsInput = {
@@ -76048,6 +80386,7 @@ export namespace Prisma {
     children?: CategoryUncheckedUpdateManyWithoutParentNestedInput
     categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
     categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
+    landingPageCategoryCards?: LandingPageCategoryCardUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type WishlistItemUpsertWithWhereUniqueWithoutProductInput = {
@@ -81946,6 +86285,82 @@ export namespace Prisma {
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
   }
 
+  export type CategoryCreateWithoutLandingPageCategoryCardsInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: CategoryCreateNestedOneWithoutChildrenInput
+    children?: CategoryCreateNestedManyWithoutParentInput
+    products?: ProductCreateNestedManyWithoutCategoryInput
+    categorySpecification?: CategorySpecificationCreateNestedManyWithoutCategoryInput
+    categoryOffers?: CategoryOfferCreateNestedManyWithoutCategoryInput
+  }
+
+  export type CategoryUncheckedCreateWithoutLandingPageCategoryCardsInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    parentId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: CategoryUncheckedCreateNestedManyWithoutParentInput
+    products?: ProductUncheckedCreateNestedManyWithoutCategoryInput
+    categorySpecification?: CategorySpecificationUncheckedCreateNestedManyWithoutCategoryInput
+    categoryOffers?: CategoryOfferUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type CategoryCreateOrConnectWithoutLandingPageCategoryCardsInput = {
+    where: CategoryWhereUniqueInput
+    create: XOR<CategoryCreateWithoutLandingPageCategoryCardsInput, CategoryUncheckedCreateWithoutLandingPageCategoryCardsInput>
+  }
+
+  export type CategoryUpsertWithoutLandingPageCategoryCardsInput = {
+    update: XOR<CategoryUpdateWithoutLandingPageCategoryCardsInput, CategoryUncheckedUpdateWithoutLandingPageCategoryCardsInput>
+    create: XOR<CategoryCreateWithoutLandingPageCategoryCardsInput, CategoryUncheckedCreateWithoutLandingPageCategoryCardsInput>
+    where?: CategoryWhereInput
+  }
+
+  export type CategoryUpdateToOneWithWhereWithoutLandingPageCategoryCardsInput = {
+    where?: CategoryWhereInput
+    data: XOR<CategoryUpdateWithoutLandingPageCategoryCardsInput, CategoryUncheckedUpdateWithoutLandingPageCategoryCardsInput>
+  }
+
+  export type CategoryUpdateWithoutLandingPageCategoryCardsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: CategoryUpdateOneWithoutChildrenNestedInput
+    children?: CategoryUpdateManyWithoutParentNestedInput
+    products?: ProductUpdateManyWithoutCategoryNestedInput
+    categorySpecification?: CategorySpecificationUpdateManyWithoutCategoryNestedInput
+    categoryOffers?: CategoryOfferUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type CategoryUncheckedUpdateWithoutLandingPageCategoryCardsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: CategoryUncheckedUpdateManyWithoutParentNestedInput
+    products?: ProductUncheckedUpdateManyWithoutCategoryNestedInput
+    categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
+    categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
   export type SessionCreateManyUserInput = {
     id?: string
     expiresAt: Date | string
@@ -83219,6 +87634,17 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type LandingPageCategoryCardCreateManyCategoryInput = {
+    id?: string
+    image?: string | null
+    color: string
+    darkColor?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type CategoryUpdateWithoutParentInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -83231,6 +87657,7 @@ export namespace Prisma {
     products?: ProductUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUpdateManyWithoutCategoryNestedInput
     categoryOffers?: CategoryOfferUpdateManyWithoutCategoryNestedInput
+    landingPageCategoryCards?: LandingPageCategoryCardUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateWithoutParentInput = {
@@ -83245,6 +87672,7 @@ export namespace Prisma {
     products?: ProductUncheckedUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
     categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
+    landingPageCategoryCards?: LandingPageCategoryCardUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
   export type CategoryUncheckedUpdateManyWithoutParentInput = {
@@ -83368,6 +87796,39 @@ export namespace Prisma {
   export type CategoryOfferUncheckedUpdateManyWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     offerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageCategoryCardUpdateWithoutCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    darkColor?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageCategoryCardUncheckedUpdateWithoutCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    darkColor?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LandingPageCategoryCardUncheckedUpdateManyWithoutCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    color?: StringFieldUpdateOperationsInput | string
+    darkColor?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

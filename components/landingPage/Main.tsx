@@ -3,50 +3,91 @@ import LandingPagrCategorySwiperWrapper from "./LandingPagrCategorySwiperWrapper
 
 export const revalidate = 5;
 
-const Main = async () => {
+type MainProps = {
+  swipers: any[];
+  grids: any[];
+};
+
+const Main = ({ swipers, grids }: MainProps) => {
+  // key: id, value: component
+  const sections: any[] = [
+    ...swipers.map((s: any) => ({
+      ...s,
+      type: 'swiper',
+    })),
+    ...grids.map((g: any) => ({
+      ...g,
+      type: 'grid',
+    })),
+  ].sort((a, b) => a.sortOrder - b.sortOrder);
+
+  // Fallback to defaults if no config found (optional, or just show empty)
+  // Logic: if Admin returns empty arrays, it means either no content or error.
+  // For now, if empty, we might want to keep existing hardcoded ones as fallback or show nothing.
+  // The user requested to "send list... from admin". So we should rely on admin.
+  // However, during dev/first run, it might be empty. Let's assume admin has data or we show nothing.
+
   return (
     <main className="bg-background pt-2 sm:pt-4 pb-4 sm:pb-8">
       <div className="space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-12">
-        {/* Category Sections */}
-        <LandingPagrCategorySwiperWrapper
-          title="Best Deals on Electronics"
-          category="Electronics"
-        />
-
-        <LandingPagrCategorySwiperWrapper
-          title="Best Deals on Furniture"
-          category="Furniture"
-        />
-
-        <LandingPagrCategorySwiperWrapper
-          title="Best Deals on Fashion"
-          category="Fashion"
-        />
-
-        {/* Product Grid Section - Full Width aligned with container */}
-        <div className="container-custom bg-card py-2 sm:py-4 md:py-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {/* Featured Products */}
-            <LandingPageProductGridWrapper
-              title="Featured Products"
-              topDealAbout="kitchen"
+        {sections.map((section) => (
+          section.type === 'swiper' ? (
+            <LandingPagrCategorySwiperWrapper
+              key={section.id}
+              title={section.title}
+              category={section.category}
             />
+          ) : (
+            <div key={section.id} className="container-custom bg-card py-2 sm:py-4 md:py-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                <LandingPageProductGridWrapper
+                  title={section.title}
+                  topDealAbout={section.topDealAbout}
+                  productIds={section.productIds}
+                />
+              </div>
+            </div>
+          )
+        ))}
 
-            {/* Best Deals */}
-            <LandingPageProductGridWrapper
-              title="Best Deals"
-              topDealAbout="books"
-            />
-
-            {/* Top Rated */}
-            <LandingPageProductGridWrapper
-              title="Top Rated"
-              topDealAbout="medicine"
-            />
+        {/* 
+          Note: The original 'grid' had multiple `LandingPageProductGridWrapper` side-by-side in one row.
+          The new model treats each 'LandingPageProductGrid' as a section.
+          If we want to group them into one row (grid-cols-3), we need a 'Row' generic container or 
+          the admin needs to define 'rows' that contain 'grids'.
+          
+          Based on schema, 'LandingPageProductGrid' is a top-level section.
+          If the user wants 3 grids in one row, they would likely need a "GridRow" type or 
+          we layout them differently.
+          
+          Current implementation: Each ProductGridSection will take full width (or custom container).
+          The original code had:
+          <div className="container-custom ...">
+             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                <Wrapper /> <Wrapper /> <Wrapper />
+             </div>
           </div>
-        </div>
-
-
+          
+          If the admin creates 3 grids, they will appear stacked vertically unless we group them.
+          To keep it simple: Render each as a full section. 
+          OR: We can implement logic to group adjacent 'grid' type sections into one container?
+          
+          Let's try to replicate original look:
+          If we detect consecutive 'grid' sections, we can group them. 
+          But for simplicity/predictability, let's just render them. 
+          If they are meant to be side-by-side, we would need a layout builder.
+          
+          Re-reading user request: "data of Main component... which includes... products list (optional)"
+          and "Ui along with ui that can send list of category that would show in ProductCatagoryCardSection".
+          
+          Given the schema 'LandingPageProductGrid', it seems independent.
+          However, to maintain the layout of "Featured / Best Deals / Top Rated" side-by-side, 
+          we effectively need a "GridGroup". 
+          
+          For now, I'll render them individually. If the user wants the side-by-side layout, 
+          they might need a more complex schema or I just stack them. 
+          Stacking is safer for mobile-first. 
+        */}
       </div>
     </main>
   );

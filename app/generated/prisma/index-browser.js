@@ -632,6 +632,39 @@ exports.Prisma.RecentlyViewedScalarFieldEnum = {
   viewedAt: 'viewedAt'
 };
 
+exports.Prisma.LandingPageCategoryCardScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  image: 'image',
+  color: 'color',
+  darkColor: 'darkColor',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LandingPageCategorySwiperScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  category: 'category',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LandingPageProductGridScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  topDealAbout: 'topDealAbout',
+  productIds: 'productIds',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -836,7 +869,10 @@ exports.Prisma.ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   OrderDispute: 'OrderDispute',
-  RecentlyViewed: 'RecentlyViewed'
+  RecentlyViewed: 'RecentlyViewed',
+  LandingPageCategoryCard: 'LandingPageCategoryCard',
+  LandingPageCategorySwiper: 'LandingPageCategorySwiper',
+  LandingPageProductGrid: 'LandingPageProductGrid'
 };
 
 /**

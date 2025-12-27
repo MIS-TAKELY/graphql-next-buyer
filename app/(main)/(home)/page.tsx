@@ -41,7 +41,21 @@ type SectionConfig = {
   layout: "grid" | "horizontal";
 };
 
-export default function HomePage() {
+import { GET_LANDING_PAGE_CATEGORY_CARDS, GET_LANDING_PAGE_CATEGORY_SWIPERS, GET_LANDING_PAGE_PRODUCT_GRIDS } from "@/client/landing/landing-page-config.queries";
+
+export default async function HomePage() {
+  const client = await getServerApolloClient();
+
+  const [categoryCardsData, swipersData, gridsData] = await Promise.all([
+    client.query({ query: GET_LANDING_PAGE_CATEGORY_CARDS }),
+    client.query({ query: GET_LANDING_PAGE_CATEGORY_SWIPERS }),
+    client.query({ query: GET_LANDING_PAGE_PRODUCT_GRIDS }),
+  ]);
+
+  const categoryCards = categoryCardsData.data?.getLandingPageCategoryCards || [];
+  const swipers = swipersData.data?.getLandingPageCategorySwipers || [];
+  const grids = gridsData.data?.getLandingPageProductGrids || [];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -51,9 +65,8 @@ export default function HomePage() {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${
-          process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"
-        }/shop/search?q={search_term_string}`,
+        urlTemplate: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"
+          }/shop/search?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },
@@ -65,14 +78,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ProductCatagoryCardSection />{" "}
-      {/* can be contrlled by admin if data in database is set in con: Smartphone,
-        name: "Electronics",
-        count: "2,500+ items",
-        color: "from-blue-500 to-purple-600",
-        darkColor: "from-blue-600 to-purple-700",
-     this format
-    */}
+      <ProductCatagoryCardSection categories={categoryCards} />
       <HeroCarousel />{" "}
       {/* can be contrlled by admin if data in database is set in con: Smartphone,
         id: 1,
@@ -83,7 +89,7 @@ export default function HomePage() {
      this format
     */}
       <Suspense fallback={<MainSkeleton />}>
-        <Main />
+        <Main swipers={swipers} grids={grids} />
       </Suspense>
       <Suspense fallback={<ProductSectionsSkeleton />}>
         <HomeProductSections />

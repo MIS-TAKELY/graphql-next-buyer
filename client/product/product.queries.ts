@@ -203,3 +203,14 @@ export const GET_RECOMMENDED_PRODUCTS = gql`
   }
   ${PRODUCT_FIELDS_FRAGMENT}
 `;
+export const GET_PRODUCTS_BY_IDS = gql`
+  query GetProductsByIds($ids: [ID!]!) {
+    getProductsByIds(ids: $ids) {
+      ...ProductFields
+      category {
+        name
+      }
+    }
+  }
+  ${PRODUCT_FIELDS_FRAGMENT}
+`;
