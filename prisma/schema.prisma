@@ -1,14 +1,14 @@
 generator client {
-    provider      = "prisma-client-js"
-    output        = "../app/generated/prisma"
-    binaryTargets = ["native", "windows", "rhel-openssl-3.0.x"]
+    provider        = "prisma-client-js"
+    output          = "../app/generated/prisma"
+    binaryTargets   = ["native", "windows", "rhel-openssl-3.0.x"]
     previewFeatures = ["postgresqlExtensions"]
 }
 
 generator clientAdmin {
-    provider      = "prisma-client-js"
-    output        = "../../admin/lib/generated/prisma-buyer"
-    binaryTargets = ["native", "windows", "rhel-openssl-3.0.x"]
+    provider        = "prisma-client-js"
+    output          = "../../admin/lib/generated/prisma-buyer"
+    binaryTargets   = ["native", "windows", "rhel-openssl-3.0.x"]
     previewFeatures = ["postgresqlExtensions"]
 }
 
@@ -168,26 +168,26 @@ enum DisputeType {
 }
 
 model User {
-    id             String    @id @default(cuid())
-    name           String    @default("")
-    username       String    @unique @db.VarChar(255)
+    id              String    @id @default(cuid())
+    name            String    @default("")
+    username        String    @unique @db.VarChar(255)
     displayUsername String?   @db.VarChar(255)
-    email          String    @unique @db.VarChar(255)
-    emailVerified  Boolean   @default(false)
-    password       String?
-    image          String?
-    firstName      String?
-    lastName       String?
-    avatarImageUrl String?
-    phone          String?   @unique @db.VarChar(20)
-    phoneVerified  Boolean   @default(false) // Custom for WhatsApp OTP
-    hasProfile     Boolean   @default(false) // To track if seller has set up profile
-    otp            String? // Custom for WhatsApp OTP
-    otpExpiresAt   DateTime? // OTP expiry
-    gender         Gender?
-    dob            DateTime?
-    createdAt      DateTime  @default(now())
-    updatedAt      DateTime  @updatedAt
+    email           String    @unique @db.VarChar(255)
+    emailVerified   Boolean   @default(false)
+    password        String?
+    image           String?
+    firstName       String?
+    lastName        String?
+    avatarImageUrl  String?
+    phone           String?   @unique @db.VarChar(20)
+    phoneVerified   Boolean   @default(false) // Custom for WhatsApp OTP
+    hasProfile      Boolean   @default(false) // To track if seller has set up profile
+    otp             String? // Custom for WhatsApp OTP
+    otpExpiresAt    DateTime? // OTP expiry
+    gender          Gender?
+    dob             DateTime?
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
 
     sessions Session[]
     accounts Account[]
@@ -419,12 +419,12 @@ model Category {
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 
-    parent                Category?               @relation("CategoryHierarchy", fields: [parentId], references: [id])
-    children              Category[]              @relation("CategoryHierarchy")
-    products              Product[]
-    categorySpecification CategorySpecification[]
+    parent                   Category?                 @relation("CategoryHierarchy", fields: [parentId], references: [id])
+    children                 Category[]                @relation("CategoryHierarchy")
+    products                 Product[]
+    categorySpecification    CategorySpecification[]
     // categoryDiscounts     CategoryDiscount[] // Add this line
-    categoryOffers        CategoryOffer[]
+    categoryOffers           CategoryOffer[]
     landingPageCategoryCards LandingPageCategoryCard[]
 
     @@index([slug])
@@ -651,8 +651,8 @@ model Order {
     updatedAt        DateTime    @updatedAt
     offerId          String?
 
-    offer        Offer?        @relation(fields: [offerId], references: [id], onDelete: SetNull)
-    buyer        User          @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
+    offer        Offer?         @relation(fields: [offerId], references: [id], onDelete: SetNull)
+    buyer        User           @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
     items        OrderItem[]
     payments     Payment[]
     shipments    Shipment[]
@@ -832,17 +832,17 @@ model WishlistItem {
 }
 
 model SellerOrder {
-    id           String      @id @default(cuid())
+    id           String         @id @default(cuid())
     sellerId     String
     buyerOrderId String
-    status       OrderStatus @default(PENDING)
-    subtotal     Decimal     @db.Money
-    tax          Decimal     @default(0) @db.Money
-    shippingFee  Decimal     @default(0) @db.Money
-    commission   Decimal     @default(0) @db.Money
-    total        Decimal     @db.Money
-    createdAt    DateTime    @default(now())
-    updatedAt    DateTime    @updatedAt
+    status       OrderStatus    @default(PENDING)
+    subtotal     Decimal        @db.Money
+    tax          Decimal        @default(0) @db.Money
+    shippingFee  Decimal        @default(0) @db.Money
+    commission   Decimal        @default(0) @db.Money
+    total        Decimal        @db.Money
+    createdAt    DateTime       @default(now())
+    updatedAt    DateTime       @updatedAt
     disputes     OrderDispute[]
 
     // Relations
@@ -949,8 +949,8 @@ model Account {
     refreshTokenExpiresAt DateTime?
     scope                 String?
     password              String?
-    createdAt             DateTime @default(now())
-    updatedAt             DateTime @updatedAt
+    createdAt             DateTime  @default(now())
+    updatedAt             DateTime  @updatedAt
 
     @@unique([providerId, accountId])
     @@map("account")
@@ -1005,17 +1005,17 @@ model RecentlyViewed {
 
 // Landing Page Category Cards (shown at top of homepage)
 model LandingPageCategoryCard {
-    id        String   @id @default(cuid())
-    categoryId String  // ID of the category from this database
-    image     String?  // Image URL (optional)
-    color     String   // Gradient classes, e.g., "from-blue-500 to-purple-600"
-    darkColor String?  // Dark mode gradient
-    sortOrder Int      @default(0)
-    isActive  Boolean  @default(true)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id         String   @id @default(cuid())
+    categoryId String // ID of the category from this database
+    image      String? // Image URL (optional)
+    color      String // Gradient classes, e.g., "from-blue-500 to-purple-600"
+    darkColor  String? // Dark mode gradient
+    sortOrder  Int      @default(0)
+    isActive   Boolean  @default(true)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
 
-    category  Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
     @@index([categoryId])
     @@index([sortOrder])
@@ -1025,8 +1025,8 @@ model LandingPageCategoryCard {
 // Category Swiper Sections (horizontal scrolling product sections)
 model LandingPageCategorySwiper {
     id        String   @id @default(cuid())
-    title     String   // e.g., "Best Deals on Electronics"
-    category  String   // Category name to filter products
+    title     String // e.g., "Best Deals on Electronics"
+    category  String // Category name to filter products
     sortOrder Int      @default(0)
     isActive  Boolean  @default(true)
     createdAt DateTime @default(now())
@@ -1039,8 +1039,8 @@ model LandingPageCategorySwiper {
 // Product Grid Sections (grid layout product sections)
 model LandingPageProductGrid {
     id           String   @id @default(cuid())
-    title        String   // e.g., "Featured Products"
-    topDealAbout String   // Category/tag to filter products
+    title        String // e.g., "Featured Products"
+    topDealAbout String // Category/tag to filter products
     productIds   String[] // Optional: specific product IDs to show
     sortOrder    Int      @default(0)
     isActive     Boolean  @default(true)
@@ -1050,7 +1050,6 @@ model LandingPageProductGrid {
     @@index([sortOrder])
     @@map("landing_page_product_grids")
 }
-
 
 // Landing Page Banners (Hero Carousel)
 model LandingPageBanner {
@@ -1064,7 +1063,7 @@ model LandingPageBanner {
     mediaType   FileType @default(IMAGE)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
-    
-    @@map("landing_page_banners")
+
     @@index([sortOrder])
+    @@map("landing_page_banners")
 }

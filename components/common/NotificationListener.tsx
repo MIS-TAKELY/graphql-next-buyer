@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useNotificationStore } from "@/store/notificationStore";
 import { useApolloClient } from "@apollo/client";
 import { GET_ALL_CONVERSATIONS } from "@/client/conversatation/conversatation.query";
+import { GET_MY_ORDER_ITEMS } from "@/client/order/order.queries";
 
 export function NotificationListener() {
     const { data: session } = useSession();
@@ -54,6 +55,10 @@ export function NotificationListener() {
         event: "order.orderUpdated",
         onData: (payload: any) => {
             console.log("[NotificationListener] Order updated:", payload);
+
+            // Trigger refetch of orders
+            client.refetchQueries({ include: [GET_MY_ORDER_ITEMS] });
+
             setHasNewOrderUpdate(true);
 
             toast.message("Order Updated", {

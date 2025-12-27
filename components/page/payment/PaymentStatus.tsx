@@ -46,7 +46,7 @@ export default function PaymentStatus({
             )}
             <div className="mt-6 space-y-3">
               <Link
-                href={`/orders/${orderId}`}
+                href="/account/orders"
                 className="block w-full bg-green-600 dark:bg-green-500 text-white rounded-md py-2 text-center hover:bg-green-700 dark:hover:bg-green-400 transition-colors font-medium"
               >
                 View Order

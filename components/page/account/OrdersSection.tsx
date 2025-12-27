@@ -35,8 +35,11 @@ export default function OrdersSection() {
   useEffect(() => {
     if (orders.length > 0) {
       const latestOrderUpdate = orders.reduce((latest: string, order: any) => {
-        return !latest || new Date(order.updatedAt) > new Date(latest) ? order.updatedAt : latest;
+        const orderDate = order.updatedAt || order.createdAt;
+        if (!latest) return orderDate;
+        return new Date(orderDate) > new Date(latest) ? orderDate : latest;
       }, "");
+
       if (latestOrderUpdate) {
         setLastSeenOrderUpdate(latestOrderUpdate);
       }

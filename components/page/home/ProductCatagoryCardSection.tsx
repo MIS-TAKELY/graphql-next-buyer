@@ -10,6 +10,7 @@ type Props = {
 };
 
 const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Props) => {
+  console.log("categories-->",categories)
   return (
     <section className="bg transition-colors duration-300 w-full py-2">
       <div className="container-custom">
