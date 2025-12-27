@@ -42,19 +42,22 @@ type SectionConfig = {
 };
 
 import { GET_LANDING_PAGE_CATEGORY_CARDS, GET_LANDING_PAGE_CATEGORY_SWIPERS, GET_LANDING_PAGE_PRODUCT_GRIDS } from "@/client/landing/landing-page-config.queries";
+import { GET_LANDING_PAGE_BANNERS } from "@/client/landing/landing-page-banner.queries";
 
 export default async function HomePage() {
   const client = await getServerApolloClient();
 
-  const [categoryCardsData, swipersData, gridsData] = await Promise.all([
+  const [categoryCardsData, swipersData, gridsData, bannersData] = await Promise.all([
     client.query({ query: GET_LANDING_PAGE_CATEGORY_CARDS }),
     client.query({ query: GET_LANDING_PAGE_CATEGORY_SWIPERS }),
     client.query({ query: GET_LANDING_PAGE_PRODUCT_GRIDS }),
+    client.query({ query: GET_LANDING_PAGE_BANNERS }),
   ]);
 
   const categoryCards = categoryCardsData.data?.getLandingPageCategoryCards || [];
   const swipers = swipersData.data?.getLandingPageCategorySwipers || [];
   const grids = gridsData.data?.getLandingPageProductGrids || [];
+  const banners = bannersData.data?.getLandingPageBanners || [];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -79,7 +82,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ProductCatagoryCardSection categories={categoryCards} />
-      <HeroCarousel />{" "}
+      <HeroCarousel banners={banners} />{" "}
       {/* can be contrlled by admin if data in database is set in con: Smartphone,
         id: 1,
         image: festivalSale,

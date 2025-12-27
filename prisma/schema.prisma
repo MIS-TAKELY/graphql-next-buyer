@@ -5,6 +5,13 @@ generator client {
     previewFeatures = ["postgresqlExtensions"]
 }
 
+generator clientAdmin {
+    provider      = "prisma-client-js"
+    output        = "../../admin/lib/generated/prisma-buyer"
+    binaryTargets = ["native", "windows", "rhel-openssl-3.0.x"]
+    previewFeatures = ["postgresqlExtensions"]
+}
+
 datasource db {
     provider   = "postgresql"
     url        = env("DATABASE_URL")
@@ -1044,3 +1051,20 @@ model LandingPageProductGrid {
     @@map("landing_page_product_grids")
 }
 
+
+// Landing Page Banners (Hero Carousel)
+model LandingPageBanner {
+    id          String   @id @default(cuid())
+    title       String
+    description String?
+    imageUrl    String
+    link        String?
+    sortOrder   Int      @default(0)
+    isActive    Boolean  @default(true)
+    mediaType   FileType @default(IMAGE)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    
+    @@map("landing_page_banners")
+    @@index([sortOrder])
+}

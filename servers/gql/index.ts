@@ -21,6 +21,8 @@ import { topDealsResolvers } from "./modules/landingPage/topDeals/topDeals.resol
 import { topDealsTypeDefs } from "./modules/landingPage/topDeals/topDeals.typeDefs";
 import { landingPageResolvers } from "./modules/landingPage/landingPage.resolvers";
 import { landingPageTypeDefs } from "./modules/landingPage/landingPage.typeDefs";
+import { bannerResolvers } from "./modules/landingPage/banner/banner.resolvers";
+import { bannerTypeDefs } from "./modules/landingPage/banner/banner.typeDefs";
 import { messageResolvers } from "./modules/message/message.resolvers";
 import { messageTypedefs } from "./modules/message/message.typeDefs";
 import { offerTypeDefs } from "./modules/offer/offer.typedefs";
@@ -96,6 +98,7 @@ const typeDefs = mergeTypeDefs([
   topDealsTypeDefs,
   landingPageTypeDefs,
   sellerProfileTypeDefs,
+  bannerTypeDefs,
 ]);
 
 import { GraphQLScalarType, Kind } from 'graphql';
@@ -140,6 +143,7 @@ const resolvers = mergeResolvers([
   filterResolvers,
   topDealsResolvers,
   landingPageResolvers,
+  bannerResolvers,
 ]);
 
 export const schema = makeExecutableSchema({ typeDefs, resolvers });
