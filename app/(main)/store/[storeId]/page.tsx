@@ -6,6 +6,7 @@ import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { TProduct } from "@/types/product";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import { stripTypename } from "@/lib/utils/serialize";
 
 interface PageProps {
   params: {
@@ -30,7 +31,8 @@ export default async function StorePage({ params }: PageProps) {
       fetchPolicy: "no-cache",
     });
 
-    products = data?.getProductsBySeller || [];
+    // Strip __typename from GraphQL response for Client Component compatibility
+    products = stripTypename(data?.getProductsBySeller || []);
 
     if (products.length > 0) {
       products.forEach((product) => {
