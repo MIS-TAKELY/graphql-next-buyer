@@ -31,8 +31,8 @@ function CompareButton({ isCompared, onToggle }: { isCompared?: boolean; onToggl
           size="icon"
           onClick={onToggle}
           className={`shrink-0 rounded-full h-11 w-11 ${isCompared
-              ? "bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 hover:text-blue-700"
-              : "hover:bg-gray-100 dark:hover:bg-gray-800"
+            ? "bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 hover:text-blue-700"
+            : "hover:bg-gray-100 dark:hover:bg-gray-800"
             }`}
         >
           <GitCompare className={`h-5 w-5 ${isCompared ? "fill-current" : ""}`} />
@@ -63,7 +63,9 @@ export default function ProductActions({
       <div className="flex gap-2">
         <WishlistButton added={addedToWishlist} onToggle={toggleWishlist} />
         <CompareButton isCompared={isCompared} onToggle={onCompareToggle} />
-        <ShareButton itemName={itemName} />
+        <div className="hidden sm:block">
+          <ShareButton itemName={itemName} />
+        </div>
         {onChatOpen && <MessageButton onClick={onChatOpen} />}
       </div>
     </TooltipProvider>
