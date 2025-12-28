@@ -25,13 +25,23 @@ import { Metadata } from "next";
 
 export const revalidate = 3600;
 
+import { SEO_CONFIG, BUYER_KEYWORDS, SELLER_KEYWORDS, CONVENIENCE_KEYWORDS } from "@/config/seo";
+
 export const metadata: Metadata = {
-  title: "Home", // Will be "Home | Vanijay"
-  description:
-    "Welcome to Vanijay, your one-stop shop for the best products at unbeatable prices.",
+  title: "Best Online Shopping in Nepal - Best Prices, No Seller Charges",
+  description: "Shop electronics, fashion, and furniture at Vanijay. Nepal's best online shopping platform with zero seller fees, best prices, and easy returns.",
   alternates: {
     canonical: "/",
   },
+  keywords: [
+    ...BUYER_KEYWORDS,
+    ...SELLER_KEYWORDS,
+    ...CONVENIENCE_KEYWORDS,
+  ],
+  openGraph: {
+    title: "Best Online Shopping in Nepal - Best Prices, No Seller Charges",
+    description: "Shop electronics, fashion, and furniture at Vanijay. Nepal's best online shopping platform with zero seller fees, best prices, and easy returns.",
+  }
 };
 
 type SectionConfig = {

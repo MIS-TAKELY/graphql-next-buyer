@@ -9092,6 +9092,8 @@ export namespace Prisma {
     banner: string | null
     description: string | null
     tagline: string | null
+    metaTitle: string | null
+    metaDescription: string | null
     businessName: string | null
     businessRegNo: string | null
     businessType: string | null
@@ -9121,6 +9123,8 @@ export namespace Prisma {
     banner: string | null
     description: string | null
     tagline: string | null
+    metaTitle: string | null
+    metaDescription: string | null
     businessName: string | null
     businessRegNo: string | null
     businessType: string | null
@@ -9150,6 +9154,9 @@ export namespace Prisma {
     banner: number
     description: number
     tagline: number
+    metaTitle: number
+    metaDescription: number
+    keywords: number
     businessName: number
     businessRegNo: number
     businessType: number
@@ -9193,6 +9200,8 @@ export namespace Prisma {
     banner?: true
     description?: true
     tagline?: true
+    metaTitle?: true
+    metaDescription?: true
     businessName?: true
     businessRegNo?: true
     businessType?: true
@@ -9222,6 +9231,8 @@ export namespace Prisma {
     banner?: true
     description?: true
     tagline?: true
+    metaTitle?: true
+    metaDescription?: true
     businessName?: true
     businessRegNo?: true
     businessType?: true
@@ -9251,6 +9262,9 @@ export namespace Prisma {
     banner?: true
     description?: true
     tagline?: true
+    metaTitle?: true
+    metaDescription?: true
+    keywords?: true
     businessName?: true
     businessRegNo?: true
     businessType?: true
@@ -9367,6 +9381,9 @@ export namespace Prisma {
     banner: string | null
     description: string | null
     tagline: string | null
+    metaTitle: string | null
+    metaDescription: string | null
+    keywords: string[]
     businessName: string | null
     businessRegNo: string | null
     businessType: string | null
@@ -9415,6 +9432,9 @@ export namespace Prisma {
     banner?: boolean
     description?: boolean
     tagline?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    keywords?: boolean
     businessName?: boolean
     businessRegNo?: boolean
     businessType?: boolean
@@ -9446,6 +9466,9 @@ export namespace Prisma {
     banner?: boolean
     description?: boolean
     tagline?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    keywords?: boolean
     businessName?: boolean
     businessRegNo?: boolean
     businessType?: boolean
@@ -9477,6 +9500,9 @@ export namespace Prisma {
     banner?: boolean
     description?: boolean
     tagline?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    keywords?: boolean
     businessName?: boolean
     businessRegNo?: boolean
     businessType?: boolean
@@ -9508,6 +9534,9 @@ export namespace Prisma {
     banner?: boolean
     description?: boolean
     tagline?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    keywords?: boolean
     businessName?: boolean
     businessRegNo?: boolean
     businessType?: boolean
@@ -9528,7 +9557,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SellerProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "shopName" | "slug" | "logo" | "banner" | "description" | "tagline" | "businessName" | "businessRegNo" | "businessType" | "phone" | "altPhone" | "email" | "pickupAddressId" | "returnPolicy" | "shippingPolicy" | "about" | "verificationStatus" | "verifiedAt" | "isActive" | "averageRating" | "totalReviews" | "totalSales" | "createdAt" | "updatedAt", ExtArgs["result"]["sellerProfile"]>
+  export type SellerProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "shopName" | "slug" | "logo" | "banner" | "description" | "tagline" | "metaTitle" | "metaDescription" | "keywords" | "businessName" | "businessRegNo" | "businessType" | "phone" | "altPhone" | "email" | "pickupAddressId" | "returnPolicy" | "shippingPolicy" | "about" | "verificationStatus" | "verifiedAt" | "isActive" | "averageRating" | "totalReviews" | "totalSales" | "createdAt" | "updatedAt", ExtArgs["result"]["sellerProfile"]>
   export type SellerProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pickupAddress?: boolean | SellerProfile$pickupAddressArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -9557,6 +9586,9 @@ export namespace Prisma {
       banner: string | null
       description: string | null
       tagline: string | null
+      metaTitle: string | null
+      metaDescription: string | null
+      keywords: string[]
       businessName: string | null
       businessRegNo: string | null
       businessType: string | null
@@ -10008,6 +10040,9 @@ export namespace Prisma {
     readonly banner: FieldRef<"SellerProfile", 'String'>
     readonly description: FieldRef<"SellerProfile", 'String'>
     readonly tagline: FieldRef<"SellerProfile", 'String'>
+    readonly metaTitle: FieldRef<"SellerProfile", 'String'>
+    readonly metaDescription: FieldRef<"SellerProfile", 'String'>
+    readonly keywords: FieldRef<"SellerProfile", 'String[]'>
     readonly businessName: FieldRef<"SellerProfile", 'String'>
     readonly businessRegNo: FieldRef<"SellerProfile", 'String'>
     readonly businessType: FieldRef<"SellerProfile", 'String'>
@@ -18347,6 +18382,8 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     description: string | null
+    metaTitle: string | null
+    metaDescription: string | null
     parentId: string | null
     isActive: boolean | null
     createdAt: Date | null
@@ -18358,6 +18395,8 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     description: string | null
+    metaTitle: string | null
+    metaDescription: string | null
     parentId: string | null
     isActive: boolean | null
     createdAt: Date | null
@@ -18369,6 +18408,9 @@ export namespace Prisma {
     name: number
     slug: number
     description: number
+    metaTitle: number
+    metaDescription: number
+    keywords: number
     parentId: number
     isActive: number
     createdAt: number
@@ -18382,6 +18424,8 @@ export namespace Prisma {
     name?: true
     slug?: true
     description?: true
+    metaTitle?: true
+    metaDescription?: true
     parentId?: true
     isActive?: true
     createdAt?: true
@@ -18393,6 +18437,8 @@ export namespace Prisma {
     name?: true
     slug?: true
     description?: true
+    metaTitle?: true
+    metaDescription?: true
     parentId?: true
     isActive?: true
     createdAt?: true
@@ -18404,6 +18450,9 @@ export namespace Prisma {
     name?: true
     slug?: true
     description?: true
+    metaTitle?: true
+    metaDescription?: true
+    keywords?: true
     parentId?: true
     isActive?: true
     createdAt?: true
@@ -18488,6 +18537,9 @@ export namespace Prisma {
     name: string
     slug: string
     description: string | null
+    metaTitle: string | null
+    metaDescription: string | null
+    keywords: string[]
     parentId: string | null
     isActive: boolean
     createdAt: Date
@@ -18516,6 +18568,9 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    keywords?: boolean
     parentId?: boolean
     isActive?: boolean
     createdAt?: boolean
@@ -18534,6 +18589,9 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    keywords?: boolean
     parentId?: boolean
     isActive?: boolean
     createdAt?: boolean
@@ -18546,6 +18604,9 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    keywords?: boolean
     parentId?: boolean
     isActive?: boolean
     createdAt?: boolean
@@ -18558,13 +18619,16 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     description?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    keywords?: boolean
     parentId?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "parentId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
+  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "metaTitle" | "metaDescription" | "keywords" | "parentId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
   export type CategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     parent?: boolean | Category$parentArgs<ExtArgs>
     children?: boolean | Category$childrenArgs<ExtArgs>
@@ -18596,6 +18660,9 @@ export namespace Prisma {
       name: string
       slug: string
       description: string | null
+      metaTitle: string | null
+      metaDescription: string | null
+      keywords: string[]
       parentId: string | null
       isActive: boolean
       createdAt: Date
@@ -19033,6 +19100,9 @@ export namespace Prisma {
     readonly name: FieldRef<"Category", 'String'>
     readonly slug: FieldRef<"Category", 'String'>
     readonly description: FieldRef<"Category", 'String'>
+    readonly metaTitle: FieldRef<"Category", 'String'>
+    readonly metaDescription: FieldRef<"Category", 'String'>
+    readonly keywords: FieldRef<"Category", 'String[]'>
     readonly parentId: FieldRef<"Category", 'String'>
     readonly isActive: FieldRef<"Category", 'Boolean'>
     readonly createdAt: FieldRef<"Category", 'DateTime'>
@@ -26323,6 +26393,8 @@ export namespace Prisma {
     slug: string | null
     description: string | null
     status: $Enums.ProductStatus | null
+    metaTitle: string | null
+    metaDescription: string | null
     createdAt: Date | null
     updatedAt: Date | null
     categoryId: string | null
@@ -26336,6 +26408,8 @@ export namespace Prisma {
     slug: string | null
     description: string | null
     status: $Enums.ProductStatus | null
+    metaTitle: string | null
+    metaDescription: string | null
     createdAt: Date | null
     updatedAt: Date | null
     categoryId: string | null
@@ -26351,6 +26425,9 @@ export namespace Prisma {
     features: number
     status: number
     specificationTable: number
+    metaTitle: number
+    metaDescription: number
+    keywords: number
     createdAt: number
     updatedAt: number
     categoryId: number
@@ -26366,6 +26443,8 @@ export namespace Prisma {
     slug?: true
     description?: true
     status?: true
+    metaTitle?: true
+    metaDescription?: true
     createdAt?: true
     updatedAt?: true
     categoryId?: true
@@ -26379,6 +26458,8 @@ export namespace Prisma {
     slug?: true
     description?: true
     status?: true
+    metaTitle?: true
+    metaDescription?: true
     createdAt?: true
     updatedAt?: true
     categoryId?: true
@@ -26394,6 +26475,9 @@ export namespace Prisma {
     features?: true
     status?: true
     specificationTable?: true
+    metaTitle?: true
+    metaDescription?: true
+    keywords?: true
     createdAt?: true
     updatedAt?: true
     categoryId?: true
@@ -26482,6 +26566,9 @@ export namespace Prisma {
     features: string[]
     status: $Enums.ProductStatus
     specificationTable: JsonValue | null
+    metaTitle: string | null
+    metaDescription: string | null
+    keywords: string[]
     createdAt: Date
     updatedAt: Date
     categoryId: string | null
@@ -26514,6 +26601,9 @@ export namespace Prisma {
     features?: boolean
     status?: boolean
     specificationTable?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    keywords?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     categoryId?: boolean
@@ -26543,6 +26633,9 @@ export namespace Prisma {
     features?: boolean
     status?: boolean
     specificationTable?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    keywords?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     categoryId?: boolean
@@ -26560,6 +26653,9 @@ export namespace Prisma {
     features?: boolean
     status?: boolean
     specificationTable?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    keywords?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     categoryId?: boolean
@@ -26577,13 +26673,16 @@ export namespace Prisma {
     features?: boolean
     status?: boolean
     specificationTable?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    keywords?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     categoryId?: boolean
     brand?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "name" | "slug" | "description" | "features" | "status" | "specificationTable" | "createdAt" | "updatedAt" | "categoryId" | "brand", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "name" | "slug" | "description" | "features" | "status" | "specificationTable" | "metaTitle" | "metaDescription" | "keywords" | "createdAt" | "updatedAt" | "categoryId" | "brand", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     seller?: boolean | UserDefaultArgs<ExtArgs>
     variants?: boolean | Product$variantsArgs<ExtArgs>
@@ -26635,6 +26734,9 @@ export namespace Prisma {
       features: string[]
       status: $Enums.ProductStatus
       specificationTable: Prisma.JsonValue | null
+      metaTitle: string | null
+      metaDescription: string | null
+      keywords: string[]
       createdAt: Date
       updatedAt: Date
       categoryId: string | null
@@ -27083,6 +27185,9 @@ export namespace Prisma {
     readonly features: FieldRef<"Product", 'String[]'>
     readonly status: FieldRef<"Product", 'ProductStatus'>
     readonly specificationTable: FieldRef<"Product", 'Json'>
+    readonly metaTitle: FieldRef<"Product", 'String'>
+    readonly metaDescription: FieldRef<"Product", 'String'>
+    readonly keywords: FieldRef<"Product", 'String[]'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
     readonly categoryId: FieldRef<"Product", 'String'>
@@ -59758,6 +59863,9 @@ export namespace Prisma {
     banner: 'banner',
     description: 'description',
     tagline: 'tagline',
+    metaTitle: 'metaTitle',
+    metaDescription: 'metaDescription',
+    keywords: 'keywords',
     businessName: 'businessName',
     businessRegNo: 'businessRegNo',
     businessType: 'businessType',
@@ -59888,6 +59996,9 @@ export namespace Prisma {
     name: 'name',
     slug: 'slug',
     description: 'description',
+    metaTitle: 'metaTitle',
+    metaDescription: 'metaDescription',
+    keywords: 'keywords',
     parentId: 'parentId',
     isActive: 'isActive',
     createdAt: 'createdAt',
@@ -59986,6 +60097,9 @@ export namespace Prisma {
     features: 'features',
     status: 'status',
     specificationTable: 'specificationTable',
+    metaTitle: 'metaTitle',
+    metaDescription: 'metaDescription',
+    keywords: 'keywords',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     categoryId: 'categoryId',
@@ -61089,6 +61203,9 @@ export namespace Prisma {
     banner?: StringNullableFilter<"SellerProfile"> | string | null
     description?: StringNullableFilter<"SellerProfile"> | string | null
     tagline?: StringNullableFilter<"SellerProfile"> | string | null
+    metaTitle?: StringNullableFilter<"SellerProfile"> | string | null
+    metaDescription?: StringNullableFilter<"SellerProfile"> | string | null
+    keywords?: StringNullableListFilter<"SellerProfile">
     businessName?: StringNullableFilter<"SellerProfile"> | string | null
     businessRegNo?: StringNullableFilter<"SellerProfile"> | string | null
     businessType?: StringNullableFilter<"SellerProfile"> | string | null
@@ -61120,6 +61237,9 @@ export namespace Prisma {
     banner?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     tagline?: SortOrderInput | SortOrder
+    metaTitle?: SortOrderInput | SortOrder
+    metaDescription?: SortOrderInput | SortOrder
+    keywords?: SortOrder
     businessName?: SortOrderInput | SortOrder
     businessRegNo?: SortOrderInput | SortOrder
     businessType?: SortOrderInput | SortOrder
@@ -61154,6 +61274,9 @@ export namespace Prisma {
     banner?: StringNullableFilter<"SellerProfile"> | string | null
     description?: StringNullableFilter<"SellerProfile"> | string | null
     tagline?: StringNullableFilter<"SellerProfile"> | string | null
+    metaTitle?: StringNullableFilter<"SellerProfile"> | string | null
+    metaDescription?: StringNullableFilter<"SellerProfile"> | string | null
+    keywords?: StringNullableListFilter<"SellerProfile">
     businessName?: StringNullableFilter<"SellerProfile"> | string | null
     businessRegNo?: StringNullableFilter<"SellerProfile"> | string | null
     businessType?: StringNullableFilter<"SellerProfile"> | string | null
@@ -61185,6 +61308,9 @@ export namespace Prisma {
     banner?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     tagline?: SortOrderInput | SortOrder
+    metaTitle?: SortOrderInput | SortOrder
+    metaDescription?: SortOrderInput | SortOrder
+    keywords?: SortOrder
     businessName?: SortOrderInput | SortOrder
     businessRegNo?: SortOrderInput | SortOrder
     businessType?: SortOrderInput | SortOrder
@@ -61222,6 +61348,9 @@ export namespace Prisma {
     banner?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
     description?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
     tagline?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    metaTitle?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    metaDescription?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    keywords?: StringNullableListFilter<"SellerProfile">
     businessName?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
     businessRegNo?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
     businessType?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
@@ -61787,6 +61916,9 @@ export namespace Prisma {
     name?: StringFilter<"Category"> | string
     slug?: StringFilter<"Category"> | string
     description?: StringNullableFilter<"Category"> | string | null
+    metaTitle?: StringNullableFilter<"Category"> | string | null
+    metaDescription?: StringNullableFilter<"Category"> | string | null
+    keywords?: StringNullableListFilter<"Category">
     parentId?: StringNullableFilter<"Category"> | string | null
     isActive?: BoolFilter<"Category"> | boolean
     createdAt?: DateTimeFilter<"Category"> | Date | string
@@ -61804,6 +61936,9 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
+    metaTitle?: SortOrderInput | SortOrder
+    metaDescription?: SortOrderInput | SortOrder
+    keywords?: SortOrder
     parentId?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
@@ -61824,6 +61959,9 @@ export namespace Prisma {
     OR?: CategoryWhereInput[]
     NOT?: CategoryWhereInput | CategoryWhereInput[]
     description?: StringNullableFilter<"Category"> | string | null
+    metaTitle?: StringNullableFilter<"Category"> | string | null
+    metaDescription?: StringNullableFilter<"Category"> | string | null
+    keywords?: StringNullableListFilter<"Category">
     parentId?: StringNullableFilter<"Category"> | string | null
     isActive?: BoolFilter<"Category"> | boolean
     createdAt?: DateTimeFilter<"Category"> | Date | string
@@ -61841,6 +61979,9 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
+    metaTitle?: SortOrderInput | SortOrder
+    metaDescription?: SortOrderInput | SortOrder
+    keywords?: SortOrder
     parentId?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
@@ -61858,6 +61999,9 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Category"> | string
     slug?: StringWithAggregatesFilter<"Category"> | string
     description?: StringNullableWithAggregatesFilter<"Category"> | string | null
+    metaTitle?: StringNullableWithAggregatesFilter<"Category"> | string | null
+    metaDescription?: StringNullableWithAggregatesFilter<"Category"> | string | null
+    keywords?: StringNullableListFilter<"Category">
     parentId?: StringNullableWithAggregatesFilter<"Category"> | string | null
     isActive?: BoolWithAggregatesFilter<"Category"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Category"> | Date | string
@@ -62296,6 +62440,9 @@ export namespace Prisma {
     features?: StringNullableListFilter<"Product">
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     specificationTable?: JsonNullableFilter<"Product">
+    metaTitle?: StringNullableFilter<"Product"> | string | null
+    metaDescription?: StringNullableFilter<"Product"> | string | null
+    keywords?: StringNullableListFilter<"Product">
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     categoryId?: StringNullableFilter<"Product"> | string | null
@@ -62324,6 +62471,9 @@ export namespace Prisma {
     features?: SortOrder
     status?: SortOrder
     specificationTable?: SortOrderInput | SortOrder
+    metaTitle?: SortOrderInput | SortOrder
+    metaDescription?: SortOrderInput | SortOrder
+    keywords?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     categoryId?: SortOrderInput | SortOrder
@@ -62355,6 +62505,9 @@ export namespace Prisma {
     features?: StringNullableListFilter<"Product">
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     specificationTable?: JsonNullableFilter<"Product">
+    metaTitle?: StringNullableFilter<"Product"> | string | null
+    metaDescription?: StringNullableFilter<"Product"> | string | null
+    keywords?: StringNullableListFilter<"Product">
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     categoryId?: StringNullableFilter<"Product"> | string | null
@@ -62383,6 +62536,9 @@ export namespace Prisma {
     features?: SortOrder
     status?: SortOrder
     specificationTable?: SortOrderInput | SortOrder
+    metaTitle?: SortOrderInput | SortOrder
+    metaDescription?: SortOrderInput | SortOrder
+    keywords?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     categoryId?: SortOrderInput | SortOrder
@@ -62404,6 +62560,9 @@ export namespace Prisma {
     features?: StringNullableListFilter<"Product">
     status?: EnumProductStatusWithAggregatesFilter<"Product"> | $Enums.ProductStatus
     specificationTable?: JsonNullableWithAggregatesFilter<"Product">
+    metaTitle?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    metaDescription?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    keywords?: StringNullableListFilter<"Product">
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     categoryId?: StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -64908,6 +65067,9 @@ export namespace Prisma {
     banner?: string | null
     description?: string | null
     tagline?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: SellerProfileCreatekeywordsInput | string[]
     businessName?: string | null
     businessRegNo?: string | null
     businessType?: string | null
@@ -64938,6 +65100,9 @@ export namespace Prisma {
     banner?: string | null
     description?: string | null
     tagline?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: SellerProfileCreatekeywordsInput | string[]
     businessName?: string | null
     businessRegNo?: string | null
     businessType?: string | null
@@ -64966,6 +65131,9 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: SellerProfileUpdatekeywordsInput | string[]
     businessName?: NullableStringFieldUpdateOperationsInput | string | null
     businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
     businessType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64996,6 +65164,9 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: SellerProfileUpdatekeywordsInput | string[]
     businessName?: NullableStringFieldUpdateOperationsInput | string | null
     businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
     businessType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65025,6 +65196,9 @@ export namespace Prisma {
     banner?: string | null
     description?: string | null
     tagline?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: SellerProfileCreatekeywordsInput | string[]
     businessName?: string | null
     businessRegNo?: string | null
     businessType?: string | null
@@ -65053,6 +65227,9 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: SellerProfileUpdatekeywordsInput | string[]
     businessName?: NullableStringFieldUpdateOperationsInput | string | null
     businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
     businessType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65081,6 +65258,9 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: SellerProfileUpdatekeywordsInput | string[]
     businessName?: NullableStringFieldUpdateOperationsInput | string | null
     businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
     businessType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65678,6 +65858,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -65694,6 +65877,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     parentId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -65710,6 +65896,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65726,6 +65915,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65742,6 +65934,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     parentId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -65753,6 +65948,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65763,6 +65961,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66216,6 +66417,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -66243,6 +66447,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -66268,6 +66475,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -66295,6 +66505,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66321,6 +66534,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -66335,6 +66551,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -66349,6 +66568,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -69166,6 +69388,14 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type EnumVerificationStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.VerificationStatus | EnumVerificationStatusFieldRefInput<$PrismaModel>
     in?: $Enums.VerificationStatus[] | ListEnumVerificationStatusFieldRefInput<$PrismaModel>
@@ -69209,6 +69439,9 @@ export namespace Prisma {
     banner?: SortOrder
     description?: SortOrder
     tagline?: SortOrder
+    metaTitle?: SortOrder
+    metaDescription?: SortOrder
+    keywords?: SortOrder
     businessName?: SortOrder
     businessRegNo?: SortOrder
     businessType?: SortOrder
@@ -69244,6 +69477,8 @@ export namespace Prisma {
     banner?: SortOrder
     description?: SortOrder
     tagline?: SortOrder
+    metaTitle?: SortOrder
+    metaDescription?: SortOrder
     businessName?: SortOrder
     businessRegNo?: SortOrder
     businessType?: SortOrder
@@ -69273,6 +69508,8 @@ export namespace Prisma {
     banner?: SortOrder
     description?: SortOrder
     tagline?: SortOrder
+    metaTitle?: SortOrder
+    metaDescription?: SortOrder
     businessName?: SortOrder
     businessRegNo?: SortOrder
     businessType?: SortOrder
@@ -69786,6 +70023,9 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrder
+    metaTitle?: SortOrder
+    metaDescription?: SortOrder
+    keywords?: SortOrder
     parentId?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
@@ -69797,6 +70037,8 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrder
+    metaTitle?: SortOrder
+    metaDescription?: SortOrder
     parentId?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
@@ -69808,6 +70050,8 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     description?: SortOrder
+    metaTitle?: SortOrder
+    metaDescription?: SortOrder
     parentId?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
@@ -70127,14 +70371,6 @@ export namespace Prisma {
     _max?: NestedEnumReturnTypeFilter<$PrismaModel>
   }
 
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
-
   export type EnumProductStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ProductStatus | EnumProductStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ProductStatus[] | ListEnumProductStatusFieldRefInput<$PrismaModel>
@@ -70211,6 +70447,9 @@ export namespace Prisma {
     features?: SortOrder
     status?: SortOrder
     specificationTable?: SortOrder
+    metaTitle?: SortOrder
+    metaDescription?: SortOrder
+    keywords?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     categoryId?: SortOrder
@@ -70224,6 +70463,8 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrder
     status?: SortOrder
+    metaTitle?: SortOrder
+    metaDescription?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     categoryId?: SortOrder
@@ -70237,6 +70478,8 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrder
     status?: SortOrder
+    metaTitle?: SortOrder
+    metaDescription?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     categoryId?: SortOrder
@@ -72761,6 +73004,10 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRolesInput, UserUpdateWithoutRolesInput>, UserUncheckedUpdateWithoutRolesInput>
   }
 
+  export type SellerProfileCreatekeywordsInput = {
+    set: string[]
+  }
+
   export type AddressCreateNestedOneWithoutSellerPickupAddressesInput = {
     create?: XOR<AddressCreateWithoutSellerPickupAddressesInput, AddressUncheckedCreateWithoutSellerPickupAddressesInput>
     connectOrCreate?: AddressCreateOrConnectWithoutSellerPickupAddressesInput
@@ -72771,6 +73018,11 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutSellerProfileInput, UserUncheckedCreateWithoutSellerProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutSellerProfileInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type SellerProfileUpdatekeywordsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type EnumVerificationStatusFieldUpdateOperationsInput = {
@@ -73145,6 +73397,10 @@ export namespace Prisma {
     update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutCategorySpecificationInput, CategoryUpdateWithoutCategorySpecificationInput>, CategoryUncheckedUpdateWithoutCategorySpecificationInput>
   }
 
+  export type CategoryCreatekeywordsInput = {
+    set: string[]
+  }
+
   export type CategoryCreateNestedOneWithoutChildrenInput = {
     create?: XOR<CategoryCreateWithoutChildrenInput, CategoryUncheckedCreateWithoutChildrenInput>
     connectOrCreate?: CategoryCreateOrConnectWithoutChildrenInput
@@ -73219,6 +73475,11 @@ export namespace Prisma {
     connectOrCreate?: LandingPageCategoryCardCreateOrConnectWithoutCategoryInput | LandingPageCategoryCardCreateOrConnectWithoutCategoryInput[]
     createMany?: LandingPageCategoryCardCreateManyCategoryInputEnvelope
     connect?: LandingPageCategoryCardWhereUniqueInput | LandingPageCategoryCardWhereUniqueInput[]
+  }
+
+  export type CategoryUpdatekeywordsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type CategoryUpdateOneWithoutChildrenNestedInput = {
@@ -73619,6 +73880,10 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type ProductCreatekeywordsInput = {
+    set: string[]
+  }
+
   export type UserCreateNestedOneWithoutProductsInput = {
     create?: XOR<UserCreateWithoutProductsInput, UserUncheckedCreateWithoutProductsInput>
     connectOrCreate?: UserCreateOrConnectWithoutProductsInput
@@ -73792,6 +74057,11 @@ export namespace Prisma {
 
   export type EnumProductStatusFieldUpdateOperationsInput = {
     set?: $Enums.ProductStatus
+  }
+
+  export type ProductUpdatekeywordsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type UserUpdateOneRequiredWithoutProductsNestedInput = {
@@ -76313,6 +76583,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -76338,6 +76611,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -76657,6 +76933,9 @@ export namespace Prisma {
     banner?: string | null
     description?: string | null
     tagline?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: SellerProfileCreatekeywordsInput | string[]
     businessName?: string | null
     businessRegNo?: string | null
     businessType?: string | null
@@ -76685,6 +76964,9 @@ export namespace Prisma {
     banner?: string | null
     description?: string | null
     tagline?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: SellerProfileCreatekeywordsInput | string[]
     businessName?: string | null
     businessRegNo?: string | null
     businessType?: string | null
@@ -77108,6 +77390,9 @@ export namespace Prisma {
     features?: StringNullableListFilter<"Product">
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     specificationTable?: JsonNullableFilter<"Product">
+    metaTitle?: StringNullableFilter<"Product"> | string | null
+    metaDescription?: StringNullableFilter<"Product"> | string | null
+    keywords?: StringNullableListFilter<"Product">
     createdAt?: DateTimeFilter<"Product"> | Date | string
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     categoryId?: StringNullableFilter<"Product"> | string | null
@@ -77388,6 +77673,9 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: SellerProfileUpdatekeywordsInput | string[]
     businessName?: NullableStringFieldUpdateOperationsInput | string | null
     businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
     businessType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77416,6 +77704,9 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: SellerProfileUpdatekeywordsInput | string[]
     businessName?: NullableStringFieldUpdateOperationsInput | string | null
     businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
     businessType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78271,6 +78562,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -78297,6 +78591,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -78591,6 +78888,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -78617,6 +78917,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -79630,6 +79933,9 @@ export namespace Prisma {
     banner?: string | null
     description?: string | null
     tagline?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: SellerProfileCreatekeywordsInput | string[]
     businessName?: string | null
     businessRegNo?: string | null
     businessType?: string | null
@@ -79659,6 +79965,9 @@ export namespace Prisma {
     banner?: string | null
     description?: string | null
     tagline?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: SellerProfileCreatekeywordsInput | string[]
     businessName?: string | null
     businessRegNo?: string | null
     businessType?: string | null
@@ -79819,6 +80128,9 @@ export namespace Prisma {
     banner?: StringNullableFilter<"SellerProfile"> | string | null
     description?: StringNullableFilter<"SellerProfile"> | string | null
     tagline?: StringNullableFilter<"SellerProfile"> | string | null
+    metaTitle?: StringNullableFilter<"SellerProfile"> | string | null
+    metaDescription?: StringNullableFilter<"SellerProfile"> | string | null
+    keywords?: StringNullableListFilter<"SellerProfile">
     businessName?: StringNullableFilter<"SellerProfile"> | string | null
     businessRegNo?: StringNullableFilter<"SellerProfile"> | string | null
     businessType?: StringNullableFilter<"SellerProfile"> | string | null
@@ -79844,6 +80156,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -79859,6 +80174,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     parentId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -79890,6 +80208,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -79905,6 +80226,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -79920,6 +80244,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -79935,6 +80262,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     parentId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -79955,6 +80285,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -79970,6 +80303,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -79998,6 +80334,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -80024,6 +80363,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -80152,6 +80494,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -80167,6 +80512,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -80201,6 +80549,9 @@ export namespace Prisma {
     name?: StringFilter<"Category"> | string
     slug?: StringFilter<"Category"> | string
     description?: StringNullableFilter<"Category"> | string | null
+    metaTitle?: StringNullableFilter<"Category"> | string | null
+    metaDescription?: StringNullableFilter<"Category"> | string | null
+    keywords?: StringNullableListFilter<"Category">
     parentId?: StringNullableFilter<"Category"> | string | null
     isActive?: BoolFilter<"Category"> | boolean
     createdAt?: DateTimeFilter<"Category"> | Date | string
@@ -80515,6 +80866,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -80541,6 +80895,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -80624,6 +80981,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -80650,6 +81010,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -80708,6 +81071,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -80723,6 +81089,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     parentId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -80797,6 +81166,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -80812,6 +81184,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -80830,6 +81205,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -80856,6 +81234,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -80896,6 +81277,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -80922,6 +81306,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -80946,6 +81333,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -80972,6 +81362,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -81012,6 +81405,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -81038,6 +81434,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -81062,6 +81461,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -81088,6 +81490,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -81128,6 +81533,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -81154,6 +81562,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -81394,6 +81805,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -81409,6 +81823,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     parentId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -81847,6 +82264,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -81862,6 +82282,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -82086,6 +82509,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -82112,6 +82538,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -82268,6 +82697,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -82294,6 +82726,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -82483,6 +82918,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -82509,6 +82947,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -82549,6 +82990,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -82575,6 +83019,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -84283,6 +84730,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -84309,6 +84759,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -84504,6 +84957,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -84530,6 +84986,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -85219,6 +85678,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -85245,6 +85707,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -85312,6 +85777,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -85338,6 +85806,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -86126,6 +86597,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -86152,6 +86626,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -86315,6 +86792,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -86341,6 +86821,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -87613,6 +88096,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -87639,6 +88125,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -87782,6 +88271,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -87808,6 +88300,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -87829,6 +88324,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -87844,6 +88342,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     parentId?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -87875,6 +88376,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -87890,6 +88394,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -88000,6 +88507,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId?: string | null
@@ -88440,6 +88950,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -88465,6 +88978,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -88490,6 +89006,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -89029,6 +89548,9 @@ export namespace Prisma {
     banner?: string | null
     description?: string | null
     tagline?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: SellerProfileCreatekeywordsInput | string[]
     businessName?: string | null
     businessRegNo?: string | null
     businessType?: string | null
@@ -89056,6 +89578,9 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: SellerProfileUpdatekeywordsInput | string[]
     businessName?: NullableStringFieldUpdateOperationsInput | string | null
     businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
     businessType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -89085,6 +89610,9 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: SellerProfileUpdatekeywordsInput | string[]
     businessName?: NullableStringFieldUpdateOperationsInput | string | null
     businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
     businessType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -89113,6 +89641,9 @@ export namespace Prisma {
     banner?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: SellerProfileUpdatekeywordsInput | string[]
     businessName?: NullableStringFieldUpdateOperationsInput | string | null
     businessRegNo?: NullableStringFieldUpdateOperationsInput | string | null
     businessType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -89137,6 +89668,9 @@ export namespace Prisma {
     name: string
     slug: string
     description?: string | null
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: CategoryCreatekeywordsInput | string[]
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -89151,6 +89685,9 @@ export namespace Prisma {
     features?: ProductCreatefeaturesInput | string[]
     status?: $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
@@ -89189,6 +89726,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -89204,6 +89744,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -89219,6 +89762,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: CategoryUpdatekeywordsInput | string[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -89232,6 +89778,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -89258,6 +89807,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -89283,6 +89835,9 @@ export namespace Prisma {
     features?: ProductUpdatefeaturesInput | string[]
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string

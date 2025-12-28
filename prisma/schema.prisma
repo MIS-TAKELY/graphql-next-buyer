@@ -245,6 +245,11 @@ model SellerProfile {
     banner      String?
     description String? @db.Text
     tagline     String?
+    
+    // SEO Fields
+    metaTitle       String?
+    metaDescription String?         @db.Text
+    keywords        String[]
 
     businessName  String?
     businessRegNo String?
@@ -415,6 +420,12 @@ model Category {
     name        String   @unique
     slug        String   @unique
     description String?
+    
+    // SEO Fields
+    metaTitle       String?
+    metaDescription String?         @db.Text
+    keywords        String[]
+
     parentId    String?
     isActive    Boolean  @default(true)
     createdAt   DateTime @default(now())
@@ -538,6 +549,12 @@ model Product {
     features           String[]
     status             ProductStatus @default(INACTIVE)
     specificationTable Json?
+
+    // SEO Fields
+    metaTitle       String?
+    metaDescription String?         @db.Text
+    keywords        String[]
+
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

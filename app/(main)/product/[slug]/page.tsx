@@ -55,26 +55,28 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
   const productImage = product.images?.[0]?.url;
 
+  const title = product.metaTitle || product.name;
+  const description = product.metaDescription || product.description?.substring(0, 160) || `Buy ${product.name} at the best price in Nepal.`;
+  const keywords = product.keywords && product.keywords.length > 0 ? product.keywords : [`buy ${product.name} online`, `${product.name} price in Nepal`];
+
   return {
-    title: product.name,
-    description:
-      product.description?.substring(0, 160) ||
-      `Buy ${product.name} at the best price.`,
+    title,
+    description,
+    keywords,
     alternates: {
-      canonical: `/shop/product/${slug}`,
+      canonical: `/product/${slug}`,
     },
     openGraph: {
-      title: product.name,
-      description: product.description?.substring(0, 160),
+      title,
+      description,
       images: productImage ? [productImage, ...previousImages] : previousImages,
-      url: `/shop/product/${slug}`,
-      type: "website", // Fallback to website for better type compatibility, or use 'article'
-      // properties like price are not standard OG, usually handled by Schema.org
+      url: `/product/${slug}`,
+      type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: product.name,
-      description: product.description?.substring(0, 160),
+      title,
+      description,
       images: productImage ? [productImage] : [],
     },
   };

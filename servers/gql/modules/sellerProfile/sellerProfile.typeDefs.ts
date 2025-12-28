@@ -28,6 +28,9 @@ export const sellerProfileTypeDefs = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     address: Address
+    metaTitle: String
+    metaDescription: String
+    keywords: [String]
   }
 
 

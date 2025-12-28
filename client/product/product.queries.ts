@@ -80,6 +80,9 @@ export const PRODUCT_FIELDS_FRAGMENT = gql`
     }
     features
     specificationTable
+    metaTitle
+    metaDescription
+    keywords
   }
 `;
 

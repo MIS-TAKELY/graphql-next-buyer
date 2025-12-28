@@ -41,6 +41,9 @@ export const productTypeDefs = gql`
     returnPolicy: [ReturnPolicy!]
     features: [String]
     specificationTable: JSON
+    metaTitle: String
+    metaDescription: String
+    keywords: [String]
   }
 
   input CreateProductInput {
@@ -54,6 +57,9 @@ export const productTypeDefs = gql`
     promotionalImages: [CreateProductImageInput!]!
     returnPolicy: String
     warranty: String
+    metaTitle: String
+    metaDescription: String
+    keywords: [String]
   }
 
   type Query {

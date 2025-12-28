@@ -246,6 +246,11 @@ model SellerProfile {
   description String? @db.Text
   tagline     String?
 
+  // SEO Fields
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  keywords        String[]
+
   businessName  String?
   businessRegNo String?
   businessType  String?
@@ -411,14 +416,20 @@ model CategorySpecification {
 }
 
 model Category {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
+  id          String  @id @default(cuid())
+  name        String  @unique
+  slug        String  @unique
   description String?
-  parentId    String?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+  // SEO Fields
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  keywords        String[]
+
+  parentId  String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   parent                   Category?                 @relation("CategoryHierarchy", fields: [parentId], references: [id])
   children                 Category[]                @relation("CategoryHierarchy")
@@ -538,6 +549,11 @@ model Product {
   features           String[]
   status             ProductStatus @default(INACTIVE)
   specificationTable Json?
+
+  // SEO Fields
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  keywords        String[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

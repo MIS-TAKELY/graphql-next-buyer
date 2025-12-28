@@ -82,6 +82,9 @@ export interface IProducts {
   category?: ICategory;
   productOffers?: IProductOffer[];
   specificationTable?: { key: string; value: string }[];
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string[];
 }
 export interface IProductVarient extends IProductsVarient {
   stock: string;

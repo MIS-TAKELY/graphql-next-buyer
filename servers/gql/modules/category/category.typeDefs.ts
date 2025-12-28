@@ -16,6 +16,9 @@ export const categoryTypeDefs = gql`
     children: [Category!]!
     products: [Product!]!
     categorySpecification: [CategorySpecification!]!
+    metaTitle: String
+    metaDescription: String
+    keywords: [String]
   }
 
   input CreateCategoryInput {
@@ -23,6 +26,9 @@ export const categoryTypeDefs = gql`
     description: String
     parentId: String
     isActive: Boolean
+    metaTitle: String
+    metaDescription: String
+    keywords: [String]
   }
 
    input CreateSubCategoryInput {
@@ -40,5 +46,6 @@ export const categoryTypeDefs = gql`
   type Query {
     categories: [Category!]!
     category(id: ID!): Category
+    categoryBySlug(slug: String!): Category
   }
 `;
