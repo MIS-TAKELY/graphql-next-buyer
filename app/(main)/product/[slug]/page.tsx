@@ -147,6 +147,23 @@ export default async function ProductPage({
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
     },
+    aggregateRating: serializableProduct.reviews && serializableProduct.reviews.length > 0 ? {
+      "@type": "AggregateRating",
+      ratingValue: serializableProduct.reviews.reduce((acc: number, review: any) => acc + (review.rating || 0), 0) / serializableProduct.reviews.length,
+      reviewCount: serializableProduct.reviews.length,
+    } : undefined,
+    review: serializableProduct.reviews?.map((review: any) => ({
+      "@type": "Review",
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: review.rating,
+        bestRating: "5",
+      },
+      author: {
+        "@type": "Person",
+        name: review.user ? `${review.user.firstName} ${review.user.lastName}` : "Anonymous",
+      },
+    })),
   };
 
   const breadcrumbLd = {

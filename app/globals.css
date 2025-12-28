@@ -26,7 +26,7 @@
   --breakpoint-3xl: 1920px;
 
   /* Fonts - Mobile-friendly, clean typography like Flipkart/Amazon */
-  --font-sans: "Roboto", "Arial", system-ui, sans-serif;
+  --font-sans: var(--font-roboto), "Roboto", "Arial", system-ui, sans-serif;
   --font-mono: "Fira Code", monospace;
 
   /* Radius - All set to 0 for sharp, modern edges */

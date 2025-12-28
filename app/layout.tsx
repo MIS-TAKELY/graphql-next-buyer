@@ -2,20 +2,17 @@ import ApolloWrapper from "@/lib/apollo/apollo-provider";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata, Viewport } from "next";
 import { ThemeProvider } from "next-themes";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { NotificationListener } from "@/components/common/NotificationListener";
 import AuthGate from "@/components/auth/AuthGate";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const roboto = Roboto({
+  weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-roboto",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -81,7 +78,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://placehold.co" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${roboto.variable} antialiased`}
       >
         <ApolloWrapper>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

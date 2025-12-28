@@ -2,7 +2,7 @@ import { prisma } from "../lib/db/prisma";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://dai-ecommerce.com";
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.vanijay.com";
 
     let categories: { slug: string }[] = [];
     let products: { slug: string; updatedAt: Date }[] = [];

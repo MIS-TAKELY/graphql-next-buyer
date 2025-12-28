@@ -359,9 +359,9 @@ const ProductReviews = ({ isOwnProduct }: { isOwnProduct?: boolean }) => {
               .map((url, i) => (
                 <div
                   key={i}
-                  className="w-12 h-12 rounded border overflow-hidden shrink-0"
+                  className="relative w-12 h-12 rounded border overflow-hidden shrink-0"
                 >
-                  <img src={url} alt="Review" className="w-full h-full object-cover" />
+                  <Image src={url} alt="Review" fill className="object-cover" sizes="48px" />
                 </div>
               ))}
           </div>
