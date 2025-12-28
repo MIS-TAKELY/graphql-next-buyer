@@ -21,15 +21,10 @@ export const MAKE_SEARCH_QUERY = gql`
         reviews {
           rating
         }
-        description
         brand
-        features
         slug
         category {
           name
-        }
-        deliveryOptions {
-          title
         }
       }
       pagination {

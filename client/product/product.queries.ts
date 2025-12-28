@@ -86,6 +86,45 @@ export const PRODUCT_FIELDS_FRAGMENT = gql`
   }
 `;
 
+export const PRODUCT_CARD_FRAGMENT = gql`
+  fragment ProductCardFields on Product {
+    id
+    name
+    slug
+    brand
+    status
+    images {
+      id
+      url
+      altText
+      mediaType
+    }
+    variants {
+      id
+      price
+      mrp
+      stock
+      isDefault
+    }
+    category {
+      id
+      name
+    }
+    reviews {
+      id
+      rating
+    }
+    productOffers {
+      id
+      offer {
+        type
+        value
+        isActive
+      }
+    }
+  }
+`;
+
 export const GET_PRODUCT_CATEGORIES = gql`
   query GetProductCategories {
     categories {
@@ -150,28 +189,28 @@ export const GET_PRODUCT_DETAILS = gql`
 export const GET_PRODUCTS = gql`
   query GetProducts($limit: Int, $offset: Int) {
     getProducts(limit: $limit, offset: $offset) {
-      ...ProductFields
+      ...ProductCardFields
     }
   }
-  ${PRODUCT_FIELDS_FRAGMENT}
+  ${PRODUCT_CARD_FRAGMENT}
 `;
 
 export const GET_PRODUCTS_MINIMAL = gql`
   query GetProductsMinimal($limit: Int, $offset: Int) {
     getProducts(limit: $limit, offset: $offset) {
-      ...ProductFields
+      ...ProductCardFields
     }
   }
-  ${PRODUCT_FIELDS_FRAGMENT}
+  ${PRODUCT_CARD_FRAGMENT}
 `;
 
 export const GET_PRODUCTS_BY_SELLER = gql`
   query GetProductsBySeller($sellerId: ID!) {
     getProductsBySeller(sellerId: $sellerId) {
-      ...ProductFields
+      ...ProductCardFields
     }
   }
-  ${PRODUCT_FIELDS_FRAGMENT}
+  ${PRODUCT_CARD_FRAGMENT}
 `;
 
 export const RECORD_PRODUCT_VIEW = gql`
@@ -183,37 +222,35 @@ export const RECORD_PRODUCT_VIEW = gql`
 export const GET_RECENTLY_VIEWED = gql`
   query GetRecentlyViewed {
     getRecentlyViewed {
-      ...ProductFields
+      ...ProductCardFields
     }
   }
-  ${PRODUCT_FIELDS_FRAGMENT}
+  ${PRODUCT_CARD_FRAGMENT}
 `;
 
 export const GET_FREQUENTLY_BOUGHT_TOGETHER = gql`
   query GetFrequentlyBoughtTogether($productId: ID!, $limit: Int) {
     getFrequentlyBoughtTogether(productId: $productId, limit: $limit) {
-      ...ProductFields
+      ...ProductCardFields
     }
   }
-  ${PRODUCT_FIELDS_FRAGMENT}
+  ${PRODUCT_CARD_FRAGMENT}
 `;
 
 export const GET_RECOMMENDED_PRODUCTS = gql`
   query GetRecommendedProducts($productId: ID) {
     getRecommendedProducts(productId: $productId) {
-      ...ProductFields
+      ...ProductCardFields
     }
   }
-  ${PRODUCT_FIELDS_FRAGMENT}
+  ${PRODUCT_CARD_FRAGMENT}
 `;
 export const GET_PRODUCTS_BY_IDS = gql`
   query GetProductsByIds($ids: [ID!]!) {
     getProductsByIds(ids: $ids) {
-      ...ProductFields
-      category {
-        name
-      }
+      ...ProductCardFields
     }
   }
-  ${PRODUCT_FIELDS_FRAGMENT}
+  ${PRODUCT_CARD_FRAGMENT}
 `;
+

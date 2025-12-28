@@ -5,6 +5,7 @@ import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
 import { CacheService } from "@/services/CacheService";
 import { TProduct } from "@/types/product";
 import { Metadata, ResolvingMetadata } from "next";
+import { cache } from "react";
 
 export const revalidate = 0;
 
@@ -13,13 +14,17 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-async function getProduct(slug: string) {
+// Cached data fetcher to deduplicate requests between generateMetadata and page
+const getProduct = cache(async (slug: string) => {
   const CACHE_KEY = CacheService.getProductDetailKey(slug);
+
+  // 1. Try Cache First (Redis)
   let product: TProduct | null = await CacheService.get<TProduct>(CACHE_KEY);
 
   if (product) return product;
 
   try {
+    // 2. If not in Cache, fetch from DB via GraphQL
     const client = await getServerApolloClient();
     const { data } = await client.query({
       query: GET_PRODUCT_BY_SLUG,
@@ -29,6 +34,7 @@ async function getProduct(slug: string) {
     product = data?.getProductBySlug as TProduct | null;
 
     if (product) {
+      // 3. Store in Cache
       await CacheService.set(CACHE_KEY, product, 3600);
     }
 
@@ -37,7 +43,7 @@ async function getProduct(slug: string) {
     console.error("Error fetching product:", error);
     return null;
   }
-}
+});
 
 export async function generateMetadata(
   { params }: Props,
@@ -88,65 +94,10 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  let product: TProduct | null = null;
-  const CACHE_KEY = CacheService.getProductDetailKey(slug);
 
-  try {
-    /*
-    // 1. Try Cache First
-    product = await CacheService.get<TProduct>(CACHE_KEY);
-    */
+  // Fetch product using the cached function
+  const product = await getProduct(slug);
 
-    // 2. If not in Cache, fetch from DB
-    if (!product) {
-      const client = await getServerApolloClient();
-      const { data, error, errors } = await client.query({
-        query: GET_PRODUCT_BY_SLUG,
-        variables: { slug },
-        fetchPolicy: "no-cache",
-      });
-
-      if (error || (errors && errors.length > 0)) {
-        const errorMsg = error?.message || errors?.[0]?.message || "GraphQL Error";
-        console.error("GraphQL error:", errorMsg);
-        // We return a small error UI here instead of crashing
-        return <div className="p-8 text-center text-red-500">Error: {errorMsg}</div>;
-      }
-
-      product = data?.getProductBySlug;
-
-      if (product) {
-        await CacheService.set(CACHE_KEY, product, 3600);
-      }
-    }
-  } catch (err: any) {
-    console.error("Caught exception during ProductPage data fetching:", err);
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] p-8 text-center">
-        <div className="p-6 bg-red-50 dark:bg-red-950/20 rounded-xl border border-red-100 dark:border-red-900/30 max-w-2xl w-full">
-          <h2 className="text-xl font-bold text-red-600 dark:text-red-400">
-            {err.name === "ApolloError" ? "Fetch Failed" : "Something went wrong"}
-          </h2>
-          <p className="mt-3 text-gray-600 dark:text-gray-400">
-            We encountered an issue while loading this product. This may be a temporary network issue.
-          </p>
-          {process.env.NODE_ENV !== "production" && (
-            <pre className="mt-4 p-4 bg-white dark:bg-black/40 rounded border border-red-100 dark:border-red-900/30 overflow-auto text-left text-xs text-red-500 font-mono">
-              {err.message}
-            </pre>
-          )}
-          <a
-            href={`/product/${slug}`}
-            className="mt-6 inline-block px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
-          >
-            Try Again
-          </a>
-        </div>
-      </div>
-    );
-  }
-
-  // Handle case where product is still null (from DB and no error)
   if (!product) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] p-8 text-center">
@@ -158,7 +109,6 @@ export default async function ProductPage({
   }
 
   // Force serialize product to ensure it's a plain object for Client Components
-  // This prevents crashes in production due to non-serializable fields like Dates or Decimals
   const serializableProduct = JSON.parse(JSON.stringify(product));
 
   const initialCacheData = {

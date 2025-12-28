@@ -1,5 +1,6 @@
 import { createContext } from "@/servers/gql/context";
 import { createYoga } from "graphql-yoga";
+import { NoSchemaIntrospectionCustomRule } from "graphql";
 import type { NextRequest } from "next/server";
 import { schema } from "../../../servers/gql/index";
 
@@ -12,6 +13,14 @@ const yoga = createYoga<{
   context: async ({ request }: { request: NextRequest }) => {
     return await createContext(request);
   },
+  graphiql: process.env.NODE_ENV !== "production",
+  plugins: [
+    process.env.NODE_ENV === "production" && {
+      onValidate({ addValidationRule }: { addValidationRule: any }) {
+        addValidationRule(NoSchemaIntrospectionCustomRule);
+      },
+    },
+  ].filter(Boolean) as any,
   cors: {
     origin:
       process.env.NODE_ENV === "production"
@@ -27,6 +36,12 @@ const yoga = createYoga<{
 });
 
 export async function GET(request: NextRequest) {
+  if (
+    process.env.NODE_ENV === "production" &&
+    !request.nextUrl.searchParams.has("query")
+  ) {
+    return Response.redirect(new URL("/", request.url));
+  }
   return yoga.handleRequest(request, { req: request });
 }
 
