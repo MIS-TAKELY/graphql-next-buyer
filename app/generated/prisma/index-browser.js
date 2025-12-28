@@ -141,7 +141,8 @@ exports.Prisma.UserScalarFieldEnum = {
   gender: 'gender',
   dob: 'dob',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isBanned: 'isBanned'
 };
 
 exports.Prisma.UserRoleScalarFieldEnum = {

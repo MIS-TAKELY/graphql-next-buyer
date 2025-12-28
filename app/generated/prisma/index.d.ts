@@ -6143,6 +6143,7 @@ export namespace Prisma {
     dob: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    isBanned: boolean | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -6166,6 +6167,7 @@ export namespace Prisma {
     dob: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    isBanned: boolean | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -6189,6 +6191,7 @@ export namespace Prisma {
     dob: number
     createdAt: number
     updatedAt: number
+    isBanned: number
     _all: number
   }
 
@@ -6214,6 +6217,7 @@ export namespace Prisma {
     dob?: true
     createdAt?: true
     updatedAt?: true
+    isBanned?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -6237,6 +6241,7 @@ export namespace Prisma {
     dob?: true
     createdAt?: true
     updatedAt?: true
+    isBanned?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -6260,6 +6265,7 @@ export namespace Prisma {
     dob?: true
     createdAt?: true
     updatedAt?: true
+    isBanned?: true
     _all?: true
   }
 
@@ -6356,6 +6362,7 @@ export namespace Prisma {
     dob: Date | null
     createdAt: Date
     updatedAt: Date
+    isBanned: boolean
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -6396,6 +6403,7 @@ export namespace Prisma {
     dob?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    isBanned?: boolean
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
     addresses?: boolean | User$addressesArgs<ExtArgs>
@@ -6443,6 +6451,7 @@ export namespace Prisma {
     dob?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    isBanned?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6466,6 +6475,7 @@ export namespace Prisma {
     dob?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    isBanned?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -6489,9 +6499,10 @@ export namespace Prisma {
     dob?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    isBanned?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "displayUsername" | "email" | "emailVerified" | "password" | "image" | "firstName" | "lastName" | "avatarImageUrl" | "phone" | "phoneVerified" | "hasProfile" | "otp" | "otpExpiresAt" | "gender" | "dob" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "displayUsername" | "email" | "emailVerified" | "password" | "image" | "firstName" | "lastName" | "avatarImageUrl" | "phone" | "phoneVerified" | "hasProfile" | "otp" | "otpExpiresAt" | "gender" | "dob" | "createdAt" | "updatedAt" | "isBanned", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
@@ -6569,6 +6580,7 @@ export namespace Prisma {
       dob: Date | null
       createdAt: Date
       updatedAt: Date
+      isBanned: boolean
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -7035,6 +7047,7 @@ export namespace Prisma {
     readonly dob: FieldRef<"User", 'DateTime'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly isBanned: FieldRef<"User", 'Boolean'>
   }
     
 
@@ -59718,7 +59731,8 @@ export namespace Prisma {
     gender: 'gender',
     dob: 'dob',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    isBanned: 'isBanned'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -60830,6 +60844,7 @@ export namespace Prisma {
     dob?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    isBanned?: BoolFilter<"User"> | boolean
     sessions?: SessionListRelationFilter
     accounts?: AccountListRelationFilter
     addresses?: AddressListRelationFilter
@@ -60876,6 +60891,7 @@ export namespace Prisma {
     dob?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isBanned?: SortOrder
     sessions?: SessionOrderByRelationAggregateInput
     accounts?: AccountOrderByRelationAggregateInput
     addresses?: AddressOrderByRelationAggregateInput
@@ -60925,6 +60941,7 @@ export namespace Prisma {
     dob?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    isBanned?: BoolFilter<"User"> | boolean
     sessions?: SessionListRelationFilter
     accounts?: AccountListRelationFilter
     addresses?: AddressListRelationFilter
@@ -60971,6 +60988,7 @@ export namespace Prisma {
     dob?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isBanned?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -61000,6 +61018,7 @@ export namespace Prisma {
     dob?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    isBanned?: BoolWithAggregatesFilter<"User"> | boolean
   }
 
   export type UserRoleWhereInput = {
@@ -64587,6 +64606,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -64633,6 +64653,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -64679,6 +64700,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -64725,6 +64747,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -64771,6 +64794,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
   }
 
   export type UserUpdateManyMutationInput = {
@@ -64794,6 +64818,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -64817,6 +64842,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserRoleCreateInput = {
@@ -68956,6 +68982,7 @@ export namespace Prisma {
     dob?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isBanned?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -68979,6 +69006,7 @@ export namespace Prisma {
     dob?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isBanned?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -69002,6 +69030,7 @@ export namespace Prisma {
     dob?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isBanned?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -77571,6 +77600,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -77616,6 +77646,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -77677,6 +77708,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -77722,6 +77754,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -77806,6 +77839,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -77851,6 +77885,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -77957,6 +77992,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -78002,6 +78038,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -78047,6 +78084,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -78092,6 +78130,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -78153,6 +78192,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -78198,6 +78238,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -78298,6 +78339,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -78343,6 +78385,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -78393,6 +78436,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -78438,6 +78482,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -78620,6 +78665,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -78665,6 +78711,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -78721,6 +78768,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -78766,6 +78814,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -78872,6 +78921,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -78917,6 +78967,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -79039,6 +79090,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -79084,6 +79136,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -79229,6 +79282,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -79274,6 +79328,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -79364,6 +79419,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -79409,6 +79465,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -79489,6 +79546,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
@@ -79534,6 +79592,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
@@ -79661,6 +79720,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
@@ -79706,6 +79766,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
@@ -81130,6 +81191,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -81175,6 +81237,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -81615,6 +81678,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -81660,6 +81724,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -82547,6 +82612,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -82592,6 +82658,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -82694,6 +82761,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -82739,6 +82807,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -82868,6 +82937,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -82913,6 +82983,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -83201,6 +83272,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -83246,6 +83318,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -83596,6 +83669,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -83641,6 +83715,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -83744,6 +83819,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -83789,6 +83865,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -84122,6 +84199,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -84167,6 +84245,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -84335,6 +84414,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -84380,6 +84460,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -84567,6 +84648,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -84612,6 +84694,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -84716,6 +84799,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -84761,6 +84845,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -84886,6 +84971,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -84931,6 +85017,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -85016,6 +85103,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -85061,6 +85149,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -85322,6 +85411,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -85367,6 +85457,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -85523,6 +85614,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -85568,6 +85660,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -85846,6 +85939,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -85891,6 +85985,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -85952,6 +86047,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -85997,6 +86093,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -86097,6 +86194,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -86142,6 +86240,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -86290,6 +86389,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -86335,6 +86435,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -86421,6 +86522,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -86466,6 +86568,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -86558,6 +86661,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -86603,6 +86707,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -86648,6 +86753,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
@@ -86693,6 +86799,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
@@ -86754,6 +86861,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
@@ -86799,6 +86907,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
@@ -86844,6 +86953,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
@@ -86889,6 +86999,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
@@ -86950,6 +87061,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
@@ -86995,6 +87107,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
@@ -87122,6 +87235,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -87167,6 +87281,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -87322,6 +87437,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -87367,6 +87483,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -87412,6 +87529,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
@@ -87457,6 +87575,7 @@ export namespace Prisma {
     dob?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBanned?: boolean
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -87573,6 +87692,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
@@ -87618,6 +87738,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
