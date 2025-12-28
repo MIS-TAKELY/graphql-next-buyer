@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useRealChat } from "@/hooks/chat/useRealChat";
 import { ChatModal } from "@/components/page/chat/ChatModal";
+import { useCompareStore } from "@/store/compareStore";
+import { toast } from "sonner";
 
 interface ProductActionsClientProps {
   productId: string;
@@ -68,6 +70,37 @@ export function ProductActionsClient({
     }
   };
 
+  // Compare Logic
+  const { addProduct, removeProduct, isSelected } = useCompareStore();
+  const isCompared = isSelected(productId);
+
+  const handleCompareToggle = () => {
+    if (isCompared) {
+      removeProduct(productId);
+      toast.success("Removed from comparison");
+    } else {
+      // Create a compatible product object for the store
+      const productForCompare = {
+        id: productId,
+        slug: productSlug,
+        name: product?.name || "",
+        images: product?.images || [],
+        brand: product?.brand,
+        reviews: product?.reviews || [],
+        variants: product?.variants || [],
+        category: product?.category,
+        ...product
+      };
+
+      const added = addProduct(productForCompare as any);
+      if (added) {
+        toast.success("Added to comparison");
+      } else {
+        toast.error("Maximum 4 products can be compared");
+      }
+    }
+  };
+
   return (
     <div className="space-y-3 sm:space-y-4 bg-gray-50 dark:bg-gray-800 p-3 sm:p-4">
       <ProductActions
@@ -77,16 +110,18 @@ export function ProductActionsClient({
         quantity={quantity}
         inStock={inStock}
       />
-      <div className="flex w-full gap-2 sm:gap-4">
-        <div className="flex-1 flex justify-center items-center">
+      <div className="flex w-full gap-2 sm:gap-4 justify-between">
+        <div className="flex-none flex justify-center items-center">
           <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
         </div>
-        <div className="flex flex-1 justify-center items-center">
+        <div className="flex flex-1 justify-end sm:justify-center items-center">
           <WishlistShareButtons
             addedToWishlist={isAdded}
             toggleWishlist={toggleWishlist}
             itemId={productId}
             onChatOpen={handleChatOpen}
+            isCompared={isCompared}
+            onCompareToggle={handleCompareToggle}
           />
         </div>
       </div>

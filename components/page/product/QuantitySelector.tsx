@@ -8,8 +8,8 @@ interface QuantitySelectorProps {
 
 export default function QuantitySelector({ quantity, setQuantity }: QuantitySelectorProps) {
   return (
-    <div className="flex items-center gap-3">
-      <span className="font-medium text-sm text-gray-900 dark:text-gray-100">Quantity:</span>
+    <div className="flex items-center gap-2 sm:gap-3">
+      <span className="hidden sm:inline font-medium text-sm text-gray-900 dark:text-gray-100">Quantity:</span>
       <div className="flex items-center border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800">
         <Button
           variant="ghost"

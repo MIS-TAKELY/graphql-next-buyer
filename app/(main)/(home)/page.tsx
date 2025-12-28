@@ -10,7 +10,7 @@ import { TProduct } from "@/types/product";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
-import CompareFloater from "@/components/compare/CompareFloater";
+
 const DynamicSections = dynamic(
   () => import("@/components/page/home/DynamicSections")
 );
@@ -107,8 +107,8 @@ export default async function HomePage() {
       <Suspense fallback={<ProductSectionsSkeleton />}>
         <HomeProductSections />
       </Suspense>
-      {/* Comparison Button Bar - Floating */}
-      <CompareFloater />
+      {/* Comparison Button Bar - Floating - Moved to global layout */}
+      {/* <CompareFloater /> */}
     </div>
   );
 }

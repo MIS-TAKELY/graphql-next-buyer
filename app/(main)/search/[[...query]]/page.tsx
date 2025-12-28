@@ -6,7 +6,6 @@ import Pagination from "@/components/search/Pagination";
 import ProductGrid from "@/components/search/ProductGrid";
 import SearchHeader from "@/components/search/SearchHeader";
 import SortBar from "@/components/search/SortBar";
-import CompareButtonBar from "@/components/compare/CompareButtonBar";
 import { Filter, useDynamicSearchFilter } from "@/hooks/dynamicSeaarchFilter/useDynamicSearchFilter";
 import { useSearch } from "@/hooks/search/useSearch";
 import { useSearchParams } from "next/navigation";
@@ -265,8 +264,8 @@ export default function SearchPage() {
         </div>
       </div>
 
-      {/* Comparison Button Bar - Floating */}
-      <CompareButtonBar />
+      {/* Comparison Button Bar - Floating - Moved to global layout */}
+      {/* <CompareButtonBar /> */}
     </div>
   );
 }
