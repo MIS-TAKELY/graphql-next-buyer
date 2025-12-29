@@ -209,6 +209,7 @@ model User {
     sentMessages            Message[]                 @relation("UserSentMessages")
     ConversationParticipant ConversationParticipant[]
     notifications           Notification[]
+    productNotifications    ProductNotification[] @relation("UserNotifications")
     sellerProfile           SellerProfile?
     roles                   UserRole[]
     disputes                OrderDispute[]
@@ -574,6 +575,7 @@ model Product {
     returnPolicy    ReturnPolicy[]
     Conversation    Conversation[]
     questions       ProductQuestion[]
+    notifications   ProductNotification[] @relation("ProductNotifications")
     recentlyViewed  RecentlyViewed[]
 
     @@index([slug, sellerId])
@@ -1084,4 +1086,22 @@ model LandingPageBanner {
 
     @@index([sortOrder])
     @@map("landing_page_banners")
+}
+
+model ProductNotification {
+    id        String   @id @default(cuid())
+    productId String
+    variantId String?
+    userId    String?
+    email     String?
+    phone     String?
+    isNotified Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    product Product @relation("ProductNotifications", fields: [productId], references: [id], onDelete: Cascade)
+    user    User?   @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([productId, isNotified])
+    @@map("product_notifications")
 }

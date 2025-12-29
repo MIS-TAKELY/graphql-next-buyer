@@ -52,6 +52,8 @@ import { userTypeDefs } from "./modules/user/user.typeDefs";
 import { warrentyTypeDefs } from "./modules/warrenty/warrenty.typeDefs";
 import { wishlistResolvers } from "./modules/wishlist/wishlist.resolvers";
 import { wishlistTypeDefs } from "./modules/wishlist/wishlist.typeDefs";
+import { productNotificationResolvers } from "./modules/productNotification/productNotification.resolvers";
+import { productNotificationTypeDefs } from "./modules/productNotification/productNotification.schema";
 
 const rootTypeDefs = gql`
   type Query {
@@ -99,6 +101,7 @@ const typeDefs = mergeTypeDefs([
   landingPageTypeDefs,
   sellerProfileTypeDefs,
   bannerTypeDefs,
+  productNotificationTypeDefs,
 ]);
 
 import { GraphQLScalarType, Kind } from 'graphql';
@@ -144,6 +147,7 @@ const resolvers = mergeResolvers([
   topDealsResolvers,
   landingPageResolvers,
   bannerResolvers,
+  productNotificationResolvers,
 ]);
 
 export const schema = makeExecutableSchema({ typeDefs, resolvers });

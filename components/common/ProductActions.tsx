@@ -16,6 +16,7 @@ interface ProductActionsProps {
   onRemoveSuccess?: () => void;
   onError?: (error: any) => void;
   onBuyNowClick?: () => void;
+  productName?: string;
 }
 
 export function ProductActions({
@@ -31,6 +32,7 @@ export function ProductActions({
   onRemoveSuccess,
   onError,
   onBuyNowClick,
+  productName,
 }: ProductActionsProps) {
   if (!showBuyNow && !showAddToCart) {
     return null;
@@ -47,6 +49,8 @@ export function ProductActions({
             onClick={onBuyNowClick}
             isFromCart={false}
             variantId={variantId}
+            productId={productId}
+            productName={productName}
           />
         )}
       </div>

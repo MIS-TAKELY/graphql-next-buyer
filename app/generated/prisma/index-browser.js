@@ -689,6 +689,18 @@ exports.Prisma.LandingPageBannerScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ProductNotificationScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  variantId: 'variantId',
+  userId: 'userId',
+  email: 'email',
+  phone: 'phone',
+  isNotified: 'isNotified',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -897,7 +909,8 @@ exports.Prisma.ModelName = {
   LandingPageCategoryCard: 'LandingPageCategoryCard',
   LandingPageCategorySwiper: 'LandingPageCategorySwiper',
   LandingPageProductGrid: 'LandingPageProductGrid',
-  LandingPageBanner: 'LandingPageBanner'
+  LandingPageBanner: 'LandingPageBanner',
+  ProductNotification: 'ProductNotification'
 };
 
 /**

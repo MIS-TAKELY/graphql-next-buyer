@@ -109,6 +109,7 @@ export function ProductActionsClient({
         variantId={variantId}
         quantity={quantity}
         inStock={inStock}
+        productName={product?.name}
       />
       <div className="flex w-full gap-2 sm:gap-4 justify-between">
         <div className="flex-none flex justify-center items-center">

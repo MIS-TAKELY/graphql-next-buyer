@@ -243,6 +243,11 @@ export type LandingPageProductGrid = $Result.DefaultSelection<Prisma.$LandingPag
  * 
  */
 export type LandingPageBanner = $Result.DefaultSelection<Prisma.$LandingPageBannerPayload>
+/**
+ * Model ProductNotification
+ * 
+ */
+export type ProductNotification = $Result.DefaultSelection<Prisma.$ProductNotificationPayload>
 
 /**
  * Enums
@@ -1097,6 +1102,16 @@ export class PrismaClient<
     * ```
     */
   get landingPageBanner(): Prisma.LandingPageBannerDelegate<ExtArgs>;
+
+  /**
+   * `prisma.productNotification`: Exposes CRUD operations for the **ProductNotification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductNotifications
+    * const productNotifications = await prisma.productNotification.findMany()
+    * ```
+    */
+  get productNotification(): Prisma.ProductNotificationDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1583,7 +1598,8 @@ export namespace Prisma {
     LandingPageCategoryCard: 'LandingPageCategoryCard',
     LandingPageCategorySwiper: 'LandingPageCategorySwiper',
     LandingPageProductGrid: 'LandingPageProductGrid',
-    LandingPageBanner: 'LandingPageBanner'
+    LandingPageBanner: 'LandingPageBanner',
+    ProductNotification: 'ProductNotification'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1599,7 +1615,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout" | "productQuestion" | "productAnswer" | "session" | "account" | "verification" | "orderDispute" | "recentlyViewed" | "landingPageCategoryCard" | "landingPageCategorySwiper" | "landingPageProductGrid" | "landingPageBanner"
+      modelProps: "user" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout" | "productQuestion" | "productAnswer" | "session" | "account" | "verification" | "orderDispute" | "recentlyViewed" | "landingPageCategoryCard" | "landingPageCategorySwiper" | "landingPageProductGrid" | "landingPageBanner" | "productNotification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4823,6 +4839,76 @@ export namespace Prisma {
           }
         }
       }
+      ProductNotification: {
+        payload: Prisma.$ProductNotificationPayload<ExtArgs>
+        fields: Prisma.ProductNotificationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductNotificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductNotificationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductNotificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductNotificationPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductNotificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductNotificationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductNotificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductNotificationPayload>
+          }
+          findMany: {
+            args: Prisma.ProductNotificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductNotificationPayload>[]
+          }
+          create: {
+            args: Prisma.ProductNotificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductNotificationPayload>
+          }
+          createMany: {
+            args: Prisma.ProductNotificationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductNotificationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductNotificationPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductNotificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductNotificationPayload>
+          }
+          update: {
+            args: Prisma.ProductNotificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductNotificationPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductNotificationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductNotificationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ProductNotificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductNotificationPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductNotificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductNotification>
+          }
+          groupBy: {
+            args: Prisma.ProductNotificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductNotificationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductNotificationCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductNotificationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -5001,6 +5087,7 @@ export namespace Prisma {
     sentMessages: number
     ConversationParticipant: number
     notifications: number
+    productNotifications: number
     roles: number
     disputes: number
     productQuestions: number
@@ -5026,6 +5113,7 @@ export namespace Prisma {
     sentMessages?: boolean | UserCountOutputTypeCountSentMessagesArgs
     ConversationParticipant?: boolean | UserCountOutputTypeCountConversationParticipantArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+    productNotifications?: boolean | UserCountOutputTypeCountProductNotificationsArgs
     roles?: boolean | UserCountOutputTypeCountRolesArgs
     disputes?: boolean | UserCountOutputTypeCountDisputesArgs
     productQuestions?: boolean | UserCountOutputTypeCountProductQuestionsArgs
@@ -5161,6 +5249,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NotificationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountProductNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductNotificationWhereInput
   }
 
   /**
@@ -5432,6 +5527,7 @@ export namespace Prisma {
     returnPolicy: number
     Conversation: number
     questions: number
+    notifications: number
     recentlyViewed: number
   }
 
@@ -5446,6 +5542,7 @@ export namespace Prisma {
     returnPolicy?: boolean | ProductCountOutputTypeCountReturnPolicyArgs
     Conversation?: boolean | ProductCountOutputTypeCountConversationArgs
     questions?: boolean | ProductCountOutputTypeCountQuestionsArgs
+    notifications?: boolean | ProductCountOutputTypeCountNotificationsArgs
     recentlyViewed?: boolean | ProductCountOutputTypeCountRecentlyViewedArgs
   }
 
@@ -5528,6 +5625,13 @@ export namespace Prisma {
    */
   export type ProductCountOutputTypeCountQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductQuestionWhereInput
+  }
+
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductNotificationWhereInput
   }
 
   /**
@@ -6149,6 +6253,7 @@ export namespace Prisma {
     sentMessages?: boolean | User$sentMessagesArgs<ExtArgs>
     ConversationParticipant?: boolean | User$ConversationParticipantArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    productNotifications?: boolean | User$productNotificationsArgs<ExtArgs>
     sellerProfile?: boolean | User$sellerProfileArgs<ExtArgs>
     roles?: boolean | User$rolesArgs<ExtArgs>
     disputes?: boolean | User$disputesArgs<ExtArgs>
@@ -6224,6 +6329,7 @@ export namespace Prisma {
     sentMessages?: boolean | User$sentMessagesArgs<ExtArgs>
     ConversationParticipant?: boolean | User$ConversationParticipantArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    productNotifications?: boolean | User$productNotificationsArgs<ExtArgs>
     sellerProfile?: boolean | User$sellerProfileArgs<ExtArgs>
     roles?: boolean | User$rolesArgs<ExtArgs>
     disputes?: boolean | User$disputesArgs<ExtArgs>
@@ -6254,6 +6360,7 @@ export namespace Prisma {
       sentMessages: Prisma.$MessagePayload<ExtArgs>[]
       ConversationParticipant: Prisma.$ConversationParticipantPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      productNotifications: Prisma.$ProductNotificationPayload<ExtArgs>[]
       sellerProfile: Prisma.$SellerProfilePayload<ExtArgs> | null
       roles: Prisma.$UserRolePayload<ExtArgs>[]
       disputes: Prisma.$OrderDisputePayload<ExtArgs>[]
@@ -6664,6 +6771,7 @@ export namespace Prisma {
     sentMessages<T extends User$sentMessagesArgs<ExtArgs> = {}>(args?: Subset<T, User$sentMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany"> | Null>
     ConversationParticipant<T extends User$ConversationParticipantArgs<ExtArgs> = {}>(args?: Subset<T, User$ConversationParticipantArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationParticipantPayload<ExtArgs>, T, "findMany"> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany"> | Null>
+    productNotifications<T extends User$productNotificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$productNotificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, "findMany"> | Null>
     sellerProfile<T extends User$sellerProfileArgs<ExtArgs> = {}>(args?: Subset<T, User$sellerProfileArgs<ExtArgs>>): Prisma__SellerProfileClient<$Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     roles<T extends User$rolesArgs<ExtArgs> = {}>(args?: Subset<T, User$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany"> | Null>
     disputes<T extends User$disputesArgs<ExtArgs> = {}>(args?: Subset<T, User$disputesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderDisputePayload<ExtArgs>, T, "findMany"> | Null>
@@ -7371,6 +7479,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * User.productNotifications
+   */
+  export type User$productNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationInclude<ExtArgs> | null
+    where?: ProductNotificationWhereInput
+    orderBy?: ProductNotificationOrderByWithRelationInput | ProductNotificationOrderByWithRelationInput[]
+    cursor?: ProductNotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductNotificationScalarFieldEnum | ProductNotificationScalarFieldEnum[]
   }
 
   /**
@@ -23990,6 +24118,7 @@ export namespace Prisma {
     returnPolicy?: boolean | Product$returnPolicyArgs<ExtArgs>
     Conversation?: boolean | Product$ConversationArgs<ExtArgs>
     questions?: boolean | Product$questionsArgs<ExtArgs>
+    notifications?: boolean | Product$notificationsArgs<ExtArgs>
     recentlyViewed?: boolean | Product$recentlyViewedArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
@@ -24045,6 +24174,7 @@ export namespace Prisma {
     returnPolicy?: boolean | Product$returnPolicyArgs<ExtArgs>
     Conversation?: boolean | Product$ConversationArgs<ExtArgs>
     questions?: boolean | Product$questionsArgs<ExtArgs>
+    notifications?: boolean | Product$notificationsArgs<ExtArgs>
     recentlyViewed?: boolean | Product$recentlyViewedArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -24068,6 +24198,7 @@ export namespace Prisma {
       returnPolicy: Prisma.$ReturnPolicyPayload<ExtArgs>[]
       Conversation: Prisma.$ConversationPayload<ExtArgs>[]
       questions: Prisma.$ProductQuestionPayload<ExtArgs>[]
+      notifications: Prisma.$ProductNotificationPayload<ExtArgs>[]
       recentlyViewed: Prisma.$RecentlyViewedPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -24462,6 +24593,7 @@ export namespace Prisma {
     returnPolicy<T extends Product$returnPolicyArgs<ExtArgs> = {}>(args?: Subset<T, Product$returnPolicyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReturnPolicyPayload<ExtArgs>, T, "findMany"> | Null>
     Conversation<T extends Product$ConversationArgs<ExtArgs> = {}>(args?: Subset<T, Product$ConversationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany"> | Null>
     questions<T extends Product$questionsArgs<ExtArgs> = {}>(args?: Subset<T, Product$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductQuestionPayload<ExtArgs>, T, "findMany"> | Null>
+    notifications<T extends Product$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Product$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, "findMany"> | Null>
     recentlyViewed<T extends Product$recentlyViewedArgs<ExtArgs> = {}>(args?: Subset<T, Product$recentlyViewedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecentlyViewedPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -25037,6 +25169,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductQuestionScalarFieldEnum | ProductQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * Product.notifications
+   */
+  export type Product$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationInclude<ExtArgs> | null
+    where?: ProductNotificationWhereInput
+    orderBy?: ProductNotificationOrderByWithRelationInput | ProductNotificationOrderByWithRelationInput[]
+    cursor?: ProductNotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductNotificationScalarFieldEnum | ProductNotificationScalarFieldEnum[]
   }
 
   /**
@@ -53312,6 +53464,1008 @@ export namespace Prisma {
 
 
   /**
+   * Model ProductNotification
+   */
+
+  export type AggregateProductNotification = {
+    _count: ProductNotificationCountAggregateOutputType | null
+    _min: ProductNotificationMinAggregateOutputType | null
+    _max: ProductNotificationMaxAggregateOutputType | null
+  }
+
+  export type ProductNotificationMinAggregateOutputType = {
+    id: string | null
+    productId: string | null
+    variantId: string | null
+    userId: string | null
+    email: string | null
+    phone: string | null
+    isNotified: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductNotificationMaxAggregateOutputType = {
+    id: string | null
+    productId: string | null
+    variantId: string | null
+    userId: string | null
+    email: string | null
+    phone: string | null
+    isNotified: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductNotificationCountAggregateOutputType = {
+    id: number
+    productId: number
+    variantId: number
+    userId: number
+    email: number
+    phone: number
+    isNotified: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProductNotificationMinAggregateInputType = {
+    id?: true
+    productId?: true
+    variantId?: true
+    userId?: true
+    email?: true
+    phone?: true
+    isNotified?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductNotificationMaxAggregateInputType = {
+    id?: true
+    productId?: true
+    variantId?: true
+    userId?: true
+    email?: true
+    phone?: true
+    isNotified?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductNotificationCountAggregateInputType = {
+    id?: true
+    productId?: true
+    variantId?: true
+    userId?: true
+    email?: true
+    phone?: true
+    isNotified?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProductNotificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductNotification to aggregate.
+     */
+    where?: ProductNotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductNotifications to fetch.
+     */
+    orderBy?: ProductNotificationOrderByWithRelationInput | ProductNotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductNotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductNotifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductNotifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProductNotifications
+    **/
+    _count?: true | ProductNotificationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductNotificationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductNotificationMaxAggregateInputType
+  }
+
+  export type GetProductNotificationAggregateType<T extends ProductNotificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductNotification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductNotification[P]>
+      : GetScalarType<T[P], AggregateProductNotification[P]>
+  }
+
+
+
+
+  export type ProductNotificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductNotificationWhereInput
+    orderBy?: ProductNotificationOrderByWithAggregationInput | ProductNotificationOrderByWithAggregationInput[]
+    by: ProductNotificationScalarFieldEnum[] | ProductNotificationScalarFieldEnum
+    having?: ProductNotificationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductNotificationCountAggregateInputType | true
+    _min?: ProductNotificationMinAggregateInputType
+    _max?: ProductNotificationMaxAggregateInputType
+  }
+
+  export type ProductNotificationGroupByOutputType = {
+    id: string
+    productId: string
+    variantId: string | null
+    userId: string | null
+    email: string | null
+    phone: string | null
+    isNotified: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: ProductNotificationCountAggregateOutputType | null
+    _min: ProductNotificationMinAggregateOutputType | null
+    _max: ProductNotificationMaxAggregateOutputType | null
+  }
+
+  type GetProductNotificationGroupByPayload<T extends ProductNotificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductNotificationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductNotificationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductNotificationGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductNotificationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductNotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    productId?: boolean
+    variantId?: boolean
+    userId?: boolean
+    email?: boolean
+    phone?: boolean
+    isNotified?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | ProductNotification$userArgs<ExtArgs>
+  }, ExtArgs["result"]["productNotification"]>
+
+  export type ProductNotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    productId?: boolean
+    variantId?: boolean
+    userId?: boolean
+    email?: boolean
+    phone?: boolean
+    isNotified?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | ProductNotification$userArgs<ExtArgs>
+  }, ExtArgs["result"]["productNotification"]>
+
+  export type ProductNotificationSelectScalar = {
+    id?: boolean
+    productId?: boolean
+    variantId?: boolean
+    userId?: boolean
+    email?: boolean
+    phone?: boolean
+    isNotified?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProductNotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | ProductNotification$userArgs<ExtArgs>
+  }
+  export type ProductNotificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | ProductNotification$userArgs<ExtArgs>
+  }
+
+  export type $ProductNotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductNotification"
+    objects: {
+      product: Prisma.$ProductPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      productId: string
+      variantId: string | null
+      userId: string | null
+      email: string | null
+      phone: string | null
+      isNotified: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["productNotification"]>
+    composites: {}
+  }
+
+  type ProductNotificationGetPayload<S extends boolean | null | undefined | ProductNotificationDefaultArgs> = $Result.GetResult<Prisma.$ProductNotificationPayload, S>
+
+  type ProductNotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ProductNotificationFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ProductNotificationCountAggregateInputType | true
+    }
+
+  export interface ProductNotificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductNotification'], meta: { name: 'ProductNotification' } }
+    /**
+     * Find zero or one ProductNotification that matches the filter.
+     * @param {ProductNotificationFindUniqueArgs} args - Arguments to find a ProductNotification
+     * @example
+     * // Get one ProductNotification
+     * const productNotification = await prisma.productNotification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductNotificationFindUniqueArgs>(args: SelectSubset<T, ProductNotificationFindUniqueArgs<ExtArgs>>): Prisma__ProductNotificationClient<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ProductNotification that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ProductNotificationFindUniqueOrThrowArgs} args - Arguments to find a ProductNotification
+     * @example
+     * // Get one ProductNotification
+     * const productNotification = await prisma.productNotification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductNotificationFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductNotificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductNotificationClient<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ProductNotification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductNotificationFindFirstArgs} args - Arguments to find a ProductNotification
+     * @example
+     * // Get one ProductNotification
+     * const productNotification = await prisma.productNotification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductNotificationFindFirstArgs>(args?: SelectSubset<T, ProductNotificationFindFirstArgs<ExtArgs>>): Prisma__ProductNotificationClient<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ProductNotification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductNotificationFindFirstOrThrowArgs} args - Arguments to find a ProductNotification
+     * @example
+     * // Get one ProductNotification
+     * const productNotification = await prisma.productNotification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductNotificationFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductNotificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductNotificationClient<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ProductNotifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductNotificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductNotifications
+     * const productNotifications = await prisma.productNotification.findMany()
+     * 
+     * // Get first 10 ProductNotifications
+     * const productNotifications = await prisma.productNotification.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productNotificationWithIdOnly = await prisma.productNotification.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductNotificationFindManyArgs>(args?: SelectSubset<T, ProductNotificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ProductNotification.
+     * @param {ProductNotificationCreateArgs} args - Arguments to create a ProductNotification.
+     * @example
+     * // Create one ProductNotification
+     * const ProductNotification = await prisma.productNotification.create({
+     *   data: {
+     *     // ... data to create a ProductNotification
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductNotificationCreateArgs>(args: SelectSubset<T, ProductNotificationCreateArgs<ExtArgs>>): Prisma__ProductNotificationClient<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ProductNotifications.
+     * @param {ProductNotificationCreateManyArgs} args - Arguments to create many ProductNotifications.
+     * @example
+     * // Create many ProductNotifications
+     * const productNotification = await prisma.productNotification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductNotificationCreateManyArgs>(args?: SelectSubset<T, ProductNotificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductNotifications and returns the data saved in the database.
+     * @param {ProductNotificationCreateManyAndReturnArgs} args - Arguments to create many ProductNotifications.
+     * @example
+     * // Create many ProductNotifications
+     * const productNotification = await prisma.productNotification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProductNotifications and only return the `id`
+     * const productNotificationWithIdOnly = await prisma.productNotification.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductNotificationCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductNotificationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ProductNotification.
+     * @param {ProductNotificationDeleteArgs} args - Arguments to delete one ProductNotification.
+     * @example
+     * // Delete one ProductNotification
+     * const ProductNotification = await prisma.productNotification.delete({
+     *   where: {
+     *     // ... filter to delete one ProductNotification
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductNotificationDeleteArgs>(args: SelectSubset<T, ProductNotificationDeleteArgs<ExtArgs>>): Prisma__ProductNotificationClient<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ProductNotification.
+     * @param {ProductNotificationUpdateArgs} args - Arguments to update one ProductNotification.
+     * @example
+     * // Update one ProductNotification
+     * const productNotification = await prisma.productNotification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductNotificationUpdateArgs>(args: SelectSubset<T, ProductNotificationUpdateArgs<ExtArgs>>): Prisma__ProductNotificationClient<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ProductNotifications.
+     * @param {ProductNotificationDeleteManyArgs} args - Arguments to filter ProductNotifications to delete.
+     * @example
+     * // Delete a few ProductNotifications
+     * const { count } = await prisma.productNotification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductNotificationDeleteManyArgs>(args?: SelectSubset<T, ProductNotificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductNotifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductNotificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductNotifications
+     * const productNotification = await prisma.productNotification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductNotificationUpdateManyArgs>(args: SelectSubset<T, ProductNotificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ProductNotification.
+     * @param {ProductNotificationUpsertArgs} args - Arguments to update or create a ProductNotification.
+     * @example
+     * // Update or create a ProductNotification
+     * const productNotification = await prisma.productNotification.upsert({
+     *   create: {
+     *     // ... data to create a ProductNotification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductNotification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductNotificationUpsertArgs>(args: SelectSubset<T, ProductNotificationUpsertArgs<ExtArgs>>): Prisma__ProductNotificationClient<$Result.GetResult<Prisma.$ProductNotificationPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ProductNotifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductNotificationCountArgs} args - Arguments to filter ProductNotifications to count.
+     * @example
+     * // Count the number of ProductNotifications
+     * const count = await prisma.productNotification.count({
+     *   where: {
+     *     // ... the filter for the ProductNotifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductNotificationCountArgs>(
+      args?: Subset<T, ProductNotificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductNotificationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductNotification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductNotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductNotificationAggregateArgs>(args: Subset<T, ProductNotificationAggregateArgs>): Prisma.PrismaPromise<GetProductNotificationAggregateType<T>>
+
+    /**
+     * Group by ProductNotification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductNotificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductNotificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductNotificationGroupByArgs['orderBy'] }
+        : { orderBy?: ProductNotificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductNotificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductNotificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProductNotification model
+   */
+  readonly fields: ProductNotificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductNotification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductNotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    user<T extends ProductNotification$userArgs<ExtArgs> = {}>(args?: Subset<T, ProductNotification$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProductNotification model
+   */ 
+  interface ProductNotificationFieldRefs {
+    readonly id: FieldRef<"ProductNotification", 'String'>
+    readonly productId: FieldRef<"ProductNotification", 'String'>
+    readonly variantId: FieldRef<"ProductNotification", 'String'>
+    readonly userId: FieldRef<"ProductNotification", 'String'>
+    readonly email: FieldRef<"ProductNotification", 'String'>
+    readonly phone: FieldRef<"ProductNotification", 'String'>
+    readonly isNotified: FieldRef<"ProductNotification", 'Boolean'>
+    readonly createdAt: FieldRef<"ProductNotification", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProductNotification", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProductNotification findUnique
+   */
+  export type ProductNotificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductNotification to fetch.
+     */
+    where: ProductNotificationWhereUniqueInput
+  }
+
+  /**
+   * ProductNotification findUniqueOrThrow
+   */
+  export type ProductNotificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductNotification to fetch.
+     */
+    where: ProductNotificationWhereUniqueInput
+  }
+
+  /**
+   * ProductNotification findFirst
+   */
+  export type ProductNotificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductNotification to fetch.
+     */
+    where?: ProductNotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductNotifications to fetch.
+     */
+    orderBy?: ProductNotificationOrderByWithRelationInput | ProductNotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductNotifications.
+     */
+    cursor?: ProductNotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductNotifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductNotifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductNotifications.
+     */
+    distinct?: ProductNotificationScalarFieldEnum | ProductNotificationScalarFieldEnum[]
+  }
+
+  /**
+   * ProductNotification findFirstOrThrow
+   */
+  export type ProductNotificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductNotification to fetch.
+     */
+    where?: ProductNotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductNotifications to fetch.
+     */
+    orderBy?: ProductNotificationOrderByWithRelationInput | ProductNotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductNotifications.
+     */
+    cursor?: ProductNotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductNotifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductNotifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductNotifications.
+     */
+    distinct?: ProductNotificationScalarFieldEnum | ProductNotificationScalarFieldEnum[]
+  }
+
+  /**
+   * ProductNotification findMany
+   */
+  export type ProductNotificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductNotifications to fetch.
+     */
+    where?: ProductNotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductNotifications to fetch.
+     */
+    orderBy?: ProductNotificationOrderByWithRelationInput | ProductNotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProductNotifications.
+     */
+    cursor?: ProductNotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductNotifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductNotifications.
+     */
+    skip?: number
+    distinct?: ProductNotificationScalarFieldEnum | ProductNotificationScalarFieldEnum[]
+  }
+
+  /**
+   * ProductNotification create
+   */
+  export type ProductNotificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductNotification.
+     */
+    data: XOR<ProductNotificationCreateInput, ProductNotificationUncheckedCreateInput>
+  }
+
+  /**
+   * ProductNotification createMany
+   */
+  export type ProductNotificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProductNotifications.
+     */
+    data: ProductNotificationCreateManyInput | ProductNotificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductNotification createManyAndReturn
+   */
+  export type ProductNotificationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ProductNotifications.
+     */
+    data: ProductNotificationCreateManyInput | ProductNotificationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductNotification update
+   */
+  export type ProductNotificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductNotification.
+     */
+    data: XOR<ProductNotificationUpdateInput, ProductNotificationUncheckedUpdateInput>
+    /**
+     * Choose, which ProductNotification to update.
+     */
+    where: ProductNotificationWhereUniqueInput
+  }
+
+  /**
+   * ProductNotification updateMany
+   */
+  export type ProductNotificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProductNotifications.
+     */
+    data: XOR<ProductNotificationUpdateManyMutationInput, ProductNotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductNotifications to update
+     */
+    where?: ProductNotificationWhereInput
+  }
+
+  /**
+   * ProductNotification upsert
+   */
+  export type ProductNotificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductNotification to update in case it exists.
+     */
+    where: ProductNotificationWhereUniqueInput
+    /**
+     * In case the ProductNotification found by the `where` argument doesn't exist, create a new ProductNotification with this data.
+     */
+    create: XOR<ProductNotificationCreateInput, ProductNotificationUncheckedCreateInput>
+    /**
+     * In case the ProductNotification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductNotificationUpdateInput, ProductNotificationUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductNotification delete
+   */
+  export type ProductNotificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationInclude<ExtArgs> | null
+    /**
+     * Filter which ProductNotification to delete.
+     */
+    where: ProductNotificationWhereUniqueInput
+  }
+
+  /**
+   * ProductNotification deleteMany
+   */
+  export type ProductNotificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductNotifications to delete
+     */
+    where?: ProductNotificationWhereInput
+  }
+
+  /**
+   * ProductNotification.user
+   */
+  export type ProductNotification$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ProductNotification without action
+   */
+  export type ProductNotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductNotification
+     */
+    select?: ProductNotificationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductNotificationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -54030,6 +55184,21 @@ export namespace Prisma {
   export type LandingPageBannerScalarFieldEnum = (typeof LandingPageBannerScalarFieldEnum)[keyof typeof LandingPageBannerScalarFieldEnum]
 
 
+  export const ProductNotificationScalarFieldEnum: {
+    id: 'id',
+    productId: 'productId',
+    variantId: 'variantId',
+    userId: 'userId',
+    email: 'email',
+    phone: 'phone',
+    isNotified: 'isNotified',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProductNotificationScalarFieldEnum = (typeof ProductNotificationScalarFieldEnum)[keyof typeof ProductNotificationScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -54478,6 +55647,7 @@ export namespace Prisma {
     sentMessages?: MessageListRelationFilter
     ConversationParticipant?: ConversationParticipantListRelationFilter
     notifications?: NotificationListRelationFilter
+    productNotifications?: ProductNotificationListRelationFilter
     sellerProfile?: XOR<SellerProfileNullableRelationFilter, SellerProfileWhereInput> | null
     roles?: UserRoleListRelationFilter
     disputes?: OrderDisputeListRelationFilter
@@ -54525,6 +55695,7 @@ export namespace Prisma {
     sentMessages?: MessageOrderByRelationAggregateInput
     ConversationParticipant?: ConversationParticipantOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
+    productNotifications?: ProductNotificationOrderByRelationAggregateInput
     sellerProfile?: SellerProfileOrderByWithRelationInput
     roles?: UserRoleOrderByRelationAggregateInput
     disputes?: OrderDisputeOrderByRelationAggregateInput
@@ -54575,6 +55746,7 @@ export namespace Prisma {
     sentMessages?: MessageListRelationFilter
     ConversationParticipant?: ConversationParticipantListRelationFilter
     notifications?: NotificationListRelationFilter
+    productNotifications?: ProductNotificationListRelationFilter
     sellerProfile?: XOR<SellerProfileNullableRelationFilter, SellerProfileWhereInput> | null
     roles?: UserRoleListRelationFilter
     disputes?: OrderDisputeListRelationFilter
@@ -55961,6 +57133,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyListRelationFilter
     Conversation?: ConversationListRelationFilter
     questions?: ProductQuestionListRelationFilter
+    notifications?: ProductNotificationListRelationFilter
     recentlyViewed?: RecentlyViewedListRelationFilter
   }
 
@@ -55992,6 +57165,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyOrderByRelationAggregateInput
     Conversation?: ConversationOrderByRelationAggregateInput
     questions?: ProductQuestionOrderByRelationAggregateInput
+    notifications?: ProductNotificationOrderByRelationAggregateInput
     recentlyViewed?: RecentlyViewedOrderByRelationAggregateInput
   }
 
@@ -56026,6 +57200,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyListRelationFilter
     Conversation?: ConversationListRelationFilter
     questions?: ProductQuestionListRelationFilter
+    notifications?: ProductNotificationListRelationFilter
     recentlyViewed?: RecentlyViewedListRelationFilter
   }, "id" | "slug">
 
@@ -58246,6 +59421,84 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"LandingPageBanner"> | Date | string
   }
 
+  export type ProductNotificationWhereInput = {
+    AND?: ProductNotificationWhereInput | ProductNotificationWhereInput[]
+    OR?: ProductNotificationWhereInput[]
+    NOT?: ProductNotificationWhereInput | ProductNotificationWhereInput[]
+    id?: StringFilter<"ProductNotification"> | string
+    productId?: StringFilter<"ProductNotification"> | string
+    variantId?: StringNullableFilter<"ProductNotification"> | string | null
+    userId?: StringNullableFilter<"ProductNotification"> | string | null
+    email?: StringNullableFilter<"ProductNotification"> | string | null
+    phone?: StringNullableFilter<"ProductNotification"> | string | null
+    isNotified?: BoolFilter<"ProductNotification"> | boolean
+    createdAt?: DateTimeFilter<"ProductNotification"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductNotification"> | Date | string
+    product?: XOR<ProductRelationFilter, ProductWhereInput>
+    user?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type ProductNotificationOrderByWithRelationInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    variantId?: SortOrderInput | SortOrder
+    userId?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    isNotified?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    product?: ProductOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ProductNotificationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProductNotificationWhereInput | ProductNotificationWhereInput[]
+    OR?: ProductNotificationWhereInput[]
+    NOT?: ProductNotificationWhereInput | ProductNotificationWhereInput[]
+    productId?: StringFilter<"ProductNotification"> | string
+    variantId?: StringNullableFilter<"ProductNotification"> | string | null
+    userId?: StringNullableFilter<"ProductNotification"> | string | null
+    email?: StringNullableFilter<"ProductNotification"> | string | null
+    phone?: StringNullableFilter<"ProductNotification"> | string | null
+    isNotified?: BoolFilter<"ProductNotification"> | boolean
+    createdAt?: DateTimeFilter<"ProductNotification"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductNotification"> | Date | string
+    product?: XOR<ProductRelationFilter, ProductWhereInput>
+    user?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type ProductNotificationOrderByWithAggregationInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    variantId?: SortOrderInput | SortOrder
+    userId?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    isNotified?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProductNotificationCountOrderByAggregateInput
+    _max?: ProductNotificationMaxOrderByAggregateInput
+    _min?: ProductNotificationMinOrderByAggregateInput
+  }
+
+  export type ProductNotificationScalarWhereWithAggregatesInput = {
+    AND?: ProductNotificationScalarWhereWithAggregatesInput | ProductNotificationScalarWhereWithAggregatesInput[]
+    OR?: ProductNotificationScalarWhereWithAggregatesInput[]
+    NOT?: ProductNotificationScalarWhereWithAggregatesInput | ProductNotificationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProductNotification"> | string
+    productId?: StringWithAggregatesFilter<"ProductNotification"> | string
+    variantId?: StringNullableWithAggregatesFilter<"ProductNotification"> | string | null
+    userId?: StringNullableWithAggregatesFilter<"ProductNotification"> | string | null
+    email?: StringNullableWithAggregatesFilter<"ProductNotification"> | string | null
+    phone?: StringNullableWithAggregatesFilter<"ProductNotification"> | string | null
+    isNotified?: BoolWithAggregatesFilter<"ProductNotification"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ProductNotification"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProductNotification"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string
@@ -58285,6 +59538,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -58332,6 +59586,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -58379,6 +59634,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -58426,6 +59682,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -59937,6 +61194,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -59966,6 +61224,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -59995,6 +61254,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -60024,6 +61284,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -62401,6 +63662,88 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProductNotificationCreateInput = {
+    id?: string
+    variantId?: string | null
+    email?: string | null
+    phone?: string | null
+    isNotified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    product: ProductCreateNestedOneWithoutNotificationsInput
+    user?: UserCreateNestedOneWithoutProductNotificationsInput
+  }
+
+  export type ProductNotificationUncheckedCreateInput = {
+    id?: string
+    productId: string
+    variantId?: string | null
+    userId?: string | null
+    email?: string | null
+    phone?: string | null
+    isNotified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductNotificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isNotified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutNotificationsNestedInput
+    user?: UserUpdateOneWithoutProductNotificationsNestedInput
+  }
+
+  export type ProductNotificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isNotified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductNotificationCreateManyInput = {
+    id?: string
+    productId: string
+    variantId?: string | null
+    userId?: string | null
+    email?: string | null
+    phone?: string | null
+    isNotified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductNotificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isNotified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductNotificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isNotified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -62561,6 +63904,12 @@ export namespace Prisma {
     none?: NotificationWhereInput
   }
 
+  export type ProductNotificationListRelationFilter = {
+    every?: ProductNotificationWhereInput
+    some?: ProductNotificationWhereInput
+    none?: ProductNotificationWhereInput
+  }
+
   export type SellerProfileNullableRelationFilter = {
     is?: SellerProfileWhereInput | null
     isNot?: SellerProfileWhereInput | null
@@ -62662,6 +64011,10 @@ export namespace Prisma {
   }
 
   export type NotificationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProductNotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -65504,6 +66857,47 @@ export namespace Prisma {
     sortOrder?: SortOrder
   }
 
+  export type UserNullableRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type ProductNotificationCountOrderByAggregateInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    variantId?: SortOrder
+    userId?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    isNotified?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductNotificationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    variantId?: SortOrder
+    userId?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    isNotified?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductNotificationMinOrderByAggregateInput = {
+    id?: SortOrder
+    productId?: SortOrder
+    variantId?: SortOrder
+    userId?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    isNotified?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type SessionCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -65621,6 +67015,13 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
     createMany?: NotificationCreateManyUserInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type ProductNotificationCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProductNotificationCreateWithoutUserInput, ProductNotificationUncheckedCreateWithoutUserInput> | ProductNotificationCreateWithoutUserInput[] | ProductNotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProductNotificationCreateOrConnectWithoutUserInput | ProductNotificationCreateOrConnectWithoutUserInput[]
+    createMany?: ProductNotificationCreateManyUserInputEnvelope
+    connect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
   }
 
   export type SellerProfileCreateNestedOneWithoutUserInput = {
@@ -65781,6 +67182,13 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
     createMany?: NotificationCreateManyUserInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type ProductNotificationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProductNotificationCreateWithoutUserInput, ProductNotificationUncheckedCreateWithoutUserInput> | ProductNotificationCreateWithoutUserInput[] | ProductNotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProductNotificationCreateOrConnectWithoutUserInput | ProductNotificationCreateOrConnectWithoutUserInput[]
+    createMany?: ProductNotificationCreateManyUserInputEnvelope
+    connect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
   }
 
   export type SellerProfileUncheckedCreateNestedOneWithoutUserInput = {
@@ -66084,6 +67492,20 @@ export namespace Prisma {
     update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type ProductNotificationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProductNotificationCreateWithoutUserInput, ProductNotificationUncheckedCreateWithoutUserInput> | ProductNotificationCreateWithoutUserInput[] | ProductNotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProductNotificationCreateOrConnectWithoutUserInput | ProductNotificationCreateOrConnectWithoutUserInput[]
+    upsert?: ProductNotificationUpsertWithWhereUniqueWithoutUserInput | ProductNotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProductNotificationCreateManyUserInputEnvelope
+    set?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    disconnect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    delete?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    connect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    update?: ProductNotificationUpdateWithWhereUniqueWithoutUserInput | ProductNotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProductNotificationUpdateManyWithWhereWithoutUserInput | ProductNotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProductNotificationScalarWhereInput | ProductNotificationScalarWhereInput[]
   }
 
   export type SellerProfileUpdateOneWithoutUserNestedInput = {
@@ -66402,6 +67824,20 @@ export namespace Prisma {
     update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type ProductNotificationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProductNotificationCreateWithoutUserInput, ProductNotificationUncheckedCreateWithoutUserInput> | ProductNotificationCreateWithoutUserInput[] | ProductNotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProductNotificationCreateOrConnectWithoutUserInput | ProductNotificationCreateOrConnectWithoutUserInput[]
+    upsert?: ProductNotificationUpsertWithWhereUniqueWithoutUserInput | ProductNotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProductNotificationCreateManyUserInputEnvelope
+    set?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    disconnect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    delete?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    connect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    update?: ProductNotificationUpdateWithWhereUniqueWithoutUserInput | ProductNotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProductNotificationUpdateManyWithWhereWithoutUserInput | ProductNotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProductNotificationScalarWhereInput | ProductNotificationScalarWhereInput[]
   }
 
   export type SellerProfileUncheckedUpdateOneWithoutUserNestedInput = {
@@ -67464,6 +68900,13 @@ export namespace Prisma {
     connect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
   }
 
+  export type ProductNotificationCreateNestedManyWithoutProductInput = {
+    create?: XOR<ProductNotificationCreateWithoutProductInput, ProductNotificationUncheckedCreateWithoutProductInput> | ProductNotificationCreateWithoutProductInput[] | ProductNotificationUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductNotificationCreateOrConnectWithoutProductInput | ProductNotificationCreateOrConnectWithoutProductInput[]
+    createMany?: ProductNotificationCreateManyProductInputEnvelope
+    connect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+  }
+
   export type RecentlyViewedCreateNestedManyWithoutProductInput = {
     create?: XOR<RecentlyViewedCreateWithoutProductInput, RecentlyViewedUncheckedCreateWithoutProductInput> | RecentlyViewedCreateWithoutProductInput[] | RecentlyViewedUncheckedCreateWithoutProductInput[]
     connectOrCreate?: RecentlyViewedCreateOrConnectWithoutProductInput | RecentlyViewedCreateOrConnectWithoutProductInput[]
@@ -67539,6 +68982,13 @@ export namespace Prisma {
     connectOrCreate?: ProductQuestionCreateOrConnectWithoutProductInput | ProductQuestionCreateOrConnectWithoutProductInput[]
     createMany?: ProductQuestionCreateManyProductInputEnvelope
     connect?: ProductQuestionWhereUniqueInput | ProductQuestionWhereUniqueInput[]
+  }
+
+  export type ProductNotificationUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<ProductNotificationCreateWithoutProductInput, ProductNotificationUncheckedCreateWithoutProductInput> | ProductNotificationCreateWithoutProductInput[] | ProductNotificationUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductNotificationCreateOrConnectWithoutProductInput | ProductNotificationCreateOrConnectWithoutProductInput[]
+    createMany?: ProductNotificationCreateManyProductInputEnvelope
+    connect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
   }
 
   export type RecentlyViewedUncheckedCreateNestedManyWithoutProductInput = {
@@ -67720,6 +69170,20 @@ export namespace Prisma {
     deleteMany?: ProductQuestionScalarWhereInput | ProductQuestionScalarWhereInput[]
   }
 
+  export type ProductNotificationUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ProductNotificationCreateWithoutProductInput, ProductNotificationUncheckedCreateWithoutProductInput> | ProductNotificationCreateWithoutProductInput[] | ProductNotificationUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductNotificationCreateOrConnectWithoutProductInput | ProductNotificationCreateOrConnectWithoutProductInput[]
+    upsert?: ProductNotificationUpsertWithWhereUniqueWithoutProductInput | ProductNotificationUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ProductNotificationCreateManyProductInputEnvelope
+    set?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    disconnect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    delete?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    connect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    update?: ProductNotificationUpdateWithWhereUniqueWithoutProductInput | ProductNotificationUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ProductNotificationUpdateManyWithWhereWithoutProductInput | ProductNotificationUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ProductNotificationScalarWhereInput | ProductNotificationScalarWhereInput[]
+  }
+
   export type RecentlyViewedUpdateManyWithoutProductNestedInput = {
     create?: XOR<RecentlyViewedCreateWithoutProductInput, RecentlyViewedUncheckedCreateWithoutProductInput> | RecentlyViewedCreateWithoutProductInput[] | RecentlyViewedUncheckedCreateWithoutProductInput[]
     connectOrCreate?: RecentlyViewedCreateOrConnectWithoutProductInput | RecentlyViewedCreateOrConnectWithoutProductInput[]
@@ -67872,6 +69336,20 @@ export namespace Prisma {
     update?: ProductQuestionUpdateWithWhereUniqueWithoutProductInput | ProductQuestionUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: ProductQuestionUpdateManyWithWhereWithoutProductInput | ProductQuestionUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: ProductQuestionScalarWhereInput | ProductQuestionScalarWhereInput[]
+  }
+
+  export type ProductNotificationUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ProductNotificationCreateWithoutProductInput, ProductNotificationUncheckedCreateWithoutProductInput> | ProductNotificationCreateWithoutProductInput[] | ProductNotificationUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductNotificationCreateOrConnectWithoutProductInput | ProductNotificationCreateOrConnectWithoutProductInput[]
+    upsert?: ProductNotificationUpsertWithWhereUniqueWithoutProductInput | ProductNotificationUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ProductNotificationCreateManyProductInputEnvelope
+    set?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    disconnect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    delete?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    connect?: ProductNotificationWhereUniqueInput | ProductNotificationWhereUniqueInput[]
+    update?: ProductNotificationUpdateWithWhereUniqueWithoutProductInput | ProductNotificationUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ProductNotificationUpdateManyWithWhereWithoutProductInput | ProductNotificationUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ProductNotificationScalarWhereInput | ProductNotificationScalarWhereInput[]
   }
 
   export type RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput = {
@@ -69164,6 +70642,36 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type ProductCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<ProductCreateWithoutNotificationsInput, ProductUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutNotificationsInput
+    connect?: ProductWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutProductNotificationsInput = {
+    create?: XOR<UserCreateWithoutProductNotificationsInput, UserUncheckedCreateWithoutProductNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProductNotificationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ProductUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<ProductCreateWithoutNotificationsInput, ProductUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutNotificationsInput
+    upsert?: ProductUpsertWithoutNotificationsInput
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutNotificationsInput, ProductUpdateWithoutNotificationsInput>, ProductUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type UserUpdateOneWithoutProductNotificationsNestedInput = {
+    create?: XOR<UserCreateWithoutProductNotificationsInput, UserUncheckedCreateWithoutProductNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProductNotificationsInput
+    upsert?: UserUpsertWithoutProductNotificationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProductNotificationsInput, UserUpdateWithoutProductNotificationsInput>, UserUncheckedUpdateWithoutProductNotificationsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -70096,6 +71604,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -70124,6 +71633,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -70418,6 +71928,38 @@ export namespace Prisma {
 
   export type NotificationCreateManyUserInputEnvelope = {
     data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductNotificationCreateWithoutUserInput = {
+    id?: string
+    variantId?: string | null
+    email?: string | null
+    phone?: string | null
+    isNotified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    product: ProductCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type ProductNotificationUncheckedCreateWithoutUserInput = {
+    id?: string
+    productId: string
+    variantId?: string | null
+    email?: string | null
+    phone?: string | null
+    isNotified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductNotificationCreateOrConnectWithoutUserInput = {
+    where: ProductNotificationWhereUniqueInput
+    create: XOR<ProductNotificationCreateWithoutUserInput, ProductNotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProductNotificationCreateManyUserInputEnvelope = {
+    data: ProductNotificationCreateManyUserInput | ProductNotificationCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -71150,6 +72692,37 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Notification"> | Date | string
   }
 
+  export type ProductNotificationUpsertWithWhereUniqueWithoutUserInput = {
+    where: ProductNotificationWhereUniqueInput
+    update: XOR<ProductNotificationUpdateWithoutUserInput, ProductNotificationUncheckedUpdateWithoutUserInput>
+    create: XOR<ProductNotificationCreateWithoutUserInput, ProductNotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProductNotificationUpdateWithWhereUniqueWithoutUserInput = {
+    where: ProductNotificationWhereUniqueInput
+    data: XOR<ProductNotificationUpdateWithoutUserInput, ProductNotificationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ProductNotificationUpdateManyWithWhereWithoutUserInput = {
+    where: ProductNotificationScalarWhereInput
+    data: XOR<ProductNotificationUpdateManyMutationInput, ProductNotificationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ProductNotificationScalarWhereInput = {
+    AND?: ProductNotificationScalarWhereInput | ProductNotificationScalarWhereInput[]
+    OR?: ProductNotificationScalarWhereInput[]
+    NOT?: ProductNotificationScalarWhereInput | ProductNotificationScalarWhereInput[]
+    id?: StringFilter<"ProductNotification"> | string
+    productId?: StringFilter<"ProductNotification"> | string
+    variantId?: StringNullableFilter<"ProductNotification"> | string | null
+    userId?: StringNullableFilter<"ProductNotification"> | string | null
+    email?: StringNullableFilter<"ProductNotification"> | string | null
+    phone?: StringNullableFilter<"ProductNotification"> | string | null
+    isNotified?: BoolFilter<"ProductNotification"> | boolean
+    createdAt?: DateTimeFilter<"ProductNotification"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductNotification"> | Date | string
+  }
+
   export type SellerProfileUpsertWithoutUserInput = {
     update: XOR<SellerProfileUpdateWithoutUserInput, SellerProfileUncheckedUpdateWithoutUserInput>
     create: XOR<SellerProfileCreateWithoutUserInput, SellerProfileUncheckedCreateWithoutUserInput>
@@ -71405,6 +72978,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
@@ -71451,6 +73025,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
@@ -71513,6 +73088,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
@@ -71559,6 +73135,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
@@ -71644,6 +73221,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
@@ -71690,6 +73268,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
@@ -71797,6 +73376,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
@@ -71843,6 +73423,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
@@ -71888,6 +73469,7 @@ export namespace Prisma {
     sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -71934,6 +73516,7 @@ export namespace Prisma {
     sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -71996,6 +73579,7 @@ export namespace Prisma {
     sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -72042,6 +73626,7 @@ export namespace Prisma {
     sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -72075,6 +73660,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -72103,6 +73689,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -72149,6 +73736,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -72195,6 +73783,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -72246,6 +73835,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -72292,6 +73882,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -72401,6 +73992,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -72429,6 +74021,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -72481,6 +74074,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -72527,6 +74121,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -72584,6 +74179,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -72630,6 +74226,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -72737,6 +74334,7 @@ export namespace Prisma {
     sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -72783,6 +74381,7 @@ export namespace Prisma {
     sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -72906,6 +74505,7 @@ export namespace Prisma {
     sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -72952,6 +74552,7 @@ export namespace Prisma {
     sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -73098,6 +74699,7 @@ export namespace Prisma {
     sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -73144,6 +74746,7 @@ export namespace Prisma {
     sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -73235,6 +74838,7 @@ export namespace Prisma {
     sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -73281,6 +74885,7 @@ export namespace Prisma {
     sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -73362,6 +74967,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -73408,6 +75014,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -73542,6 +75149,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -73588,6 +75196,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -73847,6 +75456,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -73875,6 +75485,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -74379,6 +75990,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -74407,6 +76019,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -74494,6 +76107,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -74522,6 +76136,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -74718,6 +76333,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -74746,6 +76362,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -74790,6 +76407,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -74818,6 +76436,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -74846,6 +76465,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -74874,6 +76494,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -74918,6 +76539,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -74946,6 +76568,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -74974,6 +76597,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -75002,6 +76626,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -75046,6 +76671,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -75074,6 +76700,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -75115,6 +76742,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -75161,6 +76789,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -75537,6 +77166,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ProductNotificationCreateWithoutProductInput = {
+    id?: string
+    variantId?: string | null
+    email?: string | null
+    phone?: string | null
+    isNotified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutProductNotificationsInput
+  }
+
+  export type ProductNotificationUncheckedCreateWithoutProductInput = {
+    id?: string
+    variantId?: string | null
+    userId?: string | null
+    email?: string | null
+    phone?: string | null
+    isNotified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductNotificationCreateOrConnectWithoutProductInput = {
+    where: ProductNotificationWhereUniqueInput
+    create: XOR<ProductNotificationCreateWithoutProductInput, ProductNotificationUncheckedCreateWithoutProductInput>
+  }
+
+  export type ProductNotificationCreateManyProductInputEnvelope = {
+    data: ProductNotificationCreateManyProductInput | ProductNotificationCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RecentlyViewedCreateWithoutProductInput = {
     id?: string
     viewedAt?: Date | string
@@ -75608,6 +77269,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -75654,6 +77316,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -75955,6 +77618,22 @@ export namespace Prisma {
     data: XOR<ProductQuestionUpdateManyMutationInput, ProductQuestionUncheckedUpdateManyWithoutProductInput>
   }
 
+  export type ProductNotificationUpsertWithWhereUniqueWithoutProductInput = {
+    where: ProductNotificationWhereUniqueInput
+    update: XOR<ProductNotificationUpdateWithoutProductInput, ProductNotificationUncheckedUpdateWithoutProductInput>
+    create: XOR<ProductNotificationCreateWithoutProductInput, ProductNotificationUncheckedCreateWithoutProductInput>
+  }
+
+  export type ProductNotificationUpdateWithWhereUniqueWithoutProductInput = {
+    where: ProductNotificationWhereUniqueInput
+    data: XOR<ProductNotificationUpdateWithoutProductInput, ProductNotificationUncheckedUpdateWithoutProductInput>
+  }
+
+  export type ProductNotificationUpdateManyWithWhereWithoutProductInput = {
+    where: ProductNotificationScalarWhereInput
+    data: XOR<ProductNotificationUpdateManyMutationInput, ProductNotificationUncheckedUpdateManyWithoutProductInput>
+  }
+
   export type RecentlyViewedUpsertWithWhereUniqueWithoutProductInput = {
     where: RecentlyViewedWhereUniqueInput
     update: XOR<RecentlyViewedUpdateWithoutProductInput, RecentlyViewedUncheckedUpdateWithoutProductInput>
@@ -76022,6 +77701,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -76050,6 +77730,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -76210,6 +77891,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -76238,6 +77920,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -76431,6 +78114,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -76459,6 +78143,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -76503,6 +78188,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -76531,6 +78217,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -76572,6 +78259,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -76618,6 +78306,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -76721,6 +78410,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -76767,6 +78457,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -76897,6 +78588,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -76943,6 +78635,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -77232,6 +78925,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -77278,6 +78972,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -77629,6 +79324,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -77675,6 +79371,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -77779,6 +79476,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -77825,6 +79523,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -78159,6 +79858,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -78205,6 +79905,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -78243,6 +79944,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -78271,6 +79973,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -78380,6 +80083,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -78426,6 +80130,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -78470,6 +80175,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -78498,6 +80204,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -78620,6 +80327,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -78666,6 +80374,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -78771,6 +80480,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -78817,6 +80527,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -78943,6 +80654,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -78989,6 +80701,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -79075,6 +80788,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -79121,6 +80835,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -79191,6 +80906,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -79219,6 +80935,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -79290,6 +81007,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -79318,6 +81036,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -79395,6 +81114,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -79441,6 +81161,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -79598,6 +81319,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -79644,6 +81366,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -79923,6 +81646,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -79969,6 +81693,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -80031,6 +81756,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -80077,6 +81803,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -80110,6 +81837,7 @@ export namespace Prisma {
     warranty?: WarrantyCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
   }
 
@@ -80138,6 +81866,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
     recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -80185,6 +81914,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -80231,6 +81961,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -80305,6 +82036,7 @@ export namespace Prisma {
     warranty?: WarrantyUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -80333,6 +82065,7 @@ export namespace Prisma {
     warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -80386,6 +82119,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -80432,6 +82166,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -80519,6 +82254,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -80565,6 +82301,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -80658,6 +82395,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -80704,6 +82442,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -80749,6 +82488,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -80795,6 +82535,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -80857,6 +82598,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -80903,6 +82645,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -80949,6 +82692,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -80995,6 +82739,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -81057,6 +82802,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -81103,6 +82849,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -81232,6 +82979,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
@@ -81278,6 +83026,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
@@ -81434,6 +83183,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
@@ -81480,6 +83230,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
@@ -81526,6 +83277,7 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeCreateNestedManyWithoutUserInput
@@ -81572,6 +83324,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
@@ -81610,6 +83363,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutRecentlyViewedInput = {
@@ -81638,6 +83392,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutRecentlyViewedInput = {
@@ -81695,6 +83450,7 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
@@ -81741,6 +83497,7 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
@@ -81785,6 +83542,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutRecentlyViewedInput = {
@@ -81813,6 +83571,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type CategoryCreateWithoutLandingPageCategoryCardsInput = {
@@ -81901,6 +83660,342 @@ export namespace Prisma {
     products?: ProductUncheckedUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
     categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type ProductCreateWithoutNotificationsInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
+    status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    brand: string
+    seller: UserCreateNestedOneWithoutProductsInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    reviews?: ReviewCreateNestedManyWithoutProductInput
+    category?: CategoryCreateNestedOneWithoutProductsInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutProductInput
+    productOffers?: ProductOfferCreateNestedManyWithoutProductInput
+    deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
+    warranty?: WarrantyCreateNestedManyWithoutProductInput
+    returnPolicy?: ReturnPolicyCreateNestedManyWithoutProductInput
+    Conversation?: ConversationCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutNotificationsInput = {
+    id?: string
+    sellerId: string
+    name: string
+    slug: string
+    description?: string | null
+    features?: ProductCreatefeaturesInput | string[]
+    status?: $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: ProductCreatekeywordsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categoryId?: string | null
+    brand: string
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutProductInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutProductInput
+    productOffers?: ProductOfferUncheckedCreateNestedManyWithoutProductInput
+    deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
+    warranty?: WarrantyUncheckedCreateNestedManyWithoutProductInput
+    returnPolicy?: ReturnPolicyUncheckedCreateNestedManyWithoutProductInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
+    questions?: ProductQuestionUncheckedCreateNestedManyWithoutProductInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutNotificationsInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutNotificationsInput, ProductUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type UserCreateWithoutProductNotificationsInput = {
+    id?: string
+    name?: string
+    username: string
+    displayUsername?: string | null
+    email: string
+    emailVerified?: boolean
+    password?: string | null
+    image?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    phoneVerified?: boolean
+    hasProfile?: boolean
+    otp?: string | null
+    otpExpiresAt?: Date | string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isBanned?: boolean
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    cartItems?: CartItemCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    products?: ProductCreateNestedManyWithoutSellerInput
+    payouts?: PayoutCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutProductNotificationsInput = {
+    id?: string
+    name?: string
+    username: string
+    displayUsername?: string | null
+    email: string
+    emailVerified?: boolean
+    password?: string | null
+    image?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    phoneVerified?: boolean
+    hasProfile?: boolean
+    otp?: string | null
+    otpExpiresAt?: Date | string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isBanned?: boolean
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutBuyerInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput
+    payouts?: PayoutUncheckedCreateNestedManyWithoutSellerInput
+    sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutSellerInput
+    wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteUncheckedCreateNestedManyWithoutUserInput
+    buyerConversations?: ConversationUncheckedCreateNestedManyWithoutSenderInput
+    sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutProductNotificationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutProductNotificationsInput, UserUncheckedCreateWithoutProductNotificationsInput>
+  }
+
+  export type ProductUpsertWithoutNotificationsInput = {
+    update: XOR<ProductUpdateWithoutNotificationsInput, ProductUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<ProductCreateWithoutNotificationsInput, ProductUncheckedCreateWithoutNotificationsInput>
+    where?: ProductWhereInput
+  }
+
+  export type ProductUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: ProductWhereInput
+    data: XOR<ProductUpdateWithoutNotificationsInput, ProductUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type ProductUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: StringFieldUpdateOperationsInput | string
+    seller?: UserUpdateOneRequiredWithoutProductsNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    reviews?: ReviewUpdateManyWithoutProductNestedInput
+    category?: CategoryUpdateOneWithoutProductsNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutProductNestedInput
+    productOffers?: ProductOfferUpdateManyWithoutProductNestedInput
+    deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
+    warranty?: WarrantyUpdateManyWithoutProductNestedInput
+    returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
+    Conversation?: ConversationUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sellerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: ProductUpdatefeaturesInput | string[]
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    specificationTable?: NullableJsonNullValueInput | InputJsonValue
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: ProductUpdatekeywordsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    brand?: StringFieldUpdateOperationsInput | string
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutProductNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutProductNestedInput
+    productOffers?: ProductOfferUncheckedUpdateManyWithoutProductNestedInput
+    deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
+    warranty?: WarrantyUncheckedUpdateManyWithoutProductNestedInput
+    returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
+    questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type UserUpsertWithoutProductNotificationsInput = {
+    update: XOR<UserUpdateWithoutProductNotificationsInput, UserUncheckedUpdateWithoutProductNotificationsInput>
+    create: XOR<UserCreateWithoutProductNotificationsInput, UserUncheckedCreateWithoutProductNotificationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutProductNotificationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutProductNotificationsInput, UserUncheckedUpdateWithoutProductNotificationsInput>
+  }
+
+  export type UserUpdateWithoutProductNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    products?: ProductUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutProductNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutBuyerNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput
+    payouts?: PayoutUncheckedUpdateManyWithoutSellerNestedInput
+    sellerOrders?: SellerOrderUncheckedUpdateManyWithoutSellerNestedInput
+    wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUncheckedUpdateManyWithoutUserNestedInput
+    buyerConversations?: ConversationUncheckedUpdateManyWithoutSenderNestedInput
+    sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SessionCreateManyUserInput = {
@@ -82097,6 +84192,17 @@ export namespace Prisma {
     type: string
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductNotificationCreateManyUserInput = {
+    id?: string
+    productId: string
+    variantId?: string | null
+    email?: string | null
+    phone?: string | null
+    isNotified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -82463,6 +84569,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -82491,6 +84598,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -82790,6 +84898,39 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     data?: NullableJsonNullValueInput | InputJsonValue
     isRead?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductNotificationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isNotified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutNotificationsNestedInput
+  }
+
+  export type ProductNotificationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isNotified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductNotificationUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isNotified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -83291,6 +85432,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUpdateManyWithoutProductNestedInput
   }
 
@@ -83319,6 +85461,7 @@ export namespace Prisma {
     returnPolicy?: ReturnPolicyUncheckedUpdateManyWithoutProductNestedInput
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     questions?: ProductQuestionUncheckedUpdateManyWithoutProductNestedInput
+    notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
     recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -83655,6 +85798,17 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ProductNotificationCreateManyProductInput = {
+    id?: string
+    variantId?: string | null
+    userId?: string | null
+    email?: string | null
+    phone?: string | null
+    isNotified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type RecentlyViewedCreateManyProductInput = {
     id?: string
     userId: string
@@ -83981,6 +86135,39 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductNotificationUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isNotified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutProductNotificationsNestedInput
+  }
+
+  export type ProductNotificationUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isNotified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductNotificationUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    variantId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isNotified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -84944,6 +87131,10 @@ export namespace Prisma {
      * @deprecated Use LandingPageBannerDefaultArgs instead
      */
     export type LandingPageBannerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LandingPageBannerDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ProductNotificationDefaultArgs instead
+     */
+    export type ProductNotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductNotificationDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany
