@@ -1,7 +1,12 @@
 // MobileMenu.tsx
 import SellerDialog from "./SellerDialog";
 import UserDropdown from "./UserDropdown";
-import { useEffect } from "react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -9,36 +14,17 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
-  // Close on escape key
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
   return (
-    <>
-      {/* Backdrop - Fixed positioning to cover entire viewport */}
-      <div
-        className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 animate-in fade-in duration-200"
-        onClick={onClose}
-        aria-hidden="true"
-        style={{ top: '3.5rem' }} // Start below navbar
-      />
-
-      {/* Menu Panel */}
-      <div
-        className="md:hidden absolute top-full left-0 right-0 bg-background/98 backdrop-blur-xl border-b border-border/30 shadow-2xl z-50 animate-in slide-in-from-top-2 duration-300"
-        onClick={(e) => e.stopPropagation()} // Prevent clicks inside menu from closing it
+    <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <SheetContent
+        side="top"
+        className="w-full p-0 border-b border-border/30 shadow-2xl backdrop-blur-xl bg-background/98"
       >
-        <div className="max-h-[calc(100vh-3.5rem)] overflow-y-auto">
+        <SheetHeader className="sr-only">
+          <SheetTitle>Navigation Menu</SheetTitle>
+        </SheetHeader>
+
+        <div className="max-h-[85vh] overflow-y-auto mt-12">
           <div className="p-4 space-y-6">
             {/* User Account Section */}
             <div className="space-y-1">
@@ -58,13 +44,13 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             </div>
 
             {/* Seller Section */}
-            <div className="pb-2">
+            <div className="pb-6">
               <SellerDialog isMobile onItemClick={onClose} />
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </SheetContent>
+    </Sheet>
   );
 };
 

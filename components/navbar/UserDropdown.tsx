@@ -108,58 +108,69 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
 
   if (isMobile) {
     return (
-      <div className="space-y-0.5">
+      <div className="space-y-4">
         {/* Account Section Header */}
-        <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          Account
+        <div className="px-1 text-xs font-bold text-muted-foreground uppercase tracking-[0.1em]">
+          Account settings
         </div>
 
-        {/* My Account */}
-        <Link href="/account/profile" className="block" onClick={onItemClick}>
-          <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center relative">
-                <User className="w-4 h-4 text-primary" />
+        <div className="grid gap-2">
+          {/* My Account */}
+          <Link
+            href="/account/profile"
+            className="flex items-center justify-between p-4 rounded-xl bg-secondary/30 hover:bg-secondary/50 active:scale-[0.98] transition-all group border border-border/50"
+            onClick={onItemClick}
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center relative">
+                <User className="w-5 h-5 text-primary" />
                 {hasAnyNotification && (
-                  <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-600 rounded-full border-2 border-background animate-in zoom-in duration-300" />
+                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-600 rounded-full border-2 border-background animate-in zoom-in duration-300" />
                 )}
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-foreground">My Account</span>
-                {hasAnyNotification && (
-                  <span className="w-2 h-2 bg-red-600 rounded-full" />
-                )}
+              <div className="flex flex-col">
+                <span className="text-[15px] font-semibold text-foreground">My Profile</span>
+                <span className="text-xs text-muted-foreground">Manage your personal info</span>
               </div>
             </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-          </div>
-        </Link>
+            <ChevronRight className="w-5 h-5 text-muted-foreground/50 group-hover:text-foreground transition-colors" />
+          </Link>
 
-        {/* Orders */}
-        <Link href="/account/orders" className="block" onClick={onItemClick}>
-          <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-                <Package className="w-4 h-4 text-primary" />
+          {/* Orders */}
+          <Link
+            href="/account/orders"
+            className="flex items-center justify-between p-4 rounded-xl bg-secondary/30 hover:bg-secondary/50 active:scale-[0.98] transition-all group border border-border/50"
+            onClick={onItemClick}
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <Package className="w-5 h-5 text-primary" />
               </div>
-              <span className="text-sm font-medium text-foreground">Orders</span>
+              <div className="flex flex-col">
+                <span className="text-[15px] font-semibold text-foreground">My Orders</span>
+                <span className="text-xs text-muted-foreground">Check your order history</span>
+              </div>
             </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-          </div>
-        </Link>
+            <ChevronRight className="w-5 h-5 text-muted-foreground/50 group-hover:text-foreground transition-colors" />
+          </Link>
 
-        {/* Logout */}
-        <button className="w-full text-left" onClick={handleSignOut}>
-          <div className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-secondary/80 active:bg-secondary transition-colors group">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-destructive/10 flex items-center justify-center">
-                <LogOut className="w-4 h-4 text-destructive" />
+          {/* Logout */}
+          <button
+            className="flex items-center justify-between p-4 rounded-xl bg-destructive/5 hover:bg-destructive/10 active:scale-[0.98] transition-all group border border-destructive/10"
+            onClick={handleSignOut}
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center">
+                <LogOut className="w-5 h-5 text-destructive" />
               </div>
-              <span className="text-sm font-medium text-foreground">Logout</span>
+              <div className="flex flex-col text-left">
+                <span className="text-[15px] font-semibold text-destructive">Logout</span>
+                <span className="text-xs text-destructive/70">Sign out of your account</span>
+              </div>
             </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-          </div>
-        </button>
+            <ChevronRight className="w-5 h-5 text-destructive/30 group-hover:text-destructive transition-colors" />
+          </button>
+        </div>
       </div>
     );
   }

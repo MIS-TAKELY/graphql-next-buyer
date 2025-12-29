@@ -70,7 +70,7 @@ export default function ProductGrid({ products, clearFilters, loading = false }:
           </Button>
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2 sm:gap-4">
           {products?.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}
