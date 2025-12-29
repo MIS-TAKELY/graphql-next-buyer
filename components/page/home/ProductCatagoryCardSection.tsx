@@ -45,7 +45,7 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
                           h-12 xs:h-14 sm:h-16 md:h-14 lg:h-16 xl:h-18
                           bg-gradient-to-br ${category.color}
                           flex items-center justify-center
-                          shadow-sm group-hover:shadow-lg
+                          
                           transition-all duration-200
                           overflow-hidden
                           ${!category.image ? 'rounded-none' : ''} 
@@ -57,7 +57,7 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
                           <img
                             src={category.image}
                             alt={category.categoryName}
-                            className="w-full h-full object-cover p-2"
+                            className="w-full h-full object-cover "
                           />
                         ) : (
                           <Icons.LayoutGrid
