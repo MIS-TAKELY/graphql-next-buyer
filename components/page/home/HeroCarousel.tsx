@@ -120,7 +120,7 @@ export default function HeroCarousel({ banners = [] }: HeroCarouselProps) {
 
   return (
     <div className="container-custom py-4 sm:py-6">
-      <div className="relative h-[250px] sm:h-[400px] md:h-[500px] lg:h-[300px] w-full rounded-2xl overflow-hidden shadow-2xl group">
+      <div className="relative aspect-[16/6] md:aspect-[21/7] lg:aspect-[16/4] w-full rounded-2xl overflow-hidden shadow-2xl group">
 
         {/* Carousel Viewport */}
         <div className="overflow-hidden h-full" ref={emblaRef}>

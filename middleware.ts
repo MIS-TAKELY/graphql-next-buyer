@@ -53,11 +53,6 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
-  // 2.5 If logged in, don't allow access to sign-in/sign-up
-  if (nextUrl.pathname.startsWith("/sign-in") || nextUrl.pathname.startsWith("/sign-up")) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
   // Note: Phone verification check is handled in AuthGate (client-side) 
   // to avoid expensive and fragile database/API calls in Edge Middleware.
 
