@@ -6,12 +6,14 @@ import Pagination from "@/components/search/Pagination";
 import ProductGrid from "@/components/search/ProductGrid";
 import SearchHeader from "@/components/search/SearchHeader";
 import SortBar from "@/components/search/SortBar";
-import { Filter, useDynamicSearchFilter } from "@/hooks/dynamicSeaarchFilter/useDynamicSearchFilter";
+import { Filter, useDynamicSearchFilter } from "@/hooks/dynamicSearchFilter/useDynamicSearchFilter";
 import { useSearch } from "@/hooks/search/useSearch";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
 interface Specification {
+  key?: string;
+  name?: string;
   value: string;
   __typename?: string;
 }
@@ -39,13 +41,23 @@ interface SearchProduct {
   brand: string;
   slug: string;
   category: Category;
+  deliveryOptions?: { title: string }[];
 }
-
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
-  const { searchProducts, searchLoading, page, setPage, totalPages, totalResults, limit, setLimit } = useSearch(query);
+  const {
+    searchProducts,
+    backendFilters,
+    searchLoading,
+    page,
+    setPage,
+    totalPages,
+    totalResults,
+    limit,
+    setLimit,
+  } = useSearch(query);
   const { dynamicSearchData } = useDynamicSearchFilter(query);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -56,44 +68,94 @@ export default function SearchPage() {
     togglePriceRange,
     setMinRating,
     setFilters,
-    resetFilters
+    resetFilters,
   } = useProductStore();
 
-  const { selectedPriceRanges, dynamicFilters, minRating, sort: sortBy } = filters;
+  const {
+    selectedPriceRanges,
+    dynamicFilters,
+    minRating,
+    sort: sortBy,
+  } = filters;
 
   const setSortBy = (sort: string) => setFilters({ sort });
 
-  // Sync query to store if needed, or handle initial hydration
-  // For simplicity, we assume store is primary, but we might want to sync URL -> Store on mount
-  // useEffect(() => {
-  //   if (query && filters.searchQuery !== query) {
-  //      setFilters({ searchQuery: query });
-  //   }
-  // }, [query, setFilters]);
+  // Use backend-provided filters if available
+  const { computedFilters, filterOptions } = useMemo(() => {
+    if (!backendFilters) {
+      return { computedFilters: [], filterOptions: {} };
+    }
 
-  const filterOptions = useMemo(() => {
+    const { brands, categories, specifications, delivery } = backendFilters;
+    const finalFilters: any[] = [];
     const options: { [key: string]: string[] } = {};
-    dynamicSearchData?.filters?.forEach((filter: Filter) => {
-      if (filter.options && filter.options.length > 0) {
-        options[filter.key] = filter.options;
-      }
-    });
-    return options;
-  }, [dynamicSearchData]);
+
+    // 1. Brands
+    if (brands?.length > 0) {
+      const opts = brands.map((b: any) => b.name);
+      finalFilters.push({
+        key: "brand",
+        label: "Brand",
+        options: opts,
+      });
+      options.brand = opts;
+    }
+
+    // 2. Categories
+    if (categories?.length > 0) {
+      const opts = categories.map((c: any) => c.name);
+      finalFilters.push({
+        key: "category",
+        label: "Category",
+        options: opts,
+      });
+      options.category = opts;
+    }
+
+    // 3. Delivery
+    if (delivery?.length > 0) {
+      const opts = delivery.map((d: any) => d.name);
+      finalFilters.push({
+        key: "delivery_options",
+        label: "Delivery Options",
+        options: opts,
+      });
+      options.delivery_options = opts;
+    }
+
+    // 4. Specifications
+    if (specifications) {
+      Object.entries(specifications).forEach(([key, spec]: [string, any]) => {
+        finalFilters.push({
+          key,
+          label: spec.label || key,
+          options: spec.options,
+        });
+        options[key] = spec.options;
+      });
+    }
+
+    return {
+      computedFilters: finalFilters,
+      filterOptions: options,
+    };
+  }, [backendFilters]);
 
   const filteredProducts = useMemo(() => {
     if (!Array.isArray(searchProducts)) return [];
-    let filtered = searchProducts.filter((product: SearchProduct) => {
+    let filtered = [...searchProducts].filter((product: SearchProduct) => {
       const price = product.variants[0]?.price || 0;
 
-      const matchesPrice = selectedPriceRanges.length === 0 || selectedPriceRanges.some(range => {
-        if (range.endsWith("+")) {
-          const min = parseInt(range);
-          return price >= min;
-        }
-        const [min, max] = range.split("-").map(Number);
-        return price >= min && price <= max;
-      });
+      const matchesPrice =
+        selectedPriceRanges.length === 0 ||
+        selectedPriceRanges.some((range) => {
+          if (range.endsWith("+")) {
+            const min = parseInt(range);
+            return price >= min;
+          }
+          const [min, max] = range.split("-").map(Number);
+          return price >= min && price <= max;
+        });
       const rating =
         product.reviews.length > 0
           ? product.reviews.reduce((sum, review) => sum + review.rating, 0) /
@@ -106,15 +168,22 @@ export default function SearchPage() {
           if (key === "brand") return selectedValues.includes(product.brand);
           if (key === "category")
             return selectedValues.includes(product.category.name);
+          if (key === "delivery_options")
+            return product.deliveryOptions?.some((opt) =>
+              selectedValues.includes(opt.title)
+            );
           return product.variants.some((variant) =>
-            variant.specifications.some((spec) =>
-              selectedValues.includes(spec.value)
+            variant.specifications.some(
+              (spec) =>
+                (spec.key === key || spec.name === key) &&
+                selectedValues.includes(spec.value)
             )
           );
         }
       );
       return matchesPrice && matchesRating && matchesDynamicFilters;
     });
+
     switch (sortBy) {
       case "price-low":
         filtered.sort(
@@ -138,7 +207,6 @@ export default function SearchPage() {
       case "popularity":
         filtered.sort((a, b) => b.reviews.length - a.reviews.length);
         break;
-      // relevance typically default order
     }
     return filtered;
   }, [searchProducts, selectedPriceRanges, dynamicFilters, minRating, sortBy]);
@@ -157,7 +225,7 @@ export default function SearchPage() {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex flex-col gap-3 lg:flex-row lg:gap-4"> {/* Reduced gap-4 to gap-3 for tighter layout */}
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between lg:gap-4">
           <SearchHeader
             query={query}
             filteredCount={filteredProducts.length}
@@ -179,25 +247,37 @@ export default function SearchPage() {
           </div>
         </div>
         <div className="flex flex-col lg:flex-row lg:gap-4">
-          {/* Mobile overlay sidebar */}
           <div
-            className={`fixed top-0 inset-y-0 left-0 w-80 bg-white/98 dark:bg-gray-900/98 backdrop-blur-xl transform ${showFilters ? "translate-x-0" : "-translate-x-full"} lg:hidden transition-transform duration-300 ease-in-out z-50 overflow-y-auto shadow-2xl rounded-r-2xl`}
+            className={`fixed top-0 inset-y-0 left-0 w-80 bg-white/98 dark:bg-gray-900/98 backdrop-blur-xl transform ${showFilters ? "translate-x-0" : "-translate-x-full"
+              } lg:hidden transition-transform duration-300 ease-in-out z-50 overflow-y-auto shadow-2xl rounded-r-2xl`}
           >
-            <div className="p-6"> {/* Increased p-4 to p-6 for better touch spacing */}
+            <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Filters</h2> {/* Increased text-lg to text-xl */}
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Filters
+                </h2>
                 <button
                   onClick={() => setShowFilters(false)}
                   className="p-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                   aria-label="Close filters"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> {/* Larger svg w-5 h-5 to w-6 h-6 */}
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               </div>
               <FilterSidebar
-                showFilters={true} // Always show content when this div is visible
+                showFilters={true}
                 selectedPriceRanges={selectedPriceRanges}
                 togglePriceRange={togglePriceRange}
                 minRating={minRating}
@@ -205,15 +285,17 @@ export default function SearchPage() {
                 dynamicFilters={dynamicFilters}
                 toggleFilter={toggleFilter}
                 filterOptions={filterOptions}
-                dynamicSearchData={dynamicSearchData}
+                dynamicSearchData={{
+                  category: dynamicSearchData?.category || "",
+                  filters: computedFilters,
+                }}
               />
             </div>
           </div>
 
-          {/* Desktop sticky sidebar */}
           <div className="hidden lg:block lg:w-64 lg:flex-shrink-0">
             <div className="sticky top-20">
-              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600"> {/* rounded-lg to rounded-xl, p-4 to p-5 */}
+              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
                 <FilterSidebar
                   showFilters={true}
                   selectedPriceRanges={selectedPriceRanges}
@@ -223,13 +305,15 @@ export default function SearchPage() {
                   dynamicFilters={dynamicFilters}
                   toggleFilter={toggleFilter}
                   filterOptions={filterOptions}
-                  dynamicSearchData={dynamicSearchData}
+                  dynamicSearchData={{
+                    category: dynamicSearchData?.category || "",
+                    filters: computedFilters,
+                  }}
                 />
               </div>
             </div>
           </div>
 
-          {/* Overlay for mobile */}
           {showFilters && (
             <div
               className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
@@ -237,8 +321,7 @@ export default function SearchPage() {
             ></div>
           )}
 
-          {/* Main content */}
-          <main className="flex-1 mt-4 lg:mt-0"> {/* Added mt-4 for mobile spacing */}
+          <main className="flex-1 mt-4 lg:mt-0">
             <ActiveFilters
               dynamicFilters={dynamicFilters}
               minRating={minRating}
@@ -248,7 +331,10 @@ export default function SearchPage() {
               setMinRating={setMinRating}
               clearFilters={clearFilters}
               filterOptions={filterOptions}
-              dynamicSearchData={dynamicSearchData}
+              dynamicSearchData={{
+                category: dynamicSearchData?.category || "",
+                filters: computedFilters,
+              }}
             />
             <ProductGrid
               products={filteredProducts}
@@ -263,9 +349,6 @@ export default function SearchPage() {
           </main>
         </div>
       </div>
-
-      {/* Comparison Button Bar - Floating - Moved to global layout */}
-      {/* <CompareButtonBar /> */}
     </div>
   );
 }

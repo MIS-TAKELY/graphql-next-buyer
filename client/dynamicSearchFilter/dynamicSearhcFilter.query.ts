@@ -8,6 +8,7 @@ export const GET_DYNAMIC_SEARCH_FILTER = gql`
         key
         label
         options
+        type
       }
     }
   }

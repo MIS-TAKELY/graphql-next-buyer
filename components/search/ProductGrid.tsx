@@ -4,6 +4,8 @@ import ProductCard from "./ProductCard";
 import ProductCardSkeleton from "./ProductCardSkeleton";
 
 interface Specification {
+  key?: string;
+  name?: string;
   value: string;
 }
 

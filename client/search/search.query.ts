@@ -11,6 +11,7 @@ export const MAKE_SEARCH_QUERY = gql`
           price
           mrp
           specifications {
+            key
             value
           }
         }
@@ -21,10 +22,29 @@ export const MAKE_SEARCH_QUERY = gql`
         reviews {
           rating
         }
+        deliveryOptions {
+          title
+        }
         brand
         slug
         category {
           name
+        }
+      }
+      filters {
+        brands {
+          name
+          count
+        }
+        categories {
+          id
+          name
+          count
+        }
+        specifications
+        delivery {
+          name
+          count
         }
       }
       pagination {

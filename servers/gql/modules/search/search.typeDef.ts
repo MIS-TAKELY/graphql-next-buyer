@@ -57,6 +57,7 @@ export const searchTypeDef = gql`
     specifications: Json
     price: PriceRange
     stock: StockInfo
+    delivery: [FilterOption!]!
   }
 
   type SearchResult {

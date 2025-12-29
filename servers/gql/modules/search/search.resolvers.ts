@@ -101,6 +101,7 @@ export const searchResolvers = {
 
               specifications: {
                 select: {
+                  key: true,
                   value: true,
                 },
               },
@@ -130,6 +131,89 @@ export const searchResolvers = {
           updatedAt: p.updatedAt.toISOString(),
         }));
 
+      // ✅ Step 5: Aggregate Filters (Across all matching results, not just the current page)
+      // For performance, we can do these in parallel or optimize further.
+
+      // 5.1 Categories aggregation
+      const categoryCounts = await prisma.$queryRaw<Array<{ id: string; name: string; count: bigint }>>(
+        Prisma.sql`
+          SELECT c.id, c.name, COUNT(p.id) as count
+          FROM "products" p
+          JOIN "categories" c ON p."categoryId" = c.id
+          WHERE ${Prisma.raw(whereClause)}
+          GROUP BY c.id, c.name
+          ORDER BY count DESC
+        `
+      );
+
+      // 5.2 Brands aggregation
+      const brandCounts = await prisma.$queryRaw<Array<{ brand: string; count: bigint }>>(
+        Prisma.sql`
+          SELECT brand, COUNT(id) as count
+          FROM "products" p
+          WHERE ${Prisma.raw(whereClause)}
+          GROUP BY brand
+          ORDER BY count DESC
+        `
+      );
+
+      // 5.3 Specifications aggregation (Getting unique keys and their common values)
+      const topCategoryIds = categoryCounts.slice(0, 3).map(c => c.id);
+
+      const categorySpecs = await prisma.categorySpecification.findMany({
+        where: { categoryId: { in: topCategoryIds } },
+        select: { key: true, label: true }
+      });
+
+      const specKeys = categorySpecs.map(s => s.key);
+
+      const allMatchingProductIds = await prisma.$queryRaw<Array<{ id: string }>>(
+        Prisma.sql`
+          SELECT id::text FROM "products"
+          WHERE ${Prisma.raw(whereClause)}
+          LIMIT 100
+        `
+      );
+      const sampleIds = allMatchingProductIds.map(p => p.id);
+
+      const specValues = await prisma.productSpecification.findMany({
+        where: {
+          key: { in: specKeys },
+          variant: {
+            product: { id: { in: sampleIds } }
+          }
+        },
+        select: { key: true, value: true }
+      });
+
+      const specAgg: Record<string, Set<string>> = {};
+      specValues.forEach(s => {
+        if (!specAgg[s.key]) specAgg[s.key] = new Set();
+        specAgg[s.key].add(s.value);
+      });
+
+      const formattedSpecs: Record<string, { label: string; options: string[] }> = {};
+      categorySpecs.forEach(cs => {
+        const values = specAgg[cs.key];
+        if (values && values.size > 0) {
+          formattedSpecs[cs.key] = {
+            label: cs.label,
+            options: Array.from(values).sort()
+          };
+        }
+      });
+
+      // 5.4 Delivery Options aggregation
+      const deliveryCounts = await prisma.$queryRaw<Array<{ title: string; count: bigint }>>(
+        Prisma.sql`
+          SELECT del.title, COUNT(DISTINCT p.id) as count
+          FROM "products" p
+          JOIN "delivery_options" del ON p.id = del."productId"
+          WHERE ${Prisma.raw(whereClause)}
+          GROUP BY del.title
+        `
+      );
+
       return {
         products: orderedProducts,
         pagination: {
@@ -138,6 +222,13 @@ export const searchResolvers = {
           total,
           totalPages,
         },
+        filters: {
+          brands: brandCounts.map(b => ({ name: b.brand, count: Number(b.count) })),
+          categories: categoryCounts.map(c => ({ id: c.id, name: c.name, count: Number(c.count) })),
+          specifications: formattedSpecs,
+          delivery: deliveryCounts.map(d => ({ name: d.title, count: Number(d.count) })),
+          // price, stock can be added similarly
+        }
       };
     },
     searchSuggestions: async (_: any, { query }: { query: string }) => {

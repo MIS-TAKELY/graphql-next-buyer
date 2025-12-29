@@ -126,9 +126,16 @@ Return ONLY the exact category name from the list above.`;
 
       const aiResponse =
         response.data?.choices?.[0]?.message?.content?.trim() || "";
-      console.log(`🤖 AI response (attempt ${attemptNumber}):`, aiResponse);
 
-      return aiResponse;
+      // Clean up potential special tokens like <s> or </s>
+      const cleanedAiResponse = aiResponse.replace(/<\/?s>/g, "").trim();
+
+      console.log(
+        `🤖 AI response (attempt ${attemptNumber}):`,
+        cleanedAiResponse
+      );
+
+      return cleanedAiResponse;
     } catch (error: any) {
       console.error("Mistral API error:", error.message || error);
       return "";

@@ -31,6 +31,7 @@ export const useSearch = (query?: string) => {
 
   return {
     searchProducts: searchQueryResponse?.searchProducts.products,
+    backendFilters: searchQueryResponse?.searchProducts?.filters,
     searchLoading: searchQueryLoading,
     page,
     setPage,

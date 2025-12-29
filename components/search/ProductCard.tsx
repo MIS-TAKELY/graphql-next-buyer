@@ -11,6 +11,8 @@ import { toast } from "sonner";
 import { MouseEvent } from "react";
 
 interface Specification {
+  key?: string;
+  name?: string;
   value: string;
 }
 
