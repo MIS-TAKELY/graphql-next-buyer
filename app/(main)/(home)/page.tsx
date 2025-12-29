@@ -1,5 +1,4 @@
 import { GET_PRODUCTS_MINIMAL } from "@/client/product/product.queries";
-import Main from "@/components/landingPage/Main";
 import HeroCarousel from "@/components/page/home/HeroCarousel";
 import ProductCatagoryCardSection from "@/components/page/home/ProductCatagoryCardSection";
 import ProductSection from "@/components/page/home/ProductSection";
@@ -9,7 +8,7 @@ import { CacheService } from "@/services/CacheService";
 import { TProduct } from "@/types/product";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-
+import MainContentLoader from "@/components/page/home/MainContentLoader";
 
 const DynamicSections = dynamic(
   () => import("@/components/page/home/DynamicSections")
@@ -51,22 +50,18 @@ type SectionConfig = {
   layout: "grid" | "horizontal";
 };
 
-import { GET_LANDING_PAGE_CATEGORY_CARDS, GET_LANDING_PAGE_CATEGORY_SWIPERS, GET_LANDING_PAGE_PRODUCT_GRIDS } from "@/client/landing/landing-page-config.queries";
+import { GET_LANDING_PAGE_CATEGORY_CARDS } from "@/client/landing/landing-page-config.queries";
 import { GET_LANDING_PAGE_BANNERS } from "@/client/landing/landing-page-banner.queries";
 
 export default async function HomePage() {
   const client = await getServerApolloClient();
 
-  const [categoryCardsData, swipersData, gridsData, bannersData] = await Promise.all([
+  const [categoryCardsData, bannersData] = await Promise.all([
     client.query({ query: GET_LANDING_PAGE_CATEGORY_CARDS }),
-    client.query({ query: GET_LANDING_PAGE_CATEGORY_SWIPERS }),
-    client.query({ query: GET_LANDING_PAGE_PRODUCT_GRIDS }),
     client.query({ query: GET_LANDING_PAGE_BANNERS }),
   ]);
 
   const categoryCards = categoryCardsData.data?.getLandingPageCategoryCards || [];
-  const swipers = swipersData.data?.getLandingPageCategorySwipers || [];
-  const grids = gridsData.data?.getLandingPageProductGrids || [];
   const banners = bannersData.data?.getLandingPageBanners || [];
 
   const jsonLd = {
@@ -92,17 +87,10 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ProductCatagoryCardSection categories={categoryCards} />
-      <HeroCarousel banners={banners} />{" "}
-      {/* can be contrlled by admin if data in database is set in con: Smartphone,
-        id: 1,
-        image: festivalSale,
-        title: "Festival Sale",
-        subtitle: "Up to 70% Off",
-        description: "Biggest sale of the year on all categories",
-     this format
-    */}
+      <HeroCarousel banners={banners} />
+
       <Suspense fallback={<MainSkeleton />}>
-        <Main swipers={swipers} grids={grids} />
+        <MainContentLoader />
       </Suspense>
       <Suspense fallback={<ProductSectionsSkeleton />}>
         <HomeProductSections />

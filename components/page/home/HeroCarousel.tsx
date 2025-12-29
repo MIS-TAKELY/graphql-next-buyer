@@ -25,9 +25,10 @@ interface HeroCarouselProps {
 interface SlideProps {
   slide: Banner;
   isActive: boolean;
+  priority: boolean;
 }
 
-const Slide = memo(({ slide, isActive }: SlideProps) => (
+const Slide = memo(({ slide, isActive, priority }: SlideProps) => (
   <div className="relative h-full w-full flex-[0_0_100%] min-w-0">
     {slide.mediaType === "VIDEO" ? (
       <video
@@ -47,7 +48,7 @@ const Slide = memo(({ slide, isActive }: SlideProps) => (
         className={`object-cover z-0 transition-all duration-700 ${isActive ? "scale-100 blur-0" : "scale-105 blur-sm"
           }`}
         sizes="100vw"
-        priority={true}
+        priority={isActive}
       />
     )}
     <div className="absolute inset-0 flex items-center justify-center bg-black/40">
@@ -125,7 +126,12 @@ export default function HeroCarousel({ banners = [] }: HeroCarouselProps) {
         <div className="overflow-hidden h-full" ref={emblaRef}>
           <div className="flex h-full touch-pan-y">
             {banners.map((slide, index) => (
-              <Slide key={slide.id} slide={slide} isActive={index === selectedIndex} />
+              <Slide
+                key={slide.id}
+                slide={slide}
+                isActive={index === selectedIndex}
+                priority={index === 0}
+              />
             ))}
           </div>
         </div>
