@@ -27,7 +27,7 @@ export const revalidate = 3600;
 import { SEO_CONFIG, BUYER_KEYWORDS, SELLER_KEYWORDS, CONVENIENCE_KEYWORDS } from "@/config/seo";
 
 export const metadata: Metadata = {
-  title: "Best Online Shopping in Nepal - Best Prices, No Seller Charges",
+  title: "Vanijay-Best Online Shopping in Nepal - Best Prices, No Seller Charges",
   description: "Shop electronics, fashion, and furniture at Vanijay. Nepal's best online shopping platform with zero seller fees, best prices, and easy returns.",
   alternates: {
     canonical: "/",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     ...CONVENIENCE_KEYWORDS,
   ],
   openGraph: {
-    title: "Best Online Shopping in Nepal - Best Prices, No Seller Charges",
+    title: "Vanijay-Best Online Shopping in Nepal - Best Prices, No Seller Charges",
     description: "Shop electronics, fashion, and furniture at Vanijay. Nepal's best online shopping platform with zero seller fees, best prices, and easy returns.",
   }
 };
