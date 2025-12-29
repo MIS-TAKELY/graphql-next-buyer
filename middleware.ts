@@ -20,6 +20,30 @@ const publicRoutes = [
 export default async function middleware(request: NextRequest) {
   const { nextUrl } = request;
 
+  // Restriction for sitemap.xml: Only allow search engine bots
+  if (nextUrl.pathname === "/sitemap.xml") {
+    const userAgent = request.headers.get("user-agent") || "";
+    const botPatterns = [
+      "googlebot",
+      "bingbot",
+      "yandexbot",
+      "duckduckbot",
+      "slurp",
+      "baiduspider",
+      "facebookexternalhit",
+      "twitterbot",
+      "linkedinbot",
+      "pinterest",
+      "slackbot",
+    ];
+    const isBot = botPatterns.some((bot) => userAgent.toLowerCase().includes(bot));
+
+    if (!isBot) {
+      // Return 404 to regular users so it looks like the file doesn't exist
+      return new NextResponse(null, { status: 404 });
+    }
+  }
+
   // 0. Early return for auth API routes, OTP routes, and verify-phone
   if (
     nextUrl.pathname.startsWith("/api/auth") ||

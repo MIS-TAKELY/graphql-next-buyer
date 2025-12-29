@@ -13,17 +13,15 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
   console.log("categories-->",categories)
   return (
     <section className="bg transition-colors duration-300 w-full py-2">
-      <div className="container-custom">
-        <div className="bg-card w-full">
+      {/* <div className="container-custom"> */}
+        <div className="bg-card container-custom">
           {/* Scrollable container for mobile, grid for lg+ */}
           <div className="overflow-x-auto lg:overflow-x-visible scrollbar-hide lg:scrollbar-auto snap-x snap-mandatory">
             <div
               className="
                 flex lg:grid lg:grid-cols-[repeat(auto-fit,minmax(80px,1fr))]
-                gap-2 xs:gap-3 sm:gap-4 md:gap-3 lg:gap-2 xl:gap-3 2xl:gap-4
-                pb-2 xs:pb-2 sm:pb-3 md:pb-4
-                px-2 xs:px-3 sm:px-4 md:px-0
-                min-w-max lg:min-w-0
+                
+                min-w-max lg:min-w-0 
               "
             >
               {categories.map((category: any, index: number) => {
@@ -35,17 +33,17 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
                         group focus:outline-none
                         transition-transform hover:scale-105 active:scale-95
                         flex-shrink-0 lg:flex-shrink
-                        w-20 xs:w-24 sm:w-28 md:w-24 lg:w-full
+                        w-20 xs:w-24 sm:w-28 md:w-24 lg:w-full py-2
                       "
                       aria-label={`Go to ${category.categoryName || category.name} category`}
                     >
                       <div
                         className={`
-                          w-12 xs:w-14 sm:w-16 md:w-14 lg:w-16 xl:w-18
-                          h-12 xs:h-14 sm:h-16 md:h-14 lg:h-16 xl:h-18
+                          w-16 xs:w-16 sm:w-18 md:w-20 lg:w-22 xl:w-24
+                          h-16 xs:h-16 sm:h-18 md:h-20 lg:h-22 xl:h-24
                           bg-gradient-to-br ${category.color}
                           flex items-center justify-center
-                          
+                          shadow-sm group-hover:shadow-lg
                           transition-all duration-200
                           overflow-hidden
                           ${!category.image ? 'rounded-none' : ''} 
@@ -57,7 +55,7 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
                           <img
                             src={category.image}
                             alt={category.categoryName}
-                            className="w-full h-full object-cover "
+                            className="w-full h-full object-cover"
                           />
                         ) : (
                           <Icons.LayoutGrid
@@ -72,16 +70,16 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
                       <h3
                         className="
                           mt-1 xs:mt-1.5 sm:mt-2 md:mt-1.5 lg:mt-2
-                          text-[10px] xs:text-xs sm:text-sm md:text-xs lg:text-sm xl:text-base
+                          text-[12px] xs:text-md sm:text-md md:text-md lg:text-sm xl:text-base
                           font-medium text-foreground text-center
-                          line-clamp-1 lg:line-clamp-2
+                          line-clamp-1
                           max-w-[60px] xs:max-w-[80px] sm:max-w-[100px] md:max-w-[80px] lg:max-w-full
                           px-0.5
                         "
                       >
                         {category.categoryName || category.name}
                       </h3>
-                      {category.count && (
+                      {/* {category.count && (
                         <p
                           className="
                             text-[8px] xs:text-[9px] sm:text-[10px] md:text-[9px] lg:text-[10px] xl:text-xs
@@ -90,14 +88,14 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
                         >
                           {category.count}
                         </p>
-                      )}
+                      )} */}
                     </button>
                   </Link>
                 );
               })}
             </div>
           </div>
-        </div>
+        {/* </div> */}
       </div>
     </section>
   );

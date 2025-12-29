@@ -4,14 +4,14 @@ import { MetadataRoute } from "next";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.vanijay.com";
 
-    let categories: { slug: string }[] = [];
+    let categories: { slug: string; updatedAt: Date }[] = [];
     let products: { slug: string; updatedAt: Date }[] = [];
 
     try {
         const [cats, prods] = await Promise.all([
             prisma.category.findMany({
                 where: { isActive: true },
-                select: { slug: true }
+                select: { slug: true, updatedAt: true }
             }),
             prisma.product.findMany({
                 where: { status: "ACTIVE" },
@@ -33,7 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const categoryUrls = categories.map((category) => ({
         url: `${baseUrl}/category/${category.slug}`,
-        lastModified: new Date(),
+        lastModified: category.updatedAt || new Date(),
         changeFrequency: "weekly" as const,
         priority: 0.7,
     }));
@@ -41,6 +41,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticRoutes = [
         "",
         "/about",
+        "/contact",
+        "/blog",
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: new Date(),
@@ -48,5 +50,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 1.0,
     }));
 
-    return [...staticRoutes, ...categoryUrls, ...productUrls];
+    const blogPosts = [
+        "top-10-products-2025",
+        "how-to-choose-best",
+        "sustainable-shopping",
+    ].map((slug) => ({
+        url: `${baseUrl}/blog/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.6,
+    }));
+
+    return [...staticRoutes, ...categoryUrls, ...productUrls, ...blogPosts];
 }
