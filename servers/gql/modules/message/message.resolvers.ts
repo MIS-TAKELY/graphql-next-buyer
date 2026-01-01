@@ -60,7 +60,7 @@ export const messageResolvers = {
 
       // Reverse to maintain chronological order (oldest to newest) for display
       // Map to match GraphQL schema field names
-      return messages.reverse().map((msg) => ({
+      return messages.reverse().map((msg: any) => ({
         ...msg,
         attachments: msg.MessageAttachment || [],
       }));
@@ -127,7 +127,7 @@ export const messageResolvers = {
           throw new Error("Unauthorized: You are not a participant.");
         }
 
-        const result = await prisma.$transaction(async (tx) => {
+        const result = await prisma.$transaction(async (tx: any) => {
           const message = await tx.message.create({
             data: {
               conversationId,
@@ -215,7 +215,7 @@ export const messageResolvers = {
           isRead: result.isRead,
           sentAt: result.sentAt, // <-- keep as Date
           sender: result.sender,
-          attachments: (result.MessageAttachment || []).map((att) => ({
+          attachments: (result.MessageAttachment || []).map((att: any) => ({
             id: att.id,
             url: att.url,
             type: att.type,
@@ -235,7 +235,7 @@ export const messageResolvers = {
           if (conversation.reciever?.id) {
             participantIds.add(conversation.reciever.id);
           }
-          conversation.ConversationParticipant?.forEach((participant) => {
+          conversation.ConversationParticipant?.forEach((participant: any) => {
             const userId = participant.user?.id;
             if (userId) participantIds.add(userId);
           });

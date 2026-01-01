@@ -23,8 +23,8 @@ export const getAllCategoryNames = cache(async () => {
       orderBy: { name: "asc" },
     });
 
-    const categoryNames = categories.map((c) => c.name); // Extract strings first
-    console.log("categoryNames",categoryNames)
+    const categoryNames = categories.map((c: any) => c.name); // Extract strings first
+    console.log("categoryNames", categoryNames)
     await setCache(cacheKey, categoryNames, 864000); // ✅ Cache strings
 
     return categoryNames;

@@ -92,8 +92,8 @@ export const topDealsResolvers = {
           SELECT 
             id::text,
             1 - (embedding <=> ${Prisma.raw(
-              `'${vectorString}'::vector`
-            )}) AS similarity
+          `'${vectorString}'::vector`
+        )}) AS similarity
           FROM "products"
           WHERE status = 'ACTIVE'
             AND "categoryId" = ANY(${categoryIds}::text[])
@@ -114,7 +114,7 @@ export const topDealsResolvers = {
         `✅ Found ${idResults.length} products in category hierarchy`
       );
 
-      const productIds = idResults.map((p) => p.id);
+      const productIds = idResults.map((p: any) => p.id);
 
       // Step 7: Fetch full product details with proper typing
       const products = (await prisma.product.findMany({
@@ -237,7 +237,7 @@ export const topDealsResolvers = {
           const avgRating =
             product.reviews.length > 0
               ? product.reviews.reduce((sum, r) => sum + r.rating, 0) /
-                product.reviews.length
+              product.reviews.length
               : 0;
 
           return {

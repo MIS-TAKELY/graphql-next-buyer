@@ -72,7 +72,7 @@ export const wishlistResolvers = {
 
       // Use transaction for atomicity
       return prisma.$transaction(
-        async (tx) => {
+        async (tx: any) => {
           let wishlist;
 
           if (wishlistId) {

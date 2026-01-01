@@ -5,7 +5,6 @@ const publicRoutes = [
   "/sign-up",
   "/api/auth",
   "/api/otp",
-  "/api/webhook",
   "/api/products",
   "/api/graphql",
   "/cart",

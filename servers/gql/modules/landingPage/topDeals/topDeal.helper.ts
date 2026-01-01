@@ -66,5 +66,5 @@ export async function getAllDescendantCategoryIds(
     `
   );
 
-  return categories.map((c) => c.id);
+  return categories.map((c: any) => c.id);
 }

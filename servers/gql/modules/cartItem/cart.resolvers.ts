@@ -135,7 +135,7 @@ export const cartItemResolvers = {
 
         // OPTIMIZATION 2: Use transaction for atomicity and speed
         await prisma.$transaction(
-          async (tx) => {
+          async (tx: any) => {
             // Upsert the cart item
             await tx.cartItem.upsert({
               where: { userId_variantId: { userId: user.id, variantId } },

@@ -63,7 +63,7 @@ export async function createContext(
         user = {
           id: dbUser.id,
           email: dbUser.email,
-          roles: dbUser.roles.map((r) => r.role),
+          roles: dbUser.roles.map((r: any) => r.role),
           firstName: dbUser.firstName ?? "",
           lastName: dbUser.lastName ?? "",
           phone: dbUser.phone,

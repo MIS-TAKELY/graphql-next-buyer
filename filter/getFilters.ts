@@ -23,7 +23,7 @@ export async function getDynamicFilters(searchTerm: string) {
   });
 
   const catIds = new Set<string>();
-  sampleProducts.forEach((p) => {
+  sampleProducts.forEach((p: any) => {
     if (p.categoryId) catIds.add(p.categoryId);
   });
 
@@ -83,7 +83,7 @@ export async function getDynamicFilters(searchTerm: string) {
           distinct: ["brand"],
           select: { brand: true },
         });
-        options = brands.map((b) => b.brand).filter(Boolean);
+        options = brands.map((b: any) => b.brand).filter(Boolean);
       } else {
         const specValues = await prisma.productSpecification.findMany({
           where: {
@@ -101,7 +101,7 @@ export async function getDynamicFilters(searchTerm: string) {
           distinct: ["value"],
           select: { value: true },
         });
-        options = specValues.map((v) => v.value).filter(Boolean);
+        options = specValues.map((v: any) => v.value).filter(Boolean);
       }
 
       return {

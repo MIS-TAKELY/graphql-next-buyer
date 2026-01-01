@@ -44,7 +44,7 @@ export const productResolvers = {
             return product;
           })
         );
-        return products.filter((p) => p !== null);
+        return products.filter((p: any) => p !== null);
       }
 
       // Query DB if slugs not cached
@@ -76,13 +76,13 @@ export const productResolvers = {
 
       // Cache individual products and slugs
       await Promise.all(
-        products.map((product) =>
+        products.map((product: any) =>
           setCache(`product:${product.slug}`, product, 86400)
         )
       );
       await setCache(
         `${cacheKey}:slugs`,
-        products.map((p) => p.slug),
+        products.map((p: any) => p.slug),
         86400
       );
 
@@ -202,10 +202,10 @@ export const productResolvers = {
           if (prod?.brand) brands.add(prod.brand);
         };
 
-        recentOrders.forEach(o => o.items.forEach(i => extract(i.variant.product)));
-        cartItems.forEach(i => extract(i.variant.product));
-        wishlistItems.forEach(i => extract(i.product));
-        recentlyViewed.forEach(i => extract(i.product));
+        recentOrders.forEach((o: any) => o.items.forEach((i: any) => extract(i.variant.product)));
+        cartItems.forEach((i: any) => extract(i.variant.product));
+        wishlistItems.forEach((i: any) => extract(i.product));
+        recentlyViewed.forEach((i: any) => extract(i.product));
 
         return { categories: Array.from(categories), brands: Array.from(brands) };
       };
@@ -279,7 +279,7 @@ export const productResolvers = {
             `;
           // Fetch more than limit to allow re-ranking
 
-          const productIds = similarProducts.map((p) => p.id);
+          const productIds = similarProducts.map((p: any) => p.id);
           let products = await prisma.product.findMany({
             where: { id: { in: productIds } },
             include: {
@@ -295,7 +295,7 @@ export const productResolvers = {
           if (userId) {
             const interests = await getUserInterests(userId);
             // Simple re-rank: Move interested items to top
-            products = products.sort((a, b) => {
+            products = products.sort((a: any, b: any) => {
               const aScore = (interests.categories.includes(a.categoryId || '') ? 1 : 0) + (interests.brands.includes(a.brand || '') ? 1 : 0);
               const bScore = (interests.categories.includes(b.categoryId || '') ? 1 : 0) + (interests.brands.includes(b.brand || '') ? 1 : 0);
               return bScore - aScore;
@@ -382,7 +382,7 @@ export const productResolvers = {
         }
       });
 
-      return views.map(v => v.product);
+      return views.map((v: any) => v.product);
     },
     getFrequentlyBoughtTogether: async (_: any, { productId, limit = 5 }: { productId: string, limit?: number }) => {
       // 1. Try Order History (Existing Logic)
@@ -445,10 +445,10 @@ export const productResolvers = {
 
           // Filter out excluded IDs in JavaScript
           const similarProducts = allSimilarProducts
-            .filter(p => !excludedIds.includes(p.id))
+            .filter((p: any) => !excludedIds.includes(p.id))
             .slice(0, limit - resultIds.length);
 
-          const similarIds = similarProducts.map(p => p.id);
+          const similarIds = similarProducts.map((p: any) => p.id);
           resultIds = [...resultIds, ...similarIds];
         }
 
@@ -465,7 +465,7 @@ export const productResolvers = {
               take: limit - resultIds.length,
               select: { id: true }
             });
-            resultIds = [...resultIds, ...categoryProducts.map(p => p.id)];
+            resultIds = [...resultIds, ...categoryProducts.map((p: any) => p.id)];
           }
         }
       }
@@ -494,7 +494,7 @@ export const productResolvers = {
       });
 
       // Sort back to the hybrid order (bought together first, then AI/Category)
-      const productMap = new Map(products.map(p => [p.id, p]));
+      const productMap = new Map(products.map((p: any) => [p.id, p]));
       return resultIds.map(id => productMap.get(id)).filter(Boolean);
     },
     getProductsByIds: async (_: any, { ids }: { ids: string[] }) => {

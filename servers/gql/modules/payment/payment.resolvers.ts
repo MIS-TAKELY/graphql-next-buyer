@@ -38,7 +38,7 @@ export const paymentResolvers = {
 
         // Check if payment already exists
         const existingPayment = order.payments.find(
-          (p) => p.status === "PENDING"
+          (p: any) => p.status === "PENDING"
         );
         console.log("existingPayment-->", existingPayment);
         if (existingPayment) {

@@ -2,6 +2,7 @@ import { prisma } from "../../../../lib/db/prisma";
 import { verifyEsewaSignature } from "../../../../servers/gql/modules/payment/paymentHelper";
 import { NextRequest, NextResponse } from "next/server";
 
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -76,7 +77,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Atomic Transaction
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       await tx.payment.update({
         where: { id: payment.id },
         data: {

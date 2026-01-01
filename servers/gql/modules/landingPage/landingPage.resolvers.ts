@@ -16,7 +16,7 @@ export const landingPageResolvers = {
                 orderBy: { sortOrder: 'asc' }
             });
 
-            return cards.map(card => ({
+            return cards.map((card: any) => ({
                 id: card.id,
                 categoryId: card.categoryId,
                 categoryName: card.category.name,

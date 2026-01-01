@@ -126,23 +126,23 @@ exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
   username: 'username',
-  displayUsername: 'displayUsername',
   email: 'email',
   emailVerified: 'emailVerified',
-  password: 'password',
   image: 'image',
   firstName: 'firstName',
   lastName: 'lastName',
   avatarImageUrl: 'avatarImageUrl',
   phone: 'phone',
   phoneVerified: 'phoneVerified',
-  hasProfile: 'hasProfile',
   otp: 'otp',
   otpExpiresAt: 'otpExpiresAt',
   gender: 'gender',
   dob: 'dob',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  displayUsername: 'displayUsername',
+  password: 'password',
+  hasProfile: 'hasProfile',
   isBanned: 'isBanned'
 };
 
@@ -163,9 +163,6 @@ exports.Prisma.SellerProfileScalarFieldEnum = {
   banner: 'banner',
   description: 'description',
   tagline: 'tagline',
-  metaTitle: 'metaTitle',
-  metaDescription: 'metaDescription',
-  keywords: 'keywords',
   businessName: 'businessName',
   businessRegNo: 'businessRegNo',
   businessType: 'businessType',
@@ -183,7 +180,10 @@ exports.Prisma.SellerProfileScalarFieldEnum = {
   totalReviews: 'totalReviews',
   totalSales: 'totalSales',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  keywords: 'keywords',
+  metaDescription: 'metaDescription',
+  metaTitle: 'metaTitle'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
@@ -272,13 +272,13 @@ exports.Prisma.CategoryScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   description: 'description',
-  metaTitle: 'metaTitle',
-  metaDescription: 'metaDescription',
-  keywords: 'keywords',
   parentId: 'parentId',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  keywords: 'keywords',
+  metaDescription: 'metaDescription',
+  metaTitle: 'metaTitle'
 };
 
 exports.Prisma.OfferScalarFieldEnum = {
@@ -352,13 +352,13 @@ exports.Prisma.ProductScalarFieldEnum = {
   features: 'features',
   status: 'status',
   specificationTable: 'specificationTable',
-  metaTitle: 'metaTitle',
-  metaDescription: 'metaDescription',
-  keywords: 'keywords',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   categoryId: 'categoryId',
-  brand: 'brand'
+  brand: 'brand',
+  keywords: 'keywords',
+  metaDescription: 'metaDescription',
+  metaTitle: 'metaTitle'
 };
 
 exports.Prisma.ProductVariantScalarFieldEnum = {

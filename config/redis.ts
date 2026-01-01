@@ -1,7 +1,8 @@
 import { Redis as UpstashRedis } from "@upstash/redis";
-import Redis from "ioredis";
+// import Redis from "ioredis";
 
-let redis: Redis | undefined;
+let redis: any | undefined;
+
 let publisher: UpstashRedis | undefined;
 
 try {
@@ -16,11 +17,13 @@ try {
     console.warn("Upstash Redis config missing; publisher won't be available.");
   }
 
-  // Use ioredis for subscriber (supports rediss:// for Upstash TLS)
+  // Use standard Redis for subscriber (requires ioredis, which is currently uninstalled for Edge)
+  /*
   redis = new Redis(REDIS_URL || "redis://localhost:6379");
-
   redis.on("connect", () => console.log("ioredis connected"));
   redis.on("error", (err) => console.error("ioredis error:", err));
+  */
+
 
   // Use Upstash client for publisher (REST-based, good for serverless)
   if (UPSTASH_URL && UPSTASH_TOKEN) {

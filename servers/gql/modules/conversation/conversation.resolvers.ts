@@ -227,8 +227,8 @@ export const conversationResolvers = {
       }
 
       // 2. Create new
-      return await prisma.$transaction(
-        async (tx) => {
+      const result = await prisma.$transaction(
+        async (tx: any) => {
           const newConversation = await tx.conversation.create({
             data: {
               productId,

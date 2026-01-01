@@ -7,14 +7,3 @@ export const maxDuration = 60;
 
 export const GET = handle({ realtime });
 
-// Optional: Add auth middleware if needed
-// export const GET = handle({
-//   realtime,
-//   middleware: async ({ request, channel }) => {
-//     // Example: Auth check
-//     const user = await getCurrentUser(request); // Your auth logic
-//     if (channel !== user?.id) {
-//       return new Response("Unauthorized", { status: 401 });
-//     }
-//   },
-// });

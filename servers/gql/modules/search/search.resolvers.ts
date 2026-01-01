@@ -89,7 +89,7 @@ export const searchResolvers = {
         };
       }
 
-      const productIds = idResults.map((p) => p.id);
+      const productIds = idResults.map((p: any) => p.id);
 
       const products = await prisma.product.findMany({
         where: { id: { in: productIds } },
@@ -121,11 +121,11 @@ export const searchResolvers = {
         },
       });
 
-      const productMap = new Map(products.map((p) => [p.id, p]));
+      const productMap = new Map(products.map((p: any) => [p.id, p]));
       const orderedProducts = productIds
-        .map((id) => productMap.get(id))
-        .filter((p): p is NonNullable<typeof p> => Boolean(p))
-        .map((p) => ({
+        .map((id: any) => productMap.get(id))
+        .filter((p: any): p is NonNullable<typeof p> => Boolean(p))
+        .map((p: any) => ({
           ...p,
           createdAt: p.createdAt.toISOString(),
           updatedAt: p.updatedAt.toISOString(),
@@ -158,14 +158,14 @@ export const searchResolvers = {
       );
 
       // 5.3 Specifications aggregation (Getting unique keys and their common values)
-      const topCategoryIds = categoryCounts.slice(0, 3).map(c => c.id);
+      const topCategoryIds = categoryCounts.slice(0, 3).map((c: any) => c.id);
 
       const categorySpecs = await prisma.categorySpecification.findMany({
         where: { categoryId: { in: topCategoryIds } },
         select: { key: true, label: true }
       });
 
-      const specKeys = categorySpecs.map(s => s.key);
+      const specKeys = categorySpecs.map((s: any) => s.key);
 
       const allMatchingProductIds = await prisma.$queryRaw<Array<{ id: string }>>(
         Prisma.sql`
@@ -174,7 +174,7 @@ export const searchResolvers = {
           LIMIT 100
         `
       );
-      const sampleIds = allMatchingProductIds.map(p => p.id);
+      const sampleIds = allMatchingProductIds.map((p: any) => p.id);
 
       const specValues = await prisma.productSpecification.findMany({
         where: {
@@ -187,13 +187,13 @@ export const searchResolvers = {
       });
 
       const specAgg: Record<string, Set<string>> = {};
-      specValues.forEach(s => {
+      specValues.forEach((s: any) => {
         if (!specAgg[s.key]) specAgg[s.key] = new Set();
         specAgg[s.key].add(s.value);
       });
 
       const formattedSpecs: Record<string, { label: string; options: string[] }> = {};
-      categorySpecs.forEach(cs => {
+      categorySpecs.forEach((cs: any) => {
         const values = specAgg[cs.key];
         if (values && values.size > 0) {
           formattedSpecs[cs.key] = {
@@ -223,10 +223,10 @@ export const searchResolvers = {
           totalPages,
         },
         filters: {
-          brands: brandCounts.map(b => ({ name: b.brand, count: Number(b.count) })),
-          categories: categoryCounts.map(c => ({ id: c.id, name: c.name, count: Number(c.count) })),
+          brands: brandCounts.map((b: any) => ({ name: b.brand, count: Number(b.count) })),
+          categories: categoryCounts.map((c: any) => ({ id: c.id, name: c.name, count: Number(c.count) })),
           specifications: formattedSpecs,
-          delivery: deliveryCounts.map(d => ({ name: d.title, count: Number(d.count) })),
+          delivery: deliveryCounts.map((d: any) => ({ name: d.title, count: Number(d.count) })),
           // price, stock can be added similarly
         }
       };
@@ -279,7 +279,7 @@ export const searchResolvers = {
 
       // Extract unique suggestions from product names, categories, and brands
       const suggestions = new Set<string>();
-      results.forEach((result) => {
+      results.forEach((result: any) => {
         if (result.name) suggestions.add(result.name.toLowerCase());
         if (result.categoryName)
           suggestions.add(result.categoryName.toLowerCase());

@@ -173,9 +173,9 @@ export const orderResolvers = {
 
       try {
         await prisma.$transaction(
-          async (tx) => {
+          async (tx: any) => {
             for (const orderInput of input) {
-              const variantIds = orderInput.items.map((i) => i.variantId);
+              const variantIds = orderInput.items.map((i: any) => i.variantId);
               const variants = await tx.productVariant.findMany({
                 where: { id: { in: variantIds } },
                 include: {
@@ -199,11 +199,11 @@ export const orderResolvers = {
 
               console.log("orderInput-->", orderInput);
 
-              const byId = new Map(variants.map((v) => [v.id, v]));
+              const byId = new Map(variants.map((v: any) => [v.id, v]));
               let subtotal = 0;
 
-              const computedItems = orderInput.items.map((i) => {
-                const v = byId.get(i.variantId);
+              const computedItems = orderInput.items.map((i: any) => {
+                const v: any = byId.get(i.variantId);
                 if (!v) throw new Error("Variant not found");
                 if (v.product.status !== "ACTIVE")
                   throw new Error("Product inactive");
@@ -244,7 +244,7 @@ export const orderResolvers = {
                   discount,
                   total,
                   items: {
-                    create: computedItems.map((ci) => ({
+                    create: computedItems.map((ci: any) => ({
                       variantId: ci.variantId,
                       quantity: ci.quantity,
                       unitPrice: ci.unitPrice,
@@ -300,7 +300,7 @@ export const orderResolvers = {
                     total: sellerSubtotal,
                     commission,
                     items: {
-                      create: items.map((ci) => ({
+                      create: items.map((ci: any) => ({
                         variantId: ci.variantId,
                         quantity: ci.quantity,
                         unitPrice: ci.unitPrice,
@@ -376,7 +376,7 @@ export const orderResolvers = {
           });
 
           const computedItems = orderInput.items.map((i) => {
-            const v = variants.find((vv) => vv.id === i.variantId);
+            const v: any = variants.find((vv: any) => vv.id === i.variantId);
             if (!v) throw new Error("Variant not found");
 
             const unitPrice = v.price.toNumber();
@@ -398,7 +398,7 @@ export const orderResolvers = {
           }
 
           for (const [sellerId, items] of Object.entries(itemsBySeller)) {
-            const seller = variants.find((v) => v.product.sellerId === sellerId)
+            const seller = variants.find((v: any) => v.product.sellerId === sellerId)
               ?.product.seller;
 
             if (seller?.email) {
@@ -475,7 +475,7 @@ export const orderResolvers = {
       if (order.buyerId !== user.id) throw new Error("Unauthorized");
 
       // Check if any shipment is already shipped
-      const isShipped = order.shipments.some((s) =>
+      const isShipped = order.shipments.some((s: any) =>
         ["SHIPPED", "IN_TRANSIT", "OUT_FOR_DELIVERY", "DELIVERED"].includes(
           s.status
         )
@@ -519,7 +519,7 @@ export const orderResolvers = {
       if (order.buyerId !== user.id) throw new Error("Unauthorized");
 
       // Check if order is delivered
-      const isDelivered = order.status === "DELIVERED" || order.shipments.some((s) => s.status === "DELIVERED");
+      const isDelivered = order.status === "DELIVERED" || (order.shipments as any[]).some((s: any) => s.status === "DELIVERED");
 
       if (!isDelivered) {
         throw new Error("Can only request return for delivered orders");
@@ -552,8 +552,8 @@ export const orderResolvers = {
       if (!dispute) throw new Error("Dispute not found");
 
       // Ensure the seller owns one of the sellerOrders in this order
-      const isMyOrder = dispute.order.sellerOrders.some(
-        (so) => so.sellerId === user.id
+      const isMyOrder = (dispute.order.sellerOrders as any[]).some(
+        (so: any) => so.sellerId === user.id
       );
       if (!isMyOrder) throw new Error("Unauthorized");
 
