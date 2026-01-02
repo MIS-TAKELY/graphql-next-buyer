@@ -27,11 +27,13 @@ try {
 
   // Use Upstash client for publisher (REST-based, good for serverless)
   if (UPSTASH_URL && UPSTASH_TOKEN) {
-    publisher = new UpstashRedis({
+    const upstashClient = new UpstashRedis({
       url: UPSTASH_URL,
       token: UPSTASH_TOKEN,
     });
-    console.log("Upstash publisher initialized.");
+    redis = upstashClient;
+    publisher = upstashClient;
+    console.log("Upstash Redis initialized.");
   }
 } catch (error) {
   console.error("Error while connecting to Redis:", error);
