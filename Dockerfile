@@ -60,9 +60,9 @@ RUN apt-get update -y && \
   openssl ca-certificates && \
   rm -rf /var/lib/apt/lists/*
 
-# Create non-root user
-RUN addgroup --system --gid 1001 nodejs && \
-  adduser --system --uid 1001 nextjs
+# Create non-root user with a home directory
+RUN groupadd --system --gid 1001 nodejs && \
+  useradd --system --uid 1001 --gid nodejs --create-home nextjs
 
 # Copy built artifacts from builder
 COPY --from=builder /app/public ./public
@@ -76,6 +76,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 
 USER nextjs
+
+ENV HOME=/home/nextjs
 
 EXPOSE 3000
 ENV PORT=3000
