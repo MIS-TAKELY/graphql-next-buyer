@@ -1,5 +1,6 @@
 services:
   app:
+    build: .
     image: ghcr.io/sachinsharma-lordheydes/vanijay-buyer:latest
     container_name: vanijay-app
     restart: unless-stopped
