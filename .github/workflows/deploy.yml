@@ -78,6 +78,6 @@ jobs:
               --network vanijay-network \
               --env-file .env \
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
-              npx prisma migrate deploy
+              npx prisma@5.22.0 migrate deploy
             docker compose up -d
             docker image prune -f
