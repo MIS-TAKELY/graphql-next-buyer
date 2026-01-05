@@ -4,6 +4,7 @@ import { prisma } from "./db/prisma";
 import { username } from "better-auth/plugins";
 import { senMail } from "@/services/nodeMailer.services";
 import { AuthUser, GoogleProfile, FacebookProfile, TikTokProfile } from "@/types/auth";
+import { APP_URL } from "@/config/env";
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
@@ -31,8 +32,9 @@ export const auth = betterAuth({
             },
         },
     },
-    baseURL: process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.BETTER_AUTH_URL || "http://localhost:3000"),
+    baseURL: APP_URL,
     trustedOrigins: [
+        APP_URL,
         "https://www.vanijay.com",
         "https://vanijay.com",
         "http://localhost:3000",

@@ -2,6 +2,7 @@
 import { ApolloClient, ApolloProvider, createHttpLink } from "@apollo/client";
 import { useMemo } from "react";
 import { APOLLO_CONFIG, APOLLO_DEFAULT_OPTIONS } from "./config";
+import { APP_URL } from "@/config/env";
 
 interface SSRApolloProviderProps {
   children: React.ReactNode;
@@ -18,7 +19,7 @@ export function SSRApolloProvider({
   initialData,
 }: SSRApolloProviderProps) {
   const client = useMemo(() => {
-    const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")).replace(/\/$/, "");
+    const baseUrl = APP_URL.replace(/\/$/, "");
 
     const httpLink = createHttpLink({
       uri: typeof window !== "undefined"

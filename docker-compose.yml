@@ -1,0 +1,23 @@
+services:
+  app:
+    image: ghcr.io/sachinsharma-lordheydes/vanijay-buyer:latest
+    container_name: vanijay-app
+    restart: unless-stopped
+    expose:
+      - "3000"
+    env_file: .env
+
+  nginx:
+    image: nginx:alpine
+    container_name: vanijay-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+
+networks:
+  default:
+    name: vanijay-network
