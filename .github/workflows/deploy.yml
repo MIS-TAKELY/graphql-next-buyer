@@ -5,9 +5,7 @@ on:
     branches: ["main"]
 
 env:
-  # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
   IMAGE_NAME: sachinsharma-lordheydes/vanijay-buyer
 
 jobs:
@@ -16,16 +14,12 @@ jobs:
     permissions:
       contents: read
       packages: write
-      # This is used to complete the identity challenge
-      # with sigstore/fulcio when running outside of PRs.
       id-token: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Install the cosign tool except on PR
-      # https://github.com/sigstore/cosign-installer
       - name: Install cosign
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 #v3.5.0
@@ -73,20 +67,9 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
           script: |
-            # Stop execution if any command fails
             set -e
-
-            # Navigate to project directory (make sure this secret is set)
             cd ${{ secrets.VPS_PROJECT_PATH }}
-
-            # Pull latest code (including new docker-compose.yml)
             git pull origin main
-
-            # Pull new docker images
             docker compose pull
-
-            # Start services
             docker compose up -d
-
-            # Clean up unused images
             docker image prune -f
