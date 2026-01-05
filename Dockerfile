@@ -33,6 +33,9 @@ COPY . .
 # Optional: disable Next.js telemetry
 # ENV NEXT_TELEMETRY_DISABLED=1
 
+# Add dummy DATABASE_URL for build (Prisma validation requires it)
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
+
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
@@ -53,13 +56,13 @@ ENV NODE_ENV=production
 
 # Install minimal runtime dependencies (openssl for Prisma compatibility)
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends \
-    openssl ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+  apt-get install -y --no-install-recommends \
+  openssl ca-certificates && \
+  rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
+  adduser --system --uid 1001 nextjs
 
 # Copy built artifacts from builder
 COPY --from=builder /app/public ./public
