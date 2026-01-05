@@ -72,5 +72,11 @@ jobs:
             git pull https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/SachinSharma-LordHeydes/graphql-next-buyer.git main
             docker compose down || true
             docker compose pull
+            echo "Running database migrations..."
+            docker run --rm \
+              --network vanijay-network \
+              --env-file .env \
+              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
+              npx prisma migrate deploy
             docker compose up -d
             docker image prune -f
