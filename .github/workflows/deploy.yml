@@ -73,10 +73,15 @@ jobs:
             docker compose pull
             echo "Starting database for migrations..."
             docker compose up -d db
+            echo "Waiting for database to be ready..."
+            until docker exec vanijay-db pg_isready -h localhost -p 5432; do
+              sleep 2
+            done
             echo "Running database migrations..."
             docker run --rm \
               --network vanijay-network \
               --env-file .env \
+              -e DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-vanijay} \
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
               npx prisma@5.22.0 migrate deploy
             docker compose up -d
