@@ -1,39 +1,86 @@
-name: Deploy
+name: Build & Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: sachinsharma-lordheydes/vanijay-buyer
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Deploy via SSH
+      - name: Install cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20
+        with:
+          cosign-release: "v2.2.4"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          port: ${{ secrets.SERVER_SSH_PORT }}
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_SSH_PORT }} # optional if not default 22
           script: |
             set -e
 
-            cd /var/www/graphql-next-buyer
+            cd ${{ secrets.VPS_PROJECT_PATH }}
 
-            # Pull latest code
+            # Ensure clean pull
             git reset --hard
             git clean -fd
-            git pull origin main
+            git pull https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/SachinSharma-LordHeydes/graphql-next-buyer.git main
 
-            # Pull latest images
+            echo "Pulling latest Docker images..."
             docker compose pull
 
-            echo "Starting database..."
+            echo "Starting database container..."
             docker compose up -d db
 
             echo "Waiting for database to be ready..."
@@ -45,10 +92,10 @@ jobs:
             docker compose run --rm \
               --env DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-vanijay} \
               app \
-              npx prisma migrate deploy
+              npx prisma@7.2.0 migrate deploy
 
-            echo "Starting all services..."
+            echo "Starting application containers..."
             docker compose up -d
 
-            echo "Cleaning up unused images..."
+            echo "Cleaning up unused Docker images..."
             docker image prune -f
