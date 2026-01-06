@@ -60,12 +60,12 @@
     "tailwindcss-animate": "latest",
     "pg": "^8.13.1",
     "zod": "latest",
-    "zustand": "latest"
+    "zustand": "latest",
+    "@prisma/config": "^7.2.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "latest",
     "@next/bundle-analyzer": "^16.1.1",
-    "@prisma/config": "^7.2.0",
     "@tailwindcss/postcss": "latest",
     "@types/node": "latest",
     "@types/nodemailer": "latest",
