@@ -2,7 +2,6 @@ services:
   app:
     build: .
     image: ghcr.io/sachinsharma-lordheydes/vanijay-buyer:latest
-    container_name: vanijay-app
     restart: unless-stopped
     expose:
       - "3000"
@@ -15,7 +14,6 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: vanijay-nginx
     restart: unless-stopped
     ports:
       - "80:80"
@@ -26,7 +24,6 @@ services:
 
   db:
     image: pgvector/pgvector:pg16
-    container_name: vanijay-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
