@@ -74,6 +74,10 @@ jobs:
 
             # Ensure clean pull
             git reset --hard
+            if [ -d nginx.conf ]; then
+              echo "Removing accidental nginx.conf directory..."
+              rm -rf nginx.conf
+            fi
             git clean -fd
             git pull https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/SachinSharma-LordHeydes/graphql-next-buyer.git main
 
