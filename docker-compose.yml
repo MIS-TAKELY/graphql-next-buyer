@@ -6,7 +6,7 @@ services:
     expose:
       - "3000"
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-vanijay}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-VanijayvpsPass123buyerseller}@db:5432/${POSTGRES_DB:-vanijay_buyer_seller}?schema=public
       - HOSTNAME=0.0.0.0
     env_file: .env
     depends_on:
@@ -27,8 +27,8 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-vanijay}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-VanijayvpsPass123buyerseller}
+      POSTGRES_DB: ${POSTGRES_DB:-vanijay_buyer_seller}
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

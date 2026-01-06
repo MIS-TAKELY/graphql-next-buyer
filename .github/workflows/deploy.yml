@@ -94,7 +94,7 @@ jobs:
 
             echo "Running Prisma migrations..."
             docker compose run --rm \
-              --env DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-vanijay} \
+              --env DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-VanijayvpsPass123buyerseller}@db:5432/${POSTGRES_DB:-vanijay_buyer_seller}?schema=public \
               app \
               npx prisma@7.2.0 migrate deploy
 
