@@ -5,9 +5,6 @@ services:
     restart: unless-stopped
     expose:
       - "3000"
-    environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-VanijayvpsPass123buyerseller}@db:5432/${POSTGRES_DB:-vanijay_buyer_seller}?schema=public
-      - HOSTNAME=0.0.0.0
     env_file: .env
     depends_on:
       - db
