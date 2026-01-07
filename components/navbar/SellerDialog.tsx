@@ -24,7 +24,7 @@ const SellerButton = ({ isMobile = false, onItemClick }: SellerButtonProps) => {
     >
       <Link href={sellerDashboard} target="_blank" rel="noopener noreferrer">
         <span className={isMobile ? "" : "hidden lg:inline"}>
-          Become a Father
+          Become a Seller
         </span>
         {!isMobile && <span className="lg:hidden">Sell</span>}
       </Link>
