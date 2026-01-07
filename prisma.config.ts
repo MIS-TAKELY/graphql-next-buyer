@@ -1,5 +1,5 @@
 // prisma.config.ts
-import 'dotenv/config'; 
+// import 'dotenv/config'; // Removed for Docker compatibility 
 
 export default {
   schema: 'prisma/schema.prisma',
