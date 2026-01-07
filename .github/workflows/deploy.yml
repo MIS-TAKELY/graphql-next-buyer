@@ -74,10 +74,6 @@ jobs:
 
             # Ensure clean pull
             git reset --hard
-            if [ -d nginx.conf ]; then
-              echo "Removing accidental nginx.conf directory..."
-              rm -rf nginx.conf
-            fi
             git clean -fd
             git pull https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/SachinSharma-LordHeydes/graphql-next-buyer.git main
 
@@ -93,13 +89,16 @@ jobs:
             done
 
             echo "Running Prisma migrations..."
-            docker compose run --rm \
-              --env DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-VanijayvpsPass123buyerseller}@db:5432/${POSTGRES_DB:-vanijay_buyer_seller}?schema=public \
-              app \
-              npx prisma@7.2.0 migrate deploy
+            # We use the app image to run migrations because it contains the schema and prisma client
+            docker run --rm \
+              --network vanijay-network \
+              --env DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-VanijayvpsPass123buyerseller}@vanijay_buyer_seller_database:5432/${POSTGRES_DB:-vanijay_buyer_seller}?schema=public \
+              ghcr.io/sachinsharma-lordheydes/vanijay-buyer:latest \
+              npx prisma migrate deploy
 
             echo "Starting application containers..."
-            docker compose up -d
+            # This recreates the app container with the new image
+            docker compose up -d --force-recreate app
 
             echo "Cleaning up unused Docker images..."
             docker image prune -f

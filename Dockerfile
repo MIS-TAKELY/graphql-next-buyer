@@ -44,9 +44,9 @@ RUN \
   fi
 
 # ────────────────────────────────────────────────
-# Stage: runner – minimal production image (Debian slim)
+# Stage: runner – minimal production image
 # ────────────────────────────────────────────────
-FROM node:22-slim AS runner
+FROM base AS runner
 
 WORKDIR /app
 
@@ -55,14 +55,12 @@ ENV NODE_ENV=production
 # ENV NEXT_TELEMETRY_DISABLED=1
 
 # Install minimal runtime dependencies (openssl for Prisma compatibility)
-RUN apt-get update -y && \
-  apt-get install -y --no-install-recommends \
-  openssl ca-certificates && \
-  rm -rf /var/lib/apt/lists/*
+# Alpine uses apk, not apt-get
+RUN apk add --no-cache openssl
 
 # Create non-root user with a home directory
-RUN groupadd --system --gid 1001 nodejs && \
-  useradd --system --uid 1001 --gid nodejs --create-home nextjs
+RUN addgroup --system --gid 1001 nodejs && \
+  adduser --system --uid 1001 --ingroup nodejs nextjs
 
 # Copy built artifacts from builder
 COPY --from=builder /app/public ./public

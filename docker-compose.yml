@@ -1,25 +1,16 @@
 services:
   app:
-    build: .
+    container_name: vanijay_buyer
     image: ghcr.io/sachinsharma-lordheydes/vanijay-buyer:latest
     restart: unless-stopped
-    expose:
-      - "3000"
+    ports:
+      - "127.0.0.1:3000:3000" # Expose to localhost only, for host Nginx to proxy
     env_file: .env
     depends_on:
       - db
 
-  nginx:
-    image: nginx:alpine
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - app
-
   db:
+    container_name: vanijay_buyer_seller_database
     image: pgvector/pgvector:pg16
     restart: unless-stopped
     environment:
@@ -28,6 +19,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-vanijay_buyer_seller}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432" # Expose to localhost if needed for local tools, strictly optional
 
 volumes:
   postgres_data:
