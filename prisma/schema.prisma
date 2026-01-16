@@ -63,9 +63,23 @@ model User {
   sessions                Session[]
   roles                   UserRole[]
   wishlists               Wishlist[]
+  role                    String                    @default("USER")
+  logs                    SystemLog[]
 
   @@index([email])
   @@map("user")
+}
+
+model SystemLog {
+  id        String   @id @default(cuid())
+  action    String
+  details   String?
+  adminId   String
+  createdAt DateTime @default(now())
+
+  admin User @relation(fields: [adminId], references: [id])
+
+  @@map("system_logs")
 }
 
 model UserRole {

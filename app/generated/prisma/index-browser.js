@@ -141,7 +141,16 @@ exports.Prisma.UserScalarFieldEnum = {
   displayUsername: 'displayUsername',
   password: 'password',
   hasProfile: 'hasProfile',
-  isBanned: 'isBanned'
+  isBanned: 'isBanned',
+  role: 'role'
+};
+
+exports.Prisma.SystemLogScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  details: 'details',
+  adminId: 'adminId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.UserRoleScalarFieldEnum = {
@@ -863,6 +872,7 @@ exports.DisputeType = exports.$Enums.DisputeType = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  SystemLog: 'SystemLog',
   UserRole: 'UserRole',
   SellerProfile: 'SellerProfile',
   Notification: 'Notification',

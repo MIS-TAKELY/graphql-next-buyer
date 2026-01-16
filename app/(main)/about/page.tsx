@@ -55,7 +55,7 @@ export default function AboutPage() {
                             Start Shopping
                         </a>
                         <a href="/shop/register-seller" className="px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:opacity-90 transition">
-                            Become a Sellerdfh
+                            Become a Seller
                         </a>
                     </div>
                 </div>

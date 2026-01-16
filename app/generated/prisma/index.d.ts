@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model SystemLog
+ * 
+ */
+export type SystemLog = $Result.DefaultSelection<Prisma.$SystemLogPayload>
+/**
  * Model UserRole
  * 
  */
@@ -675,6 +680,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.systemLog`: Exposes CRUD operations for the **SystemLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SystemLogs
+    * const systemLogs = await prisma.systemLog.findMany()
+    * ```
+    */
+  get systemLog(): Prisma.SystemLogDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.userRole`: Exposes CRUD operations for the **UserRole** model.
@@ -1570,6 +1585,7 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    SystemLog: 'SystemLog',
     UserRole: 'UserRole',
     SellerProfile: 'SellerProfile',
     Notification: 'Notification',
@@ -1631,7 +1647,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout" | "productQuestion" | "productAnswer" | "session" | "account" | "verification" | "orderDispute" | "recentlyViewed" | "landingPageCategoryCard" | "landingPageCategorySwiper" | "landingPageProductGrid" | "landingPageBanner" | "productNotification"
+      modelProps: "user" | "systemLog" | "userRole" | "sellerProfile" | "notification" | "conversation" | "message" | "messageAttachment" | "conversationParticipant" | "address" | "categorySpecification" | "category" | "offer" | "productOffer" | "categoryOffer" | "deliveryOption" | "warranty" | "returnPolicy" | "product" | "productVariant" | "productSpecification" | "productImage" | "cartItem" | "order" | "orderItem" | "paymentMethod" | "payment" | "shipment" | "review" | "reviewVote" | "reviewMedia" | "wishlist" | "wishlistItem" | "sellerOrder" | "sellerOrderItem" | "payout" | "productQuestion" | "productAnswer" | "session" | "account" | "verification" | "orderDispute" | "recentlyViewed" | "landingPageCategoryCard" | "landingPageCategorySwiper" | "landingPageProductGrid" | "landingPageBanner" | "productNotification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1706,6 +1722,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      SystemLog: {
+        payload: Prisma.$SystemLogPayload<ExtArgs>
+        fields: Prisma.SystemLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SystemLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SystemLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemLogPayload>
+          }
+          findFirst: {
+            args: Prisma.SystemLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SystemLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemLogPayload>
+          }
+          findMany: {
+            args: Prisma.SystemLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemLogPayload>[]
+          }
+          create: {
+            args: Prisma.SystemLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemLogPayload>
+          }
+          createMany: {
+            args: Prisma.SystemLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SystemLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemLogPayload>[]
+          }
+          delete: {
+            args: Prisma.SystemLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemLogPayload>
+          }
+          update: {
+            args: Prisma.SystemLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.SystemLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SystemLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SystemLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.SystemLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemLogPayload>
+          }
+          aggregate: {
+            args: Prisma.SystemLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSystemLog>
+          }
+          groupBy: {
+            args: Prisma.SystemLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SystemLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SystemLogCountArgs<ExtArgs>
+            result: $Utils.Optional<SystemLogCountAggregateOutputType> | number
           }
         }
       }
@@ -5222,6 +5312,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    systemLog?: SystemLogOmit
     userRole?: UserRoleOmit
     sellerProfile?: SellerProfileOmit
     notification?: NotificationOmit
@@ -5371,6 +5462,7 @@ export namespace Prisma {
     sessions: number
     roles: number
     wishlists: number
+    logs: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5397,6 +5489,7 @@ export namespace Prisma {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     roles?: boolean | UserCountOutputTypeCountRolesArgs
     wishlists?: boolean | UserCountOutputTypeCountWishlistsArgs
+    logs?: boolean | UserCountOutputTypeCountLogsArgs
   }
 
   // Custom InputTypes
@@ -5569,6 +5662,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountWishlistsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WishlistWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SystemLogWhereInput
   }
 
 
@@ -6254,6 +6354,7 @@ export namespace Prisma {
     password: string | null
     hasProfile: boolean | null
     isBanned: boolean | null
+    role: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -6278,6 +6379,7 @@ export namespace Prisma {
     password: string | null
     hasProfile: boolean | null
     isBanned: boolean | null
+    role: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -6302,6 +6404,7 @@ export namespace Prisma {
     password: number
     hasProfile: number
     isBanned: number
+    role: number
     _all: number
   }
 
@@ -6328,6 +6431,7 @@ export namespace Prisma {
     password?: true
     hasProfile?: true
     isBanned?: true
+    role?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -6352,6 +6456,7 @@ export namespace Prisma {
     password?: true
     hasProfile?: true
     isBanned?: true
+    role?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -6376,6 +6481,7 @@ export namespace Prisma {
     password?: true
     hasProfile?: true
     isBanned?: true
+    role?: true
     _all?: true
   }
 
@@ -6473,6 +6579,7 @@ export namespace Prisma {
     password: string | null
     hasProfile: boolean
     isBanned: boolean
+    role: string
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -6514,6 +6621,7 @@ export namespace Prisma {
     password?: boolean
     hasProfile?: boolean
     isBanned?: boolean
+    role?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     addresses?: boolean | User$addressesArgs<ExtArgs>
     cartItems?: boolean | User$cartItemsArgs<ExtArgs>
@@ -6538,6 +6646,7 @@ export namespace Prisma {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     roles?: boolean | User$rolesArgs<ExtArgs>
     wishlists?: boolean | User$wishlistsArgs<ExtArgs>
+    logs?: boolean | User$logsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6563,6 +6672,7 @@ export namespace Prisma {
     password?: boolean
     hasProfile?: boolean
     isBanned?: boolean
+    role?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6587,6 +6697,7 @@ export namespace Prisma {
     password?: boolean
     hasProfile?: boolean
     isBanned?: boolean
+    role?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -6611,9 +6722,10 @@ export namespace Prisma {
     password?: boolean
     hasProfile?: boolean
     isBanned?: boolean
+    role?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "emailVerified" | "image" | "firstName" | "lastName" | "avatarImageUrl" | "phone" | "phoneVerified" | "otp" | "otpExpiresAt" | "gender" | "dob" | "createdAt" | "updatedAt" | "displayUsername" | "password" | "hasProfile" | "isBanned", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "emailVerified" | "image" | "firstName" | "lastName" | "avatarImageUrl" | "phone" | "phoneVerified" | "otp" | "otpExpiresAt" | "gender" | "dob" | "createdAt" | "updatedAt" | "displayUsername" | "password" | "hasProfile" | "isBanned" | "role", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     addresses?: boolean | User$addressesArgs<ExtArgs>
@@ -6639,6 +6751,7 @@ export namespace Prisma {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     roles?: boolean | User$rolesArgs<ExtArgs>
     wishlists?: boolean | User$wishlistsArgs<ExtArgs>
+    logs?: boolean | User$logsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -6671,6 +6784,7 @@ export namespace Prisma {
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       roles: Prisma.$UserRolePayload<ExtArgs>[]
       wishlists: Prisma.$WishlistPayload<ExtArgs>[]
+      logs: Prisma.$SystemLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6694,6 +6808,7 @@ export namespace Prisma {
       password: string | null
       hasProfile: boolean
       isBanned: boolean
+      role: string
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -7112,6 +7227,7 @@ export namespace Prisma {
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     roles<T extends User$rolesArgs<ExtArgs> = {}>(args?: Subset<T, User$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     wishlists<T extends User$wishlistsArgs<ExtArgs> = {}>(args?: Subset<T, User$wishlistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WishlistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    logs<T extends User$logsArgs<ExtArgs> = {}>(args?: Subset<T, User$logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7162,6 +7278,7 @@ export namespace Prisma {
     readonly password: FieldRef<"User", 'String'>
     readonly hasProfile: FieldRef<"User", 'Boolean'>
     readonly isBanned: FieldRef<"User", 'Boolean'>
+    readonly role: FieldRef<"User", 'String'>
   }
     
 
@@ -8121,6 +8238,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.logs
+   */
+  export type User$logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogInclude<ExtArgs> | null
+    where?: SystemLogWhereInput
+    orderBy?: SystemLogOrderByWithRelationInput | SystemLogOrderByWithRelationInput[]
+    cursor?: SystemLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SystemLogScalarFieldEnum | SystemLogScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8136,6 +8277,1064 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SystemLog
+   */
+
+  export type AggregateSystemLog = {
+    _count: SystemLogCountAggregateOutputType | null
+    _min: SystemLogMinAggregateOutputType | null
+    _max: SystemLogMaxAggregateOutputType | null
+  }
+
+  export type SystemLogMinAggregateOutputType = {
+    id: string | null
+    action: string | null
+    details: string | null
+    adminId: string | null
+    createdAt: Date | null
+  }
+
+  export type SystemLogMaxAggregateOutputType = {
+    id: string | null
+    action: string | null
+    details: string | null
+    adminId: string | null
+    createdAt: Date | null
+  }
+
+  export type SystemLogCountAggregateOutputType = {
+    id: number
+    action: number
+    details: number
+    adminId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SystemLogMinAggregateInputType = {
+    id?: true
+    action?: true
+    details?: true
+    adminId?: true
+    createdAt?: true
+  }
+
+  export type SystemLogMaxAggregateInputType = {
+    id?: true
+    action?: true
+    details?: true
+    adminId?: true
+    createdAt?: true
+  }
+
+  export type SystemLogCountAggregateInputType = {
+    id?: true
+    action?: true
+    details?: true
+    adminId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SystemLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SystemLog to aggregate.
+     */
+    where?: SystemLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemLogs to fetch.
+     */
+    orderBy?: SystemLogOrderByWithRelationInput | SystemLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SystemLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SystemLogs
+    **/
+    _count?: true | SystemLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SystemLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SystemLogMaxAggregateInputType
+  }
+
+  export type GetSystemLogAggregateType<T extends SystemLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateSystemLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSystemLog[P]>
+      : GetScalarType<T[P], AggregateSystemLog[P]>
+  }
+
+
+
+
+  export type SystemLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SystemLogWhereInput
+    orderBy?: SystemLogOrderByWithAggregationInput | SystemLogOrderByWithAggregationInput[]
+    by: SystemLogScalarFieldEnum[] | SystemLogScalarFieldEnum
+    having?: SystemLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SystemLogCountAggregateInputType | true
+    _min?: SystemLogMinAggregateInputType
+    _max?: SystemLogMaxAggregateInputType
+  }
+
+  export type SystemLogGroupByOutputType = {
+    id: string
+    action: string
+    details: string | null
+    adminId: string
+    createdAt: Date
+    _count: SystemLogCountAggregateOutputType | null
+    _min: SystemLogMinAggregateOutputType | null
+    _max: SystemLogMaxAggregateOutputType | null
+  }
+
+  type GetSystemLogGroupByPayload<T extends SystemLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SystemLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SystemLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SystemLogGroupByOutputType[P]>
+            : GetScalarType<T[P], SystemLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SystemLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    action?: boolean
+    details?: boolean
+    adminId?: boolean
+    createdAt?: boolean
+    admin?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["systemLog"]>
+
+  export type SystemLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    action?: boolean
+    details?: boolean
+    adminId?: boolean
+    createdAt?: boolean
+    admin?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["systemLog"]>
+
+  export type SystemLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    action?: boolean
+    details?: boolean
+    adminId?: boolean
+    createdAt?: boolean
+    admin?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["systemLog"]>
+
+  export type SystemLogSelectScalar = {
+    id?: boolean
+    action?: boolean
+    details?: boolean
+    adminId?: boolean
+    createdAt?: boolean
+  }
+
+  export type SystemLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "action" | "details" | "adminId" | "createdAt", ExtArgs["result"]["systemLog"]>
+  export type SystemLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SystemLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SystemLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SystemLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SystemLog"
+    objects: {
+      admin: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      action: string
+      details: string | null
+      adminId: string
+      createdAt: Date
+    }, ExtArgs["result"]["systemLog"]>
+    composites: {}
+  }
+
+  type SystemLogGetPayload<S extends boolean | null | undefined | SystemLogDefaultArgs> = $Result.GetResult<Prisma.$SystemLogPayload, S>
+
+  type SystemLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SystemLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SystemLogCountAggregateInputType | true
+    }
+
+  export interface SystemLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SystemLog'], meta: { name: 'SystemLog' } }
+    /**
+     * Find zero or one SystemLog that matches the filter.
+     * @param {SystemLogFindUniqueArgs} args - Arguments to find a SystemLog
+     * @example
+     * // Get one SystemLog
+     * const systemLog = await prisma.systemLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SystemLogFindUniqueArgs>(args: SelectSubset<T, SystemLogFindUniqueArgs<ExtArgs>>): Prisma__SystemLogClient<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SystemLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SystemLogFindUniqueOrThrowArgs} args - Arguments to find a SystemLog
+     * @example
+     * // Get one SystemLog
+     * const systemLog = await prisma.systemLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SystemLogFindUniqueOrThrowArgs>(args: SelectSubset<T, SystemLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SystemLogClient<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SystemLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemLogFindFirstArgs} args - Arguments to find a SystemLog
+     * @example
+     * // Get one SystemLog
+     * const systemLog = await prisma.systemLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SystemLogFindFirstArgs>(args?: SelectSubset<T, SystemLogFindFirstArgs<ExtArgs>>): Prisma__SystemLogClient<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SystemLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemLogFindFirstOrThrowArgs} args - Arguments to find a SystemLog
+     * @example
+     * // Get one SystemLog
+     * const systemLog = await prisma.systemLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SystemLogFindFirstOrThrowArgs>(args?: SelectSubset<T, SystemLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__SystemLogClient<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SystemLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SystemLogs
+     * const systemLogs = await prisma.systemLog.findMany()
+     * 
+     * // Get first 10 SystemLogs
+     * const systemLogs = await prisma.systemLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const systemLogWithIdOnly = await prisma.systemLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SystemLogFindManyArgs>(args?: SelectSubset<T, SystemLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SystemLog.
+     * @param {SystemLogCreateArgs} args - Arguments to create a SystemLog.
+     * @example
+     * // Create one SystemLog
+     * const SystemLog = await prisma.systemLog.create({
+     *   data: {
+     *     // ... data to create a SystemLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends SystemLogCreateArgs>(args: SelectSubset<T, SystemLogCreateArgs<ExtArgs>>): Prisma__SystemLogClient<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SystemLogs.
+     * @param {SystemLogCreateManyArgs} args - Arguments to create many SystemLogs.
+     * @example
+     * // Create many SystemLogs
+     * const systemLog = await prisma.systemLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SystemLogCreateManyArgs>(args?: SelectSubset<T, SystemLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SystemLogs and returns the data saved in the database.
+     * @param {SystemLogCreateManyAndReturnArgs} args - Arguments to create many SystemLogs.
+     * @example
+     * // Create many SystemLogs
+     * const systemLog = await prisma.systemLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SystemLogs and only return the `id`
+     * const systemLogWithIdOnly = await prisma.systemLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SystemLogCreateManyAndReturnArgs>(args?: SelectSubset<T, SystemLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SystemLog.
+     * @param {SystemLogDeleteArgs} args - Arguments to delete one SystemLog.
+     * @example
+     * // Delete one SystemLog
+     * const SystemLog = await prisma.systemLog.delete({
+     *   where: {
+     *     // ... filter to delete one SystemLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SystemLogDeleteArgs>(args: SelectSubset<T, SystemLogDeleteArgs<ExtArgs>>): Prisma__SystemLogClient<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SystemLog.
+     * @param {SystemLogUpdateArgs} args - Arguments to update one SystemLog.
+     * @example
+     * // Update one SystemLog
+     * const systemLog = await prisma.systemLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SystemLogUpdateArgs>(args: SelectSubset<T, SystemLogUpdateArgs<ExtArgs>>): Prisma__SystemLogClient<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SystemLogs.
+     * @param {SystemLogDeleteManyArgs} args - Arguments to filter SystemLogs to delete.
+     * @example
+     * // Delete a few SystemLogs
+     * const { count } = await prisma.systemLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SystemLogDeleteManyArgs>(args?: SelectSubset<T, SystemLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SystemLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SystemLogs
+     * const systemLog = await prisma.systemLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SystemLogUpdateManyArgs>(args: SelectSubset<T, SystemLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SystemLogs and returns the data updated in the database.
+     * @param {SystemLogUpdateManyAndReturnArgs} args - Arguments to update many SystemLogs.
+     * @example
+     * // Update many SystemLogs
+     * const systemLog = await prisma.systemLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SystemLogs and only return the `id`
+     * const systemLogWithIdOnly = await prisma.systemLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SystemLogUpdateManyAndReturnArgs>(args: SelectSubset<T, SystemLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SystemLog.
+     * @param {SystemLogUpsertArgs} args - Arguments to update or create a SystemLog.
+     * @example
+     * // Update or create a SystemLog
+     * const systemLog = await prisma.systemLog.upsert({
+     *   create: {
+     *     // ... data to create a SystemLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SystemLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SystemLogUpsertArgs>(args: SelectSubset<T, SystemLogUpsertArgs<ExtArgs>>): Prisma__SystemLogClient<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SystemLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemLogCountArgs} args - Arguments to filter SystemLogs to count.
+     * @example
+     * // Count the number of SystemLogs
+     * const count = await prisma.systemLog.count({
+     *   where: {
+     *     // ... the filter for the SystemLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends SystemLogCountArgs>(
+      args?: Subset<T, SystemLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SystemLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SystemLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SystemLogAggregateArgs>(args: Subset<T, SystemLogAggregateArgs>): Prisma.PrismaPromise<GetSystemLogAggregateType<T>>
+
+    /**
+     * Group by SystemLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SystemLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SystemLogGroupByArgs['orderBy'] }
+        : { orderBy?: SystemLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SystemLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSystemLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SystemLog model
+   */
+  readonly fields: SystemLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SystemLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SystemLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    admin<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SystemLog model
+   */
+  interface SystemLogFieldRefs {
+    readonly id: FieldRef<"SystemLog", 'String'>
+    readonly action: FieldRef<"SystemLog", 'String'>
+    readonly details: FieldRef<"SystemLog", 'String'>
+    readonly adminId: FieldRef<"SystemLog", 'String'>
+    readonly createdAt: FieldRef<"SystemLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SystemLog findUnique
+   */
+  export type SystemLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SystemLog to fetch.
+     */
+    where: SystemLogWhereUniqueInput
+  }
+
+  /**
+   * SystemLog findUniqueOrThrow
+   */
+  export type SystemLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SystemLog to fetch.
+     */
+    where: SystemLogWhereUniqueInput
+  }
+
+  /**
+   * SystemLog findFirst
+   */
+  export type SystemLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SystemLog to fetch.
+     */
+    where?: SystemLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemLogs to fetch.
+     */
+    orderBy?: SystemLogOrderByWithRelationInput | SystemLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SystemLogs.
+     */
+    cursor?: SystemLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SystemLogs.
+     */
+    distinct?: SystemLogScalarFieldEnum | SystemLogScalarFieldEnum[]
+  }
+
+  /**
+   * SystemLog findFirstOrThrow
+   */
+  export type SystemLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SystemLog to fetch.
+     */
+    where?: SystemLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemLogs to fetch.
+     */
+    orderBy?: SystemLogOrderByWithRelationInput | SystemLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SystemLogs.
+     */
+    cursor?: SystemLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SystemLogs.
+     */
+    distinct?: SystemLogScalarFieldEnum | SystemLogScalarFieldEnum[]
+  }
+
+  /**
+   * SystemLog findMany
+   */
+  export type SystemLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogInclude<ExtArgs> | null
+    /**
+     * Filter, which SystemLogs to fetch.
+     */
+    where?: SystemLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemLogs to fetch.
+     */
+    orderBy?: SystemLogOrderByWithRelationInput | SystemLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SystemLogs.
+     */
+    cursor?: SystemLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemLogs.
+     */
+    skip?: number
+    distinct?: SystemLogScalarFieldEnum | SystemLogScalarFieldEnum[]
+  }
+
+  /**
+   * SystemLog create
+   */
+  export type SystemLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SystemLog.
+     */
+    data: XOR<SystemLogCreateInput, SystemLogUncheckedCreateInput>
+  }
+
+  /**
+   * SystemLog createMany
+   */
+  export type SystemLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SystemLogs.
+     */
+    data: SystemLogCreateManyInput | SystemLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SystemLog createManyAndReturn
+   */
+  export type SystemLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many SystemLogs.
+     */
+    data: SystemLogCreateManyInput | SystemLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SystemLog update
+   */
+  export type SystemLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SystemLog.
+     */
+    data: XOR<SystemLogUpdateInput, SystemLogUncheckedUpdateInput>
+    /**
+     * Choose, which SystemLog to update.
+     */
+    where: SystemLogWhereUniqueInput
+  }
+
+  /**
+   * SystemLog updateMany
+   */
+  export type SystemLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SystemLogs.
+     */
+    data: XOR<SystemLogUpdateManyMutationInput, SystemLogUncheckedUpdateManyInput>
+    /**
+     * Filter which SystemLogs to update
+     */
+    where?: SystemLogWhereInput
+    /**
+     * Limit how many SystemLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SystemLog updateManyAndReturn
+   */
+  export type SystemLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * The data used to update SystemLogs.
+     */
+    data: XOR<SystemLogUpdateManyMutationInput, SystemLogUncheckedUpdateManyInput>
+    /**
+     * Filter which SystemLogs to update
+     */
+    where?: SystemLogWhereInput
+    /**
+     * Limit how many SystemLogs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SystemLog upsert
+   */
+  export type SystemLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SystemLog to update in case it exists.
+     */
+    where: SystemLogWhereUniqueInput
+    /**
+     * In case the SystemLog found by the `where` argument doesn't exist, create a new SystemLog with this data.
+     */
+    create: XOR<SystemLogCreateInput, SystemLogUncheckedCreateInput>
+    /**
+     * In case the SystemLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SystemLogUpdateInput, SystemLogUncheckedUpdateInput>
+  }
+
+  /**
+   * SystemLog delete
+   */
+  export type SystemLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogInclude<ExtArgs> | null
+    /**
+     * Filter which SystemLog to delete.
+     */
+    where: SystemLogWhereUniqueInput
+  }
+
+  /**
+   * SystemLog deleteMany
+   */
+  export type SystemLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SystemLogs to delete
+     */
+    where?: SystemLogWhereInput
+    /**
+     * Limit how many SystemLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SystemLog without action
+   */
+  export type SystemLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLog
+     */
+    select?: SystemLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemLog
+     */
+    omit?: SystemLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SystemLogInclude<ExtArgs> | null
   }
 
 
@@ -61140,10 +62339,22 @@ export namespace Prisma {
     displayUsername: 'displayUsername',
     password: 'password',
     hasProfile: 'hasProfile',
-    isBanned: 'isBanned'
+    isBanned: 'isBanned',
+    role: 'role'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const SystemLogScalarFieldEnum: {
+    id: 'id',
+    action: 'action',
+    details: 'details',
+    adminId: 'adminId',
+    createdAt: 'createdAt'
+  };
+
+  export type SystemLogScalarFieldEnum = (typeof SystemLogScalarFieldEnum)[keyof typeof SystemLogScalarFieldEnum]
 
 
   export const UserRoleScalarFieldEnum: {
@@ -62277,6 +63488,7 @@ export namespace Prisma {
     password?: StringNullableFilter<"User"> | string | null
     hasProfile?: BoolFilter<"User"> | boolean
     isBanned?: BoolFilter<"User"> | boolean
+    role?: StringFilter<"User"> | string
     accounts?: AccountListRelationFilter
     addresses?: AddressListRelationFilter
     cartItems?: CartItemListRelationFilter
@@ -62301,6 +63513,7 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     roles?: UserRoleListRelationFilter
     wishlists?: WishlistListRelationFilter
+    logs?: SystemLogListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -62325,6 +63538,7 @@ export namespace Prisma {
     password?: SortOrderInput | SortOrder
     hasProfile?: SortOrder
     isBanned?: SortOrder
+    role?: SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     addresses?: AddressOrderByRelationAggregateInput
     cartItems?: CartItemOrderByRelationAggregateInput
@@ -62349,6 +63563,7 @@ export namespace Prisma {
     sessions?: SessionOrderByRelationAggregateInput
     roles?: UserRoleOrderByRelationAggregateInput
     wishlists?: WishlistOrderByRelationAggregateInput
+    logs?: SystemLogOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -62376,6 +63591,7 @@ export namespace Prisma {
     password?: StringNullableFilter<"User"> | string | null
     hasProfile?: BoolFilter<"User"> | boolean
     isBanned?: BoolFilter<"User"> | boolean
+    role?: StringFilter<"User"> | string
     accounts?: AccountListRelationFilter
     addresses?: AddressListRelationFilter
     cartItems?: CartItemListRelationFilter
@@ -62400,6 +63616,7 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     roles?: UserRoleListRelationFilter
     wishlists?: WishlistListRelationFilter
+    logs?: SystemLogListRelationFilter
   }, "id" | "username" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -62424,6 +63641,7 @@ export namespace Prisma {
     password?: SortOrderInput | SortOrder
     hasProfile?: SortOrder
     isBanned?: SortOrder
+    role?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -62454,6 +63672,62 @@ export namespace Prisma {
     password?: StringNullableWithAggregatesFilter<"User"> | string | null
     hasProfile?: BoolWithAggregatesFilter<"User"> | boolean
     isBanned?: BoolWithAggregatesFilter<"User"> | boolean
+    role?: StringWithAggregatesFilter<"User"> | string
+  }
+
+  export type SystemLogWhereInput = {
+    AND?: SystemLogWhereInput | SystemLogWhereInput[]
+    OR?: SystemLogWhereInput[]
+    NOT?: SystemLogWhereInput | SystemLogWhereInput[]
+    id?: StringFilter<"SystemLog"> | string
+    action?: StringFilter<"SystemLog"> | string
+    details?: StringNullableFilter<"SystemLog"> | string | null
+    adminId?: StringFilter<"SystemLog"> | string
+    createdAt?: DateTimeFilter<"SystemLog"> | Date | string
+    admin?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type SystemLogOrderByWithRelationInput = {
+    id?: SortOrder
+    action?: SortOrder
+    details?: SortOrderInput | SortOrder
+    adminId?: SortOrder
+    createdAt?: SortOrder
+    admin?: UserOrderByWithRelationInput
+  }
+
+  export type SystemLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SystemLogWhereInput | SystemLogWhereInput[]
+    OR?: SystemLogWhereInput[]
+    NOT?: SystemLogWhereInput | SystemLogWhereInput[]
+    action?: StringFilter<"SystemLog"> | string
+    details?: StringNullableFilter<"SystemLog"> | string | null
+    adminId?: StringFilter<"SystemLog"> | string
+    createdAt?: DateTimeFilter<"SystemLog"> | Date | string
+    admin?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type SystemLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    action?: SortOrder
+    details?: SortOrderInput | SortOrder
+    adminId?: SortOrder
+    createdAt?: SortOrder
+    _count?: SystemLogCountOrderByAggregateInput
+    _max?: SystemLogMaxOrderByAggregateInput
+    _min?: SystemLogMinOrderByAggregateInput
+  }
+
+  export type SystemLogScalarWhereWithAggregatesInput = {
+    AND?: SystemLogScalarWhereWithAggregatesInput | SystemLogScalarWhereWithAggregatesInput[]
+    OR?: SystemLogScalarWhereWithAggregatesInput[]
+    NOT?: SystemLogScalarWhereWithAggregatesInput | SystemLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SystemLog"> | string
+    action?: StringWithAggregatesFilter<"SystemLog"> | string
+    details?: StringNullableWithAggregatesFilter<"SystemLog"> | string | null
+    adminId?: StringWithAggregatesFilter<"SystemLog"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"SystemLog"> | Date | string
   }
 
   export type UserRoleWhereInput = {
@@ -66168,6 +67442,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -66192,6 +67467,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -66216,6 +67492,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -66240,6 +67517,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserUpdateInput = {
@@ -66264,6 +67542,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -66288,6 +67567,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -66312,6 +67592,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -66336,6 +67617,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -66360,6 +67642,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
   }
 
   export type UserUpdateManyMutationInput = {
@@ -66384,6 +67667,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -66408,6 +67692,62 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SystemLogCreateInput = {
+    id?: string
+    action: string
+    details?: string | null
+    createdAt?: Date | string
+    admin: UserCreateNestedOneWithoutLogsInput
+  }
+
+  export type SystemLogUncheckedCreateInput = {
+    id?: string
+    action: string
+    details?: string | null
+    adminId: string
+    createdAt?: Date | string
+  }
+
+  export type SystemLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin?: UserUpdateOneRequiredWithoutLogsNestedInput
+  }
+
+  export type SystemLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    adminId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemLogCreateManyInput = {
+    id?: string
+    action: string
+    details?: string | null
+    adminId: string
+    createdAt?: Date | string
+  }
+
+  export type SystemLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    adminId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserRoleCreateInput = {
@@ -70592,6 +71932,12 @@ export namespace Prisma {
     none?: WishlistWhereInput
   }
 
+  export type SystemLogListRelationFilter = {
+    every?: SystemLogWhereInput
+    some?: SystemLogWhereInput
+    none?: SystemLogWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -70685,6 +72031,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type SystemLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -70707,6 +72057,7 @@ export namespace Prisma {
     password?: SortOrder
     hasProfile?: SortOrder
     isBanned?: SortOrder
+    role?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -70731,6 +72082,7 @@ export namespace Prisma {
     password?: SortOrder
     hasProfile?: SortOrder
     isBanned?: SortOrder
+    role?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -70755,6 +72107,7 @@ export namespace Prisma {
     password?: SortOrder
     hasProfile?: SortOrder
     isBanned?: SortOrder
+    role?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -70839,16 +72192,40 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type SystemLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    action?: SortOrder
+    details?: SortOrder
+    adminId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SystemLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    action?: SortOrder
+    details?: SortOrder
+    adminId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SystemLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    action?: SortOrder
+    details?: SortOrder
+    adminId?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type EnumRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
     in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
     notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type UserRoleUserIdRoleCompoundUniqueInput = {
@@ -73716,6 +75093,13 @@ export namespace Prisma {
     connect?: WishlistWhereUniqueInput | WishlistWhereUniqueInput[]
   }
 
+  export type SystemLogCreateNestedManyWithoutAdminInput = {
+    create?: XOR<SystemLogCreateWithoutAdminInput, SystemLogUncheckedCreateWithoutAdminInput> | SystemLogCreateWithoutAdminInput[] | SystemLogUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: SystemLogCreateOrConnectWithoutAdminInput | SystemLogCreateOrConnectWithoutAdminInput[]
+    createMany?: SystemLogCreateManyAdminInputEnvelope
+    connect?: SystemLogWhereUniqueInput | SystemLogWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -73881,6 +75265,13 @@ export namespace Prisma {
     connectOrCreate?: WishlistCreateOrConnectWithoutUserInput | WishlistCreateOrConnectWithoutUserInput[]
     createMany?: WishlistCreateManyUserInputEnvelope
     connect?: WishlistWhereUniqueInput | WishlistWhereUniqueInput[]
+  }
+
+  export type SystemLogUncheckedCreateNestedManyWithoutAdminInput = {
+    create?: XOR<SystemLogCreateWithoutAdminInput, SystemLogUncheckedCreateWithoutAdminInput> | SystemLogCreateWithoutAdminInput[] | SystemLogUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: SystemLogCreateOrConnectWithoutAdminInput | SystemLogCreateOrConnectWithoutAdminInput[]
+    createMany?: SystemLogCreateManyAdminInputEnvelope
+    connect?: SystemLogWhereUniqueInput | SystemLogWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -74239,6 +75630,20 @@ export namespace Prisma {
     deleteMany?: WishlistScalarWhereInput | WishlistScalarWhereInput[]
   }
 
+  export type SystemLogUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<SystemLogCreateWithoutAdminInput, SystemLogUncheckedCreateWithoutAdminInput> | SystemLogCreateWithoutAdminInput[] | SystemLogUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: SystemLogCreateOrConnectWithoutAdminInput | SystemLogCreateOrConnectWithoutAdminInput[]
+    upsert?: SystemLogUpsertWithWhereUniqueWithoutAdminInput | SystemLogUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: SystemLogCreateManyAdminInputEnvelope
+    set?: SystemLogWhereUniqueInput | SystemLogWhereUniqueInput[]
+    disconnect?: SystemLogWhereUniqueInput | SystemLogWhereUniqueInput[]
+    delete?: SystemLogWhereUniqueInput | SystemLogWhereUniqueInput[]
+    connect?: SystemLogWhereUniqueInput | SystemLogWhereUniqueInput[]
+    update?: SystemLogUpdateWithWhereUniqueWithoutAdminInput | SystemLogUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: SystemLogUpdateManyWithWhereWithoutAdminInput | SystemLogUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: SystemLogScalarWhereInput | SystemLogScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -74569,6 +75974,34 @@ export namespace Prisma {
     update?: WishlistUpdateWithWhereUniqueWithoutUserInput | WishlistUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: WishlistUpdateManyWithWhereWithoutUserInput | WishlistUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: WishlistScalarWhereInput | WishlistScalarWhereInput[]
+  }
+
+  export type SystemLogUncheckedUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<SystemLogCreateWithoutAdminInput, SystemLogUncheckedCreateWithoutAdminInput> | SystemLogCreateWithoutAdminInput[] | SystemLogUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: SystemLogCreateOrConnectWithoutAdminInput | SystemLogCreateOrConnectWithoutAdminInput[]
+    upsert?: SystemLogUpsertWithWhereUniqueWithoutAdminInput | SystemLogUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: SystemLogCreateManyAdminInputEnvelope
+    set?: SystemLogWhereUniqueInput | SystemLogWhereUniqueInput[]
+    disconnect?: SystemLogWhereUniqueInput | SystemLogWhereUniqueInput[]
+    delete?: SystemLogWhereUniqueInput | SystemLogWhereUniqueInput[]
+    connect?: SystemLogWhereUniqueInput | SystemLogWhereUniqueInput[]
+    update?: SystemLogUpdateWithWhereUniqueWithoutAdminInput | SystemLogUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: SystemLogUpdateManyWithWhereWithoutAdminInput | SystemLogUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: SystemLogScalarWhereInput | SystemLogScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutLogsInput = {
+    create?: XOR<UserCreateWithoutLogsInput, UserUncheckedCreateWithoutLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLogsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutLogsNestedInput = {
+    create?: XOR<UserCreateWithoutLogsInput, UserUncheckedCreateWithoutLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLogsInput
+    upsert?: UserUpsertWithoutLogsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLogsInput, UserUpdateWithoutLogsInput>, UserUncheckedUpdateWithoutLogsInput>
   }
 
   export type UserCreateNestedOneWithoutRolesInput = {
@@ -78821,6 +80254,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SystemLogCreateWithoutAdminInput = {
+    id?: string
+    action: string
+    details?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SystemLogUncheckedCreateWithoutAdminInput = {
+    id?: string
+    action: string
+    details?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SystemLogCreateOrConnectWithoutAdminInput = {
+    where: SystemLogWhereUniqueInput
+    create: XOR<SystemLogCreateWithoutAdminInput, SystemLogUncheckedCreateWithoutAdminInput>
+  }
+
+  export type SystemLogCreateManyAdminInputEnvelope = {
+    data: SystemLogCreateManyAdminInput | SystemLogCreateManyAdminInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput
     update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
@@ -79592,6 +81049,245 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Wishlist"> | Date | string
   }
 
+  export type SystemLogUpsertWithWhereUniqueWithoutAdminInput = {
+    where: SystemLogWhereUniqueInput
+    update: XOR<SystemLogUpdateWithoutAdminInput, SystemLogUncheckedUpdateWithoutAdminInput>
+    create: XOR<SystemLogCreateWithoutAdminInput, SystemLogUncheckedCreateWithoutAdminInput>
+  }
+
+  export type SystemLogUpdateWithWhereUniqueWithoutAdminInput = {
+    where: SystemLogWhereUniqueInput
+    data: XOR<SystemLogUpdateWithoutAdminInput, SystemLogUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type SystemLogUpdateManyWithWhereWithoutAdminInput = {
+    where: SystemLogScalarWhereInput
+    data: XOR<SystemLogUpdateManyMutationInput, SystemLogUncheckedUpdateManyWithoutAdminInput>
+  }
+
+  export type SystemLogScalarWhereInput = {
+    AND?: SystemLogScalarWhereInput | SystemLogScalarWhereInput[]
+    OR?: SystemLogScalarWhereInput[]
+    NOT?: SystemLogScalarWhereInput | SystemLogScalarWhereInput[]
+    id?: StringFilter<"SystemLog"> | string
+    action?: StringFilter<"SystemLog"> | string
+    details?: StringNullableFilter<"SystemLog"> | string | null
+    adminId?: StringFilter<"SystemLog"> | string
+    createdAt?: DateTimeFilter<"SystemLog"> | Date | string
+  }
+
+  export type UserCreateWithoutLogsInput = {
+    id?: string
+    name?: string
+    username: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    phoneVerified?: boolean
+    otp?: string | null
+    otpExpiresAt?: Date | string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    displayUsername?: string | null
+    password?: string | null
+    hasProfile?: boolean
+    isBanned?: boolean
+    role?: string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    cartItems?: CartItemCreateNestedManyWithoutUserInput
+    ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
+    sellerConversations?: ConversationCreateNestedManyWithoutRecieverInput
+    buyerConversations?: ConversationCreateNestedManyWithoutSenderInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutBuyerInput
+    paymentMethods?: PaymentMethodCreateNestedManyWithoutUserInput
+    payouts?: PayoutCreateNestedManyWithoutSellerInput
+    productAnswers?: ProductAnswerCreateNestedManyWithoutSellerInput
+    productNotifications?: ProductNotificationCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionCreateNestedManyWithoutUserInput
+    products?: ProductCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    sellerOrders?: SellerOrderCreateNestedManyWithoutSellerInput
+    sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    roles?: UserRoleCreateNestedManyWithoutUserInput
+    wishlists?: WishlistCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutLogsInput = {
+    id?: string
+    name?: string
+    username: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    avatarImageUrl?: string | null
+    phone?: string | null
+    phoneVerified?: boolean
+    otp?: string | null
+    otpExpiresAt?: Date | string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    displayUsername?: string | null
+    password?: string | null
+    hasProfile?: boolean
+    isBanned?: boolean
+    role?: string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
+    ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
+    sellerConversations?: ConversationUncheckedCreateNestedManyWithoutRecieverInput
+    buyerConversations?: ConversationUncheckedCreateNestedManyWithoutSenderInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    disputes?: OrderDisputeUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutBuyerInput
+    paymentMethods?: PaymentMethodUncheckedCreateNestedManyWithoutUserInput
+    payouts?: PayoutUncheckedCreateNestedManyWithoutSellerInput
+    productAnswers?: ProductAnswerUncheckedCreateNestedManyWithoutSellerInput
+    productNotifications?: ProductNotificationUncheckedCreateNestedManyWithoutUserInput
+    productQuestions?: ProductQuestionUncheckedCreateNestedManyWithoutUserInput
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput
+    recentlyViewed?: RecentlyViewedUncheckedCreateNestedManyWithoutUserInput
+    ReviewVote?: ReviewVoteUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    sellerOrders?: SellerOrderUncheckedCreateNestedManyWithoutSellerInput
+    sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutLogsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutLogsInput, UserUncheckedCreateWithoutLogsInput>
+  }
+
+  export type UserUpsertWithoutLogsInput = {
+    update: XOR<UserUpdateWithoutLogsInput, UserUncheckedUpdateWithoutLogsInput>
+    create: XOR<UserCreateWithoutLogsInput, UserUncheckedCreateWithoutLogsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutLogsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutLogsInput, UserUncheckedUpdateWithoutLogsInput>
+  }
+
+  export type UserUpdateWithoutLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUpdateManyWithoutUserNestedInput
+    ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
+    sellerConversations?: ConversationUpdateManyWithoutRecieverNestedInput
+    buyerConversations?: ConversationUpdateManyWithoutSenderNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutBuyerNestedInput
+    paymentMethods?: PaymentMethodUpdateManyWithoutUserNestedInput
+    payouts?: PayoutUpdateManyWithoutSellerNestedInput
+    productAnswers?: ProductAnswerUpdateManyWithoutSellerNestedInput
+    productNotifications?: ProductNotificationUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUpdateManyWithoutUserNestedInput
+    products?: ProductUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    sellerOrders?: SellerOrderUpdateManyWithoutSellerNestedInput
+    sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
+    wishlists?: WishlistUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneVerified?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    hasProfile?: BoolFieldUpdateOperationsInput | boolean
+    isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
+    ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
+    sellerConversations?: ConversationUncheckedUpdateManyWithoutRecieverNestedInput
+    buyerConversations?: ConversationUncheckedUpdateManyWithoutSenderNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    disputes?: OrderDisputeUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutBuyerNestedInput
+    paymentMethods?: PaymentMethodUncheckedUpdateManyWithoutUserNestedInput
+    payouts?: PayoutUncheckedUpdateManyWithoutSellerNestedInput
+    productAnswers?: ProductAnswerUncheckedUpdateManyWithoutSellerNestedInput
+    productNotifications?: ProductNotificationUncheckedUpdateManyWithoutUserNestedInput
+    productQuestions?: ProductQuestionUncheckedUpdateManyWithoutUserNestedInput
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput
+    recentlyViewed?: RecentlyViewedUncheckedUpdateManyWithoutUserNestedInput
+    ReviewVote?: ReviewVoteUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    sellerOrders?: SellerOrderUncheckedUpdateManyWithoutSellerNestedInput
+    sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type UserCreateWithoutRolesInput = {
     id?: string
     name?: string
@@ -79614,6 +81310,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -79637,6 +81334,7 @@ export namespace Prisma {
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutRolesInput = {
@@ -79661,6 +81359,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -79684,6 +81383,7 @@ export namespace Prisma {
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutRolesInput = {
@@ -79724,6 +81424,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -79747,6 +81448,7 @@ export namespace Prisma {
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRolesInput = {
@@ -79771,6 +81473,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -79794,6 +81497,7 @@ export namespace Prisma {
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type AddressCreateWithoutSellerPickupAddressesInput = {
@@ -79857,6 +81561,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -79880,6 +81585,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutSellerProfileInput = {
@@ -79904,6 +81610,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -79927,6 +81634,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutSellerProfileInput = {
@@ -80012,6 +81720,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -80035,6 +81744,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSellerProfileInput = {
@@ -80059,6 +81769,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -80082,6 +81793,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -80106,6 +81818,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -80129,6 +81842,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -80153,6 +81867,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -80176,6 +81891,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -80216,6 +81932,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -80239,6 +81956,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -80263,6 +81981,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -80286,6 +82005,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type ConversationParticipantCreateWithoutConversationInput = {
@@ -80395,6 +82115,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -80418,6 +82139,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutSellerConversationsInput = {
@@ -80442,6 +82164,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -80465,6 +82188,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutSellerConversationsInput = {
@@ -80494,6 +82218,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -80517,6 +82242,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutBuyerConversationsInput = {
@@ -80541,6 +82267,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -80564,6 +82291,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutBuyerConversationsInput = {
@@ -80727,6 +82455,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -80750,6 +82479,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSellerConversationsInput = {
@@ -80774,6 +82504,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -80797,6 +82528,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUpsertWithoutBuyerConversationsInput = {
@@ -80832,6 +82564,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -80855,6 +82588,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBuyerConversationsInput = {
@@ -80879,6 +82613,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -80902,6 +82637,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -80997,6 +82733,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -81020,6 +82757,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -81044,6 +82782,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -81067,6 +82806,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -81170,6 +82910,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -81193,6 +82934,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -81217,6 +82959,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -81240,6 +82983,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type MessageCreateWithoutMessageAttachmentInput = {
@@ -81365,6 +83109,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -81388,6 +83133,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutConversationParticipantInput = {
@@ -81412,6 +83158,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -81435,6 +83182,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutConversationParticipantInput = {
@@ -81510,6 +83258,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -81533,6 +83282,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConversationParticipantInput = {
@@ -81557,6 +83307,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -81580,6 +83331,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type UserCreateWithoutAddressesInput = {
@@ -81604,6 +83356,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
@@ -81627,6 +83380,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutAddressesInput = {
@@ -81651,6 +83405,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
@@ -81674,6 +83429,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutAddressesInput = {
@@ -81786,6 +83542,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
@@ -81809,6 +83566,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAddressesInput = {
@@ -81833,6 +83591,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
@@ -81856,6 +83615,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type SellerProfileUpsertWithWhereUniqueWithoutPickupAddressInput = {
@@ -83648,6 +85408,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -83671,6 +85432,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutProductsInput = {
@@ -83695,6 +85457,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -83718,6 +85481,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutProductsInput = {
@@ -84112,6 +85876,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -84135,6 +85900,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProductsInput = {
@@ -84159,6 +85925,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -84182,6 +85949,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type RecentlyViewedUpsertWithWhereUniqueWithoutProductInput = {
@@ -84896,6 +86664,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
@@ -84919,6 +86688,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutCartItemsInput = {
@@ -84943,6 +86713,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
@@ -84966,6 +86737,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutCartItemsInput = {
@@ -85047,6 +86819,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
@@ -85070,6 +86843,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCartItemsInput = {
@@ -85094,6 +86868,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
@@ -85117,6 +86892,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type ProductVariantUpsertWithoutCartItemsInput = {
@@ -85254,6 +87030,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -85277,6 +87054,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -85301,6 +87079,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -85324,6 +87103,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -85551,6 +87331,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -85574,6 +87355,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -85598,6 +87380,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -85621,6 +87404,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type OfferUpsertWithoutOrderInput = {
@@ -85961,6 +87745,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -85984,6 +87769,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutPaymentMethodsInput = {
@@ -86008,6 +87794,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -86031,6 +87818,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutPaymentMethodsInput = {
@@ -86113,6 +87901,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -86136,6 +87925,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPaymentMethodsInput = {
@@ -86160,6 +87950,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -86183,6 +87974,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type PaymentUpsertWithWhereUniqueWithoutMethodInput = {
@@ -86610,6 +88402,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -86633,6 +88426,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -86657,6 +88451,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -86680,6 +88475,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -86833,6 +88629,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -86856,6 +88653,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -86880,6 +88678,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -86903,6 +88702,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type ReviewCreateWithoutVotesInput = {
@@ -86964,6 +88764,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -86987,6 +88788,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutReviewVoteInput = {
@@ -87011,6 +88813,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -87034,6 +88837,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutReviewVoteInput = {
@@ -87117,6 +88921,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -87140,6 +88945,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewVoteInput = {
@@ -87164,6 +88970,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -87187,6 +88994,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type ReviewCreateWithoutMediaInput = {
@@ -87315,6 +89123,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -87338,6 +89147,7 @@ export namespace Prisma {
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutWishlistsInput = {
@@ -87362,6 +89172,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -87385,6 +89196,7 @@ export namespace Prisma {
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutWishlistsInput = {
@@ -87441,6 +89253,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -87464,6 +89277,7 @@ export namespace Prisma {
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWishlistsInput = {
@@ -87488,6 +89302,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -87511,6 +89326,7 @@ export namespace Prisma {
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type ProductCreateWithoutWishlistItemsInput = {
@@ -87830,6 +89646,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -87853,6 +89670,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutSellerOrdersInput = {
@@ -87877,6 +89695,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -87900,6 +89719,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutSellerOrdersInput = {
@@ -88025,6 +89845,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -88048,6 +89869,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSellerOrdersInput = {
@@ -88072,6 +89894,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -88095,6 +89918,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type SellerOrderCreateWithoutItemsInput = {
@@ -88283,6 +90107,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -88306,6 +90131,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutPayoutsInput = {
@@ -88330,6 +90156,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -88353,6 +90180,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutPayoutsInput = {
@@ -88393,6 +90221,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -88416,6 +90245,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPayoutsInput = {
@@ -88440,6 +90270,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -88463,6 +90294,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type ProductAnswerCreateWithoutQuestionInput = {
@@ -88576,6 +90408,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -88599,6 +90432,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutProductQuestionsInput = {
@@ -88623,6 +90457,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -88646,6 +90481,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutProductQuestionsInput = {
@@ -88771,6 +90607,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -88794,6 +90631,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProductQuestionsInput = {
@@ -88818,6 +90656,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -88841,6 +90680,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type ProductQuestionCreateWithoutAnswersInput = {
@@ -88890,6 +90730,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -88913,6 +90754,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutProductAnswersInput = {
@@ -88937,6 +90779,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -88960,6 +90803,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutProductAnswersInput = {
@@ -89031,6 +90875,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -89054,6 +90899,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProductAnswersInput = {
@@ -89078,6 +90924,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -89101,6 +90948,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -89125,6 +90973,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -89148,6 +90997,7 @@ export namespace Prisma {
     sellerProfile?: SellerProfileCreateNestedOneWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -89172,6 +91022,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -89195,6 +91046,7 @@ export namespace Prisma {
     sellerProfile?: SellerProfileUncheckedCreateNestedOneWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -89235,6 +91087,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -89258,6 +91111,7 @@ export namespace Prisma {
     sellerProfile?: SellerProfileUpdateOneWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -89282,6 +91136,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -89305,6 +91160,7 @@ export namespace Prisma {
     sellerProfile?: SellerProfileUncheckedUpdateOneWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -89329,6 +91185,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
     ConversationParticipant?: ConversationParticipantCreateNestedManyWithoutUserInput
@@ -89352,6 +91209,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -89376,6 +91234,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
     ConversationParticipant?: ConversationParticipantUncheckedCreateNestedManyWithoutUserInput
@@ -89399,6 +91258,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -89439,6 +91299,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
     ConversationParticipant?: ConversationParticipantUpdateManyWithoutUserNestedInput
@@ -89462,6 +91323,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -89486,6 +91348,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
     ConversationParticipant?: ConversationParticipantUncheckedUpdateManyWithoutUserNestedInput
@@ -89509,6 +91372,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type OrderCreateWithoutDisputesInput = {
@@ -89615,6 +91479,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -89638,6 +91503,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutDisputesInput = {
@@ -89662,6 +91528,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -89685,6 +91552,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutDisputesInput = {
@@ -89819,6 +91687,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -89842,6 +91711,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDisputesInput = {
@@ -89866,6 +91736,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -89889,6 +91760,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type ProductCreateWithoutRecentlyViewedInput = {
@@ -89976,6 +91848,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -89999,6 +91872,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutRecentlyViewedInput = {
@@ -90023,6 +91897,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -90046,6 +91921,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutRecentlyViewedInput = {
@@ -90155,6 +92031,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -90178,6 +92055,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecentlyViewedInput = {
@@ -90202,6 +92080,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -90225,6 +92104,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type CategoryCreateWithoutLandingPageCategoryCardsInput = {
@@ -90400,6 +92280,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
@@ -90423,6 +92304,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     roles?: UserRoleCreateNestedManyWithoutUserInput
     wishlists?: WishlistCreateNestedManyWithoutUserInput
+    logs?: SystemLogCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutProductNotificationsInput = {
@@ -90447,6 +92329,7 @@ export namespace Prisma {
     password?: string | null
     hasProfile?: boolean
     isBanned?: boolean
+    role?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
@@ -90470,6 +92353,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
     wishlists?: WishlistUncheckedCreateNestedManyWithoutUserInput
+    logs?: SystemLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutProductNotificationsInput = {
@@ -90579,6 +92463,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
@@ -90602,6 +92487,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     roles?: UserRoleUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProductNotificationsInput = {
@@ -90626,6 +92512,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     hasProfile?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
+    role?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
@@ -90649,6 +92536,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
     wishlists?: WishlistUncheckedUpdateManyWithoutUserNestedInput
+    logs?: SystemLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -90901,6 +92789,13 @@ export namespace Prisma {
     name?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type SystemLogCreateManyAdminInput = {
+    id?: string
+    action: string
+    details?: string | null
+    createdAt?: Date | string
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -91717,6 +93612,27 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemLogUpdateWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemLogUncheckedUpdateWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemLogUncheckedUpdateManyWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ConversationParticipantCreateManyConversationInput = {

@@ -432,6 +432,8 @@ export const orderResolvers = {
               try {
                 const wppConnectUrl = process.env.WPP_CONNECT;
 
+                console.log("wppConnectUrl-->",wppConnectUrl)
+
                 if (!wppConnectUrl) {
                   throw new Error(
                     "WPP_CONNECT environment variable is not defined"

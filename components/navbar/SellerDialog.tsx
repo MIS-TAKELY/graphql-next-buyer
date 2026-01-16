@@ -33,3 +33,4 @@ const SellerButton = ({ isMobile = false, onItemClick }: SellerButtonProps) => {
 };
 
 export default SellerButton;
+
