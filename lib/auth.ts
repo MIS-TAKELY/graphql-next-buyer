@@ -41,6 +41,7 @@ export const auth = betterAuth({
     ],
     advanced: {
         useSecureCookies: true,
+        cookieDomain: ".vanijay.com",
     },
     emailVerification: {
         sendOnSignUp: true,
