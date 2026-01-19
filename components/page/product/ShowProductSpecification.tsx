@@ -6,11 +6,13 @@ interface ShowProductSpecificationProps {
     specifications?: Array<{ key: string; value: string | number }>;
   };
   productSpecificationTable?: Array<{ key: string; value: string }>;
+  specificationDisplayFormat?: 'table' | 'bullet' | 'custom_table';
 }
 
 const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
   defaultVariant,
   productSpecificationTable = [],
+  specificationDisplayFormat = 'table',
 }) => {
   console.log("ShowProductSpecification - productSpecificationTable:", productSpecificationTable);
   const attributes = defaultVariant?.attributes || {};
@@ -98,28 +100,48 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
         Product Details
       </h2>
 
-      <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-        <table className="min-w-full text-sm text-gray-700 dark:text-gray-300">
-          <tbody>
+      {specificationDisplayFormat === "bullet" ? (
+        <div className="bg-gray-50 dark:bg-gray-800/30 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
             {visibleData.map((item, index) => (
-              <tr
-                key={index}
-                className={`${index % 2 === 0
-                  ? "bg-gray-50 dark:bg-gray-800/50"
-                  : "bg-white dark:bg-gray-900"
-                  }`}
-              >
-                <td className="px-4 py-2 font-medium text-gray-900 dark:text-gray-100 capitalize w-1/3">
-                  {item.key}
-                </td>
-                <td className="px-4 py-2 text-gray-700 dark:text-gray-300">
-                  {item.value}
-                </td>
-              </tr>
+              <li key={index} className="flex items-start gap-3 group">
+                <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary/60 group-hover:bg-primary transition-colors shrink-0" />
+                <div className="text-sm">
+                  <span className="font-semibold text-gray-900 dark:text-gray-100 mr-2 capitalize">
+                    {item.key}:
+                  </span>
+                  <span className="text-gray-700 dark:text-gray-300">
+                    {item.value}
+                  </span>
+                </div>
+              </li>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </ul>
+        </div>
+      ) : (
+        <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+          <table className="min-w-full text-sm text-gray-700 dark:text-gray-300">
+            <tbody>
+              {visibleData.map((item, index) => (
+                <tr
+                  key={index}
+                  className={`${index % 2 === 0
+                    ? "bg-gray-50 dark:bg-gray-800/50"
+                    : "bg-white dark:bg-gray-900"
+                    }`}
+                >
+                  <td className="px-4 py-2 font-medium text-gray-900 dark:text-gray-100 capitalize w-1/3">
+                    {item.key}
+                  </td>
+                  <td className="px-4 py-2 text-gray-700 dark:text-gray-300">
+                    {item.value}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {combinedData.length > 5 && (
         <button

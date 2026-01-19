@@ -109,7 +109,7 @@ const ProductInfo = memo(function ProductInfo({
 
         {product.description && (
           <div className="mt-4">
-            <p className={`text-muted-foreground text-base leading-relaxed ${!isDescExpanded ? 'line-clamp-3' : ''} transition-all duration-300`}>
+            <p className={`text-muted-foreground text-base whitespace-pre-wrap leading-relaxed ${!isDescExpanded ? 'line-clamp-3' : ''} transition-all duration-300`}>
               {product.description}
             </p>
             {product.description.length > 150 && (
@@ -209,6 +209,7 @@ const ProductInfo = memo(function ProductInfo({
       <ShowProductSpecification
         defaultVariant={defaultVariant}
         productSpecificationTable={product.specificationTable}
+        specificationDisplayFormat={product.specificationDisplayFormat}
       />
 
       {/* 🌟 Seamless Product Highlights (Continuous Stack) */}

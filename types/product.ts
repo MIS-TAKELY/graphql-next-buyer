@@ -82,6 +82,7 @@ export interface IProducts {
   category?: ICategory;
   productOffers?: IProductOffer[];
   specificationTable?: { key: string; value: string }[];
+  specificationDisplayFormat?: 'table' | 'bullet' | 'custom_table';
   metaTitle?: string;
   metaDescription?: string;
   keywords?: string[];
