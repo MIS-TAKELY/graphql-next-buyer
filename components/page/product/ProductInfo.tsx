@@ -248,15 +248,12 @@ const ProductInfo = memo(function ProductInfo({
             <div className="flex flex-col">
               {promotionalImages.map((image: any, index: number) => (
                 <div key={index} className="relative w-full overflow-hidden border border-border/50">
-                  <div className="relative aspect-[16/9] w-full">
-                    <Image
-                      src={image.url}
-                      alt={image.altText || `Highlight ${index + 1}`}
-                      fill
-                      className="object-cover block"
-                      loading="lazy"
-                    />
-                  </div>
+                  <img
+                    src={image.url}
+                    alt={image.altText || `Highlight ${index + 1}`}
+                    className="w-full h-auto block object-contain"
+                    loading="lazy"
+                  />
 
                   {/* Optional caption overlay */}
                   {image.caption && (
