@@ -22,7 +22,7 @@ import { ProductCardSkeleton } from "@/components/page/home/ProductCardSkeleton"
 
 import { Metadata } from "next";
 
-export const revalidate = 3600;
+export const revalidate = 60; // Revalidate every minute instead of every hour
 
 import { SEO_CONFIG, BUYER_KEYWORDS, SELLER_KEYWORDS, CONVENIENCE_KEYWORDS } from "@/config/seo";
 
