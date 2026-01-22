@@ -42,7 +42,6 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
                           h-16 xs:h-16 sm:h-18 md:h-20 lg:h-22 xl:h-24
                           bg-gradient-to-br ${category.color}
                           flex items-center justify-center
-                          shadow-sm group-hover:shadow-lg
                           transition-all duration-200
                           overflow-hidden
                           ${!category.image ? 'rounded-none' : ''} 
