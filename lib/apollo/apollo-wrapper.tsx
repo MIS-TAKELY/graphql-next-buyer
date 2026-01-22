@@ -1,7 +1,7 @@
 "use client";
-import { ApolloClient, ApolloProvider, createHttpLink } from "@apollo/client";
+import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from "@apollo/client";
 import { useMemo } from "react";
-import { APOLLO_CONFIG, APOLLO_DEFAULT_OPTIONS } from "./config";
+import { APOLLO_CONFIG, APOLLO_DEFAULT_OPTIONS, APOLLO_CACHE_CONFIG } from "./config";
 import { APP_URL } from "@/config/env";
 
 interface SSRApolloProviderProps {
@@ -29,7 +29,7 @@ export function SSRApolloProvider({
 
     const client = new ApolloClient({
       link: httpLink,
-      cache: APOLLO_CONFIG.cache,
+      cache: new InMemoryCache(APOLLO_CACHE_CONFIG),
       defaultOptions: APOLLO_DEFAULT_OPTIONS,
     });
 

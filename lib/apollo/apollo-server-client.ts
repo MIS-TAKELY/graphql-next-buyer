@@ -1,9 +1,9 @@
 // lib/apollo/server.ts
-import { ApolloClient, createHttpLink } from "@apollo/client";
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { SchemaLink } from "@apollo/client/link/schema";
 import { schema } from "@/servers/gql";
 import { createContext } from "@/servers/gql/context";
-import { APOLLO_CONFIG, APOLLO_DEFAULT_OPTIONS } from "./config";
+import { APOLLO_CONFIG, APOLLO_DEFAULT_OPTIONS, APOLLO_CACHE_CONFIG } from "./config";
 
 export async function getServerApolloClient() {
   const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")).replace(/\/$/, "");
@@ -16,7 +16,7 @@ export async function getServerApolloClient() {
         schema,
         context: async () => await createContext()
       }),
-      cache: APOLLO_CONFIG.cache,
+      cache: new InMemoryCache(APOLLO_CACHE_CONFIG),
       defaultOptions: APOLLO_DEFAULT_OPTIONS,
     });
   }
@@ -27,7 +27,7 @@ export async function getServerApolloClient() {
 
   return new ApolloClient({
     link: httpLink,
-    cache: APOLLO_CONFIG.cache,
+    cache: new InMemoryCache(APOLLO_CACHE_CONFIG),
     defaultOptions: APOLLO_DEFAULT_OPTIONS,
   });
 }
