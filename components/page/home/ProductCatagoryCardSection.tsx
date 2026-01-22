@@ -40,11 +40,12 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
                       className={`
                           w-16 xs:w-16 sm:w-18 md:w-20 lg:w-22 xl:w-24
                           h-16 xs:h-16 sm:h-18 md:h-20 lg:h-22 xl:h-24
-                          bg-gradient-to-br ${category.color}
+                          ${!category.image ? `bg-gradient-to-br ${category.color}` : 'bg-transparent'}
                           flex items-center justify-center
                           transition-all duration-200
                           overflow-hidden
-                          ${!category.image ? 'rounded-none' : ''} 
+                          rounded-none
+                          border-none shadow-none
                         `}
                     // Note: Added overflow-hidden to clip image if needed, though they are usually icons.
                     // Removed dynamic icon logic.
