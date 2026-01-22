@@ -13,7 +13,7 @@ export default async function SignUpPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-4 w-full">
       <UnifiedAuth />
     </div>
   );
