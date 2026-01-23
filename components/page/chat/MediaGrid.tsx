@@ -41,6 +41,7 @@ export function MediaGrid({ attachments, onMediaClick }: MediaGridProps) {
                         alt="attachment"
                         fill
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        unoptimized
                     />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-100">

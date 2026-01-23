@@ -78,6 +78,7 @@ export default function WishlistSection() {
                         className="object-cover"
                         loading="lazy"
                         sizes="(max-width: 640px) 96px, 112px"
+                        unoptimized
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center">

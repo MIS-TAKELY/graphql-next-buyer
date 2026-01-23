@@ -172,7 +172,7 @@ export const AddReviewForm = ({
                 {item.type === "VIDEO" ? (
                   <div className="w-full h-full bg-muted flex items-center justify-center text-xs text-muted-foreground font-medium">Video</div>
                 ) : (
-                  <Image src={item.url} alt="Review media" layout="fill" objectFit="cover" />
+                  <Image src={item.url} alt="Review media" layout="fill" objectFit="cover" unoptimized />
                 )}
                 <button
                   type="button"

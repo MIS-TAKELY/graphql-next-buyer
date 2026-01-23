@@ -48,6 +48,7 @@ const Slide = memo(({ slide, isActive, priority }: SlideProps) => {
           className="object-cover z-0"
           sizes="100vw"
           priority={isActive}
+          unoptimized
         />
       )}
       <div className="absolute inset-0 flex items-center justify-center">

@@ -44,6 +44,7 @@ export default function ReviewGallery({ images }: ReviewGalleryProps) {
                                     alt="Review attachment"
                                     fill
                                     className="object-cover"
+                                    unoptimized
                                 />
                             </div>
                         </DialogTrigger>
@@ -70,6 +71,7 @@ export default function ReviewGallery({ images }: ReviewGalleryProps) {
                                     alt="Review full size"
                                     fill
                                     className="object-contain p-12"
+                                    unoptimized
                                 />
                             </div>
 

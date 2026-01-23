@@ -104,6 +104,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               sizes="(max-width: 640px) 120px, (max-width: 768px) 180px, 220px"
               className="object-contain mix-blend-multiply dark:mix-blend-normal transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
+              unoptimized
             />
           </div>
           {discount > 0 && (

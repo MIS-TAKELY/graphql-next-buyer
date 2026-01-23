@@ -219,6 +219,7 @@ function OrderItemComponent({ order }: OrderItemProps) {
                     alt={firstItem?.variant?.product?.name || "Order Image"}
                     fill
                     className="object-cover"
+                    unoptimized
                   />
                   {moreItemsCount > 0 && (
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
@@ -336,6 +337,7 @@ function OrderItemComponent({ order }: OrderItemProps) {
                       alt={item.variant?.product?.name}
                       fill
                       className="object-cover"
+                      unoptimized
                     />
                   </div>
                   <div className="flex-1 min-w-0">

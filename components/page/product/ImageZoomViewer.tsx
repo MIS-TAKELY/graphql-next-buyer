@@ -35,7 +35,7 @@ const ImageZoomViewer = memo(function ImageZoomViewer({
           }}
           sizes="(max-width: 768px) 100vw, 600px"
           priority
-          quality={90}
+          unoptimized
         />
       </div>
       <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full animate-fade-in">

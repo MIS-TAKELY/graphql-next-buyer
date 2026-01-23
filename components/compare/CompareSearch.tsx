@@ -109,8 +109,8 @@ export default function CompareSearch() {
                                             onClick={() => handleAddProduct(product)}
                                             disabled={isAlreadySelected}
                                             className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors text-left ${isAlreadySelected
-                                                    ? "bg-gray-100 dark:bg-gray-800 cursor-not-allowed opacity-60"
-                                                    : "hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+                                                ? "bg-gray-100 dark:bg-gray-800 cursor-not-allowed opacity-60"
+                                                : "hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
                                                 }`}
                                         >
                                             {/* Product Image */}
@@ -120,6 +120,7 @@ export default function CompareSearch() {
                                                     alt={product.images[0]?.altText || product.name}
                                                     fill
                                                     className="object-contain p-1"
+                                                    unoptimized
                                                 />
                                             </div>
 

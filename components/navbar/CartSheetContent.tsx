@@ -175,9 +175,8 @@ export default function CartSheetContent() {
               return (
                 <div
                   key={item.id}
-                  className={`flex gap-4 items-start border-b pb-4 transition-opacity ${
-                    isRemoving ? "opacity-50" : ""
-                  }`}
+                  className={`flex gap-4 items-start border-b pb-4 transition-opacity ${isRemoving ? "opacity-50" : ""
+                    }`}
                 >
                   <div className="h-20 w-20 bg-muted rounded-md overflow-hidden relative flex-shrink-0">
                     <Image
@@ -187,7 +186,7 @@ export default function CartSheetContent() {
                       height={80}
                       className="object-cover w-full h-full"
                       loading="lazy"
-                      quality={85}
+                      unoptimized
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = "/placeholder.svg";
                       }}

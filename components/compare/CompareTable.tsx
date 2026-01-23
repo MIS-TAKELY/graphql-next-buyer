@@ -90,6 +90,7 @@ export default function CompareTable() {
                                             alt={product.images[0]?.altText || product.name}
                                             fill
                                             className="object-contain p-2"
+                                            unoptimized
                                         />
                                     </div>
                                     <h3 className="font-semibold text-sm line-clamp-2 text-gray-900 dark:text-white">
@@ -291,6 +292,7 @@ export default function CompareTable() {
                                         alt={product.images[0]?.altText || product.name}
                                         fill
                                         className="object-contain p-4"
+                                        unoptimized
                                     />
                                 </div>
 

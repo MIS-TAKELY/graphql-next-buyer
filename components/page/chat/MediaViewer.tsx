@@ -105,6 +105,7 @@ export function MediaViewer({ isOpen, onClose, initialIndex, attachments }: Medi
                                 fill
                                 className="object-contain"
                                 priority
+                                unoptimized
                             />
                         </div>
                     )}

@@ -31,6 +31,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
                     alt={relatedProduct.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    unoptimized
                   />
                 </div>
                 <h3 className="font-medium text-sm mb-2 line-clamp-2">{relatedProduct.title}</h3>

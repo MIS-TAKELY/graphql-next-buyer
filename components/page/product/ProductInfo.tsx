@@ -232,6 +232,7 @@ const ProductInfo = memo(function ProductInfo({
                 className="object-cover block"
                 loading="lazy"
                 onLoad={handleImageLoad}
+                unoptimized
               />
 
               {/* Show More overlay */}
@@ -248,11 +249,14 @@ const ProductInfo = memo(function ProductInfo({
             <div className="flex flex-col">
               {promotionalImages.map((image: any, index: number) => (
                 <div key={index} className="relative w-full overflow-hidden border border-border/50">
-                  <img
+                  <Image
                     src={image.url}
                     alt={image.altText || `Highlight ${index + 1}`}
+                    width={1200}
+                    height={800}
                     className="w-full h-auto block object-contain"
                     loading="lazy"
+                    unoptimized
                   />
 
                   {/* Optional caption overlay */}

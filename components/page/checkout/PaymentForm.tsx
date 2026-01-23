@@ -213,8 +213,8 @@ export function PaymentForm({
                   placeholder="1234 5678 9012 3456"
                   maxLength={19}
                   className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${errors.cardNumber
-                      ? "border-red-500 dark:border-red-400"
-                      : ""
+                    ? "border-red-500 dark:border-red-400"
+                    : ""
                     }`}
                 />
                 <CreditCard className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
@@ -237,8 +237,8 @@ export function PaymentForm({
                     handleInputChange("expiryMonth", e.target.value)
                   }
                   className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${errors.expiryMonth
-                      ? "border-red-500 dark:border-red-400"
-                      : ""
+                    ? "border-red-500 dark:border-red-400"
+                    : ""
                     }`}
                 >
                   <option value="">MM</option>
@@ -268,8 +268,8 @@ export function PaymentForm({
                     handleInputChange("expiryYear", e.target.value)
                   }
                   className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${errors.expiryYear
-                      ? "border-red-500 dark:border-red-400"
-                      : ""
+                    ? "border-red-500 dark:border-red-400"
+                    : ""
                     }`}
                 >
                   <option value="">YY</option>
@@ -334,8 +334,8 @@ export function PaymentForm({
                   }
                   placeholder="JOHN DOE"
                   className={`pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${errors.cardHolderName
-                      ? "border-red-500 dark:border-red-400"
-                      : ""
+                    ? "border-red-500 dark:border-red-400"
+                    : ""
                     }`}
                 />
                 <User className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
@@ -463,8 +463,8 @@ export function PaymentForm({
                     <label
                       key={provider}
                       className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 ${formData.walletProvider === provider
-                          ? "border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20"
-                          : ""
+                        ? "border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20"
+                        : ""
                         }`}
                     >
                       <input
@@ -483,6 +483,7 @@ export function PaymentForm({
                           alt={provider}
                           height={40}
                           width={40}
+                          unoptimized
                         />
                       )}
                       <span className="text-sm font-medium text-gray-900 dark:text-white">

@@ -88,6 +88,7 @@ const LandingPageProductGrid = ({
                     fill
                     sizes="200px"
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    unoptimized
                   />
                 </div>
                 <div className="p-3 space-y-1.5">
@@ -160,6 +161,7 @@ const LandingPageProductGrid = ({
                       fill
                       sizes="(max-width: 640px) 176px, (max-width: 768px) 192px, 208px"
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      unoptimized
                     />
                   </div>
                   <div className="p-3 space-y-1.5">
@@ -197,6 +199,7 @@ const LandingPageProductGrid = ({
                     sizes="(max-width: 400px) 45vw, 180px"
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                     priority={index < 2}
+                    unoptimized
                   />
                   {/* Gradient overlay for better text readability */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

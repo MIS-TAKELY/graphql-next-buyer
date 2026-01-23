@@ -213,7 +213,7 @@ const ProductReviews = ({ isOwnProduct }: { isOwnProduct?: boolean }) => {
                   {item.type === "VIDEO" ? (
                     <div className="w-full h-full bg-muted flex items-center justify-center text-[10px] text-muted-foreground font-medium">Video</div>
                   ) : (
-                    <Image src={item.url} alt="Review media" fill className="object-cover" />
+                    <Image src={item.url} alt="Review media" fill className="object-cover" unoptimized />
                   )}
                   <button
                     type="button"
@@ -361,7 +361,7 @@ const ProductReviews = ({ isOwnProduct }: { isOwnProduct?: boolean }) => {
                   key={i}
                   className="relative w-12 h-12 rounded border overflow-hidden shrink-0"
                 >
-                  <Image src={url} alt="Review" fill className="object-cover" sizes="48px" />
+                  <Image src={url} alt="Review" fill className="object-cover" unoptimized />
                 </div>
               ))}
           </div>

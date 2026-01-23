@@ -248,6 +248,7 @@ export const ReviewCard = ({ review }: { review: Review }) => {
                             alt="Review media"
                             fill
                             className="object-cover"
+                            unoptimized
                           />
                         )}
                       </div>
@@ -350,6 +351,7 @@ export const ReviewCard = ({ review }: { review: Review }) => {
                       alt="Full size"
                       fill
                       className="object-contain"
+                      unoptimized
                     />
                   </div>
                 )}

@@ -158,6 +158,7 @@ export default function FlipkartImageZoom({
                             alt={`Product thumbnail ${idx + 1}`}
                             fill
                             className="object-contain p-1"
+                            unoptimized
                         />
                     </button>
                 ))}
@@ -183,6 +184,7 @@ export default function FlipkartImageZoom({
                         fill
                         priority
                         className="object-contain p-4"
+                        unoptimized
                     />
 
                     {/* Lens (Desktop Only) */}

@@ -77,6 +77,7 @@ export function OrderSummary({
                     }
                     fill
                     className="object-cover rounded-md"
+                    unoptimized
                   />
                   <Badge
                     variant="secondary"

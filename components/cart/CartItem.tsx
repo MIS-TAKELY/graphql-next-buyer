@@ -43,6 +43,7 @@ const CartItem = ({
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                   quality={85}
+                  unoptimized
                 />
               </Link>
             </div>

@@ -4,6 +4,7 @@ import { categories as defaultCategories } from "@/data/catagory";
 import Link from "next/link";
 import { memo } from "react";
 import * as Icons from "lucide-react";
+import Image from "next/image";
 
 type Props = {
   categories?: any[];
@@ -51,10 +52,12 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
                     // Removed dynamic icon logic.
                     >
                       {category.image ? (
-                        <img
+                        <Image
                           src={category.image}
                           alt={category.categoryName}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
+                          unoptimized
                         />
                       ) : (
                         <Icons.LayoutGrid

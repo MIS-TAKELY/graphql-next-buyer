@@ -26,6 +26,7 @@ const PlainProductCards = ({ product }: Props) => {
           sizes="(max-width: 360px) 160px, (max-width: 640px) 176px, (max-width: 768px) 192px, (max-width: 1024px) 208px, 224px"
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           priority={false}
+          unoptimized
         />
       </div>
 

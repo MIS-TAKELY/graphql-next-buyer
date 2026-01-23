@@ -111,7 +111,7 @@ export default function SmartMedia({
                 alt={alt || "Media"}
                 className={cn("object-cover", className)}
                 fill={fill}
-                unoptimized={false}
+                unoptimized={true}
                 onError={() => setError(true)}
                 priority={priority}
                 {...props}
