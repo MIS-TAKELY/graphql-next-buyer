@@ -1,7 +1,7 @@
 services:
   app:
     container_name: vanijay_buyer
-    image: ghcr.io/sachinsharma-lordheydes/vanijay-buyer:latest
+    image: ghcr.io/mis-takely/vanijay-buyer:latest
     restart: unless-stopped
     ports:
       - "127.0.0.1:3000:3000" # Expose to localhost only, for host Nginx to proxy
