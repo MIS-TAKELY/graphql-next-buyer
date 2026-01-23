@@ -30,7 +30,7 @@ interface SlideProps {
 
 const Slide = memo(({ slide, isActive, priority }: SlideProps) => {
   const content = (
-    <div className="relative h-full w-full flex-[0_0_100%] min-w-0">
+    <div className="relative h-full w-full">
       {slide.mediaType === "VIDEO" ? (
         <video
           src={slide.imageUrl}
@@ -51,20 +51,22 @@ const Slide = memo(({ slide, isActive, priority }: SlideProps) => {
           unoptimized
         />
       )}
-      <div className="absolute inset-0 flex items-center justify-center">
-      </div>
     </div>
   );
 
   if (slide.link) {
     return (
-      <Link href={slide.link} className="flex-[0_0_100%] min-w-0 h-full">
+      <Link href={slide.link} className="flex-[0_0_100%] min-w-0 h-full relative block">
         {content}
       </Link>
     );
   }
 
-  return content;
+  return (
+    <div className="flex-[0_0_100%] min-w-0 h-full relative">
+      {content}
+    </div>
+  );
 });
 Slide.displayName = "Slide";
 
