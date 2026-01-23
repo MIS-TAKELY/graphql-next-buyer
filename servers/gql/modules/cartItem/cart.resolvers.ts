@@ -35,7 +35,7 @@ export const cartItemResolvers = {
                   select: {
                     id: true,
                     name: true,
-                    images: { select: { url: true, altText: true }, take: 1 },
+                    images: { select: { url: true, altText: true, sortOrder: true }, take: 1, orderBy: { sortOrder: 'asc' } },
                   },
                 },
               },
@@ -88,7 +88,7 @@ export const cartItemResolvers = {
                     name: true,
                     slug: true,
                     // Only get first image for performance
-                    images: { select: { url: true, altText: true }, take: 1 },
+                    images: { select: { url: true, altText: true, sortOrder: true }, take: 1, orderBy: { sortOrder: 'asc' } },
                   },
                 },
               },

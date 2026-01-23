@@ -102,7 +102,7 @@ export const orderResolvers = {
                 include: {
                   product: {
                     include: {
-                      images: true,
+                      images: { orderBy: { sortOrder: 'asc' } },
                     },
                   },
                 },
@@ -432,7 +432,7 @@ export const orderResolvers = {
               try {
                 const wppConnectUrl = process.env.WPP_CONNECT;
 
-                console.log("wppConnectUrl-->",wppConnectUrl)
+                console.log("wppConnectUrl-->", wppConnectUrl)
 
                 if (!wppConnectUrl) {
                   throw new Error(

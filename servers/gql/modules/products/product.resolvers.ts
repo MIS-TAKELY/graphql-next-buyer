@@ -32,7 +32,7 @@ export const productResolvers = {
                     cartItems: { select: { userId: true, variantId: true } },
                   },
                 },
-                images: true,
+                images: { orderBy: { sortOrder: 'asc' } },
                 reviews: true,
                 category: { include: { children: true, parent: true } },
                 wishlistItems: true,
@@ -64,7 +64,7 @@ export const productResolvers = {
               offer: true,
             },
           },
-          images: true,
+          images: { orderBy: { sortOrder: 'asc' } },
           reviews: true,
           category: { include: { children: true, parent: true } },
           wishlistItems: true,
@@ -124,7 +124,7 @@ export const productResolvers = {
             },
           },
           deliveryOptions: true,
-          images: true,
+          images: { orderBy: { sortOrder: 'asc' } },
           reviews: {
             select: {
               id: true,
@@ -234,7 +234,7 @@ export const productResolvers = {
               include: {
                 seller: { select: { id: true, firstName: true, lastName: true } },
                 variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
-                images: true,
+                images: { orderBy: { sortOrder: 'asc' } },
                 reviews: { select: { rating: true } },
                 category: true,
               }
@@ -251,7 +251,7 @@ export const productResolvers = {
             include: {
               seller: { select: { id: true, firstName: true, lastName: true } },
               variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
-              images: true,
+              images: { orderBy: { sortOrder: 'asc' } },
               reviews: { select: { rating: true } },
               category: true,
             }
@@ -285,7 +285,7 @@ export const productResolvers = {
             include: {
               seller: { select: { id: true, firstName: true, lastName: true } },
               variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
-              images: true,
+              images: { orderBy: { sortOrder: 'asc' } },
               reviews: { select: { rating: true } },
               category: true,
             }
@@ -313,7 +313,7 @@ export const productResolvers = {
             include: {
               seller: { select: { id: true, firstName: true, lastName: true } },
               variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
-              images: true,
+              images: { orderBy: { sortOrder: 'asc' } },
               reviews: { select: { rating: true } },
               category: true,
             }
@@ -336,7 +336,7 @@ export const productResolvers = {
         },
         include: {
           variants: true,
-          images: true,
+          images: { orderBy: { sortOrder: 'asc' } },
           reviews: true,
           category: true,
           seller: true,
@@ -374,7 +374,7 @@ export const productResolvers = {
                   specifications: true,
                 }
               },
-              images: true,
+              images: { orderBy: { sortOrder: 'asc' } },
               reviews: { select: { rating: true } },
               category: true,
             }
@@ -487,7 +487,7 @@ export const productResolvers = {
               specifications: true,
             }
           },
-          images: true,
+          images: { orderBy: { sortOrder: 'asc' } },
           reviews: { select: { rating: true } },
           category: true,
         }
@@ -517,7 +517,7 @@ export const productResolvers = {
               specifications: true,
             }
           },
-          images: true,
+          images: { orderBy: { sortOrder: 'asc' } },
           reviews: { select: { rating: true } },
           category: true,
         }

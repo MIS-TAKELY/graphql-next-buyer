@@ -111,7 +111,9 @@ export const searchResolvers = {
             select: {
               url: true,
               altText: true,
+              sortOrder: true,
             },
+            orderBy: { sortOrder: 'asc' },
           },
           reviews: {
             select: { rating: true },

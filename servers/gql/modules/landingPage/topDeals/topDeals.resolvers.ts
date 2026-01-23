@@ -151,7 +151,9 @@ export const topDealsResolvers = {
             select: {
               url: true,
               altText: true,
+              sortOrder: true,
             },
+            orderBy: { sortOrder: "asc" },
           },
           category: {
             select: {

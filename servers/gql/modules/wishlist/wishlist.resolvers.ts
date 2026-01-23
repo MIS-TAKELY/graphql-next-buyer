@@ -17,7 +17,9 @@ const PRODUCT_SELECT = {
   images: {
     select: {
       url: true,
+      sortOrder: true,
     },
+    orderBy: { sortOrder: "asc" },
   },
 } as const;
 
