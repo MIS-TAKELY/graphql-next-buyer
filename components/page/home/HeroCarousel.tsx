@@ -28,56 +28,51 @@ interface SlideProps {
   priority: boolean;
 }
 
-const Slide = memo(({ slide, isActive, priority }: SlideProps) => (
-  <div className="relative h-full w-full flex-[0_0_100%] min-w-0">
-    {slide.mediaType === "VIDEO" ? (
-      <video
-        src={slide.imageUrl}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className={`absolute inset-0 w-full h-full object-cover z-0 transition-all duration-700 ${isActive ? "scale-100 blur-0" : "scale-105 blur-sm"
-          }`}
-      />
-    ) : (
-      <Image
-        src={slide.imageUrl}
-        alt={slide.title}
-        fill
-        className={`object-cover z-0 transition-all duration-700 ${isActive ? "scale-100 blur-0" : "scale-105 blur-sm"
-          }`}
-        sizes="100vw"
-        priority={isActive}
-      />
-    )}
-    <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-      <div className={`text-center text-white px-4 max-w-[90%] sm:max-w-[70%] transition-all duration-700 delay-100 ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}>
-        <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 drop-shadow-xl">
-          {slide.title}
-        </h2>
-        {/* We use description as subtitle/main text since we only have one text field besides title in schema 
-            If we wanted subtitle + description, we should have added that to schema.
-            For now, let's display description if it exists.
-        */}
-        {slide.description && (
-          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-6 font-medium text-gray-200 drop-shadow-md">
-            {slide.description}
-          </p>
-        )}
-
-        {slide.link && (
-          <Link href={slide.link}>
-            <Button className="rounded-full px-8 py-6 text-lg bg-white text-black hover:bg-gray-100 border-none">
-              Shop Now
-            </Button>
-          </Link>
-        )}
+const Slide = memo(({ slide, isActive, priority }: SlideProps) => {
+  const content = (
+    <div className="relative h-full w-full flex-[0_0_100%] min-w-0">
+      {slide.mediaType === "VIDEO" ? (
+        <video
+          src={slide.imageUrl}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className={`absolute inset-0 w-full h-full object-cover z-0 transition-all duration-700 ${isActive ? "scale-100 blur-0" : "scale-105 blur-sm"
+            }`}
+        />
+      ) : (
+        <Image
+          src={slide.imageUrl}
+          alt={slide.title}
+          fill
+          className={`object-cover z-0 transition-all duration-700 ${isActive ? "scale-100 blur-0" : "scale-105 blur-sm"
+            }`}
+          sizes="100vw"
+          priority={isActive}
+        />
+      )}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className={`text-center text-white px-4 max-w-[90%] sm:max-w-[70%] transition-all duration-700 delay-100 ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}>
+          <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2">
+            {slide.title}
+          </h2>
+        </div>
       </div>
     </div>
-  </div>
-));
+  );
+
+  if (slide.link) {
+    return (
+      <Link href={slide.link} className="flex-[0_0_100%] min-w-0 h-full">
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
+});
 Slide.displayName = "Slide";
 
 export default function HeroCarousel({ banners = [] }: HeroCarouselProps) {
