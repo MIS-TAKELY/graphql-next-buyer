@@ -1,15 +1,22 @@
 // utils/orderNumber.ts
 export function generateOrderNumber(): string {
-  // Get today's date in YYYYMMDD
   const now = new Date();
+
+  // Date part: YYYYMMDD
   const datePart = now
     .toISOString()
     .slice(0, 10)
-    .replace(/-/g, ""); // e.g. 20250825
+    .replace(/-/g, "");
 
-  // Generate a random 6-character alphanumeric string
+  // Time part: HHMMSS
+  const timePart = now
+    .toTimeString()
+    .slice(0, 8)
+    .replace(/:/g, "");
+
+  // Random alphanumeric string
   const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
 
-  // Combine with prefix
-  return `ORD-${datePart}-${randomPart}`;
+  // Combined: ORD-YYYYMMDD-HHMMSS-RANDOM6
+  return `ORD-${datePart}-${timePart}-${randomPart}`;
 }

@@ -22,9 +22,14 @@ export const userResolvers = {
             orders: true,
             reviews: true,
             products: true,
-            // payouts: true,
+            payouts: true,
             sellerOrders: true,
             wishlists: true,
+            sellerProfile: {
+              include: {
+                pickupAddress: true,
+              }
+            },
           },
         });
       } catch (error: any) {
