@@ -35,18 +35,18 @@ const Footer = () => {
             <h3 className="font-semibold text-foreground mb-4">Support</h3>
             <ul className="space-y-3 text-sm">
               <li><Link href="/" className="hover:text-primary transition-colors">Help Center</Link></li>
-              <li><Link href="/" className="hover:text-primary transition-colors">Cancellation & Returns</Link></li>
-              <li><Link href="/" className="hover:text-primary transition-colors">Shipping Info</Link></li>
-              <li><Link href="/" className="hover:text-primary transition-colors">Contact Us</Link></li>
+              <li><Link href="/returns-policy" className="hover:text-primary transition-colors">Cancellation & Returns</Link></li>
+              <li><Link href="/shipping-policy" className="hover:text-primary transition-colors">Shipping Info</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
             </ul>
           </div>
 
           <div>
             <h3 className="font-semibold text-foreground mb-4">Legal</h3>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/" className="hover:text-primary transition-colors">Terms of Service</Link></li>
-              <li><Link href="/" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/" className="hover:text-primary transition-colors">Cookie Policy</Link></li>
+              <li><Link href="/terms-conditions" className="hover:text-primary transition-colors">Terms of Service</Link></li>
+              <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</Link></li>
               <li><Link href="/" className="hover:text-primary transition-colors">Accessibility</Link></li>
             </ul>
           </div>
