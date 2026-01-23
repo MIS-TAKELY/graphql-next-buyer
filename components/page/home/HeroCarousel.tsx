@@ -38,27 +38,19 @@ const Slide = memo(({ slide, isActive, priority }: SlideProps) => {
           loop
           muted
           playsInline
-          className={`absolute inset-0 w-full h-full object-cover z-0 transition-all duration-700 ${isActive ? "scale-100 blur-0" : "scale-105 blur-sm"
-            }`}
+          className="absolute inset-0 w-full h-full object-cover z-0"
         />
       ) : (
         <Image
           src={slide.imageUrl}
           alt={slide.title}
           fill
-          className={`object-cover z-0 transition-all duration-700 ${isActive ? "scale-100 blur-0" : "scale-105 blur-sm"
-            }`}
+          className="object-cover z-0"
           sizes="100vw"
           priority={isActive}
         />
       )}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className={`text-center text-white px-4 max-w-[90%] sm:max-w-[70%] transition-all duration-700 delay-100 ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}>
-          <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2">
-            {slide.title}
-          </h2>
-        </div>
       </div>
     </div>
   );
@@ -115,7 +107,7 @@ export default function HeroCarousel({ banners = [] }: HeroCarouselProps) {
 
   return (
     <div className="container-custom py-4 sm:py-6">
-      <div className="relative aspect-[16/6] md:aspect-[21/7] lg:aspect-[16/4] w-full rounded-2xl overflow-hidden shadow-2xl group">
+      <div className="relative aspect-[16/5] w-full rounded-2xl overflow-hidden group">
 
         {/* Carousel Viewport */}
         <div className="overflow-hidden h-full" ref={emblaRef}>
