@@ -101,7 +101,7 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
         className="flex items-center gap-2"
       >
         <User className="w-4 h-4" />
-        <span className="hidden lg:inline">Sign In</span>
+        <span className="hidden lg:inline bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white">Sign In</span>
       </Button>
     )
   }
