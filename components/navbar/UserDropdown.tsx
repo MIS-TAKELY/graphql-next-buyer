@@ -84,7 +84,7 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
       return (
         <Button
           variant="default"
-          className="w-full justify-start h-12 text-base font-medium"
+          className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 w-full justify-start h-12 text-base font-medium"
           onClick={handleSignIn}
         >
           <LogIn className="w-5 h-5 mr-3" />
