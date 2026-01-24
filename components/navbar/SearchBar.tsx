@@ -94,7 +94,6 @@ const SearchBar = ({
   return (
     <form onSubmit={handleSearch} className={`relative ${className} w-full`}>
       <div className="relative group">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
         <Input
           type="text"
           placeholder={placeholder}
@@ -103,7 +102,7 @@ const SearchBar = ({
           onFocus={() => setShowSuggestions(true)}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           onKeyDown={handleKeyDown}
-          className="w-full pl-10 pr-10 h-10 text-sm bg-secondary/30 focus:bg-background border-transparent focus:border-primary/20 hover:bg-secondary/50 transition-all duration-200"
+          className="w-full pl-4 pr-10 h-10 text-sm bg-secondary/30 focus:bg-background border-transparent focus:border-primary/20 hover:bg-secondary/50 transition-all duration-200"
         />
         {searchQuery.trim() && (
           <Search
