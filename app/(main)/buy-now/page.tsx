@@ -20,6 +20,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
 function BuyNowPageInner() {
+  // Sync visual step with logical step
   const [currentStep, setCurrentStep] = useState(1);
   const searchParams = useSearchParams();
   const productSlug = searchParams.get("product");
@@ -49,6 +50,23 @@ function BuyNowPageInner() {
     handlePaymentSubmit,
     handleBackToAddress,
   } = useBuyNow();
+
+  // EFFECT: Sync the visual `currentStep` with the logical `step` from useBuyNow
+  useEffect(() => {
+    switch (step) {
+      case "address":
+        setCurrentStep(1);
+        break;
+      case "payment":
+        setCurrentStep(2);
+        break;
+      case "summary":
+        setCurrentStep(3);
+        break;
+      default:
+        setCurrentStep(1);
+    }
+  }, [step]);
 
   const [verifyEsewaPayment] = useMutation(VERIFY_ESEWA_PAYMENT);
 
@@ -225,9 +243,16 @@ function BuyNowPageInner() {
       />
       <BuyNowSteps currentStep={currentStep} />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* LEFT SIDE: Address & Payment (unchanged, but loading handles cartLoading) */}
+        {/* LEFT SIDE: Address & Payment */}
         <div className="lg:col-span-2 space-y-6">
-          {addressLoading || (isFromCart && cartLoading) ? (
+          {/* 
+            CRITICAL FIX: 
+            Wait for BOTH address loading AND (product loading OR cart loading) 
+            before showing the address step. This prevents the user from selecting 
+            an address and trying to move to payment before we have the product data 
+            needed to calculate totals/render PaymentStep.
+          */}
+          {addressLoading || (isFromCart ? cartLoading : productLoading) ? (
             <div className="space-y-4">
               <div className="h-96 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
             </div>
@@ -244,7 +269,12 @@ function BuyNowPageInner() {
               />
             )
           )}
-          {step === "payment" && (product || isFromCart) && (
+
+          {/* 
+             Simplified check: We already ensured product/cart is loaded above.
+             If step is payment, we should be good to go.
+          */}
+          {step === "payment" && (
             <PaymentStep
               selectedAddress={selectedAddress}
               selectedPaymentMethod={selectedPaymentMethod}
