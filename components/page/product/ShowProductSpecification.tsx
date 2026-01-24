@@ -87,10 +87,7 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
                       {section.rows.map((row, i) => (
                         <tr
                           key={i}
-                          className={`${i % 2 === 0
-                            ? "bg-white dark:bg-gray-900"
-                            : "bg-gray-50 dark:bg-gray-800/50"
-                            }`}
+                          className="bg-white dark:bg-gray-900"
                         >
                           {row.map((cell, j) => (
                             <td key={j} className={`px-4 py-2 ${j === 0 ? 'font-medium text-gray-900 dark:text-gray-100 w-1/3' : 'text-gray-700 dark:text-gray-300'}`}>
@@ -217,14 +214,11 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
       ) : (
         <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
           <table className="min-w-full text-sm text-gray-700 dark:text-gray-300">
-            <tbody>
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {visibleData.map((item, index) => (
                 <tr
                   key={index}
-                  className={`${index % 2 === 0
-                    ? "bg-gray-50 dark:bg-gray-800/50"
-                    : "bg-white dark:bg-gray-900"
-                    }`}
+                  className="bg-white dark:bg-gray-900"
                 >
                   <td className="px-4 py-2 font-medium text-gray-900 dark:text-gray-100 capitalize w-1/3">
                     {item.key}
