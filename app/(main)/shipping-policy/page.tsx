@@ -63,7 +63,7 @@ Enjoy fast, reliable, and often free shipping across Nepal with Vanijay.com – 
                         </div>
                     </div>
 
-                    <div className="mt-12 bg-primary/5 p-6 rounded-lg border border-primary/10">
+                    <div className="mt-12 bg-muted/30 p-6 rounded-lg border border-primary/10">
                         <h2 className="text-2xl font-bold mb-4 text-primary">Nepali Translation (ढुवानी र डेलिभरी नीति)</h2>
                         <div className="whitespace-pre-line text-foreground/80 leading-relaxed font-medium">
                             {`ढुवानी र डेलिभरी नीति (Shipping & Delivery Policy) - Vanijay.com नेपाल

@@ -51,7 +51,7 @@ Phone: +977 976101281`}
                         </div>
                     </div>
 
-                    <div className="mt-12 bg-primary/5 p-6 rounded-lg border border-primary/10">
+                    <div className="mt-12 bg-muted/30 p-6 rounded-lg border border-primary/10">
                         <h2 className="text-2xl font-bold mb-4 text-primary">Nepali Translation (कुकिज नीति)</h2>
                         <div className="whitespace-pre-line text-foreground/80 leading-relaxed font-medium">
                             {`अन्तिम परिमार्जन: डिसेम्बर २२, २०२५

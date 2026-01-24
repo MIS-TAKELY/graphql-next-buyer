@@ -55,7 +55,7 @@ Phone: 9761012813`}
                         </div>
                     </div>
 
-                    <div className="mt-12 bg-primary/5 p-6 rounded-lg border border-primary/10">
+                    <div className="mt-12 bg-muted/30 p-6 rounded-lg border border-primary/10">
                         <h2 className="text-2xl font-bold mb-4 text-primary">Nepali Translation (गोपनीयता नीति)</h2>
                         <div className="whitespace-pre-line text-foreground/80 leading-relaxed font-medium">
                             {`गोपनीयता नीति (Privacy Policy) - Vanijay.com नेपाल अनलाइन सपिङ

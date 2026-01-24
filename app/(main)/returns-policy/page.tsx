@@ -93,7 +93,7 @@ Shop worry-free at Vanijay.com – Nepal’s reliable online store with easy ret
                         </div>
                     </div>
 
-                    <div className="mt-12 bg-primary/5 p-6 rounded-lg border border-primary/10">
+                    <div className="mt-12 bg-muted/30 p-6 rounded-lg border border-primary/10">
                         <h2 className="text-2xl font-bold mb-4 text-primary">Nepali Translation (फिर्ता र रिफन्ड नीति)</h2>
                         <div className="whitespace-pre-line text-foreground/80 leading-relaxed font-medium">
                             {`फिर्ता र रिफन्ड नीति (Return and Refund Policy) - Vanijay.com नेपाल अनलाइन सपिङ
