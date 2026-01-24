@@ -103,8 +103,14 @@ const SearchBar = ({
           onFocus={() => setShowSuggestions(true)}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           onKeyDown={handleKeyDown}
-          className="w-full pl-10 pr-4 h-10 text-sm bg-secondary/30 focus:bg-background border-transparent focus:border-primary/20 hover:bg-secondary/50 transition-all duration-200"
+          className="w-full pl-10 pr-10 h-10 text-sm bg-secondary/30 focus:bg-background border-transparent focus:border-primary/20 hover:bg-secondary/50 transition-all duration-200"
         />
+        {searchQuery.trim() && (
+          <Search
+            onClick={() => selectSuggestion(searchQuery.trim())}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground hover:text-primary cursor-pointer transition-colors duration-200"
+          />
+        )}
       </div>
 
       {showSuggestions && searchQuery && (
