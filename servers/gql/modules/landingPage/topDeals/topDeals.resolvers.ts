@@ -130,7 +130,7 @@ export const topDealsResolvers = {
           description: true,
           brand: true,
           variants: {
-            where: { stock: { gt: 0 } },
+            // Removed stock filter to show products even with 0 stock
             select: {
               id: true,
               sku: true,
