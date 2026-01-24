@@ -63,7 +63,7 @@ const CartButton = ({ isMobile = false }: CartButtonProps) => {
         className="relative flex items-center gap-1 lg:gap-2 text-sm lg:text-base text-foreground hover:bg-secondary"
       >
         <ShoppingCart className="w-4 h-4 lg:w-5 lg:h-5 text-muted-foreground" />
-        <span className="hidden lg:inline">Cart</span>
+        <span className="hidden lg:inline font-light">Cart</span>
         {badgeCount > 0 && (
           <Badge className="absolute -top-2 -right-2 h-4 w-4 lg:h-5 lg:w-5 p-0 flex items-center justify-center text-[10px] lg:text-xs bg-destructive text-destructive-foreground">
             {badgeCount}

@@ -95,13 +95,13 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
 
     return (
       <Button
-        variant="default"
+        variant="ghost"
         size="sm"
         onClick={handleSignIn}
-        className="flex items-center gap-2"
+        className="flex items-center gap-1 lg:gap-2 text-sm lg:text-base text-foreground hover:bg-secondary"
       >
-        <User className="w-4 h-4" />
-        <span className="hidden lg:inline bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white">Sign In</span>
+        <User className="w-4 h-4 lg:w-5 lg:h-5 text-muted-foreground" />
+        <span className="hidden lg:inline font-light">Sign In</span>
       </Button>
     )
   }
@@ -188,7 +188,7 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-600 rounded-full border-2 border-background animate-in zoom-in duration-300" />
             )}
           </div>
-          <span className="hidden lg:inline">{session.user.name || "Account"}</span>
+          <span className="hidden lg:inline font-light">{session.user.name || "Account"}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-popover border-border">
