@@ -2,16 +2,15 @@ import ApolloWrapper from "@/lib/apollo/apollo-provider";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata, Viewport } from "next";
 import { ThemeProvider } from "next-themes";
-import { Roboto } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { NotificationListener } from "@/components/common/NotificationListener";
 import AuthGate from "@/components/auth/AuthGate";
 import "./globals.css";
 
-const roboto = Roboto({
-  weight: ["300", "400", "500", "700"],
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-roboto",
+  variable: "--font-plus-jakarta",
   display: "swap",
 });
 
@@ -78,7 +77,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://placehold.co" />
       </head>
       <body
-        className={`${roboto.variable} antialiased`}
+        className={`${plusJakarta.variable} antialiased`}
       >
         <ApolloWrapper>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
