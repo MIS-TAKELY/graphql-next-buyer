@@ -123,6 +123,10 @@ export default function WishlistSection() {
                     variantId={item.product?.variants?.[0]?.id}
                     className="flex-1 sm:flex-initial"
                     size="default"
+                    productName={item.product?.name}
+                    productImage={item.product?.images?.[0]?.url}
+                    price={item.product?.variants?.[0]?.price}
+                    slug={item.product?.slug}
                   />
 
                   <Button

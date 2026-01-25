@@ -89,7 +89,10 @@ export default function CartSheetContent() {
                       loading="lazy"
                       unoptimized
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/placeholder.svg";
+                        const target = e.target as HTMLImageElement;
+                        if (target.src !== window.location.origin + "/placeholder.svg") {
+                          target.src = "/placeholder.svg";
+                        }
                       }}
                     />
                   </div>

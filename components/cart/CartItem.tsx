@@ -51,6 +51,12 @@ const CartItem = ({
                   loading="lazy"
                   quality={85}
                   unoptimized
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (target.src !== window.location.origin + "/placeholder.svg") {
+                      target.src = "/placeholder.svg";
+                    }
+                  }}
                 />
               </Link>
             </div>
