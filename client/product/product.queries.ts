@@ -80,7 +80,6 @@ export const PRODUCT_FIELDS_FRAGMENT = gql`
     }
     features
     specificationTable
-    specificationDisplayFormat
     metaTitle
     metaDescription
     keywords
