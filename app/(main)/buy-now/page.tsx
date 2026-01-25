@@ -6,18 +6,17 @@ import { formatPrice } from "@/lib/utils";
 import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
 import { VERIFY_ESEWA_PAYMENT } from "@/client/payment/payment.mutations";
 import { GET_PRODUCT_BY_SLUG } from "@/client/product/product.queries";
-// NEW: Import cart query (add this if it doesn't exist)
-import { ICartItem } from "@/app/(main)/cart/page"; // Import cart item type
-import { GET_MY_CART_ITEMS } from "@/client/cart/cart.queries"; // Assume this exists
 import { AddressStep } from "@/components/page/buy-now/AddressStep";
 import { BuyNowHeader } from "@/components/page/buy-now/BuyNowHeader";
 import { BuyNowSteps } from "@/components/page/buy-now/BuyNowSteps";
 import { PaymentStep } from "@/components/page/buy-now/PaymentStep";
 import { OrderSummary } from "@/components/page/checkout/OrderSummary";
 import { useBuyNow } from "@/hooks/buy-now/useBuyNow";
+import { useCart } from "@/hooks/cart/useCart";
 import { useMutation, useQuery } from "@apollo/client";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import { CartItem } from "@/store/cartStore";
 
 function BuyNowPageInner() {
   // Sync visual step with logical step
@@ -70,12 +69,9 @@ function BuyNowPageInner() {
 
   const [verifyEsewaPayment] = useMutation(VERIFY_ESEWA_PAYMENT);
 
-  // NEW: Query cart if from cart
-  const { data: cartData, loading: cartLoading } = useQuery(GET_MY_CART_ITEMS, {
-    skip: !isFromCart, // Only run if from cart
-    fetchPolicy: "cache-first",
-    errorPolicy: "all",
-  });
+  // Use global cart hook
+  const { cartItems, loading: cartLoading } = useCart();
+
   // Existing product query (skip if from cart)
   const { data: productData, loading: productLoading } = useQuery(
     GET_PRODUCT_BY_SLUG,
@@ -93,16 +89,15 @@ function BuyNowPageInner() {
 
   const product = productData?.getProductBySlug;
   const addresses = addressData?.getAddressOfUser || [];
-  const cartItems: ICartItem[] = cartData?.getMyCart || []; // NEW: Cart items
 
   // UPDATED: Calculate order amount (handle both single product and cart)
   const calculateOrderAmount = () => {
     if (isFromCart) {
       if (!cartItems.length) return 0;
       const subtotal = cartItems.reduce(
-        (sum, item) => sum + item.variant.price * item.quantity,
+        (sum, item) => sum + item.price * item.quantity,
         0
-      ); // Assume price in cents
+      );
       const shipping = 0;
       const tax = 0;
       return subtotal + shipping + tax;
@@ -123,8 +118,6 @@ function BuyNowPageInner() {
 
   const orderAmount = calculateOrderAmount();
 
-  console.log("Cart items-->", cartItems);
-
   // UPDATED: Map cart items to OrderItem[] for OrderSummary (if from cart)
   const selectedVariant = !isFromCart && product?.variants
     ? (variantId
@@ -133,17 +126,17 @@ function BuyNowPageInner() {
     : null;
 
   const orderItemsForSummary = isFromCart
-    ? cartItems.map((cartItem: ICartItem) => ({
+    ? cartItems.map((cartItem: CartItem) => ({
       id: cartItem.id,
       quantity: cartItem.quantity,
-      price: cartItem.variant.price * cartItem.quantity, // Subtotal per item
+      price: cartItem.price * cartItem.quantity, // Subtotal per item
       variant: {
-        id: cartItem.variant.id,
-        price: cartItem.variant.price,
-        attributes: cartItem.variant.attributes,
+        id: cartItem.variantId,
+        price: cartItem.price,
+        attributes: { comparePrice: cartItem.comparePrice },
         product: {
-          name: cartItem.variant.product.name,
-          images: cartItem.variant.product.images || [],
+          name: cartItem.name,
+          images: cartItem.image ? [{ url: cartItem.image }] : [],
         },
       },
     }))
@@ -165,14 +158,12 @@ function BuyNowPageInner() {
       },
     ];
 
-  console.log("orderItemsForSummary-->", orderItemsForSummary);
-
   // NEW: Cart-specific totals (adapt from CartOrderSummary logic)
   const cartSubtotal =
     cartItems.reduce(
-      (sum, item) => sum + item.variant.price * item.quantity * 100,
+      (sum, item) => sum + item.price * item.quantity,
       0
-    ) / 100; // In NPR
+    );
 
   // Handle eSewa callback (unchanged)
   useEffect(() => {

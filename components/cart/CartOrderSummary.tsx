@@ -1,5 +1,5 @@
 // components/cart/CartOrderSummary.tsx
-import { ICartItem } from "@/app/(main)/cart/page";
+import { CartItem } from "@/store/cartStore";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tag } from "lucide-react";
 import { BuyNowButton } from "../common"; // Adjust path as needed
@@ -11,7 +11,7 @@ const CartOrderSummary = ({
   originalTotal,
   totalSavings,
 }: {
-  cartItems: ICartItem[];
+  cartItems: CartItem[];
   subtotal: number;
   originalTotal: number;
   totalSavings: number;

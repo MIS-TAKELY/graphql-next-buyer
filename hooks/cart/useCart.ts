@@ -1,272 +1,183 @@
 "use client";
 
 import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART_QUANTITY } from "@/client/cart/cart.mutations";
-import { GET_CART_PRODUCT_IDS, GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
-import { useCartStore } from "@/store/cartStore";
+import { GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
+import { CartItem, useCartStore } from "@/store/cartStore";
 import { useMutation, useQuery } from "@apollo/client";
 import { useSession } from "@/lib/auth-client";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-
-interface IGetCartIdResponse {
-  getMyCart: [
-    variant: {
-      product: {
-        id: string;
-      };
-    }
-  ];
-}
-
-interface IGetCartId {
-  variant: {
-    product: {
-      id: string;
-    };
-  };
-}
-
-export type TGetCartIdResponse = IGetCartIdResponse | null;
-export type TGetCartId = IGetCartId | null;
 
 export const useCart = () => {
   const { data: session } = useSession();
   const userId = session?.user?.id;
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { anonymousCart, addInAnonymousCart, removeFromAnonymousCart } =
+  const { items: cartItems, addItem, removeItem, updateQuantity: updateStoreQuantity, setCart, clearCart } =
     useCartStore();
 
-  const { data: myCartItemsIds, loading: cartLoading } = useQuery(
-    GET_CART_PRODUCT_IDS,
+  // Fetch full cart details from server for logged-in users
+  const { data: serverCartData, loading: cartLoading, refetch } = useQuery(
+    GET_MY_CART_ITEMS,
     {
       skip: !userId,
-      fetchPolicy: "cache-first",
-      errorPolicy: "all",
+      fetchPolicy: "network-only", // Ensure we get fresh data on mount/login
+      nextFetchPolicy: "cache-first",
+      onError: (err) => console.error("Error fetching cart:", err),
     }
   );
 
-  const myCartItems = useMemo(() => {
-    if (userId) {
-      // Logged-in: Use server data
-      if (!myCartItemsIds?.getMyCart) return new Set<string>();
-      return new Set(
-        myCartItemsIds.getMyCart
-          .map((item: any) => item?.variant?.product?.id)
-          .filter(Boolean)
-      );
-    } else {
-      return new Set([
-        ...anonymousCart
-          .map((item) => item?.variant?.product?.id)
-          .filter(Boolean),
-      ]);
+  // Sync server data to store
+  useEffect(() => {
+    if (userId && serverCartData?.getMyCart) {
+      const mappedItems: CartItem[] = serverCartData.getMyCart.map((item: any) => ({
+        id: item.variant.product.id,
+        name: item.variant.product.name,
+        image: item.variant.product.images?.[0]?.url || "/placeholder.svg",
+        price: item.variant.price,
+        comparePrice: item.variant.mrp,
+        sku: item.variant.sku,
+        variantId: item.variant.id,
+        quantity: item.quantity,
+        stock: item.variant.stock, // maximizing utility
+        slug: item.variant.product.slug,
+      }));
+      setCart(mappedItems);
     }
-  }, [myCartItemsIds, userId, anonymousCart]);
+    // If we logout, we should probably clear or handle anonymous. 
+    // For now, let's just sync when we have data.
+  }, [userId, serverCartData, setCart]);
 
-  // Import toast from sonner at the top (I will do this in a separate step or just assume it is done if I combine edits, but best to do distinct)
-  // Actually I cannot add import at top and edit body in same replace_file_content call if they are far apart.
-  // I will assume I add import separately.
 
   const [addToCartMutation] = useMutation(ADD_TO_CART, {
-    update(cache, { data }, { variables }) {
-      if (!data?.addToCart) return;
-
-      try {
-        const newCartItem = {
-          quantity: variables!.quantity,
-          variant: {
-            id: variables!.variantId,
-            product: {
-              id: variables!.productId,
-            },
-          },
-        };
-
-        const existing: TGetCartIdResponse = cache.readQuery({
-          query: GET_CART_PRODUCT_IDS,
-        });
-        const existingCart = existing?.getMyCart ?? [];
-
-        const isItemInCart = existingCart.some(
-          (item: any) => item?.variant?.id === variables!.variantId
-        );
-
-        if (!isItemInCart) {
-          cache.writeQuery({
-            query: GET_CART_PRODUCT_IDS,
-            data: {
-              getMyCart: [...existingCart, newCartItem],
-            },
-          });
-        }
-      } catch (error) {
-        console.error("Error updating cache after addToCart:", error);
-      }
-    },
     onError(error) {
       console.error("Add to cart mutation failed:", error);
       toast.error("Failed to add to cart. Please try again.");
+      // Rollback logic could be complex if we don't track previous state. 
+      // For now, simple error toast. Ideally we refetch or remove the item.
+      refetch();
+    },
+  });
+
+  const [removeFromCartMutation] = useMutation(REMOVE_FROM_CART, {
+    onError(error) {
+      toast.error("Failed to remove from cart");
+      refetch();
+    }
+  });
+
+  const [updateQuantityMutation] = useMutation(UPDATE_CART_QUANTITY, {
+    onError(error) {
+      toast.error("Failed to update quantity");
+      refetch();
     },
   });
 
   const addToCart = useCallback(
-    async (variantId: string, productId: string, quantity: number = 1) => {
+    async (
+      variantId: string,
+      productId: string,
+      quantity: number = 1,
+      productDetails?: { name: string; image: string; price: number; slug?: string }
+    ) => {
       setLoading(true);
 
+      // Construct optimistic item
+      // We prioritize productDetails if passed, otherwise fall back to placeholders 
+      // or what we might check from existing cache (not implemented here for simplicity)
+      const optimisticItem: CartItem = {
+        id: productId,
+        variantId: variantId,
+        quantity: quantity,
+        name: productDetails?.name || "Product", // Fallback, updated on refetch
+        image: productDetails?.image || "/placeholder.svg",
+        price: productDetails?.price || 0,
+        slug: productDetails?.slug,
+      };
+
       try {
-        if (!userId) {
-          addInAnonymousCart(productId, variantId);
-          toast.success("Added to cart");
-        } else {
+        // Optimistic Update
+        addItem(optimisticItem);
+        toast.success("Added to cart");
+
+        if (userId) {
           await addToCartMutation({
-            variables: { variantId, productId, quantity },
-            optimisticResponse: {
-              addToCart: true,
-            },
+            variables: { variantId, quantity },
           });
-          toast.success("Added to cart");
         }
       } catch (err) {
-        // Error handled in onError
+        // Error handled in onError of mutation (which triggers refetch)
+        // Manual rollback if needed: removeItem(variantId)
+        removeItem(variantId);
       } finally {
         setLoading(false);
       }
     },
-    [addToCartMutation, userId, addInAnonymousCart]
+    [addToCartMutation, userId, addItem, removeItem]
   );
-
-  const [removeFromCartMutation] = useMutation(REMOVE_FROM_CART, {
-    update(cache, { data }, { variables }) {
-      if (!data?.removeFromCart) return;
-
-      try {
-        const existing: TGetCartIdResponse = cache.readQuery({
-          query: GET_CART_PRODUCT_IDS,
-        });
-
-        const existingCart = existing?.getMyCart ?? [];
-
-        const updatedCart = existingCart.filter(
-          (item: any) => item?.variant?.product?.id !== variables?.productId
-        );
-
-        cache.writeQuery({
-          query: GET_CART_PRODUCT_IDS,
-          data: {
-            getMyCart: updatedCart,
-          },
-        });
-      } catch (error) {
-        console.log("errror while removing from cart-->", error);
-      }
-    },
-    onError(error) {
-      toast.error("Failed to remove from cart");
-    }
-  });
 
   const removeFromCart = useCallback(
     async (variantId: string, productId: string) => {
       setLoading(true);
+
+      // Optimistic
+      const previousItems = cartItems;
+      removeItem(variantId);
+      toast.success("Removed from cart");
+
       try {
-        if (!userId) {
-          removeFromAnonymousCart(productId);
-          toast.success("Removed from cart");
-        } else {
+        if (userId) {
           await removeFromCartMutation({
-            variables: { variantId, productId },
-            optimisticResponse: {
-              removeFromCart: true,
-            },
+            variables: { variantId },
           });
-          toast.success("Removed from cart");
         }
       } catch (error) {
-        // Handled in onError
+        setCart(previousItems); // Rollback
       } finally {
         setLoading(false);
       }
     },
-    [removeFromCartMutation, userId, removeFromAnonymousCart]
+    [removeFromCartMutation, userId, removeItem, cartItems, setCart]
   );
 
-  // Update quantity mutation
-  const [updateQuantityMutation] = useMutation(UPDATE_CART_QUANTITY, {
-    update(cache, { data }, { variables }) {
-      if (!data?.updateCartQuantity) return;
-
-      try {
-        const { cartItemId, quantity } = variables || {};
-
-        // Read current cart
-        const currentData: any = cache.readQuery({ query: GET_MY_CART_ITEMS });
-
-        if (currentData?.getMyCart) {
-          const updatedCart = currentData.getMyCart.map((item: any) => {
-            // Check against variant.id since that matches the cartItemId argument
-            if (item.variant.id === cartItemId) {
-              return { ...item, quantity };
-            }
-            return item;
-          });
-
-          cache.writeQuery({
-            query: GET_MY_CART_ITEMS,
-            data: {
-              getMyCart: updatedCart,
-            },
-          });
-        }
-      } catch (error) {
-        console.error("Optimistic update failed:", error);
-      }
-    },
-    onError(error) {
-      toast.error("Failed to update quantity");
-    },
-  });
-
   const updateQuantity = useCallback(
-    async (cartItemId: string, quantity: number) => {
+    async (cartItemId: string, quantity: number) => { // cartItemId here is variantId based on usage
       if (quantity < 1) return;
 
-      console.log("varient id-->", cartItemId)
+      // Optimistic
+      const previousItems = cartItems;
+      updateStoreQuantity(cartItemId, quantity);
 
       if (!userId) {
-        // For anonymous cart, update quantity in store
-        // (Assuming anonymous cart doesn't persist quantity to server)
         return;
       }
 
       try {
         await updateQuantityMutation({
           variables: { cartItemId, quantity },
-          optimisticResponse: {
-            updateCartQuantity: true,
-          },
         });
       } catch (err) {
         console.error("Update quantity failed", err);
+        setCart(previousItems); // Rollback
       }
     },
-    [updateQuantityMutation, userId]
+    [updateQuantityMutation, userId, updateStoreQuantity, cartItems, setCart]
   );
 
   const checkIsInCart = (productId: string | undefined) => {
-    return myCartItems?.has(productId || "") || false;
+    return cartItems.some((item) => item.id === productId);
   };
 
   const isLoading = cartLoading || loading;
 
   const getButtonText = (productId: string | undefined) => {
     if (isLoading) return "Loading..";
-
     return checkIsInCart(productId) ? "In Cart" : "Add To Cart";
   };
 
   return {
-    myCartItems,
+    cartItems, // Return the full items
+    myCartItems: new Set(cartItems.map(i => i.id)), // Keep backward compat for 'myCartItems.has' checks if any
     checkIsInCart,
     cartLoading,
     loading,
@@ -275,6 +186,5 @@ export const useCart = () => {
     updateQuantity,
     getButtonText,
     isLoading,
-    anonymousCart,
   };
 };

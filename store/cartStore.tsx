@@ -1,69 +1,84 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export interface CartItemVariant {
-  id?: string;
-  product: {
-    id: string;
-  };
-}
-
 export interface CartItem {
-  variant: CartItemVariant;
+  id: string; // Product ID
+  name: string;
+  image: string;
+  price: number;
+  comparePrice?: number;
+  variantId: string;
+  sku?: string;
   quantity: number;
+  stock?: number;
+  slug?: string;
+  maxQuantity?: number;
 }
 
 interface CartStore {
-  anonymousCart: CartItem[];
-  setAnonymousCart: (cart: CartItem[]) => void;
-  addInAnonymousCart: (productId: string, variantId?: string) => void;
-  removeFromAnonymousCart: (productId: string) => void;
-  clearAnonymousCart: () => void;
+  items: CartItem[];
+  anonymousCart: CartItem[]; // Keep for persistence if not logged in
+
+  // Actions
+  setCart: (items: CartItem[]) => void;
+  addItem: (item: CartItem) => void;
+  removeItem: (variantId: string) => void;
+  updateQuantity: (variantId: string, quantity: number) => void;
+  clearCart: () => void;
+
+  // Anonymous specific (optional, could be merged logic)
+  // We will try to unify, but keeping some backward compat logic or specific sync logic might be helpful
 }
 
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
+      items: [],
       anonymousCart: [],
 
-      setAnonymousCart: (cart) => set({ anonymousCart: cart }),
+      setCart: (items) => set({ items }),
 
-      addInAnonymousCart: (productId, variantId) => {
-        const currentCart = get().anonymousCart;
-
-        // Check if item already exists
-        const existingItem = currentCart.find(
-          (item) => item.variant.product.id === productId
+      addItem: (newItem) => {
+        const currentItems = get().items;
+        const existingItemIndex = currentItems.findIndex(
+          (item) => item.variantId === newItem.variantId
         );
 
-        if (existingItem) {
-          // Ideally increase quantity here if we tracked it in anonymous cart more robustly
-          return;
+        if (existingItemIndex > -1) {
+          const updatedItems = [...currentItems];
+          const existingItem = updatedItems[existingItemIndex];
+          updatedItems[existingItemIndex] = {
+            ...existingItem,
+            quantity: existingItem.quantity + newItem.quantity,
+          };
+          set({ items: updatedItems });
+        } else {
+          set({ items: [...currentItems, newItem] });
         }
-
-        const newItem: CartItem = {
-          variant: {
-            id: variantId,
-            product: { id: productId }
-          },
-          quantity: 1
-        };
-
-        set({ anonymousCart: [...currentCart, newItem] });
       },
 
-      removeFromAnonymousCart: (productId) => {
-        const currentCart = get().anonymousCart;
-        const updatedCart = currentCart.filter(
-          (item) => item.variant.product.id !== productId
+      removeItem: (variantId) => {
+        const currentItems = get().items;
+        set({
+          items: currentItems.filter((item) => item.variantId !== variantId),
+        });
+      },
+
+      updateQuantity: (variantId, quantity) => {
+        const currentItems = get().items;
+        const updatedItems = currentItems.map((item) =>
+          item.variantId === variantId ? { ...item, quantity } : item
         );
-        set({ anonymousCart: updatedCart });
+        set({ items: updatedItems });
       },
 
-      clearAnonymousCart: () => set({ anonymousCart: [] }),
+      clearCart: () => set({ items: [], anonymousCart: [] }),
     }),
     {
-      name: "anonymous_cart",
+      name: "cart-storage",
+      partialize: (state) => ({ anonymousCart: state.anonymousCart, items: state.items }), // Persist both?
+      // Ideally, if user is logged in, we trust server. If not, we trust local 'items' or 'anonymousCart'.
+      // For simplicity, let's treat 'items' as the active UI state.
     }
   )
 );

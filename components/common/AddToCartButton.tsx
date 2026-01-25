@@ -24,6 +24,10 @@ interface AddToCartButtonProps {
   onAddSuccess?: () => void;
   onRemoveSuccess?: () => void;
   onError?: (error: any) => void;
+  productName?: string;
+  productImage?: string;
+  price?: number;
+  slug?: string;
 }
 
 export function AddToCartButton({
@@ -40,6 +44,10 @@ export function AddToCartButton({
   onAddSuccess,
   onRemoveSuccess,
   onError,
+  productName,
+  productImage,
+  price,
+  slug,
 }: AddToCartButtonProps) {
   const { checkIsInCart, addToCart, removeFromCart, cartLoading, loading } =
     useCart();
@@ -60,7 +68,12 @@ export function AddToCartButton({
         await removeFromCart(variantId!, productId!);
         onRemoveSuccess?.();
       } else {
-        await addToCart(variantId!, productId!, quantity);
+        await addToCart(variantId!, productId!, quantity, {
+          name: productName || "Product",
+          image: productImage || "/placeholder.svg",
+          price: price || 0,
+          slug,
+        });
         onAddSuccess?.();
       }
     } catch (error) {

@@ -1,106 +1,33 @@
-import { GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
-import { GET_PRODUCTS_MINIMAL } from "@/client/product/product.queries";
 import { Button } from "@/components/ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useCart } from "@/hooks/cart/useCart";
-import { useSession } from "@/lib/auth-client";
 import { formatPrice } from "@/lib/utils";
 import { useUIStore } from "@/store/uiStore";
-import { useQuery } from "@apollo/client";
 import { ShoppingCart, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
-interface CartItemData {
-  id: string;
-  name: string;
-  image: string;
-  price: string;
-  variantId: string;
-  quantity: number;
-}
-
 export default function CartSheetContent() {
   const router = useRouter();
   const {
-    myCartItems: cartProductIds,
+    cartItems,
     removeFromCart,
     updateQuantity,
+    loading: cartLoading,
   } = useCart();
   const { closeCart } = useUIStore();
   const [removingItems, setRemovingItems] = useState<Set<string>>(new Set());
   const [updatingItems, setUpdatingItems] = useState<Set<string>>(new Set());
-  const [quantity, setQuantity] = useState(1);
-
-  const { data: session } = useSession();
-  const userId = session?.user?.id;
-  const { anonymousCart } = useCart(); // Get anonymous cart from hook
-
-  // Fetch items for logged-in user
-  const { data: cartData, loading: cartLoading } = useQuery(GET_MY_CART_ITEMS, {
-    skip: !userId || !cartProductIds || cartProductIds.size === 0,
-    fetchPolicy: "cache-first",
-  });
-
-  // Fetch items for guest user (if using anonymous cart)
-  const { data: allProductsData, loading: allProductsLoading } = useQuery(
-    GET_PRODUCTS_MINIMAL,
-    {
-      skip: !!userId || !anonymousCart || anonymousCart.length === 0,
-      fetchPolicy: "cache-first",
-    }
-  );
-
-  const cartItems = useMemo((): CartItemData[] => {
-    if (userId) {
-      if (!cartData?.getMyCart) return [];
-
-      return cartData.getMyCart.map((item: any) => ({
-        id: item.variant.product.id,
-        name: item.variant.product.name,
-        image: item.variant.product.images?.[0]?.url || "/placeholder.svg",
-        price: item.variant.price.toString(),
-        variantId: item.variant.id,
-        quantity: item.quantity,
-      }));
-    } else {
-      // Guest User logic (similar to CartPage)
-      if (!anonymousCart || !allProductsData?.getProducts) return [];
-
-      return anonymousCart
-        .map((cartItem) => {
-          const product = allProductsData.getProducts.find(
-            (p: any) => p.id === cartItem.variant.product.id
-          );
-          if (!product) return null;
-
-          const variant =
-            product.variants?.find((v: any) => v.id === cartItem.variant.id) ||
-            product.variants?.[0];
-          if (!variant) return null;
-
-          return {
-            id: product.id,
-            name: product.name,
-            image: product.images?.[0]?.url || "/placeholder.svg",
-            price: variant.price || "0",
-            variantId: variant.id,
-            quantity: cartItem.quantity || 1,
-          };
-        })
-        .filter((item): item is CartItemData => item !== null);
-    }
-  }, [cartData, userId, anonymousCart, allProductsData]);
-
-  const loading = cartLoading || allProductsLoading;
 
   const displayedItemsCount = cartItems.length;
 
   const total = useMemo(() => {
-    return cartItems.reduce((sum: number, item: CartItemData) => {
-      return sum + parseFloat(item.price || "0") * item.quantity;
+    return cartItems.reduce((sum, item) => {
+      // Ensure price is treated as number
+      const price = typeof item.price === 'string' ? parseFloat(item.price) : item.price;
+      return sum + (price || 0) * item.quantity;
     }, 0);
   }, [cartItems]);
 
@@ -124,26 +51,6 @@ export default function CartSheetContent() {
     }
   };
 
-  const handleQuantityChange = async (
-    variantId: string,
-    productId: string,
-    newQuantity: number
-  ) => {
-    if (newQuantity < 1) return;
-    setUpdatingItems((prev) => new Set(prev).add(productId));
-    try {
-      await updateQuantity(variantId, newQuantity);
-    } catch (error) {
-      console.error("Failed to update quantity:", error);
-    } finally {
-      setUpdatingItems((prev) => {
-        const next = new Set(prev);
-        next.delete(productId);
-        return next;
-      });
-    }
-  };
-
   return (
     <SheetContent className="flex flex-col h-full w-full sm:max-w-md">
       <SheetHeader>
@@ -151,12 +58,7 @@ export default function CartSheetContent() {
       </SheetHeader>
 
       <div className="flex-1 overflow-y-auto py-6">
-        {loading ? (
-          <div className="flex flex-col items-center justify-center h-full space-y-4">
-            <div className="w-8 h-8 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
-            <p className="text-sm text-muted-foreground">Loading cart...</p>
-          </div>
-        ) : cartItems.length === 0 ? (
+        {cartItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground space-y-4">
             <ShoppingCart className="h-12 w-12 opacity-20" />
             <p>Your cart is empty</p>
@@ -168,13 +70,12 @@ export default function CartSheetContent() {
           </div>
         ) : (
           <div className="space-y-4">
-            {cartItems.map((item: CartItemData) => {
+            {cartItems.map((item) => {
               const isRemoving = removingItems.has(item.id);
-              const isUpdating = updatingItems.has(item.id);
 
               return (
                 <div
-                  key={item.id}
+                  key={`${item.id}-${item.variantId}`}
                   className={`flex gap-4 items-start border-b pb-4 transition-opacity ${isRemoving ? "opacity-50" : ""
                     }`}
                 >
@@ -196,44 +97,6 @@ export default function CartSheetContent() {
                     <h4 className="text-sm font-medium line-clamp-2">
                       {item.name}
                     </h4>
-
-                    {/* Quantity controls */}
-                    {/* <div className="flex items-center gap-2 mt-2">
-
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-6 w-6"
-                        onClick={() =>
-                          handleQuantityChange(
-                            item.variantId,
-                            item.id,
-                            item.quantity - 1
-                          )
-                        }
-                        disabled={item.quantity <= 1 || isUpdating}
-                      >
-                        <Minus className="h-3 w-3" />
-                      </Button>
-                      <span className="text-sm font-medium min-w-[20px] text-center">
-                        {item.quantity}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-6 w-6"
-                        onClick={() =>
-                          handleQuantityChange(
-                            item.variantId,
-                            item.id,
-                            item.quantity + 1
-                          )
-                        }
-                        disabled={isUpdating}
-                      >
-                        <Plus className="h-3 w-3" />
-                      </Button>
-                    </div> */}
 
                     <div className="flex items-center justify-between mt-2">
                       <p className="font-semibold">{formatPrice(item.price)}</p>
@@ -261,7 +124,7 @@ export default function CartSheetContent() {
         <div className="border-t pt-4 space-y-4 mt-auto">
           <div className="flex justify-between font-semibold text-lg">
             <span>Total</span>
-            <span>{formatPrice(total.toString())}</span>
+            <span>{formatPrice(total)}</span>
           </div>
           <Button className="w-full text-lg h-12" onClick={handleCheckout}>
             Proceed to Checkout

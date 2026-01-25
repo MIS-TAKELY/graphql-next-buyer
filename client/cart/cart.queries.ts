@@ -32,6 +32,7 @@ export const GET_MY_CART_ITEMS = gql`
         price
         sku
         stock
+        mrp
         product {
           id
           name

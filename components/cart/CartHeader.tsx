@@ -1,10 +1,10 @@
-import { ICartItem } from "@/app/(main)/cart/page";
+import { CartItem } from "@/store/cartStore";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
-const CartHeader = ({ cartItems }: { cartItems: ICartItem[] }) => {
+const CartHeader = ({ cartItems }: { cartItems: CartItem[] }) => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
       <Link href="/">
