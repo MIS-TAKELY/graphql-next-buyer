@@ -13,7 +13,7 @@ export const useCart = () => {
   const userId = session?.user?.id;
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { items: cartItems, addItem, removeItem, updateQuantity: updateStoreQuantity, setCart, clearCart } =
+  const { items: cartItems, addItem, removeItem, updateQuantity: updateStoreQuantity, setCart, clearCart, selectedVariantIds, toggleSelection, setSelected, selectAll } =
     useCartStore();
 
   // Fetch full cart details from server for logged-in users
@@ -175,6 +175,10 @@ export const useCart = () => {
     return checkIsInCart(productId) ? "In Cart" : "Add To Cart";
   };
 
+  const selectedItems = useMemo(() => {
+    return cartItems.filter(item => selectedVariantIds.includes(item.variantId));
+  }, [cartItems, selectedVariantIds]);
+
   return {
     cartItems, // Return the full items
     myCartItems: new Set(cartItems.map(i => i.id)), // Keep backward compat for 'myCartItems.has' checks if any
@@ -186,5 +190,10 @@ export const useCart = () => {
     updateQuantity,
     getButtonText,
     isLoading,
+    selectedItems,
+    selectedVariantIds,
+    toggleSelection,
+    setSelected,
+    selectAll,
   };
 };

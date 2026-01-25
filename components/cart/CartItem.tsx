@@ -8,15 +8,20 @@ import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
 import QuantitySelector from "../page/product/QuantitySelector";
 import { CartItem as CartItemType } from "@/store/cartStore";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const CartItem = ({
   item,
   updateQuantity,
   removeItem,
+  selected,
+  onToggle,
 }: {
   item: CartItemType;
   updateQuantity: (variantId: string, newQuantity: number) => void;
   removeItem: (productId: string, variantId: string) => void;
+  selected?: boolean;
+  onToggle?: (variantId: string) => void;
 }) => {
   const {
     id: productId,
@@ -27,19 +32,31 @@ const CartItem = ({
     price,
     comparePrice,
     sku,
-    slug
+    slug,
+    stock
   } = item;
 
   const discount = comparePrice
     ? Math.round(((comparePrice - price) / comparePrice) * 100)
     : 0;
 
+  const isOutOfStock = (stock || 0) <= 0;
+
   return (
-    <Card className="overflow-hidden bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 shadow-sm">
+    <Card className={`overflow-hidden bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 shadow-sm ${selected ? "border-orange-500 dark:border-orange-400 ring-1 ring-orange-500 dark:ring-orange-400" : ""}`}>
       <CardContent className="p-3">
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
+          {/* Selection Checkbox */}
+          {onToggle && (
+            <Checkbox
+              checked={selected}
+              onCheckedChange={() => onToggle(variantId)}
+              className="mt-1"
+            />
+          )}
+
           {/* Product Image - Fixed Width */}
-          <div className="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24">
+          <div className="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 relative">
             <div className="aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden rounded-md border border-gray-100 dark:border-gray-700">
               <Link href={`/product/${slug}`}>
                 <Image
@@ -47,7 +64,7 @@ const CartItem = ({
                   alt={name}
                   width={96}
                   height={96}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  className={`w-full h-full object-cover hover:scale-105 transition-transform duration-300 ${isOutOfStock ? "opacity-50 grayscale" : ""}`}
                   loading="lazy"
                   quality={85}
                   unoptimized
@@ -60,6 +77,13 @@ const CartItem = ({
                 />
               </Link>
             </div>
+            {isOutOfStock && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <Badge variant="destructive" className="text-[10px] px-1 py-0.5 h-auto">
+                  Out of Stock
+                </Badge>
+              </div>
+            )}
           </div>
 
           {/* Product Details & Controls Wrapper */}
@@ -116,6 +140,7 @@ const CartItem = ({
                 </span>
               )}
             </div>
+            {isOutOfStock && <div className="text-red-500 text-xs mt-1">This item is currently out of stock.</div>}
           </div>
         </div>
       </CardContent>

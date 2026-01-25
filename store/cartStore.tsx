@@ -28,6 +28,11 @@ interface CartStore {
 
   // Anonymous specific (optional, could be merged logic)
   // We will try to unify, but keeping some backward compat logic or specific sync logic might be helpful
+
+  selectedVariantIds: string[];
+  toggleSelection: (variantId: string) => void;
+  setSelected: (ids: string[]) => void;
+  selectAll: () => void;
 }
 
 export const useCartStore = create<CartStore>()(
@@ -53,7 +58,11 @@ export const useCartStore = create<CartStore>()(
           };
           set({ items: updatedItems });
         } else {
-          set({ items: [...currentItems, newItem] });
+          set({
+            items: [...currentItems, newItem],
+            // Auto-select new items? Maybe yes.
+            selectedVariantIds: [...get().selectedVariantIds, newItem.variantId]
+          });
         }
       },
 
@@ -61,6 +70,7 @@ export const useCartStore = create<CartStore>()(
         const currentItems = get().items;
         set({
           items: currentItems.filter((item) => item.variantId !== variantId),
+          selectedVariantIds: get().selectedVariantIds.filter(id => id !== variantId)
         });
       },
 
@@ -72,11 +82,25 @@ export const useCartStore = create<CartStore>()(
         set({ items: updatedItems });
       },
 
-      clearCart: () => set({ items: [], anonymousCart: [] }),
+      selectedVariantIds: [],
+      toggleSelection: (variantId) => {
+        const currentSelected = get().selectedVariantIds;
+        if (currentSelected.includes(variantId)) {
+          set({ selectedVariantIds: currentSelected.filter((id) => id !== variantId) });
+        } else {
+          set({ selectedVariantIds: [...currentSelected, variantId] });
+        }
+      },
+      setSelected: (ids) => set({ selectedVariantIds: ids }),
+      selectAll: () => {
+        set({ selectedVariantIds: get().items.map((item) => item.variantId) });
+      },
+
+      clearCart: () => set({ items: [], anonymousCart: [], selectedVariantIds: [] }),
     }),
     {
       name: "cart-storage",
-      partialize: (state) => ({ anonymousCart: state.anonymousCart, items: state.items }), // Persist both?
+      partialize: (state) => ({ anonymousCart: state.anonymousCart, items: state.items, selectedVariantIds: state.selectedVariantIds }), // Persist both?
       // Ideally, if user is logged in, we trust server. If not, we trust local 'items' or 'anonymousCart'.
       // For simplicity, let's treat 'items' as the active UI state.
     }

@@ -70,7 +70,7 @@ function BuyNowPageInner() {
   const [verifyEsewaPayment] = useMutation(VERIFY_ESEWA_PAYMENT);
 
   // Use global cart hook
-  const { cartItems, loading: cartLoading } = useCart();
+  const { cartItems, selectedItems, loading: cartLoading } = useCart();
 
   // Existing product query (skip if from cart)
   const { data: productData, loading: productLoading } = useQuery(
@@ -93,8 +93,8 @@ function BuyNowPageInner() {
   // UPDATED: Calculate order amount (handle both single product and cart)
   const calculateOrderAmount = () => {
     if (isFromCart) {
-      if (!cartItems.length) return 0;
-      const subtotal = cartItems.reduce(
+      if (!selectedItems.length) return 0;
+      const subtotal = selectedItems.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
       );
@@ -126,7 +126,7 @@ function BuyNowPageInner() {
     : null;
 
   const orderItemsForSummary = isFromCart
-    ? cartItems.map((cartItem: CartItem) => ({
+    ? selectedItems.map((cartItem: CartItem) => ({
       id: cartItem.id,
       quantity: cartItem.quantity,
       price: cartItem.price * cartItem.quantity, // Subtotal per item
@@ -160,7 +160,7 @@ function BuyNowPageInner() {
 
   // NEW: Cart-specific totals (adapt from CartOrderSummary logic)
   const cartSubtotal =
-    cartItems.reduce(
+    selectedItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
@@ -223,7 +223,7 @@ function BuyNowPageInner() {
 
   // UPDATED: BuyNowHeader (pass cart info if needed; assume it handles empty slug)
   const headerProductName = isFromCart
-    ? `Cart (${cartItems.length} items)`
+    ? `Cart (${selectedItems.length} items)`
     : product?.name;
 
   return (

@@ -1,20 +1,24 @@
-// components/cart/CartOrderSummary.tsx
 import { CartItem } from "@/store/cartStore";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tag } from "lucide-react";
 import { BuyNowButton } from "../common"; // Adjust path as needed
 import { formatPrice } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const CartOrderSummary = ({
   cartItems,
   subtotal,
   originalTotal,
   totalSavings,
+  onCheckout,
+  disabled
 }: {
   cartItems: CartItem[];
   subtotal: number;
   originalTotal: number;
   totalSavings: number;
+  onCheckout?: () => void;
+  disabled?: boolean;
 }) => {
   return (
     <Card className="sticky top-24 h-fit bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
@@ -43,15 +47,15 @@ const CartOrderSummary = ({
         </div>
         <div className="mt-4 text-center text-sm text-gray-600 dark:text-gray-300"></div>
         {/* Updated: Navigate to cart buy-now */}
-        <BuyNowButton
-          productSlug="" // Ignored for cart
-          quantity={1} // Ignored for cart
-          inStock={true}
-          className="mt-4 w-full" // Adjust styling as needed
-          isFromCart={true}
-        >
-          Proceed to Checkout
-        </BuyNowButton>
+        <div className="mt-4">
+          <Button
+            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg hover:shadow-xl h-12 text-lg" // Matching style from BuyNowButton
+            onClick={onCheckout}
+            disabled={disabled}
+          >
+            Proceed to Checkout
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
