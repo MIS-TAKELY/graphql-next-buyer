@@ -14,6 +14,11 @@ const publicRoutes = [
   "/product",
   "/store",
   "/compare",
+  "/terms-conditions",
+  "/cookie-policy",
+  "/shipping-policy",
+  "/returns-policy",
+  "/privacy-policy",
 ];
 
 export default async function middleware(request: NextRequest) {
