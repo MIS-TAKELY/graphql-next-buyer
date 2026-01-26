@@ -577,19 +577,26 @@ export function PaymentForm({
                   </Button>
                 ) : (
                   <div className="flex flex-col items-center gap-4 bg-white p-4 rounded-lg shadow-inner">
-                    <p className="text-sm font-medium text-gray-700">Scan to Pay with FonePay</p>
-                    <QRCodeSVG value={qrValue} size={200} />
-                    <div className="w-full">
-                      <label className="block text-sm font-medium mb-2 text-gray-900">
-                        Enter Transaction ID *
-                      </label>
-                      <Input
-                        type="text"
-                        value={formData.transactionId}
-                        onChange={(e) => handleInputChange("transactionId", e.target.value)}
-                        placeholder="Transaction ID from PhonePe"
-                        className="bg-gray-50 border-gray-300"
-                      />
+                    <p className="text-sm font-medium text-gray-700">Scan this QR with any Fonepay supported app</p>
+                    <div className="p-2 bg-white border-2 border-gray-100 rounded-xl">
+                      <QRCodeSVG value={qrValue} size={220} />
+                    </div>
+                    <div className="w-full space-y-4">
+                      <div className="bg-blue-50 p-3 rounded-lg text-xs text-blue-700">
+                        <strong>Note:</strong> This is a dynamic EMVCo QR code. You can scan it directly using your mobile banking app or the Fonepay app.
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-900">
+                          Enter Transaction ID *
+                        </label>
+                        <Input
+                          type="text"
+                          value={formData.transactionId}
+                          onChange={(e) => handleInputChange("transactionId", e.target.value)}
+                          placeholder="Transaction ID from PhonePe"
+                          className="bg-gray-50 border-gray-300"
+                        />
+                      </div>
                     </div>
                   </div>
                 )}

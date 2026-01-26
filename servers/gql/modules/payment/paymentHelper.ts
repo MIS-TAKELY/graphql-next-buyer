@@ -1,4 +1,46 @@
 import crypto from 'crypto';
+import { NepPayments } from 'neppayments';
+
+// Helper for EMVCo CRC-16 (CCITT-FALSE)
+function crc16ccitt(data: string): string {
+  let crc = 0xFFFF;
+  for (let i = 0; i < data.length; i++) {
+    crc ^= data.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      if ((crc & 0x8000) !== 0) {
+        crc = (crc << 1) ^ 0x1021;
+      } else {
+        crc = crc << 1;
+      }
+    }
+  }
+  return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+}
+
+export function generateFonepayEMVCoQR(amount: number, merchantCode: string, ref: string): string {
+  const fields: Record<string, string> = {
+    '00': '01', // Payload Format Indicator
+    '01': '12', // Point of Initiation Method (12 for Dynamic)
+    '29': `0012NP.FONEPAY.0101${merchantCode.length.toString().padStart(2, '0')}${merchantCode}`, // Merchant Account Information
+    '52': '5411', // Merchant Category Code
+    '53': '524', // Transaction Currency (NPR)
+    '54': amount.toString(), // Transaction Amount
+    '58': 'NP', // Country Code
+    '59': 'Merchant', // Merchant Name
+    '60': 'Kathmandu', // Merchant City
+    '62': `01${ref.length.toString().padStart(2, '0')}${ref}`, // Additional Data (Reference)
+  };
+
+  let qrString = '';
+  for (const [id, value] of Object.entries(fields)) {
+    qrString += `${id}${value.length.toString().padStart(2, '0')}${value}`;
+  }
+
+  qrString += '6304'; // CRC-16 tag and length
+  qrString += crc16ccitt(qrString);
+
+  return qrString;
+}
 
 interface EsewaPaymentData {
   amount: string;

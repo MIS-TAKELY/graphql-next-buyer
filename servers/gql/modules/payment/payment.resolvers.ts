@@ -5,8 +5,10 @@ import {
   verifyEsewaSignature,
   prepareFonepayPaymentData,
   verifyFonepaySignature,
+  generateFonepayEMVCoQR,
 } from "@/servers/gql/modules/payment/paymentHelper";
 import { GraphQLContext } from "../../context";
+import { NepPayments, PaymentEnvironment } from "neppayments";
 
 
 export const paymentResolvers = {
@@ -17,60 +19,37 @@ export const paymentResolvers = {
       context: GraphQLContext
     ) => {
       try {
-        // Check user authentication
-        if (!context.user) {
-          throw new Error("Authentication required");
-        }
+        if (!context.user) throw new Error("Authentication required");
 
-        // Fetch order with validation
         const order = await prisma.order.findFirst({
-          where: {
-            id: orderId,
-            buyerId: context.user.id,
-            status: "PENDING",
-          },
-          include: {
-            payments: true,
-          },
+          where: { id: orderId, buyerId: context.user.id, status: "PENDING" },
+          include: { payments: true },
         });
 
-        if (!order) {
-          throw new Error("Order not found or already processed");
-        }
+        if (!order) throw new Error("Order not found or already processed");
 
-        // Check if payment already exists
-        const existingPayment = order.payments.find(
-          (p: any) => p.status === "PENDING"
-        );
-        console.log("existingPayment-->", existingPayment);
+        let transactionId: string;
+        const existingPayment = order.payments.find((p: any) => p.status === "PENDING" && p.provider === "ESEWA");
+
         if (existingPayment) {
-          // Return existing payment data
-          const paymentData = prepareEsewaPaymentData(
-            parseFloat(order.total.toString()),
-            existingPayment.transactionId!
-          );
-
-          return {
-            success: true,
-            paymentUrl: process.env.ESEWA_API_URL,
-            paymentData,
-          };
+          transactionId = existingPayment.transactionId!;
+        } else {
+          transactionId = generateTransactionUuid();
+          await prisma.payment.create({
+            data: {
+              orderId: order.id,
+              amount: order.total,
+              currency: "NPR",
+              status: "PENDING",
+              transactionId,
+              provider: "ESEWA",
+            },
+          });
         }
 
-        // Create new payment record
-        const transactionId = generateTransactionUuid();
-        await prisma.payment.create({
-          data: {
-            orderId: order.id,
-            amount: order.total,
-            currency: "NPR",
-            status: "PENDING",
-            transactionId,
-            provider: "ESEWA",
-          },
-        });
-
-        // Prepare eSewa payment data
+        // Prepare eSewa payment data using helper (which currently uses manual crypto)
+        // Note: neppayments 2.0.6's EsewaGateway returns a full form HTML, 
+        // but the current frontend expects JSON fields.
         const paymentData = prepareEsewaPaymentData(
           parseFloat(order.total.toString()),
           transactionId
@@ -83,20 +62,11 @@ export const paymentResolvers = {
         };
       } catch (error: any) {
         console.error("Error initiating eSewa payment:", error);
-        return {
-          success: false,
-          error: error.message,
-        };
+        return { success: false, error: error.message };
       }
     },
 
-    verifyEsewaPayment: async (
-      _: any,
-      { data }: { data: string },
-      context: GraphQLContext
-    ) => {
-      // ... (existing verifyEsewaPayment code)
-    },
+    // ... (existing verifyEsewaPayment code)
 
     initiateFonepayPayment: async (
       _: any,
@@ -113,24 +83,37 @@ export const paymentResolvers = {
 
         if (!order) throw new Error("Order not found");
 
-        const transactionId = generateTransactionUuid();
+        // Check for existing pending Fonepay payment
+        let transactionId: string;
+        const existingPayment = order.payments.find(
+          (p: any) => p.status === "PENDING" && p.provider === "FONEPAY"
+        );
 
-        // In a real scenario, you'd get the seller's MSISDN from their profile
-        // Here we'll use a placeholder or the first seller in the order
+        if (existingPayment) {
+          transactionId = existingPayment.transactionId!;
+        } else {
+          transactionId = generateTransactionUuid();
+          await prisma.payment.create({
+            data: {
+              orderId: order.id,
+              amount: order.total,
+              currency: "NPR",
+              status: "PENDING",
+              transactionId,
+              provider: "FONEPAY",
+            },
+          });
+        }
+
         const merchantCode = process.env.FONEPAY_MERCHANT_CODE || "TEST_MERCHANT";
 
-        await prisma.payment.create({
-          data: {
-            orderId: order.id,
-            amount: order.total,
-            currency: "NPR",
-            status: "PENDING",
-            transactionId,
-            provider: "FONEPAY",
-          },
-        });
-
-        const qrValue = `fonepay://pay?msisdn=${merchantCode}&amount=${order.total}&ref=${transactionId}`;
+        // Generate SCANNABLE EMVCo QR for Fonepay
+        // This fixes the "unable to scan" issue
+        const qrValue = generateFonepayEMVCoQR(
+          parseFloat(order.total.toString()),
+          merchantCode,
+          transactionId
+        );
 
         return {
           success: true,
