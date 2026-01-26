@@ -3,11 +3,12 @@
 import {
   CREATE_ORDER,
   INITIATE_ESEWA_PAYMENT,
+  INITIATE_FONEPAY_PAYMENT,
+  VERIFY_FONEPAY_PAYMENT,
 } from "@/client/payment/payment.mutations";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-// import toast from "react-toastify"; // Assuming you use react-toastify for notifications
 
 export function useBuyNow() {
   const [step, setStep] = useState<"address" | "payment" | "summary">(
@@ -21,8 +22,9 @@ export function useBuyNow() {
   const router = useRouter();
 
   const [createOrder] = useMutation(CREATE_ORDER);
-
   const [initiateEsewaPayment] = useMutation(INITIATE_ESEWA_PAYMENT);
+  const [initiateFonepay] = useMutation(INITIATE_FONEPAY_PAYMENT);
+  const [verifyFonepay] = useMutation(VERIFY_FONEPAY_PAYMENT);
 
   const handleAddressSaved = (newAddress: any) => {
     setSelectedAddress(newAddress);
@@ -50,106 +52,32 @@ export function useBuyNow() {
   const handlePaymentSubmit = async (paymentData: any) => {
     setIsProcessingPayment(true);
 
-    if (!paymentData) console.log("payment data not avilable");
-
-    // console.log("paymentdata---?", paymentData);
-    // const output = paymentData?.items?.map((data: any) => data);
-
-    // const output2 = output.map((v: any) => v);
-    // console.log("output-->", output2);
-
     try {
-      const paymentProvider = paymentData.walletProvider
-        ? paymentData.walletProvider.toUpperCase()
+      let paymentProvider = paymentData.walletProvider
+        ? paymentData.walletProvider.toUpperCase().replace(/\s+/g, "")
         : paymentData.paymentProvider;
 
-      const supportedProviders = ["ESEWA", "KHALTI", "IMEPAY", "COD"];
-      if (!supportedProviders.includes(paymentProvider)) {
-        throw new Error("Unsupported payment provider");
+      // Map PHONEPE to FONEPAY for consistency with backend
+      if (paymentProvider === "PHONEPE") {
+        paymentProvider = "FONEPAY";
       }
 
-      if (paymentData.items && paymentData.items.length > 0) {
-        console.log("paymentdata---?", paymentData);
+      const supportedProviders = ["ESEWA", "KHALTI", "IMEPAY", "COD", "FONEPAY"];
+      if (!supportedProviders.includes(paymentProvider)) {
+        throw new Error(`Unsupported payment provider: ${paymentProvider}`);
+      }
 
-        // MULTIPLE ORDERS CASE
-        const ordersInput = [
-          {
-            items: paymentData.items.map((item: any) => ({
-              variantId: item.variantId || item.variant?.id,
-              quantity: item.quantity,
-            })),
-            shippingAddress: {
-              line1: selectedAddress?.line1,
-              label: selectedAddress?.label || "Shipping Address",
-              line2: selectedAddress?.line2 ?? null,
-              city: selectedAddress?.city,
-              state: selectedAddress?.state,
-              postalCode: selectedAddress?.postalCode,
-              country: selectedAddress?.country,
-              phone: selectedAddress?.phone || "",
-            },
-            billingAddress: null,
-            shippingMethod: paymentData.shippingMethod ?? "STANDARD",
-            paymentProvider,
-          },
-        ];
-        console.log("ordersInput -->", ordersInput);
+      let orderIds: string[] = paymentData.orderId ? [paymentData.orderId] : [];
 
-        const ordersResult = await createOrder({
-          variables: { input: ordersInput },
-        });
-
-        console.log("Multiple orders result:", ordersResult);
-
-        // Handle COD (redirect to success)
-        if (paymentProvider === "COD") {
-          router.push(`/payment/success`);
-        }
-
-        // For eSewa, Khalti, etc., we’ll handle per order
-        if (paymentProvider === "ESEWA") {
-          for (const order of ordersResult.data.createOrder) {
-            const esewaResult = await initiateEsewaPayment({
-              variables: { orderId: order.id },
-            });
-
-            if (esewaResult.data.initiateEsewaPayment.success) {
-              const form = document.createElement("form");
-              form.method = "POST";
-              form.action = esewaResult.data.initiateEsewaPayment.paymentUrl;
-
-              Object.entries(
-                esewaResult.data.initiateEsewaPayment.paymentData
-              ).forEach(([key, value]) => {
-                const input = document.createElement("input");
-                input.type = "hidden";
-                input.name = key;
-                input.value = value as string;
-                form.appendChild(input);
-              });
-
-              document.body.appendChild(form);
-              form.submit();
-              return; // Stop after first redirect
-            } else {
-              alert(
-                esewaResult.data.initiateEsewaPayment.error ||
-                "Payment initiation failed"
-              );
-            }
-          }
-        }
-      } else {
-        // SINGLE ORDER CASE (existing logic)
-        const variables = {
-          input: [
+      if (orderIds.length === 0) {
+        if (paymentData.items && paymentData.items.length > 0) {
+          // MULTIPLE ORDERS CASE
+          const ordersInput = [
             {
-              items: [
-                {
-                  variantId: paymentData.variantId,
-                  quantity: paymentData.quantity ?? 1,
-                },
-              ],
+              items: paymentData.items.map((item: any) => ({
+                variantId: item.variantId || item.variant?.id,
+                quantity: item.quantity,
+              })),
               shippingAddress: {
                 line1: selectedAddress?.line1,
                 label: selectedAddress?.label || "Shipping Address",
@@ -164,21 +92,73 @@ export function useBuyNow() {
               shippingMethod: paymentData.shippingMethod ?? "STANDARD",
               paymentProvider,
             },
-          ],
-        };
+          ];
 
-        const orderResult = await createOrder({ variables });
-        const orderId = orderResult.data?.createOrder?.[0]?.id;
+          const ordersResult = await createOrder({
+            variables: { input: ordersInput },
+          });
+          orderIds = ordersResult.data.createOrder.map((o: any) => o.id);
+        } else {
+          // SINGLE ORDER CASE
+          const variables = {
+            input: [
+              {
+                items: [
+                  {
+                    variantId: paymentData.variantId,
+                    quantity: paymentData.quantity ?? 1,
+                  },
+                ],
+                shippingAddress: {
+                  line1: selectedAddress?.line1,
+                  label: selectedAddress?.label || "Shipping Address",
+                  line2: selectedAddress?.line2 ?? null,
+                  city: selectedAddress?.city,
+                  state: selectedAddress?.state,
+                  postalCode: selectedAddress?.postalCode,
+                  country: selectedAddress?.country,
+                  phone: selectedAddress?.phone || "",
+                },
+                billingAddress: null,
+                shippingMethod: paymentData.shippingMethod ?? "STANDARD",
+                paymentProvider,
+              },
+            ],
+          };
 
-        if (!orderResult) throw new Error("Failed to create order");
-
-        if (paymentProvider === "COD" && orderId) {
-          router.push(`/payment/success/?orderId=${orderId}`);
+          const orderResult = await createOrder({ variables });
+          const orderId = orderResult.data?.createOrder?.[0]?.id;
+          if (!orderId) throw new Error("Failed to create order");
+          orderIds = [orderId];
         }
+      }
 
-        if (paymentProvider === "ESEWA") {
+      // Handle REDIRECTION or VERIFICATION
+      if (paymentProvider === "COD") {
+        router.push(`/payment/success/?orderId=${orderIds[0]}`);
+        return;
+      }
+
+      if (paymentProvider === "FONEPAY") {
+        const { data } = await verifyFonepay({
+          variables: {
+            orderId: orderIds[0],
+            transactionId: paymentData.transactionId,
+          },
+        });
+
+        if (data.verifyFonepayPayment.success) {
+          router.push(`/payment/success/?orderId=${orderIds[0]}`);
+        } else {
+          alert(data.verifyFonepayPayment.message || "Payment verification failed");
+        }
+        return;
+      }
+
+      if (paymentProvider === "ESEWA") {
+        for (const id of orderIds) {
           const esewaResult = await initiateEsewaPayment({
-            variables: { orderId },
+            variables: { orderId: id },
           });
 
           if (esewaResult.data.initiateEsewaPayment.success) {
@@ -198,6 +178,7 @@ export function useBuyNow() {
 
             document.body.appendChild(form);
             form.submit();
+            return;
           } else {
             alert(
               esewaResult.data.initiateEsewaPayment.error ||
@@ -208,10 +189,83 @@ export function useBuyNow() {
       }
 
       setStep("summary");
-    } catch (e) {
-      console.error("Order creation failed:", e);
+    } catch (e: any) {
+      console.error("Order completion failed:", e);
+      alert(e.message || "Failed to complete order");
     } finally {
       setIsProcessingPayment(false);
+    }
+  };
+
+  const handleInitiateFonepay = async (paymentData: any) => {
+    try {
+      const isFromCart = !!paymentData.items;
+      let orderId: string | null = null;
+
+      if (isFromCart) {
+        const ordersInput = [{
+          items: paymentData.items.map((item: any) => ({
+            variantId: item.variantId || item.variant?.id,
+            quantity: item.quantity,
+          })),
+          shippingAddress: {
+            line1: selectedAddress?.line1,
+            label: selectedAddress?.label || "Shipping Address",
+            line2: selectedAddress?.line2 ?? null,
+            city: selectedAddress?.city,
+            state: selectedAddress?.state,
+            postalCode: selectedAddress?.postalCode,
+            country: selectedAddress?.country,
+            phone: selectedAddress?.phone || "",
+          },
+          billingAddress: null,
+          shippingMethod: paymentData.shippingMethod ?? "STANDARD",
+          paymentProvider: "FONEPAY",
+        }];
+
+        const ordersResult = await createOrder({
+          variables: { input: ordersInput },
+        });
+        orderId = ordersResult.data.createOrder[0].id;
+      } else {
+        const variables = {
+          input: [{
+            items: [{
+              variantId: paymentData.variantId,
+              quantity: paymentData.quantity ?? 1,
+            }],
+            shippingAddress: {
+              line1: selectedAddress?.line1,
+              label: selectedAddress?.label || "Shipping Address",
+              line2: selectedAddress?.line2 ?? null,
+              city: selectedAddress?.city,
+              state: selectedAddress?.state,
+              postalCode: selectedAddress?.postalCode,
+              country: selectedAddress?.country,
+              phone: selectedAddress?.phone || "",
+            },
+            billingAddress: null,
+            shippingMethod: paymentData.shippingMethod ?? "STANDARD",
+            paymentProvider: "FONEPAY",
+          }],
+        };
+
+        const orderResult = await createOrder({ variables });
+        orderId = orderResult.data?.createOrder?.[0]?.id;
+      }
+
+      if (!orderId) throw new Error("Failed to create order");
+
+      const { data } = await initiateFonepay({ variables: { orderId } });
+      return {
+        success: data?.initiateFonepayPayment?.success,
+        qrValue: data?.initiateFonepayPayment?.qrValue,
+        error: data?.initiateFonepayPayment?.error,
+        orderId,
+      };
+    } catch (error: any) {
+      console.error("Fonepay initiation failed:", error);
+      return { success: false, error: error.message };
     }
   };
 
@@ -237,6 +291,7 @@ export function useBuyNow() {
     handleSelectAddress,
     handlePaymentMethodSelect,
     handlePaymentSubmit,
+    handleInitiateFonepay,
     handleBackToAddress,
     handleBackToPayment,
   };

@@ -13,6 +13,7 @@ interface PaymentStepProps {
   onPaymentMethodSelect: (method: any) => void;
   onPaymentSubmit: (paymentData: any) => void;
   onBackToAddress: () => void;
+  onInitiateFonepay?: () => Promise<{ success: boolean; qrValue?: string; error?: string }>;
 }
 
 export function PaymentStep({
@@ -23,6 +24,7 @@ export function PaymentStep({
   onPaymentMethodSelect,
   onPaymentSubmit,
   onBackToAddress,
+  onInitiateFonepay,
 }: PaymentStepProps) {
   if (!selectedAddress) return null;
 
@@ -53,6 +55,7 @@ export function PaymentStep({
           onSubmit={onPaymentSubmit}
           isProcessing={isProcessingPayment}
           amount={orderAmount}
+          onInitiateFonepay={onInitiateFonepay}
         />
         <div className="mt-4">
           <Button

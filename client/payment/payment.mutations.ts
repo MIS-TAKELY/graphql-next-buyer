@@ -119,3 +119,22 @@ export const VERIFY_ESEWA_PAYMENT = gql`
     }
   }
 `;
+
+export const INITIATE_FONEPAY_PAYMENT = gql`
+  mutation InitiateFonepayPayment($orderId: ID!) {
+    initiateFonepayPayment(orderId: $orderId) {
+      success
+      qrValue
+      error
+    }
+  }
+`;
+
+export const VERIFY_FONEPAY_PAYMENT = gql`
+  mutation VerifyFonepayPayment($orderId: ID!, $transactionId: String!) {
+    verifyFonepayPayment(orderId: $orderId, transactionId: $transactionId) {
+      success
+      message
+    }
+  }
+`;

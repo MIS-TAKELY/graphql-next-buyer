@@ -47,6 +47,7 @@ function BuyNowPageInner() {
     handleSelectAddress,
     handlePaymentMethodSelect,
     handlePaymentSubmit,
+    handleInitiateFonepay,
     handleBackToAddress,
   } = useBuyNow();
 
@@ -281,7 +282,7 @@ function BuyNowPageInner() {
                       paymentData.method === "CASH_ON_DELIVERY"
                         ? "COD"
                         : paymentData.method === "WALLET"
-                          ? "ESEWA"
+                          ? (paymentData.walletProvider?.toUpperCase().replace(/\s+/g, "") || "ESEWA")
                           : paymentData.method,
                     paymentMethodId: selectedPaymentMethod?.id ?? null,
                     items: orderItemsForSummary, // Pass full cart items
@@ -300,9 +301,27 @@ function BuyNowPageInner() {
                       paymentData.method === "CASH_ON_DELIVERY"
                         ? "COD"
                         : paymentData.method === "WALLET"
-                          ? "ESEWA"
+                          ? (paymentData.walletProvider?.toUpperCase().replace(/\s+/g, "") || "ESEWA")
                           : paymentData.method,
                     paymentMethodId: selectedPaymentMethod?.id ?? null,
+                    variantId: selectedVariant?.id,
+                    quantity,
+                    shippingMethod: "STANDARD",
+                  });
+                }
+              }}
+              onInitiateFonepay={async () => {
+                if (isFromCart) {
+                  return await handleInitiateFonepay({
+                    items: orderItemsForSummary,
+                    shippingMethod: "STANDARD",
+                  });
+                } else {
+                  const selectedVariant = variantId
+                    ? product.variants?.find((v: any) => v.id === variantId)
+                    : (product.variants?.find((v: any) => v.isDefault) || product.variants?.[0]);
+
+                  return await handleInitiateFonepay({
                     variantId: selectedVariant?.id,
                     quantity,
                     shippingMethod: "STANDARD",

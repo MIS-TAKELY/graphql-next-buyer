@@ -64,6 +64,7 @@ interface PaymentFormProps {
   onSubmit: (paymentData: any) => void;
   isProcessing: boolean;
   amount: number;
+  onInitiateFonepay?: () => Promise<{ success: boolean; qrValue?: string; error?: string }>;
 }
 
 
@@ -73,6 +74,7 @@ export function PaymentForm({
   onSubmit,
   isProcessing,
   amount,
+  onInitiateFonepay,
 }: PaymentFormProps) {
   const [formData, setFormData] = useState({
     cardNumber: "",
@@ -87,16 +89,33 @@ export function PaymentForm({
   });
 
   const [qrValue, setQrValue] = useState<string | null>(null);
+  const [orderId, setOrderId] = useState<string | null>(null);
+  const [isInitiating, setIsInitiating] = useState(false);
 
-  const [initiateFonepay] = useMutation(INITIATE_FONEPAY_PAYMENT);
   const [verifyFonepay] = useMutation(VERIFY_FONEPAY_PAYMENT);
 
   const handlePhonePayInitiation = async () => {
-    // In a real scenario, you'd have the orderId from props or context
-    const orderId = "TEST_ORDER_ID";
-    const { data } = await initiateFonepay({ variables: { orderId } });
-    if (data?.initiateFonepayPayment?.success) {
-      setQrValue(data.initiateFonepayPayment.qrValue);
+    if (!onInitiateFonepay) {
+      console.error("onInitiateFonepay not provided");
+      return;
+    }
+
+    setIsInitiating(true);
+    try {
+      const result = await onInitiateFonepay();
+      if (result.success && result.qrValue) {
+        setQrValue(result.qrValue);
+        if ((result as any).orderId) {
+          setOrderId((result as any).orderId);
+        }
+      } else if (result.error) {
+        alert(result.error);
+      }
+    } catch (error: any) {
+      console.error("Failed to initiate Fonepay:", error);
+      alert("Failed to initiate Fonepay payment");
+    } finally {
+      setIsInitiating(false);
     }
   };
 
@@ -209,7 +228,7 @@ export function PaymentForm({
     }
 
     if (validateForm()) {
-      onSubmit({ method: paymentMethod.type, ...formData });
+      onSubmit({ method: paymentMethod.type, ...formData, orderId });
     }
   };
 
@@ -538,19 +557,27 @@ export function PaymentForm({
               )}
             </div>
 
-            {formData.walletProvider === "PhonePe" && (
+            {(formData.walletProvider === "PhonePe" || formData.walletProvider === "Phonepe") && (
               <div className="mt-6 space-y-4 border-t pt-4">
                 {!qrValue ? (
                   <Button
                     type="button"
                     onClick={handlePhonePayInitiation}
+                    disabled={isInitiating}
                     className="w-full bg-purple-600 hover:bg-purple-700 text-white"
                   >
-                    Generate Dynamic QR
+                    {isInitiating ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Generating QR...
+                      </>
+                    ) : (
+                      "Generate Dynamic QR"
+                    )}
                   </Button>
                 ) : (
                   <div className="flex flex-col items-center gap-4 bg-white p-4 rounded-lg shadow-inner">
-                    <p className="text-sm font-medium text-gray-700">Scan to Pay with PhonePe</p>
+                    <p className="text-sm font-medium text-gray-700">Scan to Pay with FonePay</p>
                     <QRCodeSVG value={qrValue} size={200} />
                     <div className="w-full">
                       <label className="block text-sm font-medium mb-2 text-gray-900">
