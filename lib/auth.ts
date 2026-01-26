@@ -60,6 +60,15 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: true,
+        sendResetPassword: async ({ user, url }: { user: AuthUser; url: string }) => {
+            console.log("BETTER-AUTH: triggering sendResetPassword for", user.email);
+            try {
+                await senMail(user.email, "PASSWORD_RESET", { url, name: (user.name || user.firstName || "User") as string });
+                console.log("BETTER-AUTH: senMail call completed for password reset");
+            } catch (err) {
+                console.error("BETTER-AUTH: Error in sendResetPassword hook:", err);
+            }
+        },
     },
     user: {
         additionalFields: {

@@ -1,20 +1,34 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { signIn, signUp, useSession, signOut, sendVerificationEmail } from "@/lib/auth-client";
+import { signIn, signUp, useSession, signOut, sendVerificationEmail, authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { CheckCircle2, Mail, Phone, Loader2, Eye, EyeOff } from "lucide-react";
+import { CheckCircle2, Mail, Phone, Loader2, Eye, EyeOff, X } from "lucide-react";
 import Logo from "../navbar/Logo";
+import Link from "next/link";
 
-type AuthStep = "SIGN_IN" | "SIGN_UP" | "PHONE_OTP" | "PHONE_NUMBER" | "EMAIL_SENT";
+type AuthStep = "SIGN_IN" | "SIGN_UP" | "PHONE_OTP" | "PHONE_NUMBER" | "EMAIL_SENT" | "FORGOT_PASSWORD";
 
-export default function UnifiedAuth() {
+interface UnifiedAuthProps {
+    isModal?: boolean;
+    onClose?: () => void;
+    onStepChange?: (step: AuthStep) => void;
+}
+
+export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: UnifiedAuthProps) {
     const { data: session, isPending, refetch } = useSession();
     const [step, setStep] = useState<AuthStep>("SIGN_IN");
+
+    useEffect(() => {
+        if (onStepChange) {
+            onStepChange(step);
+        }
+    }, [step, onStepChange]);
+
     const [identifier, setIdentifier] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -25,6 +39,9 @@ export default function UnifiedAuth() {
     const [loading, setLoading] = useState(false);
     const [timer, setTimer] = useState(120);
     const [canResend, setCanResend] = useState(false);
+    const [acceptPolicies, setAcceptPolicies] = useState(false);
+    const [acceptCookies, setAcceptCookies] = useState(false);
+    const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
     const router = useRouter();
 
     // Handle step transitions based on session state
@@ -118,6 +135,12 @@ export default function UnifiedAuth() {
 
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!acceptPolicies || !acceptCookies) {
+            toast.error("Please accept the terms, privacy policy, and cookie policy to continue.");
+            return;
+        }
+
         setLoading(true);
         try {
             const nameParts = name.trim().split(/\s+/);
@@ -182,6 +205,31 @@ export default function UnifiedAuth() {
         } catch (error: any) {
             console.error("Facebook sign-in error:", error);
             toast.error("Facebook sign-in failed. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleForgotPassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!forgotPasswordEmail) {
+            toast.error("Please enter your email address");
+            return;
+        }
+        setLoading(true);
+        try {
+            const { error } = await (authClient as any).forgetPassword({
+                email: forgotPasswordEmail,
+                redirectTo: "/reset-password",
+            });
+            if (error) {
+                toast.error(error.message || "Failed to send reset email");
+            } else {
+                toast.success("Password reset link sent to your email!");
+                setStep("SIGN_IN");
+            }
+        } catch (err) {
+            toast.error("An error occurred. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -308,7 +356,16 @@ export default function UnifiedAuth() {
                     <Input id="identifier_login" type="text" required value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="name@example.com or johndoe123" />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <div className="flex items-center justify-between">
+                        <Label htmlFor="password">Password</Label>
+                        <button
+                            type="button"
+                            onClick={() => setStep("FORGOT_PASSWORD")}
+                            className="text-xs font-medium text-primary hover:underline"
+                        >
+                            Forgot password?
+                        </button>
+                    </div>
                     <div className="relative">
                         <Input
                             id="password"
@@ -402,6 +459,33 @@ export default function UnifiedAuth() {
                         </button>
                     </div>
                 </div>
+
+                <div className="space-y-3 pt-2">
+                    <div className="flex items-start space-x-2">
+                        <input
+                            type="checkbox"
+                            id="acceptPolicies"
+                            checked={acceptPolicies}
+                            onChange={(e) => setAcceptPolicies(e.target.checked)}
+                            className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                        />
+                        <Label htmlFor="acceptPolicies" className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground">
+                            I accept the <Link href="/privacy-policy" className="text-primary hover:underline">Privacy Policy</Link> and <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link>
+                        </Label>
+                    </div>
+                    <div className="flex items-start space-x-2">
+                        <input
+                            type="checkbox"
+                            id="acceptCookies"
+                            checked={acceptCookies}
+                            onChange={(e) => setAcceptCookies(e.target.checked)}
+                            className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                        />
+                        <Label htmlFor="acceptCookies" className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground">
+                            I agree to the <Link href="/cookie-policy" className="text-primary hover:underline">Cookie Policy</Link>
+                        </Label>
+                    </div>
+                </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                     Create Account
@@ -427,6 +511,40 @@ export default function UnifiedAuth() {
                 <button onClick={() => setStep("SIGN_IN")} className="font-medium text-primary hover:underline">Sign in</button>
             </div>
         </div >
+    );
+
+    const renderForgotPassword = () => (
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="text-left">
+                <h2 className="text-2xl font-bold tracking-tight text-foreground">Forgot Password</h2>
+                <p className="mt-2 text-sm text-muted-foreground">Enter your email and we'll send you a link to reset your password.</p>
+            </div>
+            <form onSubmit={handleForgotPassword} className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="forgot_email">Email address</Label>
+                    <Input
+                        id="forgot_email"
+                        type="email"
+                        required
+                        value={forgotPasswordEmail}
+                        onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                        placeholder="name@example.com"
+                    />
+                </div>
+                <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                    Send Reset Link
+                </Button>
+            </form>
+            <div className="text-center text-sm">
+                <button
+                    onClick={() => setStep("SIGN_IN")}
+                    className="font-medium text-primary hover:underline"
+                >
+                    Back to Sign In
+                </button>
+            </div>
+        </div>
     );
 
 
@@ -546,9 +664,22 @@ export default function UnifiedAuth() {
                 </div>
 
                 {/* Right Column: Form */}
-                <div className="p-8 md:p-12 flex flex-col justify-center">
+                <div className="p-8 md:p-12 flex flex-col justify-center relative">
+                    {/* Close Button */}
+                    {isModal && onClose && (
+                        <button
+                            onClick={onClose}
+                            disabled={step === "PHONE_OTP" || step === "PHONE_NUMBER"}
+                            className="absolute top-4 right-4 p-2 rounded-full hover:bg-secondary/80 text-muted-foreground transition-colors disabled:opacity-0 disabled:pointer-events-none"
+                            aria-label="Close"
+                        >
+                            <X className="h-5 w-5" />
+                        </button>
+                    )}
+
                     {step === "SIGN_IN" && renderSignIn()}
                     {step === "SIGN_UP" && renderSignUp()}
+                    {step === "FORGOT_PASSWORD" && renderForgotPassword()}
                     {step === "EMAIL_SENT" && renderEmailSent()}
                     {step === "PHONE_NUMBER" && renderPhoneNumber()}
                     {step === "PHONE_OTP" && renderPhoneOtp()}

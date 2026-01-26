@@ -13,7 +13,8 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_CONVERSATIONS } from "@/client/conversatation/conversatation.query";
 import { useNotificationStore } from "@/store/notificationStore";
 import { GET_MY_ORDER_ITEMS } from "@/client/order/order.queries";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import AuthDialog from "../auth/AuthDialog";
 
 interface UserDropdownProps {
   isMobile?: boolean;
@@ -82,27 +83,29 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
   if (!session) {
     if (isMobile) {
       return (
-        <Button
-          variant="default"
-          className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 w-full justify-start h-12 text-base font-medium"
-          onClick={handleSignIn}
-        >
-          <LogIn className="w-5 h-5 mr-3" />
-          Sign In
-        </Button>
+        <AuthDialog>
+          <Button
+            variant="default"
+            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 w-full justify-start h-12 text-base font-medium"
+          >
+            <LogIn className="w-5 h-5 mr-3" />
+            Sign In
+          </Button>
+        </AuthDialog>
       )
     }
 
     return (
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={handleSignIn}
-        className="flex items-center gap-1 lg:gap-2 text-sm lg:text-base text-foreground hover:bg-secondary"
-      >
-        <User className="w-4 h-4 lg:w-5 lg:h-5 text-muted-foreground" />
-        <span className="hidden lg:inline font-light">Sign In</span>
-      </Button>
+      <AuthDialog>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="flex items-center gap-1 lg:gap-2 text-sm lg:text-base text-foreground hover:bg-secondary"
+        >
+          <User className="w-4 h-4 lg:w-5 lg:h-5 text-muted-foreground" />
+          <span className="hidden lg:inline font-light">Sign In</span>
+        </Button>
+      </AuthDialog>
     )
   }
 
