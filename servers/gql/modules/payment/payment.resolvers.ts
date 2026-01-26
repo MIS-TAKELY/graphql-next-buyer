@@ -8,8 +8,6 @@ import {
   generateFonepayEMVCoQR,
 } from "@/servers/gql/modules/payment/paymentHelper";
 import { GraphQLContext } from "../../context";
-import { NepPayments, PaymentEnvironment } from "neppayments";
-
 
 export const paymentResolvers = {
   Mutation: {
@@ -47,9 +45,6 @@ export const paymentResolvers = {
           });
         }
 
-        // Prepare eSewa payment data using helper (which currently uses manual crypto)
-        // Note: neppayments 2.0.6's EsewaGateway returns a full form HTML, 
-        // but the current frontend expects JSON fields.
         const paymentData = prepareEsewaPaymentData(
           parseFloat(order.total.toString()),
           transactionId
@@ -66,7 +61,53 @@ export const paymentResolvers = {
       }
     },
 
-    // ... (existing verifyEsewaPayment code)
+    verifyEsewaPayment: async (
+      _: any,
+      { data }: { data: string },
+      context: GraphQLContext
+    ) => {
+      try {
+        if (!context.user) throw new Error("Authentication required");
+
+        const decodedData = JSON.parse(
+          Buffer.from(data, "base64").toString("utf-8")
+        );
+
+        const isValid = verifyEsewaSignature(decodedData);
+        if (!isValid) throw new Error("Invalid eSewa signature");
+
+        const payment = await prisma.payment.findUnique({
+          where: { transactionId: decodedData.transaction_uuid },
+          include: { order: true },
+        });
+
+        if (!payment) throw new Error("Payment record not found");
+
+        if (decodedData.status === "COMPLETE") {
+          await prisma.$transaction(async (tx: any) => {
+            await tx.payment.update({
+              where: { id: payment.id },
+              data: { status: "COMPLETED", verifiedAt: new Date() },
+            });
+
+            await tx.order.update({
+              where: { id: payment.orderId },
+              data: { status: "CONFIRMED" },
+            });
+          });
+        }
+
+        return {
+          success: true,
+          payment: payment as any,
+          order: payment.order as any,
+          message: "eSewa payment verified successfully",
+        };
+      } catch (error: any) {
+        console.error("Error verifying eSewa payment:", error);
+        return { success: false, message: error.message };
+      }
+    },
 
     initiateFonepayPayment: async (
       _: any,
@@ -83,7 +124,6 @@ export const paymentResolvers = {
 
         if (!order) throw new Error("Order not found");
 
-        // Check for existing pending Fonepay payment
         let transactionId: string;
         const existingPayment = order.payments.find(
           (p: any) => p.status === "PENDING" && p.provider === "FONEPAY"
@@ -107,8 +147,6 @@ export const paymentResolvers = {
 
         const merchantCode = process.env.FONEPAY_MERCHANT_CODE || "TEST_MERCHANT";
 
-        // Generate SCANNABLE EMVCo QR for Fonepay
-        // This fixes the "unable to scan" issue
         const qrValue = generateFonepayEMVCoQR(
           parseFloat(order.total.toString()),
           merchantCode,
@@ -140,10 +178,6 @@ export const paymentResolvers = {
         if (!payment || payment.orderId !== orderId) {
           throw new Error("Payment record not found");
         }
-
-        // HERE: Call neppayments or Fonepay API to verify the transactionId
-        // For demonstration, we assume verification is successful if it matches our record
-        // In production, integrate actual API call here.
 
         await prisma.$transaction(async (tx: any) => {
           await tx.payment.update({

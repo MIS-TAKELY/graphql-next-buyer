@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import { NepPayments } from 'neppayments';
 
 // Helper for EMVCo CRC-16 (CCITT-FALSE)
 function crc16ccitt(data: string): string {
@@ -20,28 +19,28 @@ function crc16ccitt(data: string): string {
 export function generateFonepayEMVCoQR(amount: number, merchantCode: string, ref: string): string {
   const toTLV = (tag: string, value: string) => `${tag}${value.length.toString().padStart(2, '0')}${value}`;
 
-  // Standard NepalQR / NCHL (Tag 26)
+  // Standard NepalQR (Tag 26) - Interoperable GUID
   const nepalQRId =
-    toTLV('00', 'NP.QR') +
+    toTLV('00', 'NP.NCHL.QR') +
     toTLV('01', merchantCode);
 
-  // Fonepay specific (Tag 30)
+  // Fonepay specific (Tag 30) - Proprietary GUID
   const fonepayId =
     toTLV('00', 'NP.FONEPAY') +
     toTLV('01', merchantCode);
 
   const fields = [
     toTLV('00', '01'), // Payload Format Indicator
-    toTLV('01', '12'), // Point of Initiation Method (12 for Dynamic)
-    toTLV('26', nepalQRId), // Standard NepalQR
+    toTLV('01', '12'), // Point of Initiation Method (12: Dynamic)
+    toTLV('26', nepalQRId), // Standard NepalQR / NCHL
     toTLV('30', fonepayId), // Fonepay ID
-    toTLV('52', '0000'), // Merchant Category Code (Generic)
+    toTLV('52', '5311'), // Merchant Category Code (General Merchandise)
     toTLV('53', '524'), // Transaction Currency (NPR)
     toTLV('54', amount.toFixed(2)), // Transaction Amount
     toTLV('58', 'NP'), // Country Code
-    toTLV('59', 'DAI MULTI VENDOR'), // Merchant Name
+    toTLV('59', 'DAI STORE'), // Merchant Name
     toTLV('60', 'KATHMANDU'), // Merchant City
-    toTLV('62', toTLV('01', ref)), // Reference ID
+    toTLV('62', toTLV('05', ref)), // Additional Data (Reference Label)
   ];
 
   let qrString = fields.join('');
