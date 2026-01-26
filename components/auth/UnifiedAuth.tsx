@@ -218,7 +218,7 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
         }
         setLoading(true);
         try {
-            const { error } = await (authClient as any).forgetPassword({
+            const { error } = await (authClient as any).requestPasswordReset({
                 email: forgotPasswordEmail,
                 redirectTo: "/reset-password",
             });
@@ -356,16 +356,7 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
                     <Input id="identifier_login" type="text" required value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="name@example.com or johndoe123" />
                 </div>
                 <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor="password">Password</Label>
-                        <button
-                            type="button"
-                            onClick={() => setStep("FORGOT_PASSWORD")}
-                            className="text-xs font-medium text-primary hover:underline"
-                        >
-                            Forgot password?
-                        </button>
-                    </div>
+                    <Label htmlFor="password">Password</Label>
                     <div className="relative">
                         <Input
                             id="password"
@@ -386,6 +377,15 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
                             ) : (
                                 <Eye className="h-4 w-4" />
                             )}
+                        </button>
+                    </div>
+                    <div className="flex justify-end">
+                        <button
+                            type="button"
+                            onClick={() => setStep("FORGOT_PASSWORD")}
+                            className="text-xs font-medium text-primary hover:underline"
+                        >
+                            Forgot password?
                         </button>
                     </div>
                 </div>
