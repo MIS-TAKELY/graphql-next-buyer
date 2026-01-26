@@ -201,8 +201,12 @@ function OrderItemComponent({ order }: OrderItemProps) {
     // 2. Check each item's return policy
     const hasReturnableItem = order.items.some(item => {
       const policy = item.variant.product.returnPolicy?.[0]; // Assuming one policy for now
-      if (!policy) return false;
-      if (policy.type === "NO_RETURN") return false;
+
+      // Default to 7 days if no policy found
+      const duration = policy?.duration || 7;
+      const unit = policy?.unit || "DAYS";
+
+      if (policy?.type === "NO_RETURN") return false;
 
       // 3. Check time window
       // Use deliveredAt from shipment or updatedAt of order if shipment not found
@@ -213,10 +217,10 @@ function OrderItemComponent({ order }: OrderItemProps) {
       const now = new Date();
 
       let expirationDate = new Date(deliveryDate);
-      if (policy.unit === 'DAYS') {
-        expirationDate.setDate(deliveryDate.getDate() + policy.duration);
-      } else if (policy.unit === 'HOURS') {
-        expirationDate.setHours(deliveryDate.getHours() + policy.duration);
+      if (unit === 'DAYS') {
+        expirationDate.setDate(deliveryDate.getDate() + duration);
+      } else if (unit === 'HOURS') {
+        expirationDate.setHours(deliveryDate.getHours() + duration);
       }
 
       return now <= expirationDate;

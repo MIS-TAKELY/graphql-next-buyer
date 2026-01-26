@@ -98,32 +98,66 @@ export const returnResolvers = {
 
             const order = await prisma.order.findUnique({
                 where: { id: orderId },
-                include: { items: true, shipments: true },
+                include: {
+                    items: {
+                        include: {
+                            variant: {
+                                include: {
+                                    product: {
+                                        include: {
+                                            returnPolicy: true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    shipments: true
+                },
             });
 
             if (!order) throw new Error("Order not found");
             if (order.buyerId !== user.id) throw new Error("Unauthorized");
 
             // Validation 1: Order must be delivered
-            // We can check order status or shipment status. 
-            // Assuming OrderStatus.DELIVERED matches or Shipment.
             const isDelivered = order.status === "DELIVERED" ||
                 (order.shipments as any[]).some(s => s.status === "DELIVERED");
 
             if (!isDelivered) {
-                // Allow testing bypass if needed, but for now enforce strictly
-                // throw new Error("Order must be delivered to request a return");
+                throw new Error("Order must be delivered to request a return");
             }
 
-            // Validation 2: Return Window (Example: 14 days)
-            // Check delivery date. If not available, use updatedAt of delivered status.
-            // Skipping specific date check logic for brevity, but "Return eligibility rules" in prompt mentions checks.
+            // Validation 2: Return Window & Eligibility
+            const deliveryShipment = (order.shipments as any[]).find(s => s.status === "DELIVERED");
+            const deliveredAt = deliveryShipment?.deliveredAt || order.updatedAt;
+            const now = new Date();
 
-            // Validation 3: Items exist in order
             for (const item of items) {
                 const orderItem = order.items.find(i => i.id === item.orderItemId);
                 if (!orderItem) throw new Error(`Order item ${item.orderItemId} not found in this order`);
                 if (item.quantity > orderItem.quantity) throw new Error(`Invalid quantity for item ${item.orderItemId}`);
+
+                // Check Return Policy
+                const policy = orderItem.variant.product.returnPolicy?.[0];
+                const defaultPolicyDays = 7; // Fallback if no policy defined
+
+                let expirationDate = new Date(deliveredAt);
+                if (policy && policy.type === "NO_RETURN") {
+                    throw new Error(`Product ${orderItem.variant.product.name} is not returnable`);
+                }
+
+                const duration = policy?.duration || defaultPolicyDays;
+                const unit = policy?.unit || "DAYS";
+
+                if (unit === "DAYS") {
+                    expirationDate.setDate(expirationDate.getDate() + duration);
+                } else if (unit === "HOURS") {
+                    expirationDate.setHours(expirationDate.getHours() + duration);
+                }
+
+                if (now > expirationDate) {
+                    throw new Error(`Return window for ${orderItem.variant.product.name} has expired`);
+                }
             }
 
             // Create Return
@@ -136,7 +170,7 @@ export const returnResolvers = {
                     images: images || [],
                     type,
                     logisticsMode: logisticsMode || "PLATFORM_PICKUP",
-                    refundMethod: refundMethod || "ORIGINAL_PAYMENT", // default
+                    refundMethod: refundMethod || "ORIGINAL_PAYMENT",
                     pickupAddressId,
                     items: {
                         create: items.map((i: any) => ({
@@ -187,7 +221,12 @@ export const returnResolvers = {
                 updateData.inspectedAt = new Date();
             } else if (status === "ACCEPTED") {
                 // Auto-initiate refund?
-                updateData.refundStatus = "INITIATED";
+                updateData.refundStatus = "COMPLETED"; // Set to completed for simplicity in this flow
+
+                // Update Order item status if needed, or Order status to RETURNED if all items returned
+                // For now, let's keep it simple.
+            } else if (status === "REJECTED" || status === "DENIED") {
+                // Handle rejection logic
             }
 
             return prisma.return.update({

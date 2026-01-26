@@ -13,6 +13,7 @@ import {
   Settings,
   Shield,
   User,
+  RotateCcw,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useNotificationStore } from "@/store/notificationStore";
@@ -50,6 +51,7 @@ export default function SidebarNav({
     { id: "profile", label: "Profile", icon: User, href: "/account/profile" },
     { id: "addresses", label: "Addresses", icon: MapPin, href: "/account/addresses" },
     { id: "orders", label: "My Orders", icon: Package, href: "/account/orders", hasNotification: hasNewOrderUpdate },
+    { id: "returns", label: "My Returns", icon: RotateCcw, href: "/account/returns" },
     { id: "wishlist", label: "Wishlist", icon: Heart, href: "/account/wishlist" },
     { id: "chat", label: "Messages", icon: MessageCircle, href: "/account/chat", hasNotification: totalUnread > 0 }, // Added Chat
     { id: "payment", label: "Payment Methods", icon: CreditCard, href: "/account/payment" },
