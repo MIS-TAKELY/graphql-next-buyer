@@ -6,6 +6,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { NotificationListener } from "@/components/common/NotificationListener";
 import AuthGate from "@/components/auth/AuthGate";
+import GlobalAuthModal from "@/components/auth/GlobalAuthModal";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -87,6 +88,7 @@ export default function RootLayout({
           </ThemeProvider>
           <Toaster position="top-right" duration={2500} richColors closeButton />
           <NotificationListener />
+          <GlobalAuthModal />
         </ApolloWrapper>
       </body>
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "G-R7VFCZNSEQ"} />

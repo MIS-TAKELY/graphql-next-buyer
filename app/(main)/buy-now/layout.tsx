@@ -22,7 +22,7 @@ export default async function BuyNowLayout({
 
     // Redirect to sign-in if user is not authenticated
     if (!user) {
-        redirect("/sign-in");
+        redirect("/");
     }
 
     return <>{children}</>;

@@ -9,7 +9,7 @@ export default async function VerifyPhonePage() {
     });
 
     if (!session) {
-        redirect("/sign-in");
+        redirect("/");
     }
 
     if (session.user.phoneVerified) {

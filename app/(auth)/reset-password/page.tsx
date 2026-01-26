@@ -23,7 +23,7 @@ function ResetPasswordContent() {
     useEffect(() => {
         if (!token) {
             toast.error("Invalid or missing reset token");
-            router.push("/sign-in");
+            router.push("/");
         }
     }, [token, router]);
 
@@ -53,7 +53,7 @@ function ResetPasswordContent() {
                 setSuccess(true);
                 toast.success("Password reset successfully!");
                 setTimeout(() => {
-                    router.push("/sign-in");
+                    router.push("/");
                 }, 3000);
             }
         } catch (err) {
@@ -75,8 +75,8 @@ function ResetPasswordContent() {
                 <p className="text-muted-foreground">
                     Your password has been reset. You will be redirected to the sign-in page in a few seconds.
                 </p>
-                <Button onClick={() => router.push("/sign-in")} className="w-full">
-                    Go to Sign In Now
+                <Button onClick={() => router.push("/")} className="w-full">
+                    Go to Home Now
                 </Button>
             </div>
         );

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
+import AuthDialog from "@/components/auth/AuthDialog";
 import Link from "next/link";
 
 export default function FAQSection({ productId, isOwnProduct }: { productId: string; isOwnProduct?: boolean }) {
@@ -74,9 +75,9 @@ export default function FAQSection({ productId, isOwnProduct }: { productId: str
                     ) : (
                         <div className="text-center">
                             <p className="text-xs text-muted-foreground mb-2">Login to ask a question</p>
-                            <Button size="sm" variant="outline" asChild>
-                                <Link href="/sign-in">Sign In</Link>
-                            </Button>
+                            <AuthDialog>
+                                <Button size="sm" variant="outline">Sign In</Button>
+                            </AuthDialog>
                         </div>
                     )}
                 </div>

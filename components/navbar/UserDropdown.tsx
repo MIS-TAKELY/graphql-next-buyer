@@ -69,10 +69,7 @@ const UserDropdown = ({ isMobile = false, onItemClick }: UserDropdownProps) => {
     if (onItemClick) onItemClick();
   };
 
-  const handleSignIn = () => {
-    router.push("/sign-in");
-    if (onItemClick) onItemClick();
-  }
+
 
   if (isPending) {
     return (

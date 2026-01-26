@@ -11,8 +11,6 @@ interface AuthGateProps {
 
 // Routes that don't require full verification
 const PUBLIC_ROUTES = [
-    "/sign-in",
-    "/sign-up",
     "/verify-phone",
     "/", // Landing page
     "/compare",
@@ -47,7 +45,7 @@ export default function AuthGate({ children }: AuthGateProps) {
     if (session) {
         if (!isPhoneVerified) {
             // Allow them to see /sign-in, /sign-up, /verify-phone without AuthGate interference
-            const isAuthRoute = ["/sign-in", "/sign-up", "/verify-phone"].some(route => pathname.startsWith(route));
+            const isAuthRoute = ["/verify-phone"].some(route => pathname.startsWith(route));
 
             if (isAuthRoute) {
                 return <>{children}</>;

@@ -11,6 +11,7 @@ import { useRealChat } from "@/hooks/chat/useRealChat";
 import { ChatModal } from "@/components/page/chat/ChatModal";
 import { useCompareStore } from "@/store/compareStore";
 import { toast } from "sonner";
+import { useAuthModal } from "@/store/authModalStore";
 
 interface ProductActionsClientProps {
   productId: string;
@@ -32,6 +33,7 @@ export function ProductActionsClient({
   const { data: session } = useSession();
   const userId = session?.user?.id;
   const router = useRouter();
+  const { openModal } = useAuthModal();
   const [quantity, setQuantity] = useState(1);
   const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -46,7 +48,7 @@ export function ProductActionsClient({
 
   const handleChatOpen = () => {
     if (!userId) {
-      router.push("/sign-in");
+      openModal();
       return;
     }
     setIsChatOpen(true);
@@ -58,7 +60,7 @@ export function ProductActionsClient({
   // Toggle wishlist status
   const toggleWishlist = async () => {
     if (!userId) {
-      router.push("/sign-in");
+      openModal();
       return;
     }
 

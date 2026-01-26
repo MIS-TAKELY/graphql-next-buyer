@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import Image from "next/image";
+import AuthDialog from "@/components/auth/AuthDialog";
 
 const sortFns: Record<string, (a: Review, b: Review) => number> = {
   newest: (a, b) =>
@@ -272,14 +273,15 @@ const ProductReviews = ({ isOwnProduct }: { isOwnProduct?: boolean }) => {
         <div className="bg-muted/10 rounded-lg p-3 border border-border/50">
           <div className="flex items-center justify-between text-xs py-1">
             <p className="text-muted-foreground">Sign in to rate this product</p>
-            <Button
-              variant="link"
-              size="sm"
-              className="h-auto p-0 text-xs"
-              onClick={() => (window.location.href = "/sign-in")}
-            >
-              Sign In
-            </Button>
+            <AuthDialog>
+              <Button
+                variant="link"
+                size="sm"
+                className="h-auto p-0 text-xs"
+              >
+                Sign In
+              </Button>
+            </AuthDialog>
           </div>
         </div>
       )}

@@ -1,8 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 const publicRoutes = [
-  "/sign-in",
-  "/sign-up",
   "/api/auth",
   "/api/otp",
   "/api/products",
@@ -78,7 +76,7 @@ export default async function middleware(request: NextRequest) {
     if (isPublicRoute) {
       return NextResponse.next();
     }
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // Note: Phone verification check is handled in AuthGate (client-side) 
