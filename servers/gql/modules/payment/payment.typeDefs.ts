@@ -48,6 +48,19 @@ export const paymentTypeDefs = gql`
     signature: String!
   }
 
+  type FonepayPaymentInitiation {
+    success: Boolean!
+    qrValue: String
+    error: String
+  }
+
+  type FonepayPaymentData {
+    amount: String!
+    transaction_uuid: String!
+    merchant_code: String!
+    signature: String!
+  }
+
   type PaymentVerificationResult {
     success: Boolean!
     payment: Payment
@@ -58,5 +71,7 @@ export const paymentTypeDefs = gql`
   type Mutation {
     initiateEsewaPayment(orderId: ID!): EsewaPaymentInitiation!
     verifyEsewaPayment(data: String!): PaymentVerificationResult!
+    initiateFonepayPayment(orderId: ID!): FonepayPaymentInitiation!
+    verifyFonepayPayment(orderId: ID!, transactionId: String!): PaymentVerificationResult!
   }
 `;

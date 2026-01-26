@@ -22,12 +22,35 @@ import IMEPay from "@/assets/payments-walltes-logo/IME-Pay.png";
 import Esewa from "@/assets/payments-walltes-logo/esewa.png";
 import Khalti from "@/assets/payments-walltes-logo/khalti.png";
 import Image from "next/image";
+import { QRCodeSVG } from "qrcode.react";
+import { useMutation } from "@apollo/client";
+import { gql } from "graphql-tag";
 
 const walletLogos: Record<string, any> = {
   esewa: Esewa,
   imepay: IMEPay,
   khalti: Khalti,
+  phonepe: Esewa, // Using Esewa as placeholder if PhonePe logo not found, or add it
 };
+
+const INITIATE_FONEPAY_PAYMENT = gql`
+  mutation InitiateFonepayPayment($orderId: ID!) {
+    initiateFonepayPayment(orderId: $orderId) {
+      success
+      qrValue
+      error
+    }
+  }
+`;
+
+const VERIFY_FONEPAY_PAYMENT = gql`
+  mutation VerifyFonepayPayment($orderId: ID!, $transactionId: String!) {
+    verifyFonepayPayment(orderId: $orderId, transactionId: $transactionId) {
+      success
+      message
+    }
+  }
+`;
 
 interface PaymentMethod {
   id: string;
@@ -60,7 +83,22 @@ export function PaymentForm({
     upiId: "",
     bankName: "",
     walletProvider: "",
+    transactionId: "",
   });
+
+  const [qrValue, setQrValue] = useState<string | null>(null);
+
+  const [initiateFonepay] = useMutation(INITIATE_FONEPAY_PAYMENT);
+  const [verifyFonepay] = useMutation(VERIFY_FONEPAY_PAYMENT);
+
+  const handlePhonePayInitiation = async () => {
+    // In a real scenario, you'd have the orderId from props or context
+    const orderId = "TEST_ORDER_ID";
+    const { data } = await initiateFonepay({ variables: { orderId } });
+    if (data?.initiateFonepayPayment?.success) {
+      setQrValue(data.initiateFonepayPayment.qrValue);
+    }
+  };
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -499,6 +537,37 @@ export function PaymentForm({
                 </p>
               )}
             </div>
+
+            {formData.walletProvider === "PhonePe" && (
+              <div className="mt-6 space-y-4 border-t pt-4">
+                {!qrValue ? (
+                  <Button
+                    type="button"
+                    onClick={handlePhonePayInitiation}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                  >
+                    Generate Dynamic QR
+                  </Button>
+                ) : (
+                  <div className="flex flex-col items-center gap-4 bg-white p-4 rounded-lg shadow-inner">
+                    <p className="text-sm font-medium text-gray-700">Scan to Pay with PhonePe</p>
+                    <QRCodeSVG value={qrValue} size={200} />
+                    <div className="w-full">
+                      <label className="block text-sm font-medium mb-2 text-gray-900">
+                        Enter Transaction ID *
+                      </label>
+                      <Input
+                        type="text"
+                        value={formData.transactionId}
+                        onChange={(e) => handleInputChange("transactionId", e.target.value)}
+                        placeholder="Transaction ID from PhonePe"
+                        className="bg-gray-50 border-gray-300"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         );
 

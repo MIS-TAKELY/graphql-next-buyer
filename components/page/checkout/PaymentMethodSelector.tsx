@@ -50,8 +50,8 @@ const paymentMethods: PaymentMethod[] = [
     type: "WALLET",
     name: "Digital Wallet",
     icon: Wallet,
-    description: "Esewa, Khalti, IME Pay",
-    providers: ["Esewa", "Khalti", "IME Pay"],
+    description: "Esewa, Khalti, IME Pay, PhonePe",
+    providers: ["Esewa", "Khalti", "IME Pay", "PhonePe"],
   },
   {
     id: "cod",
@@ -85,34 +85,30 @@ export function PaymentMethodSelector({
           return (
             <Card
               key={method.id}
-              className={`cursor-pointer transition-all duration-200 hover:shadow-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 ${
-                isSelected
+              className={`cursor-pointer transition-all duration-200 hover:shadow-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 ${isSelected
                   ? "ring-2 ring-blue-500 dark:ring-blue-400 bg-blue-50 dark:bg-blue-900/20"
                   : "hover:border-gray-400 dark:hover:border-gray-500"
-              }`}
+                }`}
               onClick={() => handleMethodSelect(method)}
             >
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <div
-                      className={`p-2 rounded-lg ${
-                        isSelected ? "bg-blue-100 dark:bg-blue-900/30" : "bg-gray-100 dark:bg-gray-700"
-                      }`}
+                      className={`p-2 rounded-lg ${isSelected ? "bg-blue-100 dark:bg-blue-900/30" : "bg-gray-100 dark:bg-gray-700"
+                        }`}
                     >
                       <Icon
-                        className={`w-6 h-6 ${
-                          isSelected ? "text-blue-600 dark:text-blue-400" : "text-gray-600 dark:text-gray-300"
-                        }`}
+                        className={`w-6 h-6 ${isSelected ? "text-blue-600 dark:text-blue-400" : "text-gray-600 dark:text-gray-300"
+                          }`}
                       />
                     </div>
 
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <h3
-                          className={`font-semibold ${
-                            isSelected ? "text-blue-900 dark:text-blue-200" : "text-gray-900 dark:text-white"
-                          }`}
+                          className={`font-semibold ${isSelected ? "text-blue-900 dark:text-blue-200" : "text-gray-900 dark:text-white"
+                            }`}
                         >
                           {method.name}
                         </h3>
@@ -126,9 +122,8 @@ export function PaymentMethodSelector({
                         )}
                       </div>
                       <p
-                        className={`text-sm ${
-                          isSelected ? "text-blue-700 dark:text-blue-300" : "text-gray-600 dark:text-gray-300"
-                        }`}
+                        className={`text-sm ${isSelected ? "text-blue-700 dark:text-blue-300" : "text-gray-600 dark:text-gray-300"
+                          }`}
                       >
                         {method.description}
                       </p>
@@ -140,22 +135,20 @@ export function PaymentMethodSelector({
                             .map((provider, index) => (
                               <span
                                 key={provider}
-                                className={`text-xs px-2 py-1 rounded ${
-                                  isSelected
+                                className={`text-xs px-2 py-1 rounded ${isSelected
                                     ? "bg-blue-200 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200"
                                     : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                                }`}
+                                  }`}
                               >
                                 {provider}
                               </span>
                             ))}
                           {method.providers.length > 4 && (
                             <span
-                              className={`text-xs px-2 py-1 rounded ${
-                                isSelected
+                              className={`text-xs px-2 py-1 rounded ${isSelected
                                   ? "bg-blue-200 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200"
                                   : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                              }`}
+                                }`}
                             >
                               +{method.providers.length - 4} more
                             </span>
