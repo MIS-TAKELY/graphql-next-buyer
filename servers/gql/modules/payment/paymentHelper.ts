@@ -18,28 +18,37 @@ function crc16ccitt(data: string): string {
 }
 
 export function generateFonepayEMVCoQR(amount: number, merchantCode: string, ref: string): string {
-  const fields: Record<string, string> = {
-    '00': '01', // Payload Format Indicator
-    '01': '12', // Point of Initiation Method (12 for Dynamic)
-    '29': `0012NP.FONEPAY.0101${merchantCode.length.toString().padStart(2, '0')}${merchantCode}`, // Merchant Account Information
-    '52': '5411', // Merchant Category Code
-    '53': '524', // Transaction Currency (NPR)
-    '54': amount.toString(), // Transaction Amount
-    '58': 'NP', // Country Code
-    '59': 'Merchant', // Merchant Name
-    '60': 'Kathmandu', // Merchant City
-    '62': `01${ref.length.toString().padStart(2, '0')}${ref}`, // Additional Data (Reference)
-  };
+  const toTLV = (tag: string, value: string) => `${tag}${value.length.toString().padStart(2, '0')}${value}`;
 
-  let qrString = '';
-  for (const [id, value] of Object.entries(fields)) {
-    qrString += `${id}${value.length.toString().padStart(2, '0')}${value}`;
-  }
+  // Standard NepalQR / NCHL (Tag 26)
+  const nepalQRId =
+    toTLV('00', 'NP.QR') +
+    toTLV('01', merchantCode);
 
-  qrString += '6304'; // CRC-16 tag and length
-  qrString += crc16ccitt(qrString);
+  // Fonepay specific (Tag 30)
+  const fonepayId =
+    toTLV('00', 'NP.FONEPAY') +
+    toTLV('01', merchantCode);
 
-  return qrString;
+  const fields = [
+    toTLV('00', '01'), // Payload Format Indicator
+    toTLV('01', '12'), // Point of Initiation Method (12 for Dynamic)
+    toTLV('26', nepalQRId), // Standard NepalQR
+    toTLV('30', fonepayId), // Fonepay ID
+    toTLV('52', '0000'), // Merchant Category Code (Generic)
+    toTLV('53', '524'), // Transaction Currency (NPR)
+    toTLV('54', amount.toFixed(2)), // Transaction Amount
+    toTLV('58', 'NP'), // Country Code
+    toTLV('59', 'DAI MULTI VENDOR'), // Merchant Name
+    toTLV('60', 'KATHMANDU'), // Merchant City
+    toTLV('62', toTLV('01', ref)), // Reference ID
+  ];
+
+  let qrString = fields.join('');
+  qrString += '6304';
+
+  const crc = crc16ccitt(qrString);
+  return qrString + crc;
 }
 
 interface EsewaPaymentData {
