@@ -60,6 +60,7 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: true,
+        resetPasswordTokenExpiresIn: 600, // 10 minutes
         sendResetPassword: async ({ user, url }: { user: AuthUser; url: string }) => {
             console.log("BETTER-AUTH: triggering sendResetPassword for", user.email);
             try {

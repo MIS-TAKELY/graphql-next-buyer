@@ -17,6 +17,7 @@ const publicRoutes = [
   "/shipping-policy",
   "/returns-policy",
   "/privacy-policy",
+  "/reset-password",
 ];
 
 export default async function middleware(request: NextRequest) {

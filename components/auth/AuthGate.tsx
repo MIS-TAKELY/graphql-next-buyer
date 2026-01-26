@@ -25,6 +25,7 @@ const PUBLIC_ROUTES = [
     "/account", // Account pages are now public (will show guest user)
     "/checkout", // Checkout is public
     "/payment", // Payment status pages
+    "/reset-password",
 ];
 
 export default function AuthGate({ children }: AuthGateProps) {
