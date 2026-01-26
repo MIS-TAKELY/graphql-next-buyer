@@ -28,7 +28,7 @@ import {
 import Image from "next/image";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { CANCEL_ORDER, REQUEST_RETURN, GET_MY_ORDER_ITEMS } from "@/client/order/order.queries";
+import { CANCEL_ORDER, GET_MY_ORDER_ITEMS } from "@/client/order/order.queries";
 import { ADD_TO_CART } from "@/client/cart/cart.mutations";
 import { GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
 import { useRouter } from "next/navigation";
@@ -44,6 +44,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import ReturnRequestModal from "./ReturnRequestModal";
 
 type OrderStatus =
   | "PENDING"
@@ -82,6 +83,16 @@ export interface Order {
     reason: string;
     description?: string;
     images?: string[];
+  }>;
+  returns?: Array<{
+    id: string;
+    status: string;
+    type: string;
+    items: Array<{
+      id: string;
+      quantity: number;
+      orderItem: { id: string };
+    }>;
   }>;
 }
 
@@ -130,19 +141,7 @@ function OrderItemComponent({ order }: OrderItemProps) {
     }
   });
 
-  const [requestReturn, { loading: returnLoading }] = useMutation(REQUEST_RETURN, {
-    refetchQueries: [GET_MY_ORDER_ITEMS],
-    onCompleted: () => {
-      toast.success("Return request submitted successfully");
-      setShowReturnDialog(false);
-      setReason("");
-      setIsOpen(false);
-    },
-    onError: (error) => {
-      const message = error.graphQLErrors?.[0]?.message || "Something went wrong. Please try again.";
-      toast.error(message);
-    }
-  });
+
 
   const handleCancelOrder = () => {
     cancelOrder({
@@ -155,18 +154,7 @@ function OrderItemComponent({ order }: OrderItemProps) {
     });
   };
 
-  const handleRequestReturn = () => {
-    requestReturn({
-      variables: {
-        input: {
-          orderId: order.id,
-          reason,
-          description,
-          images: images.map((img) => img.url),
-        }
-      }
-    });
-  };
+
 
   const router = useRouter();
   const [addToCart, { loading: addToCartLoading }] = useMutation(ADD_TO_CART, {
@@ -491,43 +479,12 @@ function OrderItemComponent({ order }: OrderItemProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Return Order Dialog */}
-      <Dialog open={showReturnDialog} onOpenChange={setShowReturnDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Return Items</DialogTitle>
-            <DialogDescription>
-              Please provide a reason for returning the items.
-            </DialogDescription>
-          </DialogHeader>
-          <Textarea
-            onChange={(e) => setReason(e.target.value)}
-          />
-          <Textarea
-            placeholder="Additional description (optional)..."
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="mt-2"
-          />
-          <div className="mt-4">
-            <label className="text-sm font-medium mb-2 block">Upload Images</label>
-            <MediaUploader
-              value={images}
-              onChange={setImages}
-              maxSizeMB={5}
-            />
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowReturnDialog(false)}>Cancel</Button>
-            <Button
-              onClick={handleRequestReturn}
-              disabled={returnLoading || !reason.trim()}
-            >
-              {returnLoading ? "Submitting..." : "Submit Return Request"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Return Request Modal */}
+      <ReturnRequestModal
+        order={order}
+        open={showReturnDialog}
+        onOpenChange={setShowReturnDialog}
+      />
     </Sheet >
   );
 }

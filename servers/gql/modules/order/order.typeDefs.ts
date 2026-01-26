@@ -36,6 +36,7 @@ export const orderTypeDefs = gql`
     payments: [Payment]
     shipments: [Shipment]
     disputes: [OrderDispute]
+    returns: [Return]
   }
 
   input OrderItemInput {

@@ -708,6 +708,37 @@ exports.Prisma.ProductNotificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ReturnScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  userId: 'userId',
+  status: 'status',
+  refundStatus: 'refundStatus',
+  refundMethod: 'refundMethod',
+  refundAmount: 'refundAmount',
+  reason: 'reason',
+  description: 'description',
+  images: 'images',
+  type: 'type',
+  logisticsMode: 'logisticsMode',
+  trackingNumber: 'trackingNumber',
+  pickupAddressId: 'pickupAddressId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  pickupScheduledAt: 'pickupScheduledAt',
+  receivedAt: 'receivedAt',
+  inspectedAt: 'inspectedAt',
+  rejectionReason: 'rejectionReason'
+};
+
+exports.Prisma.ReturnItemScalarFieldEnum = {
+  id: 'id',
+  returnId: 'returnId',
+  orderItemId: 'orderItemId',
+  quantity: 'quantity',
+  reason: 'reason'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -870,6 +901,43 @@ exports.DisputeType = exports.$Enums.DisputeType = {
   RETURN: 'RETURN'
 };
 
+exports.ReturnStatus = exports.$Enums.ReturnStatus = {
+  REQUESTED: 'REQUESTED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  PICKUP_SCHEDULED: 'PICKUP_SCHEDULED',
+  IN_TRANSIT: 'IN_TRANSIT',
+  RECEIVED: 'RECEIVED',
+  INSPECTED: 'INSPECTED',
+  ACCEPTED: 'ACCEPTED',
+  DENIED: 'DENIED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.RefundStatus = exports.$Enums.RefundStatus = {
+  PENDING: 'PENDING',
+  INITIATED: 'INITIATED',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  NOT_APPLICABLE: 'NOT_APPLICABLE'
+};
+
+exports.RefundMethod = exports.$Enums.RefundMethod = {
+  ORIGINAL_PAYMENT: 'ORIGINAL_PAYMENT',
+  WALLET: 'WALLET',
+  BANK_TRANSFER: 'BANK_TRANSFER'
+};
+
+exports.ReturnRequestType = exports.$Enums.ReturnRequestType = {
+  REFUND: 'REFUND',
+  REPLACEMENT: 'REPLACEMENT'
+};
+
+exports.LogisticsMode = exports.$Enums.LogisticsMode = {
+  PLATFORM_PICKUP: 'PLATFORM_PICKUP',
+  SELF_SHIP: 'SELF_SHIP'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   SystemLog: 'SystemLog',
@@ -918,7 +986,9 @@ exports.Prisma.ModelName = {
   LandingPageCategorySwiper: 'LandingPageCategorySwiper',
   LandingPageProductGrid: 'LandingPageProductGrid',
   LandingPageBanner: 'LandingPageBanner',
-  ProductNotification: 'ProductNotification'
+  ProductNotification: 'ProductNotification',
+  Return: 'Return',
+  ReturnItem: 'ReturnItem'
 };
 
 /**

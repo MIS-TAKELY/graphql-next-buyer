@@ -38,6 +38,18 @@ export const GET_MY_ORDER_ITEMS = gql`
         description
         images
       }
+      returns {
+        id
+        status
+        type
+        items {
+          id
+          quantity
+          orderItem {
+             id
+          }
+        }
+      }
     }
   }
 `;
@@ -53,8 +65,8 @@ export const CANCEL_ORDER = gql`
 `;
 
 export const REQUEST_RETURN = gql`
-  mutation RequestReturn($input: RequestReturnInput!) {
-    requestReturn(input: $input) {
+  mutation CreateReturnRequest($input: CreateReturnInput!) {
+    createReturnRequest(input: $input) {
       id
       status
       type
