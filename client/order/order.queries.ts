@@ -27,8 +27,17 @@ export const GET_MY_ORDER_ITEMS = gql`
             images {
               url
             }
+            returnPolicy {
+              type
+              duration
+              unit
+            }
           }
         }
+      }
+      shipments {
+        status
+        deliveredAt
       }
       disputes {
         id
