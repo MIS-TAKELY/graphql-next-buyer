@@ -101,8 +101,6 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
                     toast.error(errorMessage);
                 }
             } else {
-                router.refresh()
-                router.push("/")
                 toast.success("Signed in successfully");
                 await refetch();
             }
@@ -164,8 +162,6 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
                 }
             } else {
                 if (data?.token) {
-                    router.refresh()
-                    router.push("/")
                     toast.success("Account created! Signed in successfully.");
                     await refetch();
                 } else {
