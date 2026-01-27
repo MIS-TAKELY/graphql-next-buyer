@@ -87,6 +87,7 @@ export interface IProducts {
   metaTitle?: string;
   metaDescription?: string;
   keywords?: string[];
+  createdAt: string;
 }
 export interface IProductVarient extends IProductsVarient {
   stock: string;
@@ -102,5 +103,6 @@ export interface IRemainingProductDetails {
   features?: string[];
   productOffers?: IProductOffer[];
   deliveryOptions?: IDeliveryOption[];
+  createdAt?: string;
 }
 export type TProduct = IProducts & IRemainingProductDetails;

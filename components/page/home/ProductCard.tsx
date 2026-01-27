@@ -17,6 +17,7 @@ import { useCompareStore } from "@/store/compareStore";
 import { useAuthModal } from "@/store/authModalStore";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { differenceInDays } from "date-fns";
 
 interface ProductCardProps {
   product: TProduct;
@@ -98,6 +99,8 @@ export default function ProductCard({ product }: ProductCardProps) {
       ? product.reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / product.reviews.length
       : 0;
 
+  const isNew = !averageRating && product.createdAt && differenceInDays(new Date(), new Date(product.createdAt)) <= 30;
+
   return (
     <div className="block w-full h-full relative">
       <Link href={`/product/${product.slug}`} className="block h-full">
@@ -156,10 +159,12 @@ export default function ProductCard({ product }: ProductCardProps) {
 
               {/* Rating */}
               <div className="flex items-center gap-1.5">
-                <span className="bg-green-600 text-white px-1.5 py-0.5 flex items-center gap-0.5 rounded text-[10px] sm:text-xs font-bold">
-                  {averageRating > 0 ? averageRating.toFixed(1) : "New"}
-                  <Star className="w-2.5 h-2.5 fill-white" />
-                </span>
+                {(averageRating > 0 || isNew) && (
+                  <span className="bg-green-600 text-white px-1.5 py-0.5 flex items-center gap-0.5 rounded text-[10px] sm:text-xs font-bold">
+                    {averageRating > 0 ? averageRating.toFixed(1) : "New"}
+                    <Star className="w-2.5 h-2.5 fill-white" />
+                  </span>
+                )}
                 {product.reviews && product.reviews.length > 0 && (
                   <span className="text-muted-foreground text-[10px] sm:text-xs">
                     ({product.reviews.length})

@@ -83,6 +83,7 @@ export const PRODUCT_FIELDS_FRAGMENT = gql`
     metaTitle
     metaDescription
     keywords
+    createdAt
   }
 `;
 
@@ -93,6 +94,7 @@ export const PRODUCT_CARD_FRAGMENT = gql`
     slug
     brand
     status
+    createdAt
     images {
       id
       url
