@@ -146,48 +146,68 @@ export default function ReturnRequestModal({ order, open, onOpenChange }: Return
                 <div className="p-6 md:p-8 overflow-y-auto max-h-[70vh] scrollbar-thin">
                     {step === 1 ? (
                         <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
-                            {order.items.map(item => (
-                                <div
-                                    key={item.id}
-                                    className={cn(
-                                        "flex items-center gap-4 p-4 border rounded-2xl transition-all duration-300",
-                                        selectedItems[item.id]
-                                            ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                                            : "border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700"
-                                    )}
-                                >
-                                    <Checkbox
-                                        id={`item-${item.id}`}
-                                        checked={!!selectedItems[item.id]}
-                                        onCheckedChange={() => handleItemToggle(item.id, item.quantity)}
-                                        className="w-5 h-5 rounded-md"
-                                    />
-                                    <div className="relative w-16 h-16 rounded-xl bg-slate-100 dark:bg-zinc-800 overflow-hidden shrink-0 border border-slate-200 dark:border-zinc-800">
-                                        <Image src={item.variant.product.images[0]?.url || "/placeholder.jpg"} alt="" fill className="object-cover" />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <label htmlFor={`item-${item.id}`} className="text-sm font-bold block truncate text-foreground mb-1 cursor-pointer">
-                                            {item.variant.product.name}
-                                        </label>
-                                        <Badge variant="secondary" className="text-[10px] font-bold uppercase tracking-wider px-2 py-0">
-                                            Purchased: {item.quantity}
-                                        </Badge>
-                                    </div>
-                                    {selectedItems[item.id] && (
-                                        <div className="flex flex-col items-end gap-1.5 shrink-0">
-                                            <span className="text-[10px] font-black uppercase text-muted-foreground tracking-tighter">Qty to Return</span>
-                                            <Input
-                                                type="number"
-                                                className="w-16 h-9 rounded-lg font-bold text-center"
-                                                value={selectedItems[item.id]}
-                                                onChange={(e) => handleQtyChange(item.id, parseInt(e.target.value), item.quantity)}
-                                                min={1}
-                                                max={item.quantity}
-                                            />
+                            {order.items.map(item => {
+                                // Calculate how many have already been returned
+                                const totalReturnedQty = order.returns?.reduce((acc, ret) => {
+                                    const returnItem = ret.items.find(ri => ri.orderItem.id === item.id);
+                                    return acc + (returnItem ? returnItem.quantity : 0);
+                                }, 0) || 0;
+
+                                const remainingQty = item.quantity - totalReturnedQty;
+
+                                // If already fully returned, don't show in the selection list
+                                if (remainingQty <= 0) return null;
+
+                                return (
+                                    <div
+                                        key={item.id}
+                                        className={cn(
+                                            "flex items-center gap-4 p-4 border rounded-2xl transition-all duration-300",
+                                            selectedItems[item.id]
+                                                ? "border-primary bg-primary/5 ring-1 ring-primary/20"
+                                                : "border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700"
+                                        )}
+                                    >
+                                        <Checkbox
+                                            id={`item-${item.id}`}
+                                            checked={!!selectedItems[item.id]}
+                                            onCheckedChange={() => handleItemToggle(item.id, remainingQty)}
+                                            className="w-5 h-5 rounded-md"
+                                        />
+                                        <div className="relative w-16 h-16 rounded-xl bg-slate-100 dark:bg-zinc-800 overflow-hidden shrink-0 border border-slate-200 dark:border-zinc-800">
+                                            <Image src={item.variant.product.images[0]?.url || "/placeholder.jpg"} alt="" fill className="object-cover" />
                                         </div>
-                                    )}
-                                </div>
-                            ))}
+                                        <div className="flex-1 min-w-0">
+                                            <label htmlFor={`item-${item.id}`} className="text-sm font-bold block truncate text-foreground mb-1 cursor-pointer">
+                                                {item.variant.product.name}
+                                            </label>
+                                            <div className="flex flex-wrap gap-2">
+                                                <Badge variant="secondary" className="text-[10px] font-bold uppercase tracking-wider px-2 py-0">
+                                                    Purchased: {item.quantity}
+                                                </Badge>
+                                                {totalReturnedQty > 0 && (
+                                                    <Badge variant="outline" className="text-[10px] font-bold uppercase tracking-wider px-2 py-0 border-amber-200 text-amber-700 bg-amber-50">
+                                                        Already Returned: {totalReturnedQty}
+                                                    </Badge>
+                                                )}
+                                            </div>
+                                        </div>
+                                        {selectedItems[item.id] && (
+                                            <div className="flex flex-col items-end gap-1.5 shrink-0">
+                                                <span className="text-[10px] font-black uppercase text-muted-foreground tracking-tighter">Qty to Return</span>
+                                                <Input
+                                                    type="number"
+                                                    className="w-16 h-9 rounded-lg font-bold text-center"
+                                                    value={selectedItems[item.id]}
+                                                    onChange={(e) => handleQtyChange(item.id, parseInt(e.target.value), remainingQty)}
+                                                    min={1}
+                                                    max={remainingQty}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
                             <div className="flex justify-end pt-4 border-t border-dashed mt-6">
                                 <Button
                                     onClick={() => setStep(2)}

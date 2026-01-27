@@ -198,8 +198,17 @@ function OrderItemComponent({ order }: OrderItemProps) {
     // 1. Must be DELIVERED
     if (order.status !== "DELIVERED") return false;
 
-    // 2. Check each item's return policy
+    // 2. Check each item's return policy and remaining quantity
     const hasReturnableItem = order.items.some(item => {
+      // Calculate how many have already been returned
+      const returnedQty = order.returns?.reduce((acc, ret) => {
+        const returnItem = ret.items.find(ri => ri.orderItem.id === item.id);
+        return acc + (returnItem ? returnItem.quantity : 0);
+      }, 0) || 0;
+
+      // If already fully returned, not returnable
+      if (returnedQty >= item.quantity) return false;
+
       const policy = item.variant.product.returnPolicy?.[0]; // Assuming one policy for now
 
       // Default to 7 days if no policy found
@@ -209,9 +218,6 @@ function OrderItemComponent({ order }: OrderItemProps) {
       if (policy?.type === "NO_RETURN") return false;
 
       // 3. Check time window
-      // Use deliveredAt from shipment or updatedAt of order if shipment not found
-      // For simplicity, using order.updatedAt as proxy if deliveredAt missing, 
-      // but ideally should come from shipment.
       const deliveryDateStr = order.shipments?.find(s => s.status === 'DELIVERED')?.deliveredAt || order.updatedAt;
       const deliveryDate = new Date(deliveryDateStr);
       const now = new Date();
