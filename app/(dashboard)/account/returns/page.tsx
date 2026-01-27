@@ -97,8 +97,8 @@ export default function MyReturnsPage() {
                                             </p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="font-semibold text-sm">Order #{ret.order.orderNumber}</p>
-                                            <p className="text-xs text-muted-foreground mt-0.5">ID: {ret.id.slice(-8)}</p>
+                                            <p className="font-semibold text-sm">Order #{ret.order?.orderNumber || "N/A"}</p>
+                                            <p className="text-xs text-muted-foreground mt-0.5">ID: {ret.id?.slice(-8)}</p>
                                         </div>
                                     </div>
 
@@ -107,16 +107,16 @@ export default function MyReturnsPage() {
                                             <div key={item.id} className="flex gap-3 items-center">
                                                 <div className="relative w-12 h-12 rounded border bg-muted overflow-hidden shrink-0">
                                                     <Image
-                                                        src={item.orderItem.variant.product.images[0]?.url || "/placeholder.jpg"}
-                                                        alt={item.orderItem.variant.product.name}
+                                                        src={item.orderItem?.variant?.product?.images?.[0]?.url || "/placeholder.jpg"}
+                                                        alt={item.orderItem?.variant?.product?.name || "Product image"}
                                                         fill
                                                         className="object-cover"
                                                         unoptimized
                                                     />
                                                 </div>
                                                 <div className="min-w-0 flex-1">
-                                                    <p className="text-sm font-medium truncate">{item.orderItem.variant.product.name}</p>
-                                                    <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
+                                                    <p className="text-sm font-medium truncate">{item.orderItem?.variant?.product?.name || "Unknown Product"}</p>
+                                                    <p className="text-xs text-muted-foreground">Qty: {item.quantity || 0}</p>
                                                 </div>
                                             </div>
                                         ))}
@@ -126,7 +126,7 @@ export default function MyReturnsPage() {
                                     <div className="text-center w-full">
                                         <p className="text-xs text-muted-foreground uppercase tracking-tight font-bold mb-1 sm:block hidden">Refund Status</p>
                                         <Badge variant="secondary" className="capitalize">
-                                            {ret.refundStatus.toLowerCase()}
+                                            {(ret.refundStatus || "N/A").toLowerCase()}
                                         </Badge>
                                     </div>
                                     {/* <Button variant="ghost" size="sm" className="w-full gap-1 group">
