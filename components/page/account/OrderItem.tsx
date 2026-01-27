@@ -24,6 +24,8 @@ import {
   Truck,
   RotateCcw,
   XCircle,
+  AlertCircle,
+  HelpCircle,
 } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -493,7 +495,7 @@ function OrderItemComponent({ order }: OrderItemProps) {
           )}
 
           {/* Return Button */}
-          {isOrderReturnable() && (!order.disputes || order.disputes.length === 0) && (
+          {isOrderReturnable() ? (
             <Button
               variant="secondary"
               className="flex-1 gap-2"
@@ -501,7 +503,12 @@ function OrderItemComponent({ order }: OrderItemProps) {
             >
               <RotateCcw className="w-4 h-4" /> Return Items
             </Button>
-          )}
+          ) : order.status === "DELIVERED" ? (
+            <div className="flex-1 flex flex-col items-center justify-center p-2 rounded-lg bg-muted/30 border border-dashed text-[10px] text-muted-foreground text-center">
+              <AlertCircle className="w-3 h-3 mb-1" />
+              Not eligible for return
+            </div>
+          ) : null}
 
           <Button
             className="flex-1"

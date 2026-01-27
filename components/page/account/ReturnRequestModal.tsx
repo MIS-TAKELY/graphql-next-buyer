@@ -154,9 +154,11 @@ export default function ReturnRequestModal({ order, open, onOpenChange }: Return
                                 }, 0) || 0;
 
                                 const remainingQty = item.quantity - totalReturnedQty;
+                                const policy = item.variant?.product?.returnPolicy?.[0];
+                                const isNonReturnable = policy?.type === "NO_RETURN";
 
-                                // If already fully returned, don't show in the selection list
-                                if (remainingQty <= 0) return null;
+                                // If already fully returned or non-returnable, don't show in the selection list
+                                if (remainingQty <= 0 || isNonReturnable) return null;
 
                                 return (
                                     <div
