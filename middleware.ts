@@ -18,6 +18,11 @@ const publicRoutes = [
   "/returns-policy",
   "/privacy-policy",
   "/reset-password",
+  "/about",
+  "/contact",
+  "/careers",
+  "/site-map",
+  "/help",
 ];
 
 export default async function middleware(request: NextRequest) {

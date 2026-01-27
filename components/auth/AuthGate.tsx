@@ -33,6 +33,7 @@ const PUBLIC_ROUTES = [
     "/returns-policy",
     "/shipping-policy",
     "/site-map",
+    "/help",
 ];
 
 
@@ -53,14 +54,14 @@ export default function AuthGate({ children }: AuthGateProps) {
     // If session exists, they MUST be verified even for public routes (except auth routes)
     if (session) {
         if (!isPhoneVerified) {
-            // Allow them to see /sign-in, /sign-up, /verify-phone without AuthGate interference
+            // Allow them to see /verify-phone and ALL public routes without AuthGate interference
             const isAuthRoute = ["/verify-phone"].some(route => pathname.startsWith(route));
 
-            if (isAuthRoute) {
+            if (isAuthRoute || isPublicRoute) {
                 return <>{children}</>;
             }
 
-            console.log("AuthGate: Authenticated but not verified. Enforcing verification UI.");
+            console.log("AuthGate: Authenticated but not verified for private route. Enforcing verification UI.");
             return (
                 <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-background via-secondary/10 to-primary/5 p-4">
                     <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl opacity-50" />
