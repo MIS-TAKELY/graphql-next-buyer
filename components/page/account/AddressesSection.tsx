@@ -1,7 +1,7 @@
 "use client"
 import { useQuery } from "@apollo/client";
 import { AlertCircle, MapPin, Plus } from "lucide-react";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
 import { AddAddressForm } from "@/components/address";
@@ -42,12 +42,14 @@ const AddressesSection = React.memo<AddressesSectionProps>(() => {
   const [addresses, setLocalAddresses] = useState<BaseAddress[]>([]);
 
   // Query addresses
-  const { data, loading, error, refetch } = useQuery(GET_ADDRESS_OF_USER, {
-    onCompleted: (data) => {
-      const fetchedAddresses = data?.getAddressOfUser || [];
-      setLocalAddresses(fetchedAddresses);
-    },
-  });
+  const { data, loading, error, refetch } = useQuery(GET_ADDRESS_OF_USER);
+
+  // Sync data to local state
+  useEffect(() => {
+    if (data?.getAddressOfUser) {
+      setLocalAddresses(data.getAddressOfUser);
+    }
+  }, [data]);
 
   // Memoized values
   const sortedAddresses = useMemo(() => {

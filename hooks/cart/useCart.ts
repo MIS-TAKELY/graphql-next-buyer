@@ -17,15 +17,21 @@ export const useCart = () => {
     useCartStore();
 
   // Fetch full cart details from server for logged-in users
-  const { data: serverCartData, loading: cartLoading, refetch } = useQuery(
+  const { data: serverCartData, loading: cartLoading, error: cartError, refetch } = useQuery(
     GET_MY_CART_ITEMS,
     {
       skip: !userId,
       fetchPolicy: "network-only", // Ensure we get fresh data on mount/login
       nextFetchPolicy: "cache-first",
-      onError: (err) => console.error("Error fetching cart:", err),
     }
   );
+
+  // Log fetch error
+  useEffect(() => {
+    if (cartError) {
+      console.error("Error fetching cart:", cartError);
+    }
+  }, [cartError]);
 
   // Sync server data to store
   useEffect(() => {
