@@ -237,6 +237,33 @@ export const returnResolvers = {
                     order: true
                 }
             });
+        },
+
+        cancelReturnRequest: async (
+            _: any,
+            { id }: { id: string },
+            ctx: GraphQLContext
+        ) => {
+            const user = requireBuyer(ctx);
+
+            const returnRequest = await prisma.return.findUnique({
+                where: { id },
+            });
+
+            if (!returnRequest) throw new Error("Return request not found");
+            if (returnRequest.userId !== user.id) throw new Error("Unauthorized");
+            if (returnRequest.status !== "REQUESTED") {
+                throw new Error("Only pending return requests can be cancelled");
+            }
+
+            return prisma.return.update({
+                where: { id },
+                data: { status: "CANCELLED" },
+                include: {
+                    items: { include: { orderItem: true } },
+                    order: true
+                }
+            });
         }
     }
 };

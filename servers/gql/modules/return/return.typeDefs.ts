@@ -134,5 +134,6 @@ export const returnTypedefs = gql`
   type Mutation {
     createReturnRequest(input: CreateReturnInput!): Return!
     updateReturnStatus(input: UpdateReturnStatusInput!): Return!
+    cancelReturnRequest(id: ID!): Return!
   }
 `;
