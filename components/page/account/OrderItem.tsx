@@ -139,6 +139,14 @@ function OrderItemComponent({ order }: OrderItemProps) {
   const [images, setImages] = useState<ReviewMedia[]>([]);
 
   const [cancelOrder, { loading: cancelLoading }] = useMutation(CANCEL_ORDER, {
+    optimisticResponse: {
+      cancelOrder: {
+        id: "temp-dispute-id-" + Date.now(),
+        status: "PENDING",
+        type: "CANCEL",
+        __typename: "OrderDispute"
+      }
+    },
     refetchQueries: [GET_MY_ORDER_ITEMS],
     onCompleted: () => {
       toast.success("Order cancellation request submitted");

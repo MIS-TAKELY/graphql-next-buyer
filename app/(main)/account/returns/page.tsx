@@ -72,6 +72,13 @@ function ReturnDetailsSheet({ ret }: { ret: any }) {
 
     const [cancelReturn, { loading: cancelling }] = useMutation(CANCEL_RETURN_REQUEST, {
         variables: { id: ret.id },
+        optimisticResponse: {
+            cancelReturnRequest: {
+                id: ret.id,
+                status: "CANCELLED",
+                __typename: "Return"
+            }
+        },
         refetchQueries: [GET_MY_RETURNS],
         onCompleted: () => {
             toast.success("Return request cancelled successfully");

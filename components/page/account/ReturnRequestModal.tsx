@@ -62,6 +62,14 @@ export default function ReturnRequestModal({ order, open, onOpenChange }: Return
     }, [selectedItems, order.items]);
 
     const [createReturnRequest, { loading }] = useMutation(REQUEST_RETURN, {
+        optimisticResponse: {
+            createReturnRequest: {
+                id: "temp-id-" + Date.now(),
+                status: "REQUESTED",
+                type: derivedReturnType,
+                __typename: "Return"
+            }
+        },
         refetchQueries: [GET_MY_ORDER_ITEMS],
         onCompleted: () => {
             toast.success("Return request submitted successfully");
