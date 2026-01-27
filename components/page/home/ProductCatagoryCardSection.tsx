@@ -56,7 +56,7 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
                               h-16 xs:h-18 sm:h-20 md:h-18 lg:h-20 xl:h-22
                               object-contain
                               transition-transform duration-300
-                              group-hover:scale-125
+                              group-hover:scale-110
                             "
                         />
                       ) : (

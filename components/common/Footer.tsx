@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
+import { Facebook, Instagram, Twitter, Linkedin, Music4 } from "lucide-react";
 import Link from "next/link";
 
 const Footer = () => {
@@ -13,10 +13,10 @@ const Footer = () => {
               Experience the best in e-commerce with our premium selection of products. Quality, trust, and speed delivered to your doorstep.
             </p>
             <div className="flex items-center gap-4 pt-2">
-              <Link href="/" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Facebook className="w-5 h-5" /></Link>
-              <Link href="/" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Instagram className="w-5 h-5" /></Link>
-              <Link href="/" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Twitter className="w-5 h-5" /></Link>
-              <Link href="/" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Linkedin className="w-5 h-5" /></Link>
+              <Link href="https://www.facebook.com/VanijayEnterprises" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Facebook className="w-5 h-5" /></Link>
+              <Link href="https://www.instagram.com/vanijay_enterprises" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Instagram className="w-5 h-5" /></Link>
+              <Link href="https://x.com/Vanijay_Ent" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Twitter className="w-5 h-5" /></Link>
+              <Link href="https://www.tiktok.com/@vanijay_enterprises" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Music4 className="w-5 h-5" /></Link>
             </div>
           </div>
 
@@ -24,10 +24,8 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-foreground mb-4">Company</h3>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/" className="hover:text-primary transition-colors">About Us</Link></li>
-              <li><Link href="/" className="hover:text-primary transition-colors">Careers</Link></li>
-              <li><Link href="/" className="hover:text-primary transition-colors">Press</Link></li>
-              <li><Link href="/" className="hover:text-primary transition-colors">Blog</Link></li>
+              <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Careers (No Vacancy)</Link></li>
             </ul>
           </div>
 
@@ -47,7 +45,6 @@ const Footer = () => {
               <li><Link href="/terms-conditions" className="hover:text-primary transition-colors">Terms of Service</Link></li>
               <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
               <li><Link href="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</Link></li>
-              <li><Link href="/" className="hover:text-primary transition-colors">Accessibility</Link></li>
             </ul>
           </div>
         </div>
@@ -55,8 +52,7 @@ const Footer = () => {
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
           <p>&copy; {new Date().getFullYear()} Vanijay. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <span className="hover:text-primary cursor-pointer">Sitemap</span>
-            <span className="hover:text-primary cursor-pointer">Security</span>
+            <Link href="/sitemap" className="hover:text-primary cursor-pointer">Sitemap</Link>
           </div>
         </div>
       </div>
