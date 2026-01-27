@@ -1,14 +1,15 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { GET_MY_RETURNS } from "@/client/return/return.queries";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_MY_RETURNS, CANCEL_RETURN_REQUEST } from "@/client/return/return.queries";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
     Package, Calendar, RotateCcw, ChevronRight, Clock,
     CheckCircle2, AlertCircle, Truck, Search, Info,
-    Undo2, ArrowLeft, MapPin, Receipt, CreditCard
+    Undo2, ArrowLeft, MapPin, Receipt, CreditCard,
+    XCircle
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,6 +25,8 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 const statusConfig: Record<string, { color: string; icon: any; label: string }> = {
     REQUESTED: { color: "bg-amber-500/10 text-amber-600 border-amber-200 dark:bg-amber-500/20 dark:text-amber-400 dark:border-amber-800", icon: Clock, label: "Requested" },
@@ -35,7 +38,7 @@ const statusConfig: Record<string, { color: string; icon: any; label: string }> 
     ACCEPTED: { color: "bg-emerald-500/10 text-emerald-600 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-800", icon: CheckCircle2, label: "Completed" },
     REJECTED: { color: "bg-rose-500/10 text-rose-600 border-rose-200 dark:bg-rose-500/20 dark:text-rose-400 dark:border-rose-800", icon: AlertCircle, label: "Rejected" },
     DENIED: { color: "bg-rose-500/10 text-rose-600 border-rose-200 dark:bg-rose-500/20 dark:text-rose-400 dark:border-rose-800", icon: AlertCircle, label: "Denied" },
-    CANCELLED: { color: "bg-slate-500/10 text-slate-600 border-slate-200 dark:bg-slate-500/20 dark:text-slate-400 dark:border-slate-800", icon: Clock, label: "Cancelled" },
+    CANCELLED: { color: "bg-slate-500/10 text-slate-600 border-slate-200 dark:bg-slate-500/20 dark:text-slate-400 dark:border-slate-800", icon: XCircle, label: "Cancelled" },
 };
 
 const formatDate = (dateInput: any) => {
@@ -65,9 +68,22 @@ const formatDate = (dateInput: any) => {
 function ReturnDetailsSheet({ ret }: { ret: any }) {
     const status = statusConfig[ret.status] || { color: "bg-muted text-muted-foreground", icon: Clock, label: ret.status };
     const StatusIcon = status.icon;
+    const [open, setOpen] = useState(false);
+
+    const [cancelReturn, { loading: cancelling }] = useMutation(CANCEL_RETURN_REQUEST, {
+        variables: { id: ret.id },
+        refetchQueries: [GET_MY_RETURNS],
+        onCompleted: () => {
+            toast.success("Return request cancelled successfully");
+            setOpen(false);
+        },
+        onError: (error) => {
+            toast.error(error.message || "Failed to cancel return request");
+        }
+    });
 
     return (
-        <Sheet>
+        <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
                 <button className="flex items-center justify-center gap-2 text-sm font-bold text-primary hover:text-primary/70 transition-colors group/btn">
                     Details
@@ -161,19 +177,32 @@ function ReturnDetailsSheet({ ret }: { ret: any }) {
                     </div>
                 </div>
 
-                <div className="p-6 bg-background border-t mt-auto flex gap-3">
-                    <Link
-                        href={`/account/orders`}
-                        className="flex-1 px-4 py-2.5 bg-muted hover:bg-muted/80 rounded-xl text-sm font-bold text-center transition-colors"
-                    >
-                        View Order
-                    </Link>
-                    <button
-                        className="flex-1 px-4 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-bold text-center hover:bg-primary/90 transition-colors"
-                        onClick={() => {/* Support link? */ }}
-                    >
-                        Need Help?
-                    </button>
+                <div className="p-6 bg-background border-t mt-auto flex flex-col gap-3">
+                    <div className="flex gap-3">
+                        <Link
+                            href={`/account/orders`}
+                            className="flex-1 px-4 py-2.5 bg-muted hover:bg-muted/80 rounded-xl text-sm font-bold text-center transition-colors"
+                        >
+                            View Order
+                        </Link>
+                        <button
+                            className="flex-1 px-4 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-bold text-center hover:bg-primary/90 transition-colors"
+                            onClick={() => {/* Support link? */ }}
+                        >
+                            Need Help?
+                        </button>
+                    </div>
+
+                    {ret.status === "REQUESTED" && (
+                        <Button
+                            variant="destructive"
+                            className="w-full h-11 rounded-xl text-sm font-bold"
+                            onClick={() => cancelReturn()}
+                            disabled={cancelling}
+                        >
+                            {cancelling ? "Cancelling..." : "Cancel Return Request"}
+                        </Button>
+                    )}
                 </div>
             </SheetContent>
         </Sheet>

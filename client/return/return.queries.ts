@@ -75,3 +75,12 @@ export const GET_RETURN_DETAILS = gql`
     }
   }
 `;
+
+export const CANCEL_RETURN_REQUEST = gql`
+  mutation CancelReturnRequest($id: ID!) {
+    cancelReturnRequest(id: $id) {
+      id
+      status
+    }
+  }
+`;
