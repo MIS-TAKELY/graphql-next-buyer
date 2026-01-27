@@ -32,7 +32,7 @@ const PUBLIC_ROUTES = [
     "/terms-conditions",
     "/returns-policy",
     "/shipping-policy",
-    "/sitemap",
+    "/site-map",
 ];
 
 

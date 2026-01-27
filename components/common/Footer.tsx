@@ -52,7 +52,7 @@ const Footer = () => {
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
           <p>&copy; {new Date().getFullYear()} Vanijay. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <Link href="/sitemap" className="hover:text-primary cursor-pointer">Sitemap</Link>
+            <Link href="/site-map" className="hover:text-primary cursor-pointer">Sitemap</Link>
           </div>
         </div>
       </div>
