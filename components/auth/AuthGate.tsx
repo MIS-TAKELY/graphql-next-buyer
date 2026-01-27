@@ -22,11 +22,19 @@ const PUBLIC_ROUTES = [
     "/about",
     "/contact",
     "/blog",
+    "/careers",
     "/account", // Account pages are now public (will show guest user)
     "/checkout", // Checkout is public
     "/payment", // Payment status pages
     "/reset-password",
+    "/privacy-policy",
+    "/cookie-policy",
+    "/terms-conditions",
+    "/returns-policy",
+    "/shipping-policy",
+    "/sitemap",
 ];
+
 
 export default function AuthGate({ children }: AuthGateProps) {
     const { data: session, isPending } = useSession();
