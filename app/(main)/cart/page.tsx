@@ -73,7 +73,7 @@ export default function CartPage() {
       return;
     }
 
-    router.push("/buy-now?from=cart");
+    router.push("/checkout");
   };
 
   if (isLoading && cartItems.length === 0) {

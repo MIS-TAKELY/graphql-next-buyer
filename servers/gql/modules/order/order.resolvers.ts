@@ -487,6 +487,31 @@ export const orderResolvers = {
         throw new Error("Cannot cancel order after it has been shipped");
       }
 
+      // If status is PENDING, cancel immediately without dispute
+      if (order.status === "PENDING") {
+        await prisma.$transaction([
+          prisma.order.update({
+            where: { id: input.orderId },
+            data: { status: "CANCELLED" },
+          }),
+          prisma.sellerOrder.updateMany({
+            where: { buyerOrderId: input.orderId },
+            data: { status: "CANCELLED" },
+          }),
+        ]);
+
+        return prisma.orderDispute.create({
+          data: {
+            orderId: input.orderId,
+            userId: user.id,
+            reason: input.reason,
+            type: "CANCEL",
+            status: "RESOLVED",
+            description: "Immediate cancellation by buyer (Order was PENDING)",
+          },
+        });
+      }
+
       return prisma.orderDispute.create({
         data: {
           orderId: input.orderId,
@@ -521,7 +546,9 @@ export const orderResolvers = {
       if (order.buyerId !== user.id) throw new Error("Unauthorized");
 
       // Check if order is delivered
-      const isDelivered = order.status === "DELIVERED" || (order.shipments as any[]).some((s: any) => s.status === "DELIVERED");
+      const isDelivered =
+        order.status === "DELIVERED" ||
+        (order.shipments as any[]).some((s: any) => s.status === "DELIVERED");
 
       if (!isDelivered) {
         throw new Error("Can only request return for delivered orders");
@@ -571,9 +598,9 @@ export const orderResolvers = {
             where: { id: updatedDispute.orderId },
             data: { status: "CANCELLED" },
           });
-          // Also update seller orders
+          // Also update ALL seller orders, as the parent order is cancelled
           await prisma.sellerOrder.updateMany({
-            where: { buyerOrderId: updatedDispute.orderId, sellerId: user.id },
+            where: { buyerOrderId: updatedDispute.orderId },
             data: { status: "CANCELLED" },
           });
         } else if (updatedDispute.type === "RETURN") {
@@ -581,8 +608,11 @@ export const orderResolvers = {
             where: { id: updatedDispute.orderId },
             data: { status: "RETURNED" },
           });
+          // For returns, we might still want to update all if it's a full return
+          // But strict sync for multiple sellers on return is complex.
+          // Assuming for now if main order is RETURNED, all parts are.
           await prisma.sellerOrder.updateMany({
-            where: { buyerOrderId: updatedDispute.orderId, sellerId: user.id },
+            where: { buyerOrderId: updatedDispute.orderId },
             data: { status: "RETURNED" },
           });
         }

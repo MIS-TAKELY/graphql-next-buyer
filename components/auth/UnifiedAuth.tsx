@@ -39,8 +39,7 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
     const [loading, setLoading] = useState(false);
     const [timer, setTimer] = useState(120);
     const [canResend, setCanResend] = useState(false);
-    const [acceptPolicies, setAcceptPolicies] = useState(false);
-    const [acceptCookies, setAcceptCookies] = useState(false);
+    const [acceptTerms, setAcceptTerms] = useState(false);
     const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
     const router = useRouter();
 
@@ -134,7 +133,7 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!acceptPolicies || !acceptCookies) {
+        if (!acceptTerms) {
             toast.error("Please accept the terms, privacy policy, and cookie policy to continue.");
             return;
         }
@@ -460,25 +459,13 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
                     <div className="flex items-start space-x-2">
                         <input
                             type="checkbox"
-                            id="acceptPolicies"
-                            checked={acceptPolicies}
-                            onChange={(e) => setAcceptPolicies(e.target.checked)}
+                            id="acceptTerms"
+                            checked={acceptTerms}
+                            onChange={(e) => setAcceptTerms(e.target.checked)}
                             className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                         />
-                        <Label htmlFor="acceptPolicies" className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground">
-                            I accept the <Link href="/privacy-policy" className="text-primary hover:underline">Privacy Policy</Link> and <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link>
-                        </Label>
-                    </div>
-                    <div className="flex items-start space-x-2">
-                        <input
-                            type="checkbox"
-                            id="acceptCookies"
-                            checked={acceptCookies}
-                            onChange={(e) => setAcceptCookies(e.target.checked)}
-                            className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                        />
-                        <Label htmlFor="acceptCookies" className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground">
-                            I agree to the <Link href="/cookie-policy" className="text-primary hover:underline">Cookie Policy</Link>
+                        <Label htmlFor="acceptTerms" className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground">
+                            I accept the <Link href="/privacy-policy" className="text-primary hover:underline">Privacy Policy</Link>, <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link>, and <Link href="/cookie-policy" className="text-primary hover:underline">Cookie Policy</Link>
                         </Label>
                     </div>
                 </div>

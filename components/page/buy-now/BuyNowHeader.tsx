@@ -5,9 +5,10 @@ import { ArrowLeft } from "lucide-react";
 interface BuyNowHeaderProps {
   productSlug: string;
   productName: string;
+  title?: string;
 }
 
-export function BuyNowHeader({ productSlug, productName }: BuyNowHeaderProps) {
+export function BuyNowHeader({ productSlug, productName, title = "Buy Now" }: BuyNowHeaderProps) {
   return (
     <div className="mb-8">
       <Link
@@ -17,7 +18,7 @@ export function BuyNowHeader({ productSlug, productName }: BuyNowHeaderProps) {
         <ArrowLeft className="h-4 w-4 mr-2 text-gray-600 dark:text-gray-300" />
         Back to Cart
       </Link>
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Buy Now</h1>
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{title}</h1>
       <p className="text-gray-600 dark:text-gray-300 mt-2">
         Complete your purchase for {productName}
       </p>
