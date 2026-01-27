@@ -59,15 +59,15 @@ export default async function SitemapPage() {
                 { name: "Shipping Policy", href: "/shipping-policy", icon: <Truck className="w-4 h-4" /> },
             ]
         },
-        {
-            title: "Account",
-            icon: <ShoppingBag className="w-5 h-5" />,
-            links: [
-                { name: "My Account", href: "/account", icon: <ShoppingBag className="w-4 h-4" /> },
-                { name: "My Orders", href: "/account/orders", icon: <ShoppingBag className="w-4 h-4" /> },
-                { name: "Cart", href: "/cart", icon: <ShoppingBag className="w-4 h-4" /> },
-            ]
-        }
+        // {
+        //     title: "Account",
+        //     icon: <ShoppingBag className="w-5 h-5" />,
+        //     links: [
+        //         { name: "My Account", href: "/account", icon: <ShoppingBag className="w-4 h-4" /> },
+        //         { name: "My Orders", href: "/account/orders", icon: <ShoppingBag className="w-4 h-4" /> },
+        //         { name: "Cart", href: "/cart", icon: <ShoppingBag className="w-4 h-4" /> },
+        //     ]
+        // }
     ];
 
     return (
