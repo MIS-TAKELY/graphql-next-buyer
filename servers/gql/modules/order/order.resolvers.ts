@@ -539,7 +539,7 @@ export const orderResolvers = {
       const user = requireBuyer(ctx);
       const order = await prisma.order.findUnique({
         where: { id: input.orderId },
-        include: { shipments: true },
+        include: { shipments: true, items: true },
       });
 
       if (!order) throw new Error("Order not found");
@@ -554,15 +554,32 @@ export const orderResolvers = {
         throw new Error("Can only request return for delivered orders");
       }
 
-      return prisma.orderDispute.create({
+      // Check if return already exists
+      const existingReturn = await prisma.return.findFirst({
+        where: { orderId: input.orderId },
+      });
+
+      if (existingReturn) {
+        throw new Error("Return request already exists for this order");
+      }
+
+      // Create Return and ReturnItems
+      return prisma.return.create({
         data: {
           orderId: input.orderId,
           userId: user.id,
           reason: input.reason,
           description: input.description,
           images: input.images || [],
-          type: "RETURN",
-          status: "PENDING",
+          type: "REFUND",
+          status: "REQUESTED",
+          items: {
+            create: order.items.map((item) => ({
+              orderItemId: item.id,
+              quantity: item.quantity,
+              reason: input.reason,
+            })),
+          },
         },
       });
     },

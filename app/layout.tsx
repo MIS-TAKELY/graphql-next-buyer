@@ -21,8 +21,19 @@ export const metadata: Metadata = {
     template: "%s | Vanijay",
   },
   description: "Modern e-commerce platform for seamless online shopping. Discover the best deals on electronics, fashion, and more.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://www.vanijay.com"),
-  keywords: ["ecommerce", "shopping", "electronics", "fashion", "online store"],
+  metadataBase: new URL(process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000")),
+  keywords: ["ecommerce", "shopping", "electronics", "fashion", "online store", "Nepal"],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
     locale: "en_US",

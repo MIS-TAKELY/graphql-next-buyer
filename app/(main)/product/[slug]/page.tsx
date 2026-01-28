@@ -61,23 +61,35 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
   const productImage = product.images?.[0]?.url;
 
-  const title = product.metaTitle || product.name;
-  const description = product.metaDescription || product.description?.substring(0, 160) || `Buy ${product.name} at the best price in Nepal.`;
-  const keywords = product.keywords && product.keywords.length > 0 ? product.keywords : [`buy ${product.name} online`, `${product.name} price in Nepal`];
+  const baseUrl = process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
+  const url = `${baseUrl}/product/${slug}`;
+
+  const title = product.metaTitle || `${product.name} | Best Price in Nepal | Vanijay`;
+  const description = product.metaDescription || product.description?.substring(0, 160) || `Buy ${product.name} at the best price in Nepal. Fast delivery and secure payment at Vanijay.`;
+  const keywords = product.keywords && product.keywords.length > 0 ? product.keywords : [product.name, `buy ${product.name} online`, `${product.name} price in Nepal`, "Vanijay"];
 
   return {
     title,
     description,
     keywords,
     alternates: {
-      canonical: `/product/${slug}`,
+      canonical: url,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      }
     },
     openGraph: {
       title,
       description,
       images: productImage ? [productImage, ...previousImages] : previousImages,
-      url: `/product/${slug}`,
+      url,
       type: "website",
+      siteName: "Vanijay",
     },
     twitter: {
       card: "summary_large_image",
@@ -122,13 +134,17 @@ export default async function ProductPage({
   const stockValue = serializableProduct.variants?.[0]?.stock;
   const stock = stockValue ? Number(stockValue) : 0;
 
+  const baseUrl = process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
+  const productUrl = `${baseUrl}/product/${slug}`;
+  const description = serializableProduct.metaDescription || serializableProduct.description?.substring(0, 160) || `Buy ${serializableProduct.name} at the best price in Nepal.`;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: serializableProduct.name,
     image: serializableProduct.images?.map((img: any) => img.url) || [],
-    description: serializableProduct.description,
-    sku: serializableProduct.variants?.[0]?.sku || "",
+    description: serializableProduct.description || description,
+    sku: serializableProduct.variants?.[0]?.sku || `VJ-${serializableProduct.id.substring(0, 8)}`,
     brand: {
       "@type": "Brand",
       name:
@@ -138,7 +154,7 @@ export default async function ProductPage({
     },
     offers: {
       "@type": "Offer",
-      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/product/${slug}`,
+      url: productUrl,
       priceCurrency: "NPR",
       price: currentPrice,
       itemCondition: "https://schema.org/NewCondition",
@@ -146,6 +162,11 @@ export default async function ProductPage({
         stock > 0
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
+      priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+      seller: {
+        "@type": "Organization",
+        name: "Vanijay",
+      },
     },
     aggregateRating: serializableProduct.reviews && serializableProduct.reviews.length > 0 ? {
       "@type": "AggregateRating",

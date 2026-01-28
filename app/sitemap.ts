@@ -2,7 +2,7 @@ import { prisma } from "../lib/db/prisma";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.vanijay.com";
+    const baseUrl = process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
 
     let categories: { slug: string; updatedAt: Date }[] = [];
     let products: { slug: string; updatedAt: Date }[] = [];
@@ -17,9 +17,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 where: { status: "ACTIVE" },
                 select: { slug: true, updatedAt: true }
             })
-        ]);
-        categories = cats;
-        products = prods;
+        ]).catch(err => {
+            console.error("Error in sitemap fetching:", err);
+            return [[], []];
+        });
+        categories = cats || [];
+        products = prods || [];
     } catch (error) {
         console.error("Error fetching data for sitemap:", error);
     }

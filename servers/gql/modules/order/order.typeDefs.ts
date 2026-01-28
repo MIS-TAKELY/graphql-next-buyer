@@ -112,7 +112,7 @@ export const orderTypeDefs = gql`
   extend type Mutation {
     createOrder(input: [CreateOrderInput!]!): [Order!]!
     cancelOrder(input: CancelOrderInput!): OrderDispute!
-    requestReturn(input: RequestReturnInput!): OrderDispute!
+    requestReturn(input: RequestReturnInput!): Return!
     updateDisputeStatus(disputeId: ID!, status: DisputeStatus!): OrderDispute!
   }
 `;
