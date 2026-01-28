@@ -33,7 +33,8 @@ export const topDealsResolvers = {
       }
 
       // Step 1: Detect category from the query using AI
-      const detectedCategory = await detectCategory(topDealAbout);
+      const result = await detectCategory(topDealAbout);
+      const detectedCategory = result.category;
       console.log("🎯 Detected category:", detectedCategory);
 
       // Step 2: Get the detected category from database
