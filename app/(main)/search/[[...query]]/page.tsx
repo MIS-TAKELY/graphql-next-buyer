@@ -104,19 +104,19 @@ export default function SearchPage() {
 
   const setSortBy = (sort: string) => setFilters({ sort });
 
-  // Use AI-driven filters if available, fallback to backend filters
+  // Process filters from backend (new FilterGroup structure)
   const { computedFilters, filterOptions } = useMemo(() => {
     // Prioritize AI-driven filters from dynamicSearchData
     if (dynamicSearchData?.filters && dynamicSearchData.filters.length > 0) {
       const finalFilters: any[] = [];
-      const options: { [key: string]: string[] } = {};
+      const options: { [key: string]: any[] } = {};
 
       dynamicSearchData.filters.forEach((filter: any) => {
         if (filter.options && filter.options.length > 0) {
           finalFilters.push({
             key: filter.key,
             label: filter.label,
-            options: filter.options,
+            options: filter.options, // Already in { value, count } format
             type: filter.type || "dropdown",
           });
           options[filter.key] = filter.options;
@@ -126,86 +126,27 @@ export default function SearchPage() {
       return { computedFilters: finalFilters, filterOptions: options };
     }
 
-    // Fallback to backend filters if AI filters not available
-    if (!backendFilters) {
-      return { computedFilters: [], filterOptions: {} };
-    }
+    // Process backend filters (new FilterGroup[] structure)
+    if (backendFilters && Array.isArray(backendFilters)) {
+      const finalFilters: any[] = [];
+      const options: { [key: string]: any[] } = {};
 
-    const { brands, categories, specifications, delivery } = backendFilters;
-    const finalFilters: any[] = [];
-    const options: { [key: string]: string[] } = {};
-
-    // 1. Brands
-    if (brands?.length > 0) {
-      const opts = brands.map((b: any) => b.name);
-      finalFilters.push({
-        key: "brand",
-        label: "Brand",
-        options: opts,
-      });
-      options.brand = opts;
-    }
-
-    // 2. Categories (only show if multiple categories)
-    if (categories?.length > 1) {
-      const opts = categories.map((c: any) => c.name);
-      finalFilters.push({
-        key: "category",
-        label: "Category",
-        options: opts,
-      });
-      options.category = opts;
-    }
-
-    // 3. Delivery - Normalize and deduplicate
-    if (delivery?.length > 0) {
-      const normalizedDelivery = new Set<string>();
-      delivery.forEach((d: any) => {
-        const normalized = d.name
-          .replace(/\s+/g, "")
-          .toLowerCase();
-
-        // Map variations to standard names
-        if (normalized.includes("standard") || normalized.includes("stander")) {
-          normalizedDelivery.add("Standard Delivery");
-        } else if (normalized.includes("express") || normalized.includes("fast")) {
-          normalizedDelivery.add("Express Delivery");
-        } else if (normalized.includes("free")) {
-          normalizedDelivery.add("Free Delivery");
-        } else if (normalized.includes("same") && normalized.includes("day")) {
-          normalizedDelivery.add("Same Day Delivery");
-        } else {
-          normalizedDelivery.add(d.name);
+      backendFilters.forEach((filter: any) => {
+        if (filter.options && filter.options.length > 0) {
+          finalFilters.push({
+            key: filter.key,
+            label: filter.label,
+            options: filter.options, // { value, count }[]
+            type: filter.type || "dropdown",
+          });
+          options[filter.key] = filter.options;
         }
       });
 
-      const opts = Array.from(normalizedDelivery);
-      if (opts.length > 0) {
-        finalFilters.push({
-          key: "delivery_options",
-          label: "Delivery Options",
-          options: opts,
-        });
-        options.delivery_options = opts;
-      }
+      return { computedFilters: finalFilters, filterOptions: options };
     }
 
-    // 4. Specifications
-    if (specifications) {
-      Object.entries(specifications).forEach(([key, spec]: [string, any]) => {
-        finalFilters.push({
-          key,
-          label: spec.label || key,
-          options: spec.options,
-        });
-        options[key] = spec.options;
-      });
-    }
-
-    return {
-      computedFilters: finalFilters,
-      filterOptions: options,
-    };
+    return { computedFilters: [], filterOptions: {} };
   }, [backendFilters, dynamicSearchData]);
 
   const filteredProducts = useMemo(() => {

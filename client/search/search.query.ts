@@ -32,21 +32,21 @@ export const MAKE_SEARCH_QUERY = gql`
         }
       }
       filters {
-        brands {
-          name
-          count
-        }
-        categories {
-          id
-          name
-          count
-        }
-        specifications
-        delivery {
-          name
+        key
+        label
+        type
+        options {
+          value
           count
         }
       }
+      intent {
+        price_max
+        price_min
+        brand
+        specifications
+      }
+      dominantCategory
       pagination {
         page
         limit
