@@ -269,7 +269,7 @@ export default async function ProductPage({
   };
 
   return (
-    <SSRApolloProvider initialData={initialCacheData}>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -278,7 +278,9 @@ export default async function ProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
-      <ProductPageClient product={serializableProduct} />
-    </SSRApolloProvider>
+      <SSRApolloProvider initialData={initialCacheData}>
+        <ProductPageClient product={serializableProduct} />
+      </SSRApolloProvider>
+    </>
   );
 }
