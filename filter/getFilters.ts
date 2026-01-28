@@ -137,6 +137,37 @@ export async function getDynamicFilters(
     currentId = cat?.parentId || null;
   }
 
+  // ===== AI FALLBACK: Suggest specs if category has none =====
+  if (allSpecs.length === 1) {
+    // Only brand, no category specs
+    console.log(`🤖 No category specs found, using AI to suggest specifications for "${searchTerm}"`);
+
+    const { suggestSpecifications, getFallbackSpecifications } = await import("@/lib/search/specificationSuggester");
+
+    // Try AI first
+    let suggestedSpecs = await suggestSpecifications(searchTerm);
+
+    // Fallback to rule-based if AI fails
+    if (suggestedSpecs.length === 0) {
+      suggestedSpecs = getFallbackSpecifications(searchTerm);
+      if (suggestedSpecs.length > 0) {
+        console.log(`📋 Using ${suggestedSpecs.length} fallback specifications`);
+      }
+    }
+
+    // Add suggested specs (they'll be populated from actual product data)
+    for (const spec of suggestedSpecs) {
+      if (!seenKeys.has(spec.key)) {
+        allSpecs.push({
+          key: spec.key,
+          label: spec.label,
+          options: null, // Will be populated from actual data
+        });
+        seenKeys.add(spec.key);
+      }
+    }
+  }
+
   // ===== STEP 4: Build WHERE clause for applied filters =====
   const buildFilteredProductIds = async (): Promise<string[]> => {
     if (!appliedFilters || Object.keys(appliedFilters).length === 0) {
