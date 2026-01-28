@@ -193,11 +193,11 @@ export const searchResolvers = {
 
       const whereClause = whereConditions.join(" AND ");
 
-      // Get total count
-      const countResult = await prisma.$queryRaw<Array<{ count: bigint }>>(
-        Prisma.sql([
-          `SELECT COUNT(*) as count FROM "products" WHERE ${whereClause}`,
-        ] as any, ...params)
+      // Get total count using $queryRawUnsafe
+      const countQuery = `SELECT COUNT(*) as count FROM "products" WHERE ${whereClause}`;
+      const countResult = await prisma.$queryRawUnsafe<Array<{ count: bigint }>>(
+        countQuery,
+        ...params
       );
 
       const total = Number(countResult[0]?.count || 0);
@@ -206,29 +206,28 @@ export const searchResolvers = {
       // ===== STEP 6: Final Ranking =====
       // Semantic relevance + Business metrics (popularity + trust)
       let orderByClause = "";
-      if (useVectorSearch && vector) {
-        orderByClause = `
-          embedding <=> '${`[${vector.join(",")}]`}'::vector,
-          "soldCount" DESC,
-          "averageRating" DESC
-        `;
+      if (useVectorSearch && vector.length > 0) {
+        const vectorString = `[${vector.join(",")}]`;
+        orderByClause = `embedding <=> '${vectorString}'::vector, "soldCount" DESC, "averageRating" DESC`;
       } else {
-        orderByClause = `
-          "soldCount" DESC,
-          "averageRating" DESC,
-          "createdAt" DESC
-        `;
+        orderByClause = `"soldCount" DESC, "averageRating" DESC, "createdAt" DESC`;
       }
 
-      const rankedResults = await prisma.$queryRaw<Array<{ id: string }>>(
-        Prisma.sql([
-          `SELECT id::text 
-           FROM "products" 
-           WHERE ${whereClause}
-           ORDER BY ${orderByClause}
-           LIMIT $${params.length + 1}
-           OFFSET $${params.length + 2}`,
-        ] as any, ...params, limit, offset)
+      // Build final query with pagination
+      const selectQuery = `
+        SELECT id::text 
+        FROM "products" 
+        WHERE ${whereClause}
+        ORDER BY ${orderByClause}
+        LIMIT $${params.length + 1}
+        OFFSET $${params.length + 2}
+      `;
+
+      const rankedResults = await prisma.$queryRawUnsafe<Array<{ id: string }>>(
+        selectQuery,
+        ...params,
+        limit,
+        offset
       );
 
       const productIds = rankedResults.map((p) => p.id);
