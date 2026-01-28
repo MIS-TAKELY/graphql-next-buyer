@@ -26,13 +26,14 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
             {categories.map((category: any, index: number) => {
               return (
                 <Link key={category.id || index} href={`/search?q=${category.categoryName || category.name}`}>
-                  <button
+                  <div
                     className="
                         flex flex-col items-center justify-center
                         group focus:outline-none
                         transition-transform hover:scale-105 active:scale-95
                         flex-shrink-0 lg:flex-shrink
                         w-20 xs:w-24 sm:w-28 md:w-24 lg:w-full py-2
+                        cursor-pointer
                       "
                     aria-label={`Go to ${category.categoryName || category.name} category`}
                   >
@@ -81,8 +82,7 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
                     >
                       {category.categoryName || category.name}
                     </h3>
-
-                  </button>
+                  </div>
                 </Link>
               );
             })}

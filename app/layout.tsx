@@ -87,7 +87,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
 
       <body
         className={`${plusJakarta.variable} antialiased`}
@@ -102,8 +102,8 @@ export default function RootLayout({
           <NotificationListener />
           <GlobalAuthModal />
         </ApolloWrapper>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "G-R7VFCZNSEQ"} />
       </body>
-      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "G-R7VFCZNSEQ"} />
     </html>
   );
 }

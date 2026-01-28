@@ -102,9 +102,9 @@ export default function ProductCard({ product }: ProductCardProps) {
   const isNew = !averageRating && product.createdAt && differenceInDays(new Date(), new Date(product.createdAt)) <= 30;
 
   return (
-    <div className="block w-full h-full relative">
+    <div className="block w-full h-full relative group">
       <Link href={`/product/${product.slug}`} className="block h-full">
-        <Card className={`group cursor-pointer transition-all duration-300 bg-white dark:bg-gray-900 border-none shadow-none rounded-xl h-full flex flex-col overflow-hidden min-h-[260px] p-0 ${selected ? "ring-2 ring-blue-500 border-blue-500" : ""
+        <Card className={`transition-all duration-300 bg-white dark:bg-gray-900 border-none shadow-none rounded-xl h-full flex flex-col overflow-hidden min-h-[260px] p-0 ${selected ? "ring-2 ring-blue-500 border-blue-500" : ""
           }`}>
           <CardContent className="p-0 flex flex-col h-full">
             {/* Image Section - Fixed Aspect Ratio */}
@@ -123,26 +123,6 @@ export default function ProductCard({ product }: ProductCardProps) {
                   {discount}% OFF
                 </Badge>
               )}
-
-              {/* Quick Actions Overlay (Desktop) */}
-              <div className="absolute top-3 right-3 z-20 flex flex-col gap-2 opacity-100 sm:opacity-0 sm:translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className={`h-8 w-8 rounded-full shadow-sm bg-white/95 hover:bg-white ${checkIsWishlisted(product.id) ? "text-red-500" : "text-gray-600"}`}
-                  onClick={handleWishlistAction}
-                >
-                  <Heart className={`h-4 w-4 ${checkIsWishlisted(product.id) ? "fill-current" : ""}`} />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className={`h-8 w-8 rounded-full shadow-sm bg-white/95 hover:bg-white ${checkIsInCart(product.id) ? "text-green-600" : "text-gray-600"}`}
-                  onClick={handleCartAction}
-                >
-                  {checkIsInCart(product.id) ? <Check className="h-4 w-4" /> : <ShoppingCart className="h-4 w-4" />}
-                </Button>
-              </div>
             </div>
 
             {/* Details Section */}
@@ -194,6 +174,26 @@ export default function ProductCard({ product }: ProductCardProps) {
           </CardContent>
         </Card>
       </Link>
+
+      {/* Quick Actions Overlay (Desktop) - MOVED OUTSIDE LINK */}
+      <div className="absolute top-3 right-3 z-20 flex flex-col gap-2 opacity-100 sm:opacity-0 sm:translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+        <Button
+          size="icon"
+          variant="secondary"
+          className={`h-8 w-8 rounded-full shadow-sm bg-white/95 hover:bg-white ${checkIsWishlisted(product.id) ? "text-red-500" : "text-gray-600"}`}
+          onClick={handleWishlistAction}
+        >
+          <Heart className={`h-4 w-4 ${checkIsWishlisted(product.id) ? "fill-current" : ""}`} />
+        </Button>
+        <Button
+          size="icon"
+          variant="secondary"
+          className={`h-8 w-8 rounded-full shadow-sm bg-white/95 hover:bg-white ${checkIsInCart(product.id) ? "text-green-600" : "text-gray-600"}`}
+          onClick={handleCartAction}
+        >
+          {checkIsInCart(product.id) ? <Check className="h-4 w-4" /> : <ShoppingCart className="h-4 w-4" />}
+        </Button>
+      </div>
 
       {/* Compare Checkbox */}
       <div
