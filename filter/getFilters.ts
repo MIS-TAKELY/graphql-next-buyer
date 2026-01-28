@@ -269,6 +269,12 @@ export async function getDynamicFilters(
     select: { name: true },
   });
 
+  console.log(`🔍 Filter Debug for "${searchTerm}":`);
+  console.log(`  - Category: ${category?.name}`);
+  console.log(`  - Total specs collected: ${allSpecs.length}`);
+  console.log(`  - Specs with options: ${filtersWithCounts.filter(f => f.options.length > 0).length}`);
+  console.log(`  - Filter keys:`, allSpecs.map(s => s.key));
+
   // ===== STEP 6: Return results =====
   return {
     category: category?.name || detected.category || "Filtered Search",
