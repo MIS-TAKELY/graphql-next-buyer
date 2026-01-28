@@ -1,46 +1,55 @@
-import { GET_PRODUCT_BY_SLUG } from "@/client/product/product.queries";
 import ProductPageClient from "@/components/page/product/ProductPageClient";
-import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
-import { CacheService } from "@/services/CacheService";
+import { prisma } from "@/lib/db/prisma";
 import { TProduct } from "@/types/product";
 import { Metadata, ResolvingMetadata } from "next";
 import { cache } from "react";
 
-export const revalidate = 3600; // Enable ISR for better performance and indexability
+export const revalidate = 3600;
 
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-// Cached data fetcher to deduplicate requests between generateMetadata and page
-const getProduct = cache(async (slug: string) => {
-  const CACHE_KEY = CacheService.getProductDetailKey(slug);
-
-  // 1. Try Cache First (Redis)
-  let product: TProduct | null = await CacheService.get<TProduct>(CACHE_KEY);
-
-  if (product) return product;
-
+// Consolidate fetching logic with Prisma for direct DB access
+const fetchProduct = cache(async (slug: string) => {
   try {
-    // 2. If not in Cache, fetch from DB via GraphQL
-    const client = await getServerApolloClient();
-    const { data } = await client.query({
-      query: GET_PRODUCT_BY_SLUG,
-      variables: { slug },
-      fetchPolicy: "no-cache",
+    const product = await prisma.product.findUnique({
+      where: { slug, status: "ACTIVE" },
+      include: {
+        images: { orderBy: { sortOrder: 'asc' } },
+        variants: {
+          include: {
+            specifications: true
+          }
+        },
+        category: {
+          include: {
+            categorySpecification: true
+          }
+        },
+        reviews: {
+          where: { status: "APPROVED" },
+          include: {
+            user: {
+              select: { firstName: true, lastName: true }
+            }
+          }
+        },
+        productOffers: {
+          include: {
+            offer: true
+          }
+        },
+        warranty: true,
+        returnPolicy: true
+      }
     });
-    product = data?.getProductBySlug as TProduct | null;
 
-    if (product) {
-      // 3. Store in Cache
-      await CacheService.set(CACHE_KEY, product, 3600);
-    }
-
-    return product;
+    return product as unknown as TProduct;
   } catch (error) {
-    console.error("Error fetching product:", error);
+    console.error("Error fetching product via Prisma:", error);
     return null;
   }
 });
@@ -50,11 +59,11 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { slug } = await params;
-  const product = await getProduct(slug);
+  const product = await fetchProduct(slug);
 
   if (!product) {
     return {
-      title: "Product Not Found",
+      title: "Product Not Found | Vanijay Nepal",
     };
   }
 
@@ -64,8 +73,8 @@ export async function generateMetadata(
   const baseUrl = process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
   const url = `${baseUrl}/product/${slug}`;
 
-  // Simplify title: [Product Name] Price in Nepal | Vanijay
-  const title = product.metaTitle || `${product.name} Price in Nepal | Vanijay`;
+  // Title: [Product Name] | Vanijay Nepal
+  const title = product.metaTitle || `${product.name} | Vanijay Nepal`;
 
   // High quality description (no truncation mid-sentence, 150-160 chars)
   let description = product.metaDescription || product.description || `Buy ${product.name} at the best price in Nepal. Fast delivery and secure payment at Vanijay.`;
@@ -114,7 +123,7 @@ export default async function ProductPage({
   const { slug } = await params;
 
   // Fetch product using the cached function
-  const product = await getProduct(slug);
+  const product = await fetchProduct(slug);
 
   if (!product) {
     return (
