@@ -81,20 +81,20 @@ export const productNotificationResolvers = {
                 }
             }
 
-            // Simplified duplicate check - only check for logged-in user
-            if (user) {
-                const existingNotification = await prisma.productNotification.findFirst({
-                    where: {
-                        productId: input.productId,
-                        variantId: input.variantId || null,
-                        userId: user.id,
-                        isNotified: false,
-                    },
-                });
+            // Duplicate check for both logged-in and guest users
+            const existingNotification = await prisma.productNotification.findFirst({
+                where: {
+                    productId: input.productId,
+                    variantId: input.variantId || null,
+                    userId: user?.id || undefined,
+                    email: !user ? input.email : undefined,
+                    phone: !user ? input.phone : undefined,
+                    isNotified: false,
+                },
+            });
 
-                if (existingNotification) {
-                    return existingNotification;
-                }
+            if (existingNotification) {
+                return existingNotification;
             }
 
             // Create notification
@@ -208,39 +208,45 @@ export const productNotificationResolvers = {
             for (const notification of notifications) {
                 try {
                     // Send email notification
-                    if (notification.email || notification.user?.email) {
+                    const emailToUse = notification.email || notification.user?.email;
+                    if (emailToUse) {
                         await sendEmailNotification(
-                            notification.email || notification.user!.email,
+                            emailToUse,
                             product.name,
                             product.slug
-                        );
+                        ).catch(err => console.error(`Email fail: ${err.message}`));
                     }
 
-                    // Send WhatsApp notification (placeholder - implement with your WhatsApp service)
-                    if (notification.phone || notification.user?.phone) {
+                    // Send WhatsApp notification
+                    const phoneToUse = notification.phone || notification.user?.phone;
+                    if (phoneToUse) {
                         await sendWhatsAppNotification(
-                            notification.phone || notification.user!.phone!,
+                            phoneToUse,
                             product.name,
                             product.slug
-                        );
+                        ).catch(err => console.error(`WhatsApp fail: ${err.message}`));
                     }
 
                     notificationIds.push(notification.id);
                     notifiedCount++;
                 } catch (error) {
                     console.error("Error sending notification:", error);
+                    // Still mark as notified so we don't spam
+                    notificationIds.push(notification.id);
                 }
             }
 
             // Mark notifications as sent
-            await prisma.productNotification.updateMany({
-                where: {
-                    id: { in: notificationIds },
-                },
-                data: {
-                    isNotified: true,
-                },
-            });
+            if (notificationIds.length > 0) {
+                await prisma.productNotification.updateMany({
+                    where: {
+                        id: { in: notificationIds },
+                    },
+                    data: {
+                        isNotified: true,
+                    },
+                });
+            }
 
             return {
                 success: true,
