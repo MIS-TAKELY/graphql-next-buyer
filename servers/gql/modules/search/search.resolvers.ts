@@ -1,6 +1,8 @@
 import { Prisma } from "../../../../app/generated/prisma";
 import { prisma } from "../../../../lib/db/prisma";
 import { generateEmbedding } from "@/lib/embemdind";
+import { extractIntent } from "@/lib/search/intentExtractor";
+import { getDynamicFilters } from "@/filter/getFilters";
 
 export const searchResolvers = {
   Query: {
@@ -20,29 +22,168 @@ export const searchResolvers = {
     ) => {
       const offset = (page - 1) * limit;
 
-      // ✅ Step 1: Generate vector embedding
-      const vector = await generateEmbedding(query);
-      const vectorString = `[${vector.join(",")}]`;
+      // ===== STEP 1: Vector Search (Recall) =====
+      // Get top 100 products by semantic similarity
+      let vector: number[] = [];
+      let topProductIds: string[] = [];
+      let useVectorSearch = true;
 
-      // ✅ Step 2: Build WHERE conditions dynamically
-      const whereConditions: string[] = ["embedding IS NOT NULL", "status = 'ACTIVE'"];
-      const params: any[] = [];
+      try {
+        vector = await generateEmbedding(query);
+        const vectorString = `[${vector.join(",")}]`;
 
+        const vectorResults = await prisma.$queryRaw<
+          Array<{ id: string; category_id: string | null; similarity: number }>
+        >(
+          Prisma.sql`
+            SELECT 
+              id::text,
+              "categoryId"::text as category_id,
+              1 - (embedding <=> ${Prisma.raw(
+            `'${vectorString}'::vector`
+          )}) AS similarity
+            FROM "products"
+            WHERE embedding IS NOT NULL AND status = 'ACTIVE'
+            ORDER BY similarity DESC
+            LIMIT 100
+          `
+        );
+
+        topProductIds = vectorResults.map((p) => p.id);
+      } catch (error) {
+        console.error("Vector search failed, falling back to keyword search:", error);
+        useVectorSearch = false;
+
+        // Fallback to keyword search
+        const keywordResults = await prisma.product.findMany({
+          where: {
+            OR: [
+              { name: { contains: query, mode: "insensitive" } },
+              { brand: { contains: query, mode: "insensitive" } },
+              { description: { contains: query, mode: "insensitive" } },
+            ],
+            status: "ACTIVE",
+          },
+          select: { id: true },
+          take: 100,
+        });
+
+        topProductIds = keywordResults.map((p) => p.id);
+      }
+
+      if (topProductIds.length === 0) {
+        return {
+          products: [],
+          pagination: { page, limit, total: 0, totalPages: 0 },
+          filters: { brands: [], categories: [], specifications: {}, delivery: [] },
+          intent: {},
+          dominantCategory: null,
+        };
+      }
+
+      // ===== STEP 2: Category Inference =====
+      // Find dominant category from top results
+      const categoryDistribution = await prisma.product.groupBy({
+        by: ["categoryId"],
+        where: {
+          id: { in: topProductIds },
+          categoryId: { not: null },
+        },
+        _count: true,
+        orderBy: {
+          _count: {
+            categoryId: "desc",
+          },
+        },
+        take: 1,
+      });
+
+      const dominantCategoryId = categoryDistribution[0]?.categoryId;
+      let dominantCategoryName = "All Products";
+
+      if (dominantCategoryId) {
+        const category = await prisma.category.findUnique({
+          where: { id: dominantCategoryId },
+          select: { name: true },
+        });
+        dominantCategoryName = category?.name || "All Products";
+      }
+
+      // ===== STEP 3: Fetch CategorySpecification =====
+      // Get dynamic filters for dominant category (hierarchical)
+      const dynamicFiltersResult = await getDynamicFilters(
+        query,
+        filters?.specifications || {},
+        topProductIds
+      );
+
+      const availableFilterKeys = dynamicFiltersResult.filters.map((f) => f.key);
+
+      // ===== STEP 4: LLM Intent Extraction =====
+      // Extract structured intent from query (controlled, JSON-only)
+      const intent = await extractIntent(query, availableFilterKeys);
+
+      // ===== STEP 5: Structured Filtering =====
+      // Apply filters from intent + user selections
+      const whereConditions: string[] = [
+        `id = ANY($1)`, // Must be in top 100 from vector search
+        `status = 'ACTIVE'`,
+      ];
+      const params: any[] = [topProductIds];
+
+      // Apply category filter
       if (filters?.categories?.length) {
         whereConditions.push(`"categoryId" = ANY($${params.length + 1})`);
         params.push(filters.categories);
       }
 
-      if (filters?.brands?.length) {
+      // Apply brand filter (from user OR intent)
+      const brandFilter = filters?.brands || intent.brand;
+      if (brandFilter?.length) {
         whereConditions.push(`brand = ANY($${params.length + 1})`);
-        params.push(filters.brands);
+        params.push(brandFilter);
       }
 
-      if (filters?.sellerId) {
-        whereConditions.push(`"sellerId" = $${params.length + 1}`);
-        params.push(filters.sellerId);
+      // Apply price filter (from user OR intent)
+      const priceMax = filters?.maxPrice || intent.price_max;
+      const priceMin = filters?.minPrice || intent.price_min;
+
+      if (priceMax || priceMin) {
+        const priceConditions: string[] = [];
+        if (priceMax) {
+          priceConditions.push(`pv.price <= $${params.length + 1}`);
+          params.push(priceMax);
+        }
+        if (priceMin) {
+          priceConditions.push(`pv.price >= $${params.length + 1}`);
+          params.push(priceMin);
+        }
+
+        whereConditions.push(`EXISTS (
+          SELECT 1 FROM "product_variants" pv 
+          WHERE pv."productId" = products.id 
+          AND ${priceConditions.join(" AND ")}
+        )`);
       }
 
+      // Apply specification filters (from user OR intent)
+      const specFilters = { ...intent.specifications, ...filters?.specifications };
+
+      for (const [key, value] of Object.entries(specFilters)) {
+        if (!value || (Array.isArray(value) && value.length === 0)) continue;
+
+        const values = Array.isArray(value) ? value : [value];
+        whereConditions.push(`EXISTS (
+          SELECT 1 FROM "product_variants" pv
+          JOIN "product_specifications" ps ON ps."variantId" = pv.id
+          WHERE pv."productId" = products.id
+          AND ps.key = $${params.length + 1}
+          AND ps.value = ANY($${params.length + 2})
+        )`);
+        params.push(key, values);
+      }
+
+      // Apply stock filter
       if (filters?.inStock) {
         whereConditions.push(`EXISTS (
           SELECT 1 FROM "product_variants" pv 
@@ -52,45 +193,47 @@ export const searchResolvers = {
 
       const whereClause = whereConditions.join(" AND ");
 
-      // ✅ Step 3: Get total count
+      // Get total count
       const countResult = await prisma.$queryRaw<Array<{ count: bigint }>>(
-        Prisma.sql`
-          SELECT COUNT(*) as count
-          FROM "products"
-          WHERE ${Prisma.raw(whereClause)}
-        `
+        Prisma.sql([
+          `SELECT COUNT(*) as count FROM "products" WHERE ${whereClause}`,
+        ] as any, ...params)
       );
 
       const total = Number(countResult[0]?.count || 0);
       const totalPages = Math.ceil(total / limit);
 
-      // ✅ Step 4: Fetch top product IDs (semantic relevance)
-      const idResults = await prisma.$queryRaw<
-        Array<{ id: string; similarity: number }>
-      >(
-        Prisma.sql`
-          SELECT 
-            id::text,
-            1 - (embedding <=> ${Prisma.raw(
-          `'${vectorString}'::vector`
-        )}) AS similarity
-          FROM "products"
-          WHERE ${Prisma.raw(whereClause)}
-          ORDER BY similarity DESC
-          LIMIT ${limit}
-          OFFSET ${offset}
-        `
-      );
-
-      if (idResults.length === 0) {
-        return {
-          products: [],
-          pagination: { page, limit, total, totalPages },
-        };
+      // ===== STEP 6: Final Ranking =====
+      // Semantic relevance + Business metrics (popularity + trust)
+      let orderByClause = "";
+      if (useVectorSearch && vector) {
+        orderByClause = `
+          embedding <=> '${`[${vector.join(",")}]`}'::vector,
+          "soldCount" DESC,
+          "averageRating" DESC
+        `;
+      } else {
+        orderByClause = `
+          "soldCount" DESC,
+          "averageRating" DESC,
+          "createdAt" DESC
+        `;
       }
 
-      const productIds = idResults.map((p: any) => p.id);
+      const rankedResults = await prisma.$queryRaw<Array<{ id: string }>>(
+        Prisma.sql([
+          `SELECT id::text 
+           FROM "products" 
+           WHERE ${whereClause}
+           ORDER BY ${orderByClause}
+           LIMIT $${params.length + 1}
+           OFFSET $${params.length + 2}`,
+        ] as any, ...params, limit, offset)
+      );
 
+      const productIds = rankedResults.map((p) => p.id);
+
+      // Fetch full product data
       const products = await prisma.product.findMany({
         where: { id: { in: productIds } },
         include: {
@@ -98,7 +241,6 @@ export const searchResolvers = {
             select: {
               price: true,
               mrp: true,
-
               specifications: {
                 select: {
                   key: true,
@@ -113,7 +255,7 @@ export const searchResolvers = {
               altText: true,
               sortOrder: true,
             },
-            orderBy: { sortOrder: 'asc' },
+            orderBy: { sortOrder: "asc" },
           },
           reviews: {
             select: { rating: true },
@@ -123,97 +265,23 @@ export const searchResolvers = {
         },
       });
 
-      const productMap = new Map(products.map((p: any) => [p.id, p]));
+      // Maintain ranking order
+      const productMap = new Map(products.map((p) => [p.id, p]));
       const orderedProducts = productIds
-        .map((id: any) => productMap.get(id))
-        .filter((p: any): p is NonNullable<typeof p> => Boolean(p))
-        .map((p: any) => ({
+        .map((id) => productMap.get(id))
+        .filter((p): p is NonNullable<typeof p> => Boolean(p))
+        .map((p) => ({
           ...p,
           createdAt: p.createdAt.toISOString(),
           updatedAt: p.updatedAt.toISOString(),
         }));
 
-      // ✅ Step 5: Aggregate Filters (Across all matching results, not just the current page)
-      // For performance, we can do these in parallel or optimize further.
-
-      // 5.1 Categories aggregation
-      const categoryCounts = await prisma.$queryRaw<Array<{ id: string; name: string; count: bigint }>>(
-        Prisma.sql`
-          SELECT c.id, c.name, COUNT(p.id) as count
-          FROM "products" p
-          JOIN "categories" c ON p."categoryId" = c.id
-          WHERE ${Prisma.raw(whereClause)}
-          GROUP BY c.id, c.name
-          ORDER BY count DESC
-        `
-      );
-
-      // 5.2 Brands aggregation
-      const brandCounts = await prisma.$queryRaw<Array<{ brand: string; count: bigint }>>(
-        Prisma.sql`
-          SELECT brand, COUNT(id) as count
-          FROM "products" p
-          WHERE ${Prisma.raw(whereClause)}
-          GROUP BY brand
-          ORDER BY count DESC
-        `
-      );
-
-      // 5.3 Specifications aggregation (Getting unique keys and their common values)
-      const topCategoryIds = categoryCounts.slice(0, 3).map((c: any) => c.id);
-
-      const categorySpecs = await prisma.categorySpecification.findMany({
-        where: { categoryId: { in: topCategoryIds } },
-        select: { key: true, label: true }
-      });
-
-      const specKeys = categorySpecs.map((s: any) => s.key);
-
-      const allMatchingProductIds = await prisma.$queryRaw<Array<{ id: string }>>(
-        Prisma.sql`
-          SELECT id::text FROM "products"
-          WHERE ${Prisma.raw(whereClause)}
-          LIMIT 100
-        `
-      );
-      const sampleIds = allMatchingProductIds.map((p: any) => p.id);
-
-      const specValues = await prisma.productSpecification.findMany({
-        where: {
-          key: { in: specKeys },
-          variant: {
-            product: { id: { in: sampleIds } }
-          }
-        },
-        select: { key: true, value: true }
-      });
-
-      const specAgg: Record<string, Set<string>> = {};
-      specValues.forEach((s: any) => {
-        if (!specAgg[s.key]) specAgg[s.key] = new Set();
-        specAgg[s.key].add(s.value);
-      });
-
-      const formattedSpecs: Record<string, { label: string; options: string[] }> = {};
-      categorySpecs.forEach((cs: any) => {
-        const values = specAgg[cs.key];
-        if (values && values.size > 0) {
-          formattedSpecs[cs.key] = {
-            label: cs.label,
-            options: Array.from(values).sort()
-          };
-        }
-      });
-
-      // 5.4 Delivery Options aggregation
-      const deliveryCounts = await prisma.$queryRaw<Array<{ title: string; count: bigint }>>(
-        Prisma.sql`
-          SELECT del.title, COUNT(DISTINCT p.id) as count
-          FROM "products" p
-          JOIN "delivery_options" del ON p.id = del."productId"
-          WHERE ${Prisma.raw(whereClause)}
-          GROUP BY del.title
-        `
+      // ===== Dynamic Facet Counts =====
+      // Get filter counts for UI (Amazon-style)
+      const filterCounts = await getDynamicFilters(
+        query,
+        filters?.specifications || {},
+        productIds
       );
 
       return {
@@ -224,15 +292,12 @@ export const searchResolvers = {
           total,
           totalPages,
         },
-        filters: {
-          brands: brandCounts.map((b: any) => ({ name: b.brand, count: Number(b.count) })),
-          categories: categoryCounts.map((c: any) => ({ id: c.id, name: c.name, count: Number(c.count) })),
-          specifications: formattedSpecs,
-          delivery: deliveryCounts.map((d: any) => ({ name: d.title, count: Number(d.count) })),
-          // price, stock can be added similarly
-        }
+        filters: filterCounts.filters,
+        intent,
+        dominantCategory: dominantCategoryName,
       };
     },
+
     searchSuggestions: async (_: any, { query }: { query: string }) => {
       if (!query.trim()) {
         // Return popular categories or terms if query is empty
@@ -249,7 +314,6 @@ export const searchResolvers = {
       // Generate vector embedding for the query
       const vector = await generateEmbedding(query);
       const vectorString = `[${vector.join(",")}]`;
-
 
       // Query for top matching products based on embedding similarity
       const results = await prisma.$queryRaw<
@@ -276,18 +340,14 @@ export const searchResolvers = {
         `
       );
 
-      // console.log("results-->",results)
-
-
       // Extract unique suggestions from product names, categories, and brands
       const suggestions = new Set<string>();
-      results.forEach((result: any) => {
+      results.forEach((result) => {
         if (result.name) suggestions.add(result.name.toLowerCase());
         if (result.categoryName)
           suggestions.add(result.categoryName.toLowerCase());
         if (result.brand) suggestions.add(result.brand.toLowerCase());
       });
-
 
       // Convert Set to Array and filter out duplicates
       return Array.from(suggestions).slice(0, 6);

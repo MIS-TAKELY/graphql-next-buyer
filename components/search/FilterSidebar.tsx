@@ -6,6 +6,11 @@ import { useState } from "react";
 import PriceFilter from "./PriceFilter";
 import RatingFilter from "./RatingFilter";
 
+interface FilterOption {
+  value: string;
+  count: number;
+}
+
 interface FilterSidebarProps {
   showFilters: boolean;
   selectedPriceRanges: string[];
@@ -18,14 +23,19 @@ interface FilterSidebarProps {
   dynamicSearchData: {
     category: string;
     intent?: Record<string, string[]>;
-    filters: { key: string; label: string; options: string[] | null; type?: string }[];
+    filters: {
+      key: string;
+      label: string;
+      options: FilterOption[] | string[] | null;
+      type?: string
+    }[];
   } | null;
 }
 
 interface DynamicFilterProps {
   filterKey: string;
   label: string;
-  options: string[];
+  options: FilterOption[] | string[];
   selectedValues: string[];
   toggleFilter: (key: string, value: string) => void;
   type?: string;
@@ -53,6 +63,14 @@ function DynamicFilter({
   );
 
   const isSuggested = type === "suggested";
+
+  // Normalize options to FilterOption format
+  const normalizedOptions: FilterOption[] = options.map((opt) => {
+    if (typeof opt === "string") {
+      return { value: opt, count: 0 };
+    }
+    return opt;
+  });
 
   return (
     <div className={`border-b border-gray-200 dark:border-gray-800 pb-2 ${isSuggested ? 'bg-blue-50/30 dark:bg-blue-900/10 -mx-2 px-2 rounded-lg' : ''}`}>
@@ -83,23 +101,30 @@ function DynamicFilter({
       </div>
       {isExpanded && (
         <div className="space-y-1">
-          {options.map((option) => (
+          {normalizedOptions.map((option) => (
             <div
-              key={option}
-              className="flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 p-1 rounded"
-              onClick={() => toggleFilter(filterKey, option)}
+              key={option.value}
+              className="flex items-center justify-between cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 p-1 rounded"
+              onClick={() => toggleFilter(filterKey, option.value)}
             >
-              <Checkbox
-                id={`${filterKey}-${option}`}
-                checked={selectedValues.includes(option)}
-                className="border-gray-300 dark:border-gray-600"
-              />
-              <Label
-                htmlFor={`${filterKey}-${option}`}
-                className="ml-2 text-xs cursor-pointer text-gray-700 dark:text-gray-300"
-              >
-                {option}
-              </Label>
+              <div className="flex items-center flex-1">
+                <Checkbox
+                  id={`${filterKey}-${option.value}`}
+                  checked={selectedValues.includes(option.value)}
+                  className="border-gray-300 dark:border-gray-600"
+                />
+                <Label
+                  htmlFor={`${filterKey}-${option.value}`}
+                  className="ml-2 text-xs cursor-pointer text-gray-700 dark:text-gray-300"
+                >
+                  {option.value}
+                </Label>
+              </div>
+              {option.count > 0 && (
+                <span className="text-[10px] text-gray-500 dark:text-gray-400 ml-2">
+                  ({option.count})
+                </span>
+              )}
             </div>
           ))}
         </div>

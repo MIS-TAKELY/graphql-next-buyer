@@ -9,6 +9,7 @@ export const searchTypeDef = gql`
     minRating: Float
     inStock: Boolean
     sellerId: String
+    specifications: Json
   }
 
   enum SearchSortBy {
@@ -27,8 +28,22 @@ export const searchTypeDef = gql`
   }
 
   type FilterOption {
-    name: String!
+    value: String!
     count: Int!
+  }
+
+  type FilterGroup {
+    key: String!
+    label: String!
+    type: String!
+    options: [FilterOption!]!
+  }
+
+  type SearchIntent {
+    price_max: Float
+    price_min: Float
+    brand: [String!]
+    specifications: Json
   }
 
   type CategoryFilter {
@@ -63,7 +78,9 @@ export const searchTypeDef = gql`
   type SearchResult {
     products: [Product!]!
     pagination: SearchPagination!
-    filters: SearchFiltersResult!
+    filters: [FilterGroup!]!
+    intent: SearchIntent
+    dominantCategory: String
   }
 
   type Query {
@@ -85,3 +102,4 @@ export const searchTypeDef = gql`
     errors: Boolean!
   }
 `;
+

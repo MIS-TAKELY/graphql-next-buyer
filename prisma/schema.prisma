@@ -382,6 +382,8 @@ model Product {
   categoryId         String?
   brand              String
   embedding          Unsupported("vector")?
+  soldCount          Int                    @default(0)
+  averageRating      Decimal?               @default(0) @db.Decimal(3, 2)
   keywords           String[]
   metaDescription    String?
   metaTitle          String?
