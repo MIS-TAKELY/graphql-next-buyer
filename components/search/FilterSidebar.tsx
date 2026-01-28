@@ -17,7 +17,8 @@ interface FilterSidebarProps {
   filterOptions: { [key: string]: string[] };
   dynamicSearchData: {
     category: string;
-    filters: { key: string; label: string; options: string[] | null }[];
+    intent?: Record<string, string[]>;
+    filters: { key: string; label: string; options: string[] | null; type?: string }[];
   } | null;
 }
 
@@ -27,6 +28,7 @@ interface DynamicFilterProps {
   options: string[];
   selectedValues: string[];
   toggleFilter: (key: string, value: string) => void;
+  type?: string;
 }
 
 function DynamicFilter({
@@ -35,11 +37,12 @@ function DynamicFilter({
   options,
   selectedValues,
   toggleFilter,
+  type,
 }: DynamicFilterProps) {
   // State to manage collapse/expand for collapsible filters
   const [isExpanded, setIsExpanded] = useState(
-    // Always expanded for Price, Rating, and Brand
-    ["price", "rating", "brand"].includes(filterKey.toLowerCase())
+    // Always expanded for Price, Rating, Brand and AI suggested filters
+    ["price", "rating", "brand"].includes(filterKey.toLowerCase()) || type === "suggested"
   );
 
   if (!options || options.length === 0) return null;
@@ -49,12 +52,21 @@ function DynamicFilter({
     filterKey.toLowerCase()
   );
 
+  const isSuggested = type === "suggested";
+
   return (
-    <div className="border-b border-gray-200 dark:border-gray-800 pb-2">
+    <div className={`border-b border-gray-200 dark:border-gray-800 pb-2 ${isSuggested ? 'bg-blue-50/30 dark:bg-blue-900/10 -mx-2 px-2 rounded-lg' : ''}`}>
       <div className="flex items-center justify-between">
-        <h3 className="font-medium text-sm text-gray-900 dark:text-white mb-2">
-          {label}
-        </h3>
+        <div className="flex items-center gap-2">
+          <h3 className="font-medium text-sm text-gray-900 dark:text-white mb-2">
+            {label}
+          </h3>
+          {isSuggested && (
+            <span className="text-[10px] bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-1 rounded font-bold uppercase tracking-wider mb-2">
+              AI
+            </span>
+          )}
+        </div>
         {isCollapsible && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
@@ -126,6 +138,7 @@ export default function FilterSidebar({
             options={filterOptions[filter.key] || filter.options || []}
             selectedValues={dynamicFilters[filter.key] || []}
             toggleFilter={toggleFilter}
+            type={filter.type}
           />
         ))}
       </div>

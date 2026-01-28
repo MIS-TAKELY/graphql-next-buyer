@@ -27,16 +27,21 @@ export async function getDynamicFilters(searchTerm: string) {
     if (p.categoryId) catIds.add(p.categoryId);
   });
 
-  // 2. Also ask AI for the ideal category
+  // 2. Also ask AI for the ideal category and intent
   const detected = await detectCategory(searchTerm);
+  const aiCategoryName = detected.category;
   const aiCategory = await prisma.category.findFirst({
-    where: { name: { equals: detected, mode: "insensitive" } },
+    where: { name: { equals: aiCategoryName, mode: "insensitive" } },
   });
 
   if (aiCategory) catIds.add(aiCategory.id);
 
   if (catIds.size === 0) {
-    return { category: detected || "Unknown", filters: [] };
+    return {
+      category: aiCategoryName || "Unknown",
+      filters: [],
+      intent: detected.intent
+    };
   }
 
   // 3. Gather specifications from all identified categories and their hierarchies
@@ -108,15 +113,16 @@ export async function getDynamicFilters(searchTerm: string) {
         label: s.label,
         key: s.key,
         options: options,
-        type: "dropdown",
+        type: detected.attributes.includes(s.key) ? "suggested" : "dropdown",
       };
     })
   );
 
   // 5. Return results
   return {
-    category: aiCategory?.name || "Filtered Search",
+    category: aiCategory?.name || aiCategoryName || "Filtered Search",
     filters: filtersWithPopulatedOptions.filter((f) => f.options.length > 0),
+    intent: detected.intent,
   };
 }
 

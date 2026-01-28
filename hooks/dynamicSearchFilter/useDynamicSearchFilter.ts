@@ -10,6 +10,7 @@ export interface Filter {
 
 export interface DynamicFilterResult {
   category: string;
+  intent?: Record<string, string[]>;
   filters: Filter[];
 }
 

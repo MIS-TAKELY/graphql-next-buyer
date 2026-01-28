@@ -9,7 +9,7 @@ import SortBar from "@/components/search/SortBar";
 import { Filter, useDynamicSearchFilter } from "@/hooks/dynamicSearchFilter/useDynamicSearchFilter";
 import { useSearch } from "@/hooks/search/useSearch";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 interface Specification {
   key?: string;
@@ -60,6 +60,7 @@ export default function SearchPage() {
   } = useSearch(query);
   const { dynamicSearchData } = useDynamicSearchFilter(query);
   const [showFilters, setShowFilters] = useState(false);
+  const [aiIntentApplied, setAiIntentApplied] = useState(false);
 
   // Zustand Store
   const {
@@ -70,6 +71,29 @@ export default function SearchPage() {
     setFilters,
     resetFilters,
   } = useProductStore();
+
+  // Auto-apply AI intent
+  useEffect(() => {
+    if (dynamicSearchData?.intent && !aiIntentApplied) {
+      const intentFilters = dynamicSearchData.intent;
+      Object.entries(intentFilters).forEach(([key, values]) => {
+        if (Array.isArray(values)) {
+          values.forEach(val => {
+            // Only add if not already selected
+            if (!filters.dynamicFilters[key]?.includes(val)) {
+              toggleDynamicFilter(key, val);
+            }
+          });
+        }
+      });
+      setAiIntentApplied(true);
+    }
+  }, [dynamicSearchData, aiIntentApplied, toggleDynamicFilter, filters.dynamicFilters]);
+
+  // Reset intent flag when query changes
+  useEffect(() => {
+    setAiIntentApplied(false);
+  }, [query]);
 
   const {
     selectedPriceRanges,
@@ -287,6 +311,7 @@ export default function SearchPage() {
                 filterOptions={filterOptions}
                 dynamicSearchData={{
                   category: dynamicSearchData?.category || "",
+                  intent: dynamicSearchData?.intent || {},
                   filters: computedFilters,
                 }}
               />
@@ -307,6 +332,7 @@ export default function SearchPage() {
                   filterOptions={filterOptions}
                   dynamicSearchData={{
                     category: dynamicSearchData?.category || "",
+                    intent: dynamicSearchData?.intent || {},
                     filters: computedFilters,
                   }}
                 />
@@ -333,6 +359,7 @@ export default function SearchPage() {
               filterOptions={filterOptions}
               dynamicSearchData={{
                 category: dynamicSearchData?.category || "",
+                intent: dynamicSearchData?.intent || {},
                 filters: computedFilters,
               }}
             />

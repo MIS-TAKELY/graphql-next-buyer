@@ -9,7 +9,11 @@ interface ActiveFiltersProps {
   filterOptions: { [key: string]: string[] };
   selectedPriceRanges: string[];
   togglePriceRange: (range: string) => void;
-  dynamicSearchData: { category: string; filters: { key: string; label: string; type: string }[] } | null;
+  dynamicSearchData: {
+    category: string;
+    intent?: Record<string, string[]>;
+    filters: { key: string; label: string; type: string }[];
+  } | null;
 }
 
 export default function ActiveFilters({

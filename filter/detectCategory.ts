@@ -9,11 +9,21 @@ const OPENROUTER_API_KEY =
 let CATEGORIES_CACHE: string[] | null = null;
 let CATEGORIES_PROMISE: Promise<string[]> | null = null;
 
+export interface DetectedIntent {
+  category: string;
+  attributes: string[];
+  intent: Record<string, string[]>;
+}
+
 export async function detectCategory(
   query: string,
   maxRetries = 3
-): Promise<string> {
-  const DEFAULT_CATEGORY = "Electronics";
+): Promise<DetectedIntent> {
+  const DEFAULT_INTENT: DetectedIntent = {
+    category: "Electronics",
+    attributes: [],
+    intent: {},
+  };
 
   // ===== LOAD CATEGORIES =====
   async function loadCategories(): Promise<string[]> {
@@ -46,75 +56,47 @@ export async function detectCategory(
     return CATEGORIES_PROMISE;
   }
 
-  // ===== VALIDATE CATEGORY =====
-  function isValidCategory(category: string, categories: string[]): boolean {
-    try {
-      return categories.some(
-        (cat) => cat.toLowerCase() === category.toLowerCase()
-      );
-    } catch (err) {
-      console.error("Error validating category:", err);
-      return false;
-    }
-  }
-
-  // ===== FIND CLOSEST MATCH =====
-  function findClosestCategory(
-    input: string,
-    categories: string[]
-  ): string | null {
-    try {
-      const normalizedInput = input.toLowerCase().trim();
-
-      const exactMatch = categories.find(
-        (cat) => cat.toLowerCase() === normalizedInput
-      );
-      if (exactMatch) return exactMatch;
-
-      const partialMatch = categories.find(
-        (cat) =>
-          cat.toLowerCase().includes(normalizedInput) ||
-          normalizedInput.includes(cat.toLowerCase())
-      );
-      return partialMatch || null;
-    } catch (err) {
-      console.error("Error finding closest category:", err);
-      return null;
-    }
-  }
-
   // ===== CALL AI API =====
   async function callMistralAPI(
     query: string,
-    categories: string[],
-    attemptNumber = 1
-  ): Promise<string> {
+    categories: string[]
+  ): Promise<DetectedIntent | null> {
     try {
-      const prompt =
-        attemptNumber === 1
-          ? `You are an expert e-commerce AI categorizer. Classify the given user search query into exactly one category from the list below. Return only the category name, without quotes, numbers, nesting or extra explanation.
+      const prompt = `You are an expert e-commerce AI. Analyze the search query and return a JSON object.
+Choose exactly one category from the provided list.
+Identify any specific attributes (like color, brand, size, storage) mentioned in the query.
 
 Categories: ${categories.join(", ")}
 
 User Query: "${query}"
 
-Category:`
-          : `IMPORTANT: You MUST choose EXACTLY ONE category from this list. Do not create new categories.
+Return ONLY a JSON object in this format:
+{
+  "category": "Exact Category Name",
+  "attributes": ["attribute1", "attribute2"],
+  "intent": {
+    "attributeName": ["value1", "value2"]
+  }
+}
 
-Valid Categories:
-${categories.map((cat, i) => `${i + 1}. ${cat}`).join("\n")}
-
-User Query: "${query}"
-
-Return ONLY the exact category name from the list above.`;
+Example for "red nike shoes":
+{
+  "category": "Footwear",
+  "attributes": ["color", "brand"],
+  "intent": {
+    "color": ["red"],
+    "brand": ["nike"]
+  }
+}`;
 
       const response = await axios.post(
         "https://openrouter.ai/api/v1/chat/completions",
         {
           model: "mistralai/mistral-7b-instruct",
           messages: [{ role: "user", content: prompt }],
-          temperature: attemptNumber === 1 ? 0.3 : 0.1,
-          max_tokens: 50,
+          temperature: 0.1,
+          max_tokens: 200,
+          response_format: { type: "json_object" }
         },
         {
           headers: {
@@ -124,101 +106,66 @@ Return ONLY the exact category name from the list above.`;
         }
       );
 
-      const aiResponse =
-        response.data?.choices?.[0]?.message?.content?.trim() || "";
+      const content = response.data?.choices?.[0]?.message?.content || "";
+      const parsed = JSON.parse(content);
 
-      // Clean up potential special tokens like <s> or </s>
-      const cleanedAiResponse = aiResponse.replace(/<\/?s>/g, "").trim();
+      // Validate category
+      if (!categories.some(c => c.toLowerCase() === parsed.category?.toLowerCase())) {
+        // Find closest match for category
+        const normalized = parsed.category?.toLowerCase();
+        const closest = categories.find(c => c.toLowerCase() === normalized || normalized?.includes(c.toLowerCase()));
+        if (closest) parsed.category = closest;
+        else parsed.category = "Electronics";
+      }
 
-      console.log(
-        `🤖 AI response (attempt ${attemptNumber}):`,
-        cleanedAiResponse
-      );
-
-      return cleanedAiResponse;
+      return {
+        category: parsed.category || "Electronics",
+        attributes: parsed.attributes || [],
+        intent: parsed.intent || {}
+      };
     } catch (error: any) {
-      console.error("Mistral API error:", error.message || error);
-      return "";
+      console.error("AI API error:", error.message || error);
+      return null;
     }
   }
 
   // ===== KEYWORD FALLBACK =====
-  function findFallbackCategory(query: string): string {
+  function findFallbackIntent(query: string): DetectedIntent {
     const queryLower = query.toLowerCase();
     const keywordMappings: Record<string, string[]> = {
-      "Mobile Phones & Accessories": [
-        "phone",
-        "mobile",
-        "iphone",
-        "samsung",
-        "smartphone",
-      ],
-      "Computers & Laptops": [
-        "laptop",
-        "computer",
-        "pc",
-        "macbook",
-        "notebook",
-      ],
-      "Fashion & Apparel": [
-        "shirt",
-        "dress",
-        "clothes",
-        "clothing",
-        "wear",
-        "kurta",
-      ],
-      "Home & Kitchen": ["kitchen", "home", "furniture", "utensil"],
-      "Beauty & Personal Care": ["beauty", "skincare", "makeup", "cosmetic"],
-      "Toys & Games": ["toy", "game", "play", "puzzle"],
-      "Sports & Outdoors": ["sport", "fitness", "gym", "outdoor"],
-      "Grocery & Gourmet": ["food", "snack", "grocery", "beverage"],
+      "Mobile Phones & Accessories": ["phone", "mobile", "iphone", "samsung"],
+      "Electronics": ["laptop", "computer", "pc", "tv", "camera"],
+      "Fashion & Apparel": ["shirt", "dress", "clothes", "clothing", "wear"],
     };
 
-    for (const [category, keywords] of Object.entries(keywordMappings)) {
+    let category = "Electronics";
+    for (const [cat, keywords] of Object.entries(keywordMappings)) {
       if (keywords.some((k) => queryLower.includes(k))) {
-        return category;
+        category = cat;
+        break;
       }
     }
 
-    return "Electronics";
+    // Try to extract brand as intent if query is short
+    const intent: Record<string, string[]> = {};
+    if (queryLower.includes("iphone")) intent.brand = ["Apple"];
+    if (queryLower.includes("samsung")) intent.brand = ["Samsung"];
+
+    return {
+      category,
+      attributes: Object.keys(intent),
+      intent
+    };
   }
 
   // ===== MAIN LOGIC =====
   const CATEGORIES = await loadCategories();
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      console.log(`\n🔄 Attempt ${attempt}/${maxRetries}: "${query}"`);
-
-      const result = await callMistralAPI(query, CATEGORIES, attempt);
-
-      if (isValidCategory(result, CATEGORIES)) {
-        console.log(`✅ Valid category found: ${result}`);
-        return result;
-      }
-
-      const closestMatch = findClosestCategory(result, CATEGORIES);
-      if (closestMatch) {
-        console.log(`🔍 Closest match found: ${closestMatch}`);
-        return closestMatch;
-      }
-
-      console.warn(`⚠️ Invalid category returned: "${result}"`);
-
-      if (attempt === maxRetries) {
-        console.error("❌ Max retry limit reached.");
-        break;
-      }
-
-      await new Promise((res) => setTimeout(res, 1000));
-    } catch (error) {
-      console.error(`Error in detectCategory (attempt ${attempt}):`, error);
-      if (attempt === maxRetries) break;
-    }
+    const result = await callMistralAPI(query, CATEGORIES);
+    if (result) return result;
+    if (attempt < maxRetries) await new Promise(res => setTimeout(res, 500));
   }
 
-  const fallbackCategory = findFallbackCategory(query);
-  console.log(`🧭 Using fallback category: ${fallbackCategory}`);
-  return fallbackCategory || DEFAULT_CATEGORY;
+  return findFallbackIntent(query);
 }
