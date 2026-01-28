@@ -51,25 +51,31 @@ import { GET_LANDING_PAGE_BANNERS } from "@/client/landing/landing-page-banner.q
 export default async function HomePage() {
   const client = await getServerApolloClient();
 
-  const [categoryCardsData, bannersData] = await Promise.all([
-    client.query({ query: GET_LANDING_PAGE_CATEGORY_CARDS }),
-    client.query({ query: GET_LANDING_PAGE_BANNERS }),
-  ]);
+  let categoryCards = [];
+  let banners = [];
 
-  const categoryCards = categoryCardsData.data?.getLandingPageCategoryCards || [];
-  const banners = bannersData.data?.getLandingPageBanners || [];
+  try {
+    const [categoryCardsData, bannersData] = await Promise.all([
+      client.query({ query: GET_LANDING_PAGE_CATEGORY_CARDS }),
+      client.query({ query: GET_LANDING_PAGE_BANNERS }),
+    ]);
+
+    categoryCards = categoryCardsData.data?.getLandingPageCategoryCards || [];
+    banners = bannersData.data?.getLandingPageBanners || [];
+  } catch (error) {
+    console.error("Error fetching landing page configuration:", error);
+  }
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Vanijay E-Commerce",
-    url: process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com",
+    url: "https://www.vanijay.com",
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"
-          }/shop/search?q={search_term_string}`,
+        urlTemplate: `https://www.vanijay.com/shop/search?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },

@@ -23,6 +23,7 @@ const publicRoutes = [
   "/careers",
   "/site-map",
   "/help",
+  "/blog",
 ];
 
 export default async function middleware(request: NextRequest) {
