@@ -104,8 +104,29 @@ export default function SearchPage() {
 
   const setSortBy = (sort: string) => setFilters({ sort });
 
-  // Use backend-provided filters if available
+  // Use AI-driven filters if available, fallback to backend filters
   const { computedFilters, filterOptions } = useMemo(() => {
+    // Prioritize AI-driven filters from dynamicSearchData
+    if (dynamicSearchData?.filters && dynamicSearchData.filters.length > 0) {
+      const finalFilters: any[] = [];
+      const options: { [key: string]: string[] } = {};
+
+      dynamicSearchData.filters.forEach((filter: any) => {
+        if (filter.options && filter.options.length > 0) {
+          finalFilters.push({
+            key: filter.key,
+            label: filter.label,
+            options: filter.options,
+            type: filter.type || "dropdown",
+          });
+          options[filter.key] = filter.options;
+        }
+      });
+
+      return { computedFilters: finalFilters, filterOptions: options };
+    }
+
+    // Fallback to backend filters if AI filters not available
     if (!backendFilters) {
       return { computedFilters: [], filterOptions: {} };
     }
@@ -125,8 +146,8 @@ export default function SearchPage() {
       options.brand = opts;
     }
 
-    // 2. Categories
-    if (categories?.length > 0) {
+    // 2. Categories (only show if multiple categories)
+    if (categories?.length > 1) {
       const opts = categories.map((c: any) => c.name);
       finalFilters.push({
         key: "category",
@@ -136,15 +157,37 @@ export default function SearchPage() {
       options.category = opts;
     }
 
-    // 3. Delivery
+    // 3. Delivery - Normalize and deduplicate
     if (delivery?.length > 0) {
-      const opts = delivery.map((d: any) => d.name);
-      finalFilters.push({
-        key: "delivery_options",
-        label: "Delivery Options",
-        options: opts,
+      const normalizedDelivery = new Set<string>();
+      delivery.forEach((d: any) => {
+        const normalized = d.name
+          .replace(/\s+/g, "")
+          .toLowerCase();
+
+        // Map variations to standard names
+        if (normalized.includes("standard") || normalized.includes("stander")) {
+          normalizedDelivery.add("Standard Delivery");
+        } else if (normalized.includes("express") || normalized.includes("fast")) {
+          normalizedDelivery.add("Express Delivery");
+        } else if (normalized.includes("free")) {
+          normalizedDelivery.add("Free Delivery");
+        } else if (normalized.includes("same") && normalized.includes("day")) {
+          normalizedDelivery.add("Same Day Delivery");
+        } else {
+          normalizedDelivery.add(d.name);
+        }
       });
-      options.delivery_options = opts;
+
+      const opts = Array.from(normalizedDelivery);
+      if (opts.length > 0) {
+        finalFilters.push({
+          key: "delivery_options",
+          label: "Delivery Options",
+          options: opts,
+        });
+        options.delivery_options = opts;
+      }
     }
 
     // 4. Specifications
@@ -163,7 +206,7 @@ export default function SearchPage() {
       computedFilters: finalFilters,
       filterOptions: options,
     };
-  }, [backendFilters]);
+  }, [backendFilters, dynamicSearchData]);
 
   const filteredProducts = useMemo(() => {
     if (!Array.isArray(searchProducts)) return [];
