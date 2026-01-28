@@ -277,10 +277,14 @@ export const searchResolvers = {
 
       // ===== Dynamic Facet Counts =====
       // Get filter counts for UI (Amazon-style)
+      // Use topProductIds (all search results) instead of productIds (paginated)
+      // This ensures filters show all available options, not just from current page
+      const allFilteredIds = rankedResults.map((p) => p.id);
+
       const filterCounts = await getDynamicFilters(
         query,
         filters?.specifications || {},
-        productIds
+        allFilteredIds.length > 0 ? allFilteredIds : topProductIds
       );
 
       return {

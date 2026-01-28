@@ -107,6 +107,14 @@ export async function getDynamicFilters(
   const allSpecs: { key: string; label: string; options: any }[] = [];
   const seenKeys = new Set<string>();
 
+  // Always add brand filter first
+  allSpecs.push({
+    key: "brand",
+    label: "Brand",
+    options: null, // Will be populated from actual data
+  });
+  seenKeys.add("brand");
+
   let currentId: string | null = finalCategoryId;
   while (currentId) {
     const specs = await prisma.categorySpecification.findMany({
