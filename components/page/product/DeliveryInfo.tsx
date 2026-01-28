@@ -1,10 +1,9 @@
-// components/page/product/DeliveryInfo.tsx
 import { Truck, RotateCcw, Shield } from "lucide-react";
-import { IDeliveryOption } from "@/types/product";
+import { IDeliveryOption, IWarranty, IReturnPolicy } from "@/types/product";
 
 interface DeliveryInfoProps {
-  warranty?: string;
-  returnPolicy?: string;
+  warranty?: IWarranty[];
+  returnPolicy?: IReturnPolicy[];
   deliveryOptions?: IDeliveryOption[];
 }
 
@@ -15,12 +14,20 @@ export default function DeliveryInfo({ warranty, returnPolicy, deliveryOptions }
     : "Free delivery by tomorrow";
 
   // Determine return policy text
-  const returnText = returnPolicy
-    ? returnPolicy
+  const currentReturnPolicy = returnPolicy && returnPolicy.length > 0 ? returnPolicy[0] : null;
+  const returnText = currentReturnPolicy
+    ? currentReturnPolicy.type === 'NO_RETURN'
+      ? "Non-returnable"
+      : `${currentReturnPolicy.duration} ${currentReturnPolicy.unit} ${currentReturnPolicy.type.toLowerCase().replace('_', ' ')}`
     : "7 days replacement policy";
 
   // Determine warranty text
-  const warrantyText = warranty || "No warranty available";
+  const currentWarranty = warranty && warranty.length > 0 ? warranty[0] : null;
+  const warrantyText = currentWarranty
+    ? currentWarranty.type === 'NONE'
+      ? "No warranty available"
+      : `${currentWarranty.duration} ${currentWarranty.unit} ${currentWarranty.type.toLowerCase()} warranty`
+    : "No warranty available";
 
   return (
     <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 space-y-3 my-4 overflow-hidden h-full">

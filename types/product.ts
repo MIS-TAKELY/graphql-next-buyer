@@ -62,6 +62,22 @@ export interface IOffer {
   type: string;
   value: string;
 }
+export interface IWarranty {
+  id: string;
+  type: 'SELLER' | 'BRAND' | 'NONE';
+  duration?: number;
+  unit?: string;
+  description?: string;
+  createdAt?: string;
+}
+export interface IReturnPolicy {
+  id: string;
+  type: 'REPLACEMENT' | 'REFUND' | 'NO_RETURN';
+  duration?: number;
+  unit?: string;
+  conditions?: string;
+  createdAt?: string;
+}
 export interface IProductOffer {
   id: string;
   offer: IOffer;
@@ -79,7 +95,8 @@ export interface IProducts {
   images: IProductsImages[];
   reviews: IProductsReview[];
   variants: IProductsVarient[];
-  returnPolicy?: any; // Using any to match usage or verify type later
+  returnPolicy?: IReturnPolicy[];
+  warranty?: IWarranty[];
   category?: ICategory;
   productOffers?: IProductOffer[];
   specificationTable?: { key: string; value: string }[];
@@ -98,7 +115,8 @@ export interface IRemainingProductDetails {
   seller: ISeller;
   brand: IBrand;
   variants: IProductVarient[];
-  warranty: string;
+  warranty: IWarranty[];
+  returnPolicy: IReturnPolicy[];
   specifications?: string;
   features?: string[];
   productOffers?: IProductOffer[];
