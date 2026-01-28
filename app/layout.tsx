@@ -45,7 +45,7 @@ export const metadata: Metadata = {
         url: "/og-image.jpg", // Ensure this exists or fallback
         width: 1200,
         height: 630,
-        alt: "Vanijoy E-Commerce",
+        alt: "Vanijay E-Commerce",
       },
     ],
   },

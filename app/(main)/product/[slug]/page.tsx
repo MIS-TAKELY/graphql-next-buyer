@@ -149,6 +149,31 @@ export default async function ProductPage({
     structuredDescription = structuredDescription.substring(0, 157) + "...";
   }
 
+  // Detailed specifications and attributes for JSON-LD
+  const additionalProperties: any[] = [];
+
+  // Add specifications from the table if available
+  if (serializableProduct.specificationTable && Array.isArray(serializableProduct.specificationTable)) {
+    serializableProduct.specificationTable.forEach((spec: any) => {
+      additionalProperties.push({
+        "@type": "PropertyValue",
+        name: spec.key,
+        value: spec.value,
+      });
+    });
+  }
+
+  // Add category specific specifications if available
+  if (serializableProduct.category?.categorySpecification) {
+    serializableProduct.category.categorySpecification.forEach((spec: any) => {
+      additionalProperties.push({
+        "@type": "PropertyValue",
+        name: spec.label || spec.key,
+        value: spec.value || "N/A", // This might need mapping to actual product values if they exist
+      });
+    });
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -156,33 +181,42 @@ export default async function ProductPage({
     image: serializableProduct.images?.map((img: any) => img.url) || [],
     description: structuredDescription,
     sku: serializableProduct.variants?.[0]?.sku || `VJ-${serializableProduct.id.substring(0, 8)}`,
+    mpn: serializableProduct.variants?.[0]?.sku || serializableProduct.id,
     brand: {
       "@type": "Brand",
       name:
         typeof serializableProduct.brand === "string"
           ? serializableProduct.brand
-          : serializableProduct.brand?.name || "Generic",
+          : serializableProduct.brand?.name || "Vanijay",
     },
-    offers: {
-      "@type": "Offer",
-      url: productUrl,
-      priceCurrency: "NPR",
-      price: currentPrice,
-      itemCondition: "https://schema.org/NewCondition",
-      availability:
-        stock > 0
+    additionalProperty: additionalProperties.length > 0 ? additionalProperties : undefined,
+    offers: serializableProduct.variants?.map((variant: any) => {
+      const vPrice = Number(variant.price) || 0;
+      const vStock = Number(variant.stock) || 0;
+
+      return {
+        "@type": "Offer",
+        url: productUrl,
+        priceCurrency: "NPR",
+        price: vPrice,
+        itemCondition: "https://schema.org/NewCondition",
+        availability: vStock > 0
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
-      priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-      seller: {
-        "@type": "Organization",
-        name: "Vanijay",
-      },
-    },
+        priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+        sku: variant.sku,
+        seller: {
+          "@type": "Organization",
+          name: "Vanijay",
+        },
+      };
+    }),
     aggregateRating: serializableProduct.reviews && serializableProduct.reviews.length > 0 ? {
       "@type": "AggregateRating",
       ratingValue: serializableProduct.reviews.reduce((acc: number, review: any) => acc + (review.rating || 0), 0) / serializableProduct.reviews.length,
       reviewCount: serializableProduct.reviews.length,
+      bestRating: "5",
+      worstRating: "1",
     } : undefined,
     review: serializableProduct.reviews?.map((review: any) => ({
       "@type": "Review",
@@ -190,11 +224,13 @@ export default async function ProductPage({
         "@type": "Rating",
         ratingValue: review.rating,
         bestRating: "5",
+        worstRating: "1",
       },
       author: {
         "@type": "Person",
         name: review.user ? `${review.user.firstName} ${review.user.lastName}` : "Anonymous",
       },
+      datePublished: review.createdAt ? new Date(review.createdAt).toISOString().split('T')[0] : undefined,
     })),
   };
 
@@ -206,19 +242,19 @@ export default async function ProductPage({
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com",
+        item: baseUrl,
       },
       {
         "@type": "ListItem",
         position: 2,
         name: serializableProduct.category?.name || "Shop",
-        item: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/shop`,
+        item: `${baseUrl}/shop`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: serializableProduct.name,
-        item: `${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/product/${slug}`,
+        item: productUrl,
       },
     ],
   };
