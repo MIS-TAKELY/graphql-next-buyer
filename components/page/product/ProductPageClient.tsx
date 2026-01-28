@@ -1,5 +1,6 @@
 // components/page/product/ProductPageClient.tsx
 "use client";
+import Breadcrumb from "@/components/page/product/Breadcrumb";
 import DeliveryInfo from "@/components/page/product/DeliveryInfo";
 import ImageZoomViewer from "@/components/page/product/ImageZoomViewer";
 import { ProductActionsClient } from "@/components/page/product/ProductActionsClient";
@@ -231,13 +232,10 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
   return (
     <div className="min-h-screen bg-background relative pb-20 lg:pb-0">
-      {/* <Breadcrumb
-        category={product.category?.name || "Unknown Category"}
+      <Breadcrumb
+        category={product.category}
         name={product.name}
-      /> {/* <Breadcrumb
-        category={product.category?.name || "Unknown Category"}
-        name={product.name}
-      /> */}
+      />
 
       <div className="container-custom py-4 sm:py-6 lg:py-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-[4.5fr_5.5fr] gap-8 xl:gap-12 mb-12">

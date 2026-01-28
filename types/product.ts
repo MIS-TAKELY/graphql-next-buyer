@@ -40,6 +40,7 @@ export interface ICategorySpecification {
 export interface ICategory {
   id?: string;
   name: string;
+  slug: string;
   parent?: ICategory;
   children?: ICategory[];
   categorySpecification?: ICategorySpecification[];

@@ -73,8 +73,11 @@ export async function generateMetadata(
   const baseUrl = process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
   const url = `${baseUrl}/product/${slug}`;
 
-  // Title: [Product Name] | Vanijay Nepal
-  const title = product.metaTitle || `${product.name} | Vanijay Nepal`;
+  // Title: [Product Name] | Price in Nepal | Vanijay
+  let title = product.metaTitle || `${product.name} | Price in Nepal | Vanijay`;
+  if (title.length > 60) {
+    title = title.substring(0, 57) + "...";
+  }
 
   // High quality description (no truncation mid-sentence, 150-160 chars)
   let description = product.metaDescription || product.description || `Buy ${product.name} at the best price in Nepal. Fast delivery and secure payment at Vanijay.`;
