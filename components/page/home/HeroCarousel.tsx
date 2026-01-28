@@ -47,7 +47,7 @@ const Slide = memo(({ slide, isActive, priority }: SlideProps) => {
           fill
           className="object-cover z-0"
           sizes="100vw"
-          priority={isActive}
+          priority={priority}
           unoptimized
         />
       )}

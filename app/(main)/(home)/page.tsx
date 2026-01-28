@@ -32,11 +32,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  keywords: [
-    ...BUYER_KEYWORDS,
-    ...SELLER_KEYWORDS,
-    ...CONVENIENCE_KEYWORDS,
-  ],
   openGraph: {
     title: "Vanijay-Best Online Shopping in Nepal - Best Prices, No Seller Charges",
     description: "Shop electronics, fashion, and furniture at Vanijay. Nepal's best online shopping platform with zero seller fees, best prices, and easy returns.",

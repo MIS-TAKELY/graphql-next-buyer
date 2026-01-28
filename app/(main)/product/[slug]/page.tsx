@@ -7,7 +7,7 @@ import { TProduct } from "@/types/product";
 import { Metadata, ResolvingMetadata } from "next";
 import { cache } from "react";
 
-export const revalidate = 0;
+export const revalidate = 3600; // Enable ISR for better performance and indexability
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -64,14 +64,18 @@ export async function generateMetadata(
   const baseUrl = process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
   const url = `${baseUrl}/product/${slug}`;
 
-  const title = product.metaTitle || `${product.name} | Best Price in Nepal | Vanijay`;
-  const description = product.metaDescription || product.description?.substring(0, 160) || `Buy ${product.name} at the best price in Nepal. Fast delivery and secure payment at Vanijay.`;
-  const keywords = product.keywords && product.keywords.length > 0 ? product.keywords : [product.name, `buy ${product.name} online`, `${product.name} price in Nepal`, "Vanijay"];
+  // Simplify title: [Product Name] Price in Nepal | Vanijay
+  const title = product.metaTitle || `${product.name} Price in Nepal | Vanijay`;
+
+  // High quality description (no truncation mid-sentence, 150-160 chars)
+  let description = product.metaDescription || product.description || `Buy ${product.name} at the best price in Nepal. Fast delivery and secure payment at Vanijay.`;
+  if (description.length > 160) {
+    description = description.substring(0, 157) + "...";
+  }
 
   return {
     title,
     description,
-    keywords,
     alternates: {
       canonical: url,
     },
@@ -81,6 +85,8 @@ export async function generateMetadata(
       googleBot: {
         index: true,
         follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
       }
     },
     openGraph: {
@@ -136,14 +142,19 @@ export default async function ProductPage({
 
   const baseUrl = process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
   const productUrl = `${baseUrl}/product/${slug}`;
-  const description = serializableProduct.metaDescription || serializableProduct.description?.substring(0, 160) || `Buy ${serializableProduct.name} at the best price in Nepal.`;
+
+  // Use the same refined description logic for JSON-LD
+  let structuredDescription = serializableProduct.metaDescription || serializableProduct.description || `Buy ${serializableProduct.name} at the best price in Nepal.`;
+  if (structuredDescription.length > 160) {
+    structuredDescription = structuredDescription.substring(0, 157) + "...";
+  }
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: serializableProduct.name,
     image: serializableProduct.images?.map((img: any) => img.url) || [],
-    description: serializableProduct.description || description,
+    description: structuredDescription,
     sku: serializableProduct.variants?.[0]?.sku || `VJ-${serializableProduct.id.substring(0, 8)}`,
     brand: {
       "@type": "Brand",

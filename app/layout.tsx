@@ -22,7 +22,6 @@ export const metadata: Metadata = {
   },
   description: "Modern e-commerce platform for seamless online shopping. Discover the best deals on electronics, fashion, and more.",
   metadataBase: new URL(process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000")),
-  keywords: ["ecommerce", "shopping", "electronics", "fashion", "online store", "Nepal"],
   robots: {
     index: true,
     follow: true,
