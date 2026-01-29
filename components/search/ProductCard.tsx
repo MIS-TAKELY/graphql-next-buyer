@@ -120,7 +120,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           {/* Header: Brand & Rating */}
           <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
             <div className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wide font-medium">
-              {product.brand || product.category.name}
+              {product.brand || product.category?.name}
             </div>
 
             {/* Rating - Hidden on very small screens if crowded, visible otherwise */}

@@ -175,7 +175,7 @@ export default function SearchPage() {
           if (selectedValues.length === 0) return true;
           if (key === "brand") return selectedValues.includes(product.brand);
           if (key === "category")
-            return selectedValues.includes(product.category.name);
+            return selectedValues.includes(product.category?.name || "");
           if (key === "delivery_options")
             return product.deliveryOptions?.some((opt) =>
               selectedValues.includes(opt.title)
