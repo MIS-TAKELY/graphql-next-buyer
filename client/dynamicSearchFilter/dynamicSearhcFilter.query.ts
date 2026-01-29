@@ -8,7 +8,11 @@ export const GET_DYNAMIC_SEARCH_FILTER = gql`
       filters {
         key
         label
-        options
+        options {
+          value
+          label
+          count
+        }
         type
       }
     }

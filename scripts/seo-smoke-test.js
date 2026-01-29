@@ -1,9 +1,10 @@
 import https from 'https';
 import http from 'http';
 
-const BASE_URL = process.argv[2] || 'http://localhost:3000';
-const PRODUCT_SLUG = 'sony-zve10-mirrorless-vlog-camera-242mp-apsc-sensor-4k';
-const PRODUCT_URL = `${BASE_URL}/product/${PRODUCT_SLUG}`;
+const inputArg = process.argv[2] && process.argv[2].startsWith('http') ? process.argv[2] : undefined;
+const BASE_URL = inputArg ? new URL(inputArg).origin : (process.argv[2] || 'http://localhost:3000');
+const PRODUCT_SLUG = inputArg ? inputArg.split('/').pop() : 'sony-zve10-mirrorless-vlog-camera-242mp-apsc-sensor-4k';
+const PRODUCT_URL = inputArg || `${BASE_URL}/product/${PRODUCT_SLUG}`;
 
 console.log(`\n🚀 Starting SEO Smoke Test on: ${PRODUCT_URL}\n`);
 
