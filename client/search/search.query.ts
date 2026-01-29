@@ -2,8 +2,8 @@ import gql from "graphql-tag";
 
 
 export const MAKE_SEARCH_QUERY = gql`
-  query SearchProducts($query: String!, $page: Int, $limit: Int) {
-    searchProducts(query: $query, page: $page, limit: $limit) {
+  query SearchProducts($query: String!, $filters: SearchFilters, $page: Int, $limit: Int) {
+    searchProducts(query: $query, filters: $filters, page: $page, limit: $limit) {
       products {
         id
         name

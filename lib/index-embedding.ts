@@ -24,13 +24,16 @@ async function indexAllProducts() {
   let errorCount = 0;
 
   for (const product of products) {
-    const text = `${product.name} ${product.description || ""} ${
-      product.brand
-    }`.trim();
+    const text = `${product.name} ${product.description || ""} ${product.brand
+      }`.trim();
     if (!text) continue;
 
     try {
       const vector = await generateEmbedding(text);
+
+      if (vector.length !== 3072) {
+        console.warn(`⚠️ Unexpected embedding dimension: ${vector.length} (expected 3072)`);
+      }
 
       await prisma.$executeRaw`
         UPDATE "products"
@@ -39,10 +42,10 @@ async function indexAllProducts() {
       `;
 
       successCount++;
-      console.log(`Indexed: ${product.id}`);
+      console.log(`✅ Indexed: ${product.name} (${product.id})`);
     } catch (error: any) {
       errorCount++;
-      console.error(`Failed for ${product.id}:`, error.message || error);
+      console.error(`❌ Failed for ${product.name} (${product.id}):`, error.message || error);
     }
   }
 

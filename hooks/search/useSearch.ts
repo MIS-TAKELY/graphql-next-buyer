@@ -4,11 +4,9 @@ import { useQuery } from "@apollo/client";
 
 import { useState } from "react";
 
-export const useSearch = (query?: string) => {
+export const useSearch = (query?: string, filters?: any) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-
-
 
   const {
     data: searchQueryResponse,
@@ -17,6 +15,7 @@ export const useSearch = (query?: string) => {
   } = useQuery(MAKE_SEARCH_QUERY, {
     variables: {
       query: query,
+      filters: filters,
       page: page,
       limit: limit,
     },
@@ -30,7 +29,7 @@ export const useSearch = (query?: string) => {
   const totalPages = searchQueryResponse?.searchProducts?.pagination?.totalPages || 1;
 
   return {
-    searchProducts: searchQueryResponse?.searchProducts.products,
+    searchProducts: searchQueryResponse?.searchProducts?.products,
     backendFilters: searchQueryResponse?.searchProducts?.filters,
     searchLoading: searchQueryLoading,
     page,

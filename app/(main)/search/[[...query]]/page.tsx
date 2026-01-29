@@ -47,6 +47,36 @@ interface SearchProduct {
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
+  const { dynamicSearchData } = useDynamicSearchFilter(query);
+  const [showFilters, setShowFilters] = useState(false);
+  const [aiIntentApplied, setAiIntentApplied] = useState(false);
+
+  // Zustand Store
+  const {
+    filters: storeFilters,
+    toggleDynamicFilter,
+    togglePriceRange,
+    setMinRating,
+    setFilters,
+    resetFilters,
+  } = useProductStore();
+
+  const formattedFilters = useMemo(() => {
+    // Convert store filters to SearchFilters input format
+    return {
+      brands: storeFilters.dynamicFilters["brand"] || [],
+      categories: storeFilters.categories,
+      minPrice: storeFilters.selectedPriceRanges.length > 0
+        ? Math.min(...storeFilters.selectedPriceRanges.map(r => parseInt(r) || 0))
+        : undefined,
+      maxPrice: storeFilters.selectedPriceRanges.length > 0
+        ? Math.max(...storeFilters.selectedPriceRanges.map(r => r.endsWith('+') ? 10000000 : parseInt(r.split('-')[1]) || 10000000))
+        : undefined,
+      minRating: storeFilters.minRating,
+      specifications: storeFilters.dynamicFilters,
+    };
+  }, [storeFilters]);
+
   const {
     searchProducts,
     backendFilters,
@@ -57,20 +87,7 @@ export default function SearchPage() {
     totalResults,
     limit,
     setLimit,
-  } = useSearch(query);
-  const { dynamicSearchData } = useDynamicSearchFilter(query);
-  const [showFilters, setShowFilters] = useState(false);
-  const [aiIntentApplied, setAiIntentApplied] = useState(false);
-
-  // Zustand Store
-  const {
-    filters,
-    toggleDynamicFilter,
-    togglePriceRange,
-    setMinRating,
-    setFilters,
-    resetFilters,
-  } = useProductStore();
+  } = useSearch(query, formattedFilters);
 
   // Auto-apply AI intent
   useEffect(() => {
@@ -80,7 +97,7 @@ export default function SearchPage() {
         if (Array.isArray(values)) {
           values.forEach(val => {
             // Only add if not already selected
-            if (!filters.dynamicFilters[key]?.includes(val)) {
+            if (!storeFilters.dynamicFilters[key]?.includes(val)) {
               toggleDynamicFilter(key, val);
             }
           });
@@ -88,7 +105,7 @@ export default function SearchPage() {
       });
       setAiIntentApplied(true);
     }
-  }, [dynamicSearchData, aiIntentApplied, toggleDynamicFilter, filters.dynamicFilters]);
+  }, [dynamicSearchData, aiIntentApplied, toggleDynamicFilter, storeFilters.dynamicFilters]);
 
   // Reset intent flag when query changes
   useEffect(() => {
@@ -100,7 +117,7 @@ export default function SearchPage() {
     dynamicFilters,
     minRating,
     sort: sortBy,
-  } = filters;
+  } = storeFilters;
 
   const setSortBy = (sort: string) => setFilters({ sort });
 
@@ -151,6 +168,9 @@ export default function SearchPage() {
 
   const filteredProducts = useMemo(() => {
     if (!Array.isArray(searchProducts)) return [];
+
+    console.log(`🔍 Client filtering ${searchProducts.length} products from server`);
+
     let filtered = [...searchProducts].filter((product: SearchProduct) => {
       const price = product.variants[0]?.price || 0;
 
@@ -173,24 +193,26 @@ export default function SearchPage() {
       const matchesDynamicFilters = Object.entries(dynamicFilters).every(
         ([key, selectedValues]) => {
           if (selectedValues.length === 0) return true;
-          if (key === "brand") return selectedValues.includes(product.brand);
+          if (key === "brand") return (selectedValues as string[]).includes(product.brand);
           if (key === "category")
-            return selectedValues.includes(product.category?.name || "");
+            return (selectedValues as string[]).includes(product.category?.name || "");
           if (key === "delivery_options")
             return product.deliveryOptions?.some((opt) =>
-              selectedValues.includes(opt.title)
+              (selectedValues as string[]).includes(opt.title)
             );
           return product.variants.some((variant) =>
             variant.specifications.some(
               (spec) =>
                 (spec.key === key || spec.name === key) &&
-                selectedValues.includes(spec.value)
+                (selectedValues as string[]).includes(spec.value)
             )
           );
         }
       );
       return matchesPrice && matchesRating && matchesDynamicFilters;
     });
+
+    console.log(`✅ Filtered to ${filtered.length} products after client-side filters`);
 
     switch (sortBy) {
       case "price-low":
@@ -226,7 +248,7 @@ export default function SearchPage() {
   };
 
   const activeFiltersCount =
-    Object.values(dynamicFilters).reduce((sum, v) => sum + v.length, 0) +
+    Object.values(dynamicFilters).reduce((sum, v) => sum + (v as string[]).length, 0) +
     (minRating > 0 ? 1 : 0) +
     selectedPriceRanges.length;
 
