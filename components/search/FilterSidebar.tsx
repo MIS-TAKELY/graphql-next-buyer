@@ -79,11 +79,6 @@ function DynamicFilter({
           <h3 className="font-medium text-sm text-gray-900 dark:text-white mb-2">
             {label}
           </h3>
-          {isSuggested && (
-            <span className="text-[10px] bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-1 rounded font-bold uppercase tracking-wider mb-2">
-              AI
-            </span>
-          )}
         </div>
         {isCollapsible && (
           <button

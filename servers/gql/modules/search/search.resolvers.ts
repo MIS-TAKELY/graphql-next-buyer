@@ -71,6 +71,12 @@ export const searchResolvers = {
         topProductIds = keywordResults.map((p) => p.id);
       }
 
+      // Filter to top 50% only
+      if (topProductIds.length > 0) {
+        const splitIndex = Math.ceil(topProductIds.length * 0.5);
+        topProductIds = topProductIds.slice(0, splitIndex);
+      }
+
       if (topProductIds.length === 0) {
         return {
           products: [],
