@@ -3,6 +3,7 @@ import { detectCategory } from "./detectCategory";
 
 export interface FilterOption {
   value: string;
+  label: string;
   count: number;
 }
 
@@ -255,6 +256,7 @@ export async function getDynamicFilters(
         options = brands
           .map((b) => ({
             value: b.brand,
+            label: b.brand,
             count: b._count,
           }))
           .filter((opt) => opt.value)
@@ -278,6 +280,7 @@ export async function getDynamicFilters(
         options = specCounts
           .map((v) => ({
             value: v.value,
+            label: v.value,
             count: v._count,
           }))
           .filter((opt) => opt.value)

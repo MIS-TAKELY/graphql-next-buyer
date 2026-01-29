@@ -126,7 +126,8 @@ export const reviewResolvers = {
           },
         });
 
-        return reviews;
+        // Defensive check: filter out any results with missing IDs to prevent SSR crashes
+        return reviews.filter(review => review && review.id);
       } catch (error: any) {
         console.error("Error fetching reviews by user:", error);
         throw new Error(error.message || "Failed to fetch reviews");
@@ -169,7 +170,8 @@ export const reviewResolvers = {
           },
         });
 
-        return reviews;
+        // Defensive check: filter out any results with missing IDs to prevent SSR crashes
+        return reviews.filter(review => review && review.id);
       } catch (error: any) {
         console.error("Error fetching all reviews:", error);
         throw new Error(error.message || "Failed to fetch reviews");

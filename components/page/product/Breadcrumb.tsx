@@ -13,8 +13,8 @@ interface BreadcrumbProps {
 export default function Breadcrumb({ category, name }: BreadcrumbProps) {
   if (!name) return null;
 
-  const categoryName = typeof category === "object" ? category.name : category;
-  const categorySlug = typeof category === "object" ? category.slug : category?.toLowerCase();
+  const categoryName = (category && typeof category === "object") ? category.name : category;
+  const categorySlug = (category && typeof category === "object") ? category.slug : (typeof category === "string" ? category.toLowerCase() : "");
 
   return (
     <nav className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">

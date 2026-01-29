@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 export const filterTypeDefs = gql`
   type FilterOption {
     value: String!
+    label: String!
     count: Int!
   }
 
