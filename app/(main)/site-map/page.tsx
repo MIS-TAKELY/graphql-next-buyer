@@ -153,14 +153,18 @@ export default async function SitemapPage() {
                             </div>
                             <div className="pl-7 border-l-2 border-primary/10 ml-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
                                 {products.map((prod, pIdx) => (
-                                    <Link
-                                        key={pIdx}
-                                        href={`/product/${prod.slug}`}
-                                        className="text-sm text-muted-foreground hover:text-primary transition-colors py-1 flex items-center gap-2"
-                                    >
-                                        <span className="w-1 h-1 rounded-full bg-primary/40" />
-                                        {prod.name}
-                                    </Link>
+                                    <div key={pIdx} className="flex flex-col gap-0.5">
+                                        <Link
+                                            href={`/product/${prod.slug}`}
+                                            className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2"
+                                        >
+                                            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                            {prod.name}
+                                        </Link>
+                                        <span className="text-[10px] text-muted-foreground pl-3.5 break-all">
+                                            /product/{prod.slug}
+                                        </span>
+                                    </div>
                                 ))}
                             </div>
                         </div>
