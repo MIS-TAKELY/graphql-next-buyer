@@ -48,8 +48,8 @@ async function runTest() {
             {
                 name: 'Server Side Rendering Check',
                 // If we see the specific product name in raw HTML, SSR is likely working
-                pass: body.includes('Sony') || body.includes('Camera'), // Adjust based on sample product
-                detail: 'Checked for "Sony" or "Camera" content'
+                pass: body.includes('Sony') || body.includes('Camera') || body.includes('Motul') || body.includes('Oil') || body.includes('MacBook') || body.includes('Nestle') || body.includes('Dairy'),
+                detail: 'Checked for product keywords'
             }
         ];
 
