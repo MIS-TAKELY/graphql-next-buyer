@@ -28081,8 +28081,20 @@ export namespace Prisma {
 
   export type AggregateProduct = {
     _count: ProductCountAggregateOutputType | null
+    _avg: ProductAvgAggregateOutputType | null
+    _sum: ProductSumAggregateOutputType | null
     _min: ProductMinAggregateOutputType | null
     _max: ProductMaxAggregateOutputType | null
+  }
+
+  export type ProductAvgAggregateOutputType = {
+    soldCount: number | null
+    averageRating: Decimal | null
+  }
+
+  export type ProductSumAggregateOutputType = {
+    soldCount: number | null
+    averageRating: Decimal | null
   }
 
   export type ProductMinAggregateOutputType = {
@@ -28096,6 +28108,8 @@ export namespace Prisma {
     updatedAt: Date | null
     categoryId: string | null
     brand: string | null
+    soldCount: number | null
+    averageRating: Decimal | null
     metaDescription: string | null
     metaTitle: string | null
   }
@@ -28111,6 +28125,8 @@ export namespace Prisma {
     updatedAt: Date | null
     categoryId: string | null
     brand: string | null
+    soldCount: number | null
+    averageRating: Decimal | null
     metaDescription: string | null
     metaTitle: string | null
   }
@@ -28128,12 +28144,24 @@ export namespace Prisma {
     updatedAt: number
     categoryId: number
     brand: number
+    soldCount: number
+    averageRating: number
     keywords: number
     metaDescription: number
     metaTitle: number
     _all: number
   }
 
+
+  export type ProductAvgAggregateInputType = {
+    soldCount?: true
+    averageRating?: true
+  }
+
+  export type ProductSumAggregateInputType = {
+    soldCount?: true
+    averageRating?: true
+  }
 
   export type ProductMinAggregateInputType = {
     id?: true
@@ -28146,6 +28174,8 @@ export namespace Prisma {
     updatedAt?: true
     categoryId?: true
     brand?: true
+    soldCount?: true
+    averageRating?: true
     metaDescription?: true
     metaTitle?: true
   }
@@ -28161,6 +28191,8 @@ export namespace Prisma {
     updatedAt?: true
     categoryId?: true
     brand?: true
+    soldCount?: true
+    averageRating?: true
     metaDescription?: true
     metaTitle?: true
   }
@@ -28178,6 +28210,8 @@ export namespace Prisma {
     updatedAt?: true
     categoryId?: true
     brand?: true
+    soldCount?: true
+    averageRating?: true
     keywords?: true
     metaDescription?: true
     metaTitle?: true
@@ -28222,6 +28256,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ProductAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProductSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ProductMinAggregateInputType
@@ -28252,6 +28298,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ProductCountAggregateInputType | true
+    _avg?: ProductAvgAggregateInputType
+    _sum?: ProductSumAggregateInputType
     _min?: ProductMinAggregateInputType
     _max?: ProductMaxAggregateInputType
   }
@@ -28269,10 +28317,14 @@ export namespace Prisma {
     updatedAt: Date
     categoryId: string | null
     brand: string
+    soldCount: number
+    averageRating: Decimal | null
     keywords: string[]
     metaDescription: string | null
     metaTitle: string | null
     _count: ProductCountAggregateOutputType | null
+    _avg: ProductAvgAggregateOutputType | null
+    _sum: ProductSumAggregateOutputType | null
     _min: ProductMinAggregateOutputType | null
     _max: ProductMaxAggregateOutputType | null
   }
@@ -28304,6 +28356,8 @@ export namespace Prisma {
     updatedAt?: boolean
     categoryId?: boolean
     brand?: boolean
+    soldCount?: boolean
+    averageRating?: boolean
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
@@ -28337,6 +28391,8 @@ export namespace Prisma {
     updatedAt?: boolean
     categoryId?: boolean
     brand?: boolean
+    soldCount?: boolean
+    averageRating?: boolean
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
@@ -28357,6 +28413,8 @@ export namespace Prisma {
     updatedAt?: boolean
     categoryId?: boolean
     brand?: boolean
+    soldCount?: boolean
+    averageRating?: boolean
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
@@ -28377,12 +28435,14 @@ export namespace Prisma {
     updatedAt?: boolean
     categoryId?: boolean
     brand?: boolean
+    soldCount?: boolean
+    averageRating?: boolean
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "name" | "slug" | "description" | "features" | "status" | "specificationTable" | "createdAt" | "updatedAt" | "categoryId" | "brand" | "keywords" | "metaDescription" | "metaTitle", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "name" | "slug" | "description" | "features" | "status" | "specificationTable" | "createdAt" | "updatedAt" | "categoryId" | "brand" | "soldCount" | "averageRating" | "keywords" | "metaDescription" | "metaTitle", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Conversation?: boolean | Product$ConversationArgs<ExtArgs>
     deliveryOptions?: boolean | Product$deliveryOptionsArgs<ExtArgs>
@@ -28440,6 +28500,8 @@ export namespace Prisma {
       updatedAt: Date
       categoryId: string | null
       brand: string
+      soldCount: number
+      averageRating: Prisma.Decimal | null
       keywords: string[]
       metaDescription: string | null
       metaTitle: string | null
@@ -28892,6 +28954,8 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"Product", 'DateTime'>
     readonly categoryId: FieldRef<"Product", 'String'>
     readonly brand: FieldRef<"Product", 'String'>
+    readonly soldCount: FieldRef<"Product", 'Int'>
+    readonly averageRating: FieldRef<"Product", 'Decimal'>
     readonly keywords: FieldRef<"Product", 'String[]'>
     readonly metaDescription: FieldRef<"Product", 'String'>
     readonly metaTitle: FieldRef<"Product", 'String'>
@@ -65456,6 +65520,8 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     categoryId: 'categoryId',
     brand: 'brand',
+    soldCount: 'soldCount',
+    averageRating: 'averageRating',
     keywords: 'keywords',
     metaDescription: 'metaDescription',
     metaTitle: 'metaTitle'
@@ -67990,6 +68056,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     categoryId?: StringNullableFilter<"Product"> | string | null
     brand?: StringFilter<"Product"> | string
+    soldCount?: IntFilter<"Product"> | number
+    averageRating?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     keywords?: StringNullableListFilter<"Product">
     metaDescription?: StringNullableFilter<"Product"> | string | null
     metaTitle?: StringNullableFilter<"Product"> | string | null
@@ -68022,6 +68090,8 @@ export namespace Prisma {
     updatedAt?: SortOrder
     categoryId?: SortOrderInput | SortOrder
     brand?: SortOrder
+    soldCount?: SortOrder
+    averageRating?: SortOrderInput | SortOrder
     keywords?: SortOrder
     metaDescription?: SortOrderInput | SortOrder
     metaTitle?: SortOrderInput | SortOrder
@@ -68057,6 +68127,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     categoryId?: StringNullableFilter<"Product"> | string | null
     brand?: StringFilter<"Product"> | string
+    soldCount?: IntFilter<"Product"> | number
+    averageRating?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     keywords?: StringNullableListFilter<"Product">
     metaDescription?: StringNullableFilter<"Product"> | string | null
     metaTitle?: StringNullableFilter<"Product"> | string | null
@@ -68089,12 +68161,16 @@ export namespace Prisma {
     updatedAt?: SortOrder
     categoryId?: SortOrderInput | SortOrder
     brand?: SortOrder
+    soldCount?: SortOrder
+    averageRating?: SortOrderInput | SortOrder
     keywords?: SortOrder
     metaDescription?: SortOrderInput | SortOrder
     metaTitle?: SortOrderInput | SortOrder
     _count?: ProductCountOrderByAggregateInput
+    _avg?: ProductAvgOrderByAggregateInput
     _max?: ProductMaxOrderByAggregateInput
     _min?: ProductMinOrderByAggregateInput
+    _sum?: ProductSumOrderByAggregateInput
   }
 
   export type ProductScalarWhereWithAggregatesInput = {
@@ -68113,6 +68189,8 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     categoryId?: StringNullableWithAggregatesFilter<"Product"> | string | null
     brand?: StringWithAggregatesFilter<"Product"> | string
+    soldCount?: IntWithAggregatesFilter<"Product"> | number
+    averageRating?: DecimalNullableWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     keywords?: StringNullableListFilter<"Product">
     metaDescription?: StringNullableWithAggregatesFilter<"Product"> | string | null
     metaTitle?: StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -72325,6 +72403,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -72357,6 +72437,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -72385,6 +72467,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72417,6 +72501,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72447,6 +72533,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -72463,6 +72551,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72481,6 +72571,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76651,6 +76743,17 @@ export namespace Prisma {
     not?: NestedEnumProductStatusFilter<$PrismaModel> | $Enums.ProductStatus
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type DeliveryOptionListRelationFilter = {
     every?: DeliveryOptionWhereInput
     some?: DeliveryOptionWhereInput
@@ -76724,9 +76827,16 @@ export namespace Prisma {
     updatedAt?: SortOrder
     categoryId?: SortOrder
     brand?: SortOrder
+    soldCount?: SortOrder
+    averageRating?: SortOrder
     keywords?: SortOrder
     metaDescription?: SortOrder
     metaTitle?: SortOrder
+  }
+
+  export type ProductAvgOrderByAggregateInput = {
+    soldCount?: SortOrder
+    averageRating?: SortOrder
   }
 
   export type ProductMaxOrderByAggregateInput = {
@@ -76740,6 +76850,8 @@ export namespace Prisma {
     updatedAt?: SortOrder
     categoryId?: SortOrder
     brand?: SortOrder
+    soldCount?: SortOrder
+    averageRating?: SortOrder
     metaDescription?: SortOrder
     metaTitle?: SortOrder
   }
@@ -76755,8 +76867,15 @@ export namespace Prisma {
     updatedAt?: SortOrder
     categoryId?: SortOrder
     brand?: SortOrder
+    soldCount?: SortOrder
+    averageRating?: SortOrder
     metaDescription?: SortOrder
     metaTitle?: SortOrder
+  }
+
+  export type ProductSumOrderByAggregateInput = {
+    soldCount?: SortOrder
+    averageRating?: SortOrder
   }
 
   export type EnumProductStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -76769,7 +76888,7 @@ export namespace Prisma {
     _max?: NestedEnumProductStatusFilter<$PrismaModel>
   }
 
-  export type IntFilter<$PrismaModel = never> = {
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -76777,7 +76896,12 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type OrderItemListRelationFilter = {
@@ -76863,22 +76987,6 @@ export namespace Prisma {
     mrp?: SortOrder
     stock?: SortOrder
     soldCount?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type ProductVariantScalarRelationFilter = {
@@ -80739,6 +80847,14 @@ export namespace Prisma {
     set?: $Enums.ProductStatus
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type ProductUpdatekeywordsInput = {
     set?: string[]
     push?: string | string[]
@@ -81158,14 +81274,6 @@ export namespace Prisma {
     connectOrCreate?: SellerOrderItemCreateOrConnectWithoutVariantInput | SellerOrderItemCreateOrConnectWithoutVariantInput[]
     createMany?: SellerOrderItemCreateManyVariantInputEnvelope
     connect?: SellerOrderItemWhereUniqueInput | SellerOrderItemWhereUniqueInput[]
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type CartItemUpdateManyWithoutVariantNestedInput = {
@@ -83922,6 +84030,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -83952,6 +84062,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -84810,6 +84922,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Product"> | Date | string
     categoryId?: StringNullableFilter<"Product"> | string | null
     brand?: StringFilter<"Product"> | string
+    soldCount?: IntFilter<"Product"> | number
+    averageRating?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     keywords?: StringNullableListFilter<"Product">
     metaDescription?: StringNullableFilter<"Product"> | string | null
     metaTitle?: StringNullableFilter<"Product"> | string | null
@@ -86101,6 +86215,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -86132,6 +86248,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -86439,6 +86557,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -86470,6 +86590,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -88021,6 +88143,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -88051,6 +88175,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -88471,6 +88597,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -88502,6 +88630,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -88588,6 +88718,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -88619,6 +88751,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -88814,6 +88948,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -88845,6 +88981,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -88888,6 +89026,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -88919,6 +89059,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -88946,6 +89088,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -88977,6 +89121,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -89020,6 +89166,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -89051,6 +89199,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -89078,6 +89228,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -89109,6 +89261,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -89152,6 +89306,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -89183,6 +89339,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -90252,6 +90410,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -90283,6 +90443,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -90432,6 +90594,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -90463,6 +90627,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -90609,6 +90775,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -90640,6 +90808,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -90683,6 +90853,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -90714,6 +90886,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92565,6 +92739,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -92596,6 +92772,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -92788,6 +92966,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92819,6 +92999,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -93589,6 +93771,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -93620,6 +93804,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -93684,6 +93870,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -93715,6 +93903,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -94595,6 +94785,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -94626,6 +94818,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -94790,6 +94984,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -94821,6 +95017,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -96059,6 +96257,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -96090,6 +96290,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -96238,6 +96440,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -96269,6 +96473,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -96495,6 +96701,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -96526,6 +96734,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -96674,6 +96884,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -96705,6 +96917,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -97564,6 +97778,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     categoryId?: string | null
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -98258,6 +98474,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -98288,6 +98506,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -98317,6 +98537,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -98835,6 +99057,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     brand: string
+    soldCount?: number
+    averageRating?: Decimal | DecimalJsLike | number | string | null
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
@@ -98984,6 +99208,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -99014,6 +99240,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -99043,6 +99271,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     brand?: StringFieldUpdateOperationsInput | string
+    soldCount?: IntFieldUpdateOperationsInput | number
+    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null

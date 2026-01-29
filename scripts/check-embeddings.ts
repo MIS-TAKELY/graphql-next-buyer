@@ -32,18 +32,14 @@ async function checkEmbeddings() {
     // Show sample products without embeddings
     if (count < total) {
         console.log(`\n📋 Sample products without embeddings:`);
-        const samplesWithoutEmbeddings = await prisma.product.findMany({
-            where: {
-                status: "ACTIVE",
-                embedding: null,
-            },
-            select: {
-                id: true,
-                name: true,
-                brand: true,
-            },
-            take: 5,
-        });
+        const samplesWithoutEmbeddings = await prisma.$queryRaw<
+            Array<{ id: string; name: string; brand: string }>
+        >`
+            SELECT id::text, name, brand
+            FROM "products"
+            WHERE status = 'ACTIVE' AND embedding IS NULL
+            LIMIT 5
+        `;
 
         samplesWithoutEmbeddings.forEach((p, i) => {
             console.log(`   ${i + 1}. ${p.name} (${p.brand}) - ID: ${p.id}`);

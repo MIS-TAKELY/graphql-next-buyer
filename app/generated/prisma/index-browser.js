@@ -363,6 +363,8 @@ exports.Prisma.ProductScalarFieldEnum = {
   updatedAt: 'updatedAt',
   categoryId: 'categoryId',
   brand: 'brand',
+  soldCount: 'soldCount',
+  averageRating: 'averageRating',
   keywords: 'keywords',
   metaDescription: 'metaDescription',
   metaTitle: 'metaTitle'
