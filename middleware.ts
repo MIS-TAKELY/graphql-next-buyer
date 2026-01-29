@@ -34,8 +34,6 @@ export default async function middleware(request: NextRequest) {
 
   // 0. Immediate public access for SEO and critical files
   if (
-    nextUrl.pathname === "/robots.txt" ||
-    nextUrl.pathname === "/sitemap.xml" ||
     nextUrl.pathname.startsWith("/api/auth") ||
     nextUrl.pathname.startsWith("/api/otp") ||
     nextUrl.pathname === "/verify-phone"
@@ -76,7 +74,7 @@ export default async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest|xml|txt)).*)",
     "/(api|trpc)(.*)",
   ],
 };
