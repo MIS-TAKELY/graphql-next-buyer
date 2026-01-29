@@ -2,6 +2,9 @@ import { prisma } from "../lib/db/prisma";
 import { APP_URL } from "@/config/env";
 import { MetadataRoute } from "next";
 
+export const revalidate = 3600; // Revalidate sitemap every hour
+
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = APP_URL;
 

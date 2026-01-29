@@ -39,7 +39,7 @@ async function getProducts() {
             where: { status: "ACTIVE" },
             select: { name: true, slug: true },
             orderBy: { updatedAt: 'desc' },
-            take: 100 // Limit to top 100 products for the visual sitemap
+            // Removed take limit to show all products as requested
         });
     } catch (e) {
         return [];
@@ -178,6 +178,11 @@ export default async function SitemapPage() {
                     >
                         Contact Support
                     </Link>
+                    <div className="pt-4 mt-4 border-t border-dashed">
+                        <p className="text-xs text-muted-foreground">
+                            For automated processing, access our <Link href="/api/products/feed" className="text-primary hover:underline">Product URL Feed</Link>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
