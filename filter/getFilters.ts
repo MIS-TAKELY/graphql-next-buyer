@@ -37,7 +37,7 @@ export interface DynamicFilterResult {
  */
 export async function getDynamicFilters(
   searchTerm: string,
-  appliedFilters?: Record<string, string[]>,
+  appliedFilters?: any,
   productIds?: string[]
 ): Promise<DynamicFilterResult> {
 
@@ -168,50 +168,72 @@ export async function getDynamicFilters(
     }
   }
 
-  // ===== STEP 4: Build WHERE clause for applied filters =====
-  const buildFilteredProductIds = async (): Promise<string[]> => {
+  // ===== STEP 4: Build WHERE clause for applied filters (Faceted Search) =====
+  /**
+   * Builds the set of product IDs considering all applied filters EXCEPT the one we are currently calculating facets for.
+   * This ensures that selecting one option in a category doesn't make other options in that SAME category disappear.
+   */
+  const buildFilteredProductIds = async (excludeKey?: string): Promise<string[]> => {
     if (!appliedFilters || Object.keys(appliedFilters).length === 0) {
       return matchingProductIds;
     }
 
     let filteredIds = matchingProductIds;
 
-    // Apply brand filter
-    if (appliedFilters.brand && appliedFilters.brand.length > 0) {
+    // 1. Apply brand filter (only if not excluding brand facet)
+    const brandFilter = appliedFilters.brands || (appliedFilters.specifications?.brand);
+    if (excludeKey !== "brand" && brandFilter && brandFilter.length > 0) {
       const brandFiltered = await prisma.product.findMany({
         where: {
           id: { in: filteredIds },
-          brand: { in: appliedFilters.brand },
+          brand: { in: brandFilter },
         },
         select: { id: true },
       });
-      filteredIds = brandFiltered.map(p => p.id);
+      filteredIds = brandFiltered.map((p) => p.id);
     }
 
-    // Apply price filter
-    if (appliedFilters.price_max || appliedFilters.price_min) {
+    // 2. Apply category filter
+    const categoryFilter = appliedFilters.categories;
+    if (excludeKey !== "category" && categoryFilter && categoryFilter.length > 0) {
+      const catFiltered = await prisma.product.findMany({
+        where: {
+          id: { in: filteredIds },
+          category: { name: { in: categoryFilter } },
+        },
+        select: { id: true },
+      });
+      filteredIds = catFiltered.map((p) => p.id);
+    }
+
+    // 3. Apply price filter (always apply as price is usually a separate component, not a dynamic facet here)
+    const minPrice = appliedFilters.minPrice || (appliedFilters.price_min?.[0] ? Number(appliedFilters.price_min[0]) : undefined);
+    const maxPrice = appliedFilters.maxPrice || (appliedFilters.price_max?.[0] ? Number(appliedFilters.price_max[0]) : undefined);
+
+    if (minPrice !== undefined || maxPrice !== undefined) {
       const priceFiltered = await prisma.product.findMany({
         where: {
           id: { in: filteredIds },
           variants: {
             some: {
               price: {
-                ...(appliedFilters.price_max ? { lte: Number(appliedFilters.price_max[0]) } : {}),
-                ...(appliedFilters.price_min ? { gte: Number(appliedFilters.price_min[0]) } : {}),
+                ...(maxPrice !== undefined ? { lte: maxPrice } : {}),
+                ...(minPrice !== undefined ? { gte: minPrice } : {}),
               },
             },
           },
         },
         select: { id: true },
       });
-      filteredIds = priceFiltered.map(p => p.id);
+      filteredIds = priceFiltered.map((p) => p.id);
     }
 
-    // Apply specification filters
-    for (const [key, values] of Object.entries(appliedFilters)) {
-      if (key === 'brand' || key === 'price_max' || key === 'price_min') continue;
+    // 4. Apply specification filters
+    const specFilters = appliedFilters.specifications || {};
+    for (const [key, values] of Object.entries(specFilters)) {
+      if (key === excludeKey || key === "brand" || key === "category") continue;
 
-      if (values && values.length > 0) {
+      if (Array.isArray(values) && values.length > 0) {
         const specFiltered = await prisma.product.findMany({
           where: {
             id: { in: filteredIds },
@@ -228,18 +250,19 @@ export async function getDynamicFilters(
           },
           select: { id: true },
         });
-        filteredIds = specFiltered.map(p => p.id);
+        filteredIds = specFiltered.map((p) => p.id);
       }
     }
 
     return filteredIds;
   };
 
-  const filteredProductIds = await buildFilteredProductIds();
-
-  // ===== STEP 5: Populate options with counts =====
+  // ===== STEP 5: Populate options with counts (Per-Facet) =====
   const filtersWithCounts = await Promise.all(
     allSpecs.map(async (s) => {
+      // Calculate product IDs for this specific facet (ignoring its own selection)
+      const facetFilteredIds = await buildFilteredProductIds(s.key);
+
       let options: FilterOption[] = [];
 
       if (s.key === "brand") {
@@ -247,7 +270,7 @@ export async function getDynamicFilters(
         const brands = await prisma.product.groupBy({
           by: ["brand"],
           where: {
-            id: { in: filteredProductIds },
+            id: { in: facetFilteredIds },
             status: "ACTIVE",
           },
           _count: true,
@@ -269,7 +292,7 @@ export async function getDynamicFilters(
             key: s.key,
             variant: {
               product: {
-                id: { in: filteredProductIds },
+                id: { in: facetFilteredIds },
                 status: "ACTIVE",
               },
             },
