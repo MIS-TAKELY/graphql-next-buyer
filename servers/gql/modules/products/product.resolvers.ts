@@ -235,7 +235,7 @@ export const productResolvers = {
                 seller: { select: { id: true, firstName: true, lastName: true } },
                 variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
                 images: { orderBy: { sortOrder: 'asc' } },
-                reviews: { select: { rating: true } },
+                reviews: { select: { id: true, rating: true } },
                 category: true,
               }
             });
@@ -252,7 +252,7 @@ export const productResolvers = {
               seller: { select: { id: true, firstName: true, lastName: true } },
               variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
               images: { orderBy: { sortOrder: 'asc' } },
-              reviews: { select: { rating: true } },
+              reviews: { select: { id: true, rating: true } },
               category: true,
             }
           });
@@ -286,7 +286,7 @@ export const productResolvers = {
               seller: { select: { id: true, firstName: true, lastName: true } },
               variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
               images: { orderBy: { sortOrder: 'asc' } },
-              reviews: { select: { rating: true } },
+              reviews: { select: { id: true, rating: true } },
               category: true,
             }
           });
@@ -314,7 +314,7 @@ export const productResolvers = {
               seller: { select: { id: true, firstName: true, lastName: true } },
               variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
               images: { orderBy: { sortOrder: 'asc' } },
-              reviews: { select: { rating: true } },
+              reviews: { select: { id: true, rating: true } },
               category: true,
             }
           });
@@ -375,7 +375,7 @@ export const productResolvers = {
                 }
               },
               images: { orderBy: { sortOrder: 'asc' } },
-              reviews: { select: { rating: true } },
+              reviews: { select: { id: true, rating: true } },
               category: true,
             }
           }
