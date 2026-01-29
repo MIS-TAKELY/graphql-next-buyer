@@ -98,7 +98,7 @@ export default function SearchPage() {
   const setSortBy = (sort: string) => setFilters({ sort });
 
   // Process filters from backend (new FilterGroup structure)
-  const { computedFilters, filterOptions } = useMemo(() => {
+  const { computedFilters: rawComputedFilters, filterOptions: rawFilterOptions } = useMemo(() => {
     // Prioritize AI-driven filters from dynamicSearchData
     if (dynamicSearchData?.filters && dynamicSearchData.filters.length > 0) {
       const finalFilters: any[] = [];
@@ -141,6 +141,33 @@ export default function SearchPage() {
 
     return { computedFilters: [], filterOptions: {} };
   }, [backendFilters, dynamicSearchData]);
+
+  // Persist filters to avoid layout shifts/disappearing sidebar during loading
+  const [persistentFilters, setPersistentFilters] = useState<{
+    computedFilters: any[];
+    filterOptions: { [key: string]: any[] };
+  }>({
+    computedFilters: [],
+    filterOptions: {},
+  });
+
+  useEffect(() => {
+    if (rawComputedFilters.length > 0) {
+      setPersistentFilters({
+        computedFilters: rawComputedFilters,
+        filterOptions: rawFilterOptions,
+      });
+    }
+  }, [rawComputedFilters, rawFilterOptions]);
+
+  const displayFilters =
+    rawComputedFilters.length > 0
+      ? rawComputedFilters
+      : persistentFilters.computedFilters;
+  const displayOptions =
+    rawComputedFilters.length > 0
+      ? rawFilterOptions
+      : persistentFilters.filterOptions;
 
   const filteredProducts = useMemo(() => {
     if (!Array.isArray(searchProducts)) return [];
@@ -290,11 +317,11 @@ export default function SearchPage() {
                 setMinRating={setMinRating}
                 dynamicFilters={dynamicFilters}
                 toggleFilter={toggleFilter}
-                filterOptions={filterOptions}
+                filterOptions={displayOptions}
                 dynamicSearchData={{
                   category: dynamicSearchData?.category || "",
                   intent: dynamicSearchData?.intent || {},
-                  filters: computedFilters,
+                  filters: displayFilters,
                 }}
               />
             </div>
@@ -311,11 +338,11 @@ export default function SearchPage() {
                   setMinRating={setMinRating}
                   dynamicFilters={dynamicFilters}
                   toggleFilter={toggleFilter}
-                  filterOptions={filterOptions}
+                  filterOptions={displayOptions}
                   dynamicSearchData={{
                     category: dynamicSearchData?.category || "",
                     intent: dynamicSearchData?.intent || {},
-                    filters: computedFilters,
+                    filters: displayFilters,
                   }}
                 />
               </div>
@@ -338,11 +365,11 @@ export default function SearchPage() {
               togglePriceRange={togglePriceRange}
               setMinRating={setMinRating}
               clearFilters={clearFilters}
-              filterOptions={filterOptions}
+              filterOptions={displayOptions}
               dynamicSearchData={{
                 category: dynamicSearchData?.category || "",
                 intent: dynamicSearchData?.intent || {},
-                filters: computedFilters,
+                filters: displayFilters,
               }}
             />
             <ProductGrid
