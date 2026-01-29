@@ -13,10 +13,10 @@ interface SuggestedSpecification {
 export async function suggestSpecifications(
     query: string
 ): Promise<SuggestedSpecification[]> {
-    const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+    const OPENROUTER_API_KEY = process.env.OPENROUTER_FILTER_API_KEY;
 
     if (!OPENROUTER_API_KEY) {
-        console.warn("⚠️ OPENROUTER_API_KEY not set, skipping AI spec suggestion");
+        console.warn("⚠️ OPENROUTER_FILTER_API_KEY not set, skipping AI spec suggestion");
         return [];
     }
 
