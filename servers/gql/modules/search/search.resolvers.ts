@@ -144,24 +144,24 @@ export const searchResolvers = {
         params.push(filters.categories);
       }
 
-      // Brand (Prioritize user selection, then intent)
-      const brandFilter = (filters?.brands && filters.brands.length > 0) ? filters.brands : (intent.brand || []);
+      // Brand (ONLY apply explicit user selection as hard constraints)
+      const brandFilter = filters?.brands || [];
       if (brandFilter.length > 0) {
         whereConditions.push(`brand = ANY($${params.length + 1})`);
         params.push(brandFilter);
       }
 
-      // Price
-      const priceMax = filters?.maxPrice || intent.price_max;
-      const priceMin = filters?.minPrice || intent.price_min;
+      // Price (ONLY apply explicit user selection as hard constraints)
+      const priceMax = filters?.maxPrice;
+      const priceMin = filters?.minPrice;
 
-      if (priceMax || priceMin) {
+      if (priceMax !== undefined || priceMin !== undefined) {
         const priceConditions: string[] = [];
-        if (priceMax) {
+        if (priceMax !== undefined) {
           priceConditions.push(`pv.price <= $${params.length + 1}`);
           params.push(priceMax);
         }
-        if (priceMin) {
+        if (priceMin !== undefined) {
           priceConditions.push(`pv.price >= $${params.length + 1}`);
           params.push(priceMin);
         }

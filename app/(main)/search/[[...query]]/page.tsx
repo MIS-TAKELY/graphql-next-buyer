@@ -49,7 +49,6 @@ export default function SearchPage() {
   const query = searchParams.get("q") || "";
   const { dynamicSearchData } = useDynamicSearchFilter(query);
   const [showFilters, setShowFilters] = useState(false);
-  const [aiIntentApplied, setAiIntentApplied] = useState(false);
 
   // Zustand Store
   const {
@@ -88,29 +87,6 @@ export default function SearchPage() {
     limit,
     setLimit,
   } = useSearch(query, formattedFilters);
-
-  // Auto-apply AI intent
-  useEffect(() => {
-    if (dynamicSearchData?.intent && !aiIntentApplied) {
-      const intentFilters = dynamicSearchData.intent;
-      Object.entries(intentFilters).forEach(([key, values]) => {
-        if (Array.isArray(values)) {
-          values.forEach(val => {
-            // Only add if not already selected
-            if (!storeFilters.dynamicFilters[key]?.includes(val)) {
-              toggleDynamicFilter(key, val);
-            }
-          });
-        }
-      });
-      setAiIntentApplied(true);
-    }
-  }, [dynamicSearchData, aiIntentApplied, toggleDynamicFilter, storeFilters.dynamicFilters]);
-
-  // Reset intent flag when query changes
-  useEffect(() => {
-    setAiIntentApplied(false);
-  }, [query]);
 
   const {
     selectedPriceRanges,
@@ -192,7 +168,7 @@ export default function SearchPage() {
       const matchesRating = rating >= minRating;
       const matchesDynamicFilters = Object.entries(dynamicFilters).every(
         ([key, selectedValues]) => {
-          if (selectedValues.length === 0) return true;
+          if ((selectedValues as string[]).length === 0) return true;
           if (key === "brand") return (selectedValues as string[]).includes(product.brand);
           if (key === "category")
             return (selectedValues as string[]).includes(product.category?.name || "");
