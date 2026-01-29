@@ -33,8 +33,24 @@ async function getCategories() {
     }
 }
 
+async function getProducts() {
+    try {
+        return await prisma.product.findMany({
+            where: { status: "ACTIVE" },
+            select: { name: true, slug: true },
+            orderBy: { updatedAt: 'desc' },
+            take: 100 // Limit to top 100 products for the visual sitemap
+        });
+    } catch (e) {
+        return [];
+    }
+}
+
 export default async function SitemapPage() {
-    const categories = await getCategories();
+    const [categories, products] = await Promise.all([
+        getCategories(),
+        getProducts()
+    ]);
 
     const sections = [
         {
@@ -123,6 +139,27 @@ export default async function SitemapPage() {
                                     >
                                         <span className="w-1 h-1 rounded-full bg-primary/40" />
                                         {cat.name}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {products.length > 0 && (
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-2 text-primary">
+                                <ShoppingBag className="w-5 h-5" />
+                                <h2 className="text-xl font-bold text-foreground">Our Products</h2>
+                            </div>
+                            <div className="pl-7 border-l-2 border-primary/10 ml-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+                                {products.map((prod, pIdx) => (
+                                    <Link
+                                        key={pIdx}
+                                        href={`/product/${prod.slug}`}
+                                        className="text-sm text-muted-foreground hover:text-primary transition-colors py-1 flex items-center gap-2"
+                                    >
+                                        <span className="w-1 h-1 rounded-full bg-primary/40" />
+                                        {prod.name}
                                     </Link>
                                 ))}
                             </div>

@@ -8,6 +8,22 @@ import { cache } from "react";
 
 export const revalidate = 3600;
 
+export async function generateStaticParams() {
+  try {
+    const products = await prisma.product.findMany({
+      where: { status: "ACTIVE" },
+      select: { slug: true },
+    });
+
+    return products.map((product) => ({
+      slug: product.slug,
+    }));
+  } catch (error) {
+    console.error("Error generating static params for products:", error);
+    return [];
+  }
+}
+
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
