@@ -178,6 +178,26 @@ export function getFallbackSpecifications(query: string): SuggestedSpecification
         ];
     }
 
+    // Clothing (Shirts, Dresses, Jeans, etc.)
+    if (
+        lowerQuery.includes("shirt") ||
+        lowerQuery.includes("dress") ||
+        lowerQuery.includes("jean") ||
+        lowerQuery.includes("pant") ||
+        lowerQuery.includes("tround") ||
+        lowerQuery.includes("clothing") ||
+        lowerQuery.includes("shoe") ||
+        lowerQuery.includes("sneaker")
+    ) {
+        return [
+            { key: "size", label: "Size", type: "dropdown" },
+            { key: "color", label: "Color", type: "dropdown" },
+            { key: "material", label: "Material", type: "dropdown" },
+            { key: "fit", label: "Fit", type: "dropdown" },
+            { key: "brand", label: "Brand", type: "dropdown" },
+        ];
+    }
+
     // Default: return empty (rely on category specs)
     return [];
 }
