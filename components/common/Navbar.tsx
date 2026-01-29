@@ -16,12 +16,14 @@ const Navbar = () => {
 
   // Close mobile menu when screen becomes desktop size
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const handleResize = () => {
       if (window.innerWidth >= 768 && mobileMenuOpen) {
         setMobileMenuOpen(false);
       }
     };
 
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [mobileMenuOpen]);

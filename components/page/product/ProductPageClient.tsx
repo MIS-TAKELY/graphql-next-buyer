@@ -78,7 +78,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
   // Force scroll to top on mount
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (typeof window !== "undefined") {
+      window.scrollTo(0, 0);
+    }
   }, []);
 
   const handleAttributeSelect = useCallback(

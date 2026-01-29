@@ -24,6 +24,8 @@ const publicRoutes = [
   "/site-map",
   "/help",
   "/blog",
+  "/robots.txt",
+  "/sitemap.xml",
 ];
 
 export default async function middleware(request: NextRequest) {

@@ -68,6 +68,7 @@ const ProductInfo = memo(function ProductInfo({
   };
 
   const scrollToHighlights = () => {
+    if (typeof window === "undefined") return;
     setShowAllHighlights(false);
     // Use a small timeout to allow the DOM to update before scrolling
     setTimeout(() => {
