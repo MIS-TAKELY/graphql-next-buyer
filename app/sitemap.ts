@@ -1,8 +1,9 @@
 import { prisma } from "../lib/db/prisma";
+import { APP_URL } from "@/config/env";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
+    const baseUrl = APP_URL;
 
     let categories: { slug: string; updatedAt: Date }[] = [];
     let products: { slug: string; updatedAt: Date }[] = [];

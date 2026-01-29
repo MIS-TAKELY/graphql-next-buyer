@@ -1,6 +1,7 @@
 import ProductPageClient from "@/components/page/product/ProductPageClient";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
 import { prisma } from "@/lib/db/prisma";
+import { APP_URL } from "@/config/env";
 import { TProduct } from "@/types/product";
 import { Metadata, ResolvingMetadata } from "next";
 import { cache } from "react";
@@ -70,7 +71,7 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
   const productImage = product.images?.[0]?.url;
 
-  const baseUrl = process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
+  const baseUrl = APP_URL;
   const url = `${baseUrl}/product/${slug}`;
 
   // Title: [Product Name] | Price in Nepal | Vanijay
@@ -152,7 +153,7 @@ export default async function ProductPage({
   const stockValue = serializableProduct.variants?.[0]?.stock;
   const stock = stockValue ? Number(stockValue) : 0;
 
-  const baseUrl = process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
+  const baseUrl = APP_URL;
   const productUrl = `${baseUrl}/product/${slug}`;
 
   // Use the same refined description logic for JSON-LD

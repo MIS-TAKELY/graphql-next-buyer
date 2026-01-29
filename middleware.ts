@@ -10,6 +10,7 @@ const publicRoutes = [
   "/search",
   "/category",
   "/product",
+  "/products",
   "/store",
   "/compare",
   "/terms-conditions",
@@ -42,9 +43,9 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Enforce canonical domain (www.vanijay.com) with 301 Permanent Redirect
-  if (process.env.NODE_ENV === "production" && nextUrl.hostname === "vanijay.com") {
-    const canonicalUrl = new URL(`https://www.vanijay.com${nextUrl.pathname}${nextUrl.search}`);
+  // Enforce canonical domain (vanijay.com) with 301 Permanent Redirect
+  if (process.env.NODE_ENV === "production" && nextUrl.hostname === "www.vanijay.com") {
+    const canonicalUrl = new URL(`https://vanijay.com${nextUrl.pathname}${nextUrl.search}`);
     return NextResponse.redirect(canonicalUrl, { status: 301 });
   }
 
