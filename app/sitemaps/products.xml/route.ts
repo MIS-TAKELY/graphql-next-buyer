@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/db/prisma';
 import { NextResponse } from 'next/server';
 
-export const revalidate = 3600; // 1 hour
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com';
@@ -37,6 +37,7 @@ export async function GET() {
     return new NextResponse(xml, {
         headers: {
             'Content-Type': 'application/xml',
+            'Cache-Control': 'public, max-age=3600, s-maxage=3600',
         },
     });
 }
