@@ -40,7 +40,7 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${categories.map((category) => `
   <url>
-    <loc>${escapeXml(category.canonicalUrl || `${baseUrl}/search/${category.slug}`)}</loc>
+    <loc>${escapeXml(category.canonicalUrl || `${baseUrl}/category/${category.slug}`)}</loc>
     <lastmod>${(category.lastIndexableUpdate || category.updatedAt).toISOString()}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
