@@ -66,10 +66,16 @@ export const metadata: Metadata = {
     title: "Vanijay",
   },
   other: {
+    "geo.region": "NP",
+    "geo.placename": "Nepal",
     "preconnect": [
       "https://res.cloudinary.com",
       "https://images.unsplash.com",
-      "https://placehold.co"
+      "https://placehold.co",
+      "https://www.googletagmanager.com"
+    ],
+    "dns-prefetch": [
+      "https://www.googletagmanager.com"
     ]
   }
 };
@@ -88,6 +94,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <meta name="geo.region" content="NP" />
+        <meta name="geo.placename" content="Nepal" />
+      </head>
 
       <body
         className={`${plusJakarta.variable} antialiased`}

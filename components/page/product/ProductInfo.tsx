@@ -88,9 +88,14 @@ const ProductInfo = memo(function ProductInfo({
             {product.name}
           </h1>
 
-          {product.status === "ACTIVE" && (
+          {product.status === "ACTIVE" && inStock && (
             <span className="px-2.5 py-0.5 bg-success/15 text-success text-xs font-semibold border border-success/20">
               Available
+            </span>
+          )}
+          {product.status === "ACTIVE" && !inStock && (
+            <span className="px-2.5 py-0.5 bg-destructive/15 text-destructive text-xs font-semibold border border-destructive/20">
+              Out of Stock
             </span>
           )}
         </div>
@@ -121,6 +126,13 @@ const ProductInfo = memo(function ProductInfo({
                 {isDescExpanded ? 'See less' : 'See more'}
               </button>
             )}
+          </div>
+        )}
+
+        {/* SKU and Additional Info */}
+        {defaultVariant?.sku && (
+          <div className="mt-3 text-sm text-muted-foreground">
+            <span className="font-medium">SKU:</span> {defaultVariant.sku}
           </div>
         )}
 

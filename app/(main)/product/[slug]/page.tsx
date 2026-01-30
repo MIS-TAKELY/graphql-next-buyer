@@ -5,6 +5,7 @@ import { APP_URL } from "@/config/env";
 import { TProduct } from "@/types/product";
 import { Metadata, ResolvingMetadata } from "next";
 import { cache } from "react";
+import { formatPrice } from "@/lib/utils";
 
 export const revalidate = 3600;
 
@@ -97,7 +98,14 @@ export async function generateMetadata(
   }
 
   // High quality description (no truncation mid-sentence, 150-160 chars)
-  let description = product.metaDescription || product.description || `Buy ${product.name} at the best price in Nepal. Fast delivery and secure payment at Vanijay.`;
+  const currentPrice = product.variants?.[0]?.price ? Number(product.variants[0].price) : 0;
+  const currentStock = product.variants?.[0]?.stock ? Number(product.variants[0].stock) : 0;
+  
+  let description = product.metaDescription || 
+    `${product.description ? product.description.substring(0, 100) + (product.description.length > 100 ? "..." : "") : `Buy ${product.name}`} at रु${currentPrice.toLocaleString()} ${
+      currentStock > 0 ? "with free delivery in Nepal. 1-year warranty. Available now" : "currently out of stock"
+    }. Best prices at Vanijay.`;
+    
   if (description.length > 160) {
     description = description.substring(0, 157) + "...";
   }
@@ -132,6 +140,13 @@ export async function generateMetadata(
       description,
       images: productImage ? [productImage] : [],
     },
+    other: {
+      "geo.region": "NP",
+      "geo.placename": "Nepal",
+      "product:price:amount": currentPrice.toString(),
+      "product:price:currency": "NPR",
+      "product:availability": currentStock > 0 ? "instock" : "outofstock",
+    }
   };
 }
 
@@ -232,21 +247,44 @@ export default async function ProductPage({
         availability: vStock > 0
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
-        priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+        shippingDetails: {
+          "@type": "OfferShippingDetails",
+          shippingRate: {
+            "@type": "MonetaryAmount",
+            value: "0",
+            currency: "NPR"
+          },
+          shippingDestination: {
+            "@type": "DefinedRegion",
+            addressCountry: "NP"
+          }
+        },
+        hasMerchantReturnPolicy: {
+          "@type": "MerchantReturnPolicy",
+          returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+          merchantReturnDays: 7,
+          returnMethod: "https://schema.org/ReturnByMail",
+          returnFees: "https://schema.org/FreeReturnShipping"
+        },
+        priceValidUntil: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 180 days from now
         sku: variant.sku,
         seller: {
           "@type": "Organization",
-          name: "Vanijay",
+          name: "Vanijay Enterprises",
+          url: "https://vanijay.com",
+          logo: "https://vanijay.com/final_blue_logo_500by500.svg"
         },
       };
     }),
-    aggregateRating: serializableProduct.reviews && serializableProduct.reviews.length > 0 ? {
+    aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: serializableProduct.reviews.reduce((acc: number, review: any) => acc + (review.rating || 0), 0) / serializableProduct.reviews.length,
-      reviewCount: serializableProduct.reviews.length,
+      ratingValue: serializableProduct.reviews && serializableProduct.reviews.length > 0 
+        ? (serializableProduct.reviews.reduce((acc: number, review: any) => acc + (review.rating || 0), 0) / serializableProduct.reviews.length).toString()
+        : "0",
+      reviewCount: serializableProduct.reviews?.length || 0,
       bestRating: "5",
-      worstRating: "1",
-    } : undefined,
+      worstRating: "0"
+    },
     review: serializableProduct.reviews?.map((review: any) => ({
       "@type": "Review",
       reviewRating: {
@@ -288,6 +326,44 @@ export default async function ProductPage({
     ],
   };
 
+  // FAQ Schema - Include common product questions
+  const faqQuestions = [
+    {
+      "@type": "Question",
+      name: `Does ${serializableProduct.name} come with a warranty?`,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: serializableProduct.warranty 
+          ? `Yes, ${serializableProduct.name} comes with ${serializableProduct.warranty}.` 
+          : `Yes, ${serializableProduct.name} comes with manufacturer warranty as per Vanijay policies.`
+      }
+    },
+    {
+      "@type": "Question", 
+      name: `What is the return policy for ${serializableProduct.name}?`,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: serializableProduct.returnPolicy 
+          ? `The return policy for ${serializableProduct.name} is ${serializableProduct.returnPolicy}.` 
+          : `You can return ${serializableProduct.name} within 7 days of delivery in original condition for a full refund.`
+      }
+    },
+    {
+      "@type": "Question",
+      name: `How much does ${serializableProduct.name} cost in Nepal?`,
+      acceptedAnswer: {
+        "@type": "Answer", 
+        text: `The price of ${serializableProduct.name} in Nepal is ${formatPrice(currentPrice)} NPR at Vanijay.`
+      }
+    }
+  ];
+
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqQuestions
+  };
+
   return (
     <>
       <script
@@ -297,6 +373,10 @@ export default async function ProductPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
       />
       <SSRApolloProvider initialData={initialCacheData}>
         <ProductPageClient product={serializableProduct} />

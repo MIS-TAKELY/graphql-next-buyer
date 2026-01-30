@@ -106,16 +106,30 @@ export default function SmartMedia({
 
     return (
         <div className={cn("relative overflow-hidden", containerClassName, fill && "absolute inset-0 w-full h-full", !fill && "w-fit h-fit")}>
-            <Image
-                src={src}
-                alt={alt || "Media"}
-                className={cn("object-cover", className)}
-                fill={fill}
-                unoptimized={true}
-                onError={() => setError(true)}
-                priority={priority}
-                {...props}
-            />
+            {fill ? (
+                <Image
+                    src={src}
+                    alt={alt || "Product image"}
+                    className={cn("object-cover", className)}
+                    fill
+                    unoptimized={true}
+                    onError={() => setError(true)}
+                    priority={priority}
+                    {...props}
+                />
+            ) : (
+                <Image
+                    src={src}
+                    alt={alt || "Product image"}
+                    className={cn("object-cover", className)}
+                    width={props.width || 800}
+                    height={props.height || 800}
+                    unoptimized={true}
+                    onError={() => setError(true)}
+                    priority={priority}
+                    {...props}
+                />
+            )}
         </div>
     );
 }
