@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/sitemaps/pages.xml</loc>
@@ -17,9 +17,9 @@ export async function GET() {
   </sitemap>
 </sitemapindex>`;
 
-  return new NextResponse(xml, {
-    headers: {
-      'Content-Type': 'application/xml',
-    },
-  });
+    return new NextResponse(xml, {
+        headers: {
+            'Content-Type': 'application/xml',
+        },
+    });
 }
