@@ -157,6 +157,63 @@ export const productResolvers = {
 
       return product;
     },
+    getProductsByCategory: async (_: any, { categorySlug, limit = 50, offset = 0 }: { categorySlug: string; limit?: number; offset?: number }) => {
+      if (!categorySlug) throw new Error("Category slug is required");
+
+      // First, find the category and its children
+      const category = await prisma.category.findUnique({
+        where: { slug: categorySlug },
+        include: {
+          children: { select: { id: true } }
+        }
+      });
+
+      if (!category) {
+        return { products: [], total: 0, category: null };
+      }
+
+      // Get all category IDs (parent + children)
+      const categoryIds = [category.id, ...category.children.map((c: any) => c.id)];
+
+      // Count total products
+      const total = await prisma.product.count({
+        where: {
+          categoryId: { in: categoryIds },
+          status: "ACTIVE"
+        }
+      });
+
+      // Fetch products
+      const products = await prisma.product.findMany({
+        where: {
+          categoryId: { in: categoryIds },
+          status: "ACTIVE"
+        },
+        include: {
+          seller: { select: { id: true, firstName: true, lastName: true } },
+          variants: {
+            select: {
+              id: true,
+              price: true,
+              mrp: true,
+              sku: true,
+              stock: true,
+              isDefault: true,
+              specifications: true,
+            }
+          },
+          images: { orderBy: { sortOrder: 'asc' } },
+          reviews: { select: { id: true, rating: true } },
+          category: { include: { parent: true } },
+          productOffers: { include: { offer: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        take: limit,
+        skip: offset,
+      });
+
+      return { products, total, category };
+    },
     getRecommendedProducts: async (
       _: any,
       { productId, limit = 10 }: { productId?: string; limit?: number },

@@ -6,6 +6,7 @@ export const GET_LANDING_PAGE_CATEGORY_CARDS = gql`
       id
       categoryId
       categoryName
+      categorySlug
       image
       count
       color

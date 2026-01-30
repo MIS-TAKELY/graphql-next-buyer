@@ -10,7 +10,6 @@ type Props = {
 };
 
 const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Props) => {
-  console.log("categories-->", categories)
   return (
     <section className="bg transition-colors duration-300 w-full py-2">
       <div className="bg-card container-custom">
@@ -24,8 +23,10 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
               "
           >
             {categories.map((category: any, index: number) => {
+              // Use categorySlug if available, otherwise fallback to slug or generate from name
+              const slug = category.categorySlug || category.slug || (category.categoryName || category.name).toLowerCase().replace(/\s+/g, '-');
               return (
-                <Link key={category.id || index} href={`/search?q=${category.categoryName || category.name}`}>
+                <Link key={category.id || index} href={`/category/${slug}`}>
                   <div
                     className="
                         flex flex-col items-center justify-center

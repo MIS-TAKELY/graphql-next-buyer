@@ -3,6 +3,7 @@ export const landingPageTypeDefs = `#graphql
     id: ID!
     categoryId: String!
     categoryName: String!
+    categorySlug: String!
     image: String
     count: String!
     color: String!

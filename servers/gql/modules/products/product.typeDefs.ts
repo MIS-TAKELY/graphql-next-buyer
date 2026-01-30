@@ -66,11 +66,18 @@ export const productTypeDefs = gql`
     getProducts(limit: Int, offset: Int): [Product!]!
     getProduct(productId: ID!): Product!
     getProductBySlug(slug: String!): Product!
+    getProductsByCategory(categorySlug: String!, limit: Int, offset: Int): ProductsWithCount!
     getRecommendedProducts(productId: ID, limit: Int): [Product!]!
     getProductsBySeller(sellerId: ID!): [Product!]!
     getRecentlyViewed: [Product!]!
     getFrequentlyBoughtTogether(productId: ID!, limit: Int): [Product!]!
     getProductsByIds(ids: [ID!]!): [Product!]!
+  }
+
+  type ProductsWithCount {
+    products: [Product!]!
+    total: Int!
+    category: Category
   }
 
   type Mutation {

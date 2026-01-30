@@ -9,6 +9,7 @@ export const landingPageResolvers = {
                     category: {
                         select: {
                             name: true,
+                            slug: true,
                             _count: { select: { products: true } }
                         }
                     }
@@ -20,6 +21,7 @@ export const landingPageResolvers = {
                 id: card.id,
                 categoryId: card.categoryId,
                 categoryName: card.category.name,
+                categorySlug: card.category.slug,
                 image: card.image,
                 count: `${card.category._count.products}+ items`,
                 color: card.color,

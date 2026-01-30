@@ -25,14 +25,22 @@ const publicRoutes = [
   "/site-map",
   "/help",
   "/blog",
-  "/robots.txt",
-  "/sitemap.xml",
 ];
 
 export default async function middleware(request: NextRequest) {
   const { nextUrl } = request;
 
-  // 0. Immediate public access for SEO and critical files
+  // 0. Immediate bypass for SEO files (sitemap, robots)
+  if (
+    nextUrl.pathname === "/sitemap.xml" ||
+    nextUrl.pathname === "/robots.txt" ||
+    nextUrl.pathname.startsWith("/sitemap") ||
+    nextUrl.pathname.endsWith(".xml")
+  ) {
+    return NextResponse.next();
+  }
+
+  // 1. Immediate public access for auth and critical API routes
   if (
     nextUrl.pathname.startsWith("/api/auth") ||
     nextUrl.pathname.startsWith("/api/otp") ||
@@ -47,7 +55,7 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(canonicalUrl, { status: 301 });
   }
 
-  // 1. Check session existence via cookie (optimistic check)
+  // 2. Check session existence via cookie (optimistic check)
   // We check for both standard and secure cookies to support dev and prod
   const sessionToken = request.cookies.get("better-auth.session_token") ||
     request.cookies.get("__Secure-better-auth.session_token");
@@ -58,7 +66,7 @@ export default async function middleware(request: NextRequest) {
     nextUrl.pathname === route || nextUrl.pathname.startsWith(`${route}/`)
   );
 
-  // 2. If not logged in
+  // 3. If not logged in
   if (!isLoggedIn) {
     if (isPublicRoute) {
       return NextResponse.next();
@@ -74,6 +82,7 @@ export default async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    // Skip all static files and Next.js internals
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest|xml|txt)).*)",
     "/(api|trpc)(.*)",
   ],
