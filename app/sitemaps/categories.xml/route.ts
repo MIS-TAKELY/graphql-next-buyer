@@ -23,11 +23,24 @@ export async function GET() {
         take: 50000,
     });
 
+    const escapeXml = (unsafe: string) => {
+        return unsafe.replace(/[<>&'"]/g, (c) => {
+            switch (c) {
+                case '<': return '&lt;';
+                case '>': return '&gt;';
+                case '&': return '&amp;';
+                case '\'': return '&apos;';
+                case '"': return '&quot;';
+            }
+            return c;
+        });
+    }
+
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${categories.map((category) => `
   <url>
-    <loc>${category.canonicalUrl || `${baseUrl}/search/${category.slug}`}</loc>
+    <loc>${escapeXml(category.canonicalUrl || `${baseUrl}/search/${category.slug}`)}</loc>
     <lastmod>${(category.lastIndexableUpdate || category.updatedAt).toISOString()}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
