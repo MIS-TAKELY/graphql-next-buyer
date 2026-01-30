@@ -18,6 +18,8 @@ export default function robots(): MetadataRoute.Robots {
                     "/cart",
                     "/checkout",
                     "/account",
+                    "/search*",     // Exclude search results
+                    "/*?*",         // Exclude all query param URLs
                 ],
             },
             {
@@ -25,7 +27,7 @@ export default function robots(): MetadataRoute.Robots {
                 disallow: ["/"],
             },
         ],
-        sitemap: `${baseUrl}/sitemap.xml`,
+        sitemap: `${baseUrl}/sitemap-index.xml`,
         host: baseUrl,
     };
 }

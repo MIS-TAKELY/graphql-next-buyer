@@ -190,7 +190,10 @@ exports.Prisma.SellerProfileScalarFieldEnum = {
   updatedAt: 'updatedAt',
   keywords: 'keywords',
   metaDescription: 'metaDescription',
-  metaTitle: 'metaTitle'
+  metaTitle: 'metaTitle',
+  isIndexable: 'isIndexable',
+  canonicalUrl: 'canonicalUrl',
+  lastIndexableUpdate: 'lastIndexableUpdate'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
@@ -285,7 +288,10 @@ exports.Prisma.CategoryScalarFieldEnum = {
   updatedAt: 'updatedAt',
   keywords: 'keywords',
   metaDescription: 'metaDescription',
-  metaTitle: 'metaTitle'
+  metaTitle: 'metaTitle',
+  isIndexable: 'isIndexable',
+  canonicalUrl: 'canonicalUrl',
+  lastIndexableUpdate: 'lastIndexableUpdate'
 };
 
 exports.Prisma.OfferScalarFieldEnum = {
@@ -367,7 +373,10 @@ exports.Prisma.ProductScalarFieldEnum = {
   averageRating: 'averageRating',
   keywords: 'keywords',
   metaDescription: 'metaDescription',
-  metaTitle: 'metaTitle'
+  metaTitle: 'metaTitle',
+  isIndexable: 'isIndexable',
+  canonicalUrl: 'canonicalUrl',
+  lastIndexableUpdate: 'lastIndexableUpdate'
 };
 
 exports.Prisma.ProductVariantScalarFieldEnum = {

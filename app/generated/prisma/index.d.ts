@@ -10811,6 +10811,9 @@ export namespace Prisma {
     updatedAt: Date | null
     metaDescription: string | null
     metaTitle: string | null
+    isIndexable: boolean | null
+    canonicalUrl: string | null
+    lastIndexableUpdate: Date | null
   }
 
   export type SellerProfileMaxAggregateOutputType = {
@@ -10842,6 +10845,9 @@ export namespace Prisma {
     updatedAt: Date | null
     metaDescription: string | null
     metaTitle: string | null
+    isIndexable: boolean | null
+    canonicalUrl: string | null
+    lastIndexableUpdate: Date | null
   }
 
   export type SellerProfileCountAggregateOutputType = {
@@ -10874,6 +10880,9 @@ export namespace Prisma {
     keywords: number
     metaDescription: number
     metaTitle: number
+    isIndexable: number
+    canonicalUrl: number
+    lastIndexableUpdate: number
     _all: number
   }
 
@@ -10919,6 +10928,9 @@ export namespace Prisma {
     updatedAt?: true
     metaDescription?: true
     metaTitle?: true
+    isIndexable?: true
+    canonicalUrl?: true
+    lastIndexableUpdate?: true
   }
 
   export type SellerProfileMaxAggregateInputType = {
@@ -10950,6 +10962,9 @@ export namespace Prisma {
     updatedAt?: true
     metaDescription?: true
     metaTitle?: true
+    isIndexable?: true
+    canonicalUrl?: true
+    lastIndexableUpdate?: true
   }
 
   export type SellerProfileCountAggregateInputType = {
@@ -10982,6 +10997,9 @@ export namespace Prisma {
     keywords?: true
     metaDescription?: true
     metaTitle?: true
+    isIndexable?: true
+    canonicalUrl?: true
+    lastIndexableUpdate?: true
     _all?: true
   }
 
@@ -11101,6 +11119,9 @@ export namespace Prisma {
     keywords: string[]
     metaDescription: string | null
     metaTitle: string | null
+    isIndexable: boolean
+    canonicalUrl: string | null
+    lastIndexableUpdate: Date | null
     _count: SellerProfileCountAggregateOutputType | null
     _avg: SellerProfileAvgAggregateOutputType | null
     _sum: SellerProfileSumAggregateOutputType | null
@@ -11152,6 +11173,9 @@ export namespace Prisma {
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
+    isIndexable?: boolean
+    canonicalUrl?: boolean
+    lastIndexableUpdate?: boolean
     pickupAddress?: boolean | SellerProfile$pickupAddressArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sellerProfile"]>
@@ -11186,6 +11210,9 @@ export namespace Prisma {
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
+    isIndexable?: boolean
+    canonicalUrl?: boolean
+    lastIndexableUpdate?: boolean
     pickupAddress?: boolean | SellerProfile$pickupAddressArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sellerProfile"]>
@@ -11220,6 +11247,9 @@ export namespace Prisma {
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
+    isIndexable?: boolean
+    canonicalUrl?: boolean
+    lastIndexableUpdate?: boolean
     pickupAddress?: boolean | SellerProfile$pickupAddressArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sellerProfile"]>
@@ -11254,9 +11284,12 @@ export namespace Prisma {
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
+    isIndexable?: boolean
+    canonicalUrl?: boolean
+    lastIndexableUpdate?: boolean
   }
 
-  export type SellerProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "shopName" | "slug" | "logo" | "banner" | "description" | "tagline" | "businessName" | "businessRegNo" | "businessType" | "phone" | "altPhone" | "email" | "pickupAddressId" | "returnPolicy" | "shippingPolicy" | "about" | "verificationStatus" | "verifiedAt" | "isActive" | "averageRating" | "totalReviews" | "totalSales" | "createdAt" | "updatedAt" | "keywords" | "metaDescription" | "metaTitle", ExtArgs["result"]["sellerProfile"]>
+  export type SellerProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "shopName" | "slug" | "logo" | "banner" | "description" | "tagline" | "businessName" | "businessRegNo" | "businessType" | "phone" | "altPhone" | "email" | "pickupAddressId" | "returnPolicy" | "shippingPolicy" | "about" | "verificationStatus" | "verifiedAt" | "isActive" | "averageRating" | "totalReviews" | "totalSales" | "createdAt" | "updatedAt" | "keywords" | "metaDescription" | "metaTitle" | "isIndexable" | "canonicalUrl" | "lastIndexableUpdate", ExtArgs["result"]["sellerProfile"]>
   export type SellerProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pickupAddress?: boolean | SellerProfile$pickupAddressArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -11306,6 +11339,9 @@ export namespace Prisma {
       keywords: string[]
       metaDescription: string | null
       metaTitle: string | null
+      isIndexable: boolean
+      canonicalUrl: string | null
+      lastIndexableUpdate: Date | null
     }, ExtArgs["result"]["sellerProfile"]>
     composites: {}
   }
@@ -11760,6 +11796,9 @@ export namespace Prisma {
     readonly keywords: FieldRef<"SellerProfile", 'String[]'>
     readonly metaDescription: FieldRef<"SellerProfile", 'String'>
     readonly metaTitle: FieldRef<"SellerProfile", 'String'>
+    readonly isIndexable: FieldRef<"SellerProfile", 'Boolean'>
+    readonly canonicalUrl: FieldRef<"SellerProfile", 'String'>
+    readonly lastIndexableUpdate: FieldRef<"SellerProfile", 'DateTime'>
   }
     
 
@@ -20087,6 +20126,9 @@ export namespace Prisma {
     updatedAt: Date | null
     metaDescription: string | null
     metaTitle: string | null
+    isIndexable: boolean | null
+    canonicalUrl: string | null
+    lastIndexableUpdate: Date | null
   }
 
   export type CategoryMaxAggregateOutputType = {
@@ -20100,6 +20142,9 @@ export namespace Prisma {
     updatedAt: Date | null
     metaDescription: string | null
     metaTitle: string | null
+    isIndexable: boolean | null
+    canonicalUrl: string | null
+    lastIndexableUpdate: Date | null
   }
 
   export type CategoryCountAggregateOutputType = {
@@ -20114,6 +20159,9 @@ export namespace Prisma {
     keywords: number
     metaDescription: number
     metaTitle: number
+    isIndexable: number
+    canonicalUrl: number
+    lastIndexableUpdate: number
     _all: number
   }
 
@@ -20129,6 +20177,9 @@ export namespace Prisma {
     updatedAt?: true
     metaDescription?: true
     metaTitle?: true
+    isIndexable?: true
+    canonicalUrl?: true
+    lastIndexableUpdate?: true
   }
 
   export type CategoryMaxAggregateInputType = {
@@ -20142,6 +20193,9 @@ export namespace Prisma {
     updatedAt?: true
     metaDescription?: true
     metaTitle?: true
+    isIndexable?: true
+    canonicalUrl?: true
+    lastIndexableUpdate?: true
   }
 
   export type CategoryCountAggregateInputType = {
@@ -20156,6 +20210,9 @@ export namespace Prisma {
     keywords?: true
     metaDescription?: true
     metaTitle?: true
+    isIndexable?: true
+    canonicalUrl?: true
+    lastIndexableUpdate?: true
     _all?: true
   }
 
@@ -20243,6 +20300,9 @@ export namespace Prisma {
     keywords: string[]
     metaDescription: string | null
     metaTitle: string | null
+    isIndexable: boolean
+    canonicalUrl: string | null
+    lastIndexableUpdate: Date | null
     _count: CategoryCountAggregateOutputType | null
     _min: CategoryMinAggregateOutputType | null
     _max: CategoryMaxAggregateOutputType | null
@@ -20274,6 +20334,9 @@ export namespace Prisma {
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
+    isIndexable?: boolean
+    canonicalUrl?: boolean
+    lastIndexableUpdate?: boolean
     parent?: boolean | Category$parentArgs<ExtArgs>
     children?: boolean | Category$childrenArgs<ExtArgs>
     categoryOffers?: boolean | Category$categoryOffersArgs<ExtArgs>
@@ -20295,6 +20358,9 @@ export namespace Prisma {
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
+    isIndexable?: boolean
+    canonicalUrl?: boolean
+    lastIndexableUpdate?: boolean
     parent?: boolean | Category$parentArgs<ExtArgs>
   }, ExtArgs["result"]["category"]>
 
@@ -20310,6 +20376,9 @@ export namespace Prisma {
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
+    isIndexable?: boolean
+    canonicalUrl?: boolean
+    lastIndexableUpdate?: boolean
     parent?: boolean | Category$parentArgs<ExtArgs>
   }, ExtArgs["result"]["category"]>
 
@@ -20325,9 +20394,12 @@ export namespace Prisma {
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
+    isIndexable?: boolean
+    canonicalUrl?: boolean
+    lastIndexableUpdate?: boolean
   }
 
-  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "parentId" | "isActive" | "createdAt" | "updatedAt" | "keywords" | "metaDescription" | "metaTitle", ExtArgs["result"]["category"]>
+  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "parentId" | "isActive" | "createdAt" | "updatedAt" | "keywords" | "metaDescription" | "metaTitle" | "isIndexable" | "canonicalUrl" | "lastIndexableUpdate", ExtArgs["result"]["category"]>
   export type CategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     parent?: boolean | Category$parentArgs<ExtArgs>
     children?: boolean | Category$childrenArgs<ExtArgs>
@@ -20366,6 +20438,9 @@ export namespace Prisma {
       keywords: string[]
       metaDescription: string | null
       metaTitle: string | null
+      isIndexable: boolean
+      canonicalUrl: string | null
+      lastIndexableUpdate: Date | null
     }, ExtArgs["result"]["category"]>
     composites: {}
   }
@@ -20806,6 +20881,9 @@ export namespace Prisma {
     readonly keywords: FieldRef<"Category", 'String[]'>
     readonly metaDescription: FieldRef<"Category", 'String'>
     readonly metaTitle: FieldRef<"Category", 'String'>
+    readonly isIndexable: FieldRef<"Category", 'Boolean'>
+    readonly canonicalUrl: FieldRef<"Category", 'String'>
+    readonly lastIndexableUpdate: FieldRef<"Category", 'DateTime'>
   }
     
 
@@ -28112,6 +28190,9 @@ export namespace Prisma {
     averageRating: Decimal | null
     metaDescription: string | null
     metaTitle: string | null
+    isIndexable: boolean | null
+    canonicalUrl: string | null
+    lastIndexableUpdate: Date | null
   }
 
   export type ProductMaxAggregateOutputType = {
@@ -28129,6 +28210,9 @@ export namespace Prisma {
     averageRating: Decimal | null
     metaDescription: string | null
     metaTitle: string | null
+    isIndexable: boolean | null
+    canonicalUrl: string | null
+    lastIndexableUpdate: Date | null
   }
 
   export type ProductCountAggregateOutputType = {
@@ -28149,6 +28233,9 @@ export namespace Prisma {
     keywords: number
     metaDescription: number
     metaTitle: number
+    isIndexable: number
+    canonicalUrl: number
+    lastIndexableUpdate: number
     _all: number
   }
 
@@ -28178,6 +28265,9 @@ export namespace Prisma {
     averageRating?: true
     metaDescription?: true
     metaTitle?: true
+    isIndexable?: true
+    canonicalUrl?: true
+    lastIndexableUpdate?: true
   }
 
   export type ProductMaxAggregateInputType = {
@@ -28195,6 +28285,9 @@ export namespace Prisma {
     averageRating?: true
     metaDescription?: true
     metaTitle?: true
+    isIndexable?: true
+    canonicalUrl?: true
+    lastIndexableUpdate?: true
   }
 
   export type ProductCountAggregateInputType = {
@@ -28215,6 +28308,9 @@ export namespace Prisma {
     keywords?: true
     metaDescription?: true
     metaTitle?: true
+    isIndexable?: true
+    canonicalUrl?: true
+    lastIndexableUpdate?: true
     _all?: true
   }
 
@@ -28322,6 +28418,9 @@ export namespace Prisma {
     keywords: string[]
     metaDescription: string | null
     metaTitle: string | null
+    isIndexable: boolean
+    canonicalUrl: string | null
+    lastIndexableUpdate: Date | null
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
     _sum: ProductSumAggregateOutputType | null
@@ -28361,6 +28460,9 @@ export namespace Prisma {
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
+    isIndexable?: boolean
+    canonicalUrl?: boolean
+    lastIndexableUpdate?: boolean
     Conversation?: boolean | Product$ConversationArgs<ExtArgs>
     deliveryOptions?: boolean | Product$deliveryOptionsArgs<ExtArgs>
     images?: boolean | Product$imagesArgs<ExtArgs>
@@ -28396,6 +28498,9 @@ export namespace Prisma {
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
+    isIndexable?: boolean
+    canonicalUrl?: boolean
+    lastIndexableUpdate?: boolean
     category?: boolean | Product$categoryArgs<ExtArgs>
     seller?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
@@ -28418,6 +28523,9 @@ export namespace Prisma {
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
+    isIndexable?: boolean
+    canonicalUrl?: boolean
+    lastIndexableUpdate?: boolean
     category?: boolean | Product$categoryArgs<ExtArgs>
     seller?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
@@ -28440,9 +28548,12 @@ export namespace Prisma {
     keywords?: boolean
     metaDescription?: boolean
     metaTitle?: boolean
+    isIndexable?: boolean
+    canonicalUrl?: boolean
+    lastIndexableUpdate?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "name" | "slug" | "description" | "features" | "status" | "specificationTable" | "createdAt" | "updatedAt" | "categoryId" | "brand" | "soldCount" | "averageRating" | "keywords" | "metaDescription" | "metaTitle", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "name" | "slug" | "description" | "features" | "status" | "specificationTable" | "createdAt" | "updatedAt" | "categoryId" | "brand" | "soldCount" | "averageRating" | "keywords" | "metaDescription" | "metaTitle" | "isIndexable" | "canonicalUrl" | "lastIndexableUpdate", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Conversation?: boolean | Product$ConversationArgs<ExtArgs>
     deliveryOptions?: boolean | Product$deliveryOptionsArgs<ExtArgs>
@@ -28505,6 +28616,9 @@ export namespace Prisma {
       keywords: string[]
       metaDescription: string | null
       metaTitle: string | null
+      isIndexable: boolean
+      canonicalUrl: string | null
+      lastIndexableUpdate: Date | null
     }, ExtArgs["result"]["product"]>
     composites: {}
   }
@@ -28959,6 +29073,9 @@ export namespace Prisma {
     readonly keywords: FieldRef<"Product", 'String[]'>
     readonly metaDescription: FieldRef<"Product", 'String'>
     readonly metaTitle: FieldRef<"Product", 'String'>
+    readonly isIndexable: FieldRef<"Product", 'Boolean'>
+    readonly canonicalUrl: FieldRef<"Product", 'String'>
+    readonly lastIndexableUpdate: FieldRef<"Product", 'DateTime'>
   }
     
 
@@ -65302,7 +65419,10 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     keywords: 'keywords',
     metaDescription: 'metaDescription',
-    metaTitle: 'metaTitle'
+    metaTitle: 'metaTitle',
+    isIndexable: 'isIndexable',
+    canonicalUrl: 'canonicalUrl',
+    lastIndexableUpdate: 'lastIndexableUpdate'
   };
 
   export type SellerProfileScalarFieldEnum = (typeof SellerProfileScalarFieldEnum)[keyof typeof SellerProfileScalarFieldEnum]
@@ -65421,7 +65541,10 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     keywords: 'keywords',
     metaDescription: 'metaDescription',
-    metaTitle: 'metaTitle'
+    metaTitle: 'metaTitle',
+    isIndexable: 'isIndexable',
+    canonicalUrl: 'canonicalUrl',
+    lastIndexableUpdate: 'lastIndexableUpdate'
   };
 
   export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
@@ -65524,7 +65647,10 @@ export namespace Prisma {
     averageRating: 'averageRating',
     keywords: 'keywords',
     metaDescription: 'metaDescription',
-    metaTitle: 'metaTitle'
+    metaTitle: 'metaTitle',
+    isIndexable: 'isIndexable',
+    canonicalUrl: 'canonicalUrl',
+    lastIndexableUpdate: 'lastIndexableUpdate'
   };
 
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
@@ -66836,6 +66962,9 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"SellerProfile">
     metaDescription?: StringNullableFilter<"SellerProfile"> | string | null
     metaTitle?: StringNullableFilter<"SellerProfile"> | string | null
+    isIndexable?: BoolFilter<"SellerProfile"> | boolean
+    canonicalUrl?: StringNullableFilter<"SellerProfile"> | string | null
+    lastIndexableUpdate?: DateTimeNullableFilter<"SellerProfile"> | Date | string | null
     pickupAddress?: XOR<AddressNullableScalarRelationFilter, AddressWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -66870,6 +66999,9 @@ export namespace Prisma {
     keywords?: SortOrder
     metaDescription?: SortOrderInput | SortOrder
     metaTitle?: SortOrderInput | SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrderInput | SortOrder
+    lastIndexableUpdate?: SortOrderInput | SortOrder
     pickupAddress?: AddressOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
   }
@@ -66907,6 +67039,9 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"SellerProfile">
     metaDescription?: StringNullableFilter<"SellerProfile"> | string | null
     metaTitle?: StringNullableFilter<"SellerProfile"> | string | null
+    isIndexable?: BoolFilter<"SellerProfile"> | boolean
+    canonicalUrl?: StringNullableFilter<"SellerProfile"> | string | null
+    lastIndexableUpdate?: DateTimeNullableFilter<"SellerProfile"> | Date | string | null
     pickupAddress?: XOR<AddressNullableScalarRelationFilter, AddressWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId" | "shopName" | "slug">
@@ -66941,6 +67076,9 @@ export namespace Prisma {
     keywords?: SortOrder
     metaDescription?: SortOrderInput | SortOrder
     metaTitle?: SortOrderInput | SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrderInput | SortOrder
+    lastIndexableUpdate?: SortOrderInput | SortOrder
     _count?: SellerProfileCountOrderByAggregateInput
     _avg?: SellerProfileAvgOrderByAggregateInput
     _max?: SellerProfileMaxOrderByAggregateInput
@@ -66981,6 +67119,9 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"SellerProfile">
     metaDescription?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
     metaTitle?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    isIndexable?: BoolWithAggregatesFilter<"SellerProfile"> | boolean
+    canonicalUrl?: StringNullableWithAggregatesFilter<"SellerProfile"> | string | null
+    lastIndexableUpdate?: DateTimeNullableWithAggregatesFilter<"SellerProfile"> | Date | string | null
   }
 
   export type NotificationWhereInput = {
@@ -67535,6 +67676,9 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"Category">
     metaDescription?: StringNullableFilter<"Category"> | string | null
     metaTitle?: StringNullableFilter<"Category"> | string | null
+    isIndexable?: BoolFilter<"Category"> | boolean
+    canonicalUrl?: StringNullableFilter<"Category"> | string | null
+    lastIndexableUpdate?: DateTimeNullableFilter<"Category"> | Date | string | null
     parent?: XOR<CategoryNullableScalarRelationFilter, CategoryWhereInput> | null
     children?: CategoryListRelationFilter
     categoryOffers?: CategoryOfferListRelationFilter
@@ -67555,6 +67699,9 @@ export namespace Prisma {
     keywords?: SortOrder
     metaDescription?: SortOrderInput | SortOrder
     metaTitle?: SortOrderInput | SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrderInput | SortOrder
+    lastIndexableUpdate?: SortOrderInput | SortOrder
     parent?: CategoryOrderByWithRelationInput
     children?: CategoryOrderByRelationAggregateInput
     categoryOffers?: CategoryOfferOrderByRelationAggregateInput
@@ -67578,6 +67725,9 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"Category">
     metaDescription?: StringNullableFilter<"Category"> | string | null
     metaTitle?: StringNullableFilter<"Category"> | string | null
+    isIndexable?: BoolFilter<"Category"> | boolean
+    canonicalUrl?: StringNullableFilter<"Category"> | string | null
+    lastIndexableUpdate?: DateTimeNullableFilter<"Category"> | Date | string | null
     parent?: XOR<CategoryNullableScalarRelationFilter, CategoryWhereInput> | null
     children?: CategoryListRelationFilter
     categoryOffers?: CategoryOfferListRelationFilter
@@ -67598,6 +67748,9 @@ export namespace Prisma {
     keywords?: SortOrder
     metaDescription?: SortOrderInput | SortOrder
     metaTitle?: SortOrderInput | SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrderInput | SortOrder
+    lastIndexableUpdate?: SortOrderInput | SortOrder
     _count?: CategoryCountOrderByAggregateInput
     _max?: CategoryMaxOrderByAggregateInput
     _min?: CategoryMinOrderByAggregateInput
@@ -67618,6 +67771,9 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"Category">
     metaDescription?: StringNullableWithAggregatesFilter<"Category"> | string | null
     metaTitle?: StringNullableWithAggregatesFilter<"Category"> | string | null
+    isIndexable?: BoolWithAggregatesFilter<"Category"> | boolean
+    canonicalUrl?: StringNullableWithAggregatesFilter<"Category"> | string | null
+    lastIndexableUpdate?: DateTimeNullableWithAggregatesFilter<"Category"> | Date | string | null
   }
 
   export type OfferWhereInput = {
@@ -68061,6 +68217,9 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"Product">
     metaDescription?: StringNullableFilter<"Product"> | string | null
     metaTitle?: StringNullableFilter<"Product"> | string | null
+    isIndexable?: BoolFilter<"Product"> | boolean
+    canonicalUrl?: StringNullableFilter<"Product"> | string | null
+    lastIndexableUpdate?: DateTimeNullableFilter<"Product"> | Date | string | null
     Conversation?: ConversationListRelationFilter
     deliveryOptions?: DeliveryOptionListRelationFilter
     images?: ProductImageListRelationFilter
@@ -68095,6 +68254,9 @@ export namespace Prisma {
     keywords?: SortOrder
     metaDescription?: SortOrderInput | SortOrder
     metaTitle?: SortOrderInput | SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrderInput | SortOrder
+    lastIndexableUpdate?: SortOrderInput | SortOrder
     Conversation?: ConversationOrderByRelationAggregateInput
     deliveryOptions?: DeliveryOptionOrderByRelationAggregateInput
     images?: ProductImageOrderByRelationAggregateInput
@@ -68132,6 +68294,9 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"Product">
     metaDescription?: StringNullableFilter<"Product"> | string | null
     metaTitle?: StringNullableFilter<"Product"> | string | null
+    isIndexable?: BoolFilter<"Product"> | boolean
+    canonicalUrl?: StringNullableFilter<"Product"> | string | null
+    lastIndexableUpdate?: DateTimeNullableFilter<"Product"> | Date | string | null
     Conversation?: ConversationListRelationFilter
     deliveryOptions?: DeliveryOptionListRelationFilter
     images?: ProductImageListRelationFilter
@@ -68166,6 +68331,9 @@ export namespace Prisma {
     keywords?: SortOrder
     metaDescription?: SortOrderInput | SortOrder
     metaTitle?: SortOrderInput | SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrderInput | SortOrder
+    lastIndexableUpdate?: SortOrderInput | SortOrder
     _count?: ProductCountOrderByAggregateInput
     _avg?: ProductAvgOrderByAggregateInput
     _max?: ProductMaxOrderByAggregateInput
@@ -68194,6 +68362,9 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"Product">
     metaDescription?: StringNullableWithAggregatesFilter<"Product"> | string | null
     metaTitle?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    isIndexable?: BoolWithAggregatesFilter<"Product"> | boolean
+    canonicalUrl?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    lastIndexableUpdate?: DateTimeNullableWithAggregatesFilter<"Product"> | Date | string | null
   }
 
   export type ProductVariantWhereInput = {
@@ -71070,6 +71241,9 @@ export namespace Prisma {
     keywords?: SellerProfileCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     pickupAddress?: AddressCreateNestedOneWithoutSellerPickupAddressesInput
     user: UserCreateNestedOneWithoutSellerProfileInput
   }
@@ -71104,6 +71278,9 @@ export namespace Prisma {
     keywords?: SellerProfileCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
   }
 
   export type SellerProfileUpdateInput = {
@@ -71134,6 +71311,9 @@ export namespace Prisma {
     keywords?: SellerProfileUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupAddress?: AddressUpdateOneWithoutSellerPickupAddressesNestedInput
     user?: UserUpdateOneRequiredWithoutSellerProfileNestedInput
   }
@@ -71168,6 +71348,9 @@ export namespace Prisma {
     keywords?: SellerProfileUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SellerProfileCreateManyInput = {
@@ -71200,6 +71383,9 @@ export namespace Prisma {
     keywords?: SellerProfileCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
   }
 
   export type SellerProfileUpdateManyMutationInput = {
@@ -71230,6 +71416,9 @@ export namespace Prisma {
     keywords?: SellerProfileUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SellerProfileUncheckedUpdateManyInput = {
@@ -71262,6 +71451,9 @@ export namespace Prisma {
     keywords?: SellerProfileUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type NotificationCreateInput = {
@@ -71847,6 +72039,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     parent?: CategoryCreateNestedOneWithoutChildrenInput
     children?: CategoryCreateNestedManyWithoutParentInput
     categoryOffers?: CategoryOfferCreateNestedManyWithoutCategoryInput
@@ -71867,6 +72062,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     children?: CategoryUncheckedCreateNestedManyWithoutParentInput
     categoryOffers?: CategoryOfferUncheckedCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -71885,6 +72083,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parent?: CategoryUpdateOneWithoutChildrenNestedInput
     children?: CategoryUpdateManyWithoutParentNestedInput
     categoryOffers?: CategoryOfferUpdateManyWithoutCategoryNestedInput
@@ -71905,6 +72106,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     children?: CategoryUncheckedUpdateManyWithoutParentNestedInput
     categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -71924,6 +72128,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
   }
 
   export type CategoryUpdateManyMutationInput = {
@@ -71937,6 +72144,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CategoryUncheckedUpdateManyInput = {
@@ -71951,6 +72161,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type OfferCreateInput = {
@@ -72408,6 +72621,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -72442,6 +72658,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -72472,6 +72691,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -72506,6 +72728,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -72538,6 +72763,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
   }
 
   export type ProductUpdateManyMutationInput = {
@@ -72556,6 +72784,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ProductUncheckedUpdateManyInput = {
@@ -72576,6 +72807,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ProductVariantCreateInput = {
@@ -75825,6 +76059,9 @@ export namespace Prisma {
     keywords?: SortOrder
     metaDescription?: SortOrder
     metaTitle?: SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrder
+    lastIndexableUpdate?: SortOrder
   }
 
   export type SellerProfileAvgOrderByAggregateInput = {
@@ -75862,6 +76099,9 @@ export namespace Prisma {
     updatedAt?: SortOrder
     metaDescription?: SortOrder
     metaTitle?: SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrder
+    lastIndexableUpdate?: SortOrder
   }
 
   export type SellerProfileMinOrderByAggregateInput = {
@@ -75893,6 +76133,9 @@ export namespace Prisma {
     updatedAt?: SortOrder
     metaDescription?: SortOrder
     metaTitle?: SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrder
+    lastIndexableUpdate?: SortOrder
   }
 
   export type SellerProfileSumOrderByAggregateInput = {
@@ -76395,6 +76638,9 @@ export namespace Prisma {
     keywords?: SortOrder
     metaDescription?: SortOrder
     metaTitle?: SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrder
+    lastIndexableUpdate?: SortOrder
   }
 
   export type CategoryMaxOrderByAggregateInput = {
@@ -76408,6 +76654,9 @@ export namespace Prisma {
     updatedAt?: SortOrder
     metaDescription?: SortOrder
     metaTitle?: SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrder
+    lastIndexableUpdate?: SortOrder
   }
 
   export type CategoryMinOrderByAggregateInput = {
@@ -76421,6 +76670,9 @@ export namespace Prisma {
     updatedAt?: SortOrder
     metaDescription?: SortOrder
     metaTitle?: SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrder
+    lastIndexableUpdate?: SortOrder
   }
 
   export type EnumDiscountTypeFilter<$PrismaModel = never> = {
@@ -76832,6 +77084,9 @@ export namespace Prisma {
     keywords?: SortOrder
     metaDescription?: SortOrder
     metaTitle?: SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrder
+    lastIndexableUpdate?: SortOrder
   }
 
   export type ProductAvgOrderByAggregateInput = {
@@ -76854,6 +77109,9 @@ export namespace Prisma {
     averageRating?: SortOrder
     metaDescription?: SortOrder
     metaTitle?: SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrder
+    lastIndexableUpdate?: SortOrder
   }
 
   export type ProductMinOrderByAggregateInput = {
@@ -76871,6 +77129,9 @@ export namespace Prisma {
     averageRating?: SortOrder
     metaDescription?: SortOrder
     metaTitle?: SortOrder
+    isIndexable?: SortOrder
+    canonicalUrl?: SortOrder
+    lastIndexableUpdate?: SortOrder
   }
 
   export type ProductSumOrderByAggregateInput = {
@@ -84035,6 +84296,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -84067,6 +84331,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -84249,6 +84516,9 @@ export namespace Prisma {
     keywords?: SellerProfileCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     pickupAddress?: AddressCreateNestedOneWithoutSellerPickupAddressesInput
   }
 
@@ -84281,6 +84551,9 @@ export namespace Prisma {
     keywords?: SellerProfileCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
   }
 
   export type SellerProfileCreateOrConnectWithoutUserInput = {
@@ -84927,6 +85200,9 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"Product">
     metaDescription?: StringNullableFilter<"Product"> | string | null
     metaTitle?: StringNullableFilter<"Product"> | string | null
+    isIndexable?: BoolFilter<"Product"> | boolean
+    canonicalUrl?: StringNullableFilter<"Product"> | string | null
+    lastIndexableUpdate?: DateTimeNullableFilter<"Product"> | Date | string | null
   }
 
   export type RecentlyViewedUpsertWithWhereUniqueWithoutUserInput = {
@@ -85089,6 +85365,9 @@ export namespace Prisma {
     keywords?: SellerProfileUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupAddress?: AddressUpdateOneWithoutSellerPickupAddressesNestedInput
   }
 
@@ -85121,6 +85400,9 @@ export namespace Prisma {
     keywords?: SellerProfileUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SessionUpsertWithWhereUniqueWithoutUserInput = {
@@ -86220,6 +86502,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
     notifications?: ProductNotificationCreateNestedManyWithoutProductInput
@@ -86253,6 +86538,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
@@ -86562,6 +86850,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
     notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
@@ -86595,6 +86886,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
@@ -87665,6 +87959,9 @@ export namespace Prisma {
     keywords?: SellerProfileCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     user: UserCreateNestedOneWithoutSellerProfileInput
   }
 
@@ -87697,6 +87994,9 @@ export namespace Prisma {
     keywords?: SellerProfileCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
   }
 
   export type SellerProfileCreateOrConnectWithoutPickupAddressInput = {
@@ -87869,6 +88169,9 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"SellerProfile">
     metaDescription?: StringNullableFilter<"SellerProfile"> | string | null
     metaTitle?: StringNullableFilter<"SellerProfile"> | string | null
+    isIndexable?: BoolFilter<"SellerProfile"> | boolean
+    canonicalUrl?: StringNullableFilter<"SellerProfile"> | string | null
+    lastIndexableUpdate?: DateTimeNullableFilter<"SellerProfile"> | Date | string | null
   }
 
   export type CategoryCreateWithoutCategorySpecificationInput = {
@@ -87882,6 +88185,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     parent?: CategoryCreateNestedOneWithoutChildrenInput
     children?: CategoryCreateNestedManyWithoutParentInput
     categoryOffers?: CategoryOfferCreateNestedManyWithoutCategoryInput
@@ -87901,6 +88207,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     children?: CategoryUncheckedCreateNestedManyWithoutParentInput
     categoryOffers?: CategoryOfferUncheckedCreateNestedManyWithoutCategoryInput
     landingPageCategoryCards?: LandingPageCategoryCardUncheckedCreateNestedManyWithoutCategoryInput
@@ -87934,6 +88243,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parent?: CategoryUpdateOneWithoutChildrenNestedInput
     children?: CategoryUpdateManyWithoutParentNestedInput
     categoryOffers?: CategoryOfferUpdateManyWithoutCategoryNestedInput
@@ -87953,6 +88265,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     children?: CategoryUncheckedUpdateManyWithoutParentNestedInput
     categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
     landingPageCategoryCards?: LandingPageCategoryCardUncheckedUpdateManyWithoutCategoryNestedInput
@@ -87970,6 +88285,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     parent?: CategoryCreateNestedOneWithoutChildrenInput
     categoryOffers?: CategoryOfferCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationCreateNestedManyWithoutCategoryInput
@@ -87989,6 +88307,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     categoryOffers?: CategoryOfferUncheckedCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationUncheckedCreateNestedManyWithoutCategoryInput
     landingPageCategoryCards?: LandingPageCategoryCardUncheckedCreateNestedManyWithoutCategoryInput
@@ -88011,6 +88332,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     children?: CategoryCreateNestedManyWithoutParentInput
     categoryOffers?: CategoryOfferCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationCreateNestedManyWithoutCategoryInput
@@ -88029,6 +88353,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     children?: CategoryUncheckedCreateNestedManyWithoutParentInput
     categoryOffers?: CategoryOfferUncheckedCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -88148,6 +88475,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -88180,6 +88510,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -88226,6 +88559,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parent?: CategoryUpdateOneWithoutChildrenNestedInput
     categoryOffers?: CategoryOfferUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUpdateManyWithoutCategoryNestedInput
@@ -88245,6 +88581,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
     landingPageCategoryCards?: LandingPageCategoryCardUncheckedUpdateManyWithoutCategoryNestedInput
@@ -88282,6 +88621,9 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"Category">
     metaDescription?: StringNullableFilter<"Category"> | string | null
     metaTitle?: StringNullableFilter<"Category"> | string | null
+    isIndexable?: BoolFilter<"Category"> | boolean
+    canonicalUrl?: StringNullableFilter<"Category"> | string | null
+    lastIndexableUpdate?: DateTimeNullableFilter<"Category"> | Date | string | null
   }
 
   export type CategoryOfferUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -88602,6 +88944,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -88635,6 +88980,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -88723,6 +89071,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -88756,6 +89107,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -88780,6 +89134,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     parent?: CategoryCreateNestedOneWithoutChildrenInput
     children?: CategoryCreateNestedManyWithoutParentInput
     categorySpecification?: CategorySpecificationCreateNestedManyWithoutCategoryInput
@@ -88799,6 +89156,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     children?: CategoryUncheckedCreateNestedManyWithoutParentInput
     categorySpecification?: CategorySpecificationUncheckedCreateNestedManyWithoutCategoryInput
     landingPageCategoryCards?: LandingPageCategoryCardUncheckedCreateNestedManyWithoutCategoryInput
@@ -88869,6 +89229,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parent?: CategoryUpdateOneWithoutChildrenNestedInput
     children?: CategoryUpdateManyWithoutParentNestedInput
     categorySpecification?: CategorySpecificationUpdateManyWithoutCategoryNestedInput
@@ -88888,6 +89251,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     children?: CategoryUncheckedUpdateManyWithoutParentNestedInput
     categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
     landingPageCategoryCards?: LandingPageCategoryCardUncheckedUpdateManyWithoutCategoryNestedInput
@@ -88953,6 +89319,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
     notifications?: ProductNotificationCreateNestedManyWithoutProductInput
@@ -88986,6 +89355,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
@@ -89031,6 +89403,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
     notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
@@ -89064,6 +89439,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
@@ -89093,6 +89471,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -89126,6 +89507,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -89171,6 +89555,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -89204,6 +89591,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -89233,6 +89623,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -89266,6 +89659,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -89311,6 +89707,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -89344,6 +89743,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -89596,6 +89998,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     parent?: CategoryCreateNestedOneWithoutChildrenInput
     children?: CategoryCreateNestedManyWithoutParentInput
     categoryOffers?: CategoryOfferCreateNestedManyWithoutCategoryInput
@@ -89615,6 +90020,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     children?: CategoryUncheckedCreateNestedManyWithoutParentInput
     categoryOffers?: CategoryOfferUncheckedCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -90060,6 +90468,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parent?: CategoryUpdateOneWithoutChildrenNestedInput
     children?: CategoryUpdateManyWithoutParentNestedInput
     categoryOffers?: CategoryOfferUpdateManyWithoutCategoryNestedInput
@@ -90079,6 +90490,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     children?: CategoryUncheckedUpdateManyWithoutParentNestedInput
     categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -90415,6 +90829,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -90448,6 +90865,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -90599,6 +91019,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -90632,6 +91055,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -90780,6 +91206,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     notifications?: ProductNotificationCreateNestedManyWithoutProductInput
@@ -90813,6 +91242,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     notifications?: ProductNotificationUncheckedCreateNestedManyWithoutProductInput
@@ -90858,6 +91290,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     notifications?: ProductNotificationUpdateManyWithoutProductNestedInput
@@ -90891,6 +91326,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     notifications?: ProductNotificationUncheckedUpdateManyWithoutProductNestedInput
@@ -92744,6 +93182,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -92777,6 +93218,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -92971,6 +93415,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -93004,6 +93451,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -93776,6 +94226,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -93809,6 +94262,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -93875,6 +94331,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -93908,6 +94367,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -94790,6 +95252,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -94823,6 +95288,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -94989,6 +95457,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -95022,6 +95493,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -96262,6 +96736,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -96295,6 +96772,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -96445,6 +96925,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -96478,6 +96961,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -96613,6 +97099,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     parent?: CategoryCreateNestedOneWithoutChildrenInput
     children?: CategoryCreateNestedManyWithoutParentInput
     categoryOffers?: CategoryOfferCreateNestedManyWithoutCategoryInput
@@ -96632,6 +97121,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     children?: CategoryUncheckedCreateNestedManyWithoutParentInput
     categoryOffers?: CategoryOfferUncheckedCreateNestedManyWithoutCategoryInput
     categorySpecification?: CategorySpecificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -96665,6 +97157,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parent?: CategoryUpdateOneWithoutChildrenNestedInput
     children?: CategoryUpdateManyWithoutParentNestedInput
     categoryOffers?: CategoryOfferUpdateManyWithoutCategoryNestedInput
@@ -96684,6 +97179,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     children?: CategoryUncheckedUpdateManyWithoutParentNestedInput
     categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -96706,6 +97204,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionCreateNestedManyWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -96739,6 +97240,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
     Conversation?: ConversationUncheckedCreateNestedManyWithoutProductInput
     deliveryOptions?: DeliveryOptionUncheckedCreateNestedManyWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -96889,6 +97393,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -96922,6 +97429,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -97783,6 +98293,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
   }
 
   export type RecentlyViewedCreateManyUserInput = {
@@ -98479,6 +98992,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -98511,6 +99027,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -98542,6 +99061,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type RecentlyViewedUpdateWithoutUserInput = {
@@ -98909,6 +99431,9 @@ export namespace Prisma {
     keywords?: SellerProfileCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
   }
 
   export type SellerProfileUpdateWithoutPickupAddressInput = {
@@ -98939,6 +99464,9 @@ export namespace Prisma {
     keywords?: SellerProfileUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutSellerProfileNestedInput
   }
 
@@ -98971,6 +99499,9 @@ export namespace Prisma {
     keywords?: SellerProfileUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SellerProfileUncheckedUpdateManyWithoutPickupAddressInput = {
@@ -99002,6 +99533,9 @@ export namespace Prisma {
     keywords?: SellerProfileUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CategoryCreateManyParentInput = {
@@ -99015,6 +99549,9 @@ export namespace Prisma {
     keywords?: CategoryCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
   }
 
   export type CategoryOfferCreateManyCategoryInput = {
@@ -99062,6 +99599,9 @@ export namespace Prisma {
     keywords?: ProductCreatekeywordsInput | string[]
     metaDescription?: string | null
     metaTitle?: string | null
+    isIndexable?: boolean
+    canonicalUrl?: string | null
+    lastIndexableUpdate?: Date | string | null
   }
 
   export type CategoryUpdateWithoutParentInput = {
@@ -99075,6 +99615,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     children?: CategoryUpdateManyWithoutParentNestedInput
     categoryOffers?: CategoryOfferUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUpdateManyWithoutCategoryNestedInput
@@ -99093,6 +99636,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     children?: CategoryUncheckedUpdateManyWithoutParentNestedInput
     categoryOffers?: CategoryOfferUncheckedUpdateManyWithoutCategoryNestedInput
     categorySpecification?: CategorySpecificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -99111,6 +99657,9 @@ export namespace Prisma {
     keywords?: CategoryUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CategoryOfferUpdateWithoutCategoryInput = {
@@ -99213,6 +99762,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUpdateManyWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -99245,6 +99797,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Conversation?: ConversationUncheckedUpdateManyWithoutProductNestedInput
     deliveryOptions?: DeliveryOptionUncheckedUpdateManyWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -99276,6 +99831,9 @@ export namespace Prisma {
     keywords?: ProductUpdatekeywordsInput | string[]
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    isIndexable?: BoolFieldUpdateOperationsInput | boolean
+    canonicalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lastIndexableUpdate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CategoryOfferCreateManyOfferInput = {

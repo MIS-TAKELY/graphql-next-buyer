@@ -98,41 +98,46 @@ model UserRole {
 }
 
 model SellerProfile {
-  id                 String             @id @default(cuid())
-  userId             String             @unique
-  shopName           String             @unique
-  slug               String             @unique
-  logo               String?
-  banner             String?
-  description        String?
-  tagline            String?
-  businessName       String?
-  businessRegNo      String?
-  businessType       String?
-  phone              String             @db.VarChar(20)
-  altPhone           String?            @db.VarChar(20)
-  email              String?
-  pickupAddressId    String?
-  returnPolicy       String?
-  shippingPolicy     String?
-  about              String?
-  verificationStatus VerificationStatus @default(PENDING)
-  verifiedAt         DateTime?
-  isActive           Boolean            @default(false)
-  averageRating      Decimal?           @default(0) @db.Decimal(3, 2)
-  totalReviews       Int?               @default(0)
-  totalSales         Int?               @default(0)
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  keywords           String[]
-  metaDescription    String?
-  metaTitle          String?
-  pickupAddress      Address?           @relation("SellerPickupAddress", fields: [pickupAddressId], references: [id])
-  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                  String             @id @default(cuid())
+  userId              String             @unique
+  shopName            String             @unique
+  slug                String             @unique
+  logo                String?
+  banner              String?
+  description         String?
+  tagline             String?
+  businessName        String?
+  businessRegNo       String?
+  businessType        String?
+  phone               String             @db.VarChar(20)
+  altPhone            String?            @db.VarChar(20)
+  email               String?
+  pickupAddressId     String?
+  returnPolicy        String?
+  shippingPolicy      String?
+  about               String?
+  verificationStatus  VerificationStatus @default(PENDING)
+  verifiedAt          DateTime?
+  isActive            Boolean            @default(false)
+  averageRating       Decimal?           @default(0) @db.Decimal(3, 2)
+  totalReviews        Int?               @default(0)
+  totalSales          Int?               @default(0)
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  keywords            String[]
+  metaDescription     String?
+  metaTitle           String?
+  // SEO sitemap fields
+  isIndexable         Boolean            @default(true)
+  canonicalUrl        String?
+  lastIndexableUpdate DateTime?
+  pickupAddress       Address?           @relation("SellerPickupAddress", fields: [pickupAddressId], references: [id])
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([slug])
   @@index([shopName])
   @@index([verificationStatus])
+  @@index([isActive, isIndexable])
   @@map("seller_profiles")
 }
 
@@ -267,6 +272,10 @@ model Category {
   keywords                 String[]
   metaDescription          String?
   metaTitle                String?
+  // SEO sitemap fields
+  isIndexable              Boolean                   @default(true)
+  canonicalUrl             String?
+  lastIndexableUpdate      DateTime?
   parent                   Category?                 @relation("CategoryHierarchy", fields: [parentId], references: [id])
   children                 Category[]                @relation("CategoryHierarchy")
   categoryOffers           CategoryOffer[]
@@ -275,6 +284,7 @@ model Category {
   products                 Product[]
 
   @@index([slug])
+  @@index([isActive, isIndexable])
   @@map("categories")
 }
 
@@ -369,40 +379,45 @@ model ReturnPolicy {
 }
 
 model Product {
-  id                 String                 @id @default(cuid())
-  sellerId           String
-  name               String
-  slug               String                 @unique
-  description        String?
-  features           String[]
-  status             ProductStatus          @default(INACTIVE)
-  specificationTable Json?
-  createdAt          DateTime               @default(now())
-  updatedAt          DateTime               @updatedAt
-  categoryId         String?
-  brand              String
-  embedding          Unsupported("vector")?
-  soldCount          Int                    @default(0)
-  averageRating      Decimal?               @default(0) @db.Decimal(3, 2)
-  keywords           String[]
-  metaDescription    String?
-  metaTitle          String?
-  Conversation       Conversation[]
-  deliveryOptions    DeliveryOption[]
-  images             ProductImage[]
-  notifications      ProductNotification[]  @relation("ProductNotifications")
-  productOffers      ProductOffer[]
-  questions          ProductQuestion[]
-  variants           ProductVariant[]
-  category           Category?              @relation(fields: [categoryId], references: [id])
-  seller             User                   @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
-  recentlyViewed     RecentlyViewed[]
-  returnPolicy       ReturnPolicy[]
-  reviews            Review[]
-  warranty           Warranty[]
-  wishlistItems      WishlistItem[]
+  id                  String                 @id @default(cuid())
+  sellerId            String
+  name                String
+  slug                String                 @unique
+  description         String?
+  features            String[]
+  status              ProductStatus          @default(INACTIVE)
+  specificationTable  Json?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  categoryId          String?
+  brand               String
+  embedding           Unsupported("vector")?
+  soldCount           Int                    @default(0)
+  averageRating       Decimal?               @default(0) @db.Decimal(3, 2)
+  keywords            String[]
+  metaDescription     String?
+  metaTitle           String?
+  // SEO sitemap fields
+  isIndexable         Boolean                @default(true)
+  canonicalUrl        String?
+  lastIndexableUpdate DateTime?
+  Conversation        Conversation[]
+  deliveryOptions     DeliveryOption[]
+  images              ProductImage[]
+  notifications       ProductNotification[]  @relation("ProductNotifications")
+  productOffers       ProductOffer[]
+  questions           ProductQuestion[]
+  variants            ProductVariant[]
+  category            Category?              @relation(fields: [categoryId], references: [id])
+  seller              User                   @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
+  recentlyViewed      RecentlyViewed[]
+  returnPolicy        ReturnPolicy[]
+  reviews             Review[]
+  warranty            Warranty[]
+  wishlistItems       WishlistItem[]
 
   @@index([slug, sellerId])
+  @@index([status, isIndexable])
   @@map("products")
 }
 
