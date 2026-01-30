@@ -58,6 +58,7 @@
     "qrcode.react": "^4.2.0",
     "react": "latest",
     "react-dom": "latest",
+    "react-intersection-observer": "^10.0.2",
     "react-server-dom-parcel": "latest",
     "react-server-dom-turbopack": "latest",
     "react-server-dom-webpack": "latest",
