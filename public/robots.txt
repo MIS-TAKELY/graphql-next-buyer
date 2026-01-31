@@ -1,6 +1,18 @@
 # robots.txt for vanijay.com
 # Last updated: 2026-01-31
 
+# As a condition of accessing this website, you agree to abide by the following
+# content usage terms:
+
+# (a) If you are a search engine crawler, you may index content for providing
+#     search results (returning hyperlinks and excerpts).
+# (b) AI training bots are explicitly disallowed via User-agent rules below.
+# (c) Any use of website content for AI training or fine-tuning is prohibited.
+
+# ANY RESTRICTIONS EXPRESSED ARE RESERVATIONS OF RIGHTS UNDER APPLICABLE
+# COPYRIGHT LAW INCLUDING EU DIRECTIVE 2019/790 ON COPYRIGHT AND RELATED
+# RIGHTS IN THE DIGITAL SINGLE MARKET.
+
 # BEGIN Cloudflare Managed content
 
 User-agent: *
