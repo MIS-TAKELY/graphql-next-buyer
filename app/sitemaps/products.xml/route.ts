@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
 
     const products = await prisma.product.findMany({
         where: {
