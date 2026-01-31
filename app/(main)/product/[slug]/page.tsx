@@ -100,12 +100,11 @@ export async function generateMetadata(
   // High quality description (no truncation mid-sentence, 150-160 chars)
   const currentPrice = product.variants?.[0]?.price ? Number(product.variants[0].price) : 0;
   const currentStock = product.variants?.[0]?.stock ? Number(product.variants[0].stock) : 0;
-  
-  let description = product.metaDescription || 
-    `${product.description ? product.description.substring(0, 100) + (product.description.length > 100 ? "..." : "") : `Buy ${product.name}`} at रु${currentPrice.toLocaleString()} ${
-      currentStock > 0 ? "with free delivery in Nepal. 1-year warranty. Available now" : "currently out of stock"
+
+  let description = product.metaDescription ||
+    `${product.description ? product.description.substring(0, 100) + (product.description.length > 100 ? "..." : "") : `Buy ${product.name}`} at रु${currentPrice.toLocaleString()} ${currentStock > 0 ? "with free delivery in Nepal. 1-year warranty. Available now" : "currently out of stock"
     }. Best prices at Vanijay.`;
-    
+
   if (description.length > 160) {
     description = description.substring(0, 157) + "...";
   }
@@ -198,22 +197,28 @@ export default async function ProductPage({
 
   // Add specifications from the table if available
   if (serializableProduct.specificationTable && Array.isArray(serializableProduct.specificationTable)) {
-    serializableProduct.specificationTable.forEach((spec: any) => {
-      additionalProperties.push({
-        "@type": "PropertyValue",
-        name: spec.key,
-        value: spec.value,
-      });
+    serializableProduct.specificationTable.forEach((table: any) => {
+      if (table.rows && Array.isArray(table.rows)) {
+        table.rows.forEach((row: any) => {
+          if (Array.isArray(row) && row.length >= 2) {
+            additionalProperties.push({
+              "@type": "PropertyValue",
+              name: row[0],
+              value: row[1],
+            });
+          }
+        });
+      }
     });
   }
 
   // Add category specific specifications if available
-  if (serializableProduct.category?.categorySpecification) {
+  if (serializableProduct.category?.categorySpecification && Array.isArray(serializableProduct.category.categorySpecification)) {
     serializableProduct.category.categorySpecification.forEach((spec: any) => {
       additionalProperties.push({
         "@type": "PropertyValue",
         name: spec.label || spec.key,
-        value: spec.value || "N/A", // This might need mapping to actual product values if they exist
+        value: spec.value || "N/A",
       });
     });
   }
@@ -276,29 +281,29 @@ export default async function ProductPage({
         },
       };
     }),
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: serializableProduct.reviews && serializableProduct.reviews.length > 0 
-        ? (serializableProduct.reviews.reduce((acc: number, review: any) => acc + (review.rating || 0), 0) / serializableProduct.reviews.length).toString()
-        : "0",
-      reviewCount: serializableProduct.reviews?.length || 0,
-      bestRating: "5",
-      worstRating: "0"
-    },
-    review: serializableProduct.reviews?.map((review: any) => ({
-      "@type": "Review",
-      reviewRating: {
-        "@type": "Rating",
-        ratingValue: review.rating,
+    ...(serializableProduct.reviews && serializableProduct.reviews.length > 0 ? {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: (serializableProduct.reviews.reduce((acc: number, review: any) => acc + (review.rating || 0), 0) / serializableProduct.reviews.length).toString(),
+        reviewCount: serializableProduct.reviews.length,
         bestRating: "5",
-        worstRating: "1",
+        worstRating: "0"
       },
-      author: {
-        "@type": "Person",
-        name: review.user ? `${review.user.firstName} ${review.user.lastName}` : "Anonymous",
-      },
-      datePublished: review.createdAt ? new Date(review.createdAt).toISOString().split('T')[0] : undefined,
-    })),
+      review: serializableProduct.reviews.map((review: any) => ({
+        "@type": "Review",
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: review.rating,
+          bestRating: "5",
+          worstRating: "1",
+        },
+        author: {
+          "@type": "Person",
+          name: review.user ? `${review.user.firstName} ${review.user.lastName}` : "Anonymous",
+        },
+        datePublished: review.createdAt ? new Date(review.createdAt).toISOString().split('T')[0] : undefined,
+      }))
+    } : {}),
   };
 
   const breadcrumbLd = {
@@ -333,18 +338,18 @@ export default async function ProductPage({
       name: `Does ${serializableProduct.name} come with a warranty?`,
       acceptedAnswer: {
         "@type": "Answer",
-        text: serializableProduct.warranty 
-          ? `Yes, ${serializableProduct.name} comes with ${serializableProduct.warranty}.` 
+        text: serializableProduct.warranty && serializableProduct.warranty.length > 0
+          ? `Yes, ${serializableProduct.name} comes with ${serializableProduct.warranty[0].duration} ${serializableProduct.warranty[0].unit} ${serializableProduct.warranty[0].type.toLowerCase()} warranty.`
           : `Yes, ${serializableProduct.name} comes with manufacturer warranty as per Vanijay policies.`
       }
     },
     {
-      "@type": "Question", 
+      "@type": "Question",
       name: `What is the return policy for ${serializableProduct.name}?`,
       acceptedAnswer: {
         "@type": "Answer",
-        text: serializableProduct.returnPolicy 
-          ? `The return policy for ${serializableProduct.name} is ${serializableProduct.returnPolicy}.` 
+        text: serializableProduct.returnPolicy && serializableProduct.returnPolicy.length > 0
+          ? `The return policy for ${serializableProduct.name} is ${serializableProduct.returnPolicy[0].duration} ${serializableProduct.returnPolicy[0].unit} ${serializableProduct.returnPolicy[0].type.replace(/_/g, ' ').toLowerCase()}.`
           : `You can return ${serializableProduct.name} within 7 days of delivery in original condition for a full refund.`
       }
     },
@@ -352,7 +357,7 @@ export default async function ProductPage({
       "@type": "Question",
       name: `How much does ${serializableProduct.name} cost in Nepal?`,
       acceptedAnswer: {
-        "@type": "Answer", 
+        "@type": "Answer",
         text: `The price of ${serializableProduct.name} in Nepal is ${formatPrice(currentPrice)} NPR at Vanijay.`
       }
     }
