@@ -91,23 +91,25 @@ export async function generateMetadata(
   const baseUrl = APP_URL;
   const url = `${baseUrl}/product/${slug}`;
 
-  // Title: [Product Name] | Price in Nepal | Vanijay
-  let title = product.metaTitle || `${product.name} | Price in Nepal | Vanijay`;
+  // Title: [Product Name] | [Brand] (Industry standard 40-60 chars)
+  const brandName = typeof product.brand === "string" ? product.brand : product.brand?.name || "Vanijay";
+  let title = product.metaTitle || `${product.name} | ${brandName}`;
   if (title.length > 60) {
     title = title.substring(0, 57) + "...";
   }
 
-  // High quality description (no truncation mid-sentence, 150-160 chars)
+  // Neutral description (no price/stock, no marketing fluff, 110-140 chars)
+  let description = product.metaDescription || product.description || `Explore the ${product.name} from ${brandName}, available on Vanijay. Detailed specifications and features included.`;
+
+  // Clean description: remove prices or marketing phrases if they exist in DB content
+  description = description.replace(/रु\s?\d+(,\d+)*/g, "").replace(/Rs\.?\s?\d+(,\d+)*/g, "").replace(/\d+(\.\d+)?%/g, "");
+
+  if (description.length > 140) {
+    description = description.substring(0, 137) + "...";
+  }
+
   const currentPrice = product.variants?.[0]?.price ? Number(product.variants[0].price) : 0;
   const currentStock = product.variants?.[0]?.stock ? Number(product.variants[0].stock) : 0;
-
-  let description = product.metaDescription ||
-    `${product.description ? product.description.substring(0, 100) + (product.description.length > 100 ? "..." : "") : `Buy ${product.name}`} at रु${currentPrice.toLocaleString()} ${currentStock > 0 ? "with free delivery in Nepal. 1-year warranty. Available now" : "currently out of stock"
-    }. Best prices at Vanijay.`;
-
-  if (description.length > 160) {
-    description = description.substring(0, 157) + "...";
-  }
 
   return {
     title,
@@ -128,9 +130,17 @@ export async function generateMetadata(
     openGraph: {
       title,
       description,
-      images: productImage ? [productImage, ...previousImages] : previousImages,
+      images: productImage ? [
+        {
+          url: productImage,
+          alt: product.name,
+          width: 1200,
+          height: 630,
+        },
+        ...previousImages
+      ] : previousImages,
       url,
-      type: "website",
+      type: "product" as any,
       siteName: "Vanijay",
     },
     twitter: {
