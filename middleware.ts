@@ -40,10 +40,8 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 1. Immediate public access for auth and critical API routes
+  // 1. Immediate public access for critical non-API routes that shouldn't be redirected by auth logic
   if (
-    nextUrl.pathname.startsWith("/api/auth") ||
-    nextUrl.pathname.startsWith("/api/otp") ||
     nextUrl.pathname === "/verify-phone"
   ) {
     return NextResponse.next();
