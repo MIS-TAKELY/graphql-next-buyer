@@ -339,7 +339,7 @@ export default async function ProductPage({
       acceptedAnswer: {
         "@type": "Answer",
         text: serializableProduct.warranty && serializableProduct.warranty.length > 0
-          ? `Yes, ${serializableProduct.name} comes with ${serializableProduct.warranty[0].duration} ${serializableProduct.warranty[0].unit} ${serializableProduct.warranty[0].type.toLowerCase()} warranty.`
+          ? `Yes, ${serializableProduct.name} comes with ${serializableProduct.warranty[0].duration} ${serializableProduct.warranty[0].duration === 1 ? serializableProduct.warranty[0].unit.replace(/s$/, '') : serializableProduct.warranty[0].unit} ${serializableProduct.warranty[0].type.toLowerCase()} warranty.`
           : `Yes, ${serializableProduct.name} comes with manufacturer warranty as per Vanijay policies.`
       }
     },
@@ -349,7 +349,7 @@ export default async function ProductPage({
       acceptedAnswer: {
         "@type": "Answer",
         text: serializableProduct.returnPolicy && serializableProduct.returnPolicy.length > 0
-          ? `The return policy for ${serializableProduct.name} is ${serializableProduct.returnPolicy[0].duration} ${serializableProduct.returnPolicy[0].unit} ${serializableProduct.returnPolicy[0].type.replace(/_/g, ' ').toLowerCase()}.`
+          ? `The return policy for ${serializableProduct.name} is ${serializableProduct.returnPolicy[0].duration} ${serializableProduct.returnPolicy[0].duration === 1 ? serializableProduct.returnPolicy[0].unit.replace(/s$/, '') : serializableProduct.returnPolicy[0].unit} ${serializableProduct.returnPolicy[0].type.replace(/_/g, ' ').toLowerCase()}.`
           : `You can return ${serializableProduct.name} within 7 days of delivery in original condition for a full refund.`
       }
     },
