@@ -140,7 +140,7 @@ export async function generateMetadata(
         ...previousImages
       ] : previousImages,
       url,
-      type: "product" as any,
+      type: "website",
       siteName: "Vanijay",
     },
     twitter: {
