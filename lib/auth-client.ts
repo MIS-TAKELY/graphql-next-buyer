@@ -1,9 +1,9 @@
 import { createAuthClient } from "better-auth/react"
-import { APP_URL } from "@/config/env";
+import { CANONICAL_URL } from "@/config/env";
 import { usernameClient } from "better-auth/client/plugins"
 
 export const authClient = createAuthClient({
-    baseURL: APP_URL,
+    baseURL: CANONICAL_URL,
     plugins: [
         usernameClient(),
     ]
