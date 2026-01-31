@@ -43,6 +43,14 @@ export const auth = betterAuth({
         useSecureCookies: true,
         cookieDomain: ".vanijay.com",
     },
+    cors: {
+        enabled: true,
+        origin: [
+            "https://www.vanijay.com",
+            "https://vanijay.com",
+            "http://localhost:3000"
+        ],
+    },
     emailVerification: {
         sendOnSignUp: true,
         autoSignInAfterVerification: true,

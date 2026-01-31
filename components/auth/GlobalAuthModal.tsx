@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuthModal } from "@/store/authModalStore";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import UnifiedAuth from "./UnifiedAuth";
 import { useState } from "react";
 
@@ -31,6 +31,10 @@ export default function GlobalAuthModal() {
                     }
                 }}
             >
+                <DialogTitle className="sr-only">Authentication</DialogTitle>
+                <DialogDescription className="sr-only">
+                    Sign in or create an account to access your Vanijay account
+                </DialogDescription>
                 <UnifiedAuth
                     isModal={true}
                     onClose={() => isClosable && closeModal()}

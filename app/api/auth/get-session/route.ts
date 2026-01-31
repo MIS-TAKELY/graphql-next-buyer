@@ -18,3 +18,14 @@ export const GET = async () => {
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 };
+
+export const OPTIONS = async () => {
+    return NextResponse.json({}, {
+        headers: {
+            "Access-Control-Allow-Origin": "https://www.vanijay.com",
+            "Access-Control-Allow-Methods": "GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            "Access-Control-Allow-Credentials": "true",
+        }
+    });
+};
