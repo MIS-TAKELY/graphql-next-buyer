@@ -50,7 +50,8 @@ export default async function middleware(request: NextRequest) {
   }
 
   // Enforce canonical domain (www.vanijay.com) with 301 Permanent Redirect
-  if (process.env.NODE_ENV === "production" && nextUrl.hostname === "vanijay.com") {
+  const host = request.headers.get("host");
+  if (process.env.NODE_ENV === "production" && (nextUrl.hostname === "vanijay.com" || host === "vanijay.com")) {
     const canonicalUrl = new URL(`https://www.vanijay.com${nextUrl.pathname}${nextUrl.search}`);
     return NextResponse.redirect(canonicalUrl, { status: 301 });
   }
