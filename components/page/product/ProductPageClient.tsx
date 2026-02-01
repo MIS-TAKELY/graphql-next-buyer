@@ -225,20 +225,14 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     [product?.images]
   );
 
-  if (!product) {
-    return <ProductPageSkeleton />;
-  }
+  // No need for null-check/skeleton here as parent (Server Component) handles it
+  if (!product) return null;
 
   const userId = session?.user?.id;
-  const isOwnProduct = userId === product?.seller?.id;
+  const isOwnProduct = !!(userId && product.seller?.id === userId);
 
   return (
-    <div className="min-h-screen bg-background relative pb-20 lg:pb-0">
-      <Breadcrumb
-        category={product.category}
-        name={product.name}
-      />
-
+    <>
       <div className="container-custom py-4 sm:py-6 lg:py-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-[4.5fr_5.5fr] gap-8 xl:gap-12 mb-12">
           {/* LEFT COLUMN - FIXED */}
@@ -251,7 +245,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             {/* Desktop Actions - Hidden on mobile */}
             <div className="hidden lg:block">
               <ProductActionsClient
-                productId={product.id || ""}
+                productId={product.id}
                 productSlug={product.slug}
                 variantId={currentVariant?.id || ""}
                 inStock={inStock}
@@ -274,19 +268,19 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             <div className="space-y-4">
               <ProductReviews isOwnProduct={isOwnProduct} />
               <FAQSection
-                productId={product.id || ""}
+                productId={product.id}
                 isOwnProduct={isOwnProduct}
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
               <DeliveryInfo
-                warranty={product.warranty || ""}
+                warranty={product.warranty}
                 returnPolicy={product.returnPolicy}
                 deliveryOptions={product.deliveryOptions}
               />
               <SellerInfo
                 sellerName={sellerName}
-                sellerId={product?.seller?.id}
+                sellerId={product.seller?.id}
                 isOwnProduct={isOwnProduct}
               />
             </div>
@@ -308,7 +302,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         currentProduct={product}
       />
       <RecommendedProducts
-        currentProductId={product.id || ""}
+        currentProductId={product.id}
         title="Similar Products"
       />
       <RecommendedProducts
@@ -319,13 +313,13 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
       {/* Sticky Mobile Buy Now Bar - Full width, Amazon/Flipkart style */}
       <div className="lg:hidden sticky-bottom-bar">
         <ProductActionsClient
-          productId={product.id || ""}
+          productId={product.id}
           productSlug={product.slug}
           variantId={currentVariant?.id || ""}
           inStock={inStock}
           product={product}
         />
       </div>
-    </div>
+    </>
   );
 }

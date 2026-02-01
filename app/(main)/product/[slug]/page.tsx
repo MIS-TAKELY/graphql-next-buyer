@@ -1,4 +1,5 @@
 import ProductPageClient from "@/components/page/product/ProductPageClient";
+import Breadcrumb from "@/components/page/product/Breadcrumb";
 import { SSRApolloProvider } from "@/lib/apollo/apollo-wrapper";
 import { prisma } from "@/lib/db/prisma";
 import { APP_URL } from "@/config/env";
@@ -154,7 +155,6 @@ export async function generateMetadata(
       "geo.placename": "Nepal",
       "product:price:amount": currentPrice.toString(),
       "product:price:currency": "NPR",
-      "product:availability": currentStock > 0 ? "instock" : "outofstock",
     }
   };
 }
@@ -259,9 +259,6 @@ export default async function ProductPage({
         priceCurrency: "NPR",
         price: vPrice,
         itemCondition: "https://schema.org/NewCondition",
-        availability: vStock > 0
-          ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
         shippingDetails: {
           "@type": "OfferShippingDetails",
           shippingRate: {
@@ -380,7 +377,7 @@ export default async function ProductPage({
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-background relative pb-20 lg:pb-0">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -393,9 +390,45 @@ export default async function ProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
       />
+
+      {/* Prerendered Breadcrumb for SEO */}
+      <Breadcrumb
+        category={serializableProduct.category}
+        name={serializableProduct.name}
+      />
+
+      <div className="container-custom py-4 sm:py-6 lg:py-8 relative">
+        <div className="grid grid-cols-1 lg:grid-cols-[4.5fr_5.5fr] gap-8 xl:gap-12 mb-12">
+          {/* Prerendered SEO Content - Hidden when Client Component Hydrates if duplicate, 
+              but here we'll let the Client Component handle its own parts. 
+              To avoid duplication, we can pass this as children or slots. 
+          */}
+          <div className="lg:hidden mb-6">
+            <h1 className="text-2xl font-bold text-foreground">{serializableProduct.name}</h1>
+          </div>
+          <div className="hidden lg:block">
+            {/* Prerendered Image for Crawler */}
+            {serializableProduct.images?.[0] && (
+              <img
+                src={serializableProduct.images[0].url}
+                alt={serializableProduct.name}
+                className="w-full h-auto rounded-lg"
+                loading="eager"
+                style={{ display: 'none' }} // Hidden for users, visible for crawlers/text-analysis
+              />
+            )}
+          </div>
+          <div className="sr-only">
+            {/* Hidden description for SEO that is also rendered by ProductInfo */}
+            <h2>About {serializableProduct.name}</h2>
+            <p>{serializableProduct.description}</p>
+          </div>
+        </div>
+      </div>
+
       <SSRApolloProvider initialData={initialCacheData}>
         <ProductPageClient product={serializableProduct} />
       </SSRApolloProvider>
-    </>
+    </div>
   );
 }
