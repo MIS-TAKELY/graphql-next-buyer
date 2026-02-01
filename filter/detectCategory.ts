@@ -20,7 +20,7 @@ export async function detectCategory(
   maxRetries = 3
 ): Promise<DetectedIntent> {
   const DEFAULT_INTENT: DetectedIntent = {
-    category: "Electronics",
+    category: "Electronics & Gadgets",
     attributes: [],
     intent: {},
   };
@@ -41,15 +41,14 @@ export async function detectCategory(
 
         if (!Array.isArray(result) || result.length === 0) {
           console.warn("⚠️ Empty category list, using fallback");
-          return ["Electronics"];
+          return ["Electronics & Gadgets"];
         }
 
         CATEGORIES_CACHE = result;
-        // console.log("✅ Categories loaded:", result);
         return result;
       } catch (error) {
         console.error("❌ Failed to load categories:", error);
-        return ["Electronics"];
+        return ["Electronics & Gadgets"];
       }
     })();
 
@@ -109,17 +108,23 @@ Example for "red nike shoes":
       const content = response.data?.choices?.[0]?.message?.content || "";
       const parsed = JSON.parse(content);
 
-      // Validate category
-      if (!categories.some(c => c.toLowerCase() === parsed.category?.toLowerCase())) {
-        // Find closest match for category
-        const normalized = parsed.category?.toLowerCase();
-        const closest = categories.find(c => c.toLowerCase() === normalized || normalized?.includes(c.toLowerCase()));
-        if (closest) parsed.category = closest;
-        else parsed.category = "Electronics";
+      // Robust matching: Check if AI category exactly matches or if any DB category includes the AI category
+      const normalizedAI = (parsed.category || "").toLowerCase();
+      const exactMatch = categories.find(c => c.toLowerCase() === normalizedAI);
+
+      let finalCategory = "Electronics & Gadgets"; // System default
+
+      if (exactMatch) {
+        finalCategory = exactMatch;
+      } else {
+        const partialMatch = categories.find(c => c.toLowerCase().includes(normalizedAI) || normalizedAI.includes(c.toLowerCase()));
+        if (partialMatch) {
+          finalCategory = partialMatch;
+        }
       }
 
       return {
-        category: parsed.category || "Electronics",
+        category: finalCategory,
         attributes: parsed.attributes || [],
         intent: parsed.intent || {}
       };
@@ -134,11 +139,13 @@ Example for "red nike shoes":
     const queryLower = query.toLowerCase();
     const keywordMappings: Record<string, string[]> = {
       "Mobile Phones & Accessories": ["phone", "mobile", "iphone", "samsung"],
-      "Electronics": ["laptop", "computer", "pc", "tv", "camera"],
+      "Electronics & Gadgets": ["laptop", "computer", "pc", "tv", "camera", "electronic"],
       "Fashion & Apparel": ["shirt", "dress", "clothes", "clothing", "wear"],
+      "Furniture & Home Decor": ["furniture", "sofa", "table", "chair"],
+      "Beauty & Personal Care": ["beauty", "makeup", "skin", "hair"]
     };
 
-    let category = "Electronics";
+    let category = "Electronics & Gadgets";
     for (const [cat, keywords] of Object.entries(keywordMappings)) {
       if (keywords.some((k) => queryLower.includes(k))) {
         category = cat;
@@ -146,7 +153,6 @@ Example for "red nike shoes":
       }
     }
 
-    // Try to extract brand as intent if query is short
     const intent: Record<string, string[]> = {};
     if (queryLower.includes("iphone")) intent.brand = ["Apple"];
     if (queryLower.includes("samsung")) intent.brand = ["Samsung"];
