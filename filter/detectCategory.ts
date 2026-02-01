@@ -2,6 +2,7 @@ import { getAllCategoryNames } from "@/servers/gql/modules/category/categoryHelp
 import axios from "axios";
 
 const OPENROUTER_API_KEY =
+  process.env.OPENROUTER_FILTER_API_KEY ||
   process.env.OPENROUTER_API_KEY ||
   "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";
 
@@ -129,7 +130,11 @@ Example for "red nike shoes":
         intent: parsed.intent || {}
       };
     } catch (error: any) {
-      console.error("AI API error:", error.message || error);
+      if (error?.response?.status === 402) {
+        console.warn("⚠️ AI API credit exhausted (402), falling back to keyword detection immediately.");
+      } else {
+        console.error("AI API error:", error.message || error);
+      }
       return null;
     }
   }

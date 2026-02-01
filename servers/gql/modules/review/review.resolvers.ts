@@ -54,7 +54,10 @@ export const reviewResolvers = {
           },
         });
 
-        if (!validproduct) throw new Error("review to non-existing product");
+        if (!validproduct) {
+          console.warn(`⚠️ Review fetch: Product with slug "${slug}" not found`);
+          return [];
+        }
 
         const productId = validproduct.id;
 
@@ -185,7 +188,14 @@ export const reviewResolvers = {
           select: { id: true },
         });
 
-        if (!product) throw new Error("Product not found");
+        if (!product) {
+          console.warn(`⚠️ Review stats fetch: Product with slug "${slug}" not found`);
+          return {
+            total: 0,
+            average: 0,
+            counts: [1, 2, 3, 4, 5].map(r => ({ rating: r, count: 0 }))
+          };
+        }
 
         const aggregations = await prisma.review.groupBy({
           by: ["rating"],

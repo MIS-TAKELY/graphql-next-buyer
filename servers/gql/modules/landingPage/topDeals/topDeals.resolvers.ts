@@ -38,18 +38,44 @@ export const topDealsResolvers = {
       console.log("🎯 Detected category:", detectedCategory);
 
       // Step 2: Get the detected category from database
-      const category = await prisma.category.findFirst({
+      let category = await prisma.category.findFirst({
         where: {
-          name: {
-            equals: detectedCategory,
-            mode: "insensitive",
-          },
+          OR: [
+            {
+              name: {
+                equals: detectedCategory,
+                mode: "insensitive",
+              },
+            },
+            {
+              slug: {
+                equals: detectedCategory.toLowerCase().replace(/\s+/g, "-"),
+                mode: "insensitive",
+              },
+            },
+          ],
         },
         select: {
           id: true,
           name: true,
         },
       });
+
+      // If still not found, try a partial match
+      if (!category) {
+        category = await prisma.category.findFirst({
+          where: {
+            name: {
+              contains: detectedCategory,
+              mode: "insensitive",
+            },
+          },
+          select: {
+            id: true,
+            name: true,
+          },
+        });
+      }
 
       if (!category) {
         console.warn(`⚠️ Category "${detectedCategory}" not found in database`);
@@ -188,7 +214,7 @@ export const topDealsResolvers = {
           },
           reviews: {
             where: { status: "APPROVED" },
-            select: { rating: true },
+            select: { id: true, rating: true },
           },
         },
       })) as ProductWithDetails[];

@@ -537,7 +537,7 @@ export const productResolvers = {
             }
           },
           images: { orderBy: { sortOrder: 'asc' } },
-          reviews: { select: { rating: true } },
+          reviews: { select: { id: true, rating: true } },
           category: true,
         }
       });
@@ -566,7 +566,7 @@ export const productResolvers = {
             }
           },
           images: { orderBy: { sortOrder: 'asc' } },
-          reviews: { select: { rating: true } },
+          reviews: { select: { id: true, rating: true } },
           category: true,
         }
       });
