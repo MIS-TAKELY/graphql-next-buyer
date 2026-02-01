@@ -8,7 +8,8 @@ import Link from "next/link";
 import { Metadata, ResolvingMetadata } from "next";
 import { cache } from "react";
 
-export const revalidate = 3600;
+export const revalidate = 3600; // ISR: Revalidate every hour
+export const dynamicParams = true; // Support dynamic parameters for new stores
 
 // Generate static params for all active seller stores
 export async function generateStaticParams() {
@@ -216,19 +217,24 @@ export default async function StorePage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="container-custom py-8 min-h-screen">
-        <div className="mb-6 flex items-center gap-4">
-          <Link href="/">
-            <Button variant="ghost" size="icon">
-              <ChevronLeft className="h-5 w-5" />
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold">{sellerProfile.shopName}</h1>
-            {sellerProfile.tagline && (
-              <p className="text-gray-600 text-sm">{sellerProfile.tagline}</p>
-            )}
-            <p className="text-gray-500 text-sm">{products.length} Products</p>
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Link href="/store">
+              <Button variant="outline" size="icon" className="rounded-full">
+                <ChevronLeft className="h-5 w-5" />
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-2xl font-bold">{sellerProfile.shopName}</h1>
+              {sellerProfile.tagline && (
+                <p className="text-gray-600 text-sm">{sellerProfile.tagline}</p>
+              )}
+              <p className="text-gray-500 text-sm">{products.length} Products</p>
+            </div>
           </div>
+          <Link href="/store" className="hidden sm:block text-sm font-medium text-primary hover:underline">
+            View All Stores
+          </Link>
         </div>
 
         {products.length === 0 ? (
