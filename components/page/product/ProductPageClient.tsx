@@ -202,13 +202,16 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
   );
 
   const sellerName = useMemo(
-    () =>
-      product?.brand?.name ||
-      (product?.seller
-        ? `${product.seller.firstName || ""} ${product.seller.lastName || ""
-          }`.trim()
-        : "Unknown Seller"),
-    [product?.brand?.name, product?.seller]
+    () => {
+      if (typeof product?.brand === "string") return product.brand;
+      // @ts-ignore - Handle legacy object case if types are mixed
+      if (product?.brand?.name) return product.brand.name;
+
+      return product?.seller
+        ? `${product.seller.firstName || ""} ${product.seller.lastName || ""}`.trim()
+        : "Unknown Seller";
+    },
+    [product?.brand, product?.seller]
   );
 
   const sortedImages = useMemo(

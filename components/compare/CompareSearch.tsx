@@ -130,7 +130,7 @@ export default function CompareSearch() {
                                                     {product.name}
                                                 </h4>
                                                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                                    {product.brand || product.category.name}
+                                                    {(typeof product.brand === 'string' ? product.brand : product.brand?.name) || product.category.name}
                                                 </p>
                                                 <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
                                                     {formatPrice(variant.price)}
@@ -138,11 +138,13 @@ export default function CompareSearch() {
                                             </div>
 
                                             {/* Already Selected Badge */}
-                                            {isAlreadySelected && (
-                                                <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
-                                                    Already added
-                                                </span>
-                                            )}
+                                            {
+                                                isAlreadySelected && (
+                                                    <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+                                                        Already added
+                                                    </span>
+                                                )
+                                            }
                                         </button>
                                     );
                                 })}
@@ -150,7 +152,8 @@ export default function CompareSearch() {
                         )}
                     </CardContent>
                 </Card>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 }

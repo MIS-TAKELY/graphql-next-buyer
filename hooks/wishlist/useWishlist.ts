@@ -40,6 +40,7 @@ import {
   REMOVE_FROM_WISHLIST,
 } from "@/client/wishlist/wishlist.mutation";
 import { GET_MY_WISHLISTS } from "@/client/wishlist/wishlist.queries";
+import { useSession } from "@/lib/auth-client";
 import { useApolloClient, useMutation, useQuery } from "@apollo/client";
 import { useCallback, useMemo } from "react";
 
@@ -52,6 +53,8 @@ interface UseWishlistOptions {
 export const useWishlist = (options: UseWishlistOptions = {}) => {
   const client = useApolloClient();
 
+  const { data: session } = useSession();
+
   const { data, loading, error, refetch } = useQuery<WishlistsData>(
     GET_MY_WISHLISTS,
     {
@@ -60,6 +63,7 @@ export const useWishlist = (options: UseWishlistOptions = {}) => {
         ? options.pollingInterval || 30000
         : 0,
       notifyOnNetworkStatusChange: true,
+      skip: !session?.user,
     }
   );
 

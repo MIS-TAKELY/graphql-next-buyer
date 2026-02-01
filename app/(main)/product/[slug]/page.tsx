@@ -59,11 +59,6 @@ const PRODUCT_INCLUDES = {
   },
   warranty: true,
   returnPolicy: true,
-  brand: {
-    select: {
-      name: true
-    }
-  },
   seller: {
     select: {
       id: true,
