@@ -14,7 +14,7 @@ export const revalidate = 3600;
 export async function generateStaticParams() {
   try {
     const sellers = await prisma.sellerProfile.findMany({
-      where: { 
+      where: {
         isActive: true,
         verificationStatus: "APPROVED"
       },
@@ -39,10 +39,8 @@ const fetchSellerProfile = cache(async (storeId: string) => {
   try {
     // First try to find by slug (SEO-friendly)
     let sellerProfile = await prisma.sellerProfile.findUnique({
-      where: { 
-        slug: storeId,
-        isActive: true,
-        verificationStatus: "APPROVED"
+      where: {
+        slug: storeId
       },
       select: {
         id: true,
@@ -57,16 +55,16 @@ const fetchSellerProfile = cache(async (storeId: string) => {
         metaDescription: true,
         keywords: true,
         updatedAt: true,
+        isActive: true,
+        verificationStatus: true,
       }
     });
 
     // Fallback: try to find by userId for backwards compatibility
     if (!sellerProfile) {
       sellerProfile = await prisma.sellerProfile.findFirst({
-        where: { 
+        where: {
           userId: storeId,
-          isActive: true,
-          verificationStatus: "APPROVED"
         },
         select: {
           id: true,
@@ -81,6 +79,8 @@ const fetchSellerProfile = cache(async (storeId: string) => {
           metaDescription: true,
           keywords: true,
           updatedAt: true,
+          isActive: true,
+          verificationStatus: true,
         }
       });
     }
@@ -96,7 +96,7 @@ const fetchSellerProfile = cache(async (storeId: string) => {
 const fetchProductsBySeller = cache(async (userId: string) => {
   try {
     const products = await prisma.product.findMany({
-      where: { 
+      where: {
         sellerId: userId,
         status: "ACTIVE"
       },
@@ -140,8 +140,8 @@ export async function generateMetadata(
   const url = `${baseUrl}/store/${sellerProfile.slug}`;
 
   const title = sellerProfile.metaTitle || `${sellerProfile.shopName} | Shop on Vanijay Nepal`;
-  const description = sellerProfile.metaDescription || 
-    sellerProfile.description || 
+  const description = sellerProfile.metaDescription ||
+    sellerProfile.description ||
     `Shop products from ${sellerProfile.shopName} on Vanijay. ${sellerProfile.tagline || 'Quality products at great prices.'}`;
 
   return {
