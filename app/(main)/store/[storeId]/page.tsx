@@ -98,7 +98,6 @@ const fetchProductsBySeller = cache(async (userId: string) => {
     const products = await prisma.product.findMany({
       where: {
         sellerId: userId,
-        status: "ACTIVE"
       },
       include: {
         images: { orderBy: { sortOrder: 'asc' } },

@@ -49,9 +49,7 @@ export const productResolvers = {
 
       // Query DB if slugs not cached
       const products = await prisma.product.findMany({
-        where: {
-          status: "ACTIVE",
-        },
+        where: {},
         include: {
           seller: true,
           variants: {
@@ -108,7 +106,7 @@ export const productResolvers = {
 
       const start = Date.now();
       const product = await prisma.product.findUnique({
-        where: { slug, status: "ACTIVE" },
+        where: { slug },
         include: {
           seller: { select: { id: true, firstName: true, lastName: true } },
           variants: {
@@ -178,16 +176,14 @@ export const productResolvers = {
       // Count total products
       const total = await prisma.product.count({
         where: {
-          categoryId: { in: categoryIds },
-          status: "ACTIVE"
+          categoryId: { in: categoryIds }
         }
       });
 
       // Fetch products
       const products = await prisma.product.findMany({
         where: {
-          categoryId: { in: categoryIds },
-          status: "ACTIVE"
+          categoryId: { in: categoryIds }
         },
         include: {
           seller: { select: { id: true, firstName: true, lastName: true } },
@@ -280,7 +276,6 @@ export const productResolvers = {
           if (interests.categories.length > 0 || interests.brands.length > 0) {
             recommendedProducts = await prisma.product.findMany({
               where: {
-                status: "ACTIVE",
                 OR: [
                   { categoryId: { in: interests.categories } },
                   { brand: { in: interests.brands } }
@@ -302,7 +297,7 @@ export const productResolvers = {
         // Fallback if no user or no interests found
         if (recommendedProducts.length === 0) {
           recommendedProducts = await prisma.product.findMany({
-            where: { status: "ACTIVE" },
+            where: {},
             take: limit,
             orderBy: { createdAt: 'desc' }, // Newest or random
             include: {
@@ -330,7 +325,7 @@ export const productResolvers = {
           const similarProducts = await prisma.$queryRaw<Array<{ id: string; similarity: number }>>`
                 SELECT id::text, 1 - (embedding::text::vector <=> ${embedding}::vector) AS similarity
                 FROM "products"
-                WHERE id != ${productId} AND embedding IS NOT NULL AND status = 'ACTIVE'
+                WHERE id != ${productId} AND embedding IS NOT NULL
                 ORDER BY similarity DESC
                 LIMIT ${limit + 5} 
             `;
@@ -365,7 +360,7 @@ export const productResolvers = {
         // Fallback if no embedding or vector search failed
         if (recommendedProducts.length === 0) {
           recommendedProducts = await prisma.product.findMany({
-            where: { status: "ACTIVE", id: { not: productId } },
+            where: { id: { not: productId } },
             take: limit,
             include: {
               seller: { select: { id: true, firstName: true, lastName: true } },
@@ -388,8 +383,7 @@ export const productResolvers = {
 
       const products = await prisma.product.findMany({
         where: {
-          sellerId: sellerId,
-          status: "ACTIVE",
+          sellerId: sellerId
         },
         include: {
           variants: true,
@@ -495,7 +489,6 @@ export const productResolvers = {
                 SELECT id::text, 1 - (embedding::text::vector <=> ${embedding}::vector) AS similarity
                 FROM "products"
                 WHERE embedding IS NOT NULL 
-                AND status = 'ACTIVE'
                 ORDER BY similarity DESC
                 LIMIT ${(limit - resultIds.length) * 2}
             `;
@@ -516,8 +509,7 @@ export const productResolvers = {
             const categoryProducts = await prisma.product.findMany({
               where: {
                 categoryId: product.categoryId,
-                id: { notIn: [productId, ...resultIds] },
-                status: 'ACTIVE'
+                id: { notIn: [productId, ...resultIds] }
               },
               take: limit - resultIds.length,
               select: { id: true }
@@ -530,7 +522,7 @@ export const productResolvers = {
       if (resultIds.length === 0) return [];
 
       const products = await prisma.product.findMany({
-        where: { id: { in: resultIds }, status: "ACTIVE" },
+        where: { id: { in: resultIds } },
         include: {
           seller: { select: { id: true, firstName: true, lastName: true } },
           variants: {
@@ -559,8 +551,7 @@ export const productResolvers = {
 
       const products = await prisma.product.findMany({
         where: {
-          id: { in: ids },
-          status: "ACTIVE"
+          id: { in: ids }
         },
         include: {
           variants: {
