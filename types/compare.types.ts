@@ -2,10 +2,15 @@ export interface CompareProduct {
     id: string;
     name: string;
     slug: string;
-    brand: string;
+    brand: string | { name: string };
     description: string;
     category: {
         name: string;
+        categorySpecification?: {
+            key: string;
+            label: string;
+            value?: string;
+        }[];
     };
     variants: {
         price: number;
@@ -13,8 +18,12 @@ export interface CompareProduct {
         specifications: {
             value: string;
         }[];
+        attributes?: Record<string, string>;
     }[];
     features?: string[];
+    specificationTable?: {
+        rows: string[][]; // [key, value]
+    }[];
     images: {
         altText: string;
         url: string;
