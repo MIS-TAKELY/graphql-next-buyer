@@ -15,6 +15,7 @@ import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useCompareStore } from "@/store/compareStore";
 import { useAuthModal } from "@/store/authModalStore";
+import { getProductUrl } from "@/lib/productUtils";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { differenceInDays } from "date-fns";
@@ -103,7 +104,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div className="block w-full h-full relative group">
-      <Link href={`/product/${product.slug}`} className="block h-full">
+      <Link href={getProductUrl({ slug: product.slug, id: product.id })} className="block h-full">
         <Card className={`transition-all duration-300 bg-white dark:bg-gray-900 border-none shadow-none rounded-xl h-full flex flex-col overflow-hidden min-h-[260px] p-0 ${selected ? "ring-2 ring-blue-500 border-blue-500" : ""
           }`}>
           <CardContent className="p-0 flex flex-col h-full">

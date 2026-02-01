@@ -9,6 +9,7 @@ import { formatPrice } from "@/lib/utils";
 import { useCompareStore } from "@/store/compareStore";
 import { toast } from "sonner";
 import { MouseEvent } from "react";
+import { getProductUrl } from "@/lib/productUtils";
 
 interface Specification {
   key?: string;
@@ -93,7 +94,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className={`group relative flex w-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-lg hover:shadow-md transition-all duration-300 overflow-hidden ${selected ? "ring-1 ring-blue-500 border-blue-500" : ""
       }`}>
-      <Link href={`/product/${product.slug}`} className="flex w-full min-h-[140px] sm:min-h-[160px]">
+      <Link href={getProductUrl({ slug: product.slug, id: product.id })} className="flex w-full min-h-[140px] sm:min-h-[160px]">
         {/* LEFT: Image Section */}
         <div className="relative w-[120px] xs:w-[140px] sm:w-[180px] md:w-[220px] shrink-0 bg-gray-50 dark:bg-gray-800/50 p-3 flex items-center justify-center">
           <div className="relative w-full h-full aspect-square md:aspect-[4/3]">

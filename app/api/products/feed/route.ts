@@ -6,11 +6,11 @@ export async function GET() {
     try {
         const products = await prisma.product.findMany({
             where: { status: "ACTIVE" },
-            select: { slug: true },
+            select: { slug: true, id: true },
         });
 
         const baseUrl = APP_URL;
-        const urls = products.map((p) => `${baseUrl}/product/${p.slug}`).join("\n");
+        const urls = products.map((p) => `${baseUrl}/product/${p.slug}-p${p.id}`).join("\n");
 
         return new Response(urls, {
             headers: {

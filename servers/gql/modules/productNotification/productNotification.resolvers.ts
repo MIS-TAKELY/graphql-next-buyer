@@ -213,7 +213,8 @@ export const productNotificationResolvers = {
                         await sendEmailNotification(
                             emailToUse,
                             product.name,
-                            product.slug
+                            product.slug,
+                            product.id
                         ).catch(err => console.error(`Email fail: ${err.message}`));
                     }
 
@@ -223,7 +224,8 @@ export const productNotificationResolvers = {
                         await sendWhatsAppNotification(
                             phoneToUse,
                             product.name,
-                            product.slug
+                            product.slug,
+                            product.id
                         ).catch(err => console.error(`WhatsApp fail: ${err.message}`));
                     }
 

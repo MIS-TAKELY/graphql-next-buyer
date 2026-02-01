@@ -12,6 +12,7 @@ export async function GET() {
             isIndexable: true,
         },
         select: {
+            id: true,
             slug: true,
             updatedAt: true,
             lastIndexableUpdate: true,
@@ -40,7 +41,7 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${products.map((product) => `
   <url>
-    <loc>${escapeXml(product.canonicalUrl || `${baseUrl}/product/${product.slug}`)}</loc>
+    <loc>${escapeXml(product.canonicalUrl || `${baseUrl}/product/${product.slug}-p${product.id}`)}</loc>
     <lastmod>${(product.lastIndexableUpdate || product.updatedAt).toISOString()}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>

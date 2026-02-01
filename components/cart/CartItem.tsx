@@ -9,6 +9,7 @@ import { formatPrice } from "@/lib/utils";
 import QuantitySelector from "../page/product/QuantitySelector";
 import { CartItem as CartItemType } from "@/store/cartStore";
 import { Checkbox } from "@/components/ui/checkbox";
+import { getProductUrl } from "@/lib/productUtils";
 
 const CartItem = ({
   item,
@@ -58,7 +59,7 @@ const CartItem = ({
           {/* Product Image - Fixed Width */}
           <div className="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 relative">
             <div className="aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden rounded-md border border-gray-100 dark:border-gray-700">
-              <Link href={`/product/${slug}`}>
+              <Link href={getProductUrl({ slug: slug || "", id: productId })}>
                 <Image
                   src={image || "/placeholder.svg"}
                   alt={name}
@@ -90,7 +91,7 @@ const CartItem = ({
           <div className="flex-1 flex flex-col justify-between min-w-0">
             {/* Top Row: Title & Remove */}
             <div className="flex justify-between items-start gap-2">
-              <Link href={`/product/${slug}`} className="flex-1 min-w-0">
+              <Link href={getProductUrl({ slug: slug || "", id: productId })} className="flex-1 min-w-0">
                 <h3 className="font-medium text-sm sm:text-base text-gray-900 dark:text-white line-clamp-2 leading-tight">
                   {name}
                 </h3>

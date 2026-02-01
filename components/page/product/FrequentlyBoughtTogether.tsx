@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import SmartMedia from "@/components/ui/SmartMedia";
+import { getProductUrl } from "@/lib/productUtils";
 
 interface FrequentlyBoughtTogetherProps {
     currentProduct: TProduct;
@@ -101,7 +102,7 @@ export default function FrequentlyBoughtTogether({
                                     <div className="relative group">
                                         <div className={`relative w-24 h-24 sm:w-32 sm:h-32 rounded-xl border-2 transition-all duration-300 overflow-hidden bg-white dark:bg-gray-800 ${isSelected ? 'border-primary shadow-md' : 'border-transparent opacity-60 grayscale-[0.5]'
                                             }`}>
-                                            <Link href={`/product/${product.slug}`} className="block w-full h-full p-2">
+                                            <Link href={getProductUrl({ slug: product.slug, id: product.id })} className="block w-full h-full p-2">
                                                 <SmartMedia
                                                     src={image}
                                                     alt={product.name}

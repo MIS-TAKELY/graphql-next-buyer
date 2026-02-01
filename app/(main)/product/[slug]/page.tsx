@@ -7,18 +7,70 @@ import { TProduct } from "@/types/product";
 import { Metadata, ResolvingMetadata } from "next";
 import { cache } from "react";
 import { formatPrice } from "@/lib/utils";
+import { permanentRedirect } from "next/navigation";
+import { extractProductIdFromSlug } from "@/lib/productUtils";
 
+const PRODUCT_INCLUDES = {
+  images: { orderBy: { sortOrder: 'asc' } },
+  variants: {
+    include: {
+      specifications: true
+    }
+  },
+  category: {
+    include: {
+      categorySpecification: true
+    }
+  },
+  reviews: {
+    where: { status: "APPROVED" },
+    include: {
+      user: {
+        select: { firstName: true, lastName: true }
+      }
+    }
+  },
+  productOffers: {
+    include: {
+      offer: true
+    }
+  },
+  questions: {
+    where: { isPublic: true },
+    include: {
+      user: {
+        select: { firstName: true, lastName: true }
+      },
+      answers: {
+        include: {
+          seller: {
+            select: {
+              firstName: true,
+              lastName: true,
+              sellerProfile: {
+                select: { shopName: true }
+              }
+            }
+          }
+        }
+      }
+    },
+    orderBy: { createdAt: 'desc' }
+  },
+  warranty: true,
+  returnPolicy: true
+} as const;
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
   try {
     const products = await prisma.product.findMany({
       where: { status: "ACTIVE" },
-      select: { slug: true },
+      select: { slug: true, id: true },
     });
 
     return products.map((product) => ({
-      slug: product.slug,
+      slug: `${product.slug}-p${product.id}`,
     }));
   } catch (error) {
     console.error("Error generating static params for products:", error);
@@ -31,62 +83,26 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-// Consolidate fetching logic with Prisma for direct DB access
-const fetchProduct = cache(async (slug: string) => {
+// Consolidated fetching logic with smart lookup (ID -> Slug)
+const fetchProduct = cache(async (slugParam: string) => {
   try {
-    const product = await prisma.product.findUnique({
-      where: { slug, status: "ACTIVE" },
-      include: {
-        images: { orderBy: { sortOrder: 'asc' } },
-        variants: {
-          include: {
-            specifications: true
-          }
-        },
-        category: {
-          include: {
-            categorySpecification: true
-          }
-        },
-        reviews: {
-          where: { status: "APPROVED" },
-          include: {
-            user: {
-              select: { firstName: true, lastName: true }
-            }
-          }
-        },
-        productOffers: {
-          include: {
-            offer: true
-          }
-        },
-        questions: {
-          where: { isPublic: true },
-          include: {
-            user: {
-              select: { firstName: true, lastName: true }
-            },
-            answers: {
-              include: {
-                seller: {
-                  select: {
-                    firstName: true,
-                    lastName: true,
-                    sellerProfile: {
-                      select: { shopName: true }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          orderBy: { createdAt: 'desc' }
-        },
-        warranty: true,
-        returnPolicy: true
-      }
-    });
+    const extractedId = extractProductIdFromSlug(slugParam);
+    let product = null;
+
+    if (extractedId) {
+      product = await prisma.product.findUnique({
+        where: { id: extractedId, status: "ACTIVE" },
+        include: PRODUCT_INCLUDES,
+      });
+    }
+
+    if (!product) {
+      // Fallback: search by slug (legacy URLs)
+      product = await prisma.product.findUnique({
+        where: { slug: slugParam, status: "ACTIVE" },
+        include: PRODUCT_INCLUDES,
+      });
+    }
 
     return product as unknown as TProduct;
   } catch (error) {
@@ -112,7 +128,8 @@ export async function generateMetadata(
   const productImage = product.images?.[0]?.url;
 
   const baseUrl = APP_URL;
-  const url = `${baseUrl}/product/${slug}`;
+  // Always use the canonical URL format: /product/[slug]-p[id]
+  const url = `${baseUrl}/product/${product.slug}-p${product.id}`;
 
   // Title: [Product Name] | [Brand] (Industry standard 40-60 chars)
   const brandName = typeof product.brand === "string" ? product.brand : product.brand?.name || "Vanijay";
@@ -202,6 +219,20 @@ export default async function ProductPage({
     );
   }
 
+  const extractedId = extractProductIdFromSlug(slug);
+  const correctSlug = `${product.slug}-p${product.id}`;
+
+  if (extractedId) {
+    // ID present in URL
+    if (slug !== correctSlug) {
+      // Mismatched cosmetic slug -> Redirect to canonical
+      permanentRedirect(`/product/${correctSlug}`);
+    }
+  } else {
+    // Legacy URL (no ID) -> Redirect to new format
+    permanentRedirect(`/product/${correctSlug}`);
+  }
+
   // Force serialize product to ensure it's a plain object for Client Components
   const serializableProduct = JSON.parse(JSON.stringify(product));
 
@@ -217,7 +248,7 @@ export default async function ProductPage({
   const stock = stockValue ? Number(stockValue) : 0;
 
   const baseUrl = APP_URL;
-  const productUrl = `${baseUrl}/product/${slug}`;
+  const productUrl = `${baseUrl}/product/${product.slug}-p${product.id}`;
 
   // Use the same refined description logic for JSON-LD
   let structuredDescription = serializableProduct.metaDescription || serializableProduct.description || `Buy ${serializableProduct.name} at the best price in Nepal.`;

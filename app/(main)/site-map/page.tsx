@@ -15,6 +15,7 @@ import {
     BookOpen,
     Map
 } from "lucide-react";
+import { getProductUrl } from "@/lib/productUtils";
 
 export const metadata: Metadata = {
     title: "Sitemap | Vanijay",
@@ -37,7 +38,7 @@ async function getProducts() {
     try {
         return await prisma.product.findMany({
             where: { status: "ACTIVE" },
-            select: { name: true, slug: true },
+            select: { name: true, slug: true, id: true },
             orderBy: { updatedAt: 'desc' },
             // Removed take limit to show all products as requested
         });
@@ -155,14 +156,14 @@ export default async function SitemapPage() {
                                 {products.map((prod, pIdx) => (
                                     <div key={pIdx} className="flex flex-col gap-0.5">
                                         <Link
-                                            href={`/product/${prod.slug}`}
+                                            href={getProductUrl({ slug: prod.slug, id: prod.id })}
                                             className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2"
                                         >
                                             <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                                             {prod.name}
                                         </Link>
                                         <span className="text-[10px] text-muted-foreground pl-3.5 break-all">
-                                            /product/{prod.slug}
+                                            {getProductUrl({ slug: prod.slug, id: prod.id })}
                                         </span>
                                     </div>
                                 ))}
