@@ -11,37 +11,42 @@ export const metadata: Metadata = {
 };
 
 export default async function StoresPage() {
-    const sellers = await prisma.sellerProfile.findMany({
-        where: {
-            isActive: true,
-            verificationStatus: "APPROVED",
-        },
-        select: {
-            id: true,
-            shopName: true,
-            slug: true,
-            logo: true,
-            banner: true,
-            tagline: true,
-            averageRating: true,
-            user: {
-                select: {
-                    _count: {
-                        select: {
-                            products: {
-                                where: {
-                                    status: "ACTIVE",
+    let sellers: any[] = [];
+    try {
+        sellers = await prisma.sellerProfile.findMany({
+            where: {
+                isActive: true,
+                verificationStatus: "APPROVED",
+            },
+            select: {
+                id: true,
+                shopName: true,
+                slug: true,
+                logo: true,
+                banner: true,
+                tagline: true,
+                averageRating: true,
+                user: {
+                    select: {
+                        _count: {
+                            select: {
+                                products: {
+                                    where: {
+                                        status: "ACTIVE",
+                                    },
                                 },
                             },
                         },
                     },
                 },
             },
-        },
-        orderBy: {
-            shopName: "asc",
-        },
-    });
+            orderBy: {
+                shopName: "asc",
+            },
+        });
+    } catch (error) {
+        console.error("Error fetching sellers in StoresPage:", error);
+    }
 
     const formattedSellers = sellers.map((seller) => ({
         ...seller,

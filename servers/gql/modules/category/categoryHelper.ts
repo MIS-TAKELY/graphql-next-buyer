@@ -33,4 +33,3 @@ export const getAllCategoryNames = cache(async () => {
     return [];
   }
 });
-getAllCategoryNames();
