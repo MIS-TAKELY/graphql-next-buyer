@@ -58,7 +58,19 @@ const PRODUCT_INCLUDES = {
     orderBy: { createdAt: 'desc' }
   },
   warranty: true,
-  returnPolicy: true
+  returnPolicy: true,
+  brand: {
+    select: {
+      name: true
+    }
+  },
+  seller: {
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true
+    }
+  }
 } as const;
 export const revalidate = 3600;
 
