@@ -10,24 +10,22 @@ interface DeliveryInfoProps {
 export default function DeliveryInfo({ warranty, returnPolicy, deliveryOptions }: DeliveryInfoProps) {
   // Determine delivery text
   const deliveryText = deliveryOptions && deliveryOptions.length > 0
-    ? deliveryOptions[0].title // Display the first option title usually
-    : "Free delivery by tomorrow";
+    ? deliveryOptions[0].title
+    : "No free delivery";
 
   // Determine return policy text
   const currentReturnPolicy = returnPolicy && returnPolicy.length > 0 ? returnPolicy[0] : null;
   const returnText = currentReturnPolicy
     ? currentReturnPolicy.type === 'NO_RETURN'
-      ? "Non-returnable"
+      ? "No replacement or refund"
       : `${currentReturnPolicy.duration} ${currentReturnPolicy.unit} ${currentReturnPolicy.type.toLowerCase().replace('_', ' ')}`
-    : "7 days replacement policy";
+    : "No replacement or refund";
 
   // Determine warranty text
   const currentWarranty = warranty && warranty.length > 0 ? warranty[0] : null;
-  const warrantyText = currentWarranty
-    ? currentWarranty.type === 'NONE'
-      ? "No warranty available"
-      : `${currentWarranty.duration} ${currentWarranty.unit} ${currentWarranty.type.toLowerCase()} warranty`
-    : "No warranty available";
+  const warrantyText = currentWarranty && currentWarranty.type !== 'NONE'
+    ? `${currentWarranty.duration} ${currentWarranty.unit} ${currentWarranty.type.toLowerCase()} warranty`
+    : "No warranty";
 
   return (
     <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 space-y-3 my-4 overflow-hidden h-full">
