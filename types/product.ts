@@ -49,6 +49,12 @@ export interface ISeller {
   id?: string;
   firstName: string;
   lastName: string;
+  sellerProfile?: {
+    shopName: string;
+    slug: string;
+    isActive: boolean;
+    verificationStatus: string;
+  };
 }
 export interface IBrand {
   id?: string;

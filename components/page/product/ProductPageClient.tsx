@@ -203,16 +203,32 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
   const sellerName = useMemo(
     () => {
+      // 1. Prefer Seller Shop Name (if available)
+      if (product?.seller?.sellerProfile?.shopName) {
+        return product.seller.sellerProfile.shopName;
+      }
+
+      // 2. Fallback to Brand Name (if string or object)
       if (typeof product?.brand === "string") return product.brand;
-      // @ts-ignore - Handle legacy object case if types are mixed
+      // @ts-ignore
       if (product?.brand?.name) return product.brand.name;
 
+      // 3. Last resort: Seller Personal Name
       return product?.seller
         ? `${product.seller.firstName || ""} ${product.seller.lastName || ""}`.trim()
         : "Unknown Seller";
     },
     [product?.brand, product?.seller]
   );
+
+  const storeIdentifier = useMemo(() => {
+    // Return Slug if available, otherwise User ID
+    // Also check if store is valid (active/approved) - though we'll let the link click handle 404 if not
+    if (product?.seller?.sellerProfile?.slug) {
+      return product.seller.sellerProfile.slug;
+    }
+    return product?.seller?.id;
+  }, [product?.seller]);
 
   const sortedImages = useMemo(
     () =>
@@ -289,7 +305,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
               />
               <SellerInfo
                 sellerName={sellerName}
-                sellerId={product.seller?.id}
+                sellerId={storeIdentifier}
                 isOwnProduct={isOwnProduct}
               />
             </div>

@@ -63,7 +63,15 @@ const PRODUCT_INCLUDES = {
     select: {
       id: true,
       firstName: true,
-      lastName: true
+      lastName: true,
+      sellerProfile: {
+        select: {
+          shopName: true,
+          slug: true,
+          isActive: true,
+          verificationStatus: true
+        }
+      }
     }
   }
 } as const;
