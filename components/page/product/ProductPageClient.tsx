@@ -6,8 +6,6 @@ import ImageZoomViewer from "@/components/page/product/ImageZoomViewer";
 import { ProductActionsClient } from "@/components/page/product/ProductActionsClient";
 import ProductGallery from "@/components/page/product/ProductGallery";
 import ProductInfo from "@/components/page/product/ProductInfo";
-import ProductPageSkeleton from "@/components/page/product/ProductPageSkeleton";
-
 import ProductReviews from "@/components/page/product/ProductReviews";
 import { IProductVarient, TProduct } from "@/types/product";
 import { useSession } from "@/lib/auth-client";
@@ -266,10 +264,18 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
               onAttributeSelect={handleAttributeSelect}
             />
             <div className="space-y-4">
-              <ProductReviews isOwnProduct={isOwnProduct} />
+              <ProductReviews
+                isOwnProduct={isOwnProduct}
+                initialReviews={product.reviews as any}
+                initialStats={{
+                  average: averageRating,
+                  total: product.reviews?.length || 0
+                }}
+              />
               <FAQSection
                 productId={product.id}
                 isOwnProduct={isOwnProduct}
+                initialQuestions={(product as any).questions}
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">

@@ -139,9 +139,16 @@ const ProductInfo = memo(function ProductInfo({
                 />
               ))}
             </div>
-            <span className="text-sm font-semibold text-foreground">
-              {averageRating > 0 ? averageRating.toFixed(1) : "0.0"}
-            </span>
+            {averageRating > 0 ? (
+              <span className="flex items-center gap-1.5 bg-green-600 text-white px-2 py-0.5 rounded text-sm font-bold">
+                {averageRating.toFixed(1)}
+                <Star className="w-3 h-3 fill-current" />
+              </span>
+            ) : (
+              <span className="text-sm text-muted-foreground bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded font-medium">
+                New Product
+              </span>
+            )}
             {reviewCount > 0 && (
               <span className="text-xs text-muted-foreground ml-1">
                 ({reviewCount} review{reviewCount !== 1 ? "s" : ""})

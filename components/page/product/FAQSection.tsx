@@ -10,8 +10,9 @@ import { toast } from "sonner";
 import AuthDialog from "@/components/auth/AuthDialog";
 import Link from "next/link";
 
-export default function FAQSection({ productId, isOwnProduct }: { productId: string; isOwnProduct?: boolean }) {
-    const { questions, isLoading, submitQuestion } = useProductFAQ(productId);
+export default function FAQSection({ productId, isOwnProduct, initialQuestions }: { productId: string; isOwnProduct?: boolean; initialQuestions?: any[] }) {
+    const { questions: apiQuestions, isLoading, submitQuestion } = useProductFAQ(productId);
+    const questions = apiQuestions.length > 0 ? apiQuestions : (initialQuestions || []);
     const { data: session } = useSession();
     const isSignedIn = !!session;
     const [content, setContent] = useState("");
@@ -85,7 +86,7 @@ export default function FAQSection({ productId, isOwnProduct }: { productId: str
 
             {/* List */}
             <div ref={questionsListRef} className="space-y-3">
-                {isLoading ? (
+                {isLoading && questions.length === 0 && !initialQuestions ? (
                     <p className="text-xs text-muted-foreground">Loading questions...</p>
                 ) : questions.length === 0 ? (
                     <p className="text-xs text-muted-foreground py-2 italic">No questions yet. Be the first to ask!</p>

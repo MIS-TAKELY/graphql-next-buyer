@@ -33,7 +33,7 @@ const sortFns: Record<string, (a: Review, b: Review) => number> = {
   },
 };
 
-const ProductReviews = ({ isOwnProduct }: { isOwnProduct?: boolean }) => {
+const ProductReviews = ({ isOwnProduct, initialReviews, initialStats }: { isOwnProduct?: boolean; initialReviews?: Review[]; initialStats?: any }) => {
   const { data: session } = useSession();
   const userId = session?.user?.id;
   const [filters, setFilters] = useState<FilterState>({
@@ -46,8 +46,9 @@ const ProductReviews = ({ isOwnProduct }: { isOwnProduct?: boolean }) => {
     loadMore,
   } = useReview();
 
-  // Use API data
-  const reviews: Review[] = data || ([] as Review[]);
+  // Use API data or initial data
+  const reviews: Review[] = data?.length > 0 ? data : (initialReviews || [] as Review[]);
+  const currentStats = stats || initialStats;
 
   // Find user's own review
   const userReview = useMemo(() => {
@@ -187,14 +188,14 @@ const ProductReviews = ({ isOwnProduct }: { isOwnProduct?: boolean }) => {
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold">Reviews & Ratings</h2>
         <div className="flex items-center gap-1.5 bg-green-600 text-white px-2 py-0.5 rounded text-sm font-bold">
-          {stats?.average.toFixed(1) || "0.0"}
+          {currentStats?.average.toFixed(1) || "0.0"}
           <Star className="w-3 h-3 fill-current" />
         </div>
       </div>
 
-      {stats && (
+      {currentStats && (
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <span>{stats.total} ratings</span>
+          <span>{currentStats.total} ratings</span>
         </div>
       )}
 
@@ -308,7 +309,7 @@ const ProductReviews = ({ isOwnProduct }: { isOwnProduct?: boolean }) => {
 
       {/* Reviews List */}
       <div className="space-y-4">
-        {loading && !filtered.length && !userReview ? (
+        {loading && !reviews.length && !userReview && !initialReviews ? (
           <ReviewSkeleton />
         ) : (
           <>
