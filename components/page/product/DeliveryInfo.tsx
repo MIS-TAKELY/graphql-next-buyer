@@ -18,13 +18,13 @@ export default function DeliveryInfo({ warranty, returnPolicy, deliveryOptions }
   const returnText = currentReturnPolicy
     ? currentReturnPolicy.type === 'NO_RETURN'
       ? "No replacement or refund"
-      : `${currentReturnPolicy.duration} ${currentReturnPolicy.unit} ${currentReturnPolicy.type.toLowerCase().replace('_', ' ')}`
+      : `${currentReturnPolicy.duration} ${currentReturnPolicy.unit} ${currentReturnPolicy.type.toLowerCase().replace(/_/g, ' ')}`
     : "No replacement or refund";
 
   // Determine warranty text
   const currentWarranty = warranty && warranty.length > 0 ? warranty[0] : null;
-  const warrantyText = currentWarranty && currentWarranty.type !== 'NONE'
-    ? `${currentWarranty.duration} ${currentWarranty.unit} ${currentWarranty.type.toLowerCase()} warranty`
+  const warrantyText = currentWarranty && currentWarranty.type !== 'NONE' && currentWarranty.type !== 'NO_WARRANTY'
+    ? `${currentWarranty.duration} ${currentWarranty.unit} ${currentWarranty.type.toLowerCase().replace(/_/g, ' ')} warranty`
     : "No warranty";
 
   return (

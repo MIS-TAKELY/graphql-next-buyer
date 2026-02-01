@@ -71,7 +71,7 @@ export interface IOffer {
 }
 export interface IWarranty {
   id: string;
-  type: 'SELLER' | 'BRAND' | 'NONE';
+  type: 'MANUFACTURER' | 'SELLER' | 'NO_WARRANTY' | 'BRAND' | 'NONE';
   duration?: number;
   unit?: string;
   description?: string;
@@ -79,7 +79,7 @@ export interface IWarranty {
 }
 export interface IReturnPolicy {
   id: string;
-  type: 'REPLACEMENT' | 'REFUND' | 'NO_RETURN';
+  type: 'REPLACEMENT' | 'REFUND' | 'REPLACEMENT_OR_REFUND' | 'NO_RETURN';
   duration?: number;
   unit?: string;
   conditions?: string;
