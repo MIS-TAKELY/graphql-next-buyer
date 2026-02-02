@@ -27,13 +27,13 @@ export const revalidate = 60; // Revalidate every minute instead of every hour
 import { SEO_CONFIG, BUYER_KEYWORDS, SELLER_KEYWORDS, CONVENIENCE_KEYWORDS } from "@/config/seo";
 
 export const metadata: Metadata = {
-  title: "Vanijay-Best Online Shopping in Nepal - Best Prices, No Seller Charges",
+  title: "Vanijay – Smart Online Shopping with Fair Prices in Nepal",
   description: "Shop electronics, fashion, and furniture at Vanijay. Nepal's best online shopping platform with zero seller fees, best prices, and easy returns.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Vanijay-Best Online Shopping in Nepal - Best Prices, No Seller Charges",
+    title: "Vanijay – Smart Online Shopping with Fair Prices in Nepal",
     description: "Shop electronics, fashion, and furniture at Vanijay. Nepal's best online shopping platform with zero seller fees, best prices, and easy returns.",
   }
 };
