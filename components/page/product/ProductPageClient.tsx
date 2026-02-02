@@ -318,7 +318,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             imageUrl={imageHoverData.imageUrl}
             position={imageHoverData.position}
             productName={product.name}
-            overlayClassName="fixed inset-0 z-50 lg:fixed lg:top-16 lg:left-[45%] lg:ml-8 lg:w-[600px] lg:h-[600px] lg:z-50 lg:rounded-xl lg:shadow-2xl lg:border lg:border-border"
+            overlayClassName="fixed inset-0 z-50 lg:fixed lg:top-43 lg:left-[45%] lg:ml-8 lg:w-[600px] lg:h-[600px] lg:z-50 lg:rounded-xl lg:shadow-2xl lg:border lg:border-border"
           />
         )}
       </div>

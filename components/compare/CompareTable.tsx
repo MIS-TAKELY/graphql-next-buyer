@@ -11,6 +11,39 @@ import { CompareProduct } from "@/types/compare.types";
 import { formatPrice } from "@/lib/utils";
 import { toast } from "sonner";
 
+const normalizeKey = (key: string) => {
+    return key.toLowerCase()
+        .replace(/[^a-z0-9]/g, '')
+        .trim();
+};
+
+const guessLabel = (value: string) => {
+    const v = value.toLowerCase();
+
+    // Higher priority specific features
+    if (/\b(s pen|galaxy ai|vision booster|adaptive color tone)\b/.test(v)) return 'Special Features';
+    if (/\b(midnight|moonlight|lime green|lilac blue|silverblue|jetblack|gold|white|black|color|finish)\b/.test(v)) return 'Colors Available';
+
+    if (/\b(january|february|march|april|may|june|july|august|september|october|november|december|202\d)\b/.test(v)) return 'Release Date';
+    if (/\b(mah|wh|battery|charging|wired|wireless|capacity|rechargeable|li-ion|cell)\b/.test(v)) return 'Battery & Power';
+    if (/\b(px|resolution|hz|amoled|oled|lcd|nits|brightness|display|screen|inch|diagonal)\b/.test(v)) return 'Display';
+    if (/\b(snapdragon|exynos|bionic|octa-core|quad-core|ghz|processor|cpu|chipset|soc|mediatek|dimensity)\b/.test(v)) return 'Processor';
+    if (/\b(ram|rom|gb|tb|storage|memory|microsd)\b/.test(v)) return 'Memory & Storage';
+
+    // Avoid guessing "Camera" for control-related text
+    if (/\b(camera|zoom|ois|lens|sensor|selfie|aperture)\b|mp\b/.test(v) && !/\b(control|tap|playback|gesture)\b/.test(v)) return 'Camera';
+
+    if (/\b(5g|4g|lte|wi-fi|wifi|bluetooth|nfc|gps|sim|esim|volte|uwb)\b/.test(v)) return 'Connectivity';
+    if (/\b(android|ios|windows|macos|ui|os|software|firmware|one ui|harmonyos)\b/.test(v)) return 'Software & OS';
+    if (/\b(mm|g|kg|dimensions|weight|thickness|width|height|depth|form factor)\b/.test(v)) return 'Physical Design';
+    if (/\b(water|ip6\d|ipx\d|dust|resistance|durability|gorilla glass|titanium|armor)\b/.test(v)) return 'Build & Durability';
+    if (/\b(sensor|fingerprint|accelerometer|gyro|proximity|compass|barometer|lidar)\b/.test(v)) return 'Sensors';
+    if (/\b(stereo|audio|dolby|atmos|speakers|mic|microphone|driver|hi-res|aptx|codec|db\b|hz\b|earbuds|earphone|binural)\b/.test(v)) return 'Audio & Sound';
+    if (/\b(control|touch|tap|playback|double-tap|gesture)\b/.test(v)) return 'Controls';
+
+    return null;
+};
+
 export default function CompareTable() {
     const { selectedProducts, removeProduct } = useCompareStore();
 
@@ -19,7 +52,17 @@ export default function CompareTable() {
         if (selectedProducts.length === 0) return null;
 
         const allFeatureKeys = new Set<string>();
-        const featureLabels = new Map<string, string>(); // key -> display label
+        const featureLabels = new Map<string, string>(); // normalizedKey -> display label
+
+        const updateFeatureLabel = (normKey: string, label: string) => {
+            const currentLabel = featureLabels.get(normKey);
+            // Ignore "Specification N" as a source of good labels
+            if (label.startsWith('Specification ')) return;
+            // Prefer labels that have spaces or capital letters
+            if (!currentLabel || (label.length > 0 && (label.includes(' ') || /[A-Z]/.test(label)))) {
+                featureLabels.set(normKey, label);
+            }
+        };
 
         // Map to store processed features for each product
         const productFeatures = new Map<string, Map<string, any>>();
@@ -27,7 +70,23 @@ export default function CompareTable() {
         selectedProducts.forEach(product => {
             const features = new Map<string, any>();
 
-            // 1. Standard Fields
+            const addFeature = (normKey: string, label: string, value: any) => {
+                if (!value || value === '-') return;
+
+                const existing = features.get(normKey);
+                if (existing !== undefined && existing !== null && typeof value === 'string' && typeof existing === 'string') {
+                    // Avoid exact duplicates
+                    if (!existing.includes(value)) {
+                        features.set(normKey, `${existing}; ${value}`);
+                    }
+                } else {
+                    features.set(normKey, value);
+                }
+                allFeatureKeys.add(normKey);
+                updateFeatureLabel(normKey, label);
+            };
+
+            // 1. Standard Fields (Keep these keys stable)
             features.set('price', product.variants?.[0]?.price || 0);
             features.set('mrp', product.variants?.[0]?.mrp || 0);
             features.set('rating', product.reviews?.length ? product.reviews.reduce((acc, r) => acc + r.rating, 0) / product.reviews.length : 0);
@@ -41,36 +100,27 @@ export default function CompareTable() {
             if (attributes) {
                 Object.entries(attributes).forEach(([key, value]) => {
                     if (typeof value === 'string') {
-                        const compositeKey = `attr_${key}`;
-                        features.set(compositeKey, value);
-                        allFeatureKeys.add(compositeKey);
-                        featureLabels.set(compositeKey, key.charAt(0).toUpperCase() + key.slice(1));
+                        addFeature(normalizeKey(key), key.charAt(0).toUpperCase() + key.slice(1), value);
                     }
                 });
             }
 
-            // 3. Specification Table (Rich Specs)
+            // 3. Category Specifications
+            if (product.category?.categorySpecification) {
+                product.category.categorySpecification.forEach(spec => {
+                    addFeature(normalizeKey(spec.key), spec.label || spec.key, spec.value);
+                });
+            }
+
+            // 4. Specification Table (Rich Specs)
             if (product.specificationTable) {
                 product.specificationTable.forEach(table => {
                     table.rows.forEach(row => {
                         if (Array.isArray(row) && row.length >= 2) {
                             const [key, value] = row;
-                            const compositeKey = `spec_${key}`;
-                            features.set(compositeKey, value);
-                            allFeatureKeys.add(compositeKey);
-                            featureLabels.set(compositeKey, key);
+                            addFeature(normalizeKey(key), key, value);
                         }
                     });
-                });
-            }
-
-            // 4. Category Specifications
-            if (product.category?.categorySpecification) {
-                product.category.categorySpecification.forEach(spec => {
-                    const compositeKey = `catspec_${spec.key}`;
-                    features.set(compositeKey, spec.value || '-');
-                    allFeatureKeys.add(compositeKey);
-                    featureLabels.set(compositeKey, spec.label || spec.key);
                 });
             }
 
@@ -80,12 +130,34 @@ export default function CompareTable() {
                 allFeatureKeys.add('highlights');
                 featureLabels.set('highlights', 'Highlights');
             }
-            if (!product.specificationTable && product.variants?.[0]?.specifications) {
+
+            // Process specifications with smart parsing and guessing
+            if (product.variants?.[0]?.specifications) {
                 product.variants[0].specifications.forEach((spec, idx) => {
+                    const specValue = spec.value;
+                    if (!specValue) return;
+
+                    // Option A: Try to parse "Key: Value" or "Key - Value" or "Key\tValue"
+                    const parts = specValue.split(/[:\t]\s*| \s*[-–—]\s+/);
+                    if (parts.length >= 2) {
+                        const key = parts[0].trim();
+                        const val = parts.slice(1).join(': ').trim();
+                        if (key.length > 0 && val.length > 0 && key.length < 50) {
+                            addFeature(normalizeKey(key), key, val);
+                            return;
+                        }
+                    }
+
+                    // Option B: Try to guess label from value content
+                    const guessedLabel = guessLabel(specValue);
+                    if (guessedLabel) {
+                        addFeature(normalizeKey(guessedLabel), guessedLabel, specValue);
+                        return;
+                    }
+
+                    // Option C: Fallback to indexed spec
                     const compositeKey = `legacy_spec_${idx}`;
-                    features.set(compositeKey, spec.value);
-                    allFeatureKeys.add(compositeKey);
-                    featureLabels.set(compositeKey, `Specification ${idx + 1}`);
+                    addFeature(compositeKey, `Specification ${idx + 1}`, specValue);
                 });
             }
 
@@ -97,6 +169,9 @@ export default function CompareTable() {
         const uncommonFeatures: string[] = [];
 
         allFeatureKeys.forEach(key => {
+            // Skip standard keys that are handled separately in UI
+            if (['price', 'mrp', 'rating', 'reviewCount', 'brand', 'category', 'description'].includes(key)) return;
+
             // Check if every selected product has a value for this key
             const isCommon = selectedProducts.every(p => {
                 const pFeatures = productFeatures.get(p.id);
@@ -111,9 +186,21 @@ export default function CompareTable() {
             }
         });
 
-        // Sort keys alphabetically for consistency within groups
-        commonFeatures.sort((a, b) => (featureLabels.get(a) || a).localeCompare(featureLabels.get(b) || b));
-        uncommonFeatures.sort((a, b) => (featureLabels.get(a) || a).localeCompare(featureLabels.get(b) || b));
+        // Hierarchical Sort: 
+        // 1. All "Specification N" last
+        // 2. Alphabetical otherwise
+        const sortFn = (a: string, b: string) => {
+            const labelA = featureLabels.get(a) || a;
+            const labelB = featureLabels.get(b) || b;
+            const isSpecA = labelA.startsWith('Specification ');
+            const isSpecB = labelB.startsWith('Specification ');
+            if (isSpecA && !isSpecB) return 1;
+            if (!isSpecA && isSpecB) return -1;
+            return labelA.localeCompare(labelB);
+        };
+
+        commonFeatures.sort(sortFn);
+        uncommonFeatures.sort(sortFn);
 
         return {
             productFeatures,

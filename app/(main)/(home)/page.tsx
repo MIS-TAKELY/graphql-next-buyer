@@ -28,13 +28,13 @@ import { SEO_CONFIG, BUYER_KEYWORDS, SELLER_KEYWORDS, CONVENIENCE_KEYWORDS } fro
 
 export const metadata: Metadata = {
   title: "Vanijay – Smart Online Shopping with Fair Prices in Nepal",
-  description: "Shop electronics, fashion, and furniture at Vanijay. Nepal's best online shopping platform with zero seller fees, best prices, and easy returns.",
+  description: "Compare products, explore detailed specifications, and shop confidently. Vanijay offers a wide product range in Nepal with fair pricing, trusted sellers, and zero seller fees.Compare products, explore detailed specifications, and shop confidently. Vanijay offers a wide product range in Nepal with fair pricing, trusted sellers, and zero seller fees.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "Vanijay – Smart Online Shopping with Fair Prices in Nepal",
-    description: "Shop electronics, fashion, and furniture at Vanijay. Nepal's best online shopping platform with zero seller fees, best prices, and easy returns.",
+    description: "Compare products, explore detailed specifications, and shop confidently. Vanijay offers a wide product range in Nepal with fair pricing, trusted sellers, and zero seller fees.Compare products, explore detailed specifications, and shop confidently. Vanijay offers a wide product range in Nepal with fair pricing, trusted sellers, and zero seller fees.",
   }
 };
 
