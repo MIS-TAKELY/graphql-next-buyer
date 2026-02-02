@@ -20,13 +20,23 @@ const normalizeKey = (key: string) => {
 const guessLabel = (value: string) => {
     const v = value.toLowerCase();
 
+    // Special hardware keywords with high probability
+    if (/\b(acer|nitro|macbook|thinkpad|inspiron|pavilion|laptop|desktop|anv\d+)\b/.test(v)) return 'Model Series';
+    if (/\b(rtx|gtx|geforce|radeon|arc\b|iris|integrated|gpu|graphics|nvidia)\b/.test(v)) return 'Graphics';
+    if (/\b(ryzen|intel|core|i3|i5|i7|i9|athlon|celeron|pentium|r3\b|r5\b|r7\b|r9\b|8\d{3}[hsu])\b/.test(v)) return 'Processor';
+    if (/\b(cooling|fan\b|thermal|vapor chamber|liquid metal|heat pipe)\b/.test(v)) return 'Cooling System';
+    if (/\b(backlit|keyboard|numpad|trackpad|touchpad)\b/.test(v)) return 'Keyboard & Input';
+    if (/\b(ips|panel|uhd|qhd|fhd|4k|2\.5k|8k|1080p|1440p|2160p|refresh rate|[\d\.]+\s*[\u00d7x]\s*[\d\.]+|ratio|80%)\b/.test(v)) return 'Display Details';
+    if (/\b(ssd|hdd|nvme|m\.2|sata)\b/.test(v)) return 'Storage Type';
+    if (/\b(aluminum|plastic|metal|opening angle|degree|angle)\b/.test(v)) return 'Physical Build';
+
     // Higher priority specific features
     if (/\b(s pen|galaxy ai|vision booster|adaptive color tone)\b/.test(v)) return 'Special Features';
     if (/\b(midnight|moonlight|lime green|lilac blue|silverblue|jetblack|gold|white|black|color|finish)\b/.test(v)) return 'Colors Available';
 
     if (/\b(january|february|march|april|may|june|july|august|september|october|november|december|202\d)\b/.test(v)) return 'Release Date';
     if (/\b(mah|wh|battery|charging|wired|wireless|capacity|rechargeable|li-ion|cell)\b/.test(v)) return 'Battery & Power';
-    if (/\b(px|resolution|hz|amoled|oled|lcd|nits|brightness|display|screen|inch|diagonal)\b/.test(v)) return 'Display';
+    if (/\b(px|resolution|hz\b|amoled|oled|lcd|nits|brightness|display|screen|inch|diagonal)\b/.test(v)) return 'Display';
     if (/\b(snapdragon|exynos|bionic|octa-core|quad-core|ghz|processor|cpu|chipset|soc|mediatek|dimensity)\b/.test(v)) return 'Processor';
     if (/\b(ram|rom|gb|tb|storage|memory|microsd)\b/.test(v)) return 'Memory & Storage';
 
@@ -56,10 +66,18 @@ export default function CompareTable() {
 
         const updateFeatureLabel = (normKey: string, label: string) => {
             const currentLabel = featureLabels.get(normKey);
-            // Ignore "Specification N" as a source of good labels
-            if (label.startsWith('Specification ')) return;
-            // Prefer labels that have spaces or capital letters
-            if (!currentLabel || (label.length > 0 && (label.includes(' ') || /[A-Z]/.test(label)))) {
+            // Allow "Specification N" as a baseline if none exists
+            if (!currentLabel) {
+                featureLabels.set(normKey, label);
+                return;
+            }
+            // Overwrite a generic "Specification N" with anything better
+            if (currentLabel.startsWith('Specification ') && !label.startsWith('Specification ')) {
+                featureLabels.set(normKey, label);
+                return;
+            }
+            // Otherwise, prefer labels that have spaces or capital letters (unless current is already better)
+            if (!label.startsWith('Specification ') && (label.includes(' ') || /[A-Z]/.test(label))) {
                 featureLabels.set(normKey, label);
             }
         };
