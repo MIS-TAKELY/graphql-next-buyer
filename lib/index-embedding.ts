@@ -1,7 +1,12 @@
-// scripts/index-embeddings.ts
-import { ProductForEmbedding } from "@/script/index-products";
 import { prisma } from "../lib/db/prisma";
 import { generateEmbedding } from "./embemdind";
+
+type ProductForEmbedding = {
+  id: string;
+  name: string;
+  description: string | null;
+  brand: string;
+};
 
 async function indexAllProducts() {
   console.log("Starting product embedding indexing...");
@@ -31,8 +36,8 @@ async function indexAllProducts() {
     try {
       const vector = await generateEmbedding(text);
 
-      if (vector.length !== 4096) {
-        console.warn(`⚠️ Unexpected embedding dimension: ${vector.length} (expected 4096)`);
+      if (vector.length !== 384) {
+        console.warn(`⚠️ Unexpected embedding dimension: ${vector.length} (expected 384)`);
       }
 
       await prisma.$executeRaw`
