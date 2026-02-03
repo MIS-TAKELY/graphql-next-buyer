@@ -88,24 +88,19 @@ export async function getDynamicFilters(
 
   const dominantCategoryId = categoryDistribution[0]?.categoryId;
 
-  let finalCategoryId = dominantCategoryId;
-  let detected: any = null;
-  
-  // PERFORMANCE: Only use AI category detection as fallback
-  if (!finalCategoryId) {
-    console.log("⚠️ No dominant category, using AI fallback");
-    detected = await detectCategory(searchTerm);
-    const aiCategory = await prisma.category.findFirst({
-      where: { name: { equals: detected.category, mode: "insensitive" } },
-    });
-    finalCategoryId = aiCategory?.id || null;
-  }
+  // Also get AI-suggested category
+  const detected = await detectCategory(searchTerm);
+  const aiCategory = await prisma.category.findFirst({
+    where: { name: { equals: detected.category, mode: "insensitive" } },
+  });
+
+  const finalCategoryId = dominantCategoryId || aiCategory?.id;
 
   if (!finalCategoryId) {
     return {
-      category: detected?.category || "Unknown",
+      category: detected.category || "Unknown",
       filters: [],
-      intent: detected?.intent || {},
+      intent: detected.intent,
     };
   }
 
@@ -151,8 +146,7 @@ export async function getDynamicFilters(
   const { suggestSpecifications, getFallbackSpecifications } = await import("@/lib/search/specificationSuggester");
 
   // Try AI first
-  // PERFORMANCE: Commented out expensive AI spec suggestions
-  let suggestedSpecs: any[] = []; // await suggestSpecifications(searchTerm);
+  let suggestedSpecs = await suggestSpecifications(searchTerm);
 
   // Fallback to rule-based if AI fails
   if (suggestedSpecs.length === 0) {
@@ -320,7 +314,7 @@ export async function getDynamicFilters(
         label: s.label,
         key: s.key,
         options,
-        type: detected?.attributes?.includes(s.key) ? "suggested" : "dropdown",
+        type: detected.attributes.includes(s.key) ? "suggested" : "dropdown",
       };
     })
   );
@@ -339,8 +333,8 @@ export async function getDynamicFilters(
 
   // ===== STEP 6: Return results =====
   return {
-    category: category?.name || detected?.category || "Filtered Search",
+    category: category?.name || detected.category || "Filtered Search",
     filters: filtersWithCounts.filter((f) => f.options.length > 0),
-    intent: detected?.intent || {},
+    intent: detected.intent,
   };
 }
