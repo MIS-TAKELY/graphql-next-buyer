@@ -94,6 +94,8 @@ export const PRODUCT_CARD_FRAGMENT = gql`
     slug
     brand
     status
+    description
+    features
     createdAt
     images {
       id
@@ -107,10 +109,23 @@ export const PRODUCT_CARD_FRAGMENT = gql`
       mrp
       stock
       isDefault
+      attributes
+      specifications {
+        key
+        value
+      }
+    }
+    specificationTable {
+      rows
     }
     category {
       id
       name
+      categorySpecification {
+        key
+        label
+        value
+      }
     }
     reviews {
       id

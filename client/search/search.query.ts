@@ -7,13 +7,19 @@ export const MAKE_SEARCH_QUERY = gql`
       products {
         id
         name
+        description
+        features
         variants {
           price
           mrp
+          attributes
           specifications {
             key
             value
           }
+        }
+        specificationTable {
+          rows
         }
         images {
           altText
@@ -25,10 +31,17 @@ export const MAKE_SEARCH_QUERY = gql`
         deliveryOptions {
           title
         }
-        brand
+        brand {
+          name
+        }
         slug
         category {
           name
+          categorySpecification {
+            key
+            label
+            value
+          }
         }
       }
       filters {
@@ -52,6 +65,50 @@ export const MAKE_SEARCH_QUERY = gql`
         limit
         total
         totalPages
+      }
+    }
+  }
+`;
+
+export const COMPARE_SEARCH_QUERY = gql`
+  query CompareSearchProducts($query: String!, $page: Int, $limit: Int) {
+    searchProducts(query: $query, page: $page, limit: $limit) {
+      products {
+        id
+        name
+        description
+        features
+        slug
+        brand {
+          name
+        }
+        category {
+          name
+          categorySpecification {
+            key
+            label
+            value
+          }
+        }
+        variants {
+          price
+          mrp
+          attributes
+          specifications {
+            key
+            value
+          }
+        }
+        specificationTable {
+          rows
+        }
+        images {
+          altText
+          url
+        }
+        reviews {
+          rating
+        }
       }
     }
   }

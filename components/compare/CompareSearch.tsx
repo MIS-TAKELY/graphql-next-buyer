@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Search, Loader2 } from "lucide-react";
 import { useQuery } from "@apollo/client";
-import { MAKE_SEARCH_QUERY } from "@/client/search/search.query";
+import { COMPARE_SEARCH_QUERY } from "@/client/search/search.query";
 import { useCompareStore } from "@/store/compareStore";
 import { CompareProduct } from "@/types/compare.types";
 import Image from "next/image";
@@ -27,7 +27,7 @@ export default function CompareSearch() {
         return () => clearTimeout(timer);
     }, [searchQuery]);
 
-    const { data, loading } = useQuery(MAKE_SEARCH_QUERY, {
+    const { data, loading } = useQuery(COMPARE_SEARCH_QUERY, {
         variables: {
             query: debouncedQuery,
             page: 1,

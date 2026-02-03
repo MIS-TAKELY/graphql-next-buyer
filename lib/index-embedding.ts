@@ -31,8 +31,8 @@ async function indexAllProducts() {
     try {
       const vector = await generateEmbedding(text);
 
-      if (vector.length !== 3072) {
-        console.warn(`⚠️ Unexpected embedding dimension: ${vector.length} (expected 3072)`);
+      if (vector.length !== 4096) {
+        console.warn(`⚠️ Unexpected embedding dimension: ${vector.length} (expected 4096)`);
       }
 
       await prisma.$executeRaw`

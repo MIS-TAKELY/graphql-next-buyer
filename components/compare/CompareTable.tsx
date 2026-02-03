@@ -151,11 +151,18 @@ export default function CompareTable() {
 
             // Process specifications with smart parsing and guessing
             if (product.variants?.[0]?.specifications) {
-                product.variants[0].specifications.forEach((spec, idx) => {
+                product.variants[0].specifications.forEach((spec: any, idx) => {
                     const specValue = spec.value;
+                    const specKey = spec.key;
                     if (!specValue) return;
 
-                    // Option A: Try to parse "Key: Value" or "Key - Value" or "Key\tValue"
+                    // Option A: Use explicit key if provided by backend
+                    if (specKey && specKey.length > 0 && specKey.length < 50) {
+                        addFeature(normalizeKey(specKey), specKey, specValue);
+                        return;
+                    }
+
+                    // Option B: Try to parse "Key: Value" or "Key - Value" or "Key\tValue"
                     const parts = specValue.split(/[:\t]\s*| \s*[-–—]\s+/);
                     if (parts.length >= 2) {
                         const key = parts[0].trim();
@@ -166,14 +173,14 @@ export default function CompareTable() {
                         }
                     }
 
-                    // Option B: Try to guess label from value content
+                    // Option C: Try to guess label from value content
                     const guessedLabel = guessLabel(specValue);
                     if (guessedLabel) {
                         addFeature(normalizeKey(guessedLabel), guessedLabel, specValue);
                         return;
                     }
 
-                    // Option C: Fallback to indexed spec
+                    // Option D: Fallback to indexed spec
                     const compositeKey = `legacy_spec_${idx}`;
                     addFeature(compositeKey, `Specification ${idx + 1}`, specValue);
                 });
