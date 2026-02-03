@@ -40,11 +40,13 @@ async function indexAllProducts() {
         console.warn(`⚠️ Unexpected embedding dimension: ${vector.length} (expected 384)`);
       }
 
-      await prisma.$executeRaw`
+      const vectorString = `[${vector.join(",")}]`;
+
+      await prisma.$executeRawUnsafe(`
         UPDATE "products"
-        SET embedding = ${vector}::vector
-        WHERE id = ${product.id}
-      `;
+        SET embedding = '${vectorString}'::vector
+        WHERE id = '${product.id}'
+      `);
 
       successCount++;
       console.log(`✅ Indexed: ${product.name} (${product.id})`);
