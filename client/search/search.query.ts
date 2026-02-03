@@ -18,9 +18,7 @@ export const MAKE_SEARCH_QUERY = gql`
             value
           }
         }
-        specificationTable {
-          rows
-        }
+        specificationTable
         images {
           altText
           url
@@ -31,16 +29,13 @@ export const MAKE_SEARCH_QUERY = gql`
         deliveryOptions {
           title
         }
-        brand {
-          name
-        }
+        brand
         slug
         category {
           name
           categorySpecification {
             key
             label
-            value
           }
         }
       }
@@ -79,15 +74,12 @@ export const COMPARE_SEARCH_QUERY = gql`
         description
         features
         slug
-        brand {
-          name
-        }
+        brand
         category {
           name
           categorySpecification {
             key
             label
-            value
           }
         }
         variants {
@@ -99,9 +91,7 @@ export const COMPARE_SEARCH_QUERY = gql`
             value
           }
         }
-        specificationTable {
-          rows
-        }
+        specificationTable
         images {
           altText
           url
