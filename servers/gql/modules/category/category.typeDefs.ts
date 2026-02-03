@@ -15,7 +15,7 @@ export const categoryTypeDefs = gql`
     parent: Category
     children: [Category!]!
     products: [Product!]!
-    categorySpecification: [CategorySpecification!]!
+    categorySpecification: [CategorySpecification!]
     metaTitle: String
     metaDescription: String
     keywords: [String]
