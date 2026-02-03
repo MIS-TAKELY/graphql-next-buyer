@@ -1,12 +1,14 @@
-import axios from "axios";
-
-const OPENROUTER_API_KEY =
-    process.env.OPENROUTER_API_KEY ||
-    "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";
+import { generateEmbedding } from "../embemdind";
+import { getBrandEmbeddings, findTopSimilar } from "../embeddingCache";
+import {
+    extractPriceRange,
+    extractBrandKeywords,
+    extractSpecificationKeywords,
+} from "./textAnalysis";
 
 /**
  * Extracted intent from user query
- * LLM outputs JSON only - NO database queries, NO filter invention
+ * No external AI API required - uses regex + embeddings
  */
 export interface ExtractedIntent {
     price_max?: number;
@@ -18,121 +20,72 @@ export interface ExtractedIntent {
 /**
  * Extract structured intent from natural language query
  * 
- * Key principles:
- * - LLM outputs JSON only
- * - No database queries from LLM
- * - Only extracts what's explicitly mentioned in query
- * - Fallback to empty intent on failure
+ * Uses combination of:
+ * 1. Regex patterns for price extraction
+ * 2. Embedding similarity for brand detection
+ * 3. Keyword matching for specifications
+ * 
+ * No external AI API required!
  * 
  * @param query - User's search query (e.g., "iphone under 1 lakh with good camera")
  * @param availableFilters - List of valid filter keys from CategorySpecification
  * @returns Extracted intent with price, brand, and specifications
- * 
- * @example
- * ```typescript
- * const intent = await extractIntent(
- *   "iphone under 1 lakh with good camera",
- *   ["ram", "storage", "camera"]
- * );
- * // Returns: { price_max: 100000, brand: ["Apple"], specifications: { camera: "high" } }
- * ```
  */
 export async function extractIntent(
     query: string,
     availableFilters: string[] = []
 ): Promise<ExtractedIntent> {
-    const DEFAULT_INTENT: ExtractedIntent = {};
+    const intent: ExtractedIntent = {};
 
     try {
-        const prompt = `You are an e-commerce search intent analyzer. Extract structured information from the user's query.
+        console.log(`🔍 Extracting intent from: "${query}"`);
 
-Available specification filters: ${availableFilters.join(", ")}
+        // Step 1: Extract price range using regex
+        const priceRange = extractPriceRange(query);
+        if (priceRange.max) intent.price_max = priceRange.max;
+        if (priceRange.min) intent.price_min = priceRange.min;
 
-User Query: "${query}"
+        // Step 2: Extract brands using embedding similarity + keywords
+        const brandKeywords = extractBrandKeywords(query);
 
-Extract ONLY what is explicitly mentioned in the query. Return a JSON object with these fields:
-- price_max: Maximum price mentioned (convert "lakh" to 100000, "thousand" to 1000)
-- price_min: Minimum price mentioned
-- brand: Array of brand names mentioned (e.g., ["Apple"], ["Samsung", "OnePlus"])
-- specifications: Object with key-value pairs for specs mentioned (ONLY use keys from available filters)
+        if (brandKeywords.length > 0) {
+            intent.brand = brandKeywords;
+        } else {
+            // Try embedding-based brand detection
+            try {
+                const queryEmbedding = await generateEmbedding(query);
+                const brandEmbeddings = await getBrandEmbeddings();
 
-Rules:
-1. If no price mentioned, omit price_max/price_min
-2. If no brand mentioned, omit brand
-3. For specifications, use ONLY keys from the available filters list
-4. Convert qualitative terms: "good camera" → {"camera": "high"}, "fast" → {"performance": "high"}
-5. Return empty object {} if nothing specific is mentioned
-
-Examples:
-
-Query: "iphone under 1 lakh"
-Output: {"price_max": 100000, "brand": ["Apple"]}
-
-Query: "samsung phone with 8gb ram"
-Output: {"brand": ["Samsung"], "specifications": {"ram": "8GB"}}
-
-Query: "laptop for gaming under 80000"
-Output: {"price_max": 80000, "specifications": {"use_case": "gaming"}}
-
-Query: "red shoes"
-Output: {"specifications": {"color": "red"}}
-
-Now analyze the user query and return ONLY the JSON object:`;
-
-        const response = await axios.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            {
-                model: "mistralai/mistral-7b-instruct",
-                messages: [{ role: "user", content: prompt }],
-                temperature: 0.1,
-                max_tokens: 200,
-                response_format: { type: "json_object" },
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-                    "Content-Type": "application/json",
-                },
-                timeout: 5000, // 5 second timeout
+                if (brandEmbeddings.length > 0) {
+                    const similarBrands = findTopSimilar(queryEmbedding, brandEmbeddings, 3, 0.6);
+                    if (similarBrands.length > 0) {
+                        intent.brand = similarBrands.map(b => b.name);
+                        console.log(`🎯 Brands detected via embedding: ${intent.brand.join(", ")}`);
+                    }
+                }
+            } catch (error) {
+                console.error("❌ Embedding-based brand detection failed:", error);
             }
-        );
-
-        const content = response.data?.choices?.[0]?.message?.content || "{}";
-        const parsed = JSON.parse(content);
-
-        // Validate and sanitize the response
-        const intent: ExtractedIntent = {};
-
-        if (parsed.price_max && typeof parsed.price_max === "number") {
-            intent.price_max = parsed.price_max;
         }
 
-        if (parsed.price_min && typeof parsed.price_min === "number") {
-            intent.price_min = parsed.price_min;
-        }
+        // Step 3: Extract specifications using keyword matching
+        const specs = extractSpecificationKeywords(query);
 
-        if (parsed.brand && Array.isArray(parsed.brand)) {
-            intent.brand = parsed.brand.filter((b: string) => typeof b === "string");
-        }
-
-        if (parsed.specifications && typeof parsed.specifications === "object") {
-            // Only include specs that are in availableFilters
+        // Filter specs to only include those in availableFilters (if provided)
+        if (Object.keys(specs).length > 0) {
             intent.specifications = {};
-            Object.entries(parsed.specifications).forEach(([key, value]) => {
-                if (
-                    availableFilters.length === 0 ||
-                    availableFilters.includes(key)
-                ) {
-                    intent.specifications![key] = String(value);
+            Object.entries(specs).forEach(([key, value]) => {
+                if (availableFilters.length === 0 || availableFilters.includes(key)) {
+                    intent.specifications![key] = value;
                 }
             });
         }
 
-        console.log("✅ Intent extracted:", intent);
+        console.log("✅ Intent extracted:", JSON.stringify(intent, null, 2));
         return intent;
-    } catch (error: any) {
-        console.error("❌ Intent extraction failed:", error.message || error);
-        return DEFAULT_INTENT;
+    } catch (error) {
+        console.error("❌ Intent extraction failed:", error);
+        return {};
     }
 }
 
@@ -147,3 +100,4 @@ export function isEmptyIntent(intent: ExtractedIntent): boolean {
         (!intent.specifications || Object.keys(intent.specifications).length === 0)
     );
 }
+

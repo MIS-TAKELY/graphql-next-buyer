@@ -1,4 +1,5 @@
-import axios from "axios";
+import { generateEmbedding } from "../embemdind";
+import { prisma } from "../db/prisma";
 
 interface SuggestedSpecification {
     key: string;
@@ -7,110 +8,99 @@ interface SuggestedSpecification {
 }
 
 /**
- * Use AI to suggest relevant specifications based on search query
- * when category has no specifications defined
+ * Suggest relevant specifications based on search query
+ * Uses embedding similarity to find similar products and extract their specs
+ * No external AI API required!
  */
 export async function suggestSpecifications(
     query: string
 ): Promise<SuggestedSpecification[]> {
-    const OPENROUTER_API_KEY = process.env.OPENROUTER_FILTER_API_KEY;
-
-    if (!OPENROUTER_API_KEY) {
-        console.warn("⚠️ OPENROUTER_FILTER_API_KEY not set, skipping AI spec suggestion");
-        return [];
-    }
-
-    const prompt = `You are a product specification expert. Based on the search query, suggest relevant product specifications that users would want to filter by.
-
-Search Query: "${query}"
-
-Return ONLY a JSON array of specifications. Each specification should have:
-- key: lowercase_snake_case identifier
-- label: Human-readable label
-- type: "dropdown" or "range"
-
-Common specifications by product type:
-- Laptops/PCs: processor, ram, storage, graphics, display_size, operating_system, battery_life
-- Phones: ram, storage, camera, battery_capacity, display_size, processor, operating_system
-- Watches: display_type, water_resistance, band_material, movement_type
-- Clothing: size, color, material, fit
-- Furniture: material, dimensions, color, weight_capacity
-
-Return 5-8 most relevant specifications. Output ONLY valid JSON array, no explanation.
-
-Example output:
-[
-  {"key": "ram", "label": "RAM", "type": "dropdown"},
-  {"key": "storage", "label": "Storage", "type": "dropdown"},
-  {"key": "processor", "label": "Processor", "type": "dropdown"}
-]`;
-
     try {
-        const response = await axios.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            {
-                model: "mistralai/mistral-7b-instruct",
-                messages: [
-                    {
-                        role: "user",
-                        content: prompt,
+        console.log(`🔍 Suggesting specifications for: "${query}"`);
+
+        // Step 1: Generate query embedding
+        const queryEmbedding = await generateEmbedding(query);
+        const vectorString = `[${queryEmbedding.join(",")}]`;
+
+        // Step 2: Find similar products using vector search
+        const similarProducts = await prisma.$queryRaw<
+            Array<{ id: string; similarity: number }>
+        >`
+      SELECT 
+        id::text,
+        1 - (embedding <=> ${vectorString}::vector) AS similarity
+      FROM "products"
+      WHERE embedding IS NOT NULL AND status = 'ACTIVE'
+      ORDER BY similarity DESC
+      LIMIT 20
+    `;
+
+        if (similarProducts.length === 0) {
+            console.log("⚠️ No similar products found, using fallback");
+            return getFallbackSpecifications(query);
+        }
+
+        // Step 3: Extract common specifications from similar products
+        const productIds = similarProducts.map((p) => p.id);
+
+        const specCounts = await prisma.productSpecification.groupBy({
+            by: ["key"],
+            where: {
+                variant: {
+                    product: {
+                        id: { in: productIds },
+                        status: "ACTIVE",
                     },
-                ],
-                temperature: 0.3,
-                max_tokens: 500,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-                    "Content-Type": "application/json",
                 },
-                timeout: 5000,
-            }
+            },
+            _count: true,
+            orderBy: {
+                _count: {
+                    key: "desc",
+                },
+            },
+            take: 10,
+        });
+
+        if (specCounts.length === 0) {
+            console.log("⚠️ No specifications found, using fallback");
+            return getFallbackSpecifications(query);
+        }
+
+        // Step 4: Convert to suggested specifications format
+        const suggestions: SuggestedSpecification[] = specCounts.map((spec) => ({
+            key: spec.key,
+            label: formatLabel(spec.key),
+            type: "dropdown",
+        }));
+
+        console.log(
+            `✅ Suggested ${suggestions.length} specifications via embedding similarity`
         );
-
-        const content = response.data.choices[0]?.message?.content?.trim();
-        if (!content) {
-            return [];
-        }
-
-        // Extract JSON from response (handle markdown code blocks)
-        let jsonStr = content;
-        const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-        if (jsonMatch) {
-            jsonStr = jsonMatch[1];
-        }
-
-        const suggestions = JSON.parse(jsonStr);
-
-        if (!Array.isArray(suggestions)) {
-            console.warn("⚠️ AI returned non-array for spec suggestions");
-            return [];
-        }
-
-        // Validate structure
-        const validSuggestions = suggestions.filter(
-            (s) =>
-                s.key &&
-                typeof s.key === "string" &&
-                s.label &&
-                typeof s.label === "string" &&
-                s.type &&
-                (s.type === "dropdown" || s.type === "range")
-        );
-
-        console.log(`✅ AI suggested ${validSuggestions.length} specifications for "${query}"`);
-        return validSuggestions;
+        return suggestions;
     } catch (error) {
-        console.error("❌ AI spec suggestion failed:", error);
-        return [];
+        console.error("❌ Specification suggestion failed:", error);
+        return getFallbackSpecifications(query);
     }
 }
 
 /**
- * Fallback specifications for common product types
- * Used when AI is unavailable
+ * Format specification key to human-readable label
  */
-export function getFallbackSpecifications(query: string): SuggestedSpecification[] {
+function formatLabel(key: string): string {
+    return key
+        .split("_")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+}
+
+/**
+ * Fallback specifications for common product types
+ * Used when embedding search fails or returns no results
+ */
+export function getFallbackSpecifications(
+    query: string
+): SuggestedSpecification[] {
     const lowerQuery = query.toLowerCase();
 
     // Laptops/Computers
@@ -178,13 +168,44 @@ export function getFallbackSpecifications(query: string): SuggestedSpecification
         ];
     }
 
+    // Cameras & Photography
+    if (
+        lowerQuery.includes("camera") ||
+        lowerQuery.includes("lens") ||
+        lowerQuery.includes("photography")
+    ) {
+        return [
+            { key: "megapixels", label: "Megapixels", type: "dropdown" },
+            { key: "sensor_type", label: "Sensor Type", type: "dropdown" },
+            { key: "lens_mount", label: "Lens Mount", type: "dropdown" },
+            { key: "video_resolution", label: "Video Resolution", type: "dropdown" },
+            { key: "iso_range", label: "ISO Range", type: "dropdown" },
+        ];
+    }
+
+    // Storage (SSD, HDD, etc.)
+    if (
+        lowerQuery.includes("ssd") ||
+        lowerQuery.includes("hdd") ||
+        lowerQuery.includes("hard drive") ||
+        lowerQuery.includes("storage")
+    ) {
+        return [
+            { key: "capacity", label: "Capacity", type: "dropdown" },
+            { key: "interface", label: "Interface", type: "dropdown" },
+            { key: "form_factor", label: "Form Factor", type: "dropdown" },
+            { key: "read_speed", label: "Read Speed", type: "dropdown" },
+            { key: "write_speed", label: "Write Speed", type: "dropdown" },
+        ];
+    }
+
     // Clothing (Shirts, Dresses, Jeans, etc.)
     if (
         lowerQuery.includes("shirt") ||
         lowerQuery.includes("dress") ||
         lowerQuery.includes("jean") ||
         lowerQuery.includes("pant") ||
-        lowerQuery.includes("tround") ||
+        lowerQuery.includes("trouser") ||
         lowerQuery.includes("clothing") ||
         lowerQuery.includes("shoe") ||
         lowerQuery.includes("sneaker")
@@ -199,5 +220,7 @@ export function getFallbackSpecifications(query: string): SuggestedSpecification
     }
 
     // Default: return empty (rely on category specs)
+    console.log("📋 No fallback specifications matched");
     return [];
 }
+
