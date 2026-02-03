@@ -279,14 +279,8 @@ export const searchResolvers = {
         }));
 
       // ===== Dynamic Facet Counts =====
-      // Get filter counts for UI (Amazon-style)
-      // Use topProductIds (all search results) to calculate facets
-      // This ensures filters show all available options, not just from the current page
-      const filterCounts = await getDynamicFilters(
-        query,
-        filters || {},
-        topProductIds
-      );
+      // Reuse the filters from the first getDynamicFilters call (line 123)
+      // to avoid expensive duplicate computation
 
       return {
         products: orderedProducts,
@@ -296,7 +290,7 @@ export const searchResolvers = {
           total,
           totalPages,
         },
-        filters: filterCounts.filters,
+        filters: dynamicFiltersResult.filters,
         intent,
         dominantCategory: dominantCategoryName,
       };
