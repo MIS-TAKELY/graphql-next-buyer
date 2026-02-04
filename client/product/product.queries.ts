@@ -115,16 +115,13 @@ export const PRODUCT_CARD_FRAGMENT = gql`
         value
       }
     }
-    specificationTable {
-      rows
-    }
+    specificationTable
     category {
       id
       name
       categorySpecification {
         key
         label
-        value
       }
     }
     reviews {
