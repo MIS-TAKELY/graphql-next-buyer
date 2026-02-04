@@ -1,9 +1,4 @@
 import { getAllCategoryNames } from "@/servers/gql/modules/category/categoryHelper";
-import { generateEmbedding } from "@/lib/embemdind";
-import {
-  getCategoryEmbeddings,
-  findMostSimilar,
-} from "@/lib/embeddingCache";
 
 export interface DetectedIntent {
   category: string;
@@ -12,8 +7,7 @@ export interface DetectedIntent {
 }
 
 /**
- * Detect category from search query using embedding similarity
- * No external AI API required - uses self-hosted embedding model
+ * Detect category from search query using Typesense
  */
 export async function detectCategory(
   query: string
@@ -25,31 +19,31 @@ export async function detectCategory(
   };
 
   try {
-    // Step 1: Try embedding-based category detection
     console.log(`🔍 Detecting category for: "${query}"`);
 
-    // Generate query embedding
-    const queryEmbedding = await generateEmbedding(query);
+    // Step 1: Use Typesense to find the most relevant category
+    const { typesenseClient } = await import("@/lib/typesense");
 
-    // Get cached category embeddings
-    const categoryEmbeddings = await getCategoryEmbeddings();
+    const searchResult = await typesenseClient.collections('products').documents().search({
+      q: query,
+      query_by: 'name,brand,description,categoryName',
+      per_page: 1,
+      include_fields: 'categoryName'
+    });
 
-    if (categoryEmbeddings.length > 0) {
-      // Find most similar category
-      const bestMatch = findMostSimilar(queryEmbedding, categoryEmbeddings, 0.4);
+    const topHit = searchResult.hits?.[0] as any;
 
-      if (bestMatch) {
-        console.log(`✅ Category detected via embedding: ${bestMatch.name}`);
-        return {
-          category: bestMatch.name,
-          attributes: [],
-          intent: {},
-        };
-      }
+    if (topHit?.document?.categoryName) {
+      console.log(`✅ Category detected via Typesense: ${topHit.document.categoryName}`);
+      return {
+        category: topHit.document.categoryName,
+        attributes: [],
+        intent: {},
+      };
     }
 
     // Step 2: Fallback to keyword matching
-    console.log("⚠️ Embedding match failed, using keyword fallback");
+    console.log("⚠️ Typesense match failed, using keyword fallback");
     return findFallbackIntent(query);
   } catch (error) {
     console.error("❌ Category detection failed:", error);
