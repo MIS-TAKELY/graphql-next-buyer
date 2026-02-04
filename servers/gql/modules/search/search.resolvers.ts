@@ -79,12 +79,13 @@ export const searchResolvers = {
 
           const searchParams: any = {
             q: searchTerms,
-            query_by: 'name,brand,description,categoryName',
-            query_by_weights: '4,3,2,1',
+            query_by: 'name,brand,categoryName,description',
+            query_by_weights: '8,4,2,1',
             prefix: true,
             page: 1,
             per_page: 50,
             filter_by: filterConditions.join(' && '),
+            num_typos: 0,
           };
 
           let typesenseResult = await typesenseClient.collections('products').documents().search(searchParams);
@@ -144,12 +145,9 @@ export const searchResolvers = {
             ...params
           );
 
-          // Fallback for Vector search
-          if (rawResults.length === 0 && intent.category && !filters?.categories?.length) {
-            console.log("⚠️ Vector: No results with category filter, retrying without it...");
-            const broaderConditions = whereConditions.filter(c => !c.includes('categoryId'));
-            // Filter out the category ID from params if possible, but it's easier to just rebuild or just let it be
-            // For simplicity, we'll just skip the fallback for now or do a simpler query
+          // Fallback for Vector search - only if we have NO other conditions but status
+          if (rawResults.length === 0 && whereConditions.length > 1) {
+            console.log("⚠️ Vector: No results with strict filters, retrying with status only...");
             rawResults = await prisma.$queryRawUnsafe<any[]>(
               `SELECT id FROM products WHERE status = 'ACTIVE' ORDER BY embedding <=> $1::vector LIMIT 50`,
               vectorString

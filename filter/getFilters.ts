@@ -80,15 +80,19 @@ export async function getDynamicFilters(
       }
     }
 
-    // 3. Search Typesense with Faceting
-    let searchResult = await typesenseClient.collections('products').documents().search({
+    const searchParams: any = {
       q: query,
-      query_by: 'name,brand,description,categoryName',
+      query_by: 'name,brand,categoryName,description',
+      query_by_weights: '8,4,2,1',
       filter_by: filters.join(' && '),
       facet_by: 'brand,categoryName,facet_attributes',
       max_facet_values: 50,
       per_page: 0,
-    });
+      num_typos: 0, // Disable typos for stricter matching
+    };
+
+    // 3. Search Typesense with Faceting
+    let searchResult = await typesenseClient.collections('products').documents().search(searchParams);
 
     // If no results found with category filter, try without it
     if (searchResult.found === 0 && intent.category) {
@@ -96,12 +100,23 @@ export async function getDynamicFilters(
       const broaderFilters = filters.filter(f => !f.startsWith('categoryName:'));
       searchResult = await typesenseClient.collections('products').documents().search({
         q: query,
-        query_by: 'name,brand,description,categoryName',
+        query_by: 'name,brand,categoryName,description',
+        query_by_weights: '8,4,2,1',
         filter_by: broaderFilters.join(' && '),
+        // Still facet by category but we might want to be careful here
         facet_by: 'brand,categoryName,facet_attributes',
         max_facet_values: 50,
         per_page: 0,
+        num_typos: 0,
       });
+    }
+
+    if (searchResult.found === 0) {
+      return {
+        category: intent.category || "Search Results",
+        intent: intent as any,
+        filters: [],
+      };
     }
 
     console.log(`⚡ Typesense search completed in ${Date.now() - startTime}ms (Found: ${searchResult.found})`);
@@ -155,6 +170,14 @@ export async function getDynamicFilters(
 
     // 5. Categorize and Return
     const detectedCategory = intent.category || (searchResult.facet_counts?.find(f => f.field_name === 'categoryName')?.counts[0]?.value) || "Unknown";
+
+    // FINAL FILTER: If we have a detected category, filter out brands/specs from other categories
+    // Typesense does this automatically via filter_by, but if we did a fallback search, we should be careful.
+    // However, the brands we see in the UI come from facets.
+    // If we want to be REALLY strict, we can filter the options here based on their count > 0 in the filtered result.
+    // Actually, Typesense facet counts are already scoped to the current search results.
+    // The reason the user saw Sony for "desk" is because Sony products were MATCHED by "desk" (likely via description).
+    // By setting num_typos: 0 and weights, we solve the root cause.
 
     return {
       category: detectedCategory,
