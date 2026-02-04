@@ -22,115 +22,146 @@ export const searchResolvers = {
     ) => {
       const offset = (page - 1) * limit;
 
-      // ===== STEP 1: Recall (Vector + Keyword) =====
-      let vector: number[] = [];
-      let topProductIds: string[] = [];
-      let useVectorSearch = true;
+      // Map to store combined scores: inputId -> { vectorScore, fuzzyScore, ... }
+      const productScores = new Map<
+        string,
+        { id: string; vectorScore: number; fuzzyScore: number; combinedScore: number }
+      >();
 
-      // 1a. Try Vector Search
-      try {
-        vector = await generateEmbedding(query);
-        const vectorString = `[${vector.join(",")}]`;
-
-        console.log(`🔍 Vector search for "${query}" (${vector.length} dimensions)`);
-
-        const vectorResults = await prisma.$queryRaw<
-          Array<{ id: string; similarity: number; dot_product: number }>
-        >(
-          Prisma.sql`
-            SELECT 
-              id::text,
-              1 - (embedding <=> ${Prisma.raw(`'${vectorString}'::vector`)}) AS similarity,
-              (embedding <#> ${Prisma.raw(`'${vectorString}'::vector`)}) * -1 AS dot_product
-            FROM "products"
-            WHERE embedding IS NOT NULL AND status = 'ACTIVE'
-            ORDER BY similarity DESC
-            LIMIT 100
-          `
-        );
-
-        console.log(`✅ Found ${vectorResults.length} products with embeddings`);
-        if (vectorResults.length > 0) {
-          console.log(`🔍 Vector Metrics (Top 1): Cosine=${vectorResults[0].similarity.toFixed(4)}, Dot=${vectorResults[0].dot_product.toFixed(4)}`);
+      // Helper to update scores
+      const updateScore = (id: string, type: 'vector' | 'fuzzy', score: number) => {
+        if (!productScores.has(id)) {
+          productScores.set(id, { id, vectorScore: 0, fuzzyScore: 0, combinedScore: 0 });
         }
-        topProductIds = vectorResults.map((p) => p.id);
-      } catch (error) {
-        console.error("❌ Vector search failed, falling back to keyword search:", error);
-        useVectorSearch = false;
-      }
+        const entry = productScores.get(id)!;
+        if (type === 'vector') entry.vectorScore = score;
+        if (type === 'fuzzy') entry.fuzzyScore = score;
 
-      // 1b. Keyword Recall (Calculated using pg_trgm for fuzzy matching)
-      let keywordIds: string[] = [];
+        // precise "laaptopt" -> "laptop" matching needs fuzzy to be strong,
+        // but "l" -> "lattafa" needs vector to be weak.
+        // Hybrid Score: Max(Vector, Fuzzy)
+        // We trust a strong signal from EITHER source.
+        // If vector is high (semantic match), good.
+        // If fuzzy is high (typo match), good.
+        entry.combinedScore = Math.max(entry.vectorScore, entry.fuzzyScore);
+      };
+
+      // 1. Parallel execution of Vector and Fuzzy Search
+      let vectorFound = false;
+      let fuzzyFound = false;
+      let vectorEmbedding: number[] = [];
+
       try {
-        // Use a transaction to set the local similarity threshold for this query only
-        const fuzzyResults = await prisma.$transaction(async (tx) => {
-          // Lower threshold to 0.1 to catch severe typos (e.g. "sansug" -> "samsung" is ~0.15)
-          await tx.$executeRawUnsafe(`SELECT set_limit(0.1);`);
+        // Run both searches concurrently
+        const [vectorResults, fuzzyResults] = await Promise.allSettled([
+          // Task A: Vector Search
+          (async () => {
+            try {
+              const vector = await generateEmbedding(query);
+              vectorEmbedding = vector;
+              const vectorString = `[${vector.join(",")}]`;
+              console.log(`🔍 Vector search for "${query}"`);
 
-          return await tx.$queryRaw<Array<{ id: string; match_score: number }>>(
-            Prisma.sql`
-              SELECT 
-                id,
-                GREATEST(
-                  similarity(name, ${query}), 
-                  similarity(brand, ${query}), 
-                  similarity(description, ${query})
-                ) as match_score
-              FROM "products"
-              WHERE status = 'ACTIVE'
-                AND (
-                  name % ${query} 
-                  OR brand % ${query} 
-                  OR description % ${query}
-                )
-              ORDER BY match_score DESC
-              LIMIT 100;
-            `
-          );
-        });
+              return await prisma.$queryRaw<
+                Array<{ id: string; similarity: number }>
+              >(
+                Prisma.sql`
+                  SELECT 
+                    id::text,
+                    1 - (embedding <=> ${Prisma.raw(`'${vectorString}'::vector`)}) AS similarity
+                  FROM "products"
+                  WHERE embedding IS NOT NULL AND status = 'ACTIVE'
+                  ORDER BY similarity DESC
+                  LIMIT 100
+                `
+              );
+            } catch (e) {
+              console.error("Vector search error:", e);
+              return [];
+            }
+          })(),
 
-        console.log(`✅ Fuzzy search found ${fuzzyResults.length} matches for "${query}"`);
-        if (fuzzyResults.length > 0) {
-          console.log(`🔍 Top Fuzzy Match: Score=${fuzzyResults[0].match_score.toFixed(4)}`);
+          // Task B: Fuzzy Search
+          (async () => {
+            try {
+              return await prisma.$transaction(async (tx) => {
+                // Increased threshold to 0.15 to reduce garbage matches
+                await tx.$executeRawUnsafe(`SELECT set_limit(0.15);`);
+
+                return await tx.$queryRaw<Array<{ id: string; match_score: number }>>(
+                  Prisma.sql`
+                    SELECT 
+                      id,
+                      GREATEST(
+                        similarity(name, ${query}), 
+                        similarity(brand, ${query}), 
+                        similarity(description, ${query})
+                      ) as match_score
+                    FROM "products"
+                    WHERE status = 'ACTIVE'
+                      AND (
+                        name % ${query} 
+                        OR brand % ${query} 
+                        OR description % ${query}
+                      )
+                    ORDER BY match_score DESC
+                    LIMIT 100;
+                  `
+                );
+              });
+            } catch (e) {
+              console.error("Fuzzy search error:", e);
+              // Fallback to simple contains
+              const simpleMatches = await prisma.product.findMany({
+                where: {
+                  status: "ACTIVE",
+                  OR: [
+                    { name: { contains: query, mode: "insensitive" } },
+                    { brand: { contains: query, mode: "insensitive" } },
+                  ]
+                },
+                select: { id: true },
+                take: 50
+              });
+              return simpleMatches.map(p => ({ id: p.id, match_score: 1.0 }));
+            }
+          })()
+        ]);
+
+        // Process Vector Results
+        if (vectorResults.status === 'fulfilled' && vectorResults.value.length > 0) {
+          vectorResults.value.forEach(p => updateScore(p.id, 'vector', p.similarity));
+          vectorFound = true;
+          console.log(`✅ Vector found ${vectorResults.value.length} items`);
         }
-        keywordIds = fuzzyResults.map(p => p.id);
+
+        // Process Fuzzy Results
+        if (fuzzyResults.status === 'fulfilled' && fuzzyResults.value.length > 0) {
+          fuzzyResults.value.forEach(p => updateScore(p.id, 'fuzzy', p.match_score));
+          fuzzyFound = true;
+          console.log(`✅ Fuzzy found ${fuzzyResults.value.length} items`);
+        }
+
       } catch (error) {
-        console.error("❌ Fuzzy search failed (pg_trgm likely missing), falling back to simple contains:", error);
-        // Fallback to simple contains if fuzzy search fails
-        const keywordResults = await prisma.product.findMany({
-          where: {
-            OR: [
-              { name: { contains: query, mode: "insensitive" } },
-              { brand: { contains: query, mode: "insensitive" } },
-              { description: { contains: query, mode: "insensitive" } },
-            ],
-            status: "ACTIVE",
-          },
-          select: { id: true },
-          take: 100,
-        });
-        keywordIds = keywordResults.map(p => p.id);
+        console.error("Search execution failed:", error);
       }
 
-      // Combine results: prioritize keyword/fuzzy matches then vector matches
-      // Use a Set to handle duplicates
-      const consolidatedIds = Array.from(new Set([...keywordIds, ...topProductIds]));
+      // Convert map to array and sort by combined score
+      let allCandidates = Array.from(productScores.values())
+        .sort((a, b) => b.combinedScore - a.combinedScore);
 
-      // If we have keyword matches, we trust them more for specific terms like "laptep" -> "laptop"
-      // So if keyword matches exist, we might want to rely less on the "bad" vector results for typos
-      if (keywordIds.length > 0 && useVectorSearch) {
-        console.log("ℹ️ Merging fuzzy matches with vector results");
+      console.log(`📊 Total unique candidates: ${allCandidates.length}`);
+      if (allCandidates.length > 0) {
+        console.log(`🏆 Top Candidate: ${allCandidates[0].id} (Score: ${allCandidates[0].combinedScore.toFixed(2)})`);
       }
 
-      // 1c. Apply 60% rule on the consolidated recall set
-      // The user requested: "among all the matched result show only 60% of the product"
-      if (consolidatedIds.length > 0) {
-        const splitIndex = Math.ceil(consolidatedIds.length * 0.6);
-        topProductIds = consolidatedIds.slice(0, splitIndex);
-      } else {
-        topProductIds = [];
+      // 60% Slicing Rule (only if we have enough results)
+      let topProductIds = allCandidates.map(c => c.id);
+      if (topProductIds.length > 10) {
+        // Keep top 60% of matches if we have a lot, but ensure at least 10 or 20
+        const keepCount = Math.max(10, Math.ceil(topProductIds.length * 0.6));
+        topProductIds = topProductIds.slice(0, keepCount);
       }
-
 
       if (topProductIds.length === 0) {
         return {
@@ -221,14 +252,10 @@ export const searchResolvers = {
         )`);
       }
 
-      // Specifications (Only apply EXPLICIT user filters as hard constraints)
-      // For AI intent, we should be more relaxed OR use them for sorting.
-      // Here, we only apply spec filters if they were explicitly selected by the user.
+      // Specifications
       const userSpecFilters = filters?.specifications || {};
-
       for (const [key, value] of Object.entries(userSpecFilters)) {
         if (!value || (Array.isArray(value) && value.length === 0)) continue;
-        // Skip brands and categories as they are handled separately
         if (key === 'brand' || key === 'categories') continue;
 
         const values = Array.isArray(value) ? value : [value];
@@ -255,16 +282,25 @@ export const searchResolvers = {
       const totalPages = Math.ceil(total / limit);
 
       // ===== STEP 6: Final Ranking =====
-      // Semantic relevance + Business metrics (popularity + trust)
+      // We want to preserve the relevance ranking we calculated in validCandidates.
+      // However, the final SQL user query applies filtering (price, brand) which might reduce the set.
+      // The simplest way to respect relevance order is to pass the filtered IDs in order.
+      // But we can't easily do `ORDER BY user_provided_array_order` without complex SQL.
+
+      // Instead, we will fallback to standard business metrics sort, OR uses vector similarity if available.
+      // Since we already did a heavy pre-filter/rank in Step 1, the topProductIds are already "good".
+      // But `WHERE id = ANY(...)` doesn't preserve order.
+
       let orderByClause = "";
-      if (useVectorSearch && vector.length > 0) {
-        const vectorString = `[${vector.join(",")}]`;
+      // If we have a vector, use it for fine-grained ranking within the top N candidates
+      if (vectorEmbedding.length > 0) {
+        const vectorString = `[${vectorEmbedding.join(",")}]`;
         orderByClause = `embedding <=> '${vectorString}'::vector, "soldCount" DESC, "averageRating" DESC`;
       } else {
+        // Fallback to popularity
         orderByClause = `"soldCount" DESC, "averageRating" DESC, "createdAt" DESC`;
       }
 
-      // Build final query with pagination
       const selectQuery = `
         SELECT id::text 
         FROM "products" 
@@ -315,7 +351,7 @@ export const searchResolvers = {
         },
       });
 
-      // Maintain ranking order
+      // Maintain ranking order from the SQL query
       const productMap = new Map(products.map((p) => [p.id, p]));
       const orderedProducts = productIds
         .map((id) => productMap.get(id))
@@ -326,18 +362,9 @@ export const searchResolvers = {
           updatedAt: p.updatedAt.toISOString(),
         }));
 
-      // ===== Dynamic Facet Counts =====
-      // Reuse the filters from the first getDynamicFilters call (line 123)
-      // to avoid expensive duplicate computation
-
       return {
         products: orderedProducts,
-        pagination: {
-          page,
-          limit,
-          total,
-          totalPages,
-        },
+        pagination: { page, limit, total, totalPages },
         filters: dynamicFiltersResult.filters,
         intent,
         dominantCategory: dominantCategoryName,
@@ -345,8 +372,8 @@ export const searchResolvers = {
     },
 
     searchSuggestions: async (_: any, { query }: { query: string }) => {
-      if (!query.trim()) {
-        // Return popular categories or terms if query is empty
+      const trimmedQuery = query.trim();
+      if (!trimmedQuery) {
         return [
           "phones",
           "laptops",
@@ -357,46 +384,74 @@ export const searchResolvers = {
         ];
       }
 
-      // Generate vector embedding for the query
-      const vector = await generateEmbedding(query);
-      const vectorString = `[${vector.join(",")}]`;
+      // Optimization for short queries: Skip vector search if length < 3
+      if (trimmedQuery.length < 3) {
+        console.log(`⚡ Short query "${trimmedQuery}", using simple prefix match`);
+        const prefixResults = await prisma.product.findMany({
+          where: {
+            OR: [
+              { name: { startsWith: trimmedQuery, mode: 'insensitive' } },
+              { brand: { startsWith: trimmedQuery, mode: 'insensitive' } },
+              { category: { name: { startsWith: trimmedQuery, mode: 'insensitive' } } }
+            ],
+            status: 'ACTIVE'
+          },
+          select: {
+            name: true,
+            brand: true,
+            category: { select: { name: true } }
+          },
+          take: 5
+        });
 
-      // Query for top matching products based on embedding similarity
-      const results = await prisma.$queryRaw<
-        Array<{
-          name: string;
-          categoryName: string;
-          brand: string;
-          similarity: number;
-        }>
-      >(
-        Prisma.sql`
-          SELECT
-            p.name,
-            c.name as categoryName,
-            p.brand,
-            1 - (p.embedding <=> ${Prisma.raw(
-          `'${vectorString}'::vector`
-        )}) AS similarity
-          FROM "products" p
-          LEFT JOIN "categories" c ON p."categoryId" = c.id
-          WHERE p.embedding IS NOT NULL AND p.status = 'ACTIVE'
-          ORDER BY similarity DESC
-          LIMIT 6
-        `
-      );
+        const suggestions = new Set<string>();
+        prefixResults.forEach(p => {
+          if (p.name.toLowerCase().startsWith(trimmedQuery.toLowerCase())) suggestions.add(p.name);
+          if (p.brand.toLowerCase().startsWith(trimmedQuery.toLowerCase())) suggestions.add(p.brand);
+          if (p.category?.name.toLowerCase().startsWith(trimmedQuery.toLowerCase())) suggestions.add(p.category.name);
+        });
+        return Array.from(suggestions).slice(0, 6);
+      }
 
-      // Extract unique suggestions from product names, categories, and brands
-      const suggestions = new Set<string>();
-      results.forEach((result) => {
-        if (result.name) suggestions.add(result.name.toLowerCase());
-        if (result.categoryName)
-          suggestions.add(result.categoryName.toLowerCase());
-        if (result.brand) suggestions.add(result.brand.toLowerCase());
-      });
+      // Vector Embedding + Fuzzy for longer queries
+      try {
+        const vector = await generateEmbedding(trimmedQuery);
+        const vectorString = `[${vector.join(",")}]`;
 
-      // Convert Set to Array and filter out duplicates
-      return Array.from(suggestions).slice(0, 6);
+        const results = await prisma.$queryRaw<
+          Array<{
+            name: string;
+            categoryName: string;
+            brand: string;
+            similarity: number;
+          }>
+        >(
+          Prisma.sql`
+            SELECT
+              p.name,
+              c.name as categoryName,
+              p.brand,
+              1 - (p.embedding <=> ${Prisma.raw(
+            `'${vectorString}'::vector`
+          )}) AS similarity
+            FROM "products" p
+            LEFT JOIN "categories" c ON p."categoryId" = c.id
+            WHERE p.embedding IS NOT NULL AND p.status = 'ACTIVE'
+            ORDER BY similarity DESC
+            LIMIT 6
+          `
+        );
+
+        const suggestions = new Set<string>();
+        results.forEach((result) => {
+          if (result.name) suggestions.add(result.name);
+          if (result.brand) suggestions.add(result.brand);
+        });
+
+        return Array.from(suggestions).slice(0, 6);
+      } catch (e) {
+        return [];
+      }
     },
   },
 };
