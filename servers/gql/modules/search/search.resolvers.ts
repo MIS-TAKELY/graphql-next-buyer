@@ -25,11 +25,17 @@ export const searchResolvers = {
       // ===== STEP 0: Early Intent Extraction (Crucial for typos like "sansang" -> "Samsung") =====
       // We need to know if the user *meant* a specific brand before we search.
       let explicitBrandIntent: string[] = [];
+      let correctedQuery: string | undefined;
+
       try {
         const intent = await extractIntent(query);
         if (intent.brand && intent.brand.length > 0) {
           explicitBrandIntent = intent.brand;
           console.log(`🚀 Early Brand Detection: ${explicitBrandIntent.join(", ")}`);
+        }
+        if (intent.correctedQuery) {
+          correctedQuery = intent.correctedQuery;
+          console.log(`✨ Corrected Query: "${query}" -> "${correctedQuery}"`);
         }
       } catch (e) {
         console.error("Early intent extraction failed:", e);
@@ -77,10 +83,11 @@ export const searchResolvers = {
             // RE-INLINING for clarity since we are replacing the block
             try {
               // Use 'query' type for search queries (E5 prefix)
-              const vector = await generateEmbedding(query, 'query');
+              const termToEmbed = correctedQuery || query;
+              const vector = await generateEmbedding(termToEmbed, 'query');
               vectorEmbedding = vector;
               const vectorString = `[${vector.join(",")}]`;
-              console.log(`🔍 Vector search for "${query}"`);
+              console.log(`🔍 Vector search for "${termToEmbed}"`);
 
               // Use inner product (<#>) for normalized embeddings
               // Faster and more accurate than cosine distance
