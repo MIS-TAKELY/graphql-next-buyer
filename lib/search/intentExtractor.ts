@@ -90,6 +90,18 @@ export async function extractIntent(
             });
         }
 
+        // Step 4: Extract category using keywords
+        const lowerQuery = query.toLowerCase();
+        if (lowerQuery.includes("phone") || lowerQuery.includes("mobile")) intent.category = "Smartphones";
+        else if (lowerQuery.includes("laptop") || lowerQuery.includes("computer")) intent.category = "Laptop";
+        else if (lowerQuery.includes("watch")) intent.category = "Smartwatch";
+        else if (lowerQuery.includes("headphone") || lowerQuery.includes("earphone") || lowerQuery.includes("buds")) intent.category = "Headphone";
+        else if (lowerQuery.includes("tv") || lowerQuery.includes("television")) intent.category = "LED/LCD TVs";
+        else if (lowerQuery.includes("camera")) intent.category = "Camera";
+        else if (lowerQuery.includes("speaker")) intent.category = "Speaker";
+        else if (lowerQuery.includes("shoe") || lowerQuery.includes("sneaker")) intent.category = "Footwear";
+        else if (lowerQuery.includes("oil") || lowerQuery.includes("motul")) intent.category = "Engine Oil & Fluids";
+
         console.log("✅ Intent extracted:", JSON.stringify(intent, null, 2));
         return intent;
     } catch (error) {
@@ -122,30 +134,11 @@ export async function extractIntentWithLLM(query: string): Promise<ExtractedInte
         "Grocery", "Books", "Dry Dog Food"
     ];
 
-    const prompt = `
-    Analyze the following e-commerce search query and extract structured intent.
-    Query: "${query}"
-
-    Available Categories: ${categories.join(", ")}
-
-    Extract:
-    1. category: The most likely product category from the "Available Categories" list above. If none match well, omit it.
-    2. brand: List of brands mentioned.
-    3. specifications: Key-value pairs of technical specs (e.g., RAM, Storage, Color, Size).
-    4. price_min: Minimum price mentioned (as number).
-    5. price_max: Maximum price mentioned (as number).
-    6. cleaned_query: The query with filter words removed, leaving only product descriptors.
-
-    Respond ONLY with a JSON object in this format:
-    {
-        "category": "string | null",
-        "brand": ["string"],
-        "specifications": {"key": "value"},
-        "price_min": number | null,
-        "price_max": number | null,
-        "cleaned_query": "string"
-    }
-    `;
+    const prompt = `Extract e-commerce intent from: "${query}"
+    Categories: ${categories.join(", ")}
+    JSON format:
+    {"category": "matched category or null", "brand": ["brands"], "specifications": {"key": "value"}, "price_min": num, "price_max": num, "cleaned_query": "query without filters"}
+    Respond ONLY with JSON.`;
 
     try {
         const response = await callLLM(prompt);
@@ -164,6 +157,22 @@ export async function extractIntentWithLLM(query: string): Promise<ExtractedInte
     } catch (error) {
         console.error("❌ LLM Intent extraction failed:", error);
         return {};
+    }
+}
+
+/**
+ * Map a raw category name (from LLM or keyword) to the actual name in DB
+ */
+export async function mapCategoryToDB(categoryName: string): Promise<string | null> {
+    try {
+        const dbCat = await prisma.category.findFirst({
+            where: { name: { contains: categoryName, mode: 'insensitive' } },
+            select: { name: true }
+        });
+        return dbCat ? dbCat.name : null;
+    } catch (e) {
+        console.error("Category mapping failed:", e);
+        return null;
     }
 }
 

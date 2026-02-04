@@ -1,7 +1,7 @@
 import { Prisma } from "../../../../app/generated/prisma";
 import { prisma } from "../../../../lib/db/prisma";
 import { typesenseClient } from "@/lib/typesense";
-import { extractIntent, extractIntentWithLLM } from "@/lib/search/intentExtractor";
+import { extractIntent, extractIntentWithLLM, mapCategoryToDB } from "@/lib/search/intentExtractor";
 import { getDynamicFilters } from "@/filter/getFilters";
 
 export const searchResolvers = {
@@ -24,10 +24,18 @@ export const searchResolvers = {
         console.log(`🔍 Search Query: "${query}"`);
         const startTime = Date.now();
 
-        // 0. Extract Intent using LLM
-        const intent = await extractIntentWithLLM(query);
+        // 0. Extract Intent (Fast First)
+        let intent = await extractIntent(query);
+
+        // If query is complex or intent is sparse, fallback to LLM
+        if (query.split(' ').length > 3 && (!intent.category || !intent.brand)) {
+          console.log("🧠 Falling back to LLM for deeper intent extraction...");
+          const llmIntent = await extractIntentWithLLM(query);
+          intent = { ...intent, ...llmIntent };
+        }
+
         const searchTerms = intent.correctedQuery || query;
-        console.log(`🤖 Intent extracted: ${JSON.stringify(intent)}`);
+        console.log(`🤖 Final Intent: ${JSON.stringify(intent)}`);
 
         // 1. Get Keywords Search (Typesense)
         let typesenseIds: string[] = [];
@@ -47,8 +55,16 @@ export const searchResolvers = {
             filterConditions.push(`price:[${min}..${max}]`);
           }
 
+          let dbCategoryName = null;
           if (intent.category) {
-            filterConditions.push(`categoryName:="${intent.category}"`);
+            dbCategoryName = await mapCategoryToDB(intent.category);
+            if (dbCategoryName) {
+              console.log(`📂 Mapped intent category "${intent.category}" to "${dbCategoryName}"`);
+            }
+          }
+
+          if (dbCategoryName) {
+            filterConditions.push(`categoryName:="${dbCategoryName}"`);
           }
           if (intent.brand?.length) {
             const intentBrandFilters = intent.brand.map((b: string) => `brand:="${b}"`).join(' || ');
@@ -71,7 +87,16 @@ export const searchResolvers = {
             filter_by: filterConditions.join(' && '),
           };
 
-          const typesenseResult = await typesenseClient.collections('products').documents().search(searchParams);
+          let typesenseResult = await typesenseClient.collections('products').documents().search(searchParams);
+
+          // Fallback if automated category filter is too restrictive
+          if (typesenseResult.found === 0 && dbCategoryName && !filters?.categories?.length) {
+            console.log("⚠️ Typesense: No results with category filter, retrying without it...");
+            const broaderFilters = filterConditions.filter(f => !f.startsWith('categoryName:'));
+            searchParams.filter_by = broaderFilters.join(' && ');
+            typesenseResult = await typesenseClient.collections('products').documents().search(searchParams);
+          }
+
           typesenseIds = (typesenseResult.hits || []).map((hit: any) => hit.document.id);
         } catch (e) {
           console.error("Typesense error in Hybrid Search:", e);
@@ -114,10 +139,22 @@ export const searchResolvers = {
           // Note: price is in ProductVariant, so we can't easily filter in raw product query without JOIN
           // Typesense already handles price filtering, which is used for the keyword side of hybrid search.
 
-          const rawResults = await prisma.$queryRawUnsafe<any[]>(
+          let rawResults = await prisma.$queryRawUnsafe<any[]>(
             `SELECT id FROM products WHERE ${whereConditions.join(' AND ')} ORDER BY embedding <=> $1::vector LIMIT 50`,
             ...params
           );
+
+          // Fallback for Vector search
+          if (rawResults.length === 0 && intent.category && !filters?.categories?.length) {
+            console.log("⚠️ Vector: No results with category filter, retrying without it...");
+            const broaderConditions = whereConditions.filter(c => !c.includes('categoryId'));
+            // Filter out the category ID from params if possible, but it's easier to just rebuild or just let it be
+            // For simplicity, we'll just skip the fallback for now or do a simpler query
+            rawResults = await prisma.$queryRawUnsafe<any[]>(
+              `SELECT id FROM products WHERE status = 'ACTIVE' ORDER BY embedding <=> $1::vector LIMIT 50`,
+              vectorString
+            );
+          }
           vectorIds = rawResults.map(r => r.id);
         } catch (e) {
           console.error("Vector search error in Hybrid Search:", e);

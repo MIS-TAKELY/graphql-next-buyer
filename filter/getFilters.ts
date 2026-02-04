@@ -1,6 +1,6 @@
 import { prisma } from "../lib/db/prisma";
 import { typesenseClient } from "../lib/typesense";
-import { extractIntentWithLLM } from "@/lib/search/intentExtractor";
+import { extractIntentWithLLM, mapCategoryToDB } from "@/lib/search/intentExtractor";
 
 export interface FilterOption {
   value: string;
@@ -46,7 +46,10 @@ export async function getDynamicFilters(
     const filters: string[] = ['status:=ACTIVE'];
 
     if (intent.category) {
-      filters.push(`categoryName:="${intent.category}"`);
+      const dbCategoryName = await mapCategoryToDB(intent.category);
+      if (dbCategoryName) {
+        filters.push(`categoryName:="${dbCategoryName}"`);
+      }
     }
     if (intent.brand && intent.brand.length > 0) {
       filters.push(`brand:=[${intent.brand.map((b: string) => `"${b}"`).join(',')}]`);
