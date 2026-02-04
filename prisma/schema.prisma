@@ -14,7 +14,7 @@ generator clientAdmin {
 
 datasource db {
   provider   = "postgresql"
-  extensions = [vector]
+  extensions = [vector, pg_trgm]
 }
 
 model User {

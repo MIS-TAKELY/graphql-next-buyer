@@ -55,25 +55,58 @@ export const searchResolvers = {
         useVectorSearch = false;
       }
 
-      // 1b. Keyword Recall (Ensure exact matches are included)
-      const keywordResults = await prisma.product.findMany({
-        where: {
-          OR: [
-            { name: { contains: query, mode: "insensitive" } },
-            { brand: { contains: query, mode: "insensitive" } },
-            { description: { contains: query, mode: "insensitive" } },
-          ],
-          status: "ACTIVE",
-        },
-        select: { id: true },
-        take: 100,
-      });
+      // 1b. Keyword Recall (Calculated using pg_trgm for fuzzy matching)
+      let keywordIds: string[] = [];
+      try {
+        const fuzzyResults = await prisma.$queryRaw<Array<{ id: string; match_score: number }>>(
+          Prisma.sql`
+            SELECT 
+              id,
+              GREATEST(
+                similarity(name, ${query}), 
+                similarity(brand, ${query}), 
+                similarity(description, ${query})
+              ) as match_score
+            FROM "products"
+            WHERE status = 'ACTIVE'
+              AND (
+                name % ${query} 
+                OR brand % ${query} 
+                OR description % ${query}
+              )
+            ORDER BY match_score DESC
+            LIMIT 100;
+          `
+        );
+        console.log(`✅ Fuzzy search found ${fuzzyResults.length} matches for "${query}"`);
+        keywordIds = fuzzyResults.map(p => p.id);
+      } catch (error) {
+        console.error("❌ Fuzzy search failed (pg_trgm likely missing), falling back to simple contains:", error);
+        // Fallback to simple contains if fuzzy search fails
+        const keywordResults = await prisma.product.findMany({
+          where: {
+            OR: [
+              { name: { contains: query, mode: "insensitive" } },
+              { brand: { contains: query, mode: "insensitive" } },
+              { description: { contains: query, mode: "insensitive" } },
+            ],
+            status: "ACTIVE",
+          },
+          select: { id: true },
+          take: 100,
+        });
+        keywordIds = keywordResults.map(p => p.id);
+      }
 
-      const keywordIds = keywordResults.map((p) => p.id);
-
-      // Combine results: prioritize keyword matches then vector matches
+      // Combine results: prioritize keyword/fuzzy matches then vector matches
       // Use a Set to handle duplicates
       const consolidatedIds = Array.from(new Set([...keywordIds, ...topProductIds]));
+
+      // If we have keyword matches, we trust them more for specific terms like "laptep" -> "laptop"
+      // So if keyword matches exist, we might want to rely less on the "bad" vector results for typos
+      if (keywordIds.length > 0 && useVectorSearch) {
+        console.log("ℹ️ Merging fuzzy matches with vector results");
+      }
 
       // 1c. Apply 60% rule on the consolidated recall set
       // The user requested: "among all the matched result show only 60% of the product"
@@ -83,6 +116,7 @@ export const searchResolvers = {
       } else {
         topProductIds = [];
       }
+
 
       if (topProductIds.length === 0) {
         return {
