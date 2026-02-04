@@ -1,4 +1,4 @@
-import { OpenAI } from "openai";
+import axios from "axios";
 
 export async function generateEmbedding(text: string): Promise<number[]> {
   try {
@@ -9,32 +9,29 @@ export async function generateEmbedding(text: string): Promise<number[]> {
 
     // Validate API URL is configured
     if (!process.env.EMBEDDING_API_URL) {
-      throw new Error("EMBEDDING_API_URL environment variable is not set");
+      console.warn("⚠️ EMBEDDING_API_URL not set. Returning zero vector.");
+      return new Array(384).fill(0);
     }
 
-    const response = await fetch(process.env.EMBEDDING_API_URL, {
-      method: "POST",
+    const response = await axios.post(process.env.EMBEDDING_API_URL, {
+      texts: [text],
+    }, {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        texts: [text],
-      }),
+      timeout: 5000 // 5s timeout to prevent hanging
     });
 
-    if (!response.ok) {
-      throw new Error(`Embedding API error: ${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json();
+    const data = response.data;
 
     if (!data.embeddings || !Array.isArray(data.embeddings) || !data.embeddings[0]) {
       throw new Error("Invalid response from embedding API");
     }
 
     return data.embeddings[0]; // Returns 384-dimensional vector
-  } catch (error) {
-    console.error("Failed to generate embedding:", error);
-    throw error;
+  } catch (error: any) {
+    console.error("Failed to generate embedding:", error.message || error);
+    // Return zero vector on failure to prevent crashes/loops in callers
+    return new Array(384).fill(0);
   }
 }

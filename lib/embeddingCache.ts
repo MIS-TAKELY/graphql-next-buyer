@@ -19,6 +19,11 @@ const CACHE_KEYS = {
     BRANDS: "embeddings:brands",
 };
 
+// In-memory locks to prevent concurrent generation
+let isGeneratingCategories = false;
+let isGeneratingBrands = false;
+
+
 /**
  * Calculate cosine similarity between two vectors
  */
@@ -47,15 +52,21 @@ export function cosineSimilarity(a: number[], b: number[]): number {
  * Get or generate category embeddings
  */
 export async function getCategoryEmbeddings(): Promise<CachedEmbedding[]> {
+    if (isGeneratingCategories) {
+        console.log("⏳ Category embedding generation already in progress...");
+        return [];
+    }
+
+
     try {
         // Try cache first
         const cached = await redis.get(CACHE_KEYS.CATEGORIES);
         if (cached && typeof cached === 'string') {
-            console.log("✅ Category embeddings loaded from cache");
             return JSON.parse(cached);
         }
 
-        console.log("🔄 Generating category embeddings...");
+        isGeneratingCategories = true;
+        console.log("🔄 Generating category embeddings (this may take a while)...");
 
         // Fetch all categories
         const categories = await prisma.category.findMany({
@@ -64,9 +75,9 @@ export async function getCategoryEmbeddings(): Promise<CachedEmbedding[]> {
 
         // Generate embeddings for each category
         const embeddings: CachedEmbedding[] = [];
-        for (const category of categories) {
+        for (let i = 0; i < categories.length; i++) {
+            const category = categories[i];
             try {
-                // Use category name + description for better matching
                 const text = category.description
                     ? `${category.name} ${category.description}`
                     : category.name;
@@ -77,6 +88,10 @@ export async function getCategoryEmbeddings(): Promise<CachedEmbedding[]> {
                     name: category.name,
                     embedding,
                 });
+
+                if (i % 10 === 0 && i > 0) {
+                    console.log(`⏳ Progress: ${i}/${categories.length} categories indexed`);
+                }
             } catch (error) {
                 console.error(`Failed to generate embedding for category ${category.name}:`, error);
             }
@@ -94,34 +109,45 @@ export async function getCategoryEmbeddings(): Promise<CachedEmbedding[]> {
     } catch (error) {
         console.error("❌ Failed to get category embeddings:", error);
         return [];
+    } finally {
+        isGeneratingCategories = false;
     }
 }
+
 
 /**
  * Get or generate brand embeddings
  */
 export async function getBrandEmbeddings(): Promise<CachedEmbedding[]> {
+    if (isGeneratingBrands) {
+        console.log("⏳ Brand embedding generation already in progress...");
+        return [];
+    }
+
+
     try {
         // Try cache first
         const cached = await redis.get(CACHE_KEYS.BRANDS);
         if (cached && typeof cached === 'string') {
-            console.log("✅ Brand embeddings loaded from cache");
             return JSON.parse(cached);
         }
 
+        isGeneratingBrands = true;
         console.log("🔄 Generating brand embeddings...");
 
-        // Fetch all unique brands (filter out null values)
+        // Fetch all unique brands
         const allBrands = await prisma.product.findMany({
             select: { brand: true },
             distinct: ["brand"],
+            where: { brand: { not: "" } }
         });
 
         const brands = allBrands.filter(item => item.brand !== null);
 
         // Generate embeddings for each brand
         const embeddings: CachedEmbedding[] = [];
-        for (const { brand } of brands) {
+        for (let i = 0; i < brands.length; i++) {
+            const { brand } = brands[i];
             if (!brand) continue;
 
             try {
@@ -131,6 +157,10 @@ export async function getBrandEmbeddings(): Promise<CachedEmbedding[]> {
                     name: brand,
                     embedding,
                 });
+
+                if (i % 20 === 0 && i > 0) {
+                    console.log(`⏳ Progress: ${i}/${brands.length} brands indexed`);
+                }
             } catch (error) {
                 console.error(`Failed to generate embedding for brand ${brand}:`, error);
             }
@@ -148,8 +178,11 @@ export async function getBrandEmbeddings(): Promise<CachedEmbedding[]> {
     } catch (error) {
         console.error("❌ Failed to get brand embeddings:", error);
         return [];
+    } finally {
+        isGeneratingBrands = false;
     }
 }
+
 
 /**
  * Find most similar item from cached embeddings
