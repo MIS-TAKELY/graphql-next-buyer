@@ -35,12 +35,13 @@ export const searchResolvers = {
         console.log(`🔍 Vector search for "${query}" (${vector.length} dimensions)`);
 
         const vectorResults = await prisma.$queryRaw<
-          Array<{ id: string; similarity: number }>
+          Array<{ id: string; similarity: number; dot_product: number }>
         >(
           Prisma.sql`
             SELECT 
               id::text,
-              1 - (embedding <=> ${Prisma.raw(`'${vectorString}'::vector`)}) AS similarity
+              1 - (embedding <=> ${Prisma.raw(`'${vectorString}'::vector`)}) AS similarity,
+              (embedding <#> ${Prisma.raw(`'${vectorString}'::vector`)}) * -1 AS dot_product
             FROM "products"
             WHERE embedding IS NOT NULL AND status = 'ACTIVE'
             ORDER BY similarity DESC
@@ -49,6 +50,9 @@ export const searchResolvers = {
         );
 
         console.log(`✅ Found ${vectorResults.length} products with embeddings`);
+        if (vectorResults.length > 0) {
+          console.log(`🔍 Vector Metrics (Top 1): Cosine=${vectorResults[0].similarity.toFixed(4)}, Dot=${vectorResults[0].dot_product.toFixed(4)}`);
+        }
         topProductIds = vectorResults.map((p) => p.id);
       } catch (error) {
         console.error("❌ Vector search failed, falling back to keyword search:", error);
