@@ -75,16 +75,30 @@ export async function getDynamicFilters(
     }
 
     // 3. Search Typesense with Faceting
-    const searchResult = await typesenseClient.collections('products').documents().search({
+    let searchResult = await typesenseClient.collections('products').documents().search({
       q: query,
       query_by: 'name,brand,description,categoryName',
       filter_by: filters.join(' && '),
       facet_by: 'brand,categoryName,facet_attributes',
       max_facet_values: 50,
-      per_page: 0, // We only need facets for this call
+      per_page: 0,
     });
 
-    console.log(`⚡ Typesense search completed in ${Date.now() - startTime}ms`);
+    // If no results found with category filter, try without it
+    if (searchResult.found === 0 && intent.category) {
+      console.log("⚠️ No results with category filter, retrying without it...");
+      const broaderFilters = filters.filter(f => !f.startsWith('categoryName:'));
+      searchResult = await typesenseClient.collections('products').documents().search({
+        q: query,
+        query_by: 'name,brand,description,categoryName',
+        filter_by: broaderFilters.join(' && '),
+        facet_by: 'brand,categoryName,facet_attributes',
+        max_facet_values: 50,
+        per_page: 0,
+      });
+    }
+
+    console.log(`⚡ Typesense search completed in ${Date.now() - startTime}ms (Found: ${searchResult.found})`);
 
     // 4. Transform Typesense Facets to DynamicFilterResult
     const dynamicFilters: FilterWithCount[] = [];

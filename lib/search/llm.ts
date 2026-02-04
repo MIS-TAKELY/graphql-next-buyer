@@ -1,5 +1,5 @@
 export async function callLLM(prompt: string, model: string = "qwen2.5:3b"): Promise<string> {
-    const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434/api/generate";
+    const OLLAMA_URL = process.env.OLLAMA_URL || "http://72.61.249.56:11434/api/generate";
 
     try {
         const response = await fetch(OLLAMA_URL, {

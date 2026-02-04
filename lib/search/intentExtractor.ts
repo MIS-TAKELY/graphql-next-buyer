@@ -114,12 +114,22 @@ export function isEmptyIntent(intent: ExtractedIntent): boolean {
  * Extract intent using LLM (Ollama)
  */
 export async function extractIntentWithLLM(query: string): Promise<ExtractedIntent> {
+    const categories = [
+        "Smartphones", "Laptop", "Smartwatch", "Tablet", "Headphone",
+        "Speaker", "Smart Home", "Accessories", "Camera", "Console",
+        "Health & Fitness", "Lifestyle", "Furniture", "Clothing",
+        "Beauty", "Home Appliances", "Baby Products", "Automotive",
+        "Grocery", "Books", "Dry Dog Food"
+    ];
+
     const prompt = `
     Analyze the following e-commerce search query and extract structured intent.
     Query: "${query}"
 
+    Available Categories: ${categories.join(", ")}
+
     Extract:
-    1. category: The most likely product category.
+    1. category: The most likely product category from the "Available Categories" list above. If none match well, omit it.
     2. brand: List of brands mentioned.
     3. specifications: Key-value pairs of technical specs (e.g., RAM, Storage, Color, Size).
     4. price_min: Minimum price mentioned (as number).
@@ -128,7 +138,7 @@ export async function extractIntentWithLLM(query: string): Promise<ExtractedInte
 
     Respond ONLY with a JSON object in this format:
     {
-        "category": "string",
+        "category": "string | null",
         "brand": ["string"],
         "specifications": {"key": "value"},
         "price_min": number | null,
