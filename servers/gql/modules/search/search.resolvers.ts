@@ -146,8 +146,7 @@ export const searchResolvers = {
         // Get Dynamic Filters using top RRF results
         const dynamicFiltersResult = await getDynamicFilters(
           query,
-          filters?.specifications || {},
-          sortedIds.slice(0, 100) // Pass top 100 for better filter quality
+          filters || {}
         );
 
         return {
