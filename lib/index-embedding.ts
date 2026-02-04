@@ -1,22 +1,36 @@
 import { prisma } from "../lib/db/prisma";
 import { generateEmbedding } from "./embemdind";
-
-type ProductForEmbedding = {
-  id: string;
-  name: string;
-  description: string | null;
-  brand: string;
-};
+import { constructProductEmbeddingText } from "./productUtils";
 
 async function indexAllProducts() {
   console.log("Starting product embedding indexing...");
 
-  const products = await prisma.$queryRaw<ProductForEmbedding[]>`
-  SELECT id, name, description, brand
-  FROM "products"
-  WHERE embedding IS NULL
-  LIMIT 1000
-`;
+  // Fetch products that need indexing (assumes declared as NULL via external update or new products)
+  // Since 'embedding' is Unsupported, we can't filter by it in findMany directly.
+  const unindexed = await prisma.$queryRaw<Array<{ id: string }>>`
+    SELECT id FROM "products" WHERE embedding IS NULL LIMIT 1000
+  `;
+
+  if (unindexed.length === 0) {
+    console.log("All products already indexed!");
+    return;
+  }
+
+  // We use findMany to get relations efficiently for these IDs
+  const products = await prisma.product.findMany({
+    where: {
+      id: { in: unindexed.map(p => p.id) },
+    },
+    include: {
+      category: true,
+      deliveryOptions: true,
+      variants: {
+        include: {
+          specifications: true,
+        },
+      },
+    },
+  });
 
   if (products.length === 0) {
     console.log("All products already indexed!");
@@ -29,9 +43,12 @@ async function indexAllProducts() {
   let errorCount = 0;
 
   for (const product of products) {
-    const text = `${product.name} ${product.description || ""} ${product.brand
-      }`.trim();
-    if (!text) continue;
+    const text = constructProductEmbeddingText(product);
+
+    if (!text) {
+      console.warn(`⚠️ Skipped ${product.id} (empty text)`);
+      continue;
+    }
 
     try {
       const vector = await generateEmbedding(text);
