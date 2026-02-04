@@ -20,64 +20,97 @@ export const searchResolvers = {
         limit: number;
       }
     ) => {
-      const offset = (page - 1) * limit;
-
       try {
-        console.log(`🔍 Typesense Search: "${query}"`);
+        console.log(`🔍 Hybrid Search: "${query}"`);
 
-        // Build Typesense Search Parameters
-        const searchParams: any = {
-          q: query,
-          query_by: 'name,brand,description,categoryName',
-          query_by_weights: '4,3,2,1', // Name is most important
-          prefix: true, // Auto-complete behavior
-          page: page,
-          per_page: limit,
-          filter_by: 'status:=ACTIVE',
-          sort_by: 'soldCount:desc,_text_match:desc', // Default sort
+        // 1. Get Keywords Search (Typesense)
+        let typesenseIds: string[] = [];
+        try {
+          const filterConditions: string[] = ['status:=ACTIVE'];
+          if (filters?.categories?.length) {
+            const categoryFilters = filters.categories.map((c: string) => `categoryId:=${c}`).join(' || ');
+            filterConditions.push(`(${categoryFilters})`);
+          }
+          if (filters?.brands?.length) {
+            const brandFilters = filters.brands.map((b: string) => `brand:=${b}`).join(' || ');
+            filterConditions.push(`(${brandFilters})`);
+          }
+          if (filters?.minPrice !== undefined || filters?.maxPrice !== undefined) {
+            const min = filters.minPrice || 0;
+            const max = filters.maxPrice || 999999999;
+            filterConditions.push(`price:[${min}..${max}]`);
+          }
+
+          const searchParams: any = {
+            q: query,
+            query_by: 'name,brand,description,categoryName',
+            query_by_weights: '4,3,2,1',
+            prefix: true,
+            page: 1,
+            per_page: 50,
+            filter_by: filterConditions.join(' && '),
+          };
+
+          const typesenseResult = await typesenseClient.collections('products').documents().search(searchParams);
+          typesenseIds = (typesenseResult.hits || []).map((hit: any) => hit.document.id);
+        } catch (e) {
+          console.error("Typesense error in Hybrid Search:", e);
+        }
+
+        // 2. Get Semantic Search (Vector)
+        let vectorIds: string[] = [];
+        try {
+          const { getEmbedding } = await import("@/lib/search/embedding");
+          const embedding = await getEmbedding(query);
+          const vectorString = `[${embedding.join(",")}]`;
+
+          // Build dynamic where clause for Postgres
+          const whereConditions = ["status = 'ACTIVE'"];
+          const params: any[] = [vectorString];
+
+          if (filters?.categories?.length) {
+            params.push(filters.categories);
+            whereConditions.push(`"categoryId" = ANY($${params.length})`);
+          }
+          if (filters?.brands?.length) {
+            params.push(filters.brands);
+            whereConditions.push(`brand = ANY($${params.length})`);
+          }
+
+          const rawResults = await prisma.$queryRawUnsafe<any[]>(
+            `SELECT id FROM products WHERE ${whereConditions.join(' AND ')} ORDER BY embedding <=> $1::vector LIMIT 50`,
+            ...params
+          );
+          vectorIds = rawResults.map(r => r.id);
+        } catch (e) {
+          console.error("Vector search error in Hybrid Search:", e);
+        }
+
+        // 3. Reciprocal Rank Fusion (RRF)
+        const k = 60;
+        const scoreMap = new Map<string, number>();
+
+        const applyRRF = (ids: string[]) => {
+          ids.forEach((id, index) => {
+            const rank = index + 1;
+            const score = 1 / (rank + k);
+            scoreMap.set(id, (scoreMap.get(id) || 0) + score);
+          });
         };
 
-        // Apply Filters
-        const filterConditions: string[] = ['status:=ACTIVE'];
+        applyRRF(typesenseIds);
+        applyRRF(vectorIds);
 
-        // Categories
-        if (filters?.categories?.length) {
-          const categoryFilters = filters.categories.map((c: string) => `categoryId:=${c}`).join(' || ');
-          filterConditions.push(`(${categoryFilters})`);
-        }
+        // Sort by RRF score
+        const sortedIds = Array.from(scoreMap.entries())
+          .sort((a, b) => b[1] - a[1])
+          .map(entry => entry[0]);
 
-        // Brands
-        if (filters?.brands?.length) {
-          const brandFilters = filters.brands.map((b: string) => `brand:=${b}`).join(' || ');
-          filterConditions.push(`(${brandFilters})`);
-        }
-
-        // Price
-        if (filters?.minPrice !== undefined || filters?.maxPrice !== undefined) {
-          const min = filters.minPrice || 0;
-          const max = filters.maxPrice || 999999999;
-          filterConditions.push(`price:[${min}..${max}]`);
-        }
-
-        // Dynamic Specifications (Need to support this in Typesense schema if we want to filter by them)
-        // For now, we will handle basic filters.
-        // If specifications are critical, we need to add them to 'product_specifications' in Typesense schema.
-
-        if (filterConditions.length > 0) {
-          searchParams.filter_by = filterConditions.join(' && ');
-        }
-
-        // Execute Search
-        const searchResult = await typesenseClient.collections('products').documents().search(searchParams);
-
-        const hits = searchResult.hits || [];
-        const total = searchResult.found;
+        const total = sortedIds.length;
         const totalPages = Math.ceil(total / limit);
+        const paginatedIds = sortedIds.slice((page - 1) * limit, page * limit);
 
-        // Map hits to IDs
-        const productIds = hits.map((hit: any) => hit.document.id);
-
-        if (productIds.length === 0) {
+        if (paginatedIds.length === 0) {
           return {
             products: [],
             pagination: { page, limit, total: 0, totalPages: 0 },
@@ -87,29 +120,21 @@ export const searchResolvers = {
           };
         }
 
-        // Fetch full product data from DB (to ensure fresh data)
+        // 4. Fetch full data
         const products = await prisma.product.findMany({
-          where: { id: { in: productIds } },
+          where: { id: { in: paginatedIds } },
           include: {
-            variants: {
-              include: {
-                specifications: true
-              }
-            },
-            images: {
-              orderBy: { sortOrder: "asc" },
-            },
-            reviews: {
-              select: { rating: true },
-            },
+            variants: { include: { specifications: true } },
+            images: { orderBy: { sortOrder: "asc" } },
+            reviews: { select: { rating: true } },
             category: true,
             deliveryOptions: true,
           },
         });
 
-        // Maintain Typesense Ranking Order
+        // 5. Restore RRF Order
         const productMap = new Map(products.map((p) => [p.id, p]));
-        const orderedProducts = productIds
+        const orderedProducts = paginatedIds
           .map((id) => productMap.get(id))
           .filter((p): p is NonNullable<typeof p> => Boolean(p))
           .map((p) => ({
@@ -118,24 +143,23 @@ export const searchResolvers = {
             updatedAt: p.updatedAt.toISOString(),
           }));
 
-        // Get Dynamic Filters (We can use facets from Typesense later for optimization)
-        // For now, keep existing logic but feed it the top candidates
+        // Get Dynamic Filters using top RRF results
         const dynamicFiltersResult = await getDynamicFilters(
           query,
           filters?.specifications || {},
-          productIds
+          sortedIds.slice(0, 100) // Pass top 100 for better filter quality
         );
 
         return {
           products: orderedProducts,
           pagination: { page, limit, total, totalPages },
           filters: dynamicFiltersResult.filters,
-          intent: {}, // can hook up intent extraction if needed
-          dominantCategory: null, // can derive from facets
+          intent: {},
+          dominantCategory: null,
         };
 
       } catch (e) {
-        console.error("Typesense Search Error:", e);
+        console.error("Hybrid Search overall failure:", e);
         return {
           products: [],
           pagination: { page, limit, total: 0, totalPages: 0 },

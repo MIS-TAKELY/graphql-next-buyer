@@ -414,6 +414,7 @@ model Product {
   reviews             Review[]
   warranty            Warranty[]
   wishlistItems       WishlistItem[]
+  embedding           Unsupported("vector(384)")?
 
   @@index([slug, sellerId])
   @@index([status, isIndexable])

@@ -379,41 +379,42 @@ model ReturnPolicy {
 }
 
 model Product {
-  id                  String                @id @default(cuid())
+  id                  String                      @id @default(cuid())
   sellerId            String
   name                String
-  slug                String                @unique
+  slug                String                      @unique
   description         String?
   features            String[]
-  status              ProductStatus         @default(INACTIVE)
+  status              ProductStatus               @default(INACTIVE)
   specificationTable  Json?
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
+  createdAt           DateTime                    @default(now())
+  updatedAt           DateTime                    @updatedAt
   categoryId          String?
   brand               String
-  soldCount           Int                   @default(0)
-  averageRating       Decimal?              @default(0) @db.Decimal(3, 2)
+  soldCount           Int                         @default(0)
+  averageRating       Decimal?                    @default(0) @db.Decimal(3, 2)
   keywords            String[]
   metaDescription     String?
   metaTitle           String?
   // SEO sitemap fields
-  isIndexable         Boolean               @default(true)
+  isIndexable         Boolean                     @default(true)
   canonicalUrl        String?
   lastIndexableUpdate DateTime?
   Conversation        Conversation[]
   deliveryOptions     DeliveryOption[]
   images              ProductImage[]
-  notifications       ProductNotification[] @relation("ProductNotifications")
+  notifications       ProductNotification[]       @relation("ProductNotifications")
   productOffers       ProductOffer[]
   questions           ProductQuestion[]
   variants            ProductVariant[]
-  category            Category?             @relation(fields: [categoryId], references: [id])
-  seller              User                  @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
+  category            Category?                   @relation(fields: [categoryId], references: [id])
+  seller              User                        @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
   recentlyViewed      RecentlyViewed[]
   returnPolicy        ReturnPolicy[]
   reviews             Review[]
   warranty            Warranty[]
   wishlistItems       WishlistItem[]
+  embedding           Unsupported("vector(384)")?
 
   @@index([slug, sellerId])
   @@index([status, isIndexable])
