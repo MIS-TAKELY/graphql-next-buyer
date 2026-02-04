@@ -101,9 +101,12 @@ export async function extractIntent(
         else if (lowerQuery.includes("speaker")) intent.category = "Speaker";
         else if (lowerQuery.includes("shoe") || lowerQuery.includes("sneaker")) intent.category = "Footwear";
         else if (lowerQuery.includes("oil") || lowerQuery.includes("motul")) intent.category = "Engine Oil & Fluids";
-        else if (lowerQuery.includes("desk") || lowerQuery.includes("table") || lowerQuery.includes("chair") || lowerQuery.includes("furniture") || lowerQuery.includes("stool")) intent.category = "Furniture";
+        else if (lowerQuery.includes("desk") || lowerQuery.includes("table") || lowerQuery.includes("chair")) intent.category = "Study Tables & Office Chairs";
+        else if (lowerQuery.includes("sofa") || lowerQuery.includes("seating")) intent.category = "Sofas & Seating Furniture";
+        else if (lowerQuery.includes("furniture")) intent.category = "Furniture";
         else if (lowerQuery.includes("diaper") || lowerQuery.includes("pampers")) intent.category = "Disposable Diapers";
         else if (lowerQuery.includes("face wash") || lowerQuery.includes("moisturizer") || lowerQuery.includes("cream")) intent.category = "Face Moisturizers & Creams";
+        else if (lowerQuery.includes("milk powder") || lowerQuery.includes("dairy")) intent.category = "Ready-to-Eat Meals";
         else if (lowerQuery.includes("console") || lowerQuery.includes("playstation") || lowerQuery.includes("ps5") || lowerQuery.includes("ps4") || lowerQuery.includes("xbox")) intent.category = "Gaming Consoles (PlayStation, Xbox, Nintendo)";
 
         console.log("✅ Intent extracted:", JSON.stringify(intent, null, 2));

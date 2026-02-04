@@ -88,7 +88,7 @@ export async function getDynamicFilters(
       facet_by: 'brand,categoryName,facet_attributes',
       max_facet_values: 50,
       per_page: 0,
-      num_typos: 0, // Disable typos for stricter matching
+      num_typos: 1, // Allow minor typos for better UX
     };
 
     // 3. Search Typesense with Faceting

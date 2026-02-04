@@ -85,7 +85,7 @@ export const searchResolvers = {
             page: 1,
             per_page: 50,
             filter_by: filterConditions.join(' && '),
-            num_typos: 0,
+            num_typos: 1,
           };
 
           let typesenseResult = await typesenseClient.collections('products').documents().search(searchParams);
@@ -162,16 +162,16 @@ export const searchResolvers = {
         const k = 60;
         const scoreMap = new Map<string, number>();
 
-        const applyRRF = (ids: string[]) => {
+        const applyRRF = (ids: string[], weight: number = 1.0) => {
           ids.forEach((id, index) => {
             const rank = index + 1;
-            const score = 1 / (rank + k);
+            const score = (1 / (rank + k)) * weight;
             scoreMap.set(id, (scoreMap.get(id) || 0) + score);
           });
         };
 
-        applyRRF(typesenseIds);
-        applyRRF(vectorIds);
+        applyRRF(typesenseIds, 2.0); // Favor keyword matches
+        applyRRF(vectorIds, 1.0);
 
         // Sort by RRF score
         const sortedIds = Array.from(scoreMap.entries())
