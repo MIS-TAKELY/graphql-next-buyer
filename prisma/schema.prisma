@@ -14,7 +14,7 @@ generator clientAdmin {
 
 datasource db {
   provider   = "postgresql"
-  extensions = [vector, pg_trgm]
+  extensions = [pg_trgm]
 }
 
 model User {
@@ -391,7 +391,6 @@ model Product {
   updatedAt           DateTime               @updatedAt
   categoryId          String?
   brand               String
-  embedding           Unsupported("vector(384)")?
   soldCount           Int                    @default(0)
   averageRating       Decimal?               @default(0) @db.Decimal(3, 2)
   keywords            String[]

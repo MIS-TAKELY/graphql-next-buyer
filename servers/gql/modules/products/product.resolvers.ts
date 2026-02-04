@@ -311,66 +311,25 @@ export const productResolvers = {
         }
       }
       // ---------------------------------------------------------
-      // SCENARIO 2: PRODUCT PAGE (Vector Similarity + Boost)
+      // SCENARIO 2: PRODUCT PAGE (Category/Brand Fallback)
       // ---------------------------------------------------------
       else {
-        // Get the current product's embedding
-        const currentProduct = await prisma.$queryRaw<Array<{ embedding: string }>>`
-            SELECT embedding::text FROM "products" WHERE id = ${productId} AND embedding IS NOT NULL
-          `;
-
-        if (currentProduct?.[0]?.embedding) {
-          const embedding = currentProduct[0].embedding;
-          // Find similar products using vector similarity
-          const similarProducts = await prisma.$queryRaw<Array<{ id: string; similarity: number }>>`
-                SELECT id::text, 1 - (embedding::text::vector <=> ${embedding}::vector) AS similarity
-                FROM "products"
-                WHERE id != ${productId} AND embedding IS NOT NULL
-                ORDER BY similarity DESC
-                LIMIT ${limit + 5} 
-            `;
-          // Fetch more than limit to allow re-ranking
-
-          const productIds = similarProducts.map((p: any) => p.id);
-          let products = await prisma.product.findMany({
-            where: { id: { in: productIds } },
-            include: {
-              seller: { select: { id: true, firstName: true, lastName: true } },
-              variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
-              images: { orderBy: { sortOrder: 'asc' } },
-              reviews: { select: { id: true, rating: true } },
-              category: true,
-            }
-          });
-
-          // If user logged in, boost products matching interests
-          if (userId) {
-            const interests = await getUserInterests(userId);
-            // Simple re-rank: Move interested items to top
-            products = products.sort((a: any, b: any) => {
-              const aScore = (interests.categories.includes(a.categoryId || '') ? 1 : 0) + (interests.brands.includes(a.brand || '') ? 1 : 0);
-              const bScore = (interests.categories.includes(b.categoryId || '') ? 1 : 0) + (interests.brands.includes(b.brand || '') ? 1 : 0);
-              return bScore - aScore;
-            });
+        // Fallback for related products
+        recommendedProducts = await prisma.product.findMany({
+          where: {
+            id: { not: productId },
+            status: 'ACTIVE'
+          },
+          take: limit,
+          orderBy: { createdAt: 'desc' },
+          include: {
+            seller: { select: { id: true, firstName: true, lastName: true } },
+            variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
+            images: { orderBy: { sortOrder: 'asc' } },
+            reviews: { select: { id: true, rating: true } },
+            category: true,
           }
-
-          recommendedProducts = products.slice(0, limit);
-        }
-
-        // Fallback if no embedding or vector search failed
-        if (recommendedProducts.length === 0) {
-          recommendedProducts = await prisma.product.findMany({
-            where: { id: { not: productId } },
-            take: limit,
-            include: {
-              seller: { select: { id: true, firstName: true, lastName: true } },
-              variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
-              images: { orderBy: { sortOrder: 'asc' } },
-              reviews: { select: { id: true, rating: true } },
-              category: true,
-            }
-          });
-        }
+        });
       }
 
       // Cache the results
@@ -472,50 +431,19 @@ export const productResolvers = {
 
       let resultIds = [...sortedIds];
 
-      // 2. AI Fallback: Vector Similarity (If not enough bought together)
+      // 2. Category Fallback: Same category (If still not enough)
       if (resultIds.length < limit) {
-        // Get the current product's embedding
-        const currentProduct = await prisma.$queryRaw<Array<{ embedding: string }>>`
-            SELECT embedding::text FROM "products" WHERE id = ${productId} AND embedding IS NOT NULL
-          `;
-
-        if (currentProduct?.[0]?.embedding) {
-          const embedding = currentProduct[0].embedding;
-          // Find similar products using vector similarity
-          const excludedIds = [productId, ...resultIds];
-
-          // Fetch more results than needed and filter in JavaScript to avoid SQL array issues
-          const allSimilarProducts = await prisma.$queryRaw<Array<{ id: string; similarity: number }>>`
-                SELECT id::text, 1 - (embedding::text::vector <=> ${embedding}::vector) AS similarity
-                FROM "products"
-                WHERE embedding IS NOT NULL 
-                ORDER BY similarity DESC
-                LIMIT ${(limit - resultIds.length) * 2}
-            `;
-
-          // Filter out excluded IDs in JavaScript
-          const similarProducts = allSimilarProducts
-            .filter((p: any) => !excludedIds.includes(p.id))
-            .slice(0, limit - resultIds.length);
-
-          const similarIds = similarProducts.map((p: any) => p.id);
-          resultIds = [...resultIds, ...similarIds];
-        }
-
-        // 3. Category Fallback: Same category (If still not enough)
-        if (resultIds.length < limit) {
-          const product = await prisma.product.findUnique({ where: { id: productId }, select: { categoryId: true } });
-          if (product?.categoryId) {
-            const categoryProducts = await prisma.product.findMany({
-              where: {
-                categoryId: product.categoryId,
-                id: { notIn: [productId, ...resultIds] }
-              },
-              take: limit - resultIds.length,
-              select: { id: true }
-            });
-            resultIds = [...resultIds, ...categoryProducts.map((p: any) => p.id)];
-          }
+        const product = await prisma.product.findUnique({ where: { id: productId }, select: { categoryId: true } });
+        if (product?.categoryId) {
+          const categoryProducts = await prisma.product.findMany({
+            where: {
+              categoryId: product.categoryId,
+              id: { notIn: [productId, ...resultIds] }
+            },
+            take: limit - resultIds.length,
+            select: { id: true }
+          });
+          resultIds = [...resultIds, ...categoryProducts.map((p: any) => p.id)];
         }
       }
 

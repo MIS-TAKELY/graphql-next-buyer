@@ -66,6 +66,7 @@
     "sonner": "latest",
     "tailwind-merge": "latest",
     "tailwindcss-animate": "latest",
+    "typesense": "^2.1.0",
     "zod": "latest",
     "zustand": "latest"
   },

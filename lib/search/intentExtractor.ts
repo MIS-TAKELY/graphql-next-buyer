@@ -1,5 +1,4 @@
-import { generateEmbedding } from "../embemdind";
-import { getBrandEmbeddings, findTopSimilar } from "../embeddingCache";
+import { prisma } from "../db/prisma";
 import {
     extractPriceRange,
     extractBrandKeywords,
@@ -8,7 +7,7 @@ import {
 
 /**
  * Extracted intent from user query
- * No external AI API required - uses regex + embeddings
+ * No external AI API required - uses regex + fuzzy matching
  */
 export interface ExtractedIntent {
     price_max?: number;
@@ -52,35 +51,23 @@ export async function extractIntent(
         if (brandKeywords.length > 0) {
             intent.brand = brandKeywords;
         } else {
-            // Try fuzzy matching against cached brands first (better for typos like "sansang" -> "Samsung")
-            // Then fallback to embedding if fuzzy fails
+            // Try fuzzy matching against active brands in the DB
             try {
-                // Get all known brands (cached)
-                const brandEmbeddings = await getBrandEmbeddings();
-                const allBrandNames = brandEmbeddings.map(b => b.name);
+                // Get all active brands from the database
+                const products = await prisma.product.findMany({
+                    where: { status: 'ACTIVE' },
+                    select: { brand: true },
+                    distinct: ['brand']
+                });
+                const allBrandNames = products.map(p => p.brand);
 
-                // Import dynamically to avoid circle if needed, or just import at top. 
-                // Assuming static import is fine.
                 const { findFuzzyMatches } = await import("../utils/stringSim");
-
-                // Allow slightly higher threshold for brands
                 const fuzzyMatches = findFuzzyMatches(query, allBrandNames, 3);
 
                 if (fuzzyMatches.length > 0) {
-                    // Take the top match if score is confident
                     const topMatch = fuzzyMatches[0];
                     console.log(`🎯 Fuzzy Brand Match: "${query}" -> "${topMatch.value}" (Score: ${topMatch.score.toFixed(2)})`);
                     intent.brand = [topMatch.value];
-
-                    // Construct corrected query: if the query is short, it's likely just the brand + maybe "phone"
-                    // Simple strategy: replace the whole query with brand if it's very short, 
-                    // or if it's a multi-word query, let's just use the brand as the corrected query for vector search purposes for now.
-                    // Actually, per plan: "replace the typo in the original query with the correct brand name" is hard without exact token match.
-                    // So we will just provide the brand as the corrected query if the query length is close to the brand length (typo only).
-                    // Or more aggressively: always suggest the brand as the primary vector signal?
-                    // Let's go with: if we found a brand, the 'correctedQuery' for embedding *IS* the brand (plus any other preserved keywords if we could, but let's start simple).
-                    // This ensures "sansung" -> Embedding("Samsung") which is exactly what we want.
-
                     intent.correctedQuery = topMatch.value;
                 }
             } catch (error) {

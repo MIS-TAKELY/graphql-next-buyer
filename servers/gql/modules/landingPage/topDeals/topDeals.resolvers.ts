@@ -1,7 +1,6 @@
 import { Prisma } from "../../../../../app/generated/prisma";
 import { detectCategory } from "@/filter/detectCategory";
 import { prisma } from "../../../../../lib/db/prisma";
-import { generateEmbedding } from "@/lib/embemdind";
 import { GraphQLContext } from "@/servers/gql/context";
 import { getCache, setCache } from "@/services/redis.services";
 import {
@@ -109,27 +108,20 @@ export const topDealsResolvers = {
         `📊 Searching across ${categoryIds.length} categories (including children)`
       );
 
-      // Step 5: Generate embedding for semantic search
-      const vector = await generateEmbedding(topDealAbout);
-      const vectorString = `[${vector.join(",")}]`;
+      // Step 5: Typesense Search within the category hierarchy
+      const { typesenseClient } = await import("@/lib/typesense");
 
-      // Step 6: Vector search within the top-level category and its descendants
-      const idResults = await prisma.$queryRaw<ProductIdWithSimilarity[]>(
-        Prisma.sql`
-          SELECT 
-            id::text,
-            1 - (embedding <=> ${Prisma.raw(
-          `'${vectorString}'::vector`
-        )}) AS similarity
-          FROM "products"
-          WHERE status = 'ACTIVE'
-            AND "categoryId" = ANY(${categoryIds}::text[])
-          ORDER BY similarity DESC
-          LIMIT ${50}
-        `
-      );
+      const searchParams: any = {
+        q: topDealAbout,
+        query_by: 'name,brand,description,categoryName',
+        filter_by: `status:=ACTIVE && categoryId:[${categoryIds.join(',')}]`,
+        per_page: 50,
+      };
 
-      if (idResults.length === 0) {
+      const searchResult = await typesenseClient.collections('products').documents().search(searchParams);
+      const hits = searchResult.hits || [];
+
+      if (hits.length === 0) {
         console.log(
           "⚠️ No products found in category hierarchy:",
           topLevelCategory.name
@@ -138,10 +130,10 @@ export const topDealsResolvers = {
       }
 
       console.log(
-        `✅ Found ${idResults.length} products in category hierarchy`
+        `✅ Found ${hits.length} products in category hierarchy via Typesense`
       );
 
-      const productIds = idResults.map((p: any) => p.id);
+      const productIds = hits.map((hit: any) => hit.document.id);
 
       // Step 7: Fetch full product details with proper typing
       const products = (await prisma.product.findMany({
