@@ -1,7 +1,7 @@
 import { Prisma } from "../../../../app/generated/prisma";
 import { prisma } from "../../../../lib/db/prisma";
 import { typesenseClient } from "@/lib/typesense";
-import { extractIntent } from "@/lib/search/intentExtractor";
+import { extractIntent, extractIntentWithLLM } from "@/lib/search/intentExtractor";
 import { getDynamicFilters } from "@/filter/getFilters";
 
 export const searchResolvers = {
@@ -21,7 +21,13 @@ export const searchResolvers = {
       }
     ) => {
       try {
-        console.log(`🔍 Hybrid Search: "${query}"`);
+        console.log(`🔍 Search Query: "${query}"`);
+        const startTime = Date.now();
+
+        // 0. Extract Intent using LLM
+        const intent = await extractIntentWithLLM(query);
+        const searchTerms = intent.correctedQuery || query;
+        console.log(`🤖 Intent extracted: ${JSON.stringify(intent)}`);
 
         // 1. Get Keywords Search (Typesense)
         let typesenseIds: string[] = [];
@@ -41,8 +47,22 @@ export const searchResolvers = {
             filterConditions.push(`price:[${min}..${max}]`);
           }
 
+          if (intent.category) {
+            filterConditions.push(`categoryName:="${intent.category}"`);
+          }
+          if (intent.brand?.length) {
+            const intentBrandFilters = intent.brand.map((b: string) => `brand:="${b}"`).join(' || ');
+            filterConditions.push(`(${intentBrandFilters})`);
+          }
+          if (intent.price_min !== undefined) {
+            filterConditions.push(`price:>=${intent.price_min}`);
+          }
+          if (intent.price_max !== undefined) {
+            filterConditions.push(`price:<=${intent.price_max}`);
+          }
+
           const searchParams: any = {
-            q: query,
+            q: searchTerms,
             query_by: 'name,brand,description,categoryName',
             query_by_weights: '4,3,2,1',
             prefix: true,
@@ -76,6 +96,23 @@ export const searchResolvers = {
             params.push(filters.brands);
             whereConditions.push(`brand = ANY($${params.length})`);
           }
+
+          if (intent.category) {
+            const category = await prisma.category.findFirst({
+              where: { name: { contains: intent.category, mode: 'insensitive' } },
+              select: { id: true }
+            });
+            if (category) {
+              params.push(category.id);
+              whereConditions.push(`"categoryId" = $${params.length}`);
+            }
+          }
+          if (intent.brand?.length) {
+            params.push(intent.brand);
+            whereConditions.push(`brand = ANY($${params.length})`);
+          }
+          // Note: price is in ProductVariant, so we can't easily filter in raw product query without JOIN
+          // Typesense already handles price filtering, which is used for the keyword side of hybrid search.
 
           const rawResults = await prisma.$queryRawUnsafe<any[]>(
             `SELECT id FROM products WHERE ${whereConditions.join(' AND ')} ORDER BY embedding <=> $1::vector LIMIT 50`,
@@ -115,8 +152,8 @@ export const searchResolvers = {
             products: [],
             pagination: { page, limit, total: 0, totalPages: 0 },
             filters: [],
-            intent: {},
-            dominantCategory: null,
+            intent: intent,
+            dominantCategory: intent.category || null,
           };
         }
 
@@ -146,15 +183,16 @@ export const searchResolvers = {
         // Get Dynamic Filters using top RRF results
         const dynamicFiltersResult = await getDynamicFilters(
           query,
-          filters || {}
+          filters || {},
+          intent
         );
 
         return {
           products: orderedProducts,
           pagination: { page, limit, total, totalPages },
           filters: dynamicFiltersResult.filters,
-          intent: {},
-          dominantCategory: null,
+          intent: intent,
+          dominantCategory: intent.category || null,
         };
 
       } catch (e) {
@@ -173,23 +211,42 @@ export const searchResolvers = {
       if (!query || query.length < 2) return [];
 
       try {
+        // First try Typesense for prefix matching
         const searchResult = await typesenseClient.collections('products').documents().search({
           q: query,
-          query_by: 'name,brand',
+          query_by: 'name,brand,categoryName',
           prefix: true,
-          per_page: 6,
-          include_fields: 'name,brand'
+          per_page: 10,
+          include_fields: 'name,brand,categoryName'
         });
 
         const suggestions = new Set<string>();
+
+        // Add exact matches or prefix matches from Typesense
         searchResult.hits?.forEach((hit: any) => {
-          suggestions.add(hit.document.name);
-          suggestions.add(hit.document.brand);
+          if (hit.document.name) suggestions.add(hit.document.name);
+          if (hit.document.brand) suggestions.add(hit.document.brand);
+          if (hit.document.categoryName) suggestions.add(`In ${hit.document.categoryName}`);
         });
 
-        return Array.from(suggestions).slice(0, 6);
+        // If we have few suggestions, ask LLM for alternatives
+        if (suggestions.size < 3) {
+          const { callLLM } = await import("@/lib/search/llm");
+          const prompt = `Give 5 popular search suggestions for e-commerce starting with or related to "${query}". Return ONLY a JSON array of strings.`;
+          try {
+            const llmResponse = await callLLM(prompt);
+            const llmSuggestions = JSON.parse(llmResponse);
+            if (Array.isArray(llmSuggestions)) {
+              llmSuggestions.forEach(s => suggestions.add(s));
+            }
+          } catch (e) {
+            console.error("LLM Suggestion Error:", e);
+          }
+        }
+
+        return Array.from(suggestions).slice(0, 8);
       } catch (e) {
-        console.error("Typesense Suggestion Error:", e);
+        console.error("Search Suggestion Error:", e);
         return [];
       }
     },

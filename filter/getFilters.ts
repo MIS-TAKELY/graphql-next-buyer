@@ -26,15 +26,18 @@ export interface DynamicFilterResult {
  */
 export async function getDynamicFilters(
   searchTerm: string,
-  appliedFilters?: any
+  appliedFilters?: any,
+  preExtractedIntent?: any
 ): Promise<DynamicFilterResult> {
   console.log(`🚀 Getting dynamic filters for: "${searchTerm}"`);
   const startTime = Date.now();
 
   try {
     // 1. Extract Intent using LLM
-    const intent = await extractIntentWithLLM(searchTerm);
-    console.log(`🤖 LLM Intent extracted in ${Date.now() - startTime}ms`);
+    const intent = preExtractedIntent || await extractIntentWithLLM(searchTerm);
+    if (!preExtractedIntent) {
+      console.log(`🤖 LLM Intent extracted in ${Date.now() - startTime}ms`);
+    }
 
     // 2. Build Typesense Query
     const query = intent.correctedQuery || searchTerm;
@@ -46,7 +49,7 @@ export async function getDynamicFilters(
       filters.push(`categoryName:="${intent.category}"`);
     }
     if (intent.brand && intent.brand.length > 0) {
-      filters.push(`brand:=[${intent.brand.map(b => `"${b}"`).join(',')}]`);
+      filters.push(`brand:=[${intent.brand.map((b: string) => `"${b}"`).join(',')}]`);
     }
     if (intent.price_min !== undefined) {
       filters.push(`price:>=${intent.price_min}`);
@@ -67,7 +70,7 @@ export async function getDynamicFilters(
       if (appliedFilters.specifications) {
         Object.entries(appliedFilters.specifications).forEach(([key, values]: [string, any]) => {
           if (Array.isArray(values) && values.length > 0) {
-            const specFilters = values.map(v => `facet_attributes:="${key}:${v}"`).join(' || ');
+            const specFilters = values.map((v: string) => `facet_attributes:="${key}:${v}"`).join(' || ');
             filters.push(`(${specFilters})`);
           }
         });
