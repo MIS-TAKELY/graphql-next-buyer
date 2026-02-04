@@ -51,20 +51,28 @@ export async function extractIntent(
         if (brandKeywords.length > 0) {
             intent.brand = brandKeywords;
         } else {
-            // Try embedding-based brand detection
+            // Try fuzzy matching against cached brands first (better for typos like "sansang" -> "Samsung")
+            // Then fallback to embedding if fuzzy fails
             try {
-                const queryEmbedding = await generateEmbedding(query);
+                // Get all known brands (cached)
                 const brandEmbeddings = await getBrandEmbeddings();
+                const allBrandNames = brandEmbeddings.map(b => b.name);
 
-                if (brandEmbeddings.length > 0) {
-                    const similarBrands = findTopSimilar(queryEmbedding, brandEmbeddings, 3, 0.6);
-                    if (similarBrands.length > 0) {
-                        intent.brand = similarBrands.map(b => b.name);
-                        console.log(`🎯 Brands detected via embedding: ${intent.brand.join(", ")}`);
-                    }
+                // Import dynamically to avoid circle if needed, or just import at top. 
+                // Assuming static import is fine.
+                const { findFuzzyMatches } = await import("../utils/stringSim");
+
+                // Allow slightly higher threshold for brands
+                const fuzzyMatches = findFuzzyMatches(query, allBrandNames, 3);
+
+                if (fuzzyMatches.length > 0) {
+                    // Take the top match if score is confident
+                    const topMatch = fuzzyMatches[0];
+                    console.log(`🎯 Fuzzy Brand Match: "${query}" -> "${topMatch.value}" (Score: ${topMatch.score.toFixed(2)})`);
+                    intent.brand = [topMatch.value];
                 }
             } catch (error) {
-                console.error("❌ Embedding-based brand detection failed:", error);
+                console.error("❌ Brand detection failed:", error);
             }
         }
 

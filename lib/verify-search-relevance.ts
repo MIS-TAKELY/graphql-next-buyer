@@ -1,8 +1,9 @@
+import 'dotenv/config';
 import { searchResolvers } from '../servers/gql/modules/search/search.resolvers';
 import { prisma } from '../lib/db/prisma';
 
 async function verifySearch() {
-    const queries = ["laaptopt", "l"];
+    const queries = ["sansang", "laaptopt", "l"];
 
     for (const query of queries) {
         console.log(`\nTesting query: "${query}"`);

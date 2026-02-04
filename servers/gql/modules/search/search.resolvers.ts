@@ -22,6 +22,19 @@ export const searchResolvers = {
     ) => {
       const offset = (page - 1) * limit;
 
+      // ===== STEP 0: Early Intent Extraction (Crucial for typos like "sansang" -> "Samsung") =====
+      // We need to know if the user *meant* a specific brand before we search.
+      let explicitBrandIntent: string[] = [];
+      try {
+        const intent = await extractIntent(query);
+        if (intent.brand && intent.brand.length > 0) {
+          explicitBrandIntent = intent.brand;
+          console.log(`🚀 Early Brand Detection: ${explicitBrandIntent.join(", ")}`);
+        }
+      } catch (e) {
+        console.error("Early intent extraction failed:", e);
+      }
+
       // Map to store combined scores: inputId -> { vectorScore, fuzzyScore, ... }
       const productScores = new Map<
         string,
@@ -52,10 +65,12 @@ export const searchResolvers = {
       let vectorEmbedding: number[] = [];
 
       try {
-        // Run both searches concurrently
-        const [vectorResults, fuzzyResults] = await Promise.allSettled([
+        // Run all searches concurrently
+        const results = await Promise.allSettled([
           // Task A: Vector Search
           (async () => {
+            // ... existing vector search logic ... 
+            // RE-INLINING for clarity since we are replacing the block
             try {
               const vector = await generateEmbedding(query);
               vectorEmbedding = vector;
@@ -125,21 +140,57 @@ export const searchResolvers = {
               });
               return simpleMatches.map(p => ({ id: p.id, match_score: 1.0 }));
             }
+          })(),
+
+          // Task C: Brand Boost (If intent detected)
+          (async () => {
+            if (explicitBrandIntent.length === 0) return [];
+            console.log(`🔥 Boosting brands: ${explicitBrandIntent.join(", ")}`);
+            try {
+              const boostedProducts = await prisma.product.findMany({
+                where: {
+                  status: 'ACTIVE',
+                  brand: { in: explicitBrandIntent, mode: 'insensitive' }
+                },
+                select: { id: true },
+                take: 50 // Boost top 50 products from this brand
+              });
+              return boostedProducts.map(p => ({ id: p.id, boost_score: 0.95 }));
+            } catch (e) {
+              console.error("Brand boost error:", e);
+              return [];
+            }
           })()
         ]);
 
         // Process Vector Results
-        if (vectorResults.status === 'fulfilled' && vectorResults.value.length > 0) {
-          vectorResults.value.forEach(p => updateScore(p.id, 'vector', p.similarity));
+        if (results[0].status === 'fulfilled' && results[0].value.length > 0) {
+          results[0].value.forEach(p => updateScore(p.id, 'vector', p.similarity));
           vectorFound = true;
-          console.log(`✅ Vector found ${vectorResults.value.length} items`);
+          console.log(`✅ Vector found ${results[0].value.length} items`);
         }
 
         // Process Fuzzy Results
-        if (fuzzyResults.status === 'fulfilled' && fuzzyResults.value.length > 0) {
-          fuzzyResults.value.forEach(p => updateScore(p.id, 'fuzzy', p.match_score));
+        if (results[1].status === 'fulfilled' && results[1].value.length > 0) {
+          results[1].value.forEach(p => updateScore(p.id, 'fuzzy', p.match_score));
           fuzzyFound = true;
-          console.log(`✅ Fuzzy found ${fuzzyResults.value.length} items`);
+          console.log(`✅ Fuzzy found ${results[1].value.length} items`);
+        }
+
+        // Process Brand Boost Results
+        if (results[2] && results[2].status === 'fulfilled' && results[2].value.length > 0) {
+          results[2].value.forEach(p => {
+            // We treat brand match as a very high fuzzy score (effectively)
+            // Overwrite or max out the score
+            if (!productScores.has(p.id)) {
+              productScores.set(p.id, { id: p.id, vectorScore: 0, fuzzyScore: 0, combinedScore: 0 });
+            }
+            const entry = productScores.get(p.id)!;
+            // Boost score ensures it competes with high vector/fuzzy scores
+            entry.fuzzyScore = Math.max(entry.fuzzyScore, p.boost_score);
+            entry.combinedScore = Math.max(entry.combinedScore, p.boost_score);
+          });
+          console.log(`✅ Brand Boost added ${results[2].value.length} items`);
         }
 
       } catch (error) {
