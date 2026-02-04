@@ -6,16 +6,20 @@ async function indexTypesense() {
     console.log("🚀 Starting Typesense indexing...");
 
     // 1. Ensure Collection Exists
+    let exists = false;
     try {
         await typesenseClient.collections('products').retrieve();
-        console.log("✅ Collection 'products' found.");
-        // Optional: Delete and recreate if schema changed?
-        // await typesenseClient.collections('products').delete();
-    } catch (e) {
-        console.log("⚠️ Collection not found, creating...");
-        await typesenseClient.collections().create(PRODUCT_SCHEMA);
-        console.log("✅ Collection 'products' created.");
+        exists = true;
+    } catch (e) { }
+
+    if (exists) {
+        console.log("✅ Collection 'products' found. Deleting for clean re-index...");
+        await typesenseClient.collections('products').delete();
     }
+
+    console.log("🚀 Creating collection 'products'...");
+    await typesenseClient.collections().create(PRODUCT_SCHEMA);
+    console.log("✅ Collection 'products' created.");
 
     // 2. Fetch Products
     const products = await prisma.product.findMany({
@@ -24,6 +28,9 @@ async function indexTypesense() {
             category: true,
             variants: {
                 where: { isDefault: true },
+                include: {
+                    specifications: true
+                },
                 take: 1
             },
             images: {
@@ -56,6 +63,7 @@ async function indexTypesense() {
             soldCount: p.soldCount,
             averageRating: Number(p.averageRating) || 0,
             createdAt: Math.floor(p.createdAt.getTime() / 1000), // Unix timestamp
+            facet_attributes: defaultVariant?.specifications.map(s => `${s.key}:${s.value}`) || [],
         };
     });
 

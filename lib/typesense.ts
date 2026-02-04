@@ -28,6 +28,7 @@ export const PRODUCT_SCHEMA = {
         { name: 'soldCount', type: 'int32' as const, optional: false },
         { name: 'averageRating', type: 'float' as const, optional: true },
         { name: 'createdAt', type: 'int64' as const, optional: true },
+        { name: 'facet_attributes', type: 'string[]' as const, facet: true },
     ],
     default_sorting_field: 'soldCount',
 };

@@ -4,6 +4,7 @@ import {
     extractBrandKeywords,
     extractSpecificationKeywords,
 } from "./textAnalysis";
+import { callLLM } from "./llm";
 
 /**
  * Extracted intent from user query
@@ -15,6 +16,7 @@ export interface ExtractedIntent {
     brand?: string[];
     specifications?: Record<string, string>;
     correctedQuery?: string;
+    category?: string;
 }
 
 /**
@@ -106,5 +108,52 @@ export function isEmptyIntent(intent: ExtractedIntent): boolean {
         (!intent.brand || intent.brand.length === 0) &&
         (!intent.specifications || Object.keys(intent.specifications).length === 0)
     );
+}
+
+/**
+ * Extract intent using LLM (Ollama)
+ */
+export async function extractIntentWithLLM(query: string): Promise<ExtractedIntent> {
+    const prompt = `
+    Analyze the following e-commerce search query and extract structured intent.
+    Query: "${query}"
+
+    Extract:
+    1. category: The most likely product category.
+    2. brand: List of brands mentioned.
+    3. specifications: Key-value pairs of technical specs (e.g., RAM, Storage, Color, Size).
+    4. price_min: Minimum price mentioned (as number).
+    5. price_max: Maximum price mentioned (as number).
+    6. cleaned_query: The query with filter words removed, leaving only product descriptors.
+
+    Respond ONLY with a JSON object in this format:
+    {
+        "category": "string",
+        "brand": ["string"],
+        "specifications": {"key": "value"},
+        "price_min": number | null,
+        "price_max": number | null,
+        "cleaned_query": "string"
+    }
+    `;
+
+    try {
+        const response = await callLLM(prompt);
+        const parsed = JSON.parse(response);
+
+        const intent: ExtractedIntent = {
+            category: parsed.category || undefined,
+            brand: parsed.brand && parsed.brand.length > 0 ? parsed.brand : undefined,
+            specifications: parsed.specifications || undefined,
+            price_min: parsed.price_min || undefined,
+            price_max: parsed.price_max || undefined,
+            correctedQuery: parsed.cleaned_query || undefined,
+        };
+
+        return intent;
+    } catch (error) {
+        console.error("❌ LLM Intent extraction failed:", error);
+        return {};
+    }
 }
 
