@@ -35,28 +35,32 @@ export const searchResolvers = {
         console.error("Early intent extraction failed:", e);
       }
 
-      // Map to store combined scores: inputId -> { vectorScore, fuzzyScore, ... }
+      // Map to store combined scores: inputId -> { vectorScore, fuzzyScore, brandBoost, ... }
       const productScores = new Map<
         string,
-        { id: string; vectorScore: number; fuzzyScore: number; combinedScore: number }
+        { id: string; vectorScore: number; fuzzyScore: number; brandBoost: number; combinedScore: number }
       >();
 
-      // Helper to update scores
-      const updateScore = (id: string, type: 'vector' | 'fuzzy', score: number) => {
+      // Helper to normalize and update scores
+      const updateScore = (id: string, type: 'vector' | 'fuzzy' | 'brand', score: number) => {
         if (!productScores.has(id)) {
-          productScores.set(id, { id, vectorScore: 0, fuzzyScore: 0, combinedScore: 0 });
+          productScores.set(id, { id, vectorScore: 0, fuzzyScore: 0, brandBoost: 0, combinedScore: 0 });
         }
         const entry = productScores.get(id)!;
-        if (type === 'vector') entry.vectorScore = score;
-        if (type === 'fuzzy') entry.fuzzyScore = score;
 
-        // precise "laaptopt" -> "laptop" matching needs fuzzy to be strong,
-        // but "l" -> "lattafa" needs vector to be weak.
-        // Hybrid Score: Max(Vector, Fuzzy)
-        // We trust a strong signal from EITHER source.
-        // If vector is high (semantic match), good.
-        // If fuzzy is high (typo match), good.
-        entry.combinedScore = Math.max(entry.vectorScore, entry.fuzzyScore);
+        // Store normalized scores (0-1 range)
+        if (type === 'vector') entry.vectorScore = Math.max(0, Math.min(1, score));
+        if (type === 'fuzzy') entry.fuzzyScore = Math.max(0, Math.min(1, score));
+        if (type === 'brand') entry.brandBoost = Math.max(0, Math.min(1, score));
+
+        // OPTIMIZED RERANKING FORMULA:
+        // - Vector search: 60% weight (semantic understanding)
+        // - Fuzzy search: 40% weight (typo tolerance)
+        // - Brand boost: additive signal (0.3 bonus)
+        entry.combinedScore =
+          (0.6 * entry.vectorScore) +
+          (0.4 * entry.fuzzyScore) +
+          (0.3 * entry.brandBoost);
       };
 
       // 1. Parallel execution of Vector and Fuzzy Search
@@ -72,18 +76,21 @@ export const searchResolvers = {
             // ... existing vector search logic ... 
             // RE-INLINING for clarity since we are replacing the block
             try {
-              const vector = await generateEmbedding(query);
+              // Use 'query' type for search queries (E5 prefix)
+              const vector = await generateEmbedding(query, 'query');
               vectorEmbedding = vector;
               const vectorString = `[${vector.join(",")}]`;
               console.log(`🔍 Vector search for "${query}"`);
 
+              // Use inner product (<#>) for normalized embeddings
+              // Faster and more accurate than cosine distance
               return await prisma.$queryRaw<
                 Array<{ id: string; similarity: number }>
               >(
                 Prisma.sql`
                   SELECT 
                     id::text,
-                    1 - (embedding <=> ${Prisma.raw(`'${vectorString}'::vector`)}) AS similarity
+                    1 - (embedding <#> ${Prisma.raw(`'${vectorString}'::vector`)}) AS similarity
                   FROM "products"
                   WHERE embedding IS NOT NULL AND status = 'ACTIVE'
                   ORDER BY similarity DESC
@@ -100,17 +107,20 @@ export const searchResolvers = {
           (async () => {
             try {
               return await prisma.$transaction(async (tx) => {
-                // Increased threshold to 0.15 to reduce garbage matches
-                await tx.$executeRawUnsafe(`SELECT set_limit(0.15);`);
+                // Adaptive threshold based on query length
+                // Shorter queries need lower threshold for typo tolerance
+                const threshold = query.length < 5 ? 0.1 : 0.15;
+                await tx.$executeRawUnsafe(`SELECT set_limit(${threshold});`);
 
+                // Weighted fuzzy search across multiple fields
                 return await tx.$queryRaw<Array<{ id: string; match_score: number }>>(
                   Prisma.sql`
                     SELECT 
                       id,
-                      GREATEST(
-                        similarity(name, ${query}), 
-                        similarity(brand, ${query}), 
-                        similarity(description, ${query})
+                      (
+                        0.5 * similarity(name, ${query}) + 
+                        0.3 * similarity(brand, ${query}) + 
+                        0.2 * COALESCE(similarity(description, ${query}), 0)
                       ) as match_score
                     FROM "products"
                     WHERE status = 'ACTIVE'
@@ -180,15 +190,8 @@ export const searchResolvers = {
         // Process Brand Boost Results
         if (results[2] && results[2].status === 'fulfilled' && results[2].value.length > 0) {
           results[2].value.forEach(p => {
-            // We treat brand match as a very high fuzzy score (effectively)
-            // Overwrite or max out the score
-            if (!productScores.has(p.id)) {
-              productScores.set(p.id, { id: p.id, vectorScore: 0, fuzzyScore: 0, combinedScore: 0 });
-            }
-            const entry = productScores.get(p.id)!;
-            // Boost score ensures it competes with high vector/fuzzy scores
-            entry.fuzzyScore = Math.max(entry.fuzzyScore, p.boost_score);
-            entry.combinedScore = Math.max(entry.combinedScore, p.boost_score);
+            // Brand boost is an additive signal, not a replacement
+            updateScore(p.id, 'brand', p.boost_score);
           });
           console.log(`✅ Brand Boost added ${results[2].value.length} items`);
         }
@@ -466,7 +469,8 @@ export const searchResolvers = {
 
       // Vector Embedding + Fuzzy for longer queries
       try {
-        const vector = await generateEmbedding(trimmedQuery);
+        // Use 'query' type for search suggestions
+        const vector = await generateEmbedding(trimmedQuery, 'query');
         const vectorString = `[${vector.join(",")}]`;
 
         const results = await prisma.$queryRaw<

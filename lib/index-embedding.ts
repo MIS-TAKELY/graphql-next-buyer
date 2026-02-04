@@ -51,7 +51,8 @@ async function indexAllProducts() {
     }
 
     try {
-      const vector = await generateEmbedding(text);
+      // Use 'passage' type for product documents (not queries)
+      const vector = await generateEmbedding(text, 'passage');
 
       if (vector.length !== 384) {
         console.warn(`⚠️ Unexpected embedding dimension: ${vector.length} (expected 384)`);

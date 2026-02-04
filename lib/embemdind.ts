@@ -1,6 +1,39 @@
 import axios from "axios";
 
-export async function generateEmbedding(text: string): Promise<number[]> {
+/**
+ * Normalize embedding vector to unit length (L2 normalization)
+ * Required for inner product search with E5 models
+ * 
+ * @param vector - Raw embedding vector
+ * @returns Normalized vector with unit length
+ */
+export function normalizeEmbedding(vector: number[]): number[] {
+  const norm = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
+
+  // Avoid division by zero
+  if (norm === 0) {
+    console.warn("⚠️ Zero-norm vector detected, returning as-is");
+    return vector;
+  }
+
+  return vector.map(val => val / norm);
+}
+
+/**
+ * Generate embedding with E5 model prefix and normalization
+ * 
+ * E5 models require specific prefixes:
+ * - "query: " for search queries
+ * - "passage: " for documents/products
+ * 
+ * @param text - Text to embed
+ * @param type - Type of text: 'query' for search queries, 'passage' for documents
+ * @returns Normalized 384-dimensional embedding vector
+ */
+export async function generateEmbedding(
+  text: string,
+  type: 'query' | 'passage' = 'passage'
+): Promise<number[]> {
   try {
     // Validate input
     if (!text || typeof text !== 'string') {
@@ -13,8 +46,14 @@ export async function generateEmbedding(text: string): Promise<number[]> {
       return new Array(384).fill(0);
     }
 
+    // Add E5 prefix based on type
+    // This is CRITICAL for E5 models to work properly
+    const prefixedText = type === 'query'
+      ? `query: ${text}`
+      : `passage: ${text}`;
+
     const response = await axios.post(process.env.EMBEDDING_API_URL, {
-      texts: [text],
+      texts: [prefixedText],
     }, {
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +67,12 @@ export async function generateEmbedding(text: string): Promise<number[]> {
       throw new Error("Invalid response from embedding API");
     }
 
-    return data.embeddings[0]; // Returns 384-dimensional vector
+    const rawEmbedding = data.embeddings[0];
+
+    // Normalize to unit length for inner product search
+    const normalized = normalizeEmbedding(rawEmbedding);
+
+    return normalized; // Returns normalized 384-dimensional vector
   } catch (error: any) {
     console.error("Failed to generate embedding:", error.message || error);
     // Return zero vector on failure to prevent crashes/loops in callers
