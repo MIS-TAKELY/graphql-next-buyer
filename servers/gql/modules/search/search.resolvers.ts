@@ -62,27 +62,37 @@ export const searchResolvers = {
       // 1b. Keyword Recall (Calculated using pg_trgm for fuzzy matching)
       let keywordIds: string[] = [];
       try {
-        const fuzzyResults = await prisma.$queryRaw<Array<{ id: string; match_score: number }>>(
-          Prisma.sql`
-            SELECT 
-              id,
-              GREATEST(
-                similarity(name, ${query}), 
-                similarity(brand, ${query}), 
-                similarity(description, ${query})
-              ) as match_score
-            FROM "products"
-            WHERE status = 'ACTIVE'
-              AND (
-                name % ${query} 
-                OR brand % ${query} 
-                OR description % ${query}
-              )
-            ORDER BY match_score DESC
-            LIMIT 100;
-          `
-        );
+        // Use a transaction to set the local similarity threshold for this query only
+        const fuzzyResults = await prisma.$transaction(async (tx) => {
+          // Lower threshold to 0.1 to catch severe typos (e.g. "sansug" -> "samsung" is ~0.15)
+          await tx.$executeRawUnsafe(`SELECT set_limit(0.1);`);
+
+          return await tx.$queryRaw<Array<{ id: string; match_score: number }>>(
+            Prisma.sql`
+              SELECT 
+                id,
+                GREATEST(
+                  similarity(name, ${query}), 
+                  similarity(brand, ${query}), 
+                  similarity(description, ${query})
+                ) as match_score
+              FROM "products"
+              WHERE status = 'ACTIVE'
+                AND (
+                  name % ${query} 
+                  OR brand % ${query} 
+                  OR description % ${query}
+                )
+              ORDER BY match_score DESC
+              LIMIT 100;
+            `
+          );
+        });
+
         console.log(`✅ Fuzzy search found ${fuzzyResults.length} matches for "${query}"`);
+        if (fuzzyResults.length > 0) {
+          console.log(`🔍 Top Fuzzy Match: Score=${fuzzyResults[0].match_score.toFixed(4)}`);
+        }
         keywordIds = fuzzyResults.map(p => p.id);
       } catch (error) {
         console.error("❌ Fuzzy search failed (pg_trgm likely missing), falling back to simple contains:", error);
