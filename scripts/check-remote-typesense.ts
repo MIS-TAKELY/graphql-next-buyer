@@ -22,7 +22,7 @@ async function checkRemote() {
         });
         console.log(`🔍 Test search for 'phone' with full params found ${searchResult.found} results.`);
         if (searchResult.hits?.length) {
-            console.log(`- Top result: ${searchResult.hits[0].document.name}`);
+            console.log(`- Top result: ${(searchResult.hits[0].document as any).name}`);
         }
     } catch (e: any) {
         console.error("❌ Failed to check remote Typesense:", e.message);
