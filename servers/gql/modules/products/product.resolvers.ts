@@ -301,8 +301,10 @@ export const productResolvers = {
 
       let recommendedIds: string[] = [];
 
+      console.time(`getRecommendedProducts:${productId || 'home'}`);
       try {
         if (productId) {
+          console.time(`Vector search for: ${productId}`);
           // SCENARIO: PRODUCT PAGE - Item-to-Item Recommendation
           const productEmbedding = await prisma.$queryRawUnsafe<any[]>(
             `SELECT embedding FROM products WHERE id = $1 AND embedding IS NOT NULL`,
@@ -323,9 +325,11 @@ export const productResolvers = {
             );
             recommendedIds = similarProducts.map(p => p.id);
           }
+          console.timeEnd(`Vector search for: ${productId}`);
         }
 
         if (recommendedIds.length < limit && userId) {
+          console.time(`UserInterestVector:${userId}`);
           // SCENARIO: USER FEED or FALLBACK - Personalized Recommendation
           const userVector = await getUserInterestVector(userId);
           if (userVector) {
@@ -339,10 +343,12 @@ export const productResolvers = {
             );
             recommendedIds.push(...personalizedProducts.map(p => p.id));
           }
+          console.timeEnd(`UserInterestVector:${userId}`);
         }
 
         // Final Fallback: Newest Products
         if (recommendedIds.length < limit) {
+          console.time("NewestFallback");
           const excludeIds = productId ? [productId, ...recommendedIds] : recommendedIds;
           const fallbackProducts = await prisma.product.findMany({
             where: {
@@ -354,11 +360,16 @@ export const productResolvers = {
             select: { id: true }
           });
           recommendedIds.push(...fallbackProducts.map(p => p.id));
+          console.timeEnd("NewestFallback");
         }
 
-        if (recommendedIds.length === 0) return [];
+        if (recommendedIds.length === 0) {
+          console.timeEnd(`getRecommendedProducts:${productId || 'home'}`);
+          return [];
+        }
 
         // Fetch full data for recommended products
+        console.time("FetchFullData");
         let products = await prisma.product.findMany({
           where: { id: { in: recommendedIds } },
           include: {
@@ -369,8 +380,10 @@ export const productResolvers = {
             category: true,
           }
         });
+        console.timeEnd("FetchFullData");
 
         // SCENARIO 3: LLM RE-RANKING (Optional improvement)
+        /*
         if (products.length > 5) {
           try {
             const { callLLM } = await import("@/lib/search/llm");
@@ -393,6 +406,7 @@ export const productResolvers = {
             console.error("LLM Re-ranking failed, falling back to vector order:", llmError);
           }
         }
+        */
 
         // Restore Order if LLM didn't run or failed
         if (products.length === recommendedIds.length) {
@@ -400,15 +414,18 @@ export const productResolvers = {
           const result = recommendedIds.map(id => productMap.get(id)).filter(Boolean);
           // Cache the results
           await setCache(cacheKey, result, 1800); // 30 mins
+          console.timeEnd(`getRecommendedProducts:${productId || 'home'}`);
           return result;
         }
 
         // Cache the results
         await setCache(cacheKey, products.slice(0, limit), 1800); // 30 mins
 
+        console.timeEnd(`getRecommendedProducts:${productId || 'home'}`);
         return products.slice(0, limit);
 
       } catch (error) {
+        console.timeEnd(`getRecommendedProducts:${productId || 'home'}`);
         console.error("Error in optimized recommendation:", error);
         // Fallback to basic category-based if vector search fails
         return prisma.product.findMany({
@@ -487,7 +504,9 @@ export const productResolvers = {
       const cached = await getCache<any[]>(cacheKey);
       if (cached) return cached;
 
+      console.time(`getFrequentlyBoughtTogether:${productId}`);
       // 1. Try Order History (Existing Logic)
+      console.time("FBT:OrderHistory");
       const orders = await prisma.order.findMany({
         where: {
           items: { some: { variant: { productId } } },
@@ -521,9 +540,12 @@ export const productResolvers = {
         .map(([id]) => id);
 
       let resultIds = [...sortedIds];
+      console.timeEnd("FBT:OrderHistory");
 
       // 2. LLM + Vector Fallback: If not enough results from history
       if (resultIds.length < limit) {
+        console.time("FBT:LLMFallback");
+        /*
         try {
           const product = await prisma.product.findUnique({
             where: { id: productId },
@@ -573,10 +595,13 @@ export const productResolvers = {
         } catch (error) {
           console.error("LLM/Vector fallback for Frequently Bought Together failed:", error);
         }
+        */
+        console.timeEnd("FBT:LLMFallback");
       }
 
       // 3. Category Fallback: Final fallback if still not enough
       if (resultIds.length < limit) {
+        console.time("FBT:CategoryFallback");
         const product = await prisma.product.findUnique({ where: { id: productId }, select: { categoryId: true } });
         if (product?.categoryId) {
           const categoryProducts = await prisma.product.findMany({
@@ -590,9 +615,13 @@ export const productResolvers = {
           });
           resultIds = [...resultIds, ...categoryProducts.map((p: any) => p.id)];
         }
+        console.timeEnd("FBT:CategoryFallback");
       }
 
-      if (resultIds.length === 0) return [];
+      if (resultIds.length === 0) {
+        console.timeEnd(`getFrequentlyBoughtTogether:${productId}`);
+        return [];
+      }
 
       const products = await prisma.product.findMany({
         where: { id: { in: resultIds } },
