@@ -35,6 +35,16 @@ export async function generateMetadata({ params }: { params: Promise<{ query?: s
         alternates: {
             canonical: `/category/${query?.join('/') || ''}`,
         },
+        robots: {
+            index: true,
+            follow: true,
+            googleBot: {
+                index: true,
+                follow: true,
+                "max-image-preview": "large",
+                "max-snippet": -1,
+            }
+        },
         openGraph: {
             title,
             description,

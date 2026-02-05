@@ -25,7 +25,7 @@ Disallow: /shop/account
 Disallow: /cart
 Disallow: /checkout
 Disallow: /account
-Disallow: /search*
+Allow: /search*
 
 User-agent: Amazonbot
 Disallow: /

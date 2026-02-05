@@ -134,11 +134,22 @@ export function isEmptyIntent(intent: ExtractedIntent): boolean {
  */
 export async function extractIntentWithLLM(query: string): Promise<ExtractedIntent> {
     const categories = [
-        "Smartphones", "Laptop", "Smartwatch", "Tablet", "Headphone",
-        "Speaker", "Smart Home", "Accessories", "Camera", "Console",
-        "Health & Fitness", "Lifestyle", "Furniture", "Clothing",
-        "Beauty", "Home Appliances", "Baby Products", "Automotive",
-        "Grocery", "Books", "Dry Dog Food"
+        "Fashion & Apparel",
+        "Grocery & Gourmet",
+        "Health & Wellness",
+        "Sports & Outdoors",
+        "Beauty & Personal Care",
+        "Automotive & Tools",
+        "Books & Stationery",
+        "Baby and Kids",
+        "Electronics & Gadgets",
+        "Pet Supplies",
+        "Home & Kitchen",
+        "Music & Sound",
+        "Furniture & Home Decor",
+        "Sofas & Seating Furniture",
+        "Outdoor Furniture",
+        "Smartphones", "Laptop", "Smartwatch", "Camera"
     ];
 
     const prompt = `Extract e-commerce intent from: "${query}"

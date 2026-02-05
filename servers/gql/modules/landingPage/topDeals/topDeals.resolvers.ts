@@ -214,12 +214,10 @@ export const topDealsResolvers = {
         );
 
         searchParams.q = '*';
-        // Exclude products we already found
-        if (productIds.length > 0) {
-          searchParams.filter_by += ` && id:!=[${productIds.join(',')}]`;
-        }
+        // Note: Typesense doesn't support id:!=[...] filtering reliably. 
+        // We fetch and then filter in memory later if needed, but per_page=50 is enough.
 
-        const remainingLimit = 50; // Fetch more to ensure we filter and sort correctly later
+        const remainingLimit = 50;
         searchParams.per_page = remainingLimit;
 
         searchResult = await typesenseClient.collections('products').documents().search(searchParams);

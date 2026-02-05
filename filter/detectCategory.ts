@@ -21,6 +21,28 @@ export async function detectCategory(
   try {
     console.log(`🔍 Detecting category for: "${query}"`);
 
+    // Step 0: Try LLM-based detection (Local Ollama)
+    try {
+      const { extractIntentWithLLM, mapCategoryToDB } = await import("@/lib/search/intentExtractor");
+      const llmIntent = await extractIntentWithLLM(query);
+
+      if (llmIntent.category) {
+        console.log(`🤖 LLM suggested category: ${llmIntent.category}`);
+        const dbCategory = await mapCategoryToDB(llmIntent.category);
+
+        if (dbCategory) {
+          console.log(`✅ LLM Category mapped to DB: ${dbCategory}`);
+          return {
+            category: dbCategory,
+            attributes: [],
+            intent: {},
+          };
+        }
+      }
+    } catch (llmError) {
+      console.error("⚠️ LLM Category detection failed, falling back...", llmError);
+    }
+
     // Step 1: Use Typesense to find the most relevant category
     const { typesenseClient } = await import("@/lib/typesense");
 
