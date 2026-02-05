@@ -483,6 +483,10 @@ export const productResolvers = {
       return views.map((v: any) => v.product);
     },
     getFrequentlyBoughtTogether: async (_: any, { productId, limit = 5 }: { productId: string, limit?: number }) => {
+      const cacheKey = `frequently_bought_together:v1:${productId}:${limit}`;
+      const cached = await getCache<any[]>(cacheKey);
+      if (cached) return cached;
+
       // 1. Try Order History (Existing Logic)
       const orders = await prisma.order.findMany({
         where: {
@@ -502,7 +506,6 @@ export const productResolvers = {
       });
 
       const frequencyMap = new Map<string, number>();
-
       orders.forEach((order: any) => {
         order.items.forEach((item: any) => {
           if (item?.variant?.productId && item.variant.productId !== productId) {
@@ -519,14 +522,68 @@ export const productResolvers = {
 
       let resultIds = [...sortedIds];
 
-      // 2. Category Fallback: Same category (If still not enough)
+      // 2. LLM + Vector Fallback: If not enough results from history
+      if (resultIds.length < limit) {
+        try {
+          const product = await prisma.product.findUnique({
+            where: { id: productId },
+            select: { name: true, description: true, category: { select: { name: true } } }
+          });
+
+          if (product) {
+            const { callLLM } = await import("@/lib/search/llm");
+            const prompt = `Given the product "${product.name}" in category "${product.category?.name}", list 3 complementary categories of products that are frequently bought with it (e.g., if it's a "Camera", complementary categories might be "Lens", "SD Card", "Tripod"). Return ONLY a JSON array of category names.`;
+
+            const llmResponse = await callLLM(prompt);
+            const complementaryCategories = JSON.parse(llmResponse);
+
+            if (Array.isArray(complementaryCategories) && complementaryCategories.length > 0) {
+              // Find one top product for each complementary category using vector similarity to the current product
+              const productEmbedding = await prisma.$queryRawUnsafe<any[]>(
+                `SELECT embedding FROM products WHERE id = $1 AND embedding IS NOT NULL`,
+                productId
+              );
+
+              if (productEmbedding.length > 0) {
+                const vecString = typeof productEmbedding[0].embedding === 'string'
+                  ? productEmbedding[0].embedding
+                  : `[${Array.from(productEmbedding[0].embedding as any).join(',')}]`;
+
+                for (const catName of complementaryCategories) {
+                  if (resultIds.length >= limit) break;
+
+                  // Find a product in the suggested category that is semantically related
+                  const suggestedProducts = await prisma.$queryRawUnsafe<any[]>(
+                    `SELECT p.id FROM products p
+                     JOIN categories c ON p."categoryId" = c.id
+                     WHERE p.id != $1 AND p.status = 'ACTIVE' AND p.embedding IS NOT NULL
+                     AND c.name ILIKE $2
+                     ORDER BY p.embedding <=> $3::vector
+                     LIMIT 1`,
+                    productId, `%${catName}%`, vecString
+                  );
+
+                  if (suggestedProducts.length > 0 && !resultIds.includes(suggestedProducts[0].id)) {
+                    resultIds.push(suggestedProducts[0].id);
+                  }
+                }
+              }
+            }
+          }
+        } catch (error) {
+          console.error("LLM/Vector fallback for Frequently Bought Together failed:", error);
+        }
+      }
+
+      // 3. Category Fallback: Final fallback if still not enough
       if (resultIds.length < limit) {
         const product = await prisma.product.findUnique({ where: { id: productId }, select: { categoryId: true } });
         if (product?.categoryId) {
           const categoryProducts = await prisma.product.findMany({
             where: {
               categoryId: product.categoryId,
-              id: { notIn: [productId, ...resultIds] }
+              id: { notIn: [productId, ...resultIds] },
+              status: 'ACTIVE'
             },
             take: limit - resultIds.length,
             select: { id: true }
@@ -558,9 +615,12 @@ export const productResolvers = {
         }
       });
 
-      // Sort back to the hybrid order (bought together first, then AI/Category)
-      const productMap = new Map(products.map((p: any) => [p.id, p]));
-      return resultIds.map(id => productMap.get(id)).filter(Boolean);
+      // Maintain order: history first, then LLM/category fallback
+      const productMap = new Map(products.map(p => [p.id, p]));
+      const result = resultIds.map(id => productMap.get(id)).filter(Boolean);
+
+      await setCache(cacheKey, result, 3600); // 1 hour cache
+      return result;
     },
     getProductsByIds: async (_: any, { ids }: { ids: string[] }) => {
       if (!ids || ids.length === 0) return [];
