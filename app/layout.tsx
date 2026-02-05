@@ -57,17 +57,40 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   icons: {
-    icon: "/favicon.ico",
-    apple: "/icon-192x192.png",
-  },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "Vanijay",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon-192x192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512x512.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [
+      { url: "/icon-192x192.png", sizes: "180x180" },
+    ],
+    other: [
+      { rel: "icon", url: "/icon-192x192.png", sizes: "192x192" },
+    ],
   },
   other: {
     "geo.region": "NP",
     "geo.placename": "Nepal",
+  }
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Vanijay",
+  "url": "https://www.vanijay.com",
+  "logo": "https://www.vanijay.com/icon-512x512.png",
+  "sameAs": [
+    "https://facebook.com/vanijay",
+    "https://instagram.com/vanijay",
+    "https://twitter.com/vanijay"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer support",
+    "areaServed": "NP",
+    "availableLanguage": "en"
   }
 };
 
@@ -99,6 +122,10 @@ export default function RootLayout({
           <GlobalAuthModal />
         </ApolloWrapper>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "G-R7VFCZNSEQ"} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </body>
     </html>
   );
