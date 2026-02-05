@@ -216,7 +216,7 @@ export const productResolvers = {
       context: any
     ) => {
       const userId = context?.user?.id;
-      const cacheKey = `recommendations:v2:${userId || 'guest'}:${productId || 'home'}:${limit}`;
+      const cacheKey = `recommendations:v3:${userId || 'guest'}:${productId || 'home'}:${limit}`;
 
       // Try cache first
       const cached = await getCache<any[]>(cacheKey);
@@ -224,102 +224,195 @@ export const productResolvers = {
         return cached;
       }
 
-      // Helper to gather user interests
-      const getUserInterests = async (uid: string) => {
-        const [recentOrders, cartItems, wishlistItems, recentlyViewed] = await Promise.all([
+      const { getEmbedding } = await import("@/lib/search/embedding");
+
+      // Helper to gather user interests and create a profile vector
+      const getUserInterestVector = async (uid: string) => {
+        const [recentOrders, wishlistItems, recentlyViewed] = await Promise.all([
           prisma.order.findMany({
             where: { buyerId: uid },
             take: 5,
             include: { items: { include: { variant: { include: { product: true } } } } }
           }),
-          prisma.cartItem.findMany({
-            where: { userId: uid },
-            include: { variant: { include: { product: true } } }
-          }),
           prisma.wishlistItem.findMany({
             where: { wishlist: { userId: uid } },
-            include: { product: true }
+            include: { product: { select: { id: true } } }
           }),
           prisma.recentlyViewed.findMany({
             where: { userId: uid },
             take: 10,
-            include: { product: true }
+            include: { product: { select: { id: true } } }
           })
         ]);
 
-        const categories = new Set<string>();
-        const brands = new Set<string>();
+        const productIds = new Set<string>();
+        const embeddings: number[][] = [];
 
-        const extract = (prod: any) => {
-          if (prod?.categoryId) categories.add(prod.categoryId);
-          if (prod?.brand) brands.add(prod.brand);
+        const addProduct = (prod: any) => {
+          if (prod && !productIds.has(prod.id)) {
+            productIds.add(prod.id);
+            // In Prisma, Unsupported type comes back as string/buffer representation or sometimes we need to query raw
+            // But let's assume if it was fetched, we handle it. 
+            // Actually, it's better to fetch embeddings via raw SQL if they are Unsupported.
+          }
         };
 
-        recentOrders.forEach((o: any) => o.items.forEach((i: any) => extract(i.variant.product)));
-        cartItems.forEach((i: any) => extract(i.variant.product));
-        wishlistItems.forEach((i: any) => extract(i.product));
-        recentlyViewed.forEach((i: any) => extract(i.product));
+        const collectedIds = new Set<string>();
+        recentOrders.forEach((o: any) => o.items.forEach((i: any) => i.variant.product && collectedIds.add(i.variant.product.id)));
+        wishlistItems.forEach((i: any) => i.product && collectedIds.add(i.product.id));
+        recentlyViewed.forEach((i: any) => i.product && collectedIds.add(i.product.id));
 
-        return { categories: Array.from(categories), brands: Array.from(brands) };
+        if (collectedIds.size === 0) return null;
+
+        // Fetch embeddings for these products
+        const productsWithEmbeddings = await prisma.$queryRawUnsafe<any[]>(
+          `SELECT embedding FROM products WHERE id = ANY($1) AND embedding IS NOT NULL`,
+          Array.from(collectedIds)
+        );
+
+        if (productsWithEmbeddings.length === 0) return null;
+
+        // Average the embeddings
+        const dim = 384; // Based on schema vector(384)
+        const avgVector = new Array(dim).fill(0);
+        let count = 0;
+
+        productsWithEmbeddings.forEach((p: any) => {
+          // embedding is returned as a string "[0.1, 0.2, ...]" from pgvector in some drivers, 
+          // or as a float32 array.
+          let vec: number[];
+          if (typeof p.embedding === 'string') {
+            vec = p.embedding.replace(/[\[\]]/g, '').split(',').map(Number);
+          } else {
+            vec = Array.from(p.embedding as any);
+          }
+
+          if (vec.length === dim) {
+            for (let i = 0; i < dim; i++) avgVector[i] += vec[i];
+            count++;
+          }
+        });
+
+        if (count === 0) return null;
+        for (let i = 0; i < dim; i++) avgVector[i] /= count;
+
+        return `[${avgVector.join(',')}]`;
       };
 
-      let recommendedProducts: any[] = [];
+      let recommendedIds: string[] = [];
 
-      // ---------------------------------------------------------
-      // SCENARIO 1: LANDING PAGE (No Product ID)
-      // ---------------------------------------------------------
-      if (!productId || productId === "") {
-        if (userId) {
-          // USER FEED: Based on interests
-          const interests = await getUserInterests(userId);
+      try {
+        if (productId) {
+          // SCENARIO: PRODUCT PAGE - Item-to-Item Recommendation
+          const productEmbedding = await prisma.$queryRawUnsafe<any[]>(
+            `SELECT embedding FROM products WHERE id = $1 AND embedding IS NOT NULL`,
+            productId
+          );
 
-          if (interests.categories.length > 0 || interests.brands.length > 0) {
-            recommendedProducts = await prisma.product.findMany({
-              where: {
-                OR: [
-                  { categoryId: { in: interests.categories } },
-                  { brand: { in: interests.brands } }
-                ]
-              },
-              take: limit,
-              orderBy: { createdAt: 'desc' },
-              include: {
-                seller: { select: { id: true, firstName: true, lastName: true } },
-                variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
-                images: { orderBy: { sortOrder: 'asc' } },
-                reviews: { select: { id: true, rating: true } },
-                category: true,
-              }
-            });
+          if (productEmbedding.length > 0) {
+            const vecString = typeof productEmbedding[0].embedding === 'string'
+              ? productEmbedding[0].embedding
+              : `[${Array.from(productEmbedding[0].embedding as any).join(',')}]`;
+
+            const similarProducts = await prisma.$queryRawUnsafe<any[]>(
+              `SELECT id FROM products 
+               WHERE id != $1 AND status = 'ACTIVE' AND embedding IS NOT NULL 
+               ORDER BY embedding <=> $2::vector 
+               LIMIT $3`,
+              productId, vecString, limit
+            );
+            recommendedIds = similarProducts.map(p => p.id);
           }
         }
 
-        // Fallback if no user or no interests found
-        if (recommendedProducts.length === 0) {
-          recommendedProducts = await prisma.product.findMany({
-            where: {},
-            take: limit,
-            orderBy: { createdAt: 'desc' }, // Newest or random
-            include: {
-              seller: { select: { id: true, firstName: true, lastName: true } },
-              variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
-              images: { orderBy: { sortOrder: 'asc' } },
-              reviews: { select: { id: true, rating: true } },
-              category: true,
-            }
-          });
+        if (recommendedIds.length < limit && userId) {
+          // SCENARIO: USER FEED or FALLBACK - Personalized Recommendation
+          const userVector = await getUserInterestVector(userId);
+          if (userVector) {
+            const excludeIds = productId ? [productId, ...recommendedIds] : recommendedIds;
+            const personalizedProducts = await prisma.$queryRawUnsafe<any[]>(
+              `SELECT id FROM products 
+               WHERE id != ALL($1) AND status = 'ACTIVE' AND embedding IS NOT NULL 
+               ORDER BY embedding <=> $2::vector 
+               LIMIT $3`,
+              excludeIds, userVector, limit - recommendedIds.length
+            );
+            recommendedIds.push(...personalizedProducts.map(p => p.id));
+          }
         }
-      }
-      // ---------------------------------------------------------
-      // SCENARIO 2: PRODUCT PAGE (Category/Brand Fallback)
-      // ---------------------------------------------------------
-      else {
-        // Fallback for related products
-        recommendedProducts = await prisma.product.findMany({
-          where: {
-            id: { not: productId },
-            status: 'ACTIVE'
-          },
+
+        // Final Fallback: Newest Products
+        if (recommendedIds.length < limit) {
+          const excludeIds = productId ? [productId, ...recommendedIds] : recommendedIds;
+          const fallbackProducts = await prisma.product.findMany({
+            where: {
+              id: { notIn: excludeIds },
+              status: 'ACTIVE'
+            },
+            take: limit - recommendedIds.length,
+            orderBy: { createdAt: 'desc' },
+            select: { id: true }
+          });
+          recommendedIds.push(...fallbackProducts.map(p => p.id));
+        }
+
+        if (recommendedIds.length === 0) return [];
+
+        // Fetch full data for recommended products
+        let products = await prisma.product.findMany({
+          where: { id: { in: recommendedIds } },
+          include: {
+            seller: { select: { id: true, firstName: true, lastName: true } },
+            variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
+            images: { orderBy: { sortOrder: 'asc' } },
+            reviews: { select: { id: true, rating: true } },
+            category: true,
+          }
+        });
+
+        // SCENARIO 3: LLM RE-RANKING (Optional improvement)
+        if (products.length > 5) {
+          try {
+            const { callLLM } = await import("@/lib/search/llm");
+            const productList = products.map(p => ({ id: p.id, name: p.name, description: p.description?.substring(0, 100) }));
+            const prompt = `Given the following products, rank them by how likely a general user would be interested in them. Return ONLY a JSON array of product IDs in order of relevance.
+            Products: ${JSON.stringify(productList)}`;
+
+            const llmResponse = await callLLM(prompt);
+            const rankedIds = JSON.parse(llmResponse);
+
+            if (Array.isArray(rankedIds)) {
+              const productMap = new Map(products.map(p => [p.id, p]));
+              products = rankedIds.map(id => productMap.get(id)).filter((p): p is NonNullable<typeof p> => Boolean(p));
+
+              // Ensure we don't lose products that LLM might have missed
+              const seenIds = new Set(rankedIds);
+              products.push(...products.filter(p => !seenIds.has(p.id)));
+            }
+          } catch (llmError) {
+            console.error("LLM Re-ranking failed, falling back to vector order:", llmError);
+          }
+        }
+
+        // Restore Order if LLM didn't run or failed
+        if (products.length === recommendedIds.length) {
+          const productMap = new Map(products.map(p => [p.id, p]));
+          const result = recommendedIds.map(id => productMap.get(id)).filter(Boolean);
+          // Cache the results
+          await setCache(cacheKey, result, 1800); // 30 mins
+          return result;
+        }
+
+        // Cache the results
+        await setCache(cacheKey, products.slice(0, limit), 1800); // 30 mins
+
+        return products.slice(0, limit);
+
+      } catch (error) {
+        console.error("Error in optimized recommendation:", error);
+        // Fallback to basic category-based if vector search fails
+        return prisma.product.findMany({
+          where: { status: 'ACTIVE' },
           take: limit,
           orderBy: { createdAt: 'desc' },
           include: {
@@ -331,11 +424,6 @@ export const productResolvers = {
           }
         });
       }
-
-      // Cache the results
-      await setCache(cacheKey, recommendedProducts, 1800); // 30 mins
-
-      return recommendedProducts;
     },
     getProductsBySeller: async (_: any, { sellerId }: { sellerId: string }) => {
       if (!sellerId) throw new Error("Seller ID is required");
