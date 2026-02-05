@@ -31,8 +31,18 @@ export const topDealsResolvers = {
         return cached;
       }
 
-      // Step 1: Detect category from the query using AI
-      const result = await detectCategory(topDealAbout);
+      // CLEAN THE QUERY: Remove "Best Deals on", "Top Offers", etc.
+      // This ensures we search for "Furniture" instead of "Best Deals on Furniture"
+      const cleanedQuery = topDealAbout
+        .replace(/\b(best|top|deals?|offers?)\b/gi, "")
+        .replace(/\b(on|for|at|in)\b/gi, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      console.log(`🧹 Cleaned query: "${topDealAbout}" -> "${cleanedQuery}"`);
+
+      // Step 1: Detect category from the query using AI (use Cleaned Query)
+      const result = await detectCategory(cleanedQuery || topDealAbout);
       const detectedCategory = result.category;
       console.log("🎯 Detected category:", detectedCategory);
 
@@ -111,32 +121,19 @@ export const topDealsResolvers = {
       // Step 5: Typesense Search within the category hierarchy
       const { typesenseClient } = await import("@/lib/typesense");
 
-      const searchParams: any = {
-        q: topDealAbout,
+      let searchParams: any = {
+        q: cleanedQuery || '*',
         query_by: 'name,brand,description,categoryName',
         filter_by: `status:=ACTIVE && categoryId:[${categoryIds.join(',')}]`,
         per_page: 50,
       };
 
-      const searchResult = await typesenseClient.collections('products').documents().search(searchParams);
-      const hits = searchResult.hits || [];
-
-      if (hits.length === 0) {
-        console.log(
-          "⚠️ No products found in category hierarchy:",
-          topLevelCategory.name
-        );
-        return [];
-      }
-
-      console.log(
-        `✅ Found ${hits.length} products in category hierarchy via Typesense`
-      );
-
-      const productIds = hits.map((hit: any) => hit.document.id);
+      let searchResult = await typesenseClient.collections('products').documents().search(searchParams);
+      let hits = searchResult.hits || [];
+      let productIds = hits.map((hit: any) => hit.document.id);
 
       // Step 7: Fetch full product details with proper typing
-      const products = (await prisma.product.findMany({
+      let products = (await prisma.product.findMany({
         where: {
           id: { in: productIds },
           status: "ACTIVE",
@@ -149,7 +146,6 @@ export const topDealsResolvers = {
           description: true,
           brand: true,
           variants: {
-            // Removed stock filter to show products even with 0 stock
             select: {
               id: true,
               sku: true,
@@ -210,6 +206,106 @@ export const topDealsResolvers = {
           },
         },
       })) as ProductWithDetails[];
+
+      // Fallback: If not enough results, fetch generic popular items from the category (Wildcard)
+      if (products.length < limit) {
+        console.log(
+          `⚠️ Only found ${products.length} products with specific query. Fetching more via wildcard...`
+        );
+
+        searchParams.q = '*';
+        // Exclude products we already found
+        if (productIds.length > 0) {
+          searchParams.filter_by += ` && id:!=[${productIds.join(',')}]`;
+        }
+
+        const remainingLimit = 50; // Fetch more to ensure we filter and sort correctly later
+        searchParams.per_page = remainingLimit;
+
+        searchResult = await typesenseClient.collections('products').documents().search(searchParams);
+        const fallbackHits = searchResult.hits || [];
+
+        if (fallbackHits.length > 0) {
+          const fallbackIds = fallbackHits.map((hit: any) => hit.document.id);
+          console.log(`✅ Found ${fallbackHits.length} fallback products`);
+
+          const fallbackProducts = (await prisma.product.findMany({
+            where: {
+              id: { in: fallbackIds },
+              status: "ACTIVE",
+              categoryId: { in: categoryIds },
+            },
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              description: true,
+              brand: true,
+              variants: {
+                select: {
+                  id: true,
+                  sku: true,
+                  price: true,
+                  mrp: true,
+                  stock: true,
+                  specifications: {
+                    select: {
+                      key: true,
+                      value: true,
+                    },
+                  },
+                },
+              },
+              images: {
+                where: { mediaType: "PRIMARY" },
+                take: 1,
+                select: {
+                  url: true,
+                  altText: true,
+                  sortOrder: true,
+                },
+                orderBy: { sortOrder: "asc" },
+              },
+              category: {
+                select: {
+                  id: true,
+                  name: true,
+                  children: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                },
+              },
+              productOffers: {
+                where: {
+                  offer: {
+                    isActive: true,
+                    startDate: { lte: new Date() },
+                    endDate: { gte: new Date() },
+                  },
+                },
+                select: {
+                  offer: {
+                    select: {
+                      id: true,
+                      title: true,
+                      type: true,
+                      value: true,
+                    },
+                  },
+                },
+              },
+              reviews: {
+                where: { status: "APPROVED" },
+                select: { id: true, rating: true },
+              },
+            },
+          })) as ProductWithDetails[];
+
+          products = [...products, ...fallbackProducts];
+        }
+      }
 
       console.log(`📦 Retrieved ${products.length} full product records`);
 
@@ -274,11 +370,9 @@ export const topDealsResolvers = {
           } as TopDealProduct;
         })
         .filter((p): p is TopDealProduct => p !== null && p.saveUpTo > 0)
-        .sort((a, b) => a.saveUpTo - b.saveUpTo)
+        // Sort by biggest savings (DESC) instead of smallest (ASC)
+        .sort((a, b) => b.saveUpTo - a.saveUpTo)
         .slice(0, limit);
-
-      // console.log("productsWithDeals-->", productsWithDeals);
-      // console.log(`💰 Top deals found: ${productsWithDeals.length}`);
 
       await setCache(cacheKey, productsWithDeals, 86400);
 
