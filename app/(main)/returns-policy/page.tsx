@@ -1,5 +1,16 @@
 // components/ReturnRefundPolicy.tsx
+import { Metadata } from 'next';
 import React from 'react';
+
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
+
+export const metadata: Metadata = {
+  title: "Return and Refund Policy",
+  description: "Read our return and refund policy for shopping on Vanijay.com. We prioritize your satisfaction.",
+  alternates: {
+    canonical: `${baseUrl}/returns-policy`,
+  }
+};
 
 const ReturnRefundPolicy = () => {
   return (

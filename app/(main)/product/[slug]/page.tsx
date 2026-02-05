@@ -417,7 +417,7 @@ export default async function ProductPage({
         "@type": "ListItem",
         position: 2,
         name: serializableProduct.category?.name || "Shop",
-        item: `${baseUrl}/shop`,
+        item: `${baseUrl}`,
       },
       {
         "@type": "ListItem",

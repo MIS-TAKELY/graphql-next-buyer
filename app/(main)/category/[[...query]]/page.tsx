@@ -24,16 +24,19 @@ export async function generateMetadata({ params }: { params: Promise<{ query?: s
     }
 
     const categoryName = category?.name || (query?.[0] ? decodeURIComponent(query[0]) : "All Products");
-    const title = category?.metaTitle || `${categoryName} | Shop | Vanijay`;
+    const title = category?.metaTitle || `${categoryName} | Shop`;
     const description = category?.metaDescription || category?.description || `Browse our collection of ${categoryName}. Find the best deals and products.`;
     const keywords = category?.keywords || [`buy ${categoryName}`, `${categoryName} Nepal`];
+
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
+    const canonical = `${baseUrl}/category/${query?.join('/') || ''}`;
 
     return {
         title,
         description,
         keywords,
         alternates: {
-            canonical: `/category/${query?.join('/') || ''}`,
+            canonical: canonical,
         },
         robots: {
             index: true,

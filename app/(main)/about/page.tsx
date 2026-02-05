@@ -1,8 +1,13 @@
 import type { Metadata } from 'next';
 
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
+
 export const metadata: Metadata = {
     title: "About Us - Vanijay | Zero Seller Charges | Best Prices in Nepal",
     description: "Learn about Vanijay, Nepal's premier online shopping platform. We offer the best prices on electronics, fashion, and home goods with zero charges for sellers.",
+    alternates: {
+        canonical: `${baseUrl}/about`,
+    },
     openGraph: {
         title: "About Vanijay - Revolutionizing E-Commerce in Nepal",
         description: "Zero seller fees, best prices for buyers. Join the Vanijay revolution today.",

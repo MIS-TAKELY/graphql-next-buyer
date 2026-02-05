@@ -11,20 +11,22 @@ export async function generateMetadata({
     const { q } = await searchParams;
     const searchQuery = typeof q === 'string' ? q : '';
 
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
+    const canonical = searchQuery ? `${baseUrl}/search?q=${encodeURIComponent(searchQuery)}` : `${baseUrl}/search`;
+
     const title = searchQuery
-        ? `Search results for "${searchQuery}" | Vanijay Nepal`
-        : "Search Products | Vanijay Nepal";
+        ? `Search results for "${searchQuery}"`
+        : "Search Products";
 
     const description = searchQuery
-        ? `Browse the best search results for "${searchQuery}" on Vanijay Nepal. Find quality products at the best prices.`
-        : "Search for electronics, fashion, and more on Vanijay. Modern e-commerce platform for seamless online shopping in Nepal.";
+        ? `Browse the best search results for "${searchQuery}" on Vanijay. Find quality products at the best prices.`
+        : "Search for electronics, fashion, and more on Vanijay. Modern e-commerce platform for online shopping in Nepal.";
 
     return {
         title,
         description,
         alternates: {
-            // Use standard search URL for canonical
-            canonical: searchQuery ? `/search?q=${encodeURIComponent(searchQuery)}` : "/search",
+            canonical: canonical,
         },
         robots: {
             // Don't index search results to avoid thin content, but follow links

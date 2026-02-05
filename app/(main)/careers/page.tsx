@@ -2,9 +2,14 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Briefcase } from 'lucide-react';
 
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
+
 export const metadata: Metadata = {
     title: "Careers - Vanijay | Join our Team",
     description: "Explore career opportunities at Vanijay. Join our mission to revolutionize e-commerce in Nepal.",
+    alternates: {
+        canonical: `${baseUrl}/careers`,
+    }
 };
 
 export default function CareersPage() {

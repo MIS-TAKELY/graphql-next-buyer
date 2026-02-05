@@ -1,5 +1,16 @@
 // components/TermsAndConditions.tsx
+import { Metadata } from 'next';
 import React from 'react';
+
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
+
+export const metadata: Metadata = {
+    title: "Terms and Conditions",
+    description: "Read the terms and conditions for using the Vanijay e-commerce platform.",
+    alternates: {
+        canonical: `${baseUrl}/terms-conditions`,
+    }
+};
 
 const TermsAndConditions = () => {
     return (

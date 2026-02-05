@@ -1,5 +1,16 @@
 // components/ShippingDeliveryPolicy.tsx
+import { Metadata } from 'next';
 import React from 'react';
+
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
+
+export const metadata: Metadata = {
+  title: "Shipping & Delivery Policy",
+  description: "Learn about our shipping and delivery process, timelines, and costs for orders across Nepal.",
+  alternates: {
+    canonical: `${baseUrl}/shipping-policy`,
+  }
+};
 
 const ShippingDeliveryPolicy = () => {
   return (

@@ -1,5 +1,16 @@
 // components/PrivacyPolicy.tsx
+import { Metadata } from 'next';
 import React from 'react';
+
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
+
+export const metadata: Metadata = {
+    title: "Privacy Policy",
+    description: "Read the privacy policy for Vanijay.com. We value your privacy and are committed to protecting your personal information.",
+    alternates: {
+        canonical: `${baseUrl}/privacy-policy`,
+    }
+};
 
 const PrivacyPolicy = () => {
     return (

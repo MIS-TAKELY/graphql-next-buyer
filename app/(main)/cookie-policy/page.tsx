@@ -1,4 +1,15 @@
 import { PolicyLayout } from "@/components/common/PolicyLayout";
+import { Metadata } from 'next';
+
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
+
+export const metadata: Metadata = {
+  title: "Cookie Policy",
+  description: "Learn about how we use cookies on Vanijay.com to improve your shopping experience.",
+  alternates: {
+    canonical: `${baseUrl}/cookie-policy`,
+  }
+};
 
 export default function CookiePolicyPage() {
   return (
