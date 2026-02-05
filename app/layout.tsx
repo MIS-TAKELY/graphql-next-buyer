@@ -72,6 +72,8 @@ export const metadata: Metadata = {
   other: {
     "geo.region": "NP",
     "geo.placename": "Nepal",
+    "msapplication-TileImage": "/icon-512x512.png",
+    "msapplication-TileColor": "#000000",
   }
 };
 
