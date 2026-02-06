@@ -43,13 +43,13 @@ const PopularSearches = () => {
                     {data.map((category) => (
                         <div key={category.id} className="flex flex-col gap-2">
                             <h3 className="font-semibold text-gray-800 mb-2">{category.title}</h3>
-                            <div className="flex flex-col gap-2">
+                            <div className="flex flex-wrap gap-2">
                                 {category.keywords.map((keyword) => (
                                     <Link
                                         key={keyword.id}
                                         href={keyword.href}
                                         target={keyword.targetType === '_blank' ? '_blank' : '_self'}
-                                        className="text-sm text-gray-600 hover:text-blue-600 hover:underline transition-colors"
+                                        className="inline-flex items-center px-3 py-1 rounded-full bg-white border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 transition-all cursor-pointer shadow-sm"
                                     // TODO: Add click tracking here
                                     >
                                         {keyword.name}
