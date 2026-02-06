@@ -49,6 +49,7 @@ const PopularSearches = () => {
                                     const getHref = (url: string) => {
                                         if (!url) return '#';
                                         if (url.startsWith('http') || url.startsWith('/')) return url;
+                                        if (url.startsWith('www.')) return `https://${url}`;
                                         // Assume it's a search query if not a URL
                                         return `/search?q=${encodeURIComponent(url)}`;
                                     };
