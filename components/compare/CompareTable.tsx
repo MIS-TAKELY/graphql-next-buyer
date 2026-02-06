@@ -124,33 +124,35 @@ export default function CompareTable() {
             }
 
             // 3. Category Specifications
-            if (product.category?.categorySpecification) {
+            if (Array.isArray(product.category?.categorySpecification)) {
                 product.category.categorySpecification.forEach(spec => {
                     addFeature(normalizeKey(spec.key), spec.label || spec.key, spec.value);
                 });
             }
 
             // 4. Specification Table (Rich Specs)
-            if (product.specificationTable) {
-                product.specificationTable.forEach(table => {
-                    table.rows.forEach(row => {
-                        if (Array.isArray(row) && row.length >= 2) {
-                            const [key, value] = row;
-                            addFeature(normalizeKey(key), key, value);
-                        }
-                    });
+            if (Array.isArray(product.specificationTable)) {
+                product.specificationTable.forEach((table: any) => {
+                    if (Array.isArray(table?.rows)) {
+                        table.rows.forEach((row: any) => {
+                            if (Array.isArray(row) && row.length >= 2) {
+                                const [key, value] = row;
+                                addFeature(normalizeKey(key), key, value);
+                            }
+                        });
+                    }
                 });
             }
 
             // 5. Legacy Features/Specs (Fallback)
-            if (product.features && product.features.length > 0) {
+            if (Array.isArray(product.features) && product.features.length > 0) {
                 features.set('highlights', product.features);
                 allFeatureKeys.add('highlights');
                 featureLabels.set('highlights', 'Highlights');
             }
 
             // Process specifications with smart parsing and guessing
-            if (product.variants?.[0]?.specifications) {
+            if (Array.isArray(product.variants?.[0]?.specifications)) {
                 product.variants[0].specifications.forEach((spec: any, idx) => {
                     const specValue = spec.value;
                     const specKey = spec.key;
