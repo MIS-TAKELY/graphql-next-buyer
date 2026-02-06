@@ -66,7 +66,7 @@ export const productTypeDefs = gql`
     getProducts(limit: Int, offset: Int): [Product!]!
     getProduct(productId: ID!): Product!
     getProductBySlug(slug: String!): Product!
-    getProductsByCategory(categorySlug: String!, limit: Int, offset: Int): ProductsWithCount!
+    getProductsByCategory(categorySlug: String!, limit: Int, offset: Int, maxPrice: Int): ProductsWithCount!
     getRecommendedProducts(productId: ID, limit: Int): [Product!]!
     getProductsBySeller(sellerId: ID!): [Product!]!
     getRecentlyViewed: [Product!]!

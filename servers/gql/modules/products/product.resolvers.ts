@@ -155,7 +155,7 @@ export const productResolvers = {
 
       return product;
     },
-    getProductsByCategory: async (_: any, { categorySlug, limit = 50, offset = 0 }: { categorySlug: string; limit?: number; offset?: number }) => {
+    getProductsByCategory: async (_: any, { categorySlug, limit = 50, offset = 0, maxPrice }: { categorySlug: string; limit?: number; offset?: number; maxPrice?: number }) => {
       if (!categorySlug) throw new Error("Category slug is required");
 
       // First, find the category and its children
@@ -174,17 +174,26 @@ export const productResolvers = {
       const categoryIds = [category.id, ...category.children.map((c: any) => c.id)];
 
       // Count total products
+      const countWhere: any = {
+        categoryId: { in: categoryIds },
+        status: 'ACTIVE'
+      };
+
+      if (maxPrice) {
+        countWhere.variants = {
+          some: {
+            price: { lte: maxPrice }
+          }
+        };
+      }
+
       const total = await prisma.product.count({
-        where: {
-          categoryId: { in: categoryIds }
-        }
+        where: countWhere
       });
 
       // Fetch products
       const products = await prisma.product.findMany({
-        where: {
-          categoryId: { in: categoryIds }
-        },
+        where: countWhere,
         include: {
           seller: { select: { id: true, firstName: true, lastName: true } },
           variants: {

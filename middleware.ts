@@ -63,7 +63,7 @@ export default async function middleware(request: NextRequest) {
 
   const isPublicRoute = publicRoutes.some(route =>
     nextUrl.pathname === route || nextUrl.pathname.startsWith(`${route}/`)
-  );
+  ) || nextUrl.pathname.startsWith("/best-");
 
   // 3. If not logged in
   if (!isLoggedIn) {
