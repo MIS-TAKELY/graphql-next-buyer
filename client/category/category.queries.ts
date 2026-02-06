@@ -15,8 +15,8 @@ export const GET_CATEGORY_BY_SLUG = gql`
 `;
 
 export const GET_PRODUCTS_BY_CATEGORY = gql`
-  query GetProductsByCategory($categorySlug: String!, $limit: Int, $offset: Int) {
-    getProductsByCategory(categorySlug: $categorySlug, limit: $limit, offset: $offset) {
+  query GetProductsByCategory($categorySlug: String!, $limit: Int, $offset: Int, $maxPrice: Int) {
+    getProductsByCategory(categorySlug: $categorySlug, limit: $limit, offset: $offset, maxPrice: $maxPrice) {
       products {
         id
         name
