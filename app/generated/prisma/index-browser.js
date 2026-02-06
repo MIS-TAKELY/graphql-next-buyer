@@ -291,7 +291,11 @@ exports.Prisma.CategoryScalarFieldEnum = {
   metaTitle: 'metaTitle',
   isIndexable: 'isIndexable',
   canonicalUrl: 'canonicalUrl',
-  lastIndexableUpdate: 'lastIndexableUpdate'
+  lastIndexableUpdate: 'lastIndexableUpdate',
+  templateType: 'templateType',
+  priceRanges: 'priceRanges',
+  filters: 'filters',
+  seoTemplates: 'seoTemplates'
 };
 
 exports.Prisma.OfferScalarFieldEnum = {
@@ -376,7 +380,10 @@ exports.Prisma.ProductScalarFieldEnum = {
   metaTitle: 'metaTitle',
   isIndexable: 'isIndexable',
   canonicalUrl: 'canonicalUrl',
-  lastIndexableUpdate: 'lastIndexableUpdate'
+  lastIndexableUpdate: 'lastIndexableUpdate',
+  pros: 'pros',
+  cons: 'cons',
+  affiliateLink: 'affiliateLink'
 };
 
 exports.Prisma.ProductVariantScalarFieldEnum = {
@@ -793,6 +800,21 @@ exports.Prisma.ReturnItemScalarFieldEnum = {
   reason: 'reason'
 };
 
+exports.Prisma.SeoPageScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  priceThreshold: 'priceThreshold',
+  urlPath: 'urlPath',
+  metaTitle: 'metaTitle',
+  metaDescription: 'metaDescription',
+  structuredData: 'structuredData',
+  lastGeneratedAt: 'lastGeneratedAt',
+  isIndexed: 'isIndexed',
+  isStale: 'isStale',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1045,7 +1067,8 @@ exports.Prisma.ModelName = {
   LandingPageBanner: 'LandingPageBanner',
   ProductNotification: 'ProductNotification',
   Return: 'Return',
-  ReturnItem: 'ReturnItem'
+  ReturnItem: 'ReturnItem',
+  SeoPage: 'SeoPage'
 };
 
 /**
