@@ -15,13 +15,15 @@ const plusJakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
+import { APP_URL } from "@/config/env";
+
 export const metadata: Metadata = {
   title: {
     default: "Vanijay - E-Commerce Platform",
     template: "%s | Vanijay",
   },
   description: "Modern e-commerce platform for seamless online shopping. Discover the best deals on electronics, fashion, and more.",
-  metadataBase: new URL(process.env.NODE_ENV === "production" ? "https://www.vanijay.com" : (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000")),
+  metadataBase: new URL(APP_URL),
   robots: {
     index: true,
     follow: true,

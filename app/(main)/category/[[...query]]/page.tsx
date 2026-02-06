@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import CategoryPageClient from "./CategoryPageClient";
 import { GET_CATEGORY_BY_SLUG } from "@/client/category/category.queries";
 import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
+import { APP_URL } from "@/config/env";
 
 export async function generateMetadata({ params }: { params: Promise<{ query?: string[] }> }): Promise<Metadata> {
     const { query } = await params;
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ query?: s
     const description = category?.metaDescription || category?.description || `Browse our collection of ${categoryName}. Find the best deals and products.`;
     const keywords = category?.keywords || [`buy ${categoryName}`, `${categoryName} Nepal`];
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
+    const baseUrl = APP_URL;
     const canonical = `${baseUrl}/category/${query?.join('/') || ''}`;
 
     return {

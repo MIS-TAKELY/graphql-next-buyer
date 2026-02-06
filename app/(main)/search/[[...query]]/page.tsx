@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import SearchPageClient from "./SearchPageClient";
+import { APP_URL } from "@/config/env";
 
 export async function generateMetadata({
     params,
@@ -11,7 +12,7 @@ export async function generateMetadata({
     const { q } = await searchParams;
     const searchQuery = typeof q === 'string' ? q : '';
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
+    const baseUrl = APP_URL;
     const canonical = searchQuery ? `${baseUrl}/search?q=${encodeURIComponent(searchQuery)}` : `${baseUrl}/search`;
 
     const title = searchQuery

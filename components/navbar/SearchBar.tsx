@@ -128,6 +128,7 @@ const SearchBar = ({
             suggestions.map((suggestion, index) => (
               <Link
                 href={`/search?q=${encodeURIComponent(suggestion)}`}
+                rel="nofollow"
                 key={index}
               >
                 <div

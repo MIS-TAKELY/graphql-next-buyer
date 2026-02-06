@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { APP_URL } from "@/config/env";
 
 type Props = {
     params: Promise<{ slug: string }>;
@@ -6,11 +7,16 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
+    const url = `${APP_URL}/blog/${slug}`;
     return {
         title: `${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} | Blog | Vanijay`,
         description: `Read our article about ${slug.replace(/-/g, ' ')}. Expert insights and tips.`,
+        alternates: {
+            canonical: url,
+        },
         openGraph: {
             type: "article",
+            url,
         },
     };
 }
