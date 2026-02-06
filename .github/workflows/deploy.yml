@@ -104,7 +104,7 @@ jobs:
               --network vanijay-network \
               --env DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-VanijayvpsPass123buyerseller}@vanijay_buyer_seller_database:5432/${POSTGRES_DB:-vanijay_buyer_seller}?schema=public \
               ghcr.io/mis-takely/vanijay-buyer:latest \
-              npx prisma migrate deploy
+              npx prisma@7.2.0 migrate deploy
 
             echo "Starting application containers..."
             # This recreates the app container with the new image
