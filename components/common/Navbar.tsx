@@ -10,6 +10,7 @@ import UserDropdown from "../navbar/UserDropdown";
 import SellerDialog from "../navbar/SellerDialog";
 import CartButton from "../navbar/CartButton";
 import MobileMenu from "../navbar/MobileMenu";
+import { ModeToggle } from "../ui/mode-toggle";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -63,6 +64,7 @@ const Navbar = () => {
               <SellerDialog />
               <div className="h-5 w-px bg-border/60" />
               <UserDropdown />
+              <ModeToggle />
             </div>
 
             {/* Cart - Always visible */}

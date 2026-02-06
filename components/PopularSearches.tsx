@@ -32,17 +32,17 @@ const PopularSearches = () => {
     if (!data || data.length === 0) return null;
 
     return (
-        <section className="w-full py-8 bg-gray-50 border-t mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="w-full py-8 bg-muted/30 border-t mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <div className="mb-6">
-                    <h2 className="text-lg font-bold text-gray-900">Popular Searches on Vanijay</h2>
-                    <p className="text-sm text-gray-500">Trending categories and keywords</p>
+                    <h2 className="text-lg font-bold text-foreground">Popular Searches on Vanijay</h2>
+                    <p className="text-sm text-muted-foreground">Trending categories and keywords</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {data.map((category) => (
                         <div key={category.id} className="flex flex-col gap-2">
-                            <h3 className="font-semibold text-gray-800 mb-2">{category.title}</h3>
+                            <h3 className="font-semibold text-foreground/90 mb-2">{category.title}</h3>
                             <div className="flex flex-wrap gap-2">
                                 {category.keywords.map((keyword) => {
                                     // Helper to construct valid URL
@@ -59,7 +59,7 @@ const PopularSearches = () => {
                                             key={keyword.id}
                                             href={getHref(keyword.href)}
                                             target={keyword.targetType === '_blank' ? '_blank' : '_self'}
-                                            className="inline-flex items-center px-3 py-1 rounded-full bg-white border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 transition-all cursor-pointer shadow-sm relative z-10"
+                                            className="inline-flex items-center px-3 py-1 rounded-full bg-card border border-border text-sm text-foreground/80 hover:bg-accent hover:border-primary/30 hover:text-primary transition-all cursor-pointer shadow-sm relative z-10"
                                         // TODO: Add click tracking here
                                         >
                                             {keyword.name}
