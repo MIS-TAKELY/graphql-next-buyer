@@ -1209,7 +1209,7 @@ model SeoPage {
   id              String   @id @default(cuid())
   categoryId      String
   category        Category @relation(fields: [categoryId], references: [id])
-  priceThreshold  Int
+  priceThreshold  Int?
   urlPath         String   @unique
   metaTitle       String?
   metaDescription String?
