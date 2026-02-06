@@ -63,8 +63,8 @@ const Navbar = () => {
             <div className="hidden md:flex items-center gap-2 lg:gap-4">
               <SellerDialog />
               <div className="h-5 w-px bg-border/60" />
-              <UserDropdown />
               <ModeToggle />
+              <UserDropdown />
             </div>
 
             {/* Cart - Always visible */}
