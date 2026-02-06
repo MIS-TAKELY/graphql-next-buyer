@@ -158,11 +158,19 @@ export const productResolvers = {
     getProductsByCategory: async (_: any, { categorySlug, limit = 50, offset = 0, maxPrice }: { categorySlug: string; limit?: number; offset?: number; maxPrice?: number }) => {
       if (!categorySlug) throw new Error("Category slug is required");
 
-      // First, find the category and its children
+      // First, find the category and recursively get all descendants
       const category = await prisma.category.findUnique({
         where: { slug: categorySlug },
         include: {
-          children: { select: { id: true } }
+          children: {
+            include: {
+              children: {
+                include: {
+                  children: true
+                }
+              }
+            }
+          }
         }
       });
 
@@ -170,8 +178,18 @@ export const productResolvers = {
         return { products: [], total: 0, category: null };
       }
 
-      // Get all category IDs (parent + children)
-      const categoryIds = [category.id, ...category.children.map((c: any) => c.id)];
+      // Recursively gather all descendant category IDs
+      const getAllDescendantIds = (cat: any): string[] => {
+        let ids = [cat.id];
+        if (cat.children && cat.children.length > 0) {
+          cat.children.forEach((child: any) => {
+            ids = ids.concat(getAllDescendantIds(child));
+          });
+        }
+        return ids;
+      };
+
+      const categoryIds = getAllDescendantIds(category);
 
       // Count total products
       const countWhere: any = {
