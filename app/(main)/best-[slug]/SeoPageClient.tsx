@@ -102,7 +102,8 @@ export default function SeoPageClient({ seoPage }: SeoPageClientProps) {
                         <ProductCard key={product.id} product={product} />
                     ))}
 
-                    {(loading || (hasMore && inView)) && (
+                    {/* Only show skeletons during infinite scroll, not initial load */}
+                    {!loading && hasMore && inView && (
                         [...Array(4)].map((_, i) => (
                             <ProductCardSkeleton key={`skeleton-${i}`} />
                         ))
