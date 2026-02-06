@@ -6,12 +6,12 @@ import { APP_URL } from "@/config/env";
 import SeoPageClient from "./SeoPageClient";
 
 interface PageProps {
-    params: Promise<{ slug: string[] }>;
+    params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { slug } = await params;
-    const path = `/${slug.join('/')}`;
+    const path = `/${slug}`;
 
     try {
         const client = await getServerApolloClient();
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function DynamicSeoPage({ params }: PageProps) {
     const { slug } = await params;
-    const path = `/${slug.join('/')}`;
+    const path = `/${slug}`;
 
     try {
         const client = await getServerApolloClient();
