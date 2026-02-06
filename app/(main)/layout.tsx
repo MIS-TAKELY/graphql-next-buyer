@@ -14,7 +14,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
       <Navbar />
       <main className="flex-1">{children}</main>
       <CompareFloater />
-      <PopularSearches /> // Added above Footer
+      <PopularSearches /> 
       <Footer />
     </div>
   );
