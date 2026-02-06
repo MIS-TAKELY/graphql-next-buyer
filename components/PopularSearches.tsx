@@ -44,17 +44,27 @@ const PopularSearches = () => {
                         <div key={category.id} className="flex flex-col gap-2">
                             <h3 className="font-semibold text-gray-800 mb-2">{category.title}</h3>
                             <div className="flex flex-wrap gap-2">
-                                {category.keywords.map((keyword) => (
-                                    <Link
-                                        key={keyword.id}
-                                        href={keyword.href}
-                                        target={keyword.targetType === '_blank' ? '_blank' : '_self'}
-                                        className="inline-flex items-center px-3 py-1 rounded-full bg-white border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 transition-all cursor-pointer shadow-sm"
-                                    // TODO: Add click tracking here
-                                    >
-                                        {keyword.name}
-                                    </Link>
-                                ))}
+                                {category.keywords.map((keyword) => {
+                                    // Helper to construct valid URL
+                                    const getHref = (url: string) => {
+                                        if (!url) return '#';
+                                        if (url.startsWith('http') || url.startsWith('/')) return url;
+                                        // Assume it's a search query if not a URL
+                                        return `/search?q=${encodeURIComponent(url)}`;
+                                    };
+
+                                    return (
+                                        <Link
+                                            key={keyword.id}
+                                            href={getHref(keyword.href)}
+                                            target={keyword.targetType === '_blank' ? '_blank' : '_self'}
+                                            className="inline-flex items-center px-3 py-1 rounded-full bg-white border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 transition-all cursor-pointer shadow-sm relative z-10"
+                                        // TODO: Add click tracking here
+                                        >
+                                            {keyword.name}
+                                        </Link>
+                                    );
+                                })}
                             </div>
                         </div>
                     ))}
