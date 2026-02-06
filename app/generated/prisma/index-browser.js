@@ -640,6 +640,49 @@ exports.Prisma.VerificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PopularSearchCategoryScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  slug: 'slug',
+  icon: 'icon',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  isIndexed: 'isIndexed',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.PopularSearchKeywordScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  name: 'name',
+  href: 'href',
+  targetType: 'targetType',
+  isActive: 'isActive',
+  isIndexed: 'isIndexed',
+  isFeatured: 'isFeatured',
+  clickCount: 'clickCount',
+  impressionCount: 'impressionCount',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.PopularSearchAuditScalarFieldEnum = {
+  id: 'id',
+  actionType: 'actionType',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  oldValues: 'oldValues',
+  newValues: 'newValues',
+  performedBy: 'performedBy',
+  performedAt: 'performedAt',
+  ipAddress: 'ipAddress'
+};
+
 exports.Prisma.OrderDisputeScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
@@ -991,6 +1034,9 @@ exports.Prisma.ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
+  PopularSearchCategory: 'PopularSearchCategory',
+  PopularSearchKeyword: 'PopularSearchKeyword',
+  PopularSearchAudit: 'PopularSearchAudit',
   OrderDispute: 'OrderDispute',
   RecentlyViewed: 'RecentlyViewed',
   LandingPageCategoryCard: 'LandingPageCategoryCard',

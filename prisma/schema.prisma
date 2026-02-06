@@ -66,6 +66,9 @@ model User {
   wishlists               Wishlist[]
   role                    String                    @default("USER")
   logs                    SystemLog[]
+  createdPopularSearchCategories PopularSearchCategory[] @relation("CreatedPopularSearchCategories")
+  createdPopularSearchKeywords   PopularSearchKeyword[]  @relation("CreatedPopularSearchKeywords")
+  popularSearchAudits            PopularSearchAudit[]    @relation("PopularSearchAudits")
 
   @@index([email])
   @@map("user")
@@ -796,6 +799,61 @@ model Verification {
   updatedAt  DateTime? @updatedAt
 
   @@map("verification")
+}
+
+model PopularSearchCategory {
+  id           String                 @id @default(cuid())
+  title        String
+  slug         String                 @unique
+  icon         String?
+  displayOrder Int                    @default(0) @map("display_order")
+  isActive     Boolean                @default(true) @map("is_active")
+  isIndexed    Boolean                @default(true) @map("is_indexed")
+  createdAt    DateTime               @default(now()) @map("created_at")
+  updatedAt    DateTime               @updatedAt @map("updated_at")
+  createdBy    String?                @map("created_by")
+  creator      User?                  @relation("CreatedPopularSearchCategories", fields: [createdBy], references: [id])
+  keywords     PopularSearchKeyword[]
+
+  @@map("popular_search_categories")
+}
+
+model PopularSearchKeyword {
+  id              String                @id @default(cuid())
+  categoryId      String                @map("category_id")
+  name            String
+  href            String
+  targetType      String                @default("_self") @map("target_type")
+  isActive        Boolean               @default(true) @map("is_active")
+  isIndexed       Boolean               @default(true) @map("is_indexed")
+  isFeatured      Boolean               @default(false) @map("is_featured")
+  clickCount      Int                   @default(0) @map("click_count")
+  impressionCount Int                   @default(0) @map("impression_count")
+  displayOrder    Int                   @default(0) @map("display_order")
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @updatedAt @map("updated_at")
+  createdBy       String?               @map("created_by")
+  creator         User?                 @relation("CreatedPopularSearchKeywords", fields: [createdBy], references: [id])
+  deletedAt       DateTime?             @map("deleted_at")
+  category        PopularSearchCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId])
+  @@map("popular_search_keywords")
+}
+
+model PopularSearchAudit {
+  id          String   @id @default(cuid())
+  actionType  String   @map("action_type")
+  entityType  String   @map("entity_type")
+  entityId    String?  @map("entity_id")
+  oldValues   Json?    @map("old_values")
+  newValues   Json?    @map("new_values")
+  performedBy String?  @map("performed_by")
+  performer   User?    @relation("PopularSearchAudits", fields: [performedBy], references: [id])
+  performedAt DateTime @default(now()) @map("performed_at")
+  ipAddress   String?  @map("ip_address")
+
+  @@map("popular_search_audit")
 }
 
 model OrderDispute {

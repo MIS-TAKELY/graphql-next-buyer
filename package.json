@@ -64,6 +64,7 @@
     "react-server-dom-turbopack": "latest",
     "react-server-dom-webpack": "latest",
     "sonner": "latest",
+    "swr": "^2.4.0",
     "tailwind-merge": "latest",
     "tailwindcss-animate": "latest",
     "typesense": "^2.1.0",
