@@ -84,6 +84,7 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
   useEffect(() => {
     if (data?.getProductsByCategory?.products && allProducts.length === 0) {
       const newProducts = data.getProductsByCategory.products;
+      console.log(`Initial load: fetched ${newProducts.length} products`);
       setAllProducts(newProducts);
       setHasMore(newProducts.length >= ITEMS_PER_PAGE);
     }
@@ -94,6 +95,7 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
     if (loading || !hasMore || !categorySlug || allProducts.length === 0) return;
 
     const newOffset = allProducts.length;
+    console.log(`Fetching more products... offset: ${newOffset}, slug: ${categorySlug}`);
 
     fetchMore({
       variables: {
@@ -103,6 +105,7 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
       },
     }).then((fetchMoreResult) => {
       const newProducts = fetchMoreResult?.data?.getProductsByCategory?.products || [];
+      console.log(`FetchMore: fetched ${newProducts.length} products`);
 
       if (newProducts.length === 0) {
         setHasMore(false);
@@ -128,18 +131,14 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
 
   // Client side filtering and sorting
   const filteredProducts = useMemo(() => {
-    if (!Array.isArray(allProducts) || allProducts.length === 0) return [];
+    if (!Array.isArray(allProducts)) return [];
 
-    // Early return if no filters applied
-    const hasFilters = selectedPriceRanges.length > 0 ||
-      minRating > 0 ||
-      Object.values(dynamicFilters).some(v => v.length > 0);
+    let filtered = [...allProducts].filter((product: any) => {
+      const price = product.variants?.[0]?.price || 0;
 
-    let filtered = hasFilters ? allProducts.filter((product: any) => {
-      // Price filter with early return
-      if (selectedPriceRanges.length > 0) {
-        const price = product.variants?.[0]?.price || 0;
-        const matchesPrice = selectedPriceRanges.some((range) => {
+      const matchesPrice =
+        selectedPriceRanges.length === 0 ||
+        selectedPriceRanges.some((range) => {
           if (range.endsWith("+")) {
             const min = parseInt(range);
             return price >= min;
@@ -147,63 +146,54 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
           const [min, max] = range.split("-").map(Number);
           return price >= min && price <= max;
         });
-        if (!matchesPrice) return false;
-      }
 
-      // Rating filter with early return
-      if (minRating > 0) {
-        const rating = product.reviews?.length > 0
-          ? product.reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0) / product.reviews.length
+      // Calculate average rating
+      const rating =
+        product.reviews?.length > 0
+          ? product.reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0) /
+          product.reviews.length
           : 0;
-        if (rating < minRating) return false;
-      }
 
-      // Dynamic filters with early return
-      const dynamicFilterEntries = Object.entries(dynamicFilters);
-      if (dynamicFilterEntries.length > 0) {
-        for (const [key, selectedValues] of dynamicFilterEntries) {
-          if ((selectedValues as string[]).length === 0) continue;
+      const matchesRating = rating >= minRating;
 
-          if (key === "brand") {
-            if (!(selectedValues as string[]).includes(product.brand)) return false;
-          } else if (key === "category") {
-            if (!(selectedValues as string[]).includes(product.category?.name || "")) return false;
-          } else {
-            const hasMatch = product.variants?.some((variant: any) =>
-              variant.specifications?.some(
-                (spec: any) =>
-                  (spec.key === key || spec.name === key) &&
-                  (selectedValues as string[]).includes(spec.value)
-              )
-            );
-            if (!hasMatch) return false;
-          }
+      const matchesDynamicFilters = Object.entries(dynamicFilters).every(
+        ([key, selectedValues]) => {
+          if ((selectedValues as string[]).length === 0) return true;
+          if (key === "brand") return (selectedValues as string[]).includes(product.brand);
+          if (key === "category")
+            return (selectedValues as string[]).includes(product.category?.name || "");
+
+          return product.variants?.some((variant: any) =>
+            variant.specifications?.some(
+              (spec: any) =>
+                (spec.key === key || spec.name === key) &&
+                (selectedValues as string[]).includes(spec.value)
+            )
+          );
         }
-      }
+      );
 
-      return true;
-    }) : [...allProducts];
+      return matchesPrice && matchesRating && matchesDynamicFilters;
+    });
 
     // Sorting
-    if (sortBy && sortBy !== "relevance") {
-      switch (sortBy) {
-        case "price-low":
-          filtered.sort((a, b) => (a.variants?.[0]?.price || 0) - (b.variants?.[0]?.price || 0));
-          break;
-        case "price-high":
-          filtered.sort((a, b) => (b.variants?.[0]?.price || 0) - (a.variants?.[0]?.price || 0));
-          break;
-        case "rating":
-          filtered.sort((a, b) => {
-            const avgA = (a.reviews?.reduce((s: number, r: any) => s + r.rating, 0) || 0) / (a.reviews?.length || 1);
-            const avgB = (b.reviews?.reduce((s: number, r: any) => s + r.rating, 0) || 0) / (b.reviews?.length || 1);
-            return avgB - avgA;
-          });
-          break;
-        case "popularity":
-          filtered.sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0));
-          break;
-      }
+    switch (sortBy) {
+      case "price-low":
+        filtered.sort((a, b) => (a.variants?.[0]?.price || 0) - (b.variants?.[0]?.price || 0));
+        break;
+      case "price-high":
+        filtered.sort((a, b) => (b.variants?.[0]?.price || 0) - (a.variants?.[0]?.price || 0));
+        break;
+      case "rating":
+        filtered.sort((a, b) => {
+          const avgA = (a.reviews?.reduce((s: number, r: any) => s + r.rating, 0) || 0) / (a.reviews?.length || 1);
+          const avgB = (b.reviews?.reduce((s: number, r: any) => s + r.rating, 0) || 0) / (b.reviews?.length || 1);
+          return avgB - avgA;
+        });
+        break;
+      case "popularity":
+        filtered.sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0));
+        break;
     }
 
     return filtered;

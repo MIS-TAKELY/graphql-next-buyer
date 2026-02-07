@@ -23,10 +23,12 @@ export const useDynamicSearchFilter = (searchTerm: string) => {
     variables: {
       searchTerm,
     },
-    skip: !searchTerm || searchTerm.trim().length === 0,
-    fetchPolicy: "cache-first",
-    nextFetchPolicy: "cache-first",
   });
+
+  console.log(
+    "dynamicSearchFilterResponse-->",
+    dynamicSearchFilterResponse?.getDynamicFilters
+  );
 
   return {
     dynamicSearchData: dynamicSearchFilterResponse?.getDynamicFilters,

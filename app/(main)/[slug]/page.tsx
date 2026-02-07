@@ -14,15 +14,18 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { slug } = await params;
     const path = `/${slug}`;
+    console.log(`DEBUG: slug=${slug}, path=${path}`);
 
     try {
         const client = await getServerApolloClient();
+        console.log("DEBUG: Querying GET_SEO_PAGE_BY_PATH with path:", path);
         const { data } = await client.query({
             query: GET_SEO_PAGE_BY_PATH,
             variables: { path },
         });
 
         const seoPage = data?.seoPageByPath;
+        console.log("DEBUG: seoPage result:", seoPage ? "FOUND" : "NULL", seoPage);
 
         if (!seoPage) {
             return {};
@@ -70,15 +73,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function DynamicSeoPage({ params }: PageProps) {
     const { slug } = await params;
     const path = `/${slug}`;
+    console.log(`DEBUG: slug=${slug}, path=${path}`);
 
     try {
         const client = await getServerApolloClient();
+        console.log("DEBUG: Querying GET_SEO_PAGE_BY_PATH with path:", path);
         const { data } = await client.query({
             query: GET_SEO_PAGE_BY_PATH,
             variables: { path },
         });
 
         const seoPage = data?.seoPageByPath;
+        console.log("DEBUG: seoPage result:", seoPage ? "FOUND" : "NULL", seoPage);
 
         if (!seoPage) {
             notFound();
