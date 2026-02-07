@@ -20,7 +20,7 @@ import { getProductUrl } from "@/lib/productUtils";
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
 
 export const metadata: Metadata = {
-    title: "Sitemap | Vanijay",
+    title: "Sitemap",
     description: "Explore all pages on Vanijay - products, categories, policies, and more.",
     alternates: {
         canonical: `${baseUrl}/site-map`,

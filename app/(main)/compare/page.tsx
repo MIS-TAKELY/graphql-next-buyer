@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import ComparePageClient from "./ComparePageClient";
 
 export const metadata: Metadata = {
-    title: "Compare Products | Vanijay Nepal",
+    title: "Compare Products",
     description: "Compare features, specifications, and prices of different products side-by-side on Vanijay. Make informed buying decisions.",
     alternates: {
         canonical: "/compare",

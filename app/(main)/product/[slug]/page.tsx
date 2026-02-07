@@ -136,7 +136,7 @@ export async function generateMetadata(
 
   if (!product) {
     return {
-      title: "Product Not Found | Vanijay Nepal",
+      title: "Product Not Found",
     };
   }
 
@@ -148,8 +148,8 @@ export async function generateMetadata(
   const url = `${baseUrl}/product/${product.slug}-p${product.id}`;
 
   // Title: [Product Name] | [Brand] (Industry standard 40-60 chars)
-  const brandName = typeof product.brand === "string" ? product.brand : product.brand?.name || "Vanijay";
-  let title = product.metaTitle || `${product.name} | ${brandName}`;
+  const brandName = typeof product.brand === "string" ? product.brand : product.brand?.name || "";
+  let title = product.metaTitle || (brandName ? `${product.name} | ${brandName}` : product.name);
   if (title.length > 60) {
     title = title.substring(0, 57) + "...";
   }

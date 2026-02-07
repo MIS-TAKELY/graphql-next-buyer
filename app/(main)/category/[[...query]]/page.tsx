@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ query?: s
     }
 
     const categoryName = category?.name || (query?.[0] ? decodeURIComponent(query[0]) : "All Products");
-    const title = category?.metaTitle || `${categoryName} | Shop`;
+    const title = category?.metaTitle || categoryName;
     const description = category?.metaDescription || category?.description || `Browse our collection of ${categoryName}. Find the best deals and products.`;
     const keywords = category?.keywords || [`buy ${categoryName}`, `${categoryName} Nepal`];
 

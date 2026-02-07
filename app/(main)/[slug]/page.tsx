@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             .map((url: string) => ({ url, width: 1200, height: 630 }));
 
         return {
-            title: seoPage.metaTitle || `${seoPage.category.name} under Rs. ${seoPage.priceThreshold} | Vanijay`,
+            title: seoPage.metaTitle || `${seoPage.category.name} under Rs. ${seoPage.priceThreshold}`,
             description: seoPage.metaDescription || `Browse the best collection of ${seoPage.category.name} under ${seoPage.priceThreshold}. Check prices and ratings.`,
             alternates: {
                 canonical: `${APP_URL}${seoPage.urlPath}`,

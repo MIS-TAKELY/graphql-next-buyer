@@ -6,7 +6,7 @@ import StoreList from "@/components/page/store/StoreList";
 export const revalidate = 3600; // ISR: Revalidate every hour
 
 export const metadata: Metadata = {
-    title: "Official Stores | Vanijay Nepal",
+    title: "Official Stores",
     description: "Explore official and verified stores on Vanijay Nepal. Shop from your favorite brands and local sellers with confidence.",
 };
 

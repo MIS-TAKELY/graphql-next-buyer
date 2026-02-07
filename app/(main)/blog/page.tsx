@@ -2,10 +2,10 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-    title: "Blog | Vanijay E-Commerce",
+    title: "Blog",
     description: "Read the latest news, updates, and articles from Vanijay. Expert advice on [Product Category].",
     openGraph: {
-        title: "Blog | Vanijay E-Commerce",
+        title: "Blog",
         description: "Read the latest news, updates, and articles from Vanijay.",
     },
 };

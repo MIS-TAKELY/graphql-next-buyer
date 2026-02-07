@@ -131,7 +131,7 @@ export async function generateMetadata(
 
   if (!sellerProfile) {
     return {
-      title: "Store Not Found | Vanijay Nepal",
+      title: "Store Not Found",
     };
   }
 
@@ -139,7 +139,7 @@ export async function generateMetadata(
   const baseUrl = APP_URL;
   const url = `${baseUrl}/store/${sellerProfile.slug}`;
 
-  const title = sellerProfile.metaTitle || `${sellerProfile.shopName} | Shop on Vanijay Nepal`;
+  const title = sellerProfile.metaTitle || sellerProfile.shopName;
   const description = sellerProfile.metaDescription ||
     sellerProfile.description ||
     `Shop products from ${sellerProfile.shopName} on Vanijay. ${sellerProfile.tagline || 'Quality products at great prices.'}`;
