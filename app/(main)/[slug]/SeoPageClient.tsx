@@ -12,14 +12,15 @@ import { useInView } from "react-intersection-observer";
 
 interface SeoPageClientProps {
     seoPage: any;
+    initialProducts?: any[];
 }
 
 const ITEMS_PER_PAGE = 20;
 
 import FilterSidebar from "@/components/search/FilterSidebar";
 
-export default function SeoPageClient({ seoPage }: SeoPageClientProps) {
-    const [allProducts, setAllProducts] = useState<any[]>([]);
+export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPageClientProps) {
+    const [allProducts, setAllProducts] = useState<any[]>(initialProducts);
     const [hasMore, setHasMore] = useState(true);
     const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -107,10 +108,69 @@ export default function SeoPageClient({ seoPage }: SeoPageClientProps) {
         }
     }, [inView, hasMore, loading, loadMore, allProducts.length]);
 
-    const total = data?.getProductsByCategory?.total || 0;
+    const total = data?.getProductsByCategory?.total || initialProducts.length || 0;
+
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com";
+
+    // Breadcrumb JSON-LD
+    const breadcrumbLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": baseUrl
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": seoPage.category.name,
+                "item": `${baseUrl}/category/${seoPage.category.slug}`
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": seoPage.metaTitle || seoPage.category.name,
+                "item": `${baseUrl}${seoPage.urlPath}`
+            }
+        ]
+    };
+
+    // ItemList (CollectionPage) JSON-LD for rich snippets
+    const itemListLd = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": seoPage.metaTitle || seoPage.category.name,
+        "description": seoPage.metaDescription || seoPage.category.description,
+        "numberOfItems": total,
+        "itemListElement": allProducts.map((product, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "url": `${baseUrl}/product/${product.slug}-p${product.id}`,
+            "name": product.name,
+            "image": product.images?.[0]?.url
+        }))
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+            {/* Structured Data */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }}
+            />
+            {seoPage.structuredData && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: typeof seoPage.structuredData === 'string' ? seoPage.structuredData : JSON.stringify(seoPage.structuredData) }}
+                />
+            )}
             {/* Dynamic Header */}
             <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
                 <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 text-center">

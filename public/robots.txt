@@ -58,3 +58,4 @@ Sitemap: https://www.vanijay.com/sitemap.xml
 Sitemap: https://www.vanijay.com/sitemaps/pages.xml
 Sitemap: https://www.vanijay.com/sitemaps/categories.xml
 Sitemap: https://www.vanijay.com/sitemaps/products.xml
+Sitemap: https://www.vanijay.com/sitemaps/seo-pages.xml
