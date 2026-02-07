@@ -10,6 +10,11 @@ import { Package } from "lucide-react";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 import Breadcrumb from "@/components/page/product/Breadcrumb";
+import { useProductStore } from "@/store/productStore";
+import { useDynamicSearchFilter } from "@/hooks/dynamicSearchFilter/useDynamicSearchFilter";
+import ActiveFilters from "@/components/search/ActiveFilters";
+import SortBar from "@/components/search/SortBar";
+import FilterSidebar from "@/components/search/FilterSidebar";
 
 interface CategoryPageClientProps {
   params: { query?: string[] };
@@ -20,11 +25,10 @@ const ITEMS_PER_PAGE = 20;
 export default function CategoryPageClient({ params }: CategoryPageClientProps) {
   const categorySlug = params.query?.[params.query.length - 1] || "";
 
-  console.log("CategoryPageClient mount/render with slug:", categorySlug);
-
   // State for accumulated products
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Intersection Observer for infinite scroll
   const { ref, inView } = useInView({
@@ -42,12 +46,37 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
     notifyOnNetworkStatusChange: true,
   });
 
+  const category = data?.getProductsByCategory?.category;
+  const total = data?.getProductsByCategory?.total || 0;
+
+  // Dynamic Filter Hooks
+  const { dynamicSearchData, dynamicSearchFilterLoading } = useDynamicSearchFilter(category?.name || categorySlug);
+
+  // Zustand Store
+  const {
+    filters: storeFilters,
+    toggleDynamicFilter,
+    togglePriceRange,
+    setMinRating,
+    setFilters,
+    resetFilters,
+  } = useProductStore();
+
+  const {
+    selectedPriceRanges,
+    dynamicFilters,
+    minRating,
+    sort: sortBy,
+  } = storeFilters;
+
+  const setSortBy = (sort: string) => setFilters({ sort });
+
   // Effect to handle initial data load and resetting on slug change
   useEffect(() => {
     if (categorySlug) {
       setAllProducts([]);
       setHasMore(true);
-      console.log("Resetting products for new slug:", categorySlug);
+      resetFilters();
     }
   }, [categorySlug]);
 
@@ -100,8 +129,81 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
     }
   }, [inView, hasMore, loading, loadMore]);
 
-  const category = data?.getProductsByCategory?.category;
-  const total = data?.getProductsByCategory?.total || 0;
+  // Client side filtering and sorting
+  const filteredProducts = useMemo(() => {
+    if (!Array.isArray(allProducts)) return [];
+
+    let filtered = [...allProducts].filter((product: any) => {
+      const price = product.variants?.[0]?.price || 0;
+
+      const matchesPrice =
+        selectedPriceRanges.length === 0 ||
+        selectedPriceRanges.some((range) => {
+          if (range.endsWith("+")) {
+            const min = parseInt(range);
+            return price >= min;
+          }
+          const [min, max] = range.split("-").map(Number);
+          return price >= min && price <= max;
+        });
+
+      // Calculate average rating
+      const rating =
+        product.reviews?.length > 0
+          ? product.reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0) /
+          product.reviews.length
+          : 0;
+
+      const matchesRating = rating >= minRating;
+
+      const matchesDynamicFilters = Object.entries(dynamicFilters).every(
+        ([key, selectedValues]) => {
+          if ((selectedValues as string[]).length === 0) return true;
+          if (key === "brand") return (selectedValues as string[]).includes(product.brand);
+          if (key === "category")
+            return (selectedValues as string[]).includes(product.category?.name || "");
+
+          return product.variants?.some((variant: any) =>
+            variant.specifications?.some(
+              (spec: any) =>
+                (spec.key === key || spec.name === key) &&
+                (selectedValues as string[]).includes(spec.value)
+            )
+          );
+        }
+      );
+
+      return matchesPrice && matchesRating && matchesDynamicFilters;
+    });
+
+    // Sorting
+    switch (sortBy) {
+      case "price-low":
+        filtered.sort((a, b) => (a.variants?.[0]?.price || 0) - (b.variants?.[0]?.price || 0));
+        break;
+      case "price-high":
+        filtered.sort((a, b) => (b.variants?.[0]?.price || 0) - (a.variants?.[0]?.price || 0));
+        break;
+      case "rating":
+        filtered.sort((a, b) => {
+          const avgA = (a.reviews?.reduce((s: number, r: any) => s + r.rating, 0) || 0) / (a.reviews?.length || 1);
+          const avgB = (b.reviews?.reduce((s: number, r: any) => s + r.rating, 0) || 0) / (b.reviews?.length || 1);
+          return avgB - avgA;
+        });
+        break;
+      case "popularity":
+        filtered.sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0));
+        break;
+    }
+
+    return filtered;
+  }, [allProducts, selectedPriceRanges, dynamicFilters, minRating, sortBy]);
+
+  // Reset list when filter definitely changes
+  useEffect(() => {
+    setAllProducts([]);
+    setHasMore(true);
+  }, [selectedPriceRanges, dynamicFilters, minRating]);
 
   // Breadcrumb JSON-LD
   const breadcrumbLd = {
@@ -151,35 +253,97 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
 
       <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight mb-2">
-            {category?.name || <span className="capitalize">{categorySlug.replace(/-/g, ' ')}</span>}
-          </h1>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="flex-1">
+              <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight mb-2">
+                {category?.name || <span className="capitalize">{categorySlug.replace(/-/g, ' ')}</span>}
+              </h1>
 
-          {category?.description && (
-            <p className="text-muted-foreground max-w-2xl text-sm leading-relaxed">
-              {category.description}
-            </p>
-          )}
+              {category?.description && (
+                <p className="text-muted-foreground max-w-2xl text-sm leading-relaxed">
+                  {category.description}
+                </p>
+              )}
 
-          <div className="mt-4 text-xs font-medium text-muted-foreground">
-            Showing {allProducts.length} of {total} products
+              <div className="mt-4 text-xs font-medium text-muted-foreground">
+                Showing {filteredProducts.length} of {total} products
+              </div>
+            </div>
+
+            <div className="flex-shrink-0">
+              <SortBar
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                showFilters={mobileFiltersOpen}
+                setShowFilters={setMobileFiltersOpen}
+                activeFiltersCount={
+                  Object.values(dynamicFilters).reduce((sum, v) => sum + (v as string[]).length, 0) +
+                  (minRating > 0 ? 1 : 0) +
+                  selectedPriceRanges.length
+                }
+                itemsPerPage={ITEMS_PER_PAGE}
+                setItemsPerPage={() => { }}
+              />
+            </div>
           </div>
         </div>
       </div>
 
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Product List - Reverted to flex-col to support horizontal cards */}
-        <div className="flex flex-col gap-4">
-          {allProducts.map((product: any) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+        <ActiveFilters
+          dynamicFilters={dynamicFilters}
+          minRating={minRating}
+          toggleFilter={toggleDynamicFilter}
+          selectedPriceRanges={selectedPriceRanges}
+          togglePriceRange={togglePriceRange}
+          setMinRating={setMinRating}
+          clearFilters={resetFilters}
+          filterOptions={{}}
+          dynamicSearchData={{
+            category: categorySlug,
+            filters: dynamicSearchData?.filters || [],
+          }}
+        />
 
-          {/* Skeleton Loaders for initial load or loading more */}
-          {(loading || (hasMore && inView)) && (
-            [...Array(4)].map((_, i) => (
-              <ProductCardSkeleton key={`skeleton-${i}`} />
-            ))
-          )}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <div className="hidden lg:block lg:col-span-1">
+            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6 sticky top-24">
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold mb-4">Filters</h3>
+                <FilterSidebar
+                  showFilters={true}
+                  selectedPriceRanges={selectedPriceRanges}
+                  togglePriceRange={togglePriceRange}
+                  minRating={minRating}
+                  setMinRating={setMinRating}
+                  dynamicFilters={dynamicFilters}
+                  toggleFilter={toggleDynamicFilter}
+                  filterOptions={{}}
+                  dynamicSearchData={{
+                    category: categorySlug,
+                    filters: dynamicSearchData?.filters || [],
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-3">
+            {/* Product List */}
+            <div className="flex flex-col gap-4">
+              {filteredProducts.map((product: any) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+
+              {/* Skeleton Loaders */}
+              {(loading || (hasMore && inView)) && (
+                [...Array(4)].map((_, i) => (
+                  <ProductCardSkeleton key={`skeleton-${i}`} />
+                ))
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Infinite Scroll Trigger */}
