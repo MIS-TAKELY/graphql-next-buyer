@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import { prisma } from '../lib/db/prisma';
 import { typesenseClient, PRODUCT_SCHEMA } from '../lib/typesense';
 
@@ -46,8 +45,32 @@ async function indexTypesense() {
 
     // 3. Transform Data
     const documents = products.map(p => {
-        const defaultVariant = p.variants[0];
+        // Fallback: Use first variant if no default is found
+        const defaultVariant = p.variants.find(v => v.isDefault) || p.variants[0];
         const price = defaultVariant ? Number(defaultVariant.price) : 0;
+
+        // Collect specifications from the selected variant
+        let specs = defaultVariant?.specifications.map(s => `${s.key}:${s.value}`) || [];
+
+        // FALLBACK: If specs are empty, try to parse from Product.specificationTable JSON
+        if (specs.length === 0 && p.specificationTable) {
+            try {
+                const table = p.specificationTable as any;
+                if (Array.isArray(table)) {
+                    table.forEach(section => {
+                        if (section.rows && Array.isArray(section.rows)) {
+                            section.rows.forEach((row: any) => {
+                                if (Array.isArray(row) && row.length >= 2) {
+                                    specs.push(`${row[0]}:${row[1]}`);
+                                }
+                            });
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error(`Failed to parse specificationTable for ${p.id}`);
+            }
+        }
 
         return {
             id: p.id,
@@ -63,7 +86,7 @@ async function indexTypesense() {
             soldCount: p.soldCount,
             averageRating: Number(p.averageRating) || 0,
             createdAt: Math.floor(p.createdAt.getTime() / 1000), // Unix timestamp
-            facet_attributes: defaultVariant?.specifications.map(s => `${s.key}:${s.value}`) || [],
+            facet_attributes: Array.from(new Set(specs)), // Deduplicate
         };
     });
 
