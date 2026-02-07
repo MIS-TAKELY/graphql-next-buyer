@@ -84,7 +84,6 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
   useEffect(() => {
     if (data?.getProductsByCategory?.products && allProducts.length === 0) {
       const newProducts = data.getProductsByCategory.products;
-      console.log(`Initial load: fetched ${newProducts.length} products`);
       setAllProducts(newProducts);
       setHasMore(newProducts.length >= ITEMS_PER_PAGE);
     }
@@ -95,7 +94,6 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
     if (loading || !hasMore || !categorySlug || allProducts.length === 0) return;
 
     const newOffset = allProducts.length;
-    console.log(`Fetching more products... offset: ${newOffset}, slug: ${categorySlug}`);
 
     fetchMore({
       variables: {
@@ -105,7 +103,6 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
       },
     }).then((fetchMoreResult) => {
       const newProducts = fetchMoreResult?.data?.getProductsByCategory?.products || [];
-      console.log(`FetchMore: fetched ${newProducts.length} products`);
 
       if (newProducts.length === 0) {
         setHasMore(false);
