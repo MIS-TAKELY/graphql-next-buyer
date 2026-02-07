@@ -1,4 +1,5 @@
 import { X } from "lucide-react";
+import { memo } from "react";
 
 interface ActiveFiltersProps {
   dynamicFilters: { [key: string]: string[] };
@@ -16,7 +17,7 @@ interface ActiveFiltersProps {
   } | null;
 }
 
-export default function ActiveFilters({
+const ActiveFilters = memo(function ActiveFilters({
   dynamicFilters,
   minRating,
   toggleFilter,
@@ -64,4 +65,6 @@ export default function ActiveFilters({
       )}
     </div>
   );
-}
+});
+
+export default ActiveFilters;

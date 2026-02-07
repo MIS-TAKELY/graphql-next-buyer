@@ -2,7 +2,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@radix-ui/react-label";
 import { ChevronDown, ChevronUp } from "lucide-react"; // Import icons for toggle
-import { useState } from "react";
+import { useState, memo } from "react";
 import PriceFilter from "./PriceFilter";
 import RatingFilter from "./RatingFilter";
 
@@ -41,7 +41,7 @@ interface DynamicFilterProps {
   type?: string;
 }
 
-function DynamicFilter({
+const DynamicFilter = memo(function DynamicFilter({
   filterKey,
   label,
   options,
@@ -126,9 +126,9 @@ function DynamicFilter({
       )}
     </div>
   );
-}
+});
 
-export default function FilterSidebar({
+const FilterSidebar = memo(function FilterSidebar({
   showFilters,
   selectedPriceRanges,
   togglePriceRange,
@@ -164,4 +164,6 @@ export default function FilterSidebar({
       </div>
     </div>
   );
-}
+});
+
+export default FilterSidebar;
