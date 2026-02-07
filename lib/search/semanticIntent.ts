@@ -18,15 +18,14 @@ async function findSemanticMatches(
     candidates: string[],
     threshold: number = 0.7
 ): Promise<SemanticMatch[]> {
-    const results: SemanticMatch[] = [];
-
     // Process candidates in parallel or use in-memory cache
     const matches = await Promise.all(candidates.map(async (candidate) => {
         let candidateEmbedding = candidateEmbeddingCache.get(candidate);
 
-        if (!candidateEmbedding) {
+        if (candidateEmbedding === undefined) {
             const cacheKey = `embedding:text:${Buffer.from(candidate).toString('base64')}`;
-            candidateEmbedding = await getCached<number[]>(cacheKey);
+            const cached = await getCached<number[]>(cacheKey);
+            candidateEmbedding = cached || undefined;
 
             if (!candidateEmbedding) {
                 candidateEmbedding = await getEmbedding(candidate);
@@ -35,7 +34,7 @@ async function findSemanticMatches(
             candidateEmbeddingCache.set(candidate, candidateEmbedding);
         }
 
-        const score = cosineSimilarity(queryEmbedding, candidateEmbedding);
+        const score = cosineSimilarity(queryEmbedding, candidateEmbedding!);
         return score >= threshold ? { value: candidate, score } : null;
     }));
 

@@ -291,6 +291,7 @@ model Category {
   filters                  Json?
   seoTemplates             Json?
 
+  @@index([name])
   @@index([slug])
   @@index([isActive, isIndexable])
   @@map("categories")
@@ -429,6 +430,8 @@ model Product {
 
   @@index([slug, sellerId])
   @@index([status, isIndexable])
+  @@index([status, brand])
+  @@index([status, categoryId])
   @@map("products")
 }
 
