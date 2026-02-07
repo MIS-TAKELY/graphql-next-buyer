@@ -46,7 +46,7 @@ export default function AuthGate({ children }: AuthGateProps) {
     const isPublicRoute = PUBLIC_ROUTES.some(route => {
         if (route === "/") return pathname === "/";
         return pathname.startsWith(route);
-    });
+    }) || pathname.startsWith("/best-");
 
     // Check if user is fully verified
     const isPhoneVerified = (session?.user as any)?.phoneVerified;
