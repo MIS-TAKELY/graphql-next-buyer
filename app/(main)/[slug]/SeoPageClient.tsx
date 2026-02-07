@@ -282,15 +282,12 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
             />
 
             <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-                <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+                <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div className="flex-1">
-                            <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight mb-4 text-left">
+                            <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight text-left">
                                 {displayTitle}
                             </h1>
-                            <p className="text-muted-foreground max-w-3xl leading-relaxed text-sm text-left">
-                                {seoPage.metaDescription || seoPage.category.description}
-                            </p>
                         </div>
                         <div className="flex-shrink-0">
                             <SortBar
