@@ -11,7 +11,7 @@ import { permanentRedirect } from "next/navigation";
 import { extractProductIdFromSlug } from "@/lib/productUtils";
 
 const PRODUCT_INCLUDES = {
-  images: { orderBy: { sortOrder: 'asc' } },
+  images: { orderBy: [{ mediaType: 'asc' as const }, { sortOrder: 'asc' as const }] },
   variants: {
     include: {
       specifications: true
@@ -23,7 +23,7 @@ const PRODUCT_INCLUDES = {
     }
   },
   reviews: {
-    where: { status: "APPROVED" },
+    where: { status: "APPROVED" as const },
     include: {
       user: {
         select: { firstName: true, lastName: true }
@@ -55,7 +55,7 @@ const PRODUCT_INCLUDES = {
         }
       }
     },
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: 'desc' as const }
   },
   warranty: true,
   returnPolicy: true,
@@ -75,7 +75,7 @@ const PRODUCT_INCLUDES = {
       }
     }
   }
-} as const;
+};
 export const revalidate = 3600;
 
 export async function generateStaticParams() {

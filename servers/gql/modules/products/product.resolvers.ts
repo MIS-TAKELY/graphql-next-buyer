@@ -32,7 +32,7 @@ export const productResolvers = {
                     cartItems: { select: { userId: true, variantId: true } },
                   },
                 },
-                images: { orderBy: { sortOrder: 'asc' } },
+                images: { orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }] },
                 reviews: true,
                 category: { include: { children: true, parent: true } },
                 wishlistItems: true,
@@ -62,7 +62,7 @@ export const productResolvers = {
               offer: true,
             },
           },
-          images: { orderBy: { sortOrder: 'asc' } },
+          images: { orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }] },
           reviews: true,
           category: { include: { children: true, parent: true } },
           wishlistItems: true,
@@ -122,7 +122,7 @@ export const productResolvers = {
             },
           },
           deliveryOptions: true,
-          images: { orderBy: { sortOrder: 'asc' } },
+          images: { orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }] },
           reviews: {
             select: {
               id: true,
@@ -225,7 +225,7 @@ export const productResolvers = {
               specifications: true,
             }
           },
-          images: { orderBy: { sortOrder: 'asc' } },
+          images: { orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }] },
           reviews: { select: { id: true, rating: true } },
           category: { include: { parent: true } },
           productOffers: { include: { offer: true } },
@@ -402,7 +402,7 @@ export const productResolvers = {
           include: {
             seller: { select: { id: true, firstName: true, lastName: true } },
             variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
-            images: { orderBy: { sortOrder: 'asc' } },
+            images: { orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }] },
             reviews: { select: { id: true, rating: true } },
             category: true,
           }
@@ -462,7 +462,7 @@ export const productResolvers = {
           include: {
             seller: { select: { id: true, firstName: true, lastName: true } },
             variants: { select: { id: true, price: true, mrp: true, sku: true, stock: true, isDefault: true, specifications: true } },
-            images: { orderBy: { sortOrder: 'asc' } },
+            images: { orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }] },
             reviews: { select: { id: true, rating: true } },
             category: true,
           }
@@ -478,7 +478,7 @@ export const productResolvers = {
         },
         include: {
           variants: true,
-          images: { orderBy: { sortOrder: 'asc' } },
+          images: { orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }] },
           reviews: true,
           category: true,
           seller: true,
@@ -516,7 +516,7 @@ export const productResolvers = {
                   specifications: true,
                 }
               },
-              images: { orderBy: { sortOrder: 'asc' } },
+              images: { orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }] },
               reviews: { select: { id: true, rating: true } },
               category: true,
             }
@@ -665,7 +665,7 @@ export const productResolvers = {
               specifications: true,
             }
           },
-          images: { orderBy: { sortOrder: 'asc' } },
+          images: { orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }] },
           reviews: { select: { id: true, rating: true } },
           category: true,
         }
@@ -697,7 +697,7 @@ export const productResolvers = {
               specifications: true,
             }
           },
-          images: { orderBy: { sortOrder: 'asc' } },
+          images: { orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }] },
           reviews: { select: { id: true, rating: true } },
           category: true,
         }

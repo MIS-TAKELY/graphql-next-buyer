@@ -34,7 +34,7 @@ async function indexTypesense() {
                 take: 1
             },
             images: {
-                orderBy: { sortOrder: 'asc' },
+                orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }],
                 take: 1
             }
         }
