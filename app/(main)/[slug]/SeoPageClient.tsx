@@ -9,6 +9,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Package } from "lucide-react";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
+import Breadcrumb from "@/components/page/product/Breadcrumb";
 
 interface SeoPageClientProps {
     seoPage: any;
@@ -112,6 +113,21 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com";
 
+    // Helper to format url path to a readable title
+    const formatUrlTitle = (path: string) => {
+        const slug = path.split('/').filter(Boolean).pop() || "";
+        return slug
+            .split('-')
+            .map(word => {
+                if (word.toLowerCase() === 'rs') return 'Rs.';
+                if (!isNaN(Number(word))) return word;
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            })
+            .join(' ');
+    };
+
+    const displayTitle = formatUrlTitle(seoPage.urlPath);
+
     // Breadcrumb JSON-LD
     const breadcrumbLd = {
         "@context": "https://schema.org",
@@ -172,24 +188,19 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
                 />
             )}
             {/* Dynamic Header */}
+            <Breadcrumb
+                category={seoPage.category}
+                name={displayTitle}
+            />
+
             <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-                <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 text-center">
-                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-foreground tracking-tight mb-6">
-                        {seoPage.metaTitle || seoPage.category.name}
+                <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+                    <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight mb-4">
+                        {displayTitle}
                     </h1>
-                    <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                    <p className="text-muted-foreground max-w-3xl leading-relaxed text-sm">
                         {seoPage.metaDescription || seoPage.category.description}
                     </p>
-                    <div className="mt-8 flex items-center justify-center gap-4 text-sm font-medium text-muted-foreground">
-                        <span className="bg-primary/10 text-primary px-4 py-1.5 rounded-full border border-primary/20">
-                            {total} Hand-picked Products
-                        </span>
-                        {effectiveMaxPrice && (
-                            <span className="bg-green-500/10 text-green-600 px-4 py-1.5 rounded-full border border-green-500/20">
-                                Under Rs. {effectiveMaxPrice.toLocaleString()}
-                            </span>
-                        )}
-                    </div>
                 </div>
             </div>
 
