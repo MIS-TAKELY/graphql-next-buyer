@@ -5,11 +5,15 @@ import { GET_PRODUCTS_BY_CATEGORY } from "@/client/category/category.queries";
 import ProductCard from "@/components/search/ProductCard";
 import ProductCardSkeleton from "@/components/search/ProductCardSkeleton";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Package } from "lucide-react";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 import Breadcrumb from "@/components/page/product/Breadcrumb";
+import { useProductStore } from "@/store/productStore";
+import { useDynamicSearchFilter } from "@/hooks/dynamicSearchFilter/useDynamicSearchFilter";
+import ActiveFilters from "@/components/search/ActiveFilters";
+import SortBar from "@/components/search/SortBar";
 
 interface SeoPageClientProps {
     seoPage: any;
@@ -23,14 +27,29 @@ import FilterSidebar from "@/components/search/FilterSidebar";
 export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPageClientProps) {
     const [allProducts, setAllProducts] = useState<any[]>(initialProducts);
     const [hasMore, setHasMore] = useState(true);
-    const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-    const togglePriceRange = (range: string) => {
-        setSelectedPriceRanges(prev =>
-            prev.includes(range) ? prev.filter(r => r !== range) : [...prev, range]
-        );
-    };
+    // Dynamic Filter Hooks
+    const { dynamicSearchData, dynamicSearchFilterLoading } = useDynamicSearchFilter(seoPage.metaTitle || seoPage.category.name);
+
+    // Zustand Store
+    const {
+        filters: storeFilters,
+        toggleDynamicFilter,
+        togglePriceRange,
+        setMinRating,
+        setFilters,
+        resetFilters,
+    } = useProductStore();
+
+    const {
+        selectedPriceRanges,
+        dynamicFilters,
+        minRating,
+        sort: sortBy,
+    } = storeFilters;
+
+    const setSortBy = (sort: string) => setFilters({ sort });
 
     const getMaxPrice = useCallback(() => {
         if (selectedPriceRanges.length === 0) return seoPage.priceThreshold;
@@ -48,7 +67,7 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
             }
         });
         if (hasUnlimited) return undefined;
-        return max > 0 ? max : seoPage.priceThreshold;
+        return max > 0 ? (seoPage.priceThreshold ? Math.min(max, seoPage.priceThreshold) : max) : seoPage.priceThreshold;
     }, [selectedPriceRanges, seoPage.priceThreshold]);
 
     const effectiveMaxPrice = getMaxPrice();
@@ -80,7 +99,7 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
     useEffect(() => {
         setAllProducts([]);
         setHasMore(true);
-    }, [effectiveMaxPrice]);
+    }, [effectiveMaxPrice, dynamicFilters, minRating]);
 
     const loadMore = useCallback(() => {
         if (loading || !hasMore || allProducts.length === 0) return;
@@ -108,6 +127,75 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
             loadMore();
         }
     }, [inView, hasMore, loading, loadMore, allProducts.length]);
+
+    const filteredProducts = useMemo(() => {
+        if (!Array.isArray(allProducts)) return [];
+
+        let filtered = [...allProducts].filter((product: any) => {
+            const price = product.variants?.[0]?.price || 0;
+
+            const matchesPrice =
+                selectedPriceRanges.length === 0 ||
+                selectedPriceRanges.some((range) => {
+                    if (range.endsWith("+")) {
+                        const min = parseInt(range);
+                        return price >= min;
+                    }
+                    const [min, max] = range.split("-").map(Number);
+                    return price >= min && price <= max;
+                });
+
+            // Calculate average rating
+            const rating =
+                product.reviews?.length > 0
+                    ? product.reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0) /
+                    product.reviews.length
+                    : 0;
+
+            const matchesRating = rating >= minRating;
+
+            const matchesDynamicFilters = Object.entries(dynamicFilters).every(
+                ([key, selectedValues]) => {
+                    if ((selectedValues as string[]).length === 0) return true;
+                    if (key === "brand") return (selectedValues as string[]).includes(product.brand);
+                    if (key === "category")
+                        return (selectedValues as string[]).includes(product.category?.name || "");
+
+                    return product.variants?.some((variant: any) =>
+                        variant.specifications?.some(
+                            (spec: any) =>
+                                (spec.key === key || spec.name === key) &&
+                                (selectedValues as string[]).includes(spec.value)
+                        )
+                    );
+                }
+            );
+
+            return matchesPrice && matchesRating && matchesDynamicFilters;
+        });
+
+        // Sorting
+        switch (sortBy) {
+            case "price-low":
+                filtered.sort((a, b) => (a.variants?.[0]?.price || 0) - (b.variants?.[0]?.price || 0));
+                break;
+            case "price-high":
+                filtered.sort((a, b) => (b.variants?.[0]?.price || 0) - (a.variants?.[0]?.price || 0));
+                break;
+            case "rating":
+                filtered.sort((a, b) => {
+                    const avgA = (a.reviews?.reduce((s: number, r: any) => s + r.rating, 0) || 0) / (a.reviews?.length || 1);
+                    const avgB = (b.reviews?.reduce((s: number, r: any) => s + r.rating, 0) || 0) / (b.reviews?.length || 1);
+                    return avgB - avgA;
+                });
+                break;
+            case "popularity":
+                filtered.sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0));
+                break;
+        }
+
+        return filtered;
+    }, [allProducts, selectedPriceRanges, dynamicFilters, minRating, sortBy]);
 
     const total = data?.getProductsByCategory?.total || initialProducts.length || 0;
 
@@ -195,16 +283,50 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
 
             <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
                 <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-                    <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight mb-4">
-                        {displayTitle}
-                    </h1>
-                    <p className="text-muted-foreground max-w-3xl leading-relaxed text-sm">
-                        {seoPage.metaDescription || seoPage.category.description}
-                    </p>
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div className="flex-1">
+                            <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight mb-4 text-left">
+                                {displayTitle}
+                            </h1>
+                            <p className="text-muted-foreground max-w-3xl leading-relaxed text-sm text-left">
+                                {seoPage.metaDescription || seoPage.category.description}
+                            </p>
+                        </div>
+                        <div className="flex-shrink-0">
+                            <SortBar
+                                sortBy={sortBy}
+                                setSortBy={setSortBy}
+                                showFilters={mobileFiltersOpen}
+                                setShowFilters={setMobileFiltersOpen}
+                                activeFiltersCount={
+                                    Object.values(dynamicFilters).reduce((sum, v) => sum + (v as string[]).length, 0) +
+                                    (minRating > 0 ? 1 : 0) +
+                                    selectedPriceRanges.length
+                                }
+                                itemsPerPage={ITEMS_PER_PAGE}
+                                setItemsPerPage={() => { }}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <ActiveFilters
+                    dynamicFilters={dynamicFilters}
+                    minRating={minRating}
+                    toggleFilter={toggleDynamicFilter}
+                    selectedPriceRanges={selectedPriceRanges}
+                    togglePriceRange={togglePriceRange}
+                    setMinRating={setMinRating}
+                    clearFilters={resetFilters}
+                    filterOptions={{}}
+                    dynamicSearchData={{
+                        category: seoPage.category.slug,
+                        filters: dynamicSearchData?.filters || [],
+                    }}
+                />
+
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     {/* Sidebar */}
                     <div className="hidden lg:block lg:col-span-1">
@@ -215,12 +337,15 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
                                     showFilters={true}
                                     selectedPriceRanges={selectedPriceRanges}
                                     togglePriceRange={togglePriceRange}
-                                    minRating={0}
-                                    setMinRating={() => { }}
-                                    dynamicFilters={{}}
-                                    toggleFilter={() => { }}
+                                    minRating={minRating}
+                                    setMinRating={setMinRating}
+                                    dynamicFilters={dynamicFilters}
+                                    toggleFilter={toggleDynamicFilter}
                                     filterOptions={{}}
-                                    dynamicSearchData={{ category: seoPage.category.slug, filters: [] }}
+                                    dynamicSearchData={{
+                                        category: seoPage.category.slug,
+                                        filters: dynamicSearchData?.filters || [],
+                                    }}
                                 />
                             </div>
                         </div>
@@ -228,9 +353,9 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
 
                     {/* Product Grid */}
                     <div className="lg:col-span-3">
-                        <div className={`flex flex-col gap-6 transition-opacity duration-300 ${(loading && allProducts.length === 0) ? 'opacity-50' : 'opacity-100'}`}>
-                            {allProducts.length > 0 ? (
-                                allProducts.map((product: any) => (
+                        <div className={`flex flex-col gap-6 transition-opacity duration-300 ${(loading && filteredProducts.length === 0) ? 'opacity-50' : 'opacity-100'}`}>
+                            {filteredProducts.length > 0 ? (
+                                filteredProducts.map((product: any) => (
                                     <ProductCard key={product.id} product={product} />
                                 ))
                             ) : (
@@ -239,7 +364,7 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
                                 ))
                             )}
 
-                            {!loading && hasMore && inView && allProducts.length > 0 && (
+                            {!loading && hasMore && inView && filteredProducts.length > 0 && (
                                 [...Array(4)].map((_, i) => (
                                     <ProductCardSkeleton key={`skeleton-more-${i}`} />
                                 ))
