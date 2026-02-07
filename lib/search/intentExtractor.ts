@@ -92,22 +92,22 @@ export async function extractIntent(
 
         // Step 4: Extract category using keywords
         const lowerQuery = query.toLowerCase();
-        if (lowerQuery.includes("phone") || lowerQuery.includes("mobile")) intent.category = "Smartphones";
-        else if (lowerQuery.includes("laptop") || lowerQuery.includes("computer")) intent.category = "Laptop";
-        else if (lowerQuery.includes("watch")) intent.category = "Smartwatch";
-        else if (lowerQuery.includes("headphone") || lowerQuery.includes("earphone") || lowerQuery.includes("buds")) intent.category = "Headphone";
-        else if (lowerQuery.includes("tv") || lowerQuery.includes("television")) intent.category = "LED/LCD TVs";
-        else if (lowerQuery.includes("camera")) intent.category = "Camera";
-        else if (lowerQuery.includes("speaker")) intent.category = "Speaker";
-        else if (lowerQuery.includes("shoe") || lowerQuery.includes("sneaker")) intent.category = "Footwear";
-        else if (lowerQuery.includes("oil") || lowerQuery.includes("motul")) intent.category = "Engine Oil & Fluids";
-        else if (lowerQuery.includes("desk") || lowerQuery.includes("table") || lowerQuery.includes("chair")) intent.category = "Study Tables & Office Chairs";
-        else if (lowerQuery.includes("sofa") || lowerQuery.includes("seating")) intent.category = "Sofas & Seating Furniture";
-        else if (lowerQuery.includes("furniture")) intent.category = "Furniture";
-        else if (lowerQuery.includes("diaper") || lowerQuery.includes("pampers")) intent.category = "Disposable Diapers";
-        else if (lowerQuery.includes("face wash") || lowerQuery.includes("moisturizer") || lowerQuery.includes("cream")) intent.category = "Face Moisturizers & Creams";
-        else if (lowerQuery.includes("milk powder") || lowerQuery.includes("dairy")) intent.category = "Ready-to-Eat Meals";
-        else if (lowerQuery.includes("console") || lowerQuery.includes("playstation") || lowerQuery.includes("ps5") || lowerQuery.includes("ps4") || lowerQuery.includes("xbox")) intent.category = "Gaming Consoles (PlayStation, Xbox, Nintendo)";
+        if (lowerQuery.includes("phone") || lowerQuery.includes("mobile") || lowerQuery.includes("iphone") || lowerQuery.includes("android")) intent.category = "Smartphones";
+        else if (lowerQuery.includes("laptop") || lowerQuery.includes("computer") || lowerQuery.includes("macbook") || lowerQuery.includes("mac")) intent.category = "Laptop";
+        else if (lowerQuery.includes("watch") || lowerQuery.includes("apple watch") || lowerQuery.includes("smartwatch")) intent.category = "Smartwatch";
+        else if (lowerQuery.includes("headphone") || lowerQuery.includes("earphone") || lowerQuery.includes("buds") || lowerQuery.includes("airpods")) intent.category = "Music & Sound";
+        else if (lowerQuery.includes("tv") || lowerQuery.includes("television") || lowerQuery.includes("led") || lowerQuery.includes("monitor")) intent.category = "Electronics & Gadgets";
+        else if (lowerQuery.includes("camera") || lowerQuery.includes("dslr") || lowerQuery.includes("canon") || lowerQuery.includes("nikon")) intent.category = "Camera";
+        else if (lowerQuery.includes("speaker") || lowerQuery.includes("bluetooth speaker")) intent.category = "Music & Sound";
+        else if (lowerQuery.includes("shoe") || lowerQuery.includes("sneaker") || lowerQuery.includes("boot") || lowerQuery.includes("nike") || lowerQuery.includes("adidas")) intent.category = "Fashion & Apparel";
+        else if (lowerQuery.includes("shirt") || lowerQuery.includes("t-shirt") || lowerQuery.includes("cloth") || lowerQuery.includes("apparel")) intent.category = "Fashion & Apparel";
+        else if (lowerQuery.includes("oil") || lowerQuery.includes("motul") || lowerQuery.includes("engine")) intent.category = "Automotive & Tools";
+        else if (lowerQuery.includes("table") || lowerQuery.includes("chair") || lowerQuery.includes("desk")) intent.category = "Furniture & Home Decor";
+        else if (lowerQuery.includes("sofa") || lowerQuery.includes("seating") || lowerQuery.includes("couch")) intent.category = "Furniture & Home Decor";
+        else if (lowerQuery.includes("furniture")) intent.category = "Furniture & Home Decor";
+        else if (lowerQuery.includes("diaper") || lowerQuery.includes("baby") || lowerQuery.includes("kid")) intent.category = "Baby and Kids";
+        else if (lowerQuery.includes("grocery") || lowerQuery.includes("food") || lowerQuery.includes("eat") || lowerQuery.includes("snack")) intent.category = "Grocery & Gourmet";
+        else if (lowerQuery.includes("console") || lowerQuery.includes("playstation") || lowerQuery.includes("ps5") || lowerQuery.includes("ps4") || lowerQuery.includes("xbox") || lowerQuery.includes("gaming")) intent.category = "Electronics & Gadgets";
 
         console.log("✅ Intent extracted:", JSON.stringify(intent, null, 2));
         return intent;
@@ -179,28 +179,53 @@ export async function extractIntentWithLLM(query: string): Promise<ExtractedInte
 }
 
 /**
- * Extract intent with timeout and fallback to regex-based extraction
+ * Extract intent with multiple layers of optimization:
+ * 1. Semantic Search (Fast + Context Aware)
+ * 2. LLM (Slow but broad)
+ * 3. Regex (Fastest fallback)
  */
 export async function extractIntentWithTimeout(
     query: string,
     timeoutMs: number = 5000
 ): Promise<ExtractedIntent> {
     try {
+        console.log(`🚀 Starting multi-layered intent extraction for: "${query}"`);
+
+        // Layer 1: Semantic Intent (Fast + DB Context)
+        const { extractSemanticIntent } = await import("./semanticIntent");
+        const semanticRes = await extractSemanticIntent(query);
+
+        if (semanticRes.category || (semanticRes.brand && semanticRes.brand.length > 0)) {
+            console.log("🎯 Semantic match found!");
+            // Still run regex for price/spec extraction as semantic is mostly for cat/brand
+            const regexRes = await extractIntent(query);
+            return {
+                ...semanticRes,
+                price_max: regexRes.price_max,
+                price_min: regexRes.price_min,
+                specifications: regexRes.specifications,
+                correctedQuery: regexRes.correctedQuery || semanticRes.category
+            };
+        }
+
+        // Layer 2: LLM with Timeout
+        console.log("🤖 Semantic match too low, trying LLM...");
         const result = await Promise.race([
             extractIntentWithLLM(query),
             new Promise<never>((_, reject) =>
                 setTimeout(() => reject(new Error("LLM_TIMEOUT")), timeoutMs)
             ),
         ]);
+
         return result;
     } catch (error: any) {
         if (error?.message === "LLM_TIMEOUT") {
             console.warn(`⏱️ LLM timeout after ${timeoutMs}ms, using regex fallback for: "${query}"`);
-            // Fallback to regex-based extraction
-            return await extractIntent(query);
+        } else {
+            console.error("❌ Intent extraction error:", error);
         }
-        console.error("❌ Intent extraction error:", error);
-        // On any other error, also fallback to regex
+
+        // Final Fallback: Regex
         return await extractIntent(query);
     }
 }

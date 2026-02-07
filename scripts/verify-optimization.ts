@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { getDynamicFilters } from "../filter/getFilters";
 import { redis } from "../lib/redis";
 
@@ -38,18 +39,27 @@ async function runVerification() {
         console.warn("⚠️ WARNING: Cache hit was slower than expected.");
     }
 
-    // 4. Test Deduplication
-    console.log("\n3️⃣ Testing concurrent request deduplication...");
+    // 4. Test Semantic Intent
+    console.log("\n3️⃣ Testing semantic intent extraction...");
+    const semanticTerm = "apple laptop";
+    const start4 = Date.now();
+    const res4 = await getDynamicFilters(semanticTerm);
+    const duration4 = Date.now() - start4;
+    console.log(`⏱️ Semantic request took: ${duration4}ms`);
+    console.log(`Identified Category: ${res4.category}, Brand: ${JSON.stringify(res4.intent?.brand || [])}, Filters: ${res4.filters.length}`);
+
+    // 5. Test Deduplication
+    console.log("\n4️⃣ Testing concurrent request deduplication...");
     const newTerm = "gaming laptop under 1 lakh";
-    const start3 = Date.now();
+    const start5 = Date.now();
 
     const [p1, p2] = await Promise.all([
         getDynamicFilters(newTerm),
         getDynamicFilters(newTerm)
     ]);
 
-    const duration3 = Date.now() - start3;
-    console.log(`⏱️ Concurrent requests took: ${duration3}ms`);
+    const duration5 = Date.now() - start5;
+    console.log(`⏱️ Concurrent requests took: ${duration5}ms`);
     console.log("✅ SUCCESS: Concurrent requests handled.");
 
     process.exit(0);
