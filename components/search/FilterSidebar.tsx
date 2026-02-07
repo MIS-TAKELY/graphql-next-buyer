@@ -139,6 +139,8 @@ export default function FilterSidebar({
   filterOptions,
   dynamicSearchData,
 }: FilterSidebarProps) {
+  const isLoading = !dynamicSearchData && !dynamicSearchData; // This is a bit simplified, usually passed via prop
+
   return (
     <div
       className={`${showFilters ? "block" : "hidden"
@@ -150,18 +152,40 @@ export default function FilterSidebar({
           togglePriceRange={togglePriceRange}
         />
         <RatingFilter minRating={minRating} setMinRating={setMinRating} />
-        {dynamicSearchData?.filters?.map((filter) => (
-          <DynamicFilter
-            key={filter.key}
-            filterKey={filter.key}
-            label={filter.label}
-            options={filterOptions[filter.key] || filter.options || []}
-            selectedValues={dynamicFilters[filter.key] || []}
-            toggleFilter={toggleFilter}
-            type={filter.type}
-          />
-        ))}
+
+        {/* Dynamic / AI Filters */}
+        {dynamicSearchData?.filters ? (
+          dynamicSearchData.filters.map((filter) => (
+            <DynamicFilter
+              key={filter.key}
+              filterKey={filter.key}
+              label={filter.label}
+              options={filterOptions[filter.key] || filter.options || []}
+              selectedValues={dynamicFilters[filter.key] || []}
+              toggleFilter={toggleFilter}
+              type={filter.type}
+            />
+          ))
+        ) : (
+          // Skeleton loaders for filters
+          <div className="space-y-6 pt-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="space-y-2">
+                <div className="h-4 w-24 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+                <div className="space-y-1">
+                  {[1, 2, 3, 4].map((j) => (
+                    <div key={j} className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded bg-gray-200 dark:bg-gray-800 animate-pulse" />
+                      <div className="h-3 w-full bg-gray-100 dark:bg-gray-900 rounded animate-pulse" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 }
+

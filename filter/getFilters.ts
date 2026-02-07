@@ -1,6 +1,7 @@
 import { prisma } from "../lib/db/prisma";
 import { typesenseClient } from "../lib/typesense";
-import { extractIntentWithLLM, mapCategoryToDB } from "@/lib/search/intentExtractor";
+import { extractIntent, extractIntentWithTimeout, mapCategoryToDB } from "@/lib/search/intentExtractor";
+import { generateCacheKey, getCached, setCached, deduplicateRequest } from "@/lib/cache/cacheUtils";
 
 export interface FilterOption {
   value: string;
@@ -33,10 +34,33 @@ export async function getDynamicFilters(
   const startTime = Date.now();
 
   try {
-    // 1. Extract Intent using LLM
-    const intent = preExtractedIntent || await extractIntentWithLLM(searchTerm);
+    // 1. Extract Intent using LLM with caching
+    let intent = preExtractedIntent;
+
     if (!preExtractedIntent) {
-      console.log(`🤖 LLM Intent extracted in ${Date.now() - startTime}ms`);
+      // Generate cache key
+      const cacheKey = generateCacheKey(searchTerm);
+
+      // Try to get from cache
+      const cachedIntent = await getCached<any>(cacheKey);
+
+      if (cachedIntent) {
+        console.log(`✅ Cache HIT for: "${searchTerm}" (${Date.now() - startTime}ms)`);
+        intent = cachedIntent;
+      } else {
+        console.log(`❌ Cache MISS for: "${searchTerm}"`);
+
+        // Deduplicate concurrent requests
+        intent = await deduplicateRequest(cacheKey, async () => {
+          const extractedIntent = await extractIntentWithTimeout(searchTerm, 5000);
+          console.log(`🤖 LLM Intent extracted in ${Date.now() - startTime}ms`);
+
+          // Cache the result for 1 hour
+          await setCached(cacheKey, extractedIntent, 3600);
+
+          return extractedIntent;
+        });
+      }
     }
 
     // 2. Build Typesense Query

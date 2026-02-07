@@ -130,7 +130,7 @@ export function isEmptyIntent(intent: ExtractedIntent): boolean {
 }
 
 /**
- * Extract intent using LLM (Ollama)
+ * Extract intent using LLM (Ollama) with timeout
  */
 export async function extractIntentWithLLM(query: string): Promise<ExtractedIntent> {
     const categories = [
@@ -179,18 +179,69 @@ export async function extractIntentWithLLM(query: string): Promise<ExtractedInte
 }
 
 /**
+ * Extract intent with timeout and fallback to regex-based extraction
+ */
+export async function extractIntentWithTimeout(
+    query: string,
+    timeoutMs: number = 5000
+): Promise<ExtractedIntent> {
+    try {
+        const result = await Promise.race([
+            extractIntentWithLLM(query),
+            new Promise<never>((_, reject) =>
+                setTimeout(() => reject(new Error("LLM_TIMEOUT")), timeoutMs)
+            ),
+        ]);
+        return result;
+    } catch (error: any) {
+        if (error?.message === "LLM_TIMEOUT") {
+            console.warn(`⏱️ LLM timeout after ${timeoutMs}ms, using regex fallback for: "${query}"`);
+            // Fallback to regex-based extraction
+            return await extractIntent(query);
+        }
+        console.error("❌ Intent extraction error:", error);
+        // On any other error, also fallback to regex
+        return await extractIntent(query);
+    }
+}
+
+// Category mapping cache (in-memory LRU cache)
+const categoryMappingCache = new Map<string, string | null>();
+const MAX_CATEGORY_CACHE_SIZE = 100;
+
+/**
  * Map a raw category name (from LLM or keyword) to the actual name in DB
  */
 export async function mapCategoryToDB(categoryName: string): Promise<string | null> {
+    // Check cache first
+    if (categoryMappingCache.has(categoryName)) {
+        return categoryMappingCache.get(categoryName)!;
+    }
+
     try {
         const dbCat = await prisma.category.findFirst({
             where: { name: { contains: categoryName, mode: 'insensitive' } },
             select: { name: true }
         });
-        return dbCat ? dbCat.name : null;
+
+        const result = dbCat ? dbCat.name : null;
+
+        // Add to cache with LRU eviction
+        if (categoryMappingCache.size >= MAX_CATEGORY_CACHE_SIZE) {
+            // Remove oldest entry (first key)
+            const firstKey = categoryMappingCache.keys().next().value;
+            if (firstKey !== undefined) {
+                categoryMappingCache.delete(firstKey);
+            }
+        }
+        categoryMappingCache.set(categoryName, result);
+
+        return result;
     } catch (e) {
         console.error("Category mapping failed:", e);
         return null;
     }
 }
+
+
 
