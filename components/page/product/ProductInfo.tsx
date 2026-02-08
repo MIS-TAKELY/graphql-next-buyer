@@ -211,9 +211,9 @@ const ProductInfo = memo(function ProductInfo({
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-0">
                 {promotionalImages.map((image: any, index: number) => (
-                  <div key={index} className="relative w-full overflow-hidden border border-border/50 min-h-[300px]">
+                  <div key={index} className="relative w-full overflow-hidden min-h-[300px]">
                     <SmartMedia
                       src={image.url}
                       alt={image.altText || `Highlight ${index + 1}`}
