@@ -7,7 +7,7 @@ import { memo, useEffect, useMemo, useRef, useState } from "react";
 import ShowProductSpecification from "./ShowProductSpecification";
 import { formatPrice } from "@/lib/utils";
 import VariantSelector from "./VariantSelector";
-import Image from "next/image";
+import SmartMedia from "@/components/ui/SmartMedia";
 
 interface ProductInfoProps {
   product: TProduct;
@@ -31,9 +31,7 @@ const ProductInfo = memo(function ProductInfo({
 
 
   const [showAllHighlights, setShowAllHighlights] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
   const highlightsRef = useRef<HTMLElement>(null);
-  const [teaserHeight, setTeaserHeight] = useState(0);
   const [isDescExpanded, setIsDescExpanded] = useState(false);
 
   const reviewCount = product.reviews?.length || 0;
@@ -44,28 +42,12 @@ const ProductInfo = memo(function ProductInfo({
     [product?.images]
   );
 
-  useEffect(() => {
-    if (
-      promotionalImages.length > 0 &&
-      imgRef.current?.complete &&
-      imgRef.current.naturalHeight > 0
-    ) {
-      setTeaserHeight(Math.round(imgRef.current.naturalHeight * 0.9));
-    }
-  }, [promotionalImages]);
-
   const mrp = defaultVariant?.mrp;
   const price = parseFloat(defaultVariant?.price || "0");
   const hasDiscount = mrp && mrp > price;
   const discountPercent = hasDiscount
     ? Math.round(((mrp - price) / mrp) * 100)
     : 0;
-
-  const handleImageLoad = () => {
-    if (imgRef.current && !showAllHighlights && promotionalImages.length > 0) {
-      setTeaserHeight(Math.round(imgRef.current.naturalHeight * 0.9));
-    }
-  };
 
   const scrollToHighlights = () => {
     if (typeof window === "undefined") return;
@@ -208,18 +190,14 @@ const ProductInfo = memo(function ProductInfo({
 
             {!showAllHighlights ? (
               <div
-                className="relative w-full overflow-hidden border border-border/50"
-                style={{ height: teaserHeight || "500px" }}
+                className="relative w-full overflow-hidden border border-border/50 h-[500px]"
               >
-                <Image
-                  ref={imgRef}
+                <SmartMedia
                   src={promotionalImages[0].url}
                   alt={promotionalImages[0].altText || "Highlight 1"}
                   fill
-                  className="object-cover block"
-                  loading="lazy"
-                  onLoad={handleImageLoad}
-                  unoptimized
+                  className="object-cover"
+                  priority
                 />
 
                 {/* Show More overlay */}
@@ -233,17 +211,15 @@ const ProductInfo = memo(function ProductInfo({
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-6">
                 {promotionalImages.map((image: any, index: number) => (
-                  <div key={index} className="relative w-full overflow-hidden border border-border/50">
-                    <Image
+                  <div key={index} className="relative w-full overflow-hidden border border-border/50 min-h-[300px]">
+                    <SmartMedia
                       src={image.url}
                       alt={image.altText || `Highlight ${index + 1}`}
+                      className="w-full h-auto block object-contain"
                       width={1200}
                       height={800}
-                      className="w-full h-auto block object-contain"
-                      loading="lazy"
-                      unoptimized
                     />
 
                     {/* Optional caption overlay */}
