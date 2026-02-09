@@ -24,16 +24,8 @@ export const searchResolvers = {
         console.log(`🔍 Search Query: "${query}"`);
         const startTime = Date.now();
 
-        // 0. Extract Intent (Fast First)
+        // 0. Extract Intent (Fast regex-based only - no LLM blocking)
         let intent = await extractIntent(query);
-
-        // If query is complex or intent is sparse, fallback to LLM
-        if (query.split(' ').length > 3 && (!intent.category || !intent.brand)) {
-          console.log("🧠 Falling back to LLM for deeper intent extraction...");
-          const llmIntent = await extractIntentWithLLM(query);
-          intent = { ...intent, ...llmIntent };
-        }
-
         const searchTerms = intent.correctedQuery || query;
         console.log(`🤖 Final Intent: ${JSON.stringify(intent)}`);
 
@@ -100,58 +92,68 @@ export const searchResolvers = {
 
           typesenseIds = (typesenseResult.hits || []).map((hit: any) => hit.document.id);
 
-          // 1.5 NEW: If results are very few, fallback to Ollama for better context
-          // but only if we haven't already fallen back to LLM at the start
-          if (typesenseResult.found < 3 && query.split(' ').length <= 3) {
+          // 1.5 SMART LLM FALLBACK: Only for truly poor results on complex queries
+          // Skip LLM for simple brand/category searches that already have some results
+          const wordCount = query.split(' ').length;
+          const isSimpleQuery = wordCount <= 2;
+          const hasSomeResults = typesenseResult.found >= 2;
+
+          if (typesenseResult.found < 2 && !isSimpleQuery) {
             console.log(`🧠 Only ${typesenseResult.found} results found for "${query}". Falling back to LLM for better context...`);
-            const llmIntent = await extractIntentWithLLM(query);
 
-            // Merge LLM intent with existing intent
-            intent = { ...intent, ...llmIntent };
-            const fallbackSearchTerms = intent.correctedQuery || query;
+            try {
+              const llmIntent = await extractIntentWithLLM(query);
 
-            console.log(`🤖 Enhanced Intent: ${JSON.stringify(intent)}`);
+              // Merge LLM intent with existing intent
+              intent = { ...intent, ...llmIntent };
+              const fallbackSearchTerms = intent.correctedQuery || query;
 
-            // Re-build filters with LLM intent
-            const enhancedFilters: string[] = ['status:=ACTIVE'];
+              console.log(`🤖 Enhanced Intent: ${JSON.stringify(intent)}`);
 
-            // Add user filters back
-            if (filters?.categories?.length) {
-              const categoryFilters = filters.categories.map((c: string) => `categoryId:=${c}`).join(' || ');
-              enhancedFilters.push(`(${categoryFilters})`);
-            }
-            if (filters?.brands?.length) {
-              const brandFilters = filters.brands.map((b: string) => `brand:=${b}`).join(' || ');
-              enhancedFilters.push(`(${brandFilters})`);
-            }
-            if (filters?.minPrice !== undefined || filters?.maxPrice !== undefined) {
-              const min = filters.minPrice || 0;
-              const max = filters.maxPrice || 999999999;
-              enhancedFilters.push(`price:[${min}..${max}]`);
-            }
+              // Re-build filters with LLM intent
+              const enhancedFilters: string[] = ['status:=ACTIVE'];
 
-            // Add LLM filters
-            if (intent.category) {
-              const dbCat = await mapCategoryToDB(intent.category);
-              if (dbCat) enhancedFilters.push(`categoryName:="${dbCat}"`);
-            }
-            if (intent.brand?.length) {
-              const bFilters = intent.brand.map((b: string) => `brand:="${b}"`).join(' || ');
-              enhancedFilters.push(`(${bFilters})`);
-            }
+              // Add user filters back
+              if (filters?.categories?.length) {
+                const categoryFilters = filters.categories.map((c: string) => `categoryId:=${c}`).join(' || ');
+                enhancedFilters.push(`(${categoryFilters})`);
+              }
+              if (filters?.brands?.length) {
+                const brandFilters = filters.brands.map((b: string) => `brand:=${b}`).join(' || ');
+                enhancedFilters.push(`(${brandFilters})`);
+              }
+              if (filters?.minPrice !== undefined || filters?.maxPrice !== undefined) {
+                const min = filters.minPrice || 0;
+                const max = filters.maxPrice || 999999999;
+                enhancedFilters.push(`price:[${min}..${max}]`);
+              }
 
-            const enhancedParams: any = {
-              ...searchParams,
-              q: fallbackSearchTerms,
-              filter_by: enhancedFilters.join(' && '),
-            };
+              // Add LLM filters
+              if (intent.category) {
+                const dbCat = await mapCategoryToDB(intent.category);
+                if (dbCat) enhancedFilters.push(`categoryName:="${dbCat}"`);
+              }
+              if (intent.brand?.length) {
+                const bFilters = intent.brand.map((b: string) => `brand:="${b}"`).join(' || ');
+                enhancedFilters.push(`(${bFilters})`);
+              }
 
-            const enhancedResult = await typesenseClient.collections('products').documents().search(enhancedParams);
+              const enhancedParams: any = {
+                ...searchParams,
+                q: fallbackSearchTerms,
+                filter_by: enhancedFilters.join(' && '),
+              };
 
-            if (enhancedResult.found > typesenseResult.found) {
-              console.log(`✅ LLM Fallback found ${enhancedResult.found} results (vs ${typesenseResult.found} originally)`);
-              typesenseResult = enhancedResult;
-              typesenseIds = (enhancedResult.hits || []).map((hit: any) => hit.document.id);
+              const enhancedResult = await typesenseClient.collections('products').documents().search(enhancedParams);
+
+              if (enhancedResult.found > typesenseResult.found) {
+                console.log(`✅ LLM Fallback found ${enhancedResult.found} results (vs ${typesenseResult.found} originally)`);
+                typesenseResult = enhancedResult;
+                typesenseIds = (enhancedResult.hits || []).map((hit: any) => hit.document.id);
+              }
+            } catch (llmError) {
+              console.error("❌ LLM Fallback failed:", llmError);
+              // Continue with original results if LLM fails
             }
           }
         } catch (e) {
