@@ -176,7 +176,8 @@ export function extractSpecificationKeywords(
         "orange",
     ];
     for (const color of colorKeywords) {
-        if (lowerQuery.includes(color)) {
+        const regex = new RegExp(`\\b${color}\\b`, "i");
+        if (regex.test(lowerQuery)) {
             specs.color = color.charAt(0).toUpperCase() + color.slice(1);
             break;
         }
