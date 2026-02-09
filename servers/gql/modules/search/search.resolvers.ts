@@ -82,10 +82,28 @@ export const searchResolvers = {
 
           let typesenseResult = await typesenseClient.collections('products').documents().search(searchParams);
 
-          // Fallback if automated category filter is too restrictive
-          if (typesenseResult.found === 0 && dbCategoryName && !filters?.categories?.length) {
-            console.log("⚠️ Typesense: No results with category filter, retrying without it...");
-            const broaderFilters = filterConditions.filter(f => !f.startsWith('categoryName:'));
+          // Fallback if automated filters are too restrictive (Low results OR 0 results)
+          const hasZeroResults = typesenseResult.found === 0;
+          const hasVeryLowResults = typesenseResult.found < 3;
+          const hasIntentFilters = dbCategoryName || (intent.brand && intent.brand.length > 0);
+          const hasUserFilters = filters?.categories?.length || filters?.brands?.length;
+
+          if ((hasZeroResults || (hasVeryLowResults && !hasUserFilters)) && hasIntentFilters) {
+            console.log(`⚠️ Typesense: ${hasZeroResults ? 'No' : 'Low'} results with intent filters, retrying without them...`);
+            const broaderFilters = filterConditions.filter(f =>
+              !f.startsWith('categoryName:') && !f.includes('brand:=')
+            );
+
+            // Re-add user selected filters if they exist
+            if (filters?.brands?.length) {
+              const brandFilters = filters.brands.map((b: string) => `brand:=${b}`).join(' || ');
+              broaderFilters.push(`(${brandFilters})`);
+            }
+            if (filters?.categories?.length) {
+              const categoryFilters = filters.categories.map((c: string) => `categoryId:=${c}`).join(' || ');
+              broaderFilters.push(`(${categoryFilters})`);
+            }
+
             searchParams.filter_by = broaderFilters.join(' && ');
             typesenseResult = await typesenseClient.collections('products').documents().search(searchParams);
           }
@@ -171,27 +189,15 @@ export const searchResolvers = {
           const whereConditions = ["status = 'ACTIVE'"];
           const params: any[] = [vectorString];
 
+          // STRICTURE: Only user-selected filters are hard-applied here.
+          // Intent-based (extracted) filters are intentionally omitted from vector search
+          // so it can find semantically related items even if metadata is slightly different.
           if (filters?.categories?.length) {
             params.push(filters.categories);
             whereConditions.push(`"categoryId" = ANY($${params.length})`);
           }
           if (filters?.brands?.length) {
             params.push(filters.brands);
-            whereConditions.push(`brand = ANY($${params.length})`);
-          }
-
-          if (intent.category) {
-            const category = await prisma.category.findFirst({
-              where: { name: { contains: intent.category, mode: 'insensitive' } },
-              select: { id: true }
-            });
-            if (category) {
-              params.push(category.id);
-              whereConditions.push(`"categoryId" = $${params.length}`);
-            }
-          }
-          if (intent.brand?.length) {
-            params.push(intent.brand);
             whereConditions.push(`brand = ANY($${params.length})`);
           }
           // Note: price is in ProductVariant, so we can't easily filter in raw product query without JOIN

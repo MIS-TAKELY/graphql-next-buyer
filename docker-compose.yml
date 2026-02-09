@@ -1,6 +1,7 @@
 services:
   app:
     container_name: vanijay_buyer
+    build: .
     image: ghcr.io/mis-takely/vanijay-buyer:latest
     restart: unless-stopped
     ports:
