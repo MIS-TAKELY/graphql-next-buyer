@@ -4,7 +4,10 @@ export async function callLLM(
     timeoutMs: number = 10000,
     retries: number = 1
 ): Promise<string> {
-    const OLLAMA_URL = process.env.OLLAMA_URL || "http://ollama:11434/api/generate";
+    const baseUrl = process.env.OLLAMA_URL || "http://ollama:11434";
+    const OLLAMA_URL = baseUrl.endsWith("/api/generate")
+        ? baseUrl
+        : `${baseUrl.replace(/\/$/, "")}/api/generate`;
 
     for (let attempt = 0; attempt <= retries; attempt++) {
         const controller = new AbortController();
