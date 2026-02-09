@@ -326,7 +326,8 @@ export const searchResolvers = {
           const { callLLM } = await import("@/lib/search/llm");
           const prompt = `Give 5 popular search suggestions for e-commerce starting with or related to "${query}". Return ONLY a JSON array of strings.`;
           try {
-            const llmResponse = await callLLM(prompt);
+            // Use short 500ms timeout for suggestions to keep UI snappy
+            const llmResponse = await callLLM(prompt, "qwen2.5:3b", 500);
             const llmSuggestions = JSON.parse(llmResponse);
             if (Array.isArray(llmSuggestions)) {
               llmSuggestions.forEach(s => suggestions.add(s));
