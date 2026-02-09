@@ -159,7 +159,7 @@ export async function extractIntentWithLLM(query: string): Promise<ExtractedInte
     Respond ONLY with JSON.`;
 
     try {
-        const response = await callLLM(prompt);
+        const response = await callLLM(prompt, "qwen2.5:3b", 30000); // 30s timeout for first load
         const parsed = JSON.parse(response);
 
         const intent: ExtractedIntent = {
