@@ -99,6 +99,61 @@ export const searchResolvers = {
           }
 
           typesenseIds = (typesenseResult.hits || []).map((hit: any) => hit.document.id);
+
+          // 1.5 NEW: If results are very few, fallback to Ollama for better context
+          // but only if we haven't already fallen back to LLM at the start
+          if (typesenseResult.found < 3 && query.split(' ').length <= 3) {
+            console.log(`🧠 Only ${typesenseResult.found} results found for "${query}". Falling back to LLM for better context...`);
+            const llmIntent = await extractIntentWithLLM(query);
+
+            // Merge LLM intent with existing intent
+            intent = { ...intent, ...llmIntent };
+            const fallbackSearchTerms = intent.correctedQuery || query;
+
+            console.log(`🤖 Enhanced Intent: ${JSON.stringify(intent)}`);
+
+            // Re-build filters with LLM intent
+            const enhancedFilters: string[] = ['status:=ACTIVE'];
+
+            // Add user filters back
+            if (filters?.categories?.length) {
+              const categoryFilters = filters.categories.map((c: string) => `categoryId:=${c}`).join(' || ');
+              enhancedFilters.push(`(${categoryFilters})`);
+            }
+            if (filters?.brands?.length) {
+              const brandFilters = filters.brands.map((b: string) => `brand:=${b}`).join(' || ');
+              enhancedFilters.push(`(${brandFilters})`);
+            }
+            if (filters?.minPrice !== undefined || filters?.maxPrice !== undefined) {
+              const min = filters.minPrice || 0;
+              const max = filters.maxPrice || 999999999;
+              enhancedFilters.push(`price:[${min}..${max}]`);
+            }
+
+            // Add LLM filters
+            if (intent.category) {
+              const dbCat = await mapCategoryToDB(intent.category);
+              if (dbCat) enhancedFilters.push(`categoryName:="${dbCat}"`);
+            }
+            if (intent.brand?.length) {
+              const bFilters = intent.brand.map((b: string) => `brand:="${b}"`).join(' || ');
+              enhancedFilters.push(`(${bFilters})`);
+            }
+
+            const enhancedParams: any = {
+              ...searchParams,
+              q: fallbackSearchTerms,
+              filter_by: enhancedFilters.join(' && '),
+            };
+
+            const enhancedResult = await typesenseClient.collections('products').documents().search(enhancedParams);
+
+            if (enhancedResult.found > typesenseResult.found) {
+              console.log(`✅ LLM Fallback found ${enhancedResult.found} results (vs ${typesenseResult.found} originally)`);
+              typesenseResult = enhancedResult;
+              typesenseIds = (enhancedResult.hits || []).map((hit: any) => hit.document.id);
+            }
+          }
         } catch (e) {
           console.error("Typesense error in Hybrid Search:", e);
         }

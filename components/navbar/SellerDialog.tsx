@@ -26,7 +26,7 @@ const SellerButton = ({ isMobile = false, onItemClick }: SellerButtonProps) => {
       <Link href={sellerDashboard} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
         {!isMobile && <Store className="w-4 h-4 lg:w-5 lg:h-5 text-muted-foreground" />}
         <span className={`${isMobile ? "" : "hidden lg:inline"} font-light`}>
-          Become a Seller
+          Seller For Free
         </span>
         {!isMobile && <span className="lg:hidden">Sell</span>}
       </Link>
