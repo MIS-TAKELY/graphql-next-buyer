@@ -144,7 +144,7 @@ const ProductInfo = memo(function ProductInfo({
       <div className="flex flex-wrap items-baseline gap-3 p-4 bg-card border border-border/40 shadow-sm w-fit min-w-[200px]">
         {defaultVariant?.price ? (
           <>
-            <span className="text-3xl font-bold text-primary">
+            <span className="text-3xl font-bold ext-blue-600 dark:text-blue-400">
               {formatPrice(defaultVariant.price)}
             </span>
 
