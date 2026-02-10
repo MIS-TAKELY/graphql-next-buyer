@@ -378,13 +378,13 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
                         <button
                             type="button"
                             onClick={() => setStep("FORGOT_PASSWORD")}
-                            className="text-xs font-medium text-primary hover:underline"
+                            className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline"
                         >
                             Forgot password?
                         </button>
                     </div>
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all" disabled={loading}>
                     {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                     Sign in
                 </Button>
@@ -406,7 +406,7 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
             </div>
             <div className="text-center text-sm">
                 <span className="text-muted-foreground">Don't have an account? </span>
-                <button onClick={() => setStep("SIGN_UP")} className="font-medium text-primary hover:underline">Sign up</button>
+                <button onClick={() => setStep("SIGN_UP")} className="font-medium text-blue-600 dark:text-blue-400 hover:underline">Sign up</button>
             </div>
         </div>
     );
@@ -465,11 +465,11 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
                             className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                         />
                         <Label htmlFor="acceptTerms" className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground">
-                            I accept the <Link href="/privacy-policy" className="text-primary hover:underline">Privacy Policy</Link>, <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link>, and <Link href="/cookie-policy" className="text-primary hover:underline">Cookie Policy</Link>
+                            I accept the <Link href="/privacy-policy" className="text-blue-600 dark:text-blue-400 hover:underline">Privacy Policy</Link>, <Link href="/terms" className="text-blue-600 dark:text-blue-400 hover:underline">Terms of Service</Link>, and <Link href="/cookie-policy" className="text-blue-600 dark:text-blue-400 hover:underline">Cookie Policy</Link>
                         </Label>
                     </div>
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all" disabled={loading}>
                     {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                     Create Account
                 </Button>
@@ -491,7 +491,7 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
             </div>
             <div className="text-center text-sm">
                 <span className="text-muted-foreground">Already have an account? </span>
-                <button onClick={() => setStep("SIGN_IN")} className="font-medium text-primary hover:underline">Sign in</button>
+                <button onClick={() => setStep("SIGN_IN")} className="font-medium text-blue-600 dark:text-blue-400 hover:underline">Sign in</button>
             </div>
         </div >
     );
@@ -522,7 +522,7 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
             <div className="text-center text-sm">
                 <button
                     onClick={() => setStep("SIGN_IN")}
-                    className="font-medium text-primary hover:underline"
+                    className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
                 >
                     Back to Sign In
                 </button>

@@ -92,7 +92,7 @@ const ProductInfo = memo(function ProductInfo({
             {product.description.length > 150 && (
               <button
                 onClick={() => setIsDescExpanded(!isDescExpanded)}
-                className="text-primary text-sm font-semibold mt-1 hover:underline focus:outline-none"
+                className="text-blue-600 dark:text-blue-400 text-sm font-semibold mt-1 hover:underline focus:outline-none"
               >
                 {isDescExpanded ? 'See less' : 'See more'}
               </button>
@@ -204,7 +204,7 @@ const ProductInfo = memo(function ProductInfo({
                 <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center bg-gradient-to-t from-background via-background/60 to-transparent p-8">
                   <button
                     onClick={() => setShowAllHighlights(true)}
-                    className="px-6 py-2 bg-primary text-primary-foreground text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+                    className="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all"
                   >
                     Show all highlights
                   </button>

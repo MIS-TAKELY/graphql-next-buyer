@@ -77,7 +77,7 @@ export default function FAQSection({ productId, isOwnProduct, initialQuestions }
                         <div className="text-center">
                             <p className="text-xs text-muted-foreground mb-2">Login to ask a question</p>
                             <AuthDialog>
-                                <Button size="sm" variant="outline">Sign In</Button>
+                                <Button size="sm" className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white">Sign In</Button>
                             </AuthDialog>
                         </div>
                     )}
@@ -117,7 +117,7 @@ export default function FAQSection({ productId, isOwnProduct, initialQuestions }
                     ))
                 )}
                 {questions.length > 3 && (
-                    <Button variant="ghost" size="sm" className="w-full text-xs text-muted-foreground">
+                    <Button variant="ghost" size="sm" className="w-full text-xs text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20">
                         View All Questions
                     </Button>
                 )}

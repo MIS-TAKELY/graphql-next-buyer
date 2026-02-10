@@ -146,7 +146,7 @@ export default function FrequentlyBoughtTogether({
                                 <Button
                                     onClick={handleAddAllToCart}
                                     disabled={selectedProducts.length === 0}
-                                    className="w-full h-12 text-base font-bold gap-2 group relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+                                    className="w-full h-12 text-base font-bold gap-2 group relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
                                 >
                                     <ShoppingCart className="w-5 h-5 transition-transform group-hover:rotate-12" />
                                     Add {selectedProducts.length} item{selectedProducts.length !== 1 ? 's' : ''} to cart

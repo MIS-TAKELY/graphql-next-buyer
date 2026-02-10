@@ -278,7 +278,7 @@ const ProductReviews = ({ isOwnProduct, initialReviews, initialStats }: { isOwnP
               <Button
                 variant="link"
                 size="sm"
-                className="h-auto p-0 text-xs"
+                className="h-auto p-0 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
               >
                 Sign In
               </Button>
@@ -297,8 +297,8 @@ const ProductReviews = ({ isOwnProduct, initialReviews, initialStats }: { isOwnP
               className={cn(
                 "text-[11px] px-2 py-1 rounded-full border transition-colors",
                 filters.sortBy === sort
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-background text-muted-foreground border-border hover:border-primary"
+                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white border-transparent"
+                  : "bg-background text-muted-foreground border-border hover:border-blue-500"
               )}
             >
               {sort.charAt(0).toUpperCase() + sort.slice(1)}
@@ -337,7 +337,7 @@ const ProductReviews = ({ isOwnProduct, initialReviews, initialStats }: { isOwnP
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="w-full text-xs text-muted-foreground"
+                    className="w-full text-xs text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                     onClick={loadMore}
                   >
                     View More Reviews
