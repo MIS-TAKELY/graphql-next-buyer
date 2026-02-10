@@ -23,8 +23,8 @@ const SellerButton = ({ isMobile = false, onItemClick }: SellerButtonProps) => {
       className={`
   flex items-center gap-1 lg:gap-2
   text-sm lg:text-base text-foreground
-  hover:text-blue-600 dark:hover:text-blue-400
-  hover:bg-blue-100 dark:hover:bg-blue-900/40
+  hover:text-white dark:hover:text-blue-400
+  hover:bg-blue-500 dark:hover:bg-blue-900/40
   ${isMobile ? "w-full h-12" : "px-2 lg:px-4"}
 `}
 
