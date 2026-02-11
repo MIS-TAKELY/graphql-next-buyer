@@ -7,6 +7,34 @@ import {
 import { callLLM } from "./llm";
 
 /**
+ * Clean common marketing prefixes that confuse intent extraction
+ */
+function cleanQuery(query: string): string {
+    return query
+        .replace(/^(best|top|featured|today's|hot|latest|new|discounted|trending|popular)\s+/i, "")
+        .replace(/\s+(deals?|offers?|products?|items?|sales?|picks?|gadgets?)$/i, "")
+        .trim();
+}
+
+/**
+ * Check if query is generic marketing term or simple keyword
+ */
+function isGenericMarketingQuery(query: string): boolean {
+    const q = query.toLowerCase().trim();
+    const wordCount = q.split(/\s+/).length;
+
+    // Fast-path for 1-2 word queries (likely direct categories or products)
+    if (wordCount <= 2) return true;
+
+    const genericTerms = [
+        "best electronics", "best deals", "featured products", "top offers",
+        "today's best deals", "trending now", "latest products", "hot deals",
+        "new arrivals", "popular items", "best electronics gadgets"
+    ];
+    return genericTerms.some(term => q === term || q.includes(term));
+}
+
+/**
  * Extracted intent from user query
  * No external AI API required - uses regex + fuzzy matching
  */
@@ -41,6 +69,10 @@ export async function extractIntent(
 
     try {
         console.log(`🔍 Extracting intent from: "${query}"`);
+
+        // Step 0: Clean query for better matches
+        const cleaned = cleanQuery(query);
+        const processingQuery = cleaned.length > 2 ? cleaned : query;
 
         // Step 1: Extract price range using regex
         const priceRange = extractPriceRange(query);
@@ -92,22 +124,39 @@ export async function extractIntent(
 
         // Step 4: Extract category using keywords
         const lowerQuery = query.toLowerCase();
-        if (lowerQuery.includes("phone") || lowerQuery.includes("mobile") || lowerQuery.includes("iphone") || lowerQuery.includes("android")) intent.category = "Smartphones";
-        else if (lowerQuery.includes("laptop") || lowerQuery.includes("computer") || lowerQuery.includes("macbook") || lowerQuery.includes("mac")) intent.category = "Laptop";
-        else if (lowerQuery.includes("watch") || lowerQuery.includes("apple watch") || lowerQuery.includes("smartwatch")) intent.category = "Smartwatch";
-        else if (lowerQuery.includes("headphone") || lowerQuery.includes("earphone") || lowerQuery.includes("buds") || lowerQuery.includes("airpods")) intent.category = "Music & Sound";
-        else if (lowerQuery.includes("tv") || lowerQuery.includes("television") || lowerQuery.includes("led") || lowerQuery.includes("monitor")) intent.category = "Electronics & Gadgets";
-        else if (lowerQuery.includes("camera") || lowerQuery.includes("dslr") || lowerQuery.includes("canon") || lowerQuery.includes("nikon")) intent.category = "Camera";
-        else if (lowerQuery.includes("speaker") || lowerQuery.includes("bluetooth speaker")) intent.category = "Music & Sound";
-        else if (lowerQuery.includes("shoe") || lowerQuery.includes("sneaker") || lowerQuery.includes("boot") || lowerQuery.includes("nike") || lowerQuery.includes("adidas")) intent.category = "Fashion & Apparel";
-        else if (lowerQuery.includes("shirt") || lowerQuery.includes("t-shirt") || lowerQuery.includes("cloth") || lowerQuery.includes("apparel")) intent.category = "Fashion & Apparel";
-        else if (lowerQuery.includes("oil") || lowerQuery.includes("motul") || lowerQuery.includes("engine")) intent.category = "Automotive & Tools";
-        else if (lowerQuery.includes("table") || lowerQuery.includes("chair") || lowerQuery.includes("desk")) intent.category = "Furniture & Home Decor";
-        else if (lowerQuery.includes("sofa") || lowerQuery.includes("seating") || lowerQuery.includes("couch")) intent.category = "Furniture & Home Decor";
-        else if (lowerQuery.includes("furniture")) intent.category = "Furniture & Home Decor";
-        else if (lowerQuery.includes("diaper") || lowerQuery.includes("baby") || lowerQuery.includes("kid")) intent.category = "Baby and Kids";
-        else if (lowerQuery.includes("grocery") || lowerQuery.includes("food") || lowerQuery.includes("eat") || lowerQuery.includes("snack")) intent.category = "Grocery & Gourmet";
-        else if (lowerQuery.includes("console") || lowerQuery.includes("playstation") || lowerQuery.includes("ps5") || lowerQuery.includes("ps4") || lowerQuery.includes("xbox") || lowerQuery.includes("gaming")) intent.category = "Electronics & Gadgets";
+        const lowerCleaned = cleaned.toLowerCase();
+
+        // Check both original and cleaned for better coverage
+        const hasKeyword = (k: string, exact: boolean = false) => {
+            if (exact) {
+                const regex = new RegExp(`\\b${k}\\b`, 'i');
+                return regex.test(lowerQuery) || regex.test(lowerCleaned);
+            }
+            return lowerQuery.includes(k) || lowerCleaned.includes(k);
+        };
+
+        if (hasKeyword("phone") || hasKeyword("mobile") || hasKeyword("iphone") || hasKeyword("android") || hasKeyword("smartphone")) intent.category = "Smartphones";
+        else if (hasKeyword("laptop") || hasKeyword("computer") || hasKeyword("macbook") || hasKeyword("mac")) intent.category = "Laptop";
+        else if (hasKeyword("watch") || hasKeyword("apple watch") || hasKeyword("smartwatch")) intent.category = "Smartwatch";
+        else if (hasKeyword("headphone") || hasKeyword("earphone") || hasKeyword("buds") || hasKeyword("airpods")) intent.category = "Music & Sound";
+        else if (hasKeyword("tv") || hasKeyword("television") || hasKeyword("led") || hasKeyword("monitor")) intent.category = "Electronics & Gadgets";
+        else if (hasKeyword("camera") || hasKeyword("dslr") || hasKeyword("canon") || hasKeyword("nikon")) intent.category = "Camera";
+        else if (hasKeyword("speaker") || hasKeyword("bluetooth speaker")) intent.category = "Music & Sound";
+        else if (hasKeyword("shoe") || hasKeyword("sneaker") || hasKeyword("boot") || hasKeyword("nike") || hasKeyword("adidas")) intent.category = "Fashion & Apparel";
+        else if (hasKeyword("shirt") || hasKeyword("t-shirt") || hasKeyword("cloth") || hasKeyword("apparel")) intent.category = "Fashion & Apparel";
+        else if (hasKeyword("oil") || hasKeyword("motul") || hasKeyword("engine")) intent.category = "Automotive & Tools";
+        else if (hasKeyword("table") || hasKeyword("chair") || hasKeyword("desk")) intent.category = "Furniture & Home Decor";
+        else if (hasKeyword("sofa") || hasKeyword("seating") || hasKeyword("couch")) intent.category = "Furniture & Home Decor";
+        else if (hasKeyword("furniture")) intent.category = "Furniture & Home Decor";
+        else if (hasKeyword("diaper") || hasKeyword("baby") || hasKeyword("kid")) intent.category = "Baby and Kids";
+        // Use exact check for short/ambiguous words like "eat" or "oil" to avoid collisions with "featured" or "boil"
+        else if (hasKeyword("grocery") || hasKeyword("food") || hasKeyword("eat", true) || hasKeyword("snack")) intent.category = "Grocery & Gourmet";
+        else if (hasKeyword("console") || hasKeyword("playstation") || hasKeyword("ps5") || hasKeyword("ps4") || hasKeyword("xbox") || hasKeyword("gaming")) intent.category = "Electronics & Gadgets";
+
+        // Special case for generic "electronics" on landing page
+        if (!intent.category && hasKeyword("electronics")) {
+            intent.category = "Electronics & Gadgets";
+        }
 
         console.log("✅ Intent extracted:", JSON.stringify(intent, null, 2));
         return intent;
@@ -191,9 +240,17 @@ export async function extractIntentWithTimeout(
     try {
         console.log(`🚀 Starting multi-layered intent extraction for: "${query}"`);
 
+        // Layer 0: Fast-path for generic landing page queries
+        if (isGenericMarketingQuery(query)) {
+            console.log("⚡ Fast-path match for generic marketing query");
+            return await extractIntent(query);
+        }
+
+        const cleaned = cleanQuery(query);
+
         // Layer 1: Semantic Intent (Fast + DB Context)
         const { extractSemanticIntent } = await import("./semanticIntent");
-        const semanticRes = await extractSemanticIntent(query);
+        const semanticRes = await extractSemanticIntent(cleaned.length > 2 ? cleaned : query);
 
         if (semanticRes.category || (semanticRes.brand && semanticRes.brand.length > 0)) {
             console.log("🎯 Semantic match found!");
