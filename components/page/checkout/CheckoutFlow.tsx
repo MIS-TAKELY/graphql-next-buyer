@@ -13,8 +13,11 @@ import { useCart } from "@/hooks/cart/useCart";
 import { formatPrice } from "@/lib/utils";
 import { CartItem } from "@/store/cartStore";
 import { useMutation, useQuery } from "@apollo/client";
-import { useSearchParams } from "next/navigation";
+
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useSession } from "@/lib/auth-client";
+import { useAuthModal } from "@/store/authModalStore";
 
 interface CheckoutFlowProps {
     isCartOverride?: boolean;
@@ -24,6 +27,10 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
     // Sync visual step with logical step
     const [currentStep, setCurrentStep] = useState(1);
     const searchParams = useSearchParams();
+    const router = useRouter(); // Added router
+    const { data: session, isPending: isSessionLoading } = useSession(); // Added session check
+    const { openModal } = useAuthModal(); // Added auth modal
+
     const productSlug = searchParams.get("product");
     const quantity = parseInt(searchParams.get("quantity") || "1");
     const variantId = searchParams.get("variant");
@@ -71,6 +78,16 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
                 setCurrentStep(1);
         }
     }, [step]);
+
+    // NEW: Check for session on mount / update
+    useEffect(() => {
+        if (!isSessionLoading && !session?.user) {
+            openModal("SIGN_IN");
+            // Optional: Redirect to home or keep them here but block access?
+            // For now, opening the modal is the primary action.
+            // If they close it, they stay on the page but can't proceed (as addresses won't load).
+        }
+    }, [isSessionLoading, session, openModal]);
 
     const [verifyEsewaPayment] = useMutation(VERIFY_ESEWA_PAYMENT);
 

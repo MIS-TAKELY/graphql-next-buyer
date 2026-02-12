@@ -13,6 +13,7 @@ import {
 } from "@/client/productNotification/productNotification.mutations";
 import { toast } from "sonner";
 import { useSession } from "@/lib/auth-client";
+import { useAuthModal } from "@/store/authModalStore";
 
 interface BuyNowButtonProps {
   productSlug: string;
@@ -51,6 +52,7 @@ export function BuyNowButton({
 }: BuyNowButtonProps) {
   const router = useRouter();
   const { data: session } = useSession();
+  const { openModal } = useAuthModal();
   const [showNotifyModal, setShowNotifyModal] = useState(false);
 
   // Check if user has active notification (only for logged-in users)
@@ -155,6 +157,11 @@ export function BuyNowButton({
       return;
     }
 
+    if (!session?.user) {
+      openModal("SIGN_IN");
+      return;
+    }
+
     if (isFromCart) {
       const searchParams = new URLSearchParams({
         from: "cart",
@@ -170,7 +177,7 @@ export function BuyNowButton({
       }
       router.push(`/buy-now?${searchParams.toString()}`);
     }
-  }, [disabled, inStock, productSlug, quantity, router, onClick, isFromCart, variantId, productId, session, createNotification, hasActiveNotification, cancelNotification]);
+  }, [disabled, inStock, productSlug, quantity, router, onClick, isFromCart, variantId, productId, session, createNotification, hasActiveNotification, cancelNotification, openModal]);
 
   const handleNotifySubmit = (data: { email?: string; phone?: string }) => {
     if (!productId) {
