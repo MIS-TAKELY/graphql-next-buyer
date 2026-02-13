@@ -114,6 +114,9 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
             } else {
                 toast.success("Signed in successfully");
                 await refetch();
+                if (isModal && onClose) {
+                    onClose();
+                }
             }
         } catch (err: any) {
             console.error("Sign in error:", err);
@@ -175,6 +178,9 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
                 if (data?.token) {
                     toast.success("Account created! Signed in successfully.");
                     await refetch();
+                    if (isModal && onClose) {
+                        onClose();
+                    }
                 } else {
                     toast.success("Account created! Please check your email for verification.");
                     setStep("EMAIL_SENT");
@@ -670,8 +676,7 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
                     {isModal && onClose && (
                         <button
                             onClick={onClose}
-                            disabled={step === "PHONE_OTP" || step === "PHONE_NUMBER"}
-                            className="absolute top-4 right-4 p-2 rounded-full hover:bg-secondary/80 text-muted-foreground transition-colors disabled:opacity-0 disabled:pointer-events-none"
+                            className="absolute top-4 right-4 p-2 rounded-full hover:bg-secondary/80 text-muted-foreground transition-colors"
                             aria-label="Close"
                         >
                             <X className="h-5 w-5" />

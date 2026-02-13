@@ -9,11 +9,10 @@ export default function GlobalAuthModal() {
     const { isOpen, closeModal, defaultStep } = useAuthModal();
     const [currentStep, setCurrentStep] = useState<string>("SIGN_IN");
 
-    const isClosable = !["PHONE_OTP", "PHONE_NUMBER"].includes(currentStep);
 
     return (
         <Dialog open={isOpen} onOpenChange={(val) => {
-            if (isClosable || !val) {
+            if (!val) {
                 closeModal();
             }
         }}>
@@ -21,14 +20,8 @@ export default function GlobalAuthModal() {
                 className="sm:max-w-[1000px] p-0 border-none bg-transparent shadow-none"
                 showCloseButton={false}
                 onInteractOutside={(e) => {
-                    if (!isClosable) {
-                        e.preventDefault();
-                    }
                 }}
                 onEscapeKeyDown={(e) => {
-                    if (!isClosable) {
-                        e.preventDefault();
-                    }
                 }}
             >
                 <DialogTitle className="sr-only">Authentication</DialogTitle>
@@ -37,7 +30,7 @@ export default function GlobalAuthModal() {
                 </DialogDescription>
                 <UnifiedAuth
                     isModal={true}
-                    onClose={() => isClosable && closeModal()}
+                    onClose={() => closeModal()}
                     onStepChange={(step) => setCurrentStep(step)}
                 />
             </DialogContent>
