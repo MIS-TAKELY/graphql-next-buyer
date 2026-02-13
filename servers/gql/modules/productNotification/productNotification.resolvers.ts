@@ -105,7 +105,7 @@ export const productNotificationResolvers = {
                         variantId: input.variantId || null,
                         userId: user?.id,
                         email: input.email || user?.email,
-                        phone: input.phone || user?.phone,
+                        phone: input.phone || user?.phoneNumber,
                     },
                 });
 
@@ -219,7 +219,7 @@ export const productNotificationResolvers = {
                     }
 
                     // Send WhatsApp notification
-                    const phoneToUse = notification.phone || notification.user?.phone;
+                    const phoneToUse = notification.phone || notification.user?.phoneNumber;
                     if (phoneToUse) {
                         await sendWhatsAppNotification(
                             phoneToUse,

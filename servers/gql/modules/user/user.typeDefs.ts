@@ -43,7 +43,8 @@ export const userTypeDefs = gql`
     email: String!
     firstName: String
     lastName: String
-    phone: String
+    phoneNumber: String
+    phoneNumberVerified: Boolean
     avatarImageUrl: String
     gender: Gender
     dob: DateTime
@@ -70,7 +71,7 @@ export const userTypeDefs = gql`
   input UpdateUserProfileDetailsInput {
     firstName: String
     lastName: String
-    phone: String
+    phoneNumber: String
     gender: Gender
     dob: DateTime
   }

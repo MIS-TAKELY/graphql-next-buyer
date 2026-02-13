@@ -50,7 +50,7 @@ export const userResolvers = {
         input: {
           firstName?: string;
           lastName?: string;
-          phone?: string;
+          phoneNumber?: string;
           gender: Gender;
           dob: Date;
         };

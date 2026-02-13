@@ -46,7 +46,7 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
     // Handle step transitions based on session state
     useEffect(() => {
         if (!isPending && session) {
-            if (!(session.user as any).phoneVerified) {
+            if (!(session.user as any).phoneNumberVerified) {
                 // Only set to PHONE_NUMBER if we're not already in the OTP verification flow
                 // This prevents the OTP page from disappearing when users switch to WhatsApp
                 if (step !== "PHONE_OTP") {

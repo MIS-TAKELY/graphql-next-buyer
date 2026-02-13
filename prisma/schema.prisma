@@ -27,8 +27,8 @@ model User {
   firstName               String?
   lastName                String?
   avatarImageUrl          String?
-  phone                   String?                   @unique @db.VarChar(20)
-  phoneVerified           Boolean                   @default(false)
+  phoneNumber             String?                   @unique @db.VarChar(20) @map("phone")
+  phoneNumberVerified     Boolean                   @default(false) @map("phone_verified")
   otp                     String?
   otpExpiresAt            DateTime?
   gender                  Gender?

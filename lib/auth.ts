@@ -89,11 +89,6 @@ export const auth = betterAuth({
     },
     user: {
         additionalFields: {
-            phoneVerified: {
-                type: "boolean",
-                required: false,
-                defaultValue: false,
-            },
             otp: {
                 type: "string",
                 required: false,

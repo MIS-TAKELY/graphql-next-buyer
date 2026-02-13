@@ -22,11 +22,11 @@ export const phonePassword = () => {
                 const { phone, password, rememberMe } = ctx.body;
 
                 // 1. Find user by phone number
-                // Note: The schema uses 'phone' field in the 'user' model
+                // Note: The schema now uses 'phoneNumber' field
                 const user = await ctx.context.adapter.findOne({
                     model: "user",
                     where: [{
-                        field: "phone",
+                        field: "phoneNumber",
                         value: phone,
                     }]
                 }) as any;
@@ -82,8 +82,8 @@ export const phonePassword = () => {
                         email: user.email as string,
                         name: user.name as string,
                         image: user.image as string | null,
-                        phone: user.phone as string | null,
-                        phoneVerified: user.phoneVerified as boolean,
+                        phoneNumber: user.phoneNumber as string | null,
+                        phoneNumberVerified: user.phoneNumberVerified as boolean,
                         createdAt: user.createdAt as Date,
                         updatedAt: user.updatedAt as Date
                     }

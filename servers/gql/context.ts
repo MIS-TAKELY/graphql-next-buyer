@@ -13,9 +13,9 @@ export interface GraphQLContext {
     email: string;
     firstName: string;
     lastName: string;
-    phone?: string | null;
+    phoneNumber?: string | null;
     roles: string[];
-    phoneVerified: boolean;
+    phoneNumberVerified: boolean;
   } | null;
   publish: (evt: {
     type: string;
@@ -51,8 +51,8 @@ export async function createContext(
           email: true,
           firstName: true,
           lastName: true,
-          phone: true,
-          phoneVerified: true,
+          phoneNumber: true,
+          phoneNumberVerified: true,
           roles: {
             select: { role: true },
           },
@@ -66,8 +66,8 @@ export async function createContext(
           roles: dbUser.roles.map((r: any) => r.role),
           firstName: dbUser.firstName ?? "",
           lastName: dbUser.lastName ?? "",
-          phone: dbUser.phone,
-          phoneVerified: dbUser.phoneVerified,
+          phoneNumber: dbUser.phoneNumber,
+          phoneNumberVerified: dbUser.phoneNumberVerified,
         };
       }
     }
