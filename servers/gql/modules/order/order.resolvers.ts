@@ -42,7 +42,7 @@ export interface AddressInput {
   state: string;
   postalCode: string;
   country: string;
-  phone: string;
+  phoneNumber: string;
   [key: string]: any;
 }
 
@@ -189,7 +189,7 @@ export const orderResolvers = {
                       seller: {
                         select: {
                           email: true,
-                          phone: true,
+                          phoneNumber: true,
                         },
                       },
                     },
@@ -367,7 +367,7 @@ export const orderResolvers = {
                   seller: {
                     select: {
                       email: true,
-                      phone: true,
+                      phoneNumber: true,
                     },
                   },
                 },
@@ -414,7 +414,7 @@ export const orderResolvers = {
               console.log("mail response-->", info);
             }
 
-            if (seller?.phone) {
+            if (seller?.phoneNumber) {
               const sellerTotal = items.reduce(
                 (acc, i) => acc + Number(i.totalPrice),
                 0
@@ -424,10 +424,10 @@ export const orderResolvers = {
               const message = `🛒 New Order Received!
                 Order Total: रु${sellerTotal}
                 Customer: ${user.firstName || ""} ${user.lastName || ""}
-                Phone: ${user.phone || "N/A"}`;
+                Phone: ${user.phoneNumber || "N/A"}`;
 
               // Send WhatsApp via your worker
-              console.log("sending whatsapp to seller:", seller.phone);
+              console.log("sending whatsapp to seller:", seller.phoneNumber);
 
               try {
                 const wppConnectUrl = process.env.WPP_CONNECT;
@@ -444,7 +444,7 @@ export const orderResolvers = {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
-                    phone: seller.phone.toString(),
+                    phone: seller.phoneNumber.toString(),
                     message,
                   }),
                 });

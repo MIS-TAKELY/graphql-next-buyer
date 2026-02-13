@@ -112,8 +112,8 @@ model SellerProfile {
   businessName        String?
   businessRegNo       String?
   businessType        String?
-  phone               String             @db.VarChar(20)
-  altPhone            String?            @db.VarChar(20)
+  phoneNumber         String             @map("phone") @db.VarChar(20)
+  altPhoneNumber      String?            @map("altPhone") @db.VarChar(20)
   email               String?
   pickupAddressId     String?
   returnPolicy        String?
@@ -237,7 +237,7 @@ model Address {
   state                 String
   country               String          @default("NP")
   postalCode            String
-  phone                 String?         @db.VarChar(20)
+  phoneNumber           String?         @map("phone") @db.VarChar(20)
   isDefault             Boolean         @default(false)
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt

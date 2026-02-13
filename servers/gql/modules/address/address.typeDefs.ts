@@ -20,7 +20,7 @@ export const addressTypeDefs = gql`
     state: String!
     country: String!
     postalCode: String!
-    phone: String
+    phoneNumber: String
     isDefault: Boolean!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -36,7 +36,7 @@ export const addressTypeDefs = gql`
     state: String!
     country: String!
     postalCode: String!
-    phone: String
+    phoneNumber: String
     isDefault: Boolean!
   }
 
@@ -50,7 +50,7 @@ export const addressTypeDefs = gql`
     state: String
     country: String
     postalCode: String
-    phone: String
+    phoneNumber: String
     isDefault: Boolean
   }
 

@@ -54,7 +54,7 @@ export const addressResolvers = {
           state: string;
           country: string;
           postalCode: string;
-          phone: string;
+          phoneNumber: string;
           isDefault: boolean;
         };
       },
@@ -74,14 +74,14 @@ export const addressResolvers = {
             state: input.state,
             country: input.country,
             postalCode: input.postalCode,
-            phone: input.phone,
+            phoneNumber: input.phoneNumber,
             isDefault: input.isDefault,
             user: {
               connect: { id: userId },
             },
           },
         });
-        
+
         if (!createAddressResponse) throw new Error("Unable to create Address");
         return true;
       } catch (error: any) {
@@ -104,7 +104,7 @@ export const addressResolvers = {
           state: string;
           country: string;
           postalCode: string;
-          phone: string;
+          phoneNumber: string;
           isDefault: boolean;
         };
       },

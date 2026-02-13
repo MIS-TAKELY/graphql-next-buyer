@@ -19,8 +19,8 @@ export const sellerProfileTypeDefs = gql`
     businessName: String
     businessRegNo: String
     businessType: String
-    phone: String!
-    altPhone: String
+    phoneNumber: String!
+    altPhoneNumber: String
     email: String
     verificationStatus: VerificationStatus!
     verifiedAt: DateTime
