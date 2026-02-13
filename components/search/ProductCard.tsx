@@ -100,10 +100,14 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="relative w-full h-full aspect-square md:aspect-[4/3]">
             <Image
               src={
-                (product.images.find(img => (img as any).mediaType === 'PRIMARY') || product.images[0])?.url || "/placeholder.svg"
+                (product.images.find(img => (img as any).mediaType === 'PRIMARY') ||
+                  product.images.find(img => (img as any).mediaType !== 'PROMOTIONAL') ||
+                  product.images[0])?.url || "/placeholder.svg"
               }
               alt={
-                (product.images.find(img => (img as any).mediaType === 'PRIMARY') || product.images[0])?.altText || product.name
+                (product.images.find(img => (img as any).mediaType === 'PRIMARY') ||
+                  product.images.find(img => (img as any).mediaType !== 'PROMOTIONAL') ||
+                  product.images[0])?.altText || product.name
               }
               fill
               sizes="(max-width: 640px) 120px, (max-width: 768px) 180px, 220px"

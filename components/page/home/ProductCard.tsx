@@ -30,7 +30,11 @@ export default function ProductCard({ product }: ProductCardProps) {
   const currentPrice = defaultVariant?.price;
   const originalPrice = defaultVariant?.mrp;
 
-  const defaultImage = product.images?.find((img) => img.mediaType !== "VIDEO")?.url || product.images?.[0]?.url;
+  // Select image: Prefer PRIMARY, fallback to any non-PROMOTIONAL/non-VIDEO, fallback to first
+  const defaultImage =
+    product.images?.find((img) => img.mediaType === "PRIMARY")?.url ||
+    product.images?.find((img) => img.mediaType !== "PROMOTIONAL" && img.mediaType !== "VIDEO")?.url ||
+    product.images?.[0]?.url;
 
   const handleCartAction = (e: React.MouseEvent) => {
     e.preventDefault();

@@ -22,6 +22,7 @@ export const MAKE_SEARCH_QUERY = gql`
         images {
           altText
           url
+          mediaType
         }
         reviews {
           rating
@@ -95,6 +96,7 @@ export const COMPARE_SEARCH_QUERY = gql`
         images {
           altText
           url
+          mediaType
         }
         reviews {
           rating
