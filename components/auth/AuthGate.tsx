@@ -49,7 +49,7 @@ export default function AuthGate({ children }: AuthGateProps) {
     }) || pathname.startsWith("/best-");
 
     // Check if user is fully verified
-    const isPhoneVerified = (session?.user as any)?.phoneVerified;
+    const isPhoneVerified = (session?.user as any)?.phoneNumberVerified;
 
     // If session exists, they MUST be verified even for public routes (except auth routes)
     if (session) {

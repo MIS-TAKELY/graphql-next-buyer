@@ -1,5 +1,10 @@
 // prisma.config.ts
-import 'dotenv/config'; // Required for local execution 
+try {
+  await import('dotenv/config'); // Required for local execution
+} catch (e) {
+  // dotenv is not available, which is expected in production
+  // where environment variables are provided by the environment
+}
 
 export default {
   schema: 'prisma/schema.prisma',
