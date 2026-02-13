@@ -15,7 +15,7 @@ export const phonePassword = () => {
     return {
         id: "phone-password",
         endpoints: {
-            signInPhone: createAuthEndpoint("/sign-in-phone", {
+            signInPhone: createAuthEndpoint("/sign-in/phone", {
                 method: "POST",
                 body: signInPhoneBodySchema,
             }, async (ctx) => {
