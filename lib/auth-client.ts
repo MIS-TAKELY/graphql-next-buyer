@@ -16,6 +16,18 @@ export const authClient = createAuthClient({
                         method: "POST",
                         body: data
                     })
+                },
+                sendForgotPasswordOtp: async (data: { identifier: string }) => {
+                    return client("/phone-password/send-forgot-password-otp", {
+                        method: "POST",
+                        body: data
+                    })
+                },
+                resetPasswordWithOtp: async (data: { identifier: string, otp: string, password: string }) => {
+                    return client("/phone-password/reset-password-with-otp", {
+                        method: "POST",
+                        body: data
+                    })
                 }
             })
         }

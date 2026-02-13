@@ -11,7 +11,7 @@ import { CheckCircle2, Mail, Phone, Loader2, Eye, EyeOff, X } from "lucide-react
 import Logo from "../navbar/Logo";
 import Link from "next/link";
 
-type AuthStep = "SIGN_IN" | "SIGN_UP_WHATSAPP_INPUT" | "SIGN_UP_WHATSAPP_OTP" | "SIGN_UP_DETAILS" | "SIGN_UP_EMAIL_OTP" | "FORGOT_PASSWORD";
+type AuthStep = "SIGN_IN" | "SIGN_UP_WHATSAPP_INPUT" | "SIGN_UP_WHATSAPP_OTP" | "SIGN_UP_DETAILS" | "SIGN_UP_EMAIL_OTP" | "FORGOT_PASSWORD_INPUT" | "FORGOT_PASSWORD_OTP" | "FORGOT_PASSWORD_RESET";
 
 interface UnifiedAuthProps {
     isModal?: boolean;
@@ -33,16 +33,19 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
     const [identifier, setIdentifier] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
     const [otp, setOtp] = useState("");
     const [emailOtp, setEmailOtp] = useState("");
+    const [forgotPasswordOtp, setForgotPasswordOtp] = useState("");
     const [loading, setLoading] = useState(false);
     const [timer, setTimer] = useState(120);
     const [canResend, setCanResend] = useState(false);
     const [acceptTerms, setAcceptTerms] = useState(false);
-    const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
+    const [forgotPasswordIdentifier, setForgotPasswordIdentifier] = useState("");
+    const [isEmailReset, setIsEmailReset] = useState(false);
 
     // Track if WhatsApp was verified during this session
     const [isWhatsAppVerified, setIsWhatsAppVerified] = useState(false);
@@ -78,7 +81,7 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
     // Timer for OTP
     useEffect(() => {
         let interval: NodeJS.Timeout;
-        if ((step === "SIGN_UP_WHATSAPP_OTP" || step === "SIGN_UP_EMAIL_OTP") && timer > 0) {
+        if ((step === "SIGN_UP_WHATSAPP_OTP" || step === "SIGN_UP_EMAIL_OTP" || step === "FORGOT_PASSWORD_OTP") && timer > 0) {
             interval = setInterval(() => {
                 setTimer((prev) => prev - 1);
             }, 1000);
@@ -294,6 +297,72 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
     }
 
 
+    const handleForgotPasswordSendOtp = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const { data, error } = await (authClient as any).phonePassword.sendForgotPasswordOtp({
+                identifier: forgotPasswordIdentifier,
+            });
+
+            if (!error) {
+                toast.success("OTP sent successfully");
+                setIsEmailReset(data.isEmail);
+                setStep("FORGOT_PASSWORD_OTP");
+                setTimer(120);
+                setCanResend(false);
+            } else {
+                toast.error(error.message || "Failed to send OTP");
+            }
+        } catch (err) {
+            toast.error("An error occurred");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleForgotPasswordVerifyOtp = async (e: React.FormEvent) => {
+        e.preventDefault();
+        // Since verify and reset are separate endpoints in my plugin, 
+        // I'll just move to the next step and let reset handle the actual verification or 
+        // I should have a verify endpoint. 
+        // Actually my plugin has resetPasswordWithOtp which takes identifier, otp, and password.
+        // So this step just verifies local input then moves to password reset form.
+        if (forgotPasswordOtp.length === 6) {
+            setStep("FORGOT_PASSWORD_RESET");
+        } else {
+            toast.error("Please enter a valid 6-digit OTP");
+        }
+    };
+
+    const handleResetPassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const { error } = await (authClient as any).phonePassword.resetPasswordWithOtp({
+                identifier: forgotPasswordIdentifier,
+                otp: forgotPasswordOtp,
+                password,
+            });
+
+            if (!error) {
+                toast.success("Password reset successfully. Please sign in.");
+                setStep("SIGN_IN");
+            } else {
+                toast.error(error.message || "Failed to reset password");
+            }
+        } catch (err) {
+            toast.error("An error occurred");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleGoogleSignIn = async () => {
         try {
             setLoading(true);
@@ -371,6 +440,15 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </button>
                     </div>
+                </div>
+                <div className="flex justify-end">
+                    <button
+                        type="button"
+                        onClick={() => setStep("FORGOT_PASSWORD_INPUT")}
+                        className="text-xs text-blue-600 hover:underline"
+                    >
+                        Forgot password?
+                    </button>
                 </div>
                 <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={loading}>
                     {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
@@ -560,6 +638,82 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
         </div>
     );
 
+    // Forgot Password Step 1: Input
+    const renderForgotPasswordInput = () => (
+        <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+            <div className="text-left">
+                <h2 className="text-2xl font-bold tracking-tight">Forgot Password</h2>
+                <p className="mt-2 text-sm text-muted-foreground">Enter your email or phone to receive an OTP.</p>
+            </div>
+            <form onSubmit={handleForgotPasswordSendOtp} className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="forgot_identifier">Email or Phone</Label>
+                    <Input id="forgot_identifier" type="text" required value={forgotPasswordIdentifier} onChange={(e) => setForgotPasswordIdentifier(e.target.value)} placeholder="email@example.com or phone" />
+                </div>
+                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={loading}>
+                    {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                    Send OTP
+                </Button>
+                <div className="text-center">
+                    <button onClick={() => setStep("SIGN_IN")} className="text-sm text-muted-foreground hover:text-primary">Back to Sign In</button>
+                </div>
+            </form>
+        </div>
+    );
+
+    // Forgot Password Step 2: OTP
+    const renderForgotPasswordOtp = () => (
+        <div className="space-y-6 animate-in fade-in scale-95 duration-500">
+            <div className="text-center">
+                <h2 className="text-2xl font-bold">Verification</h2>
+                <p className="mt-2 text-sm text-muted-foreground">Sent to {forgotPasswordIdentifier} via {isEmailReset ? "Email" : "WhatsApp"}</p>
+            </div>
+            <form onSubmit={handleForgotPasswordVerifyOtp} className="space-y-4">
+                <div className="space-y-2">
+                    <Input id="forgot_otp" type="text" required maxLength={6} value={forgotPasswordOtp} onChange={(e) => setForgotPasswordOtp(e.target.value)} className="text-center text-2xl tracking-[0.5em]" placeholder="000000" />
+                </div>
+                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={loading}>
+                    Next
+                </Button>
+                {timer > 0 ? (
+                    <p className="text-center text-sm text-muted-foreground">Resend in <span className="font-medium text-primary">{formatTime(timer)}</span></p>
+                ) : (
+                    <button type="button" onClick={handleForgotPasswordSendOtp} className="w-full text-sm font-medium text-primary hover:underline">Resend OTP</button>
+                )}
+                <Button variant="ghost" className="w-full" onClick={() => setStep("FORGOT_PASSWORD_INPUT")}>Change Identifier</Button>
+            </form>
+        </div>
+    );
+
+    // Forgot Password Step 3: Reset
+    const renderForgotPasswordReset = () => (
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="text-left">
+                <h2 className="text-2xl font-bold tracking-tight">New Password</h2>
+                <p className="mt-2 text-sm text-muted-foreground">Create a strong password for your account.</p>
+            </div>
+            <form onSubmit={handleResetPassword} className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="new_password">New Password</Label>
+                    <div className="relative">
+                        <Input id="new_password" type={showPassword ? "text" : "password"} required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="pr-10" />
+                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="confirm_password">Confirm New Password</Label>
+                    <Input id="confirm_password" type="password" required value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" />
+                </div>
+                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={loading}>
+                    {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                    Reset Password
+                </Button>
+            </form>
+        </div>
+    );
+
 
     return (
         <div className="w-full max-w-5xl mx-auto overflow-hidden">
@@ -597,7 +751,9 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                     {step === "SIGN_UP_WHATSAPP_OTP" && renderWhatsAppOtp()}
                     {step === "SIGN_UP_DETAILS" && renderSignUpDetails()}
                     {step === "SIGN_UP_EMAIL_OTP" && renderEmailOtp()}
-                    {/* Forgot Password implementation similar to before if needed... skipping for brevity as main focus is signup flow */}
+                    {step === "FORGOT_PASSWORD_INPUT" && renderForgotPasswordInput()}
+                    {step === "FORGOT_PASSWORD_OTP" && renderForgotPasswordOtp()}
+                    {step === "FORGOT_PASSWORD_RESET" && renderForgotPasswordReset()}
                 </div>
             </div>
         </div>
