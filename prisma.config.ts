@@ -1,5 +1,5 @@
 // prisma.config.ts
-// import 'dotenv/config'; // Removed for Docker compatibility 
+import 'dotenv/config'; // Required for local execution 
 
 export default {
   schema: 'prisma/schema.prisma',

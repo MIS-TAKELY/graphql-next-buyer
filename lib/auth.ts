@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./db/prisma";
-import { username, phoneNumber } from "better-auth/plugins";
+import { username, phoneNumber, emailOTP } from "better-auth/plugins";
 import { phonePassword } from "./auth-plugins/phone-password";
 import { senMail } from "@/services/nodeMailer.services";
 import { sendWhatsAppOTP } from "@/lib/whatsapp";
@@ -17,6 +17,11 @@ export const auth = betterAuth({
         phoneNumber({
             sendOTP: async ({ phoneNumber, code }) => {
                 await sendWhatsAppOTP(phoneNumber, code);
+            },
+        }),
+        emailOTP({
+            sendVerificationOTP: async ({ email, otp, type }) => {
+                await senMail(email, "VERIFICATION_OTP", { otp, name: "User" });
             },
         }),
         phonePassword(),
@@ -94,6 +99,14 @@ export const auth = betterAuth({
                 required: false,
             },
             otpExpiresAt: {
+                type: "date",
+                required: false,
+            },
+            emailOtp: {
+                type: "string",
+                required: false,
+            },
+            emailOtpExpiresAt: {
                 type: "date",
                 required: false,
             },

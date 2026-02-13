@@ -30,6 +30,7 @@ export default function GlobalAuthModal() {
                 </DialogDescription>
                 <UnifiedAuth
                     isModal={true}
+                    initialStep={defaultStep}
                     onClose={() => closeModal()}
                     onStepChange={(step) => setCurrentStep(step)}
                 />

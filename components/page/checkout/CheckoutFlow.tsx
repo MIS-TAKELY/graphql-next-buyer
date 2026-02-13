@@ -81,11 +81,16 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
 
     // NEW: Check for session on mount / update
     useEffect(() => {
-        if (!isSessionLoading && !session?.user) {
-            openModal("SIGN_IN");
-            // Optional: Redirect to home or keep them here but block access?
-            // For now, opening the modal is the primary action.
-            // If they close it, they stay on the page but can't proceed (as addresses won't load).
+        if (!isSessionLoading) {
+            if (!session?.user) {
+                openModal("SIGN_IN");
+            } else {
+                const user = session.user as any;
+                if (!user.phoneNumberVerified || !user.emailVerified) {
+                    // Open modal to trigger verification flow in UnifiedAuth
+                    openModal("SIGN_UP_WHATSAPP_INPUT");
+                }
+            }
         }
     }, [isSessionLoading, session, openModal]);
 

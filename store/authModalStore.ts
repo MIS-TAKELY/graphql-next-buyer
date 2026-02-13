@@ -2,8 +2,8 @@ import { create } from 'zustand';
 
 interface AuthModalStore {
     isOpen: boolean;
-    defaultStep: "SIGN_IN" | "SIGN_UP";
-    openModal: (step?: "SIGN_IN" | "SIGN_UP") => void;
+    defaultStep: "SIGN_IN" | "SIGN_UP_WHATSAPP_INPUT" | "SIGN_UP_WHATSAPP_OTP" | "SIGN_UP_DETAILS" | "SIGN_UP_EMAIL_OTP" | "FORGOT_PASSWORD";
+    openModal: (step?: "SIGN_IN" | "SIGN_UP_WHATSAPP_INPUT" | "SIGN_UP_WHATSAPP_OTP" | "SIGN_UP_DETAILS" | "SIGN_UP_EMAIL_OTP" | "FORGOT_PASSWORD") => void;
     closeModal: () => void;
 }
 
