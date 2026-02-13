@@ -244,19 +244,17 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
 
         setLoading(true);
         try {
-            const res = await fetch("/api/otp/send", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ phone }),
+            const { error } = await authClient.phoneNumber.sendOtp({
+                phoneNumber: phone,
             });
-            const data = await res.json();
-            if (res.ok) {
+
+            if (!error) {
                 toast.success("OTP sent to your WhatsApp");
                 setStep("PHONE_OTP");
                 setTimer(120);
                 setCanResend(false);
             } else {
-                const errorMessage = data.error || "Failed to send OTP";
+                const errorMessage = error.message || "Failed to send OTP";
                 if (errorMessage.includes("already registered")) {
                     toast.error("This phone number is already registered to another account.");
                 } else if (errorMessage.includes("Unauthorized")) {
@@ -283,24 +281,29 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
 
         setLoading(true);
         try {
-            const res = await fetch("/api/otp/verify", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ otp }),
+            const { data, error } = await authClient.phoneNumber.verify({
+                phoneNumber: phone,
+                code: otp,
             });
-            const data = await res.json();
-            if (res.ok) {
+
+            if (!error) {
                 toast.success("Phone verified successfully! Redirecting...");
-                // Refetch session to update phoneVerified status
+                // Refetch session to update phoneVerified status or log in status
                 await refetch();
-                // Trigger server-side redirect check
+
+                // If it's a login flow (session created), we might need to redirect
                 router.refresh();
+
                 // Small delay to ensure session is updated
                 setTimeout(() => {
-                    router.push("/");
+                    if (isModal && onClose) {
+                        onClose();
+                    } else {
+                        router.push("/");
+                    }
                 }, 500);
             } else {
-                const errorMessage = data.error || "Invalid OTP";
+                const errorMessage = error.message || "Invalid OTP";
                 if (errorMessage.includes("expired")) {
                     toast.error("This code has expired. Please request a new one.");
                     setTimer(0);
@@ -402,13 +405,16 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
                     <svg className="mr-3 h-5 w-5" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
                     Continue with Facebook
                 </Button>
-
+                <Button variant="outline" className="w-full justify-start px-4" onClick={() => setStep("PHONE_NUMBER")} disabled={loading}>
+                    <Phone className="mr-3 h-5 w-5 text-green-600" />
+                    Continue with Phone
+                </Button>
             </div>
             <div className="text-center text-sm">
                 <span className="text-muted-foreground">Don't have an account? </span>
                 <button onClick={() => setStep("SIGN_UP")} className="font-medium text-blue-600 dark:text-blue-400 hover:underline">Sign up</button>
             </div>
-        </div>
+        </div >
     );
 
     const renderSignUp = () => (

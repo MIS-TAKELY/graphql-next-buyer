@@ -38,7 +38,7 @@ const ProductInfo = memo(function ProductInfo({
 
   const promotionalImages = useMemo(
     () =>
-      product?.images?.filter((image) => image.mediaType !== "PRIMARY") || [],
+      product?.images?.filter((image) => image.mediaType === "PROMOTIONAL") || [],
     [product?.images]
   );
 

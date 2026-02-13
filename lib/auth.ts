@@ -1,8 +1,9 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./db/prisma";
-import { username } from "better-auth/plugins";
+import { username, phoneNumber } from "better-auth/plugins";
 import { senMail } from "@/services/nodeMailer.services";
+import { sendWhatsAppOTP } from "@/lib/whatsapp";
 import { AuthUser, GoogleProfile, FacebookProfile, TikTokProfile } from "@/types/auth";
 import { APP_URL, CANONICAL_URL } from "@/config/env";
 
@@ -12,6 +13,11 @@ export const auth = betterAuth({
     }),
     plugins: [
         username(),
+        phoneNumber({
+            sendOTP: async ({ phoneNumber, code }) => {
+                await sendWhatsAppOTP(phoneNumber, code);
+            },
+        }),
     ],
     accountLinking: {
         enabled: true,
