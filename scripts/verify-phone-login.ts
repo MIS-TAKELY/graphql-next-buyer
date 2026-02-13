@@ -3,7 +3,7 @@ const CANONICAL_URL = process.env.CANONICAL_URL || "http://localhost:3000";
 
 async function verifyPhoneLogin() {
     console.log("Testing phone login endpoint...");
-    const url = `${CANONICAL_URL}/api/auth/sign-in/phone`;
+    const url = `${CANONICAL_URL}/api/auth/sign-in-phone`;
 
     try {
         const response = await fetch(url, {
