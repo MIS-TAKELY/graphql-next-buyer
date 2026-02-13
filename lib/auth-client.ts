@@ -12,7 +12,7 @@ export const authClient = createAuthClient({
             id: "phone-password",
             getActions: (client) => ({
                 signInPhone: async (data: { phone: string, password: string, rememberMe?: boolean }) => {
-                    return client("/phone-password/phone-login", {
+                    return client("/phone-password/sign-in-phone", {
                         method: "POST",
                         body: data
                     })
