@@ -76,15 +76,27 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
         setLoading(true);
         try {
             const isEmail = identifier.includes("@");
-            const { error } = isEmail
-                ? await signIn.email({
+            const isPhone = /^\+?[0-9\s-]{7,15}$/.test(identifier) && !isEmail;
+
+            let result;
+            if (isPhone) {
+                result = await (authClient as any).phonePassword.signInPhone({
+                    phone: identifier.replace(/\s|-/g, ""),
+                    password,
+                });
+            } else if (isEmail) {
+                result = await signIn.email({
                     email: identifier,
                     password,
-                })
-                : await signIn.username({
+                });
+            } else {
+                result = await signIn.username({
                     username: identifier,
                     password,
                 });
+            }
+
+            const { error } = result;
 
             if (error) {
                 const errorMessage = error.message || "Failed to sign in";
@@ -350,8 +362,8 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
             </div>
             <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="identifier_login">Email or Username</Label>
-                    <Input id="identifier_login" type="text" required value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="name@example.com or johndoe123" />
+                    <Label htmlFor="identifier_login">Email, Username or Phone</Label>
+                    <Input id="identifier_login" type="text" required value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="email, username or phone" />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>

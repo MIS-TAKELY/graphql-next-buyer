@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./db/prisma";
 import { username, phoneNumber } from "better-auth/plugins";
+import { phonePassword } from "./auth-plugins/phone-password";
 import { senMail } from "@/services/nodeMailer.services";
 import { sendWhatsAppOTP } from "@/lib/whatsapp";
 import { AuthUser, GoogleProfile, FacebookProfile, TikTokProfile } from "@/types/auth";
@@ -18,6 +19,7 @@ export const auth = betterAuth({
                 await sendWhatsAppOTP(phoneNumber, code);
             },
         }),
+        phonePassword(),
     ],
     accountLinking: {
         enabled: true,
