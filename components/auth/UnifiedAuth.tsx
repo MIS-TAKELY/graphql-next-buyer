@@ -368,8 +368,8 @@ export default function UnifiedAuth({ isModal = false, onClose, onStepChange }: 
             </div>
             <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="identifier_login">Email, Username or Phone</Label>
-                    <Input id="identifier_login" type="text" required value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="email, username or phone" />
+                    <Label htmlFor="identifier_login">Email</Label>
+                    <Input id="identifier_login" type="text" required value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="email" />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
