@@ -17,7 +17,6 @@ export const auth = betterAuth({
         phoneNumber({
             sendOTP: async ({ phoneNumber, code }) => {
                 const cleanCode = code.includes(":") ? code.split(":")[0] : code;
-                console.log("BETTER-AUTH: phoneNumber.sendOTP request:", { phoneNumber, code, cleanCode });
                 await sendWhatsAppOTP(phoneNumber, cleanCode);
             },
             signUpOnVerification: {
@@ -42,7 +41,6 @@ export const auth = betterAuth({
         verification: {
             create: {
                 before: async (verification) => {
-                    console.log("BETTER-AUTH: before verification create:", verification);
                     // Ensure NO 'phone:' prefix (Better-Auth version 1.4.7 search logic seems to omit it)
                     if (verification.identifier.startsWith("phone:")) {
                         verification.identifier = verification.identifier.replace("phone:", "");
@@ -58,7 +56,6 @@ export const auth = betterAuth({
         user: {
             create: {
                 before: async (user) => {
-                    console.log("BETTER-AUTH: before user create:", user.email);
                     // Ensure username exists to satisfy Prisma unique constraint
                     if (!user.username) {
                         const randomId = Math.random().toString(36).substring(2, 7);
