@@ -16,20 +16,13 @@ export const auth = betterAuth({
         username(),
         phoneNumber({
             sendOTP: async ({ phoneNumber, code }) => {
-                // Check if the phone number is already linked to an existing user
-                const existingUser = await prisma.user.findFirst({
-                    where: { phoneNumber: phoneNumber }
-                });
-
-                if (existingUser && existingUser.emailVerified) {
-                    throw new Error("This phone number is already associated with a verified account.");
-                }
-
+                // Send OTP without checking for existing users
+                // Phone verification is now optional and doesn't create users
                 const cleanCode = code.includes(":") ? code.split(":")[0] : code;
                 await sendWhatsAppOTP(phoneNumber, cleanCode);
             },
             // Disable automatic user creation on phone verification
-            // This ensures users are only created when they provide an email and verify it.
+            // Users are only created when they verify their email or use OAuth
         }),
         emailOTP({
             sendVerificationOTP: async ({ email, otp, type }) => {

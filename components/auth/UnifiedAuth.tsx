@@ -67,22 +67,15 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                 return;
             }
 
-            // Normal user flow:
+            // New flow: Only email-verified users get access
+            // Phone verification is optional for browsing, required for purchases
             if (!user.emailVerified) {
+                // No email verification = no access, must verify email
                 if (step !== "SIGN_UP_EMAIL_OTP" && step !== "SIGN_UP_DETAILS") {
                     setStep("SIGN_UP_EMAIL_OTP");
                 }
-            } else if (!user.phoneNumberVerified && !isWhatsAppVerified) {
-                // If phone not verified and we haven't verified it in this session
-                // We might want to prompt them, but if they are already logged in via email
-                // we'll let them stay unless it's a hard requirement.
-                // For now, let's just let them in.
-                if (isModal && onClose) {
-                    onClose();
-                } else {
-                    router.push("/");
-                }
             } else {
+                // Email verified = grant access (phone is optional for browsing)
                 if (isModal && onClose) {
                     onClose();
                 } else {
@@ -197,10 +190,11 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             });
 
             if (!error) {
-                toast.success("WhatsApp Verified!");
+                toast.success("Phone verified! Now sign in or create account with email.");
                 setIsWhatsAppVerified(true);
-                // No longer calling refetch here because user is NOT created yet
-                setStep("SIGN_UP_DETAILS");
+                // Redirect to sign-in page - user is NOT created yet
+                // They need to complete email verification to get an account
+                setStep("SIGN_IN");
             } else {
                 toast.error(error.message || "Invalid OTP");
             }
@@ -231,19 +225,14 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             const firstName = nameParts[0] || "";
             const lastName = nameParts.slice(1).join(" ") || "";
 
-            // If we already verified WhatsApp, the user might be logged in or we have a verified phone.
-            // If they are logged in via phone verify, we are updating. 
-            // If not queries, we are creating new.
-
-            // Standard email signup
+            // Standard email signup - user will be created after email verification
+            // Phone number is NOT included here - it's verified separately
             const { error } = await signUp.email({
                 email,
                 password,
                 name: name.trim(),
                 firstName,
                 lastName,
-                phoneNumber: isWhatsAppVerified ? phone : undefined,
-                phoneNumberVerified: isWhatsAppVerified,
             } as any);
 
             if (error) {
@@ -254,8 +243,7 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                 setTimer(120);
                 setCanResend(false);
 
-                // Better-auth with requireEmailVerification will send email automatically if configured,
-                // but if we are using the emailOtp plugin for a custom verification experience:
+                // Send email verification OTP
                 await authClient.emailOtp.sendVerificationOtp({ email, type: "email-verification" });
             }
 
