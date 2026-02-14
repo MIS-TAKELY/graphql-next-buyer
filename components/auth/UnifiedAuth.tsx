@@ -190,7 +190,7 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                 toast.error(error.message || "Failed to send OTP");
             }
         } catch (error) {
-            toast.error("Unable to send OTP.");
+            toast.error("Number already registered");
         } finally {
             setLoading(false);
         }
