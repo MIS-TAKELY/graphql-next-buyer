@@ -61,6 +61,7 @@ export const auth = betterAuth({
         user: {
             create: {
                 before: async (user) => {
+                    console.log("BETTER-AUTH: user.create.before mapping payload:", JSON.stringify(user, null, 2));
                     // Ensure username exists to satisfy Prisma unique constraint
                     if (!user.username) {
                         const randomId = Math.random().toString(36).substring(2, 7);
@@ -185,6 +186,7 @@ export const auth = betterAuth({
                 const uniqueId = profile.id || profile.sub || Math.random().toString(36).slice(-5);
                 const email = profile.email || `${uniqueId}@google.com`;
                 return {
+                    email: email,
                     username: (email.split("@")[0] + "_" + uniqueId.slice(-5)).toLowerCase(),
                     firstName: profile.given_name,
                     lastName: profile.family_name,
@@ -199,6 +201,7 @@ export const auth = betterAuth({
                 const uniqueId = profile.id || Math.random().toString(36).slice(-5);
                 const email = profile.email || `${uniqueId}@facebook.com`;
                 return {
+                    email: email,
                     username: (email.split("@")[0] + "_" + uniqueId.slice(-5)).toLowerCase(),
                     firstName: profile.first_name,
                     lastName: profile.last_name,
