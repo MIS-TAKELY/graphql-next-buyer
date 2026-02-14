@@ -46,12 +46,16 @@ export const auth = betterAuth({
         verification: {
             create: {
                 before: async (verification) => {
-                    // Ensure NO 'phone:' prefix (Better-Auth version 1.4.7 search logic seems to omit it)
+                    // Only apply phone-related logic if identifier hints at a phone number
+                    const isPhone = verification.identifier.startsWith("phone:") ||
+                        /^\+?[0-9]/.test(verification.identifier);
+
                     if (verification.identifier.startsWith("phone:")) {
                         verification.identifier = verification.identifier.replace("phone:", "");
                     }
-                    // Remove suffix ':0' or ':1' if present (bug workaround for certain environments/adapters)
-                    if (verification.value.includes(":")) {
+
+                    // Remove suffix ':0' or ':1' ONLY for phone/OTP values, not OAuth states
+                    if (isPhone && verification.value.includes(":")) {
                         verification.value = verification.value.split(":")[0];
                     }
                     return { data: verification };
@@ -62,14 +66,18 @@ export const auth = betterAuth({
             create: {
                 before: async (user) => {
                     console.log("BETTER-AUTH: user.create.before mapping payload:", JSON.stringify(user, null, 2));
+
+                    // Ensure name is at least an empty string if missing (Prisma default usually handles this but safety first)
+                    if (!user.name && user.email) {
+                        user.name = user.email.split("@")[0];
+                    }
+
                     // Ensure username exists to satisfy Prisma unique constraint
-                    if (!user.username) {
+                    // Social providers like Google don't return a 'username' by default
+                    if (!user.username || (typeof user.username === 'string' && user.username.trim() === "")) {
                         const randomId = Math.random().toString(36).substring(2, 7);
-                        if (user.email.includes("@vanijay.temp")) {
-                            user.username = user.email.split("@")[0] + "_" + randomId;
-                        } else {
-                            user.username = (user.email.split("@")[0] + "_" + randomId).toLowerCase();
-                        }
+                        const emailPrefix = user.email ? user.email.split("@")[0] : "user";
+                        user.username = (emailPrefix + "_" + randomId).toLowerCase().replace(/[^a-z0-9_]/g, "");
                     }
                     return { data: user };
                 },
@@ -182,32 +190,13 @@ export const auth = betterAuth({
         google: {
             clientId: process.env.GOOGLE_CLIENT_ID as string,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-            mapProfileToUser: (profile: GoogleProfile) => {
-                const uniqueId = profile.id || profile.sub || Math.random().toString(36).slice(-5);
-                const email = profile.email || `${uniqueId}@google.com`;
-                return {
-                    email: email,
-                    username: (email.split("@")[0] + "_" + uniqueId.slice(-5)).toLowerCase(),
-                    firstName: profile.given_name,
-                    lastName: profile.family_name,
-                    emailVerified: true,
-                };
-            },
+            // We rely on databaseHooks.user.create.before to generate the username
+            // and handle optional fields mapping automatically.
         },
         facebook: {
             clientId: process.env.FACEBOOK_CLIENT_ID as string,
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
-            mapProfileToUser: (profile: FacebookProfile) => {
-                const uniqueId = profile.id || Math.random().toString(36).slice(-5);
-                const email = profile.email || `${uniqueId}@facebook.com`;
-                return {
-                    email: email,
-                    username: (email.split("@")[0] + "_" + uniqueId.slice(-5)).toLowerCase(),
-                    firstName: profile.first_name,
-                    lastName: profile.last_name,
-                    emailVerified: true,
-                };
-            },
+            // Default mapping works fine, username generated in hooks.
         },
         tiktok: {
             clientId: process.env.TIKTOK_CLIENT_ID as string,
