@@ -11,7 +11,7 @@ import { CheckCircle2, Mail, Phone, Loader2, Eye, EyeOff, X } from "lucide-react
 import Logo from "../navbar/Logo";
 import Link from "next/link";
 
-type AuthStep = "SIGN_IN" | "SIGN_UP_WHATSAPP_INPUT" | "SIGN_UP_WHATSAPP_OTP" | "SIGN_UP_DETAILS" | "SIGN_UP_EMAIL_OTP" | "FORGOT_PASSWORD_INPUT" | "FORGOT_PASSWORD_OTP" | "FORGOT_PASSWORD_RESET";
+type AuthStep = "SIGN_IN" | "SIGN_UP_WHATSAPP_INPUT" | "SIGN_UP_WHATSAPP_OTP" | "SIGN_UP_CHOICE" | "SIGN_UP_DETAILS" | "SIGN_UP_EMAIL_OTP" | "FORGOT_PASSWORD_INPUT" | "FORGOT_PASSWORD_OTP" | "FORGOT_PASSWORD_RESET";
 
 interface UnifiedAuthProps {
     isModal?: boolean;
@@ -57,16 +57,23 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
     useEffect(() => {
         if (!isPending && session) {
             const user = session.user as any;
+            const isTempEmail = user.email?.includes("@vanijay.temp");
+
             if (!user.phoneNumberVerified) {
                 // If phone not verified, send to phone verification
                 if (step !== "SIGN_UP_WHATSAPP_INPUT" && step !== "SIGN_UP_WHATSAPP_OTP") {
                     setStep("SIGN_UP_WHATSAPP_INPUT");
                 }
-            } else if (!user.emailVerified) {
-                // If email not verified, send to email verification
-                if (step !== "SIGN_UP_EMAIL_OTP") {
+            } else if (!user.emailVerified && !isTempEmail) {
+                // If email not verified AND it's not a temp email, send to email verification
+                // We only do this if they are not currently in the middle of signup details
+                if (step !== "SIGN_UP_EMAIL_OTP" && step !== "SIGN_UP_DETAILS" && step !== "SIGN_UP_CHOICE") {
                     setStep("SIGN_UP_EMAIL_OTP");
-                    // Optionally trigger send OTP if not recently sent?
+                }
+            } else if (isTempEmail) {
+                // If they have a temp email (from WhatsApp verify), we need them to complete details
+                if (step !== "SIGN_UP_DETAILS" && step !== "SIGN_UP_CHOICE") {
+                    setStep("SIGN_UP_DETAILS");
                 }
             } else {
                 if (isModal && onClose) {
@@ -190,7 +197,7 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
 
                 // If session exists (we are verifying an existing user)
                 if (session) {
-                    // let the useEffect handle the next step (e.g. email verify or close)
+                    // let the useEffect handle the next step (e.g. email verify or complete details)
                 } else {
                     setStep("SIGN_UP_DETAILS");
                 }
@@ -507,7 +514,7 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                     <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">Or</span></div>
                 </div>
 
-                <Button type="button" variant="outline" className="w-full" onClick={() => setStep("SIGN_UP_DETAILS")}>
+                <Button type="button" variant="outline" className="w-full" onClick={() => setStep("SIGN_UP_CHOICE")}>
                     I don't have WhatsApp
                 </Button>
 
@@ -540,6 +547,40 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                 )}
                 <Button variant="ghost" className="w-full" onClick={() => setStep("SIGN_UP_WHATSAPP_INPUT")}>Change Number</Button>
             </form>
+        </div>
+    );
+
+    // Step 2.5: Signup Choice (Social or Email)
+    const renderSignUpChoice = () => (
+        <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+            <div className="text-center">
+                <h2 className="text-2xl font-bold">Sign Up</h2>
+                <p className="mt-2 text-sm text-muted-foreground">Choose how you'd like to create your account.</p>
+            </div>
+            <div className="grid grid-cols-1 gap-3">
+                <Button variant="outline" className="w-full justify-start px-4 h-12" onClick={handleGoogleSignIn} disabled={loading}>
+                    <svg className="mr-3 h-5 w-5" viewBox="0 0 488 512"><path fill="#EA4335" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" /></svg>
+                    Continue with Google
+                </Button>
+                <Button variant="outline" className="w-full justify-start px-4 h-12" onClick={handleFacebookSignIn} disabled={loading}>
+                    <svg className="mr-3 h-5 w-5" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
+                    Continue with Facebook
+                </Button>
+            </div>
+
+            <div className="relative">
+                <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-border" /></div>
+                <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">Or</span></div>
+            </div>
+
+            <Button type="button" variant="secondary" className="w-full h-12" onClick={() => setStep("SIGN_UP_DETAILS")}>
+                <Mail className="mr-2 h-4 w-4" />
+                Sign up with Email
+            </Button>
+
+            <div className="text-center pt-2">
+                <button onClick={() => setStep("SIGN_UP_WHATSAPP_INPUT")} className="text-sm text-muted-foreground hover:text-primary">Back to WhatsApp</button>
+            </div>
         </div>
     );
 
@@ -767,6 +808,7 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                     {step === "SIGN_IN" && renderSignIn()}
                     {step === "SIGN_UP_WHATSAPP_INPUT" && renderWhatsAppInput()}
                     {step === "SIGN_UP_WHATSAPP_OTP" && renderWhatsAppOtp()}
+                    {step === "SIGN_UP_CHOICE" && renderSignUpChoice()}
                     {step === "SIGN_UP_DETAILS" && renderSignUpDetails()}
                     {step === "SIGN_UP_EMAIL_OTP" && renderEmailOtp()}
                     {step === "FORGOT_PASSWORD_INPUT" && renderForgotPasswordInput()}
