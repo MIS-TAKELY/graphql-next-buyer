@@ -36,25 +36,6 @@ export const auth = betterAuth({
         trustedProviders: ["google", "facebook", "tiktok"],
     },
     databaseHooks: {
-        verification: {
-            create: {
-                before: async (verification) => {
-                    // Only apply phone-related logic if identifier hints at a phone number
-                    const isPhone = verification.identifier.startsWith("phone:") ||
-                        /^\+?[0-9]/.test(verification.identifier);
-
-                    if (verification.identifier.startsWith("phone:")) {
-                        verification.identifier = verification.identifier.replace("phone:", "");
-                    }
-
-                    // Remove suffix ':0' or ':1' ONLY for phone/OTP values, not OAuth states
-                    if (isPhone && verification.value.includes(":")) {
-                        verification.value = verification.value.split(":")[0];
-                    }
-                    return { data: verification };
-                },
-            },
-        },
         user: {
             create: {
                 before: async (user) => {
