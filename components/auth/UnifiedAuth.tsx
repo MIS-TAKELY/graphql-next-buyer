@@ -206,11 +206,11 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             });
 
             if (!error) {
-                toast.success("Phone verified! Now sign in or create account with email.");
+                toast.success("Phone verified! Now complete your profile.");
                 setIsWhatsAppVerified(true);
-                // Redirect to sign-in page - user is NOT created yet
+                // Redirect to signup details - user is NOT created yet
                 // They need to complete email verification to get an account
-                setStep("SIGN_IN");
+                setStep("SIGN_UP_DETAILS");
             } else {
                 toast.error(error.message || "Invalid OTP");
             }
@@ -242,14 +242,22 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             const lastName = nameParts.slice(1).join(" ") || "";
 
             // Standard email signup - user will be created after email verification
-            // Phone number is NOT included here - it's verified separately
-            const { error } = await signUp.email({
+            // If phone was verified, link it to the new account
+            const signupData: any = {
                 email,
                 password,
                 name: name.trim(),
                 firstName,
                 lastName,
-            } as any);
+            };
+
+            // Link verified phone number if available
+            if (isWhatsAppVerified && phone) {
+                signupData.phoneNumber = phone;
+                signupData.phoneNumberVerified = true;
+            }
+
+            const { error } = await signUp.email(signupData);
 
             if (error) {
                 toast.error(error.message);
