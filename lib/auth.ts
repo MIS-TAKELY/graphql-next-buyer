@@ -20,6 +20,12 @@ export const auth = betterAuth({
                 console.log("BETTER-AUTH: phoneNumber.sendOTP request:", { phoneNumber, code, cleanCode });
                 await sendWhatsAppOTP(phoneNumber, cleanCode);
             },
+            signUpOnVerification: {
+                getTempEmail: (phoneNumber: string) => {
+                    const cleanPhone = phoneNumber.replace(/\+/g, "");
+                    return `phone_${cleanPhone}@vanijay.temp`;
+                },
+            },
         }),
         emailOTP({
             sendVerificationOTP: async ({ email, otp, type }) => {
@@ -51,6 +57,19 @@ export const auth = betterAuth({
         },
         user: {
             create: {
+                before: async (user) => {
+                    console.log("BETTER-AUTH: before user create:", user.email);
+                    // Ensure username exists to satisfy Prisma unique constraint
+                    if (!user.username) {
+                        const randomId = Math.random().toString(36).substring(2, 7);
+                        if (user.email.includes("@vanijay.temp")) {
+                            user.username = user.email.split("@")[0] + "_" + randomId;
+                        } else {
+                            user.username = (user.email.split("@")[0] + "_" + randomId).toLowerCase();
+                        }
+                    }
+                    return { data: user };
+                },
                 after: async (user) => {
                     console.log("BETTER-AUTH: User created successfully:", user.email);
                     await prisma.userRole.create({
