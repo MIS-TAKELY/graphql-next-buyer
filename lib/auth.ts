@@ -73,13 +73,19 @@ export const auth = betterAuth({
                     return { data: user };
                 },
                 after: async (user) => {
-                    console.log("BETTER-AUTH: User created successfully:", user.email);
-                    await prisma.userRole.create({
-                        data: {
-                            userId: user.id,
-                            role: "BUYER",
-                        },
-                    });
+                    try {
+                        console.log("BETTER-AUTH: User created successfully:", user.email);
+                        await prisma.userRole.create({
+                            data: {
+                                userId: user.id,
+                                role: "BUYER",
+                            },
+                        });
+                    } catch (err) {
+                        console.error("BETTER-AUTH: Critical error in after.user.create hook:", err);
+                        // We don't throw here to avoid failing the whole sign-in, 
+                        // but the user might be missing a role.
+                    }
                 },
             },
         },
@@ -206,8 +212,10 @@ export const auth = betterAuth({
             mapProfileToUser: (profile: TikTokProfile) => {
                 const uniqueId = profile.open_id || profile.id || Math.random().toString(36).slice(-5);
                 const display_name = profile.display_name || "TikTok User";
+                const email = profile.email || `tiktok_${uniqueId.slice(-10)}@vanijay.temp`;
                 return {
                     username: ("tiktok_" + uniqueId.slice(-10)).toLowerCase(),
+                    email,
                     firstName: display_name.split(" ")[0],
                     lastName: display_name.split(" ").slice(1).join(" ") || "",
                     emailVerified: true,
