@@ -171,7 +171,7 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             const checkData = await checkResponse.json();
 
             if (checkData.exists) {
-                toast.error("User already registered using this number");
+                toast.error("Number already registered");
                 setLoading(false);
                 return;
             }

@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 const publicRoutes = [
   "/api/auth",
   "/api/otp",
+  "/api/check-phone",
   "/api/products",
   "/api/graphql",
   "/cart",
