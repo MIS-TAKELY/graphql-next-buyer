@@ -161,6 +161,22 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
 
         setLoading(true);
         try {
+            // Check if phone number already exists
+            const checkResponse = await fetch("/api/check-phone", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ phoneNumber: phone }),
+            });
+
+            const checkData = await checkResponse.json();
+
+            if (checkData.exists) {
+                toast.error("User already registered using this number");
+                setLoading(false);
+                return;
+            }
+
+            // Phone number is unique, proceed to send OTP
             const { error } = await authClient.phoneNumber.sendOtp({
                 phoneNumber: phone,
             });
