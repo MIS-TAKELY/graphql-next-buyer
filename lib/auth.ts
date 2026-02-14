@@ -16,7 +16,9 @@ export const auth = betterAuth({
         username(),
         phoneNumber({
             sendOTP: async ({ phoneNumber, code }) => {
-                await sendWhatsAppOTP(phoneNumber, code);
+                const cleanCode = code.includes(":") ? code.split(":")[0] : code;
+                console.log("BETTER-AUTH: phoneNumber.sendOTP request:", { phoneNumber, code, cleanCode });
+                await sendWhatsAppOTP(phoneNumber, cleanCode);
             },
         }),
         emailOTP({
@@ -31,6 +33,22 @@ export const auth = betterAuth({
         trustedProviders: ["google", "facebook", "tiktok"],
     },
     databaseHooks: {
+        verification: {
+            create: {
+                before: async (verification) => {
+                    console.log("BETTER-AUTH: before verification create:", verification);
+                    // Ensure NO 'phone:' prefix (Better-Auth version 1.4.7 search logic seems to omit it)
+                    if (verification.identifier.startsWith("phone:")) {
+                        verification.identifier = verification.identifier.replace("phone:", "");
+                    }
+                    // Remove suffix ':0' or ':1' if present (bug workaround for certain environments/adapters)
+                    if (verification.value.includes(":")) {
+                        verification.value = verification.value.split(":")[0];
+                    }
+                    return { data: verification };
+                },
+            },
+        },
         user: {
             create: {
                 after: async (user) => {

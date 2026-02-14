@@ -15,14 +15,14 @@ export async function sendWhatsAppOTP(phone: string, otp: string) {
   const cleanPhone = phone.toString().replace(/\D/g, "");
 
   const message = `Your verification code is: ${otp}`;
+  console.log(`WHATSAPP: Sending message to ${cleanPhone}: "${message}"`);
   const MAX_RETRIES = 2;
   let attempt = 0;
 
   while (attempt <= MAX_RETRIES) {
     try {
       console.log(
-        `📱 Sending OTP to ${cleanPhone} (Attempt ${attempt + 1}/${
-          MAX_RETRIES + 1
+        `📱 Sending OTP to ${cleanPhone} (Attempt ${attempt + 1}/${MAX_RETRIES + 1
         })...`
       );
       const response = await fetch(wppConnectUrl, {
