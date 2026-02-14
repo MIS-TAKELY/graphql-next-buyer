@@ -177,17 +177,22 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             }
 
             // Phone number is unique, proceed to send OTP
-            const { error } = await authClient.phoneNumber.sendOtp({
-                phoneNumber: phone,
+            // Phone number is unique, proceed to send OTP
+            const response = await fetch("/api/auth/custom-phone/send", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ phoneNumber: phone }),
             });
 
-            if (!error) {
+            const data = await response.json();
+
+            if (response.ok) {
                 toast.success("OTP sent to your WhatsApp");
                 setStep("SIGN_UP_WHATSAPP_OTP");
                 setTimer(120);
                 setCanResend(false);
             } else {
-                toast.error(error.message || "Failed to send OTP");
+                toast.error(data.error || "Failed to send OTP");
             }
         } catch (error) {
             toast.error("Number already registered");
@@ -200,19 +205,22 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
         e.preventDefault();
         setLoading(true);
         try {
-            const { data, error } = await authClient.phoneNumber.verify({
-                phoneNumber: phone,
-                code: otp,
+            const response = await fetch("/api/auth/custom-phone/verify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ phoneNumber: phone, code: otp }),
             });
 
-            if (!error) {
+            const data = await response.json();
+
+            if (response.ok) {
                 toast.success("Phone verified! Now complete your profile.");
                 setIsWhatsAppVerified(true);
                 // Redirect to signup details - user is NOT created yet
                 // They need to complete email verification to get an account
                 setStep("SIGN_UP_DETAILS");
             } else {
-                toast.error(error.message || "Invalid OTP");
+                toast.error(data.error || "Invalid OTP");
             }
         } catch (error) {
             toast.error("Verification failed.");
