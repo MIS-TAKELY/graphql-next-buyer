@@ -59,32 +59,38 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             const user = session.user as any;
             const isTempEmail = user.email?.includes("@vanijay.temp");
 
-            if (!user.phoneNumberVerified) {
-                // If phone not verified, send to phone verification
-                if (step !== "SIGN_UP_WHATSAPP_INPUT" && step !== "SIGN_UP_WHATSAPP_OTP") {
-                    setStep("SIGN_UP_WHATSAPP_INPUT");
+            // If they have a temp email (legacy users), they must complete details
+            if (isTempEmail) {
+                if (step !== "SIGN_UP_DETAILS" && step !== "SIGN_UP_WHATSAPP_INPUT" && step !== "SIGN_UP_WHATSAPP_OTP") {
+                    setStep("SIGN_UP_DETAILS");
                 }
-            } else if (!user.emailVerified && !isTempEmail) {
-                // If email not verified AND it's not a temp email, send to email verification
-                // We only do this if they are not currently in the middle of signup details
+                return;
+            }
+
+            // Normal user flow:
+            if (!user.emailVerified) {
                 if (step !== "SIGN_UP_EMAIL_OTP" && step !== "SIGN_UP_DETAILS") {
                     setStep("SIGN_UP_EMAIL_OTP");
                 }
-            } else if (isTempEmail) {
-                // If they have a temp email (from WhatsApp verify), we need them to complete details
-                if (step !== "SIGN_UP_DETAILS" && step !== "SIGN_UP_WHATSAPP_INPUT" && step !== "SIGN_UP_WHATSAPP_OTP") {
-                    setStep("SIGN_UP_DETAILS");
+            } else if (!user.phoneNumberVerified && !isWhatsAppVerified) {
+                // If phone not verified and we haven't verified it in this session
+                // We might want to prompt them, but if they are already logged in via email
+                // we'll let them stay unless it's a hard requirement.
+                // For now, let's just let them in.
+                if (isModal && onClose) {
+                    onClose();
+                } else {
+                    router.push("/");
                 }
             } else {
                 if (isModal && onClose) {
                     onClose();
                 } else {
-                    // If on a dedicated page and verified, redirect home
                     router.push("/");
                 }
             }
         }
-    }, [session, isPending, step, router, isModal, onClose]);
+    }, [session, isPending, step, router, isModal, onClose, isWhatsAppVerified]);
 
     // Timer for OTP
     useEffect(() => {
@@ -193,19 +199,8 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             if (!error) {
                 toast.success("WhatsApp Verified!");
                 setIsWhatsAppVerified(true);
-                await refetch(); // Update session
-
-                // If session exists (we are verifying an existing user)
-                if (session) {
-                    // let the useEffect handle the next step (e.g. email verify or complete details)
-                } else {
-                    setStep("SIGN_UP_DETAILS");
-                }
-                // Note: The user is technically "logged in" with phone now via better-auth phone-number verify if it creates a session/user? 
-                // Actually, phone-number verify usually updates existing user or creates one? 
-                // Better-auth flow: usually verifies. If we need them to sign up with email/password too, we might need to link or just treat this as step 1.
-                // If verify() logs them in, we might need to update the user with email/password later.
-                // For this flow, we'll assume we proceed to details to "finish" profile.
+                // No longer calling refetch here because user is NOT created yet
+                setStep("SIGN_UP_DETAILS");
             } else {
                 toast.error(error.message || "Invalid OTP");
             }
@@ -221,6 +216,11 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
 
         if (!acceptTerms) {
             toast.error("Please accept the terms to continue.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match");
             return;
         }
 
@@ -242,10 +242,8 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                 name: name.trim(),
                 firstName,
                 lastName,
-                // If we have a phone number and it was verified (or skipped), we can try to pass it?
-                // But phone is usually separate. 
-                // If they verified WhatsApp, they might be logged in. 
-                // Let's check session. If session exists (from phone verify), we update user.
+                phoneNumber: isWhatsAppVerified ? phone : undefined,
+                phoneNumberVerified: isWhatsAppVerified,
             } as any);
 
             if (error) {
@@ -255,11 +253,9 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                 setStep("SIGN_UP_EMAIL_OTP");
                 setTimer(120);
                 setCanResend(false);
-                // Trigger email OTP sending here ideally, or better-auth does it on signup if configured?
-                // Since we have `emailOTP` plugin, we might need to explicitly request OTP or it's sent automatically?
-                // `emailOTP` plugin usually has `sendVerificationOTP` action.
 
-                // If auto-send is not enabled or we want to ensure it:
+                // Better-auth with requireEmailVerification will send email automatically if configured,
+                // but if we are using the emailOtp plugin for a custom verification experience:
                 await authClient.emailOtp.sendVerificationOtp({ email, type: "email-verification" });
             }
 
@@ -602,6 +598,27 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                             className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                         >
                             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="confirm_password_signup">Confirm Password</Label>
+                    <div className="relative">
+                        <Input
+                            id="confirm_password_signup"
+                            type={showConfirmPassword ? "text" : "password"}
+                            required
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="••••••••"
+                            className="pr-10"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </button>
                     </div>
                 </div>

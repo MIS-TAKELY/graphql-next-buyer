@@ -16,15 +16,20 @@ export const auth = betterAuth({
         username(),
         phoneNumber({
             sendOTP: async ({ phoneNumber, code }) => {
+                // Check if the phone number is already linked to an existing user
+                const existingUser = await prisma.user.findFirst({
+                    where: { phoneNumber: phoneNumber }
+                });
+
+                if (existingUser && existingUser.emailVerified) {
+                    throw new Error("This phone number is already associated with a verified account.");
+                }
+
                 const cleanCode = code.includes(":") ? code.split(":")[0] : code;
                 await sendWhatsAppOTP(phoneNumber, cleanCode);
             },
-            signUpOnVerification: {
-                getTempEmail: (phoneNumber: string) => {
-                    const cleanPhone = phoneNumber.replace(/\+/g, "");
-                    return `phone_${cleanPhone}@vanijay.temp`;
-                },
-            },
+            // Disable automatic user creation on phone verification
+            // This ensures users are only created when they provide an email and verify it.
         }),
         emailOTP({
             sendVerificationOTP: async ({ email, otp, type }) => {
@@ -156,7 +161,14 @@ export const auth = betterAuth({
                 type: "string",
                 required: false,
             },
-
+            phoneNumber: {
+                type: "string",
+                required: false,
+            },
+            phoneNumberVerified: {
+                type: "boolean",
+                required: false,
+            },
         }
     },
     socialProviders: {
@@ -165,8 +177,9 @@ export const auth = betterAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
             mapProfileToUser: (profile: GoogleProfile) => {
                 const uniqueId = profile.id || profile.sub || Math.random().toString(36).slice(-5);
+                const email = profile.email || `${uniqueId}@google.com`;
                 return {
-                    username: (profile.email.split("@")[0] + "_" + uniqueId.slice(-5)).toLowerCase(),
+                    username: (email.split("@")[0] + "_" + uniqueId.slice(-5)).toLowerCase(),
                     firstName: profile.given_name,
                     lastName: profile.family_name,
                     emailVerified: true,
