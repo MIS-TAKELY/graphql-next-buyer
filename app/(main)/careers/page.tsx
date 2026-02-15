@@ -49,16 +49,23 @@ export default function CareersPage() {
         uploadData.append("file", file);
         uploadData.append("upload_preset", uploadPreset);
 
-        // Explicitly set resource type. Using 'auto' is flexible, 
-        // but 'raw' is safer for PDFs to avoid them being treated as images.
-        const resourceType = file.type === 'application/pdf' ? 'raw' : 'auto';
+        // Use 'image' for PDFs as Cloudinary handles them there by default and 'raw' is restricted.
+        const resourceType = file.type === 'application/pdf' ? 'image' : 'auto';
 
         try {
             const res = await axios.post(
                 `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`,
                 uploadData
             );
-            setFormData(prev => ({ ...prev, cvUrl: res.data.secure_url }));
+
+            let finalUrl = res.data.secure_url;
+            if (file.type === 'application/pdf') {
+                // Add fl_attachment to ensure it's served correctly as a downloadable/viewable PDF
+                // Transformations go after '/upload/'
+                finalUrl = finalUrl.replace('/upload/', '/upload/fl_attachment/');
+            }
+
+            setFormData(prev => ({ ...prev, cvUrl: finalUrl }));
             toast.success("CV uploaded successfully");
         } catch (error) {
             console.error("Upload failed", error);

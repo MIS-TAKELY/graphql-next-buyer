@@ -6,13 +6,13 @@ import { uploadToCloudinary } from "@/servers/utils/uploadToCloudinary";
 export async function uploadFilesToStorage(files: File[]) {
   return Promise.all(
     files.map(async (file) => {
-      // Only image/video are supported by your current schema
       const isVideo = file.type.startsWith("video/");
       const isImage = file.type.startsWith("image/");
-      const resourceType = isVideo ? "video" : isImage ? "image" : "raw";
+      const isPdf = file.type === "application/pdf";
+      const resourceType = isVideo ? "video" : (isImage || isPdf) ? "image" : "raw";
 
-      if (!isVideo && !isImage) {
-        throw new Error("Unsupported file type. Only images and videos are allowed.");
+      if (!isVideo && !isImage && !isPdf) {
+        throw new Error("Unsupported file type. Only images, videos and PDFs are allowed.");
       }
 
       const res = await uploadToCloudinary(file, resourceType as "image" | "video");
