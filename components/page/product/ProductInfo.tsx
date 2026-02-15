@@ -190,7 +190,7 @@ const ProductInfo = memo(function ProductInfo({
 
             {!showAllHighlights ? (
               <div
-                className="relative w-full overflow-hidden border border-border/50 aspect-video lg:h-[600px] bg-black/5"
+                className="relative w-full overflow-hidden aspect-video lg:h-[600px] bg-black/5"
               >
                 <SmartMedia
                   src={promotionalImages[0].url}
@@ -211,9 +211,9 @@ const ProductInfo = memo(function ProductInfo({
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col">
                 {promotionalImages.map((image: any, index: number) => (
-                  <div key={index} className="relative w-full overflow-hidden aspect-video lg:min-h-[500px] bg-black/5 border border-border/40">
+                  <div key={index} className="relative w-full overflow-hidden aspect-video lg:min-h-[500px] bg-black/5">
                     <SmartMedia
                       src={image.url}
                       alt={image.altText || `Highlight ${index + 1}`}
