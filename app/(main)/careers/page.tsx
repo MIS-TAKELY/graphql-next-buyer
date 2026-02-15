@@ -15,9 +15,8 @@ export default function CareersPage() {
         email: '',
         phone: '',
         salary: '',
-        cvUrl: '',
     });
-    const [isUploading, setIsUploading] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -27,7 +26,7 @@ export default function CareersPage() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
@@ -36,55 +35,32 @@ export default function CareersPage() {
             return;
         }
 
-        const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-        const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "seller";
-
-        if (!cloudName) {
-            toast.error("Upload configuration missing");
-            return;
-        }
-
-        setIsUploading(true);
-        const uploadData = new FormData();
-        uploadData.append("file", file);
-        uploadData.append("upload_preset", uploadPreset);
-
-        // Use 'image' for PDFs as Cloudinary handles them there by default and 'raw' is restricted.
-        const resourceType = file.type === 'application/pdf' ? 'image' : 'auto';
-
-        try {
-            const res = await axios.post(
-                `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`,
-                uploadData
-            );
-
-            let finalUrl = res.data.secure_url;
-            if (file.type === 'application/pdf') {
-                // Add fl_attachment to ensure it's served correctly as a downloadable/viewable PDF
-                // Transformations go after '/upload/'
-                finalUrl = finalUrl.replace('/upload/', '/upload/fl_attachment/');
-            }
-
-            setFormData(prev => ({ ...prev, cvUrl: finalUrl }));
-            toast.success("CV uploaded successfully");
-        } catch (error) {
-            console.error("Upload failed", error);
-            toast.error("Failed to upload CV");
-        } finally {
-            setIsUploading(false);
-        }
+        setSelectedFile(file);
+        toast.success("CV selected");
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.cvUrl) {
+        if (!selectedFile) {
             toast.error("Please upload your CV");
             return;
         }
 
         setIsSubmitting(true);
         try {
-            const res = await axios.post('/api/career/apply', formData);
+            const submitData = new FormData();
+            submitData.append("name", formData.name);
+            submitData.append("email", formData.email);
+            submitData.append("phone", formData.phone);
+            submitData.append("salary", formData.salary);
+            submitData.append("cv", selectedFile);
+
+            const res = await axios.post('/api/career/apply', submitData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
             if (res.data.success) {
                 setIsSubmitted(true);
                 toast.success("Application submitted successfully!");
@@ -200,15 +176,13 @@ export default function CareersPage() {
                             <Label>Upload CV (PDF or Image, max 5MB)</Label>
                             <div
                                 onClick={() => fileInputRef.current?.click()}
-                                className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all ${formData.cvUrl ? 'border-green-500 bg-green-50/10' : 'border-border hover:border-primary hover:bg-muted/50'
+                                className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all ${selectedFile ? 'border-green-500 bg-green-50/10' : 'border-border hover:border-primary hover:bg-muted/50'
                                     }`}
                             >
-                                {isUploading ? (
-                                    <Loader2 className="w-10 h-10 animate-spin text-primary" />
-                                ) : formData.cvUrl ? (
+                                {selectedFile ? (
                                     <>
                                         <CheckCircle2 className="w-10 h-10 text-green-500 mb-2" />
-                                        <span className="text-sm font-medium text-green-600">CV Uploaded! Click to change.</span>
+                                        <span className="text-sm font-medium text-green-600">{selectedFile.name} selected! Click to change.</span>
                                     </>
                                 ) : (
                                     <>
@@ -222,20 +196,14 @@ export default function CareersPage() {
                                     className="hidden"
                                     accept=".pdf,image/*"
                                     onChange={handleFileSelect}
-                                    disabled={isUploading}
                                 />
                             </div>
-                            {formData.cvUrl && (
-                                <p className="text-xs text-muted-foreground text-center">
-                                    <a href={formData.cvUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">View uploaded CV</a>
-                                </p>
-                            )}
                         </div>
 
                         <Button
                             type="submit"
                             className="w-full h-12 text-lg font-bold"
-                            disabled={isSubmitting || isUploading}
+                            disabled={isSubmitting}
                         >
                             {isSubmitting ? (
                                 <>

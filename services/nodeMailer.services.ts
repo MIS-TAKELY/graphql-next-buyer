@@ -99,7 +99,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
   },
   JOB_APPLICATION: {
     subject: "New Job Application Received - Vanijay",
-    text: (ctx) => `New job application from ${ctx.name}. Email: ${ctx.email}, Salary: ${ctx.salary}, CV: ${ctx.cvUrl}`,
+    text: (ctx) => `New job application from ${ctx.name}. Email: ${ctx.email}, Phone: ${ctx.phone || 'N/A'}, Salary: ${ctx.salary}. The candidate's CV is attached to this email.`,
     html: (ctx) => `
       <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #333;">New Job Application</h2>
@@ -109,7 +109,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
           <p style="margin: 5px 0;"><strong>Email:</strong> ${ctx.email}</p>
           <p style="margin: 5px 0;"><strong>Phone:</strong> ${ctx.phone || 'N/A'}</p>
           <p style="margin: 5px 0;"><strong>Expected Salary:</strong> ${ctx.salary}</p>
-          <p style="margin: 15px 0 0 0;"><strong>CV/Resume:</strong> <a href="${ctx.cvUrl}" style="color: #007bff; text-decoration: underline;">View Document</a></p>
+          <p style="margin: 15px 0 0 0;"><strong>CV/Resume:</strong> Attached to this email</p>
         </div>
         <p style="color: #666; font-size: 0.9em;">This application was submitted via the Careers page.</p>
       </div>
@@ -120,7 +120,8 @@ const TEMPLATES: Record<string, EmailTemplate> = {
 export const senMail = async (
   receiverEmail: string,
   templateKey: keyof typeof TEMPLATES,
-  context: TemplateContext
+  context: TemplateContext,
+  attachments?: nodemailer.SendMailOptions["attachments"]
 ) => {
   console.log("---------------- SENMAIL CALLED ----------------");
   try {
@@ -137,6 +138,7 @@ export const senMail = async (
       subject: template.subject,
       text: template.text(context),
       html: template.html(context),
+      attachments,
     });
 
     console.log("NODEMAILER: Message sent successfully:", info.messageId);
