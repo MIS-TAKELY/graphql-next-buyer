@@ -450,7 +450,7 @@ function OrderItemComponent({ order }: OrderItemProps) {
                   {order.shippingSnapshot?.postalCode}
                 </p>
                 <p className="mt-2 text-muted-foreground">
-                  {order.shippingSnapshot?.phone}
+                  {order.shippingSnapshot?.phoneNumber}
                 </p>
               </CardContent>
             </Card>

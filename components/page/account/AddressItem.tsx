@@ -64,8 +64,8 @@ const AddressItem = React.memo<AddressItemProps>(
     );
     const formattedAddress = useMemo(() => formatAddress(address), [address]);
     const formattedPhone = useMemo(
-      () => (address.phone ? formatPhoneNumber(address.phone) : ""),
-      [address.phone]
+      () => (address.phoneNumber ? formatPhoneNumber(address.phoneNumber) : ""),
+      [address.phoneNumber]
     );
 
     // Event handlers
@@ -147,7 +147,7 @@ const AddressItem = React.memo<AddressItemProps>(
                 <p className="text-sm text-gray-700">{formattedAddress}</p>
               </div>
 
-              {address.phone && (
+              {address.phoneNumber && (
                 <div className="flex items-center gap-2">
                   <Phone className="h-4 w-4 text-muted-foreground" />
                   <p className="text-sm text-gray-700">{formattedPhone}</p>

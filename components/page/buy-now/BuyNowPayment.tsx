@@ -49,7 +49,7 @@ export function PaymentStep({
               </p>
               <p>{shippingAddress.country}</p>
               <p className="text-gray-600 dark:text-gray-300">
-                Phone: {shippingAddress.phone}
+                Phone: {shippingAddress.phoneNumber}
               </p>
             </div>
           )}

@@ -11,7 +11,7 @@ export const addressSchema = z.object({
     state: z.string().min(1, "State is required"),
     country: z.string().min(1, "Country is required"),
     postalCode: z.string().regex(postalCodeRegex, "Please enter a valid 5-digit postal code"),
-    phone: z.string().regex(phoneRegex, "Please enter a valid Nepal phone number"),
+    phoneNumber: z.string().regex(phoneRegex, "Please enter a valid Nepal phone number"),
     type: z.enum(["SHIPPING", "BILLING", "BUSINESS", "WAREHOUSE"], {
         message: "Please select a valid address type",
     }),

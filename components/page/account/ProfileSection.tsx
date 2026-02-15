@@ -47,7 +47,7 @@ export default function ProfileSection() {
     firstName: userProfileDetails?.getUserProfileDetails.firstName || "",
     email: userProfileDetails?.getUserProfileDetails.email || "",
     lastName: userProfileDetails?.getUserProfileDetails.lastName || "",
-    phone: userProfileDetails?.getUserProfileDetails.phone || "",
+    phoneNumber: userProfileDetails?.getUserProfileDetails.phoneNumber || "",
     gender: userProfileDetails?.getUserProfileDetails.gender || "",
     dob: userProfileDetails?.getUserProfileDetails.dob || "",
   });
@@ -65,7 +65,7 @@ export default function ProfileSection() {
         input: {
           firstName: form.firstName,
           lastName: form.lastName,
-          phone: form.phone,
+          phoneNumber: form.phoneNumber,
           gender: form.gender,
           dob: form.dob ? new Date(form.dob).toISOString() : null,
         },
@@ -125,8 +125,8 @@ export default function ProfileSection() {
             <Input
               minLength={10}
               maxLength={10}
-              value={form?.phone || ""}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              value={form?.phoneNumber || ""}
+              onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })}
               disabled={!isEditing}
               placeholder="Enter phone number"
             />

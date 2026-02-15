@@ -70,7 +70,7 @@ export const AddressFieldGroup = React.memo<AddressFieldGroupProps>(
         state: (value: string) => onFieldChange("state", value),
         country: (value: string) => onFieldChange("country", value),
         postalCode: (value: string) => onFieldChange("postalCode", value),
-        phone: (value: string) => onFieldChange("phone", value),
+        phoneNumber: (value: string) => onFieldChange("phoneNumber", value),
         type: (value: string) => onFieldChange("type", value),
         isDefault: (value: boolean) => onFieldChange("isDefault", value),
       }),
@@ -192,11 +192,11 @@ export const AddressFieldGroup = React.memo<AddressFieldGroupProps>(
         {/* Phone Number */}
         <div className={layout === "vertical" ? "" : layoutClass}>
           <AddressField
-            name="phone"
+            name="phoneNumber"
             label="Phone Number"
-            value={formData.phone ?? ""}
-            onChange={fieldHandlers.phone}
-            error={errors.phone}
+            value={formData.phoneNumber ?? ""}
+            onChange={fieldHandlers.phoneNumber}
+            error={errors.phoneNumber}
             disabled={disabled}
             required
             placeholder="Enter phone number"

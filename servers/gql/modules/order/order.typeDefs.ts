@@ -52,7 +52,7 @@ export const orderTypeDefs = gql`
     state: String!
     postalCode: String!
     country: String!
-    phone: String!
+    phoneNumber: String!
   }
 
   input CreateOrderInput {

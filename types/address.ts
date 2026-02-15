@@ -31,7 +31,7 @@ export interface BaseAddress {
   state: string;
   country: string;
   postalCode: string;
-  phone?: string; // Optional in Prisma schema
+  phoneNumber?: string; // Optional in Prisma schema
   isDefault: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -60,7 +60,7 @@ export const getDefaultAddressForm = (): AddressFormData => ({
   state: "",
   country: "NP",
   postalCode: "",
-  phone: "",
+  phoneNumber: "",
   isDefault: false,
 });
 
@@ -104,7 +104,7 @@ export const VALIDATION_RULES = {
     pattern: /^\d{5}$/,
     message: "Please enter a valid 5-digit postal code",
   },
-  phone: {
+  phoneNumber: {
     required: true, // Required for order creation
     pattern: /^(\+977)?9[67-9]\d{8}$/,
     minLength: 10,

@@ -96,9 +96,9 @@ export const useAddressValidation = (
 
       // Context-specific validation adjustments
       if (context === "checkout") {
-        // For checkout, we might require phone for shipping
-        if (formData.type === "SHIPPING" && !formData.phone?.trim()) {
-          errors.phone = "Phone number is required for shipping address";
+        // For checkout, we might require phoneNumber for shipping
+        if (formData.type === "SHIPPING" && !formData.phoneNumber?.trim()) {
+          errors.phoneNumber = "Phone number is required for shipping address";
         }
       }
 

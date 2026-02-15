@@ -123,8 +123,8 @@ export function AddressStep({
                 <div
                   key={address.id}
                   className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${address.isDefault
-                      ? "border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/20"
-                      : "border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600"
+                    ? "border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/20"
+                    : "border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600"
                     }`}
                   onClick={() => onSelectAddress(address)}
                 >
@@ -158,8 +158,8 @@ export function AddressStep({
                           {address.city}, {address.state} {address.postalCode}
                         </p>
                         <p className="text-gray-600 dark:text-gray-300">{address.country}</p>
-                        {address.phone && (
-                          <p className="text-gray-600 dark:text-gray-300">📞 {address.phone}</p>
+                        {address.phoneNumber && (
+                          <p className="text-gray-600 dark:text-gray-300">📞 {address.phoneNumber}</p>
                         )}
                       </div>
                     </div>
@@ -200,8 +200,8 @@ export function AddressStep({
         <div className="space-y-4">
           <div
             className={`p-4 border rounded-lg ${selectedAddress.isDefault
-                ? "border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/20"
-                : "border-blue-300 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/20"
+              ? "border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/20"
+              : "border-blue-300 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/20"
               }`}
           >
             <div className="flex items-start justify-between mb-3">
@@ -229,8 +229,8 @@ export function AddressStep({
                 {selectedAddress.postalCode}
               </p>
               <p className="text-gray-600 dark:text-gray-300">{selectedAddress.country}</p>
-              {selectedAddress.phone && (
-                <p className="text-gray-600 dark:text-gray-300">📞 {selectedAddress.phone}</p>
+              {selectedAddress.phoneNumber && (
+                <p className="text-gray-600 dark:text-gray-300">📞 {selectedAddress.phoneNumber}</p>
               )}
             </div>
           </div>
