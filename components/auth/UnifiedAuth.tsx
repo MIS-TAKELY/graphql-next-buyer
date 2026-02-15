@@ -262,7 +262,6 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             // Link verified phone number if available
             if (isWhatsAppVerified && phone) {
                 signupData.phoneNumber = phone;
-                signupData.phoneNumberVerified = true;
             }
 
             const { error } = await signUp.email(signupData);

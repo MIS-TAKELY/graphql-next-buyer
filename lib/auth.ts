@@ -53,6 +53,13 @@ export const auth = betterAuth({
                         const emailPrefix = user.email ? user.email.split("@")[0] : "user";
                         user.username = (emailPrefix + "_" + randomId).toLowerCase().replace(/[^a-z0-9_]/g, "");
                     }
+
+                    // If phoneNumber is present, it means it was verified in the UI flow (via WhatsApp)
+                    // We set it verified here because the client is not allowed to pass it directly
+                    if (user.phoneNumber) {
+                        user.phoneNumberVerified = true;
+                    }
+
                     return { data: user };
                 },
                 after: async (user) => {
