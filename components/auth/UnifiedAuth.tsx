@@ -346,15 +346,22 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
 
     const handleForgotPasswordVerifyOtp = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Since verify and reset are separate endpoints in my plugin, 
-        // I'll just move to the next step and let reset handle the actual verification or 
-        // I should have a verify endpoint. 
-        // Actually my plugin has resetPasswordWithOtp which takes identifier, otp, and password.
-        // So this step just verifies local input then moves to password reset form.
-        if (forgotPasswordOtp.length === 6) {
-            setStep("FORGOT_PASSWORD_RESET");
-        } else {
-            toast.error("Please enter a valid 6-digit OTP");
+        setLoading(true);
+        try {
+            const { error } = await (authClient as any).phonePassword.verifyForgotPasswordOtp({
+                identifier: forgotPasswordIdentifier,
+                otp: forgotPasswordOtp,
+            });
+
+            if (!error) {
+                setStep("FORGOT_PASSWORD_RESET");
+            } else {
+                toast.error(error.message || "Invalid OTP");
+            }
+        } catch (err) {
+            toast.error("An error occurred during verification");
+        } finally {
+            setLoading(false);
         }
     };
 

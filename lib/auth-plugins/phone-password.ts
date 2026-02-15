@@ -149,6 +149,46 @@ export const phonePassword = () => {
                 return ctx.json({ success: true, isEmail });
             }),
 
+            verifyForgotPasswordOtp: createAuthEndpoint("/phone-password/verify-forgot-password-otp", {
+                method: "POST",
+                body: z.object({
+                    identifier: z.string(),
+                    otp: z.string(),
+                }),
+            }, async (ctx) => {
+                const { identifier, otp } = ctx.body;
+                const isEmail = identifier.includes("@");
+                let user;
+
+                if (isEmail) {
+                    user = await ctx.context.adapter.findOne({
+                        model: "user",
+                        where: [{ field: "email", value: identifier }]
+                    }) as any;
+                } else {
+                    user = await ctx.context.adapter.findOne({
+                        model: "user",
+                        where: [{ field: "phoneNumber", value: identifier }]
+                    }) as any;
+                }
+
+                if (!user) {
+                    throw new APIError("UNAUTHORIZED", { message: "Invalid Request" });
+                }
+
+                if (isEmail) {
+                    if (!user.emailOtp || user.emailOtp !== otp || new Date() > new Date(user.emailOtpExpiresAt)) {
+                        throw new APIError("UNAUTHORIZED", { message: "Invalid or expired OTP" });
+                    }
+                } else {
+                    if (!user.otp || user.otp !== otp || new Date() > new Date(user.otpExpiresAt)) {
+                        throw new APIError("UNAUTHORIZED", { message: "Invalid or expired OTP" });
+                    }
+                }
+
+                return ctx.json({ success: true });
+            }),
+
             resetPasswordWithOtp: createAuthEndpoint("/phone-password/reset-password-with-otp", {
                 method: "POST",
                 body: z.object({
