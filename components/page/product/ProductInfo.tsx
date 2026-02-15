@@ -66,7 +66,7 @@ const ProductInfo = memo(function ProductInfo({
       {/* Product Title & Status */}
       <div>
         <div className="flex items-center gap-3 mb-2 flex-wrap">
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
             {product.name}
           </h1>
         </div>

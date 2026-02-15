@@ -119,7 +119,7 @@ const ProductGallery = memo(function ProductGallery({
     <div className="flex flex-col-reverse lg:flex-row gap-4 h-full">
       {/* Thumbnails */}
       {displayImages.length > 1 && (
-        <div className="flex lg:flex-col gap-2 overflow-auto scrollbar-hide shrink-0 lg:w-16 lg:max-h-[480px]">
+        <div className="flex lg:flex-col gap-2 overflow-auto scrollbar-hide shrink-0 lg:w-16 lg:max-h-[600px]">
           {displayImages.map((image, index) => (
             <button
               key={image.id || index}
@@ -147,7 +147,7 @@ const ProductGallery = memo(function ProductGallery({
             {displayImages.map((image, index) => (
               <div
                 key={image.id || index}
-                className="relative flex-[0_0_100%] min-w-0 h-[300px] sm:h-[400px] lg:h-[480px] bg-white dark:bg-gray-900"
+                className="relative flex-[0_0_100%] min-w-0 h-[300px] sm:h-[400px] lg:h-[600px] bg-white dark:bg-gray-900"
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
               >
