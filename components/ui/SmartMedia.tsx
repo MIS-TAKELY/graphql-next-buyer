@@ -13,6 +13,7 @@ interface SmartMediaProps extends Omit<ImageProps, "src"> {
     isVideo?: boolean; // Explicit override
     autoPlayVideo?: boolean;
     videoClassName?: string;
+    thumbnailMode?: boolean; // Only show image with play icon overlay
 }
 
 export default function SmartMedia({
@@ -27,6 +28,7 @@ export default function SmartMedia({
     autoPlayVideo = false,
     videoClassName,
     fill = false,
+    thumbnailMode = false,
     ...props
 }: SmartMediaProps) {
     const [error, setError] = useState(false);
@@ -37,14 +39,17 @@ export default function SmartMedia({
     const isVideoUrl = src && (
         src.toLowerCase().endsWith(".mp4") ||
         src.toLowerCase().endsWith(".webm") ||
-        src.toLowerCase().includes("/video/upload/")
+        src.toLowerCase().includes("/video/upload/") ||
+        src.toLowerCase().includes("res.cloudinary.com") && src.toLowerCase().includes("/video/")
     );
 
     const getExternalVideoType = (url: string) => {
         if (!url) return null;
-        if (url.includes("youtube.com") || url.includes("youtu.be")) return "youtube";
-        if (url.includes("tiktok.com")) return "tiktok";
-        if (url.includes("instagram.com")) return "instagram";
+        const lowUrl = url.toLowerCase();
+        if (lowUrl.includes("youtube.com") || lowUrl.includes("youtu.be")) return "youtube";
+        if (lowUrl.includes("vimeo.com")) return "vimeo";
+        if (lowUrl.includes("tiktok.com")) return "tiktok";
+        if (lowUrl.includes("instagram.com")) return "instagram";
         return null;
     };
 
@@ -53,16 +58,28 @@ export default function SmartMedia({
 
     const getYouTubeEmbedUrl = (url: string) => {
         let videoId = "";
-        if (url.includes("youtu.be/")) {
-            videoId = url.split("youtu.be/")[1];
-        } else if (url.includes("watch?v=")) {
-            videoId = url.split("watch?v=")[1].split("&")[0];
-        } else if (url.includes("youtube.com/embed/")) {
-            videoId = url.split("youtube.com/embed/")[1];
-        } else if (url.includes("youtube.com/v/")) {
-            videoId = url.split("youtube.com/v/")[1];
+        try {
+            if (url.includes("youtu.be/")) {
+                videoId = url.split("youtu.be/")[1].split(/[?#]/)[0];
+            } else if (url.includes("youtube.com/shorts/")) {
+                videoId = url.split("youtube.com/shorts/")[1].split(/[?#]/)[0];
+            } else if (url.includes("watch?v=")) {
+                videoId = url.split("watch?v=")[1].split("&")[0].split(/[?#]/)[0];
+            } else if (url.includes("youtube.com/embed/")) {
+                videoId = url.split("youtube.com/embed/")[1].split(/[?#]/)[0];
+            } else if (url.includes("youtube.com/v/")) {
+                videoId = url.split("youtube.com/v/")[1].split(/[?#]/)[0];
+            }
+        } catch (e) {
+            console.error("Error parsing YouTube ID:", e);
         }
-        return `https://www.youtube.com/embed/${videoId}`;
+        return `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
+    };
+
+    const getVimeoEmbedUrl = (url: string) => {
+        const match = url.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/);
+        if (match) return `https://player.vimeo.com/video/${match[1]}`;
+        return url;
     };
 
     const getInstagramEmbedUrl = (url: string) => {
@@ -72,8 +89,6 @@ export default function SmartMedia({
     };
 
     const getTikTokEmbedUrl = (url: string) => {
-        // TikTok doesn't have a simple embed URL like YouTube for all links without official SDK
-        // But we can try the /embed/v/ format or just use the URL if it's already an embed
         if (url.includes("/video/")) {
             const videoId = url.split("/video/")[1].split("?")[0].split("/")[0];
             return `https://www.tiktok.com/embed/v2/${videoId}`;
@@ -81,7 +96,16 @@ export default function SmartMedia({
         return url;
     };
 
-
+    const getThumbnailUrl = (url: string, type: string | null) => {
+        if (!url) return null;
+        if (type === "youtube") {
+            const embed = getYouTubeEmbedUrl(url);
+            const id = embed.split("/embed/")[1].split("?")[0];
+            return `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+        }
+        // Vimeo, TikTok etc usually require API calls for direct thumbnail URLs or use placeholders
+        return null;
+    };
 
     useEffect(() => {
         // Reset error when src changes
@@ -104,9 +128,39 @@ export default function SmartMedia({
     }
 
     if (isVideo) {
+        // If we are in thumbnail mode, show the thumbnail or a placeholder with a play icon
+        if (thumbnailMode) {
+            const thumbnailUrl = getThumbnailUrl(src, externalVideoType);
+            return (
+                <div className={cn("relative overflow-hidden group bg-gray-100", containerClassName, fill && "absolute inset-0 w-full h-full", !fill && "w-fit h-fit")}>
+                    {thumbnailUrl ? (
+                        <Image
+                            src={thumbnailUrl}
+                            alt={alt || "Video thumbnail"}
+                            className={cn("object-cover", className)}
+                            fill={fill}
+                            width={!fill ? (props.width || 400) : undefined}
+                            height={!fill ? (props.height || 400) : undefined}
+                            unoptimized={true}
+                        />
+                    ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+                            <FileVideo className="w-8 h-8 text-gray-400" />
+                        </div>
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
+                        <div className="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow-sm">
+                            <Play className="w-4 h-4 text-primary fill-primary ml-0.5" />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         if (externalVideoType) {
             let embedUrl = src!;
             if (externalVideoType === "youtube") embedUrl = getYouTubeEmbedUrl(src!);
+            if (externalVideoType === "vimeo") embedUrl = getVimeoEmbedUrl(src!);
             if (externalVideoType === "instagram") embedUrl = getInstagramEmbedUrl(src!);
             if (externalVideoType === "tiktok") embedUrl = getTikTokEmbedUrl(src!);
 

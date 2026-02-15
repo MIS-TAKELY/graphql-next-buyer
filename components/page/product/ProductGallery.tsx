@@ -80,8 +80,10 @@ const ProductGallery = memo(function ProductGallery({
 
     const currentImg = displayImages[selectedImage];
     const isExternalVideo = (url: string) => {
-      return url.includes("youtube.com") || url.includes("youtu.be") ||
-        url.includes("tiktok.com") || url.includes("instagram.com");
+      const lowUrl = url.toLowerCase();
+      return lowUrl.includes("youtube.com") || lowUrl.includes("youtu.be") ||
+        lowUrl.includes("vimeo.com") || lowUrl.includes("tiktok.com") ||
+        lowUrl.includes("instagram.com");
     };
 
     const isVideo = currentImg?.fileType === "VIDEO" ||
@@ -131,6 +133,7 @@ const ProductGallery = memo(function ProductGallery({
                 fill
                 className="object-cover"
                 sizes="64px"
+                thumbnailMode={true}
               />
             </button>
           ))}
@@ -156,6 +159,7 @@ const ProductGallery = memo(function ProductGallery({
                     className="object-contain"
                     priority={index === 0}
                     sizes="(max-width: 768px) 100vw, 600px"
+                    isVideo={image.fileType === "VIDEO" || image.mediaType === "VIDEO"}
                   />
                 </div>
               </div>
