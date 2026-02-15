@@ -97,6 +97,24 @@ const TEMPLATES: Record<string, EmailTemplate> = {
       </div>
     `,
   },
+  JOB_APPLICATION: {
+    subject: "New Job Application Received - Vanijay",
+    text: (ctx) => `New job application from ${ctx.name}. Email: ${ctx.email}, Salary: ${ctx.salary}, CV: ${ctx.cvUrl}`,
+    html: (ctx) => `
+      <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #333;">New Job Application</h2>
+        <p>A new candidate has applied for a position at Vanijay.</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Name:</strong> ${ctx.name}</p>
+          <p style="margin: 5px 0;"><strong>Email:</strong> ${ctx.email}</p>
+          <p style="margin: 5px 0;"><strong>Phone:</strong> ${ctx.phone || 'N/A'}</p>
+          <p style="margin: 5px 0;"><strong>Expected Salary:</strong> ${ctx.salary}</p>
+          <p style="margin: 15px 0 0 0;"><strong>CV/Resume:</strong> <a href="${ctx.cvUrl}" style="color: #007bff; text-decoration: underline;">View Document</a></p>
+        </div>
+        <p style="color: #666; font-size: 0.9em;">This application was submitted via the Careers page.</p>
+      </div>
+    `,
+  },
 };
 
 export const senMail = async (

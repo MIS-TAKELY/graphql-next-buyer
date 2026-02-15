@@ -1,42 +1,244 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useState, useRef } from 'react';
 import Link from 'next/link';
-import { Briefcase } from 'lucide-react';
-
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com';
-
-export const metadata: Metadata = {
-    title: "Careers - Vanijay | Join our Team",
-    description: "Explore career opportunities at Vanijay. Join our mission to revolutionize e-commerce in Nepal.",
-    alternates: {
-        canonical: `${baseUrl}/careers`,
-    }
-};
+import { Briefcase, UploadCloud, Loader2, CheckCircle2 } from 'lucide-react';
+import { toast } from 'sonner';
+import axios from 'axios';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export default function CareersPage() {
-    return (
-        <div className="bg-background min-h-[70vh] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full text-center space-y-8">
-                <div className="flex justify-center">
-                    <div className="bg-primary/10 p-4 rounded-full">
-                        <Briefcase className="w-12 h-12 text-primary" />
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        salary: '',
+        cvUrl: '',
+    });
+    const [isUploading, setIsUploading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error("File size should be less than 5MB");
+            return;
+        }
+
+        const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+        const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "seller";
+
+        if (!cloudName) {
+            toast.error("Upload configuration missing");
+            return;
+        }
+
+        setIsUploading(true);
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+        uploadData.append("upload_preset", uploadPreset);
+
+        try {
+            const res = await axios.post(
+                `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
+                uploadData
+            );
+            setFormData(prev => ({ ...prev, cvUrl: res.data.secure_url }));
+            toast.success("CV uploaded successfully");
+        } catch (error) {
+            console.error("Upload failed", error);
+            toast.error("Failed to upload CV");
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!formData.cvUrl) {
+            toast.error("Please upload your CV");
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const res = await axios.post('/api/career/apply', formData);
+            if (res.data.success) {
+                setIsSubmitted(true);
+                toast.success("Application submitted successfully!");
+            } else {
+                toast.error(res.data.message || "Failed to submit application");
+            }
+        } catch (error) {
+            console.error("Submission error", error);
+            toast.error("An error occurred. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    if (isSubmitted) {
+        return (
+            <div className="bg-background min-h-[70vh] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-md w-full text-center space-y-6 bg-card p-10 rounded-2xl shadow-lg border border-border">
+                    <div className="flex justify-center">
+                        <CheckCircle2 className="w-16 h-16 text-green-500" />
+                    </div>
+                    <div>
+                        <h1 className="text-3xl font-bold text-foreground">Application Received!</h1>
+                        <p className="mt-4 text-muted-foreground">
+                            Thank you for your interest in Vanijay. We have received your application and will get back to you soon.
+                        </p>
+                    </div>
+                    <div className="pt-4">
+                        <Link href="/" className="text-primary hover:underline font-medium">
+                            &larr; Back to Home
+                        </Link>
                     </div>
                 </div>
-                <div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="bg-background min-h-[70vh] py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-2xl mx-auto space-y-12">
+                <div className="text-center space-y-4">
+                    <div className="flex justify-center">
+                        <div className="bg-primary/10 p-4 rounded-full">
+                            <Briefcase className="w-12 h-12 text-primary" />
+                        </div>
+                    </div>
                     <h1 className="text-4xl font-extrabold text-primary">Careers at Vanijay</h1>
-                    <p className="mt-4 text-xl text-muted-foreground">
-                        Building the future of commerce in Nepal.
+                    <p className="text-xl text-muted-foreground">
+                        Join us in building the future of commerce in Nepal.
                     </p>
                 </div>
 
-                <div className="bg-card p-8 rounded-xl shadow-sm border space-y-4">
-                    <h2 className="text-2xl font-bold text-foreground italic">No Vacancy</h2>
-                    <p className="text-muted-foreground">
-                        Thank you for your interest in joining Vanijay. Currently, we do not have any open positions.
-                        Please check back later or follow our social media channels for updates on future opportunities.
-                    </p>
+                <div className="bg-card p-8 rounded-2xl shadow-lg border border-border space-y-8">
+                    <div>
+                        <h2 className="text-2xl font-bold text-foreground">Apply for a Position</h2>
+                        <p className="text-muted-foreground mt-2">
+                            Fill out the form below and we'll be in touch.
+                        </p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <div className="space-y-2">
+                                <Label htmlFor="name">Full Name</Label>
+                                <Input
+                                    id="name"
+                                    name="name"
+                                    placeholder="John Doe"
+                                    required
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email Address</Label>
+                                <Input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    placeholder="john@example.com"
+                                    required
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <div className="space-y-2">
+                                <Label htmlFor="phone">Phone Number (Optional)</Label>
+                                <Input
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="+977 1234567890"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="salary">Expected Salary (Monthly)</Label>
+                                <Input
+                                    id="salary"
+                                    name="salary"
+                                    placeholder="e.g. NPR 50,000"
+                                    required
+                                    value={formData.salary}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>Upload CV (PDF or Image, max 5MB)</Label>
+                            <div
+                                onClick={() => fileInputRef.current?.click()}
+                                className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all ${formData.cvUrl ? 'border-green-500 bg-green-50/10' : 'border-border hover:border-primary hover:bg-muted/50'
+                                    }`}
+                            >
+                                {isUploading ? (
+                                    <Loader2 className="w-10 h-10 animate-spin text-primary" />
+                                ) : formData.cvUrl ? (
+                                    <>
+                                        <CheckCircle2 className="w-10 h-10 text-green-500 mb-2" />
+                                        <span className="text-sm font-medium text-green-600">CV Uploaded! Click to change.</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <UploadCloud className="w-10 h-10 text-muted-foreground mb-2" />
+                                        <span className="text-sm text-muted-foreground">Click to upload your CV</span>
+                                    </>
+                                )}
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    className="hidden"
+                                    accept=".pdf,image/*"
+                                    onChange={handleFileSelect}
+                                    disabled={isUploading}
+                                />
+                            </div>
+                            {formData.cvUrl && (
+                                <p className="text-xs text-muted-foreground text-center">
+                                    <a href={formData.cvUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">View uploaded CV</a>
+                                </p>
+                            )}
+                        </div>
+
+                        <Button
+                            type="submit"
+                            className="w-full h-12 text-lg font-bold"
+                            disabled={isSubmitting || isUploading}
+                        >
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                    Submitting...
+                                </>
+                            ) : (
+                                "Submit Application"
+                            )}
+                        </Button>
+                    </form>
                 </div>
 
-                <div className="pt-4">
+                <div className="text-center">
                     <Link
                         href="/"
                         className="text-primary hover:underline font-medium transition-colors"
