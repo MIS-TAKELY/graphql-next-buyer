@@ -190,18 +190,18 @@ const ProductInfo = memo(function ProductInfo({
 
             {!showAllHighlights ? (
               <div
-                className="relative w-full overflow-hidden border border-border/50 h-[500px]"
+                className="relative w-full overflow-hidden border border-border/50 aspect-video lg:h-[600px] bg-black/5"
               >
                 <SmartMedia
                   src={promotionalImages[0].url}
                   alt={promotionalImages[0].altText || "Highlight 1"}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   priority
                 />
 
                 {/* Show More overlay */}
-                <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center bg-gradient-to-t from-background via-background/60 to-transparent p-8">
+                <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center bg-gradient-to-t from-background via-background/60 to-transparent p-6">
                   <button
                     onClick={() => setShowAllHighlights(true)}
                     className="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all"
@@ -211,20 +211,20 @@ const ProductInfo = memo(function ProductInfo({
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col gap-0">
+              <div className="flex flex-col gap-4">
                 {promotionalImages.map((image: any, index: number) => (
-                  <div key={index} className="relative w-full overflow-hidden min-h-[300px]">
+                  <div key={index} className="relative w-full overflow-hidden aspect-video lg:min-h-[500px] bg-black/5 border border-border/40">
                     <SmartMedia
                       src={image.url}
                       alt={image.altText || `Highlight ${index + 1}`}
-                      className="w-full h-auto block object-contain"
-                      width={1200}
-                      height={800}
+                      className="w-full h-full block object-contain"
+                      fill
+                      sizes="100vw"
                     />
 
                     {/* Optional caption overlay */}
                     {image.caption && (
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm p-3 text-white">
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm p-3 text-white z-10">
                         <p className="text-base font-medium">{image.caption}</p>
                       </div>
                     )}
