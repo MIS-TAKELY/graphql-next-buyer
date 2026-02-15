@@ -4,6 +4,7 @@ export interface IProductsImages {
   url: string;
   type?: string;
   mediaType?: string;
+  fileType?: string;
   sortOrder?: number;
 }
 export interface IProductsReview {

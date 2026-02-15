@@ -13,6 +13,7 @@ interface ProductImage {
   altText?: string;
   sortOrder?: number;
   mediaType?: string | null;
+  fileType?: string | null;
 }
 
 interface ProductGalleryProps {
@@ -34,10 +35,12 @@ const ProductGallery = memo(function ProductGallery({
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [isDesktop, setIsDesktop] = useState(false);
 
-  // Filter valid images
+  // Filter valid images - showing all for now if they are indexed, 
+  // or adjust based on business logic if promotional should be separate.
   const displayImages = useMemo<ProductImage[]>(() => {
     if (!images || images.length === 0) return [];
-    return images.filter((image) => image.mediaType !== "PROMOTIONAL");
+    // If the user wants to index them together, we should probably show them all
+    return [...images].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
   }, [images]);
 
   // Check viewport for desktop zoom
@@ -76,7 +79,16 @@ const ProductGallery = memo(function ProductGallery({
     if (!isDesktop || !onImageHover) return;
 
     const currentImg = displayImages[selectedImage];
-    const isVideo = currentImg?.mediaType === "VIDEO" || currentImg?.url?.toLowerCase().endsWith(".mp4") || currentImg?.url?.toLowerCase().endsWith(".webm");
+    const isExternalVideo = (url: string) => {
+      return url.includes("youtube.com") || url.includes("youtu.be") ||
+        url.includes("tiktok.com") || url.includes("instagram.com");
+    };
+
+    const isVideo = currentImg?.fileType === "VIDEO" ||
+      currentImg?.mediaType === "VIDEO" ||
+      currentImg?.url?.toLowerCase().endsWith(".mp4") ||
+      currentImg?.url?.toLowerCase().endsWith(".webm") ||
+      (currentImg?.url && isExternalVideo(currentImg.url));
 
     if (isVideo) return;
 

@@ -40,7 +40,46 @@ export default function SmartMedia({
         src.toLowerCase().includes("/video/upload/")
     );
 
-    const isVideo = explicitIsVideo ?? isVideoUrl;
+    const getExternalVideoType = (url: string) => {
+        if (!url) return null;
+        if (url.includes("youtube.com") || url.includes("youtu.be")) return "youtube";
+        if (url.includes("tiktok.com")) return "tiktok";
+        if (url.includes("instagram.com")) return "instagram";
+        return null;
+    };
+
+    const externalVideoType = src ? getExternalVideoType(src) : null;
+    const isVideo = explicitIsVideo ?? (isVideoUrl || !!externalVideoType);
+
+    const getYouTubeEmbedUrl = (url: string) => {
+        let videoId = "";
+        if (url.includes("youtu.be/")) {
+            videoId = url.split("youtu.be/")[1];
+        } else if (url.includes("watch?v=")) {
+            videoId = url.split("watch?v=")[1].split("&")[0];
+        } else if (url.includes("youtube.com/embed/")) {
+            videoId = url.split("youtube.com/embed/")[1];
+        } else if (url.includes("youtube.com/v/")) {
+            videoId = url.split("youtube.com/v/")[1];
+        }
+        return `https://www.youtube.com/embed/${videoId}`;
+    };
+
+    const getInstagramEmbedUrl = (url: string) => {
+        // Ensure trailing slash and add embed
+        const baseUrl = url.split("?")[0].replace(/\/$/, "");
+        return `${baseUrl}/embed`;
+    };
+
+    const getTikTokEmbedUrl = (url: string) => {
+        // TikTok doesn't have a simple embed URL like YouTube for all links without official SDK
+        // But we can try the /embed/v/ format or just use the URL if it's already an embed
+        if (url.includes("/video/")) {
+            const videoId = url.split("/video/")[1].split("?")[0].split("/")[0];
+            return `https://www.tiktok.com/embed/v2/${videoId}`;
+        }
+        return url;
+    };
 
 
 
@@ -65,6 +104,25 @@ export default function SmartMedia({
     }
 
     if (isVideo) {
+        if (externalVideoType) {
+            let embedUrl = src!;
+            if (externalVideoType === "youtube") embedUrl = getYouTubeEmbedUrl(src!);
+            if (externalVideoType === "instagram") embedUrl = getInstagramEmbedUrl(src!);
+            if (externalVideoType === "tiktok") embedUrl = getTikTokEmbedUrl(src!);
+
+            return (
+                <div className={cn("relative group overflow-hidden bg-black/5", containerClassName, fill && "absolute inset-0 w-full h-full")}>
+                    <iframe
+                        src={embedUrl}
+                        className={cn("w-full h-full border-0", className)}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        title={alt || "External Video"}
+                    />
+                </div>
+            );
+        }
+
         return (
             <div className={cn("relative group overflow-hidden bg-black/5", containerClassName, fill && "absolute inset-0 w-full h-full")}>
                 <video
