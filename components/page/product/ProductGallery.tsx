@@ -39,8 +39,10 @@ const ProductGallery = memo(function ProductGallery({
   // or adjust based on business logic if promotional should be separate.
   const displayImages = useMemo<ProductImage[]>(() => {
     if (!images || images.length === 0) return [];
-    // If the user wants to index them together, we should probably show them all
-    return [...images].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    // Filter out promotional images from the main gallery
+    return [...images]
+      .filter((img) => img.mediaType !== "PROMOTIONAL")
+      .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
   }, [images]);
 
   // Check viewport for desktop zoom
