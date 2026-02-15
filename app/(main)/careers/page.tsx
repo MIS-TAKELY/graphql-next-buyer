@@ -49,9 +49,13 @@ export default function CareersPage() {
         uploadData.append("file", file);
         uploadData.append("upload_preset", uploadPreset);
 
+        // Explicitly set resource type. Using 'auto' is flexible, 
+        // but 'raw' is safer for PDFs to avoid them being treated as images.
+        const resourceType = file.type === 'application/pdf' ? 'raw' : 'auto';
+
         try {
             const res = await axios.post(
-                `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
+                `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`,
                 uploadData
             );
             setFormData(prev => ({ ...prev, cvUrl: res.data.secure_url }));
