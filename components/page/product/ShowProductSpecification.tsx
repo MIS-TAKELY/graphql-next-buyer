@@ -32,8 +32,21 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
     return null;
   }, [productSpecificationTable]);
 
+
   // If we have distinct sections, render them
   if (sections) {
+    // Helper function to format values with N/A logic
+    const formatValue = (value: string) => {
+      const trimmedValue = value?.toString().trim() || "";
+      const shouldShowNA = !trimmedValue ||
+        trimmedValue === "0" ||
+        trimmedValue === "false" ||
+        trimmedValue === "-" ||
+        trimmedValue.toLowerCase() === "null" ||
+        trimmedValue.toLowerCase() === "undefined";
+      return shouldShowNA ? "N/A" : value;
+    };
+
     return (
       <div className="mt-8 space-y-8">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -64,7 +77,7 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
                             {row[0]}:
                           </span>
                           <span className="text-gray-700 dark:text-gray-300">
-                            {row[1]}
+                            {formatValue(row[1])}
                           </span>
                         </div>
                       </li>
@@ -91,7 +104,7 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
                         >
                           {row.map((cell, j) => (
                             <td key={j} className={`px-4 py-2 ${j === 0 ? 'font-medium text-gray-900 dark:text-gray-100 w-1/3' : 'text-gray-700 dark:text-gray-300'}`}>
-                              {cell}
+                              {j === 0 ? cell : formatValue(cell)}
                             </td>
                           ))}
                         </tr>
@@ -113,8 +126,20 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
   const specifications = defaultVariant?.specifications || [];
 
   // List of attribute keys we want to exclude
+  // Exclude dimension fields as they're displayed separately in Product Details
   const excludedKeys = [
     "shippingClass",
+    "Width",
+    "width",
+    "Height",
+    "height",
+    "Length",
+    "length",
+    "Weight",
+    "weight",
+    "IsFragile",
+    "isFragile",
+    "isFragile",
   ];
 
   // Filter attributes
@@ -177,10 +202,22 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
     specsMap.set(spec.key, spec.value);
   });
 
-  const combinedData = Array.from(specsMap.entries()).map(([key, value]) => ({
-    key,
-    value,
-  }));
+  const combinedData = Array.from(specsMap.entries()).map(([key, value]) => {
+    // Show "N/A" for empty, null, undefined, "0", "false", or whitespace-only values
+    const trimmedValue = value?.toString().trim() || "";
+    const shouldShowNA = !trimmedValue ||
+      trimmedValue === "0" ||
+      trimmedValue === "false" ||
+      trimmedValue === "-" ||
+      trimmedValue.toLowerCase() === "null" ||
+      trimmedValue.toLowerCase() === "undefined";
+
+    const displayValue = shouldShowNA ? "N/A" : value;
+    return {
+      key,
+      value: displayValue,
+    };
+  });
 
   const [showAll, setShowAll] = useState(false);
   const visibleData = showAll ? combinedData : combinedData.slice(0, 5);
