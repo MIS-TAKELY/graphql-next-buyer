@@ -5,14 +5,15 @@ interface DeliveryInfoProps {
   warranty?: IWarranty[];
   returnPolicy?: IReturnPolicy[];
   deliveryOptions?: IDeliveryOption[];
+  deliveryCharge?: number;
 }
 
-export default function DeliveryInfo({ warranty, returnPolicy, deliveryOptions }: DeliveryInfoProps) {
+export default function DeliveryInfo({ warranty, returnPolicy, deliveryOptions, deliveryCharge }: DeliveryInfoProps) {
   // Determine delivery text
-  const deliveryCharge = deliveryOptions && (deliveryOptions[0] as any)?.product?.deliveryCharge;
+  const charge = deliveryCharge ?? 0;
   const deliveryText = deliveryOptions && deliveryOptions.length > 0
-    ? Number(deliveryCharge) > 0
-      ? `Delivery Charge: रु ${deliveryCharge}`
+    ? Number(charge) > 0
+      ? `Delivery Charge: रु ${charge}`
       : "Free Delivery"
     : "No free delivery";
 

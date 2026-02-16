@@ -302,6 +302,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 warranty={product.warranty}
                 returnPolicy={product.returnPolicy}
                 deliveryOptions={product.deliveryOptions}
+                deliveryCharge={product.deliveryCharge}
               />
               <SellerInfo
                 sellerName={sellerName}
