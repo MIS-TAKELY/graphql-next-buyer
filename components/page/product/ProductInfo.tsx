@@ -190,13 +190,15 @@ const ProductInfo = memo(function ProductInfo({
 
             {!showAllHighlights ? (
               <div
-                className="relative w-full overflow-hidden aspect-video lg:h-[600px] bg-black/5"
+                className="relative w-full"
               >
                 <SmartMedia
                   src={promotionalImages[0].url}
                   alt={promotionalImages[0].altText || "Highlight 1"}
-                  fill
-                  className="object-contain"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  className="w-full h-auto object-contain"
                   priority
                 />
 
@@ -213,12 +215,13 @@ const ProductInfo = memo(function ProductInfo({
             ) : (
               <div className="flex flex-col">
                 {promotionalImages.map((image: any, index: number) => (
-                  <div key={index} className="relative w-full overflow-hidden aspect-video lg:min-h-[500px] bg-black/5">
+                  <div key={index} className="relative w-full">
                     <SmartMedia
                       src={image.url}
                       alt={image.altText || `Highlight ${index + 1}`}
-                      className="w-full h-full block object-contain"
-                      fill
+                      width={0}
+                      height={0}
+                      className="w-full h-auto block object-contain"
                       sizes="100vw"
                     />
 
@@ -232,7 +235,7 @@ const ProductInfo = memo(function ProductInfo({
                 ))}
 
                 {/* Show Less button */}
-                <div className="flex justify-center pt-4">
+                < div className="flex justify-center pt-4" >
                   <button
                     onClick={scrollToHighlights}
                     className="text-muted-foreground hover:text-foreground text-sm font-medium underline transition-colors"

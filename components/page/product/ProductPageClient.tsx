@@ -251,7 +251,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
   return (
     <>
       <div className="container-custom py-4 sm:py-6 lg:py-8 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-8 xl:gap-12 mb-12">
           {/* LEFT COLUMN - FIXED */}
           <div className="space-y-6 lg:sticky lg:top-24 h-fit self-start">
             <ProductGallery
