@@ -16,8 +16,10 @@ export const auth = betterAuth({
         username(),
         phoneNumber({
             sendOTP: async ({ phoneNumber, code }) => {
-                // Send OTP without checking for existing users
-                // Phone verification is now optional and doesn't create users
+                const phoneRegex = /^\+?[1-9]\d{7,14}$/;
+                if (!phoneRegex.test(phoneNumber.replace(/\s|-/g, ""))) {
+                    throw new Error("Invalid phone number format");
+                }
                 const cleanCode = code.includes(":") ? code.split(":")[0] : code;
                 await sendWhatsAppOTP(phoneNumber, cleanCode);
             },

@@ -24,8 +24,11 @@ export const phonePassword = () => {
             }, async (ctx) => {
                 const { phone, password, rememberMe } = ctx.body;
 
-                // 1. Find user by phone number
-                // Note: The schema now uses 'phoneNumber' field
+                const phoneRegex = /^\+?[1-9]\d{7,14}$/;
+                if (!phoneRegex.test(phone.replace(/\s|-/g, ""))) {
+                    throw new APIError("BAD_REQUEST", { message: "Invalid phone number format" });
+                }
+
                 const user = await ctx.context.adapter.findOne({
                     model: "user",
                     where: [{
@@ -100,7 +103,21 @@ export const phonePassword = () => {
                 }),
             }, async (ctx) => {
                 const { identifier } = ctx.body;
+
                 const isEmail = identifier.includes("@");
+
+                if (isEmail) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(identifier)) {
+                        throw new APIError("BAD_REQUEST", { message: "Please enter a valid email address" });
+                    }
+                } else {
+                    const phoneRegex = /^\+?[1-9]\d{7,14}$/;
+                    if (!phoneRegex.test(identifier.replace(/\s|-/g, ""))) {
+                        throw new APIError("BAD_REQUEST", { message: "Please enter a valid phone number" });
+                    }
+                }
+
                 let user;
 
                 if (isEmail) {
@@ -109,16 +126,29 @@ export const phonePassword = () => {
                         where: [{ field: "email", value: identifier }]
                     }) as any;
                 } else {
-                    // Assume phone
+                    // Clean phone number and search
+                    const cleanPhone = identifier.replace(/\s|-/g, "");
                     user = await ctx.context.adapter.findOne({
                         model: "user",
-                        where: [{ field: "phoneNumber", value: identifier }]
+                        where: [{ field: "phoneNumber", value: cleanPhone }]
                     }) as any;
                 }
 
                 if (!user) {
-                    // Return success even if user not found to prevent enumeration
-                    return ctx.json({ success: true });
+                    throw new APIError("NOT_FOUND", { message: "No account found with this email or phone number" });
+                }
+
+                // Check if user has a credential account (password-based)
+                const account = await ctx.context.adapter.findOne({
+                    model: "account",
+                    where: [
+                        { field: "userId", value: user.id },
+                        { field: "providerId", value: "credential" }
+                    ]
+                }) as any;
+
+                if (!account) {
+                    throw new APIError("BAD_REQUEST", { message: "This account uses social login. Please sign in with Google or Facebook instead." });
                 }
 
                 const otp = crypto.randomInt(100000, 999999).toString();
@@ -157,6 +187,11 @@ export const phonePassword = () => {
                 }),
             }, async (ctx) => {
                 const { identifier, otp } = ctx.body;
+
+                if (!/^\d{6}$/.test(otp)) {
+                    throw new APIError("BAD_REQUEST", { message: "OTP must be a 6-digit number" });
+                }
+
                 const isEmail = identifier.includes("@");
                 let user;
 
@@ -194,10 +229,19 @@ export const phonePassword = () => {
                 body: z.object({
                     identifier: z.string(),
                     otp: z.string(),
-                    password: z.string(),
+                    password: z.string().min(8, "Password must be at least 8 characters"),
                 }),
             }, async (ctx) => {
                 const { identifier, otp, password } = ctx.body;
+
+                if (!/^\d{6}$/.test(otp)) {
+                    throw new APIError("BAD_REQUEST", { message: "OTP must be a 6-digit number" });
+                }
+
+                if (password.length < 8) {
+                    throw new APIError("BAD_REQUEST", { message: "Password must be at least 8 characters" });
+                }
+
                 const isEmail = identifier.includes("@");
                 let user;
 

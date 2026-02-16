@@ -237,14 +237,24 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             return;
         }
 
+        if (password.length < 8) {
+            toast.error("Password must be at least 8 characters");
+            return;
+        }
+
         if (password !== confirmPassword) {
             toast.error("Passwords do not match");
             return;
         }
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            toast.error("Please enter a valid email address");
+            return;
+        }
+
         setLoading(true);
         try {
-            // logic to determine names
             const nameParts = name.trim().split(/\s+/);
             const firstName = nameParts[0] || "";
             const lastName = nameParts.slice(1).join(" ") || "";
@@ -322,6 +332,27 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
 
     const handleForgotPasswordSendOtp = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Client-side validation
+        const isEmail = forgotPasswordIdentifier.includes("@");
+
+        if (isEmail) {
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(forgotPasswordIdentifier)) {
+                toast.error("Please enter a valid email address");
+                return;
+            }
+        } else {
+            // Validate phone format
+            const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+            const cleanPhone = forgotPasswordIdentifier.replace(/\s|-/g, "");
+            if (!phoneRegex.test(cleanPhone)) {
+                toast.error("Please enter a valid phone number (e.g., 9812345678 or +9779812345678)");
+                return;
+            }
+        }
+
         setLoading(true);
         try {
             const { data, error } = await (authClient as any).phonePassword.sendForgotPasswordOtp({
@@ -335,10 +366,24 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                 setTimer(120);
                 setCanResend(false);
             } else {
-                toast.error(error.message || "Failed to send OTP");
+                // Handle specific error types
+                const errorMessage = error.message || "Failed to send OTP";
+
+                if (errorMessage.toLowerCase().includes("social login")) {
+                    toast.error("This account uses social login. Please use the Google or Facebook sign in button.");
+                } else if (errorMessage.toLowerCase().includes("not found") || errorMessage.toLowerCase().includes("no account")) {
+                    toast.error("No account found with this email or phone number. Please check and try again.");
+                } else if (errorMessage.toLowerCase().includes("valid email")) {
+                    toast.error("Please enter a valid email address");
+                } else if (errorMessage.toLowerCase().includes("valid phone")) {
+                    toast.error("Please enter a valid phone number");
+                } else {
+                    toast.error(errorMessage);
+                }
             }
         } catch (err) {
-            toast.error("An error occurred");
+            console.error("Forgot password error:", err);
+            toast.error("An error occurred. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -367,6 +412,10 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
 
     const handleResetPassword = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (password.length < 8) {
+            toast.error("Password must be at least 8 characters");
+            return;
+        }
         if (password !== confirmPassword) {
             toast.error("Passwords do not match");
             return;
@@ -556,7 +605,7 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             </div>
             <form onSubmit={handleWhatsAppVerifyOtp} className="space-y-4">
                 <div className="space-y-2">
-                    <Input id="otp" type="text" required maxLength={6} value={otp} onChange={(e) => setOtp(e.target.value)} className="text-center text-2xl tracking-[0.5em]" placeholder="000000" />
+                    <Input id="otp" type="text" required maxLength={6} value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))} className="text-center text-2xl tracking-[0.5em]" placeholder="000000" />
                 </div>
                 <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white" disabled={loading}>
                     {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
@@ -685,7 +734,7 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             </div>
             <form onSubmit={handleEmailVerifyOtp} className="space-y-4">
                 <div className="space-y-2">
-                    <Input id="emailOtp" type="text" required maxLength={6} value={emailOtp} onChange={(e) => setEmailOtp(e.target.value)} className="text-center text-2xl tracking-[0.5em]" placeholder="000000" />
+                    <Input id="emailOtp" type="text" required maxLength={6} value={emailOtp} onChange={(e) => setEmailOtp(e.target.value.replace(/\D/g, ""))} className="text-center text-2xl tracking-[0.5em]" placeholder="000000" />
                 </div>
                 <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={loading}>
                     {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
@@ -739,7 +788,7 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             </div>
             <form onSubmit={handleForgotPasswordVerifyOtp} className="space-y-4">
                 <div className="space-y-2">
-                    <Input id="forgot_otp" type="text" required maxLength={6} value={forgotPasswordOtp} onChange={(e) => setForgotPasswordOtp(e.target.value)} className="text-center text-2xl tracking-[0.5em]" placeholder="000000" />
+                    <Input id="forgot_otp" type="text" required maxLength={6} value={forgotPasswordOtp} onChange={(e) => setForgotPasswordOtp(e.target.value.replace(/\D/g, ""))} className="text-center text-2xl tracking-[0.5em]" placeholder="000000" />
                 </div>
                 <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={loading}>
                     Next
