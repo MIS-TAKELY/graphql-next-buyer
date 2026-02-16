@@ -226,22 +226,39 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
     specsMap.set(spec.key, spec.value);
   });
 
-  const combinedData = Array.from(specsMap.entries()).map(([key, value]) => {
-    // Show "N/A" for empty, null, undefined, "0", "false", or whitespace-only values
+  // List of dimension-related field names to hide if empty
+  const dimensionFields = [
+    "width", "height", "length", "weight", "isFragile",
+    "Width", "Height", "Length", "Weight", "IsFragile"
+  ];
+
+  // Helper function to check if a value is empty/invalid
+  const isEmptyValue = (value: string) => {
     const trimmedValue = value?.toString().trim() || "";
-    const shouldShowNA = !trimmedValue ||
+    return !trimmedValue ||
       trimmedValue === "0" ||
       trimmedValue === "false" ||
       trimmedValue === "-" ||
       trimmedValue.toLowerCase() === "null" ||
       trimmedValue.toLowerCase() === "undefined";
+  };
 
-    const displayValue = shouldShowNA ? "N/A" : value;
-    return {
-      key,
-      value: displayValue,
-    };
-  });
+  const combinedData = Array.from(specsMap.entries())
+    .map(([key, value]) => {
+      // Show "N/A" for empty, null, undefined, "0", "false", or whitespace-only values
+      const displayValue = isEmptyValue(value) ? "N/A" : value;
+      return {
+        key,
+        value: displayValue,
+      };
+    })
+    .filter(({ key, value }) => {
+      // Filter out dimension fields that have empty/invalid values
+      if (dimensionFields.some(df => df.toLowerCase() === key.toLowerCase())) {
+        return value !== "N/A"; // Only include if it has a real value
+      }
+      return true; // Include all other fields
+    });
 
   const [showAll, setShowAll] = useState(false);
   const visibleData = showAll ? combinedData : combinedData.slice(0, 5);
