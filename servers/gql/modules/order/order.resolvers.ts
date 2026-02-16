@@ -112,8 +112,16 @@ export const orderResolvers = {
           payments: true,
           shipments: true,
           disputes: true,
+          sellerOrders: true,
         },
-      });
+      }).then(orders => orders.map(order => {
+        // Map cancellationReason from the first sellerOrder that has one, or undefined
+        const cancellationReason = order.sellerOrders?.find((so: any) => so.cancellationReason)?.cancellationReason;
+        return {
+          ...order,
+          cancellationReason,
+        };
+      }));
     },
     getDisputes: async (
       _: any,

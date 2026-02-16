@@ -9,6 +9,7 @@ export const GET_MY_ORDER_ITEMS = gql`
       updatedAt
       total
       status
+      cancellationReason
       shippingSnapshot
       items {
         id

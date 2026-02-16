@@ -688,21 +688,22 @@ model WishlistItem {
 }
 
 model SellerOrder {
-  id           String            @id @default(cuid())
-  sellerId     String
-  buyerOrderId String
-  status       OrderStatus       @default(PENDING)
-  subtotal     Decimal           @db.Decimal(12, 2)
-  tax          Decimal           @default(0) @db.Decimal(12, 2)
-  shippingFee  Decimal           @default(0) @db.Decimal(12, 2)
-  commission   Decimal           @default(0) @db.Decimal(12, 2)
-  total        Decimal           @db.Decimal(12, 2)
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-  disputes     OrderDispute[]
-  items        SellerOrderItem[]
-  order        Order             @relation(fields: [buyerOrderId], references: [id], onDelete: Cascade)
-  seller       User              @relation("SellerOrders", fields: [sellerId], references: [id], onDelete: Cascade)
+  id                 String            @id @default(cuid())
+  sellerId           String
+  buyerOrderId       String
+  status             OrderStatus       @default(PENDING)
+  cancellationReason String?
+  subtotal           Decimal           @db.Decimal(12, 2)
+  tax                Decimal           @default(0) @db.Decimal(12, 2)
+  shippingFee        Decimal           @default(0) @db.Decimal(12, 2)
+  commission         Decimal           @default(0) @db.Decimal(12, 2)
+  total              Decimal           @db.Decimal(12, 2)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  disputes           OrderDispute[]
+  items              SellerOrderItem[]
+  order              Order             @relation(fields: [buyerOrderId], references: [id], onDelete: Cascade)
+  seller             User              @relation("SellerOrders", fields: [sellerId], references: [id], onDelete: Cascade)
 
   @@index([sellerId, status])
   @@map("seller_orders")

@@ -562,6 +562,7 @@ exports.Prisma.SellerOrderScalarFieldEnum = {
   sellerId: 'sellerId',
   buyerOrderId: 'buyerOrderId',
   status: 'status',
+  cancellationReason: 'cancellationReason',
   subtotal: 'subtotal',
   tax: 'tax',
   shippingFee: 'shippingFee',

@@ -23,6 +23,7 @@ export const orderTypeDefs = gql`
     orderNumber: String!
     buyerId: String!
     status: OrderStatus!
+    cancellationReason: String
     shippingSnapshot: Json!
     billingSnapshot: Json
     subtotal: Decimal!

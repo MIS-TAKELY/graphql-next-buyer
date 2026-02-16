@@ -367,6 +367,14 @@ function OrderItemComponent({ order }: OrderItemProps) {
           )}
         </SheetHeader>
         <div className="flex-1 overflow-y-auto px-6 scrollbar-hide pb-8">
+          {/* Cancellation Reason */}
+          {order.status === "CANCELLED" && (order as any).cancellationReason && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <h5 className="text-sm font-semibold text-red-800 mb-1">Cancellation Reason</h5>
+              <p className="text-sm text-red-700">{(order as any).cancellationReason}</p>
+            </div>
+          )}
+
           {/* Tracker Section */}
           <div className="py-2 mb-6">
             <h5 className="text-sm font-semibold mb-2 flex items-center gap-2">
