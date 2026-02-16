@@ -35,16 +35,26 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
 
   // If we have distinct sections, render them
   if (sections) {
-    // Helper function to format values with N/A logic
-    const formatValue = (value: string) => {
+    // List of dimension-related field names to hide if empty
+    const dimensionFields = [
+      "width", "height", "length", "weight",
+      "Width", "Height", "Length", "Weight"
+    ];
+
+    // Helper function to check if a value is empty/invalid
+    const isEmptyValue = (value: string) => {
       const trimmedValue = value?.toString().trim() || "";
-      const shouldShowNA = !trimmedValue ||
+      return !trimmedValue ||
         trimmedValue === "0" ||
         trimmedValue === "false" ||
         trimmedValue === "-" ||
         trimmedValue.toLowerCase() === "null" ||
         trimmedValue.toLowerCase() === "undefined";
-      return shouldShowNA ? "N/A" : value;
+    };
+
+    // Helper function to format values with N/A logic
+    const formatValue = (value: string) => {
+      return isEmptyValue(value) ? "N/A" : value;
     };
 
     return (
@@ -53,8 +63,22 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
           Product Details
         </h2>
         {sections.map((section, idx) => {
+          // Filter out dimension rows that have empty values
+          const filteredRows = section.rows.filter((row) => {
+            const fieldName = row[0]?.toString().trim() || "";
+            const fieldValue = row[1]?.toString().trim() || "";
+
+            // If it's a dimension field, only include it if it has a valid value
+            if (dimensionFields.some(df => df.toLowerCase() === fieldName.toLowerCase())) {
+              return !isEmptyValue(fieldValue);
+            }
+
+            // Include all other fields
+            return true;
+          });
+
           // Skip empty sections
-          if (!section.rows || section.rows.length === 0 || !section.rows.some(r => r.some(c => c && c.trim()))) {
+          if (!filteredRows || filteredRows.length === 0 || !filteredRows.some(r => r.some(c => c && c.trim()))) {
             return null;
           }
 
@@ -69,7 +93,7 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
               {specificationDisplayFormat === "bullet" ? (
                 <div className="bg-gray-50 dark:bg-gray-800/30 rounded-lg p-5 border border-gray-200 dark:border-gray-700">
                   <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
-                    {section.rows.map((row, i) => (
+                    {filteredRows.map((row, i) => (
                       <li key={i} className="flex items-start gap-3 group">
                         <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary/60 group-hover:bg-primary transition-colors shrink-0" />
                         <div className="text-sm">
@@ -97,7 +121,7 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                      {section.rows.map((row, i) => (
+                      {filteredRows.map((row, i) => (
                         <tr
                           key={i}
                           className="bg-white dark:bg-gray-900"
