@@ -47,6 +47,7 @@ export const useCart = () => {
         quantity: item.quantity,
         stock: item.variant.stock, // maximizing utility
         slug: item.variant.product.slug,
+        deliveryCharge: item.variant.product.deliveryCharge,
       }));
       setCart(mappedItems);
     }

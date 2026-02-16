@@ -9,8 +9,11 @@ interface DeliveryInfoProps {
 
 export default function DeliveryInfo({ warranty, returnPolicy, deliveryOptions }: DeliveryInfoProps) {
   // Determine delivery text
+  const deliveryCharge = deliveryOptions && (deliveryOptions[0] as any)?.product?.deliveryCharge;
   const deliveryText = deliveryOptions && deliveryOptions.length > 0
-    ? deliveryOptions[0].title
+    ? Number(deliveryCharge) > 0
+      ? `Delivery Charge: रु ${deliveryCharge}`
+      : "Free Delivery"
     : "No free delivery";
 
   // Determine return policy text

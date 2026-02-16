@@ -118,32 +118,37 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
     const addresses = addressData?.getAddressOfUser || [];
 
     // UPDATED: Calculate order amount (handle both single product and cart)
+    // UPDATED: Calculate order amount (handle both single product and cart)
     const calculateOrderAmount = () => {
         if (isFromCart) {
-            if (!selectedItems.length) return 0;
+            if (!selectedItems.length) return { subtotal: 0, shipping: 0, tax: 0, total: 0 };
             const subtotal = selectedItems.reduce(
                 (sum, item) => sum + item.price * item.quantity,
                 0
             );
-            const shipping = 0;
+            // Sum delivery charges for all unique products in the cart
+            const shipping = selectedItems.reduce(
+                (sum, item) => sum + (Number(item.deliveryCharge) || 0),
+                0
+            );
             const tax = 0;
-            return subtotal + shipping + tax;
+            return { subtotal, shipping, tax, total: subtotal + shipping + tax };
         }
-        if (!product || !product.variants) return 0;
+        if (!product || !product.variants) return { subtotal: 0, shipping: 0, tax: 0, total: 0 };
 
         // Use selected variant if available, otherwise default
         const selectedVariant = variantId
             ? product.variants.find((v: any) => v.id === variantId)
             : (product.variants.find((v: any) => v.isDefault) || product.variants[0]);
 
-        if (!selectedVariant) return 0;
+        if (!selectedVariant) return { subtotal: 0, shipping: 0, tax: 0, total: 0 };
         const subtotal = selectedVariant.price * quantity;
-        const shipping = 0;
+        const shipping = Number(product.deliveryCharge) || 0;
         const tax = 0;
-        return subtotal + shipping + tax;
+        return { subtotal, shipping, tax, total: subtotal + shipping + tax };
     };
 
-    const orderAmount = calculateOrderAmount();
+    const { subtotal, shipping, tax, total: orderAmount } = calculateOrderAmount();
 
     // UPDATED: Map cart items to OrderItem[] for OrderSummary (if from cart)
     const selectedVariant = !isFromCart && product?.variants

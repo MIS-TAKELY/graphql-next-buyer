@@ -8,6 +8,7 @@ export const PRODUCT_FIELDS_FRAGMENT = gql`
     slug
     status
     brand
+    deliveryCharge
     images {
       id
       url

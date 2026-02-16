@@ -185,7 +185,7 @@ export function OrderSummary({
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
               <span className="text-blue-900 dark:text-blue-200 font-medium">
-                Free shipping on all orders
+                Standard delivery on all orders
               </span>
             </div>
             <div className="flex items-center gap-2">

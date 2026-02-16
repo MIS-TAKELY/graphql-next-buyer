@@ -41,6 +41,7 @@ export const productTypeDefs = gql`
     returnPolicy: [ReturnPolicy!]
     features: [String]
     specificationTable: JSON
+    deliveryCharge: Float
     metaTitle: String
     metaDescription: String
     keywords: [String]

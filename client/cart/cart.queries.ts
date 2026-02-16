@@ -16,6 +16,7 @@ export const GET_CART_ITEMS = gql`
           images {
             url
           }
+          deliveryCharge
         }
       }
     }
@@ -41,6 +42,7 @@ export const GET_MY_CART_ITEMS = gql`
             url
             altText
           }
+          deliveryCharge
         }
       }
     }

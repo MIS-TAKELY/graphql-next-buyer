@@ -386,7 +386,8 @@ exports.Prisma.ProductScalarFieldEnum = {
   lastIndexableUpdate: 'lastIndexableUpdate',
   pros: 'pros',
   cons: 'cons',
-  affiliateLink: 'affiliateLink'
+  affiliateLink: 'affiliateLink',
+  deliveryCharge: 'deliveryCharge'
 };
 
 exports.Prisma.ProductVariantScalarFieldEnum = {

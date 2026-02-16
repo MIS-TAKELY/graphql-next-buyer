@@ -13,6 +13,7 @@ export interface CartItem {
   stock?: number;
   slug?: string;
   maxQuantity?: number;
+  deliveryCharge?: number;
 }
 
 interface CartStore {

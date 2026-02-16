@@ -109,6 +109,7 @@ export interface IProducts {
   productOffers?: IProductOffer[];
   specificationTable?: { key: string; value: string }[];
   specificationDisplayFormat?: 'table' | 'bullet' | 'custom_table';
+  deliveryCharge?: number;
   metaTitle?: string;
   metaDescription?: string;
   keywords?: string[];
