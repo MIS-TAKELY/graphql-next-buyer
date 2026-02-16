@@ -12,7 +12,7 @@ export const GET_ADDRESS_OF_USER = gql`
       state
       country
       postalCode
-      phone
+      phoneNumber
       isDefault
     }
   }
