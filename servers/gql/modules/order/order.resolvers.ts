@@ -1,11 +1,12 @@
 import { Prisma } from "../../../../app/generated/prisma";
 import { prisma } from "../../../../lib/db/prisma";
 import { generateOrderNumber } from "@/randomOrderNumber";
-import { senMail } from "@/services/nodeMailer.services";
 import { rateLimit } from "@/services/rateLimit.service";
-import { delCache } from "@/services/redis.services";
+import { delCache, getCache, setCache } from "@/services/redis.services";
+import { notifyBuyerOrderCreated, notifySellerNewOrder, notifyOrderCancelled, notifyReturnUpdate, notifyBuyerDisputeSubmitted, notifySellerDisputeReceived } from "@/services/orderNotification.service";
 import { requireAuth, requireBuyer, requireSeller } from "../../auth/auth";
 import { GraphQLContext } from "../../context";
+import { canPurchase } from "@/lib/guards/purchase-guard";
 
 // interface OrderInput {
 //   items: Array<{
@@ -69,6 +70,7 @@ export interface OrderInput {
   paymentProvider: PaymentProvider;
   paymentMethodId?: string | null;
   shippingMethod: ShippingMethod;
+  idempotencyKey?: string | null;
 }
 
 type CreatedOrder = Prisma.OrderGetPayload<{
@@ -171,10 +173,40 @@ export const orderResolvers = {
       requireBuyer(ctx);
       console.log("input------>", input);
 
+      // Enforce purchase guard: require email + phone verification
+      const purchaseCheck = canPurchase(ctx.user);
+      if (!purchaseCheck.allowed) {
+        throw new Error(purchaseCheck.reason || "Purchase not allowed");
+      }
+
       // Rate Limit: 5 orders per minute per user to prevent abuse
       const allowed = await rateLimit(`rate_limit:order:${user.id}`, 5, 60);
       if (!allowed) {
         throw new Error("Too many order attempts. Please wait a minute.");
+      }
+
+      // Idempotency check: if client provides an idempotency key, check for duplicate
+      const idempotencyKey = input[0]?.idempotencyKey;
+      if (idempotencyKey) {
+        try {
+          const cacheKey = `idempotency:order:${user.id}:${idempotencyKey}`;
+          const existingOrderIds = await getCache<string[]>(cacheKey);
+          if (existingOrderIds) {
+            const existingOrders = await prisma.order.findMany({
+              where: { id: { in: existingOrderIds } },
+              include: {
+                items: { include: { variant: true } },
+                payments: true,
+                shipments: true,
+              },
+            });
+            if (existingOrders.length > 0) {
+              return existingOrders;
+            }
+          }
+        } catch (e) {
+          console.error("Idempotency check failed:", e);
+        }
       }
 
       const createdOrders: CreatedOrder[] = [];
@@ -329,6 +361,7 @@ export const orderResolvers = {
                   },
                   data: {
                     stock: { decrement: ci.quantity },
+                    soldCount: { increment: ci.quantity },
                   },
                 });
 
@@ -342,6 +375,33 @@ export const orderResolvers = {
           },
           { timeout: 15000 }
         );
+
+        // Clear purchased cart items immediately after successful transaction
+        const allPurchasedVariantIds = input.flatMap((orderInput) =>
+          orderInput.items.map((i) => i.variantId)
+        );
+        if (allPurchasedVariantIds.length > 0) {
+          await prisma.cartItem.deleteMany({
+            where: {
+              userId: user.id,
+              variantId: { in: allPurchasedVariantIds },
+            },
+          });
+          await Promise.all([
+            delCache("carts:all"),
+            delCache(`carts:user:${user.id}`),
+          ]).catch(console.error);
+        }
+
+        // Store idempotency key for 5 minutes to prevent duplicate orders
+        if (idempotencyKey) {
+          const cacheKey = `idempotency:order:${user.id}:${idempotencyKey}`;
+          try {
+            await setCache(cacheKey, createdOrders.map((o) => o.id), 300);
+          } catch (e) {
+            console.error("Failed to set idempotency key:", e);
+          }
+        }
 
         // Invalidate cache for affected products (Stock update)
         for (const orderInput of input) {
@@ -360,107 +420,38 @@ export const orderResolvers = {
           }
         }
 
-        // Send emails to each unique seller for each order after transaction
-        for (const orderInput of input) {
-          const variantIds = orderInput.items.map((i) => i.variantId);
-          const variants = await prisma.productVariant.findMany({
-            where: { id: { in: variantIds } },
+        // Send notifications to buyer and sellers (fire-and-forget, non-blocking)
+        for (const createdOrder of createdOrders) {
+          const orderTotal = createdOrder.total.toString();
+          const orderNumber = (createdOrder as any).orderNumber;
+          const paymentProvider = createdOrder.payments[0]?.provider || "N/A";
+
+          // Notify buyer
+          notifyBuyerOrderCreated(
+            { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, phoneNumber: user.phoneNumber },
+            orderNumber,
+            orderTotal,
+            paymentProvider
+          );
+
+          // Notify each seller
+          const sellerOrders = await prisma.sellerOrder.findMany({
+            where: { buyerOrderId: createdOrder.id },
             include: {
-              product: {
-                select: {
-                  id: true,
-                  status: true,
-                  sellerId: true,
-                  categoryId: true,
-                  seller: {
-                    select: {
-                      email: true,
-                      phoneNumber: true,
-                    },
-                  },
-                },
-              },
+              seller: { select: { id: true, email: true, phoneNumber: true } },
             },
           });
 
-          const computedItems = orderInput.items.map((i) => {
-            const v: any = variants.find((vv: any) => vv.id === i.variantId);
-            if (!v) throw new Error("Variant not found");
-
-            const unitPrice = v.price.toNumber();
-            const totalPrice = i.quantity * unitPrice;
-
-            return {
-              variantId: i.variantId,
-              quantity: i.quantity,
-              unitPrice,
-              totalPrice,
-              sellerId: v.product.sellerId,
-            };
-          });
-
-          const itemsBySeller: Record<string, typeof computedItems> = {};
-          for (const ci of computedItems) {
-            if (!itemsBySeller[ci.sellerId]) itemsBySeller[ci.sellerId] = [];
-            itemsBySeller[ci.sellerId].push(ci);
-          }
-
-          for (const [sellerId, items] of Object.entries(itemsBySeller)) {
-            const seller = variants.find((v: any) => v.product.sellerId === sellerId)
-              ?.product.seller;
-
-            if (seller?.email) {
-              const sellerTotal = items.reduce(
-                (acc, i) => acc + Number(i.totalPrice),
-                0
-              );
-              console.log("sending mail to seller:", seller.email);
-              const info = await senMail(seller.email, "NEW_ORDER", {
-                total: sellerTotal.toString(),
-                name: "Seller",
-              });
-              console.log("mail response-->", info);
-            }
-
-            if (seller?.phoneNumber) {
-              const sellerTotal = items.reduce(
-                (acc, i) => acc + Number(i.totalPrice),
-                0
-              );
-
-              // Construct WhatsApp message - FIXED: Added backticks for template literal
-              const message = `🛒 New Order Received!
-                Order Total: रु${sellerTotal}
-                Customer: ${user.firstName || ""} ${user.lastName || ""}
-                Phone: ${user.phoneNumber || "N/A"}`;
-
-              // Send WhatsApp via your worker
-              console.log("sending whatsapp to seller:", seller.phoneNumber);
-
-              try {
-                const wppConnectUrl = process.env.WPP_CONNECT;
-
-                console.log("wppConnectUrl-->", wppConnectUrl)
-
-                if (!wppConnectUrl) {
-                  throw new Error(
-                    "WPP_CONNECT environment variable is not defined"
-                  );
-                }
-
-                await fetch(wppConnectUrl, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    phone: seller.phoneNumber.toString(),
-                    message,
-                  }),
-                });
-              } catch (whatsappError) {
-                console.error("Failed to send WhatsApp:", whatsappError);
-                // Don't throw - allow order to complete even if WhatsApp fails
-              }
-            }
+          for (const so of sellerOrders) {
+            notifySellerNewOrder(
+              { id: so.seller.id, email: so.seller.email, phoneNumber: so.seller.phoneNumber },
+              orderNumber,
+              so.total.toString(),
+              `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Customer",
+              user.phoneNumber || "N/A",
+              so.id,
+              createdOrder.id
+            );
           }
         }
 
@@ -478,11 +469,52 @@ export const orderResolvers = {
       const user = requireBuyer(ctx);
       const order = await prisma.order.findUnique({
         where: { id: input.orderId },
-        include: { shipments: true },
+        include: {
+          shipments: true,
+          payments: true,
+          sellerOrders: {
+            include: { seller: { select: { id: true, email: true, phoneNumber: true } } },
+          },
+        },
       });
 
       if (!order) throw new Error("Order not found");
       if (order.buyerId !== user.id) throw new Error("Unauthorized");
+
+      // Prevent cancellation of already-cancelled or terminal-state orders
+      if (order.status === "CANCELLED") {
+        throw new Error("Order is already cancelled");
+      }
+      if (order.status === "RETURNED") {
+        throw new Error("Cannot cancel a returned order");
+      }
+      if (order.status === "DELIVERED") {
+        throw new Error("Cannot cancel a delivered order. Please request a return instead.");
+      }
+
+      // Check for existing pending cancel dispute to prevent duplicates
+      const existingCancelDispute = await prisma.orderDispute.findFirst({
+        where: {
+          orderId: input.orderId,
+          type: "CANCEL",
+          status: { in: ["PENDING", "APPROVED"] },
+        },
+      });
+      if (existingCancelDispute) {
+        throw new Error("A cancellation request already exists for this order");
+      }
+
+      // Check for conflicting return dispute
+      const existingReturnDispute = await prisma.orderDispute.findFirst({
+        where: {
+          orderId: input.orderId,
+          type: "RETURN",
+          status: { in: ["PENDING", "APPROVED"] },
+        },
+      });
+      if (existingReturnDispute) {
+        throw new Error("Cannot cancel an order with an active return request");
+      }
 
       // Check if any shipment is already shipped
       const isShipped = order.shipments.some((s: any) =>
@@ -497,16 +529,52 @@ export const orderResolvers = {
 
       // If status is PENDING, cancel immediately without dispute
       if (order.status === "PENDING") {
-        await prisma.$transaction([
-          prisma.order.update({
+        const orderItems = await prisma.orderItem.findMany({
+          where: { orderId: input.orderId },
+          select: { variantId: true, quantity: true },
+        });
+
+        const hasCompletedPayment = order.payments.some(
+          (p: any) => p.status === "COMPLETED"
+        );
+
+        await prisma.$transaction(async (tx: any) => {
+          await tx.order.update({
             where: { id: input.orderId },
             data: { status: "CANCELLED" },
-          }),
-          prisma.sellerOrder.updateMany({
+          });
+          await tx.sellerOrder.updateMany({
             where: { buyerOrderId: input.orderId },
             data: { status: "CANCELLED" },
-          }),
-        ]);
+          });
+          // Mark pending payments as FAILED
+          await tx.payment.updateMany({
+            where: { orderId: input.orderId, status: "PENDING" },
+            data: { status: "FAILED" },
+          });
+          // Mark completed payments as REFUNDED
+          if (hasCompletedPayment) {
+            await tx.payment.updateMany({
+              where: { orderId: input.orderId, status: "COMPLETED" },
+              data: { status: "REFUNDED" },
+            });
+          }
+          // Restore stock for all order items
+          for (const item of orderItems) {
+            await tx.productVariant.update({
+              where: { id: item.variantId },
+              data: { stock: { increment: item.quantity } },
+            });
+          }
+        });
+
+        // Notify buyer about cancellation (fire-and-forget)
+        notifyOrderCancelled(
+          { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, phoneNumber: user.phoneNumber },
+          order.orderNumber,
+          input.reason,
+          hasCompletedPayment
+        );
 
         return prisma.orderDispute.create({
           data: {
@@ -515,12 +583,14 @@ export const orderResolvers = {
             reason: input.reason,
             type: "CANCEL",
             status: "RESOLVED",
-            description: "Immediate cancellation by buyer (Order was PENDING)",
+            description: hasCompletedPayment
+              ? "Immediate cancellation by buyer (Order was PENDING, refund initiated)"
+              : "Immediate cancellation by buyer (Order was PENDING)",
           },
         });
       }
 
-      return prisma.orderDispute.create({
+      const dispute = await prisma.orderDispute.create({
         data: {
           orderId: input.orderId,
           userId: user.id,
@@ -529,6 +599,28 @@ export const orderResolvers = {
           status: "PENDING",
         },
       });
+
+      // Notify buyer that cancellation request was submitted
+      notifyBuyerDisputeSubmitted(
+        { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, phoneNumber: user.phoneNumber },
+        order.orderNumber,
+        "CANCEL",
+        input.reason
+      );
+
+      // Notify each seller about the cancellation request
+      const customerName = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Customer";
+      for (const so of order.sellerOrders) {
+        notifySellerDisputeReceived(
+          so.seller,
+          order.orderNumber,
+          "CANCEL",
+          input.reason,
+          customerName
+        );
+      }
+
+      return dispute;
     },
     requestReturn: async (
       _: any,
@@ -547,7 +639,13 @@ export const orderResolvers = {
       const user = requireBuyer(ctx);
       const order = await prisma.order.findUnique({
         where: { id: input.orderId },
-        include: { shipments: true, items: true },
+        include: {
+          shipments: true,
+          items: true,
+          sellerOrders: {
+            include: { seller: { select: { id: true, email: true, phoneNumber: true } } },
+          },
+        },
       });
 
       if (!order) throw new Error("Order not found");
@@ -571,8 +669,20 @@ export const orderResolvers = {
         throw new Error("Return request already exists for this order");
       }
 
+      // Check for conflicting cancel dispute
+      const existingCancelDispute = await prisma.orderDispute.findFirst({
+        where: {
+          orderId: input.orderId,
+          type: "CANCEL",
+          status: { in: ["PENDING", "APPROVED"] },
+        },
+      });
+      if (existingCancelDispute) {
+        throw new Error("Cannot request return for an order with an active cancellation request");
+      }
+
       // Create Return and ReturnItems
-      return prisma.return.create({
+      const returnRequest = await prisma.return.create({
         data: {
           orderId: input.orderId,
           userId: user.id,
@@ -590,6 +700,28 @@ export const orderResolvers = {
           },
         },
       });
+
+      // Notify buyer that return request was submitted
+      notifyBuyerDisputeSubmitted(
+        { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, phoneNumber: user.phoneNumber },
+        order.orderNumber,
+        "RETURN",
+        input.reason
+      );
+
+      // Notify each seller about the return request
+      const customerName = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Customer";
+      for (const so of order.sellerOrders) {
+        notifySellerDisputeReceived(
+          so.seller,
+          order.orderNumber,
+          "RETURN",
+          input.reason,
+          customerName
+        );
+      }
+
+      return returnRequest;
     },
     updateDisputeStatus: async (
       _: any,
@@ -600,7 +732,14 @@ export const orderResolvers = {
 
       const dispute = await prisma.orderDispute.findUnique({
         where: { id: disputeId },
-        include: { order: { include: { sellerOrders: true } } },
+        include: {
+          order: {
+            include: {
+              sellerOrders: true,
+              buyer: { select: { id: true, email: true, firstName: true, lastName: true, phoneNumber: true } },
+            },
+          },
+        },
       });
 
       if (!dispute) throw new Error("Dispute not found");
@@ -616,30 +755,88 @@ export const orderResolvers = {
         data: { status },
       });
 
-      // If approved and type is CANCEL, update order status
+      // If approved and type is CANCEL, update order status, restore stock, and update payments
       if (status === "APPROVED") {
         if (updatedDispute.type === "CANCEL") {
-          await prisma.order.update({
-            where: { id: updatedDispute.orderId },
-            data: { status: "CANCELLED" },
+          const orderItems = await prisma.orderItem.findMany({
+            where: { orderId: updatedDispute.orderId },
+            select: { variantId: true, quantity: true },
           });
-          // Also update ALL seller orders, as the parent order is cancelled
-          await prisma.sellerOrder.updateMany({
-            where: { buyerOrderId: updatedDispute.orderId },
-            data: { status: "CANCELLED" },
+
+          await prisma.$transaction(async (tx: any) => {
+            await tx.order.update({
+              where: { id: updatedDispute.orderId },
+              data: { status: "CANCELLED" },
+            });
+            await tx.sellerOrder.updateMany({
+              where: { buyerOrderId: updatedDispute.orderId },
+              data: { status: "CANCELLED" },
+            });
+            // Mark pending payments as FAILED
+            await tx.payment.updateMany({
+              where: { orderId: updatedDispute.orderId, status: "PENDING" },
+              data: { status: "FAILED" },
+            });
+            // Mark completed payments as REFUNDED
+            await tx.payment.updateMany({
+              where: { orderId: updatedDispute.orderId, status: "COMPLETED" },
+              data: { status: "REFUNDED" },
+            });
+            // Restore stock for all cancelled order items
+            for (const item of orderItems) {
+              await tx.productVariant.update({
+                where: { id: item.variantId },
+                data: { stock: { increment: item.quantity } },
+              });
+            }
           });
         } else if (updatedDispute.type === "RETURN") {
-          await prisma.order.update({
-            where: { id: updatedDispute.orderId },
-            data: { status: "RETURNED" },
+          const orderItems = await prisma.orderItem.findMany({
+            where: { orderId: updatedDispute.orderId },
+            select: { variantId: true, quantity: true },
           });
-          // For returns, we might still want to update all if it's a full return
-          // But strict sync for multiple sellers on return is complex.
-          // Assuming for now if main order is RETURNED, all parts are.
-          await prisma.sellerOrder.updateMany({
-            where: { buyerOrderId: updatedDispute.orderId },
-            data: { status: "RETURNED" },
+
+          await prisma.$transaction(async (tx: any) => {
+            await tx.order.update({
+              where: { id: updatedDispute.orderId },
+              data: { status: "RETURNED" },
+            });
+            await tx.sellerOrder.updateMany({
+              where: { buyerOrderId: updatedDispute.orderId },
+              data: { status: "RETURNED" },
+            });
+            // Mark completed payments as REFUNDED for returns
+            await tx.payment.updateMany({
+              where: { orderId: updatedDispute.orderId, status: "COMPLETED" },
+              data: { status: "REFUNDED" },
+            });
+            // Restore stock for returned items
+            for (const item of orderItems) {
+              await tx.productVariant.update({
+                where: { id: item.variantId },
+                data: { stock: { increment: item.quantity } },
+              });
+            }
           });
+        }
+      }
+
+      // Notify buyer about dispute resolution (fire-and-forget)
+      if (status === "APPROVED" && dispute.order.buyer) {
+        const buyer = dispute.order.buyer;
+        if (updatedDispute.type === "CANCEL") {
+          notifyOrderCancelled(
+            buyer,
+            dispute.order.orderNumber,
+            updatedDispute.reason || "Cancellation approved",
+            true
+          );
+        } else if (updatedDispute.type === "RETURN") {
+          notifyReturnUpdate(
+            buyer,
+            dispute.order.orderNumber,
+            "Approved",
+          );
         }
       }
 

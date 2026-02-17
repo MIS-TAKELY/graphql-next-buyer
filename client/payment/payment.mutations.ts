@@ -131,8 +131,8 @@ export const INITIATE_FONEPAY_PAYMENT = gql`
 `;
 
 export const VERIFY_FONEPAY_PAYMENT = gql`
-  mutation VerifyFonepayPayment($orderId: ID!, $transactionId: String!) {
-    verifyFonepayPayment(orderId: $orderId, transactionId: $transactionId) {
+  mutation VerifyFonepayPayment($orderId: ID!, $transactionId: String!, $signature: String!, $amount: String!) {
+    verifyFonepayPayment(orderId: $orderId, transactionId: $transactionId, signature: $signature, amount: $amount) {
       success
       message
     }

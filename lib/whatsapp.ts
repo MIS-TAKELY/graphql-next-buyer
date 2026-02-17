@@ -1,41 +1,27 @@
-export async function sendWhatsAppOTP(phone: string, otp: string) {
-  // Use the provided URL or fallback to environment variable
+export async function sendWhatsAppMessage(phone: string, message: string) {
   const WPP_CONNECT = process.env.WPP_CONNECT;
 
   if (!WPP_CONNECT) {
-    console.log("url not avilable");
+    console.warn("WHATSAPP: WPP_CONNECT url not available, skipping");
     return;
   }
-  const wppConnectUrl = WPP_CONNECT;
 
-  console.log(wppConnectUrl);
-
-
-  // Clean phone number: remove all non-digits
   const cleanPhone = phone.toString().replace(/\D/g, "");
+  if (!cleanPhone) return;
 
-  const message = `Your verification code is: ${otp}`;
-  console.log(`WHATSAPP: Sending message to ${cleanPhone}: "${message}"`);
   const MAX_RETRIES = 2;
   let attempt = 0;
 
   while (attempt <= MAX_RETRIES) {
     try {
-      console.log(
-        `📱 Sending OTP to ${cleanPhone} (Attempt ${attempt + 1}/${MAX_RETRIES + 1
-        })...`
-      );
-      const response = await fetch(wppConnectUrl, {
+      const response = await fetch(WPP_CONNECT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phone: cleanPhone,
-          message,
-        }),
+        body: JSON.stringify({ phone: cleanPhone, message }),
       });
 
       if (response.ok) {
-        console.log(`✅ WhatsApp OTP sent successfully to ${phone}`);
+        console.log(`✅ WhatsApp message sent to ${cleanPhone}`);
         return response.json();
       }
 
@@ -43,9 +29,6 @@ export async function sendWhatsAppOTP(phone: string, otp: string) {
       console.error(`❌ WhatsApp API error (${response.status}):`, errorData);
 
       if (response.status === 503 && attempt < MAX_RETRIES) {
-        console.log(
-          "⏳ Service temporarily unavailable, retrying in 5 seconds..."
-        );
         await new Promise((resolve) => setTimeout(resolve, 5000));
         attempt++;
         continue;
@@ -62,17 +45,15 @@ export async function sendWhatsAppOTP(phone: string, otp: string) {
       throw new Error(errorMessage);
     } catch (error: any) {
       if (attempt >= MAX_RETRIES) {
-        console.error(
-          "❌ Network or Server error sending WhatsApp:",
-          error.message
-        );
+        console.error("❌ WhatsApp send failed:", error.message);
         throw error;
       }
-      console.log(
-        `⚠️ Attempt ${attempt + 1} failed: ${error.message}. Retrying...`
-      );
       await new Promise((resolve) => setTimeout(resolve, 5000));
       attempt++;
     }
   }
+}
+
+export async function sendWhatsAppOTP(phone: string, otp: string) {
+  return sendWhatsAppMessage(phone, `Your verification code is: ${otp}`);
 }

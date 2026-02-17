@@ -49,6 +49,10 @@ export const userTypeDefs = gql`
     gender: Gender
     dob: DateTime
 
+    emailNotifications: Boolean!
+    whatsappNotifications: Boolean!
+    inAppNotifications: Boolean!
+
     "User can have multiple roles (e.g., both BUYER and SELLER)"
     roles: [UserRole!]! # ← NEW: Array of roles (non-null)
     createdAt: DateTime!
@@ -76,11 +80,18 @@ export const userTypeDefs = gql`
     dob: DateTime
   }
 
+  input UpdateNotificationPreferencesInput {
+    emailNotifications: Boolean
+    whatsappNotifications: Boolean
+    inAppNotifications: Boolean
+  }
+
   type Query {
     getUserProfileDetails: User!
   }
 
   type Mutation {
     updateUserProfileDetails(input: UpdateUserProfileDetailsInput): User!
+    updateNotificationPreferences(input: UpdateNotificationPreferencesInput!): User!
   }
 `;

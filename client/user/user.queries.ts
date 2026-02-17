@@ -10,6 +10,9 @@ export const GET_USER_PROFILE_DETAILS = gql`
       phoneNumber
       gender
       dob
+      emailNotifications
+      whatsappNotifications
+      inAppNotifications
       addresses {
         id
         type

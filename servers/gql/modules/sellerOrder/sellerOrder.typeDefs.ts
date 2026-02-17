@@ -19,6 +19,7 @@ export const sellerOrderTypeDefs = gql`
     sellerId: String!
     buyerOrderId: String!
     status: OrderStatus!
+    cancellationReason: String
     subtotal: Decimal!
     tax: Decimal!
     shippingFee: Decimal!
@@ -28,6 +29,21 @@ export const sellerOrderTypeDefs = gql`
     updatedAt: DateTime!
 
     seller: User!
+    order: Order
     items: [SellerOrderItem!]
+  }
+
+  extend type Query {
+    getSellerOrders(limit: Int!, offset: Int!, status: OrderStatus): [SellerOrder!]!
+  }
+
+  extend type Mutation {
+    updateSellerOrderStatus(
+      sellerOrderId: ID!
+      status: OrderStatus!
+      cancellationReason: String
+      trackingNumber: String
+      carrier: String
+    ): SellerOrder!
   }
 `;

@@ -82,5 +82,31 @@ export const userResolvers = {
         throw new Error(error.message);
       }
     },
+    updateNotificationPreferences: async (
+      _: any,
+      {
+        input,
+      }: {
+        input: {
+          emailNotifications?: boolean;
+          whatsappNotifications?: boolean;
+          inAppNotifications?: boolean;
+        };
+      },
+      ctx: GraphQLContext
+    ) => {
+      const user = requireAuth(ctx);
+      if (!user || !user.id) throw new Error("Unauthorized User: missing ID");
+
+      const data: Record<string, boolean> = {};
+      if (input.emailNotifications !== undefined) data.emailNotifications = input.emailNotifications;
+      if (input.whatsappNotifications !== undefined) data.whatsappNotifications = input.whatsappNotifications;
+      if (input.inAppNotifications !== undefined) data.inAppNotifications = input.inAppNotifications;
+
+      return prisma.user.update({
+        where: { id: user.id },
+        data,
+      });
+    },
   },
 };

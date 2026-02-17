@@ -44,6 +44,7 @@ import { reviewResolvers } from "./modules/review/review.resolvers";
 import { reviewTypeDefs } from "./modules/review/review.typeDefs";
 import { searchResolvers } from "./modules/search/search.resolvers";
 import { searchTypeDef } from "./modules/search/search.typeDef";
+import { sellerOrderResolvers } from "./modules/sellerOrder/sellerOrder.resolvers";
 import { sellerOrderTypeDefs } from "./modules/sellerOrder/sellerOrder.typeDefs";
 import { sellerOrderItemTypeDefs } from "./modules/sellerOrderItem/sellerOrderItem.typeDefs";
 import { sellerProfileTypeDefs } from "./modules/sellerProfile/sellerProfile.typeDefs";
@@ -154,6 +155,7 @@ const resolvers = mergeResolvers([
   bannerResolvers,
   productNotificationResolvers,
   seoPageResolvers,
+  sellerOrderResolvers,
 ]);
 
 export const schema = makeExecutableSchema({ typeDefs, resolvers });

@@ -115,6 +115,200 @@ const TEMPLATES: Record<string, EmailTemplate> = {
       </div>
     `,
   },
+  ORDER_CONFIRMED_BUYER: {
+    subject: "Order Confirmed! - Vanijay",
+    text: (ctx) => `Your order #${ctx.orderNumber} has been placed successfully. Total: NPR ${ctx.total}`,
+    html: (ctx) => `
+      <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #28a745;">🎉 Order Confirmed!</h2>
+        <p>Hello ${ctx.name || 'there'},</p>
+        <p>Your order has been placed successfully on Vanijay.</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Total Amount:</strong> NPR ${ctx.total}</p>
+          <p style="margin: 5px 0;"><strong>Payment Method:</strong> ${ctx.paymentProvider || 'N/A'}</p>
+        </div>
+        <p>We'll notify you when your order is shipped.</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/account/orders" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Track Your Order</a>
+        </div>
+        <p style="color: #666; font-size: 0.9em;">Thank you for shopping on Vanijay!</p>
+      </div>
+    `,
+  },
+  PAYMENT_SUCCESS: {
+    subject: "Payment Successful - Vanijay",
+    text: (ctx) => `Payment of NPR ${ctx.amount} for order #${ctx.orderNumber} was successful via ${ctx.provider}.`,
+    html: (ctx) => `
+      <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #28a745;">✅ Payment Successful</h2>
+        <p>Hello ${ctx.name || 'there'},</p>
+        <p>Your payment has been verified and confirmed.</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Amount Paid:</strong> NPR ${ctx.amount}</p>
+          <p style="margin: 5px 0;"><strong>Payment Method:</strong> ${ctx.provider}</p>
+        </div>
+        <p>Your order is now being processed.</p>
+        <p style="color: #666; font-size: 0.9em;">Thank you for shopping on Vanijay!</p>
+      </div>
+    `,
+  },
+  ORDER_SHIPPED: {
+    subject: "Your Order Has Been Shipped! - Vanijay",
+    text: (ctx) => `Your order #${ctx.orderNumber} has been shipped.${ctx.trackingNumber ? ` Tracking: ${ctx.trackingNumber}` : ''}`,
+    html: (ctx) => `
+      <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #007bff;">📦 Order Shipped!</h2>
+        <p>Hello ${ctx.name || 'there'},</p>
+        <p>Great news! Your order has been shipped and is on its way.</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          ${ctx.trackingNumber ? `<p style="margin: 5px 0;"><strong>Tracking Number:</strong> ${ctx.trackingNumber}</p>` : ''}
+          ${ctx.carrier ? `<p style="margin: 5px 0;"><strong>Carrier:</strong> ${ctx.carrier}</p>` : ''}
+        </div>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/account/orders" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Track Your Order</a>
+        </div>
+        <p style="color: #666; font-size: 0.9em;">Thank you for shopping on Vanijay!</p>
+      </div>
+    `,
+  },
+  ORDER_DELIVERED: {
+    subject: "Your Order Has Been Delivered! - Vanijay",
+    text: (ctx) => `Your order #${ctx.orderNumber} has been delivered. We hope you enjoy your purchase!`,
+    html: (ctx) => `
+      <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #28a745;">🎉 Order Delivered!</h2>
+        <p>Hello ${ctx.name || 'there'},</p>
+        <p>Your order has been successfully delivered.</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+        </div>
+        <p>We hope you love your purchase! If you have any issues, you can request a return within the return window.</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/account/orders" style="display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">View Your Order</a>
+        </div>
+        <p style="color: #666; font-size: 0.9em;">Thank you for shopping on Vanijay!</p>
+      </div>
+    `,
+  },
+  ORDER_CANCELLED: {
+    subject: "Order Cancelled - Vanijay",
+    text: (ctx) => `Your order #${ctx.orderNumber} has been cancelled.${ctx.reason ? ` Reason: ${ctx.reason}` : ''}`,
+    html: (ctx) => `
+      <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #dc3545;">❌ Order Cancelled</h2>
+        <p>Hello ${ctx.name || 'there'},</p>
+        <p>Your order has been cancelled.</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          ${ctx.reason ? `<p style="margin: 5px 0;"><strong>Reason:</strong> ${ctx.reason}</p>` : ''}
+          ${ctx.refundNote ? `<p style="margin: 5px 0;"><strong>Refund:</strong> ${ctx.refundNote}</p>` : ''}
+        </div>
+        <p>If you have any questions, please contact our support team.</p>
+        <p style="color: #666; font-size: 0.9em;">We're sorry to see this order cancelled. We hope to serve you again!</p>
+      </div>
+    `,
+  },
+  ORDER_CONFIRMED_STATUS: {
+    subject: "Your Order Has Been Confirmed! - Vanijay",
+    text: (ctx) => `Your order #${ctx.orderNumber} has been confirmed and is being prepared.`,
+    html: (ctx) => `
+      <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #28a745;">✅ Order Confirmed!</h2>
+        <p>Hello ${ctx.name || 'there'},</p>
+        <p>Great news! Your order has been confirmed by the seller and is being prepared for shipment.</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+        </div>
+        <p>We'll notify you once your order is shipped.</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/account/orders" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Track Your Order</a>
+        </div>
+        <p style="color: #666; font-size: 0.9em;">Thank you for shopping on Vanijay!</p>
+      </div>
+    `,
+  },
+  ORDER_PROCESSING: {
+    subject: "Your Order Is Being Processed - Vanijay",
+    text: (ctx) => `Your order #${ctx.orderNumber} is now being processed and will be shipped soon.`,
+    html: (ctx) => `
+      <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #007bff;">⚙️ Order Being Processed</h2>
+        <p>Hello ${ctx.name || 'there'},</p>
+        <p>Your order is now being processed and packed for delivery.</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+        </div>
+        <p>We'll let you know when it's shipped!</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/account/orders" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Track Your Order</a>
+        </div>
+        <p style="color: #666; font-size: 0.9em;">Thank you for shopping on Vanijay!</p>
+      </div>
+    `,
+  },
+  DISPUTE_SUBMITTED_BUYER: {
+    subject: "Your Request Has Been Submitted - Vanijay",
+    text: (ctx) => `Your ${ctx.disputeType === 'CANCEL' ? 'cancellation' : 'return'} request for order #${ctx.orderNumber} has been submitted.`,
+    html: (ctx) => `
+      <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #ff9800;">📋 ${ctx.disputeType === 'CANCEL' ? 'Cancellation' : 'Return'} Request Submitted</h2>
+        <p>Hello ${ctx.name || 'there'},</p>
+        <p>Your ${ctx.disputeType === 'CANCEL' ? 'cancellation' : 'return'} request has been submitted and is awaiting review.</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Request Type:</strong> ${ctx.disputeType === 'CANCEL' ? 'Cancellation' : 'Return'}</p>
+          <p style="margin: 5px 0;"><strong>Reason:</strong> ${ctx.reason || 'N/A'}</p>
+        </div>
+        <p>The seller will review your request and respond shortly. We'll notify you once a decision is made.</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/account/orders" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">View Your Orders</a>
+        </div>
+        <p style="color: #666; font-size: 0.9em;">If you have any questions, please contact our support team.</p>
+      </div>
+    `,
+  },
+  DISPUTE_SUBMITTED_SELLER: {
+    subject: "New Dispute Request Received - Vanijay",
+    text: (ctx) => `A customer has requested a ${ctx.disputeType === 'CANCEL' ? 'cancellation' : 'return'} for order #${ctx.orderNumber}.`,
+    html: (ctx) => `
+      <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #dc3545;">⚠️ New ${ctx.disputeType === 'CANCEL' ? 'Cancellation' : 'Return'} Request</h2>
+        <p>Hello ${ctx.name || 'Seller'},</p>
+        <p>A customer has submitted a ${ctx.disputeType === 'CANCEL' ? 'cancellation' : 'return'} request for one of your orders.</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Customer:</strong> ${ctx.customerName || 'N/A'}</p>
+          <p style="margin: 5px 0;"><strong>Request Type:</strong> ${ctx.disputeType === 'CANCEL' ? 'Cancellation' : 'Return'}</p>
+          <p style="margin: 5px 0;"><strong>Reason:</strong> ${ctx.reason || 'N/A'}</p>
+        </div>
+        <p>Please log in to your dashboard to review and respond to this request.</p>
+        <p style="color: #666; font-size: 0.9em;">Prompt responses help maintain customer satisfaction.</p>
+      </div>
+    `,
+  },
+  RETURN_UPDATE: {
+    subject: "Return Request Update - Vanijay",
+    text: (ctx) => `Your return request for order #${ctx.orderNumber} has been updated to: ${ctx.status}`,
+    html: (ctx) => `
+      <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #6f42c1;">🔄 Return Request Update</h2>
+        <p>Hello ${ctx.name || 'there'},</p>
+        <p>Your return request has been updated.</p>
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Status:</strong> ${ctx.status}</p>
+          ${ctx.rejectionReason ? `<p style="margin: 5px 0;"><strong>Reason:</strong> ${ctx.rejectionReason}</p>` : ''}
+        </div>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/account/orders" style="display: inline-block; padding: 12px 24px; background-color: #6f42c1; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">View Return Status</a>
+        </div>
+        <p style="color: #666; font-size: 0.9em;">If you have questions about your return, please contact our support team.</p>
+      </div>
+    `,
+  },
 };
 
 export const senMail = async (

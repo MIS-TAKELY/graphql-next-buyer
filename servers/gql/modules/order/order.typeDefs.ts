@@ -64,6 +64,7 @@ export const orderTypeDefs = gql`
     couponCode: String
     paymentProvider: String!
     paymentMethodId: ID
+    idempotencyKey: String
   }
   enum DisputeStatus {
     PENDING

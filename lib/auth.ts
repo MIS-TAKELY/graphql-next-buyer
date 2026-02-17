@@ -187,13 +187,14 @@ export const auth = betterAuth({
             mapProfileToUser: (profile: TikTokProfile) => {
                 const uniqueId = profile.open_id || profile.id || Math.random().toString(36).slice(-5);
                 const display_name = profile.display_name || "TikTok User";
+                const hasRealEmail = !!profile.email && !profile.email.includes("@vanijay.temp");
                 const email = profile.email || `tiktok_${uniqueId.slice(-10)}@vanijay.temp`;
                 return {
                     username: ("tiktok_" + uniqueId.slice(-10)).toLowerCase(),
                     email,
                     firstName: display_name.split(" ")[0],
                     lastName: display_name.split(" ").slice(1).join(" ") || "",
-                    emailVerified: true,
+                    emailVerified: hasRealEmail,
                 };
             },
         },

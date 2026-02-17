@@ -72,6 +72,6 @@ export const paymentTypeDefs = gql`
     initiateEsewaPayment(orderId: ID!): EsewaPaymentInitiation!
     verifyEsewaPayment(data: String!): PaymentVerificationResult!
     initiateFonepayPayment(orderId: ID!): FonepayPaymentInitiation!
-    verifyFonepayPayment(orderId: ID!, transactionId: String!): PaymentVerificationResult!
+    verifyFonepayPayment(orderId: ID!, transactionId: String!, signature: String!, amount: String!): PaymentVerificationResult!
   }
 `;

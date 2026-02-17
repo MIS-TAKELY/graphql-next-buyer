@@ -1,5 +1,6 @@
 import { prisma } from "../../../../lib/db/prisma";
 import { verifyEsewaSignature } from "../../../../servers/gql/modules/payment/paymentHelper";
+import { notifyPaymentSuccess } from "../../../../services/orderNotification.service";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -22,8 +23,9 @@ export async function GET(request: NextRequest) {
       Buffer.from(data, "base64").toString("utf-8")
     );
 
-    // Verify signature
+    // Verify eSewa HMAC signature (cryptographic proof from eSewa)
     if (!verifyEsewaSignature(decodedData)) {
+      console.error("eSewa success callback: Invalid signature");
       return NextResponse.redirect(
         new URL(
           "/payment/failed?message=Invalid signature",
@@ -51,7 +53,18 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Idempotency Check: If already completed, success immediately
+    // Verify this payment is for an ESEWA provider (prevent cross-provider replay)
+    if (payment.provider !== "ESEWA") {
+      console.error(`eSewa success callback: Payment provider mismatch. Expected ESEWA, got ${payment.provider}`);
+      return NextResponse.redirect(
+        new URL(
+          "/payment/failed?message=Payment provider mismatch",
+          process.env.NEXT_PUBLIC_APP_URL!
+        )
+      );
+    }
+
+    // Only process PENDING payments (idempotency + state guard)
     if (payment.status === "COMPLETED") {
       return NextResponse.redirect(
         new URL(
@@ -61,11 +74,20 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    if (payment.status !== "PENDING") {
+      console.error(`eSewa success callback: Payment not in PENDING state, current: ${payment.status}`);
+      return NextResponse.redirect(
+        new URL(
+          "/payment/failed?message=Payment already processed",
+          process.env.NEXT_PUBLIC_APP_URL!
+        )
+      );
+    }
+
     // Amount Validation Check
     const paidAmount = parseFloat(decodedData.total_amount.replace(/,/g, ''));
     const expectedAmount = parseFloat(payment.amount.toString());
 
-    // Allow small floating point difference (epsilon)
     if (Math.abs(paidAmount - expectedAmount) > 0.01) {
       console.error(`Payment mismatch: Paid ${paidAmount}, Expected ${expectedAmount}`);
       return NextResponse.redirect(
@@ -92,7 +114,27 @@ export async function GET(request: NextRequest) {
         where: { id: payment.orderId },
         data: { status: "CONFIRMED" },
       });
+
+      // Sync seller order status
+      await tx.sellerOrder.updateMany({
+        where: { buyerOrderId: payment.orderId },
+        data: { status: "CONFIRMED" },
+      });
     });
+
+    // Notify buyer about successful payment (fire-and-forget)
+    const buyer = await prisma.user.findUnique({
+      where: { id: payment.order.buyerId },
+      select: { id: true, email: true, firstName: true, lastName: true, phoneNumber: true },
+    });
+    if (buyer) {
+      notifyPaymentSuccess(
+        buyer,
+        payment.order.orderNumber,
+        payment.amount.toString(),
+        "eSewa"
+      );
+    }
 
     // Redirect to success page
     return NextResponse.redirect(

@@ -1,5 +1,6 @@
 
 import { prisma } from "../../../../lib/db/prisma";
+import { notifyReturnUpdate, notifyBuyerDisputeSubmitted, notifySellerDisputeReceived } from "@/services/orderNotification.service";
 import { requireAuth, requireBuyer, requireSeller } from "../../auth/auth";
 import { GraphQLContext } from "../../context";
 import { Prisma } from "../../../../app/generated/prisma";
@@ -112,7 +113,10 @@ export const returnResolvers = {
                             }
                         }
                     },
-                    shipments: true
+                    shipments: true,
+                    sellerOrders: {
+                        include: { seller: { select: { id: true, email: true, phoneNumber: true } } },
+                    },
                 },
             });
 
@@ -161,7 +165,7 @@ export const returnResolvers = {
             }
 
             // Create Return
-            return prisma.return.create({
+            const returnRequest = await prisma.return.create({
                 data: {
                     orderId,
                     userId: user.id,
@@ -187,6 +191,28 @@ export const returnResolvers = {
                     order: true
                 }
             });
+
+            // Notify buyer that return request was submitted
+            notifyBuyerDisputeSubmitted(
+                { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, phoneNumber: user.phoneNumber },
+                order.orderNumber,
+                "RETURN",
+                reason
+            );
+
+            // Notify each seller about the return request
+            const customerName = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Customer";
+            for (const so of order.sellerOrders) {
+                notifySellerDisputeReceived(
+                    so.seller,
+                    order.orderNumber,
+                    "RETURN",
+                    reason,
+                    customerName
+                );
+            }
+
+            return returnRequest;
         },
 
         updateReturnStatus: async (
@@ -199,7 +225,11 @@ export const returnResolvers = {
 
             const returnRequest = await prisma.return.findUnique({
                 where: { id: returnId },
-                include: { items: { include: { orderItem: { include: { variant: { include: { product: true } } } } } } }
+                include: {
+                    items: { include: { orderItem: { include: { variant: { include: { product: true } } } } } },
+                    order: true,
+                    user: { select: { id: true, email: true, firstName: true, lastName: true, phoneNumber: true } },
+                }
             });
 
             if (!returnRequest) throw new Error("Return request not found");
@@ -212,21 +242,70 @@ export const returnResolvers = {
             const updateData: any = { status };
             if (rejectionReason) updateData.rejectionReason = rejectionReason;
 
-            // Status side-effects
             if (status === "APPROVED") {
-                updateData.pickupScheduledAt = new Date(); // Simulate scheduling
+                updateData.pickupScheduledAt = new Date();
             } else if (status === "RECEIVED") {
                 updateData.receivedAt = new Date();
             } else if (status === "INSPECTED") {
                 updateData.inspectedAt = new Date();
-            } else if (status === "ACCEPTED") {
-                // Auto-initiate refund?
-                updateData.refundStatus = "COMPLETED"; // Set to completed for simplicity in this flow
-
-                // Update Order item status if needed, or Order status to RETURNED if all items returned
-                // For now, let's keep it simple.
             } else if (status === "REJECTED" || status === "DENIED") {
                 // Handle rejection logic
+            }
+
+            if (status === "ACCEPTED") {
+                updateData.refundStatus = "COMPLETED";
+
+                // Notify buyer about return acceptance (fire-and-forget)
+                if (returnRequest.user && returnRequest.order) {
+                    notifyReturnUpdate(
+                        returnRequest.user,
+                        returnRequest.order.orderNumber,
+                        "Accepted - Refund Initiated",
+                    );
+                }
+
+                return prisma.$transaction(async (tx: any) => {
+                    // Restore stock for all returned items
+                    for (const ri of returnRequest.items) {
+                        await tx.productVariant.update({
+                            where: { id: ri.orderItem.variantId },
+                            data: { stock: { increment: ri.quantity } },
+                        });
+                    }
+
+                    await tx.payment.updateMany({
+                        where: { orderId: returnRequest.orderId, status: "COMPLETED" },
+                        data: { status: "REFUNDED" },
+                    });
+
+                    await tx.order.update({
+                        where: { id: returnRequest.orderId },
+                        data: { status: "RETURNED" },
+                    });
+                    await tx.sellerOrder.updateMany({
+                        where: { buyerOrderId: returnRequest.orderId },
+                        data: { status: "RETURNED" },
+                    });
+
+                    return tx.return.update({
+                        where: { id: returnId },
+                        data: updateData,
+                        include: {
+                            items: { include: { orderItem: true } },
+                            order: true
+                        }
+                    });
+                });
+            }
+
+            // Notify buyer about return status update (fire-and-forget)
+            if (returnRequest.user && returnRequest.order) {
+                notifyReturnUpdate(
+                    returnRequest.user,
+                    returnRequest.order.orderNumber,
+                    status,
+                    rejectionReason,
+                );
             }
 
             return prisma.return.update({

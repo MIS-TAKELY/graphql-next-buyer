@@ -144,6 +144,8 @@ export function useBuyNow() {
           variables: {
             orderId: orderIds[0],
             transactionId: paymentData.transactionId,
+            signature: paymentData.signature || "",
+            amount: paymentData.amount || "0",
           },
         });
 

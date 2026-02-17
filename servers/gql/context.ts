@@ -15,7 +15,9 @@ export interface GraphQLContext {
     lastName: string;
     phoneNumber?: string | null;
     roles: string[];
+    emailVerified: boolean;
     phoneNumberVerified: boolean;
+    isBanned: boolean;
   } | null;
   publish: (evt: {
     type: string;
@@ -49,10 +51,12 @@ export async function createContext(
         select: {
           id: true,
           email: true,
+          emailVerified: true,
           firstName: true,
           lastName: true,
           phoneNumber: true,
           phoneNumberVerified: true,
+          isBanned: true,
           roles: {
             select: { role: true },
           },
@@ -63,11 +67,13 @@ export async function createContext(
         user = {
           id: dbUser.id,
           email: dbUser.email,
+          emailVerified: dbUser.emailVerified,
           roles: dbUser.roles.map((r: any) => r.role),
           firstName: dbUser.firstName ?? "",
           lastName: dbUser.lastName ?? "",
           phoneNumber: dbUser.phoneNumber,
           phoneNumberVerified: dbUser.phoneNumberVerified,
+          isBanned: dbUser.isBanned,
         };
       }
     }

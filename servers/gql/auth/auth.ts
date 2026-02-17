@@ -2,8 +2,8 @@
 import { GraphQLContext } from "../context";
 
 export function requireAuth(ctx: GraphQLContext) {
-  // console.log("context-->",ctx)
   if (!ctx.user) throw new Error("Authentication required");
+  if (ctx.user.isBanned) throw new Error("Your account has been suspended");
   return ctx.user;
 }
 

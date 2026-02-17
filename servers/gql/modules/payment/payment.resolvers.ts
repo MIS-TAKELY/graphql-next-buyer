@@ -7,6 +7,7 @@ import {
   verifyFonepaySignature,
   generateFonepayEMVCoQR,
 } from "@/servers/gql/modules/payment/paymentHelper";
+import { notifyPaymentSuccess } from "@/services/orderNotification.service";
 import { GraphQLContext } from "../../context";
 
 export const paymentResolvers = {
@@ -83,6 +84,31 @@ export const paymentResolvers = {
 
         if (!payment) throw new Error("Payment record not found");
 
+        // Ownership check
+        if (payment.order.buyerId !== context.user.id) {
+          throw new Error("Unauthorized: order does not belong to this user");
+        }
+
+        // Idempotency: if already completed, return success
+        if (payment.status === "COMPLETED") {
+          return {
+            success: true,
+            payment: payment as any,
+            order: payment.order as any,
+            message: "Payment already verified",
+          };
+        }
+
+        // Amount validation
+        if (!decodedData.total_amount) {
+          throw new Error("Missing payment amount in eSewa response");
+        }
+        const paidAmount = parseFloat(String(decodedData.total_amount).replace(/,/g, ""));
+        const expectedAmount = parseFloat(payment.amount.toString());
+        if (Math.abs(paidAmount - expectedAmount) > 0.01) {
+          throw new Error("Payment amount mismatch");
+        }
+
         if (decodedData.status === "COMPLETE") {
           await prisma.$transaction(async (tx: any) => {
             await tx.payment.update({
@@ -94,7 +120,16 @@ export const paymentResolvers = {
               where: { id: payment.orderId },
               data: { status: "CONFIRMED" },
             });
+
+            // Sync seller order status
+            await tx.sellerOrder.updateMany({
+              where: { buyerOrderId: payment.orderId },
+              data: { status: "CONFIRMED" },
+            });
           });
+
+          // eSewa payment notification is handled by the callback route (app/api/esewa/success/route.ts)
+          // to avoid duplicate notifications when both the callback and this mutation fire.
         }
 
         return {
@@ -164,7 +199,7 @@ export const paymentResolvers = {
 
     verifyFonepayPayment: async (
       _: any,
-      { orderId, transactionId }: { orderId: string; transactionId: string },
+      { orderId, transactionId, signature, amount }: { orderId: string; transactionId: string; signature: string; amount: string },
       context: GraphQLContext
     ) => {
       try {
@@ -179,6 +214,38 @@ export const paymentResolvers = {
           throw new Error("Payment record not found");
         }
 
+        // Ownership check: ensure the order belongs to the authenticated user
+        if (payment.order.buyerId !== context.user.id) {
+          throw new Error("Unauthorized: order does not belong to this user");
+        }
+
+        // Idempotency: if already completed, return success
+        if (payment.status === "COMPLETED") {
+          return {
+            success: true,
+            payment: payment as any,
+            order: payment.order as any,
+            message: "Payment already verified",
+          };
+        }
+
+        // Verify Fonepay signature
+        const isValid = verifyFonepaySignature({
+          signature,
+          transaction_uuid: transactionId,
+          amount: amount || payment.amount.toString(),
+        });
+        if (!isValid) {
+          throw new Error("Invalid Fonepay payment signature");
+        }
+
+        // Amount validation
+        const paidAmount = parseFloat(amount || "0");
+        const expectedAmount = parseFloat(payment.amount.toString());
+        if (Math.abs(paidAmount - expectedAmount) > 0.01) {
+          throw new Error("Payment amount mismatch");
+        }
+
         await prisma.$transaction(async (tx: any) => {
           await tx.payment.update({
             where: { id: payment.id },
@@ -189,7 +256,27 @@ export const paymentResolvers = {
             where: { id: payment.orderId },
             data: { status: "CONFIRMED" },
           });
+
+          // Sync seller order status
+          await tx.sellerOrder.updateMany({
+            where: { buyerOrderId: payment.orderId },
+            data: { status: "CONFIRMED" },
+          });
         });
+
+        // Notify buyer about successful payment (fire-and-forget)
+        const buyer = await prisma.user.findUnique({
+          where: { id: context.user!.id },
+          select: { id: true, email: true, firstName: true, lastName: true, phoneNumber: true },
+        });
+        if (buyer) {
+          notifyPaymentSuccess(
+            buyer,
+            payment.order.orderNumber,
+            payment.amount.toString(),
+            "Fonepay"
+          );
+        }
 
         return {
           success: true,

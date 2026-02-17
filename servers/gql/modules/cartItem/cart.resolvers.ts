@@ -1,13 +1,13 @@
 import { prisma } from "../../../../lib/db/prisma";
 import { delCache, getCache, setCache } from "@/services/redis.services";
-import { requireAuth } from "../../auth/auth";
+import { requireAuth, requireAdmin } from "../../auth/auth";
 import { GraphQLContext } from "../../context";
 
 export const cartItemResolvers = {
   Query: {
     getCarts: async (_: any, __: any, ctx: GraphQLContext) => {
       try {
-        requireAuth(ctx);
+        requireAdmin(ctx);
         const cacheKey = "carts:all";
 
         // Use cache with longer TTL
