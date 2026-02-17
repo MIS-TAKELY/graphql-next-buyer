@@ -193,7 +193,9 @@ export function useBuyNow() {
       setStep("summary");
     } catch (e: any) {
       console.error("Order completion failed:", e);
-      alert(e.message || "Failed to complete order");
+      // Try to get specific error message from GraphQL error
+      const errorMessage = e.graphQLErrors?.[0]?.message || e.message || "Failed to complete order";
+      alert(errorMessage);
     } finally {
       setIsProcessingPayment(false);
     }
@@ -267,7 +269,8 @@ export function useBuyNow() {
       };
     } catch (error: any) {
       console.error("Fonepay initiation failed:", error);
-      return { success: false, error: error.message };
+      const errorMessage = error.graphQLErrors?.[0]?.message || error.message || "Failed to initiate Fonepay";
+      return { success: false, error: errorMessage };
     }
   };
 

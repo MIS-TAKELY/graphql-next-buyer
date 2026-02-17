@@ -84,10 +84,10 @@ export function notifyBuyerOrderCreated(
         }),
       whatsapp: buyer.phoneNumber
         ? () =>
-            sendWhatsAppMessage(
-              buyer.phoneNumber!,
-              `✅ Order Confirmed!\nOrder #${orderNumber}\nTotal: रु${total}\nPayment: ${paymentProvider}\n\nThank you for shopping on Vanijay!`
-            )
+          sendWhatsAppMessage(
+            buyer.phoneNumber!,
+            `✅ Order Placed Successfully!\nOrder #${orderNumber}\nTotal: रु${total}\nPayment: ${paymentProvider}\n\nThank you for shopping on Vanijay!`
+          )
         : undefined,
       inApp: () =>
         createAndPushNotification({
@@ -120,10 +120,10 @@ export function notifySellerNewOrder(
         }),
       whatsapp: seller.phoneNumber
         ? () =>
-            sendWhatsAppMessage(
-              seller.phoneNumber!,
-              `🛒 New Order Received!\nOrder #${orderNumber}\nTotal: रु${total}\nCustomer: ${customerName}\nPhone: ${customerPhone}`
-            )
+          sendWhatsAppMessage(
+            seller.phoneNumber!,
+            `🛒 New Order Received!\nOrder #${orderNumber}\nTotal: रु${total}\nCustomer: ${customerName}\nPhone: ${customerPhone}`
+          )
         : undefined,
       inApp: () =>
         createAndPushNotification({
@@ -167,10 +167,10 @@ export function notifyPaymentSuccess(
         }),
       whatsapp: buyer.phoneNumber
         ? () =>
-            sendWhatsAppMessage(
-              buyer.phoneNumber!,
-              `✅ Payment Successful!\nOrder #${orderNumber}\nAmount: रु${amount}\nVia: ${provider}\n\nYour order is being processed.`
-            )
+          sendWhatsAppMessage(
+            buyer.phoneNumber!,
+            `✅ Payment Successful!\nOrder #${orderNumber}\nAmount: रु${amount}\nVia: ${provider}\n\nYour order is being processed.`
+          )
         : undefined,
       inApp: () =>
         createAndPushNotification({
@@ -326,10 +326,10 @@ export function notifyOrderCancelled(
         }),
       whatsapp: buyer.phoneNumber
         ? () =>
-            sendWhatsAppMessage(
-              buyer.phoneNumber!,
-              `❌ Order Cancelled\nOrder #${orderNumber} has been cancelled.\nReason: ${reason}${hasRefund ? "\nYour refund will be processed within 5-7 business days." : ""}`
-            )
+          sendWhatsAppMessage(
+            buyer.phoneNumber!,
+            `❌ Order Cancelled\nOrder #${orderNumber} has been cancelled.\nReason: ${reason}${hasRefund ? "\nYour refund will be processed within 5-7 business days." : ""}`
+          )
         : undefined,
       inApp: () =>
         createAndPushNotification({
@@ -363,10 +363,10 @@ export function notifyReturnUpdate(
         }),
       whatsapp: buyer.phoneNumber
         ? () =>
-            sendWhatsAppMessage(
-              buyer.phoneNumber!,
-              `🔄 Return Update\nOrder #${orderNumber}\nStatus: ${status}${rejectionReason ? `\nReason: ${rejectionReason}` : ""}\n\nView details at: ${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/account/orders`
-            )
+          sendWhatsAppMessage(
+            buyer.phoneNumber!,
+            `🔄 Return Update\nOrder #${orderNumber}\nStatus: ${status}${rejectionReason ? `\nReason: ${rejectionReason}` : ""}\n\nView details at: ${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/account/orders`
+          )
         : undefined,
       inApp: () =>
         createAndPushNotification({
@@ -401,10 +401,10 @@ export function notifyBuyerDisputeSubmitted(
         }),
       whatsapp: buyer.phoneNumber
         ? () =>
-            sendWhatsAppMessage(
-              buyer.phoneNumber!,
-              `📋 ${typeLabel} Request Submitted\nOrder #${orderNumber}\nReason: ${reason}\n\nThe seller will review your request and respond shortly.`
-            )
+          sendWhatsAppMessage(
+            buyer.phoneNumber!,
+            `📋 ${typeLabel} Request Submitted\nOrder #${orderNumber}\nReason: ${reason}\n\nThe seller will review your request and respond shortly.`
+          )
         : undefined,
       inApp: () =>
         createAndPushNotification({
@@ -440,10 +440,10 @@ export function notifySellerDisputeReceived(
         }),
       whatsapp: seller.phoneNumber
         ? () =>
-            sendWhatsAppMessage(
-              seller.phoneNumber!,
-              `⚠️ New ${typeLabel} Request\nOrder #${orderNumber}\nCustomer: ${customerName}\nReason: ${reason}\n\nPlease review in your dashboard.`
-            )
+          sendWhatsAppMessage(
+            seller.phoneNumber!,
+            `⚠️ New ${typeLabel} Request\nOrder #${orderNumber}\nCustomer: ${customerName}\nReason: ${reason}\n\nPlease review in your dashboard.`
+          )
         : undefined,
       inApp: () =>
         createAndPushNotification({
