@@ -6,22 +6,28 @@ import UnifiedAuth from "./UnifiedAuth";
 import { useState } from "react";
 
 export default function GlobalAuthModal() {
-    const { isOpen, closeModal, defaultStep } = useAuthModal();
+    const { isOpen, closeModal, defaultStep, closable } = useAuthModal();
     const [currentStep, setCurrentStep] = useState<string>("SIGN_IN");
 
 
     return (
         <Dialog open={isOpen} onOpenChange={(val) => {
-            if (!val) {
+            if (!val && closable) {
                 closeModal();
             }
         }}>
             <DialogContent
                 className="sm:max-w-[1000px] p-0 border-none bg-transparent shadow-none"
-                showCloseButton={false}
+                showCloseButton={closable}
                 onInteractOutside={(e) => {
+                    if (!closable) {
+                        e.preventDefault();
+                    }
                 }}
                 onEscapeKeyDown={(e) => {
+                    if (!closable) {
+                        e.preventDefault();
+                    }
                 }}
             >
                 <DialogTitle className="sr-only">Authentication</DialogTitle>

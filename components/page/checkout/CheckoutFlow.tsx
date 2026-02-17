@@ -88,7 +88,8 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
                 const user = session.user as any;
                 if (!user.phoneNumberVerified || !user.emailVerified) {
                     // Open modal to trigger verification flow in UnifiedAuth
-                    openModal("SIGN_UP_WHATSAPP_INPUT");
+                    // Pass closable: false to prevent bypassing verification in checkout
+                    openModal("SIGN_UP_WHATSAPP_INPUT", { closable: false });
                 }
             }
         }
@@ -117,7 +118,6 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
     const product = productData?.getProductBySlug;
     const addresses = addressData?.getAddressOfUser || [];
 
-    // UPDATED: Calculate order amount (handle both single product and cart)
     // UPDATED: Calculate order amount (handle both single product and cart)
     const calculateOrderAmount = () => {
         if (isFromCart) {
@@ -258,6 +258,28 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
     const headerProductName = isFromCart
         ? `Cart (${selectedItems.length} items)`
         : product?.name;
+
+    // BLOCK RENDERING: If user is not verified, show empty state or loading
+    // The Modal will be open and non-closable, so we just need a safe background
+    const isUnverified = session?.user && !((session.user as any).phoneNumberVerified && (session.user as any).emailVerified);
+
+    if (isUnverified) {
+        return (
+            <div className="container mx-auto px-4 py-8 bg-gray-50 dark:bg-gray-900 min-h-[60vh] flex flex-col items-center justify-center">
+                <BuyNowHeader
+                    productSlug={productSlug || ""}
+                    productName={headerProductName}
+                    title={isFromCart ? "Checkout" : "Buy Now"}
+                />
+                <div className="mt-12 text-center space-y-4">
+                    <div className="animate-pulse text-muted-foreground font-medium">Verification Required</div>
+                    <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                        Please complete the verification process to proceed with your order.
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="container mx-auto px-4 py-8 bg-gray-50 dark:bg-gray-900">
