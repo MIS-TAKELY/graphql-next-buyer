@@ -33,10 +33,28 @@ export default function VariantSelector({
             }
         });
 
-        return Object.entries(attrs).map(([key, values]) => ({
-            key,
-            values: Array.from(values).sort(), // Sort values for consistency,
-        }));
+
+        const dimensionFields = ["width", "height", "length", "weight", "isfragile"];
+        const invalidValues = ["", "-", "0", "false", "null", "undefined"];
+
+        return Object.entries(attrs)
+            .filter(([key, values]) => {
+                const lowerKey = key.toLowerCase();
+                // If it's not a dimension field, keep it
+                if (!dimensionFields.includes(lowerKey)) return true;
+
+                // For dimension fields, check if there's at least one valid value in the set
+                const hasValidValue = Array.from(values).some(val => {
+                    const v = val.toString().trim().toLowerCase();
+                    return !invalidValues.includes(v);
+                });
+
+                return hasValidValue;
+            })
+            .map(([key, values]) => ({
+                key,
+                values: Array.from(values).sort(), // Sort values for consistency,
+            }));
     }, [variants]);
 
     if (attributes.length === 0) return null;
