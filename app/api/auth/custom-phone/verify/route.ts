@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { rateLimit } from "@/services/rateLimit.service";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export async function POST(req: NextRequest) {
     try {
@@ -37,6 +39,21 @@ export async function POST(req: NextRequest) {
 
         if (!verification) {
             return NextResponse.json({ error: "Invalid or expired OTP" }, { status: 400 });
+        }
+
+        // If user is logged in, update their verification status
+        const session = await auth.api.getSession({
+            headers: await headers(),
+        });
+
+        if (session?.user) {
+            await prisma.user.update({
+                where: { id: session.user.id },
+                data: {
+                    phoneNumber: cleanPhone,
+                    phoneNumberVerified: true
+                }
+            });
         }
 
         await prisma.verification.delete({

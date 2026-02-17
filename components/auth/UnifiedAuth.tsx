@@ -74,12 +74,27 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                 if (step !== "SIGN_UP_EMAIL_OTP" && step !== "SIGN_UP_DETAILS") {
                     setStep("SIGN_UP_EMAIL_OTP");
                 }
-            } else {
-                // Email verified = grant access (phone is optional for browsing)
+            } else if (user.phoneNumberVerified) {
+                // Email AND Phone verified = grant access
                 if (isModal && onClose) {
                     onClose();
                 } else {
                     router.push("/");
+                }
+            } else {
+                // Email verified but phone NOT verified
+                // If we are already in phone verification steps, STAY THERE
+                if (step === "SIGN_UP_WHATSAPP_INPUT" || step === "SIGN_UP_WHATSAPP_OTP") {
+                    return;
+                }
+                // Otherwise, if it's a modal, we might want to close it or keep it open
+                // depending on whether we want to force phone verification.
+                // For now, if it's email verified but not phone verified, 
+                // and we are NOT in the phone verification step, and it's NOT a modal,
+                // we still redirect to home, BUT the AuthGate will catch it if they try to access private routes.
+                // However, the issue was it redirecting when we WANTED them to verify phone.
+                if (isModal && onClose) {
+                    // onClose(); // Removing this to prevent modal closing prematurely
                 }
             }
         }
@@ -216,9 +231,13 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
             if (response.ok) {
                 toast.success("Phone verified! Now complete your profile.");
                 setIsWhatsAppVerified(true);
-                // Redirect to signup details - user is NOT created yet
-                // They need to complete email verification to get an account
-                setStep("SIGN_UP_DETAILS");
+                // If session exists, user is already created, just update state
+                if (session) {
+                    await refetch();
+                } else {
+                    // Redirect to signup details - user is NOT created yet
+                    setStep("SIGN_UP_DETAILS");
+                }
             } else {
                 toast.error(data.error || "Invalid OTP");
             }

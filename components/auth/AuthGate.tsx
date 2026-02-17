@@ -34,6 +34,7 @@ const PUBLIC_ROUTES = [
     "/shipping-policy",
     "/site-map",
     "/help",
+    "/buy-now",
 ];
 
 
@@ -67,7 +68,7 @@ export default function AuthGate({ children }: AuthGateProps) {
                     <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl opacity-50" />
                     <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-secondary/20 rounded-full blur-3xl opacity-50" />
                     <div className="relative z-10 w-full animate-fade-in">
-                        <UnifiedAuth />
+                        <UnifiedAuth initialStep="SIGN_UP_WHATSAPP_INPUT" />
                     </div>
                 </div>
             );
