@@ -7,7 +7,7 @@ export const GET_USER_PROFILE_DETAILS = gql`
       firstName
       email
       lastName
-      phone
+      phoneNumber
       gender
       dob
       addresses {

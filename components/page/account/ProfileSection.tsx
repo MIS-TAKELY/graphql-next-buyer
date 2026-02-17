@@ -20,10 +20,9 @@ export default function ProfileSection() {
   const { data: userProfileDetails, error: userProfileDetailsError } = useQuery(
     GET_USER_PROFILE_DETAILS
   );
-  // if (userProfileDetailsLoading) console.log("Loading user profile");
 
-  // if (userProfileDetailsError)
-  //   console.log("User profile error", userProfileDetailsError);
+  if (userProfileDetailsError)
+    console.log("User profile error", userProfileDetailsError);
 
   const [
     updateUserProfileDetails,
@@ -39,7 +38,7 @@ export default function ProfileSection() {
   if (updateUserProfileDetailsLoading) console.log("Loading user profile");
 
   if (updateUserProfileDetailsError)
-    console.log("User profile Update error", userProfileDetailsError);
+    console.log("User profile Update error", updateUserProfileDetailsError);
 
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState({

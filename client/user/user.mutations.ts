@@ -6,7 +6,7 @@ export const UPDATE_USER_PROFILE_DETAILS = gql`
       id
       firstName
       lastName
-      phone
+      phoneNumber
       gender
       dob
     }
