@@ -25,7 +25,7 @@ import { useSession } from "@/lib/auth-client";
 // Props: user
 // This can be reused in other dashboard-like pages
 interface SidebarNavProps {
-  user: { firstName?: string; lastName?: string; email?: string };
+  user: { name?: string; firstName?: string; lastName?: string; email?: string };
 }
 
 export default function SidebarNav({
@@ -64,17 +64,21 @@ export default function SidebarNav({
     router.push(item.href);
   };
 
+  const displayName = (user.firstName || user.lastName)
+    ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
+    : user.name || "User";
+
   return (
     <div className="lg:w-64 w-full shrink-0">
       <Card className="sticky top-20">
         <CardHeader className="pb-4 hidden lg:block">
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-semibold">
-              {user.firstName?.[0] || "U"}
+              {displayName[0] || "U"}
             </div>
             <div className="min-w-0">
               <p className="font-medium truncate">
-                {user.firstName} {user.lastName}
+                {displayName}
               </p>
               <p className="text-sm text-muted-foreground truncate">
                 {user.email}

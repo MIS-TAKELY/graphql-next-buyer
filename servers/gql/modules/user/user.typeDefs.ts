@@ -41,6 +41,7 @@ export const userTypeDefs = gql`
   type User {
     id: ID!
     email: String!
+    name: String
     firstName: String
     lastName: String
     phoneNumber: String

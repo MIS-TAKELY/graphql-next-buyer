@@ -144,6 +144,9 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   hasProfile: 'hasProfile',
   isBanned: 'isBanned',
+  emailNotifications: 'emailNotifications',
+  whatsappNotifications: 'whatsappNotifications',
+  inAppNotifications: 'inAppNotifications',
   role: 'role'
 };
 

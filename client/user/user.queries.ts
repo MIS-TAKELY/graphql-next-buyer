@@ -4,6 +4,7 @@ export const GET_USER_PROFILE_DETAILS = gql`
   query GetUserProfileDetails {
     getUserProfileDetails {
       id
+      name
       firstName
       email
       lastName

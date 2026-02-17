@@ -43,6 +43,7 @@ export default function ProfileSection() {
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState({
     id: userProfileDetails?.getUserProfileDetails.id || "",
+    name: userProfileDetails?.getUserProfileDetails.name || "",
     firstName: userProfileDetails?.getUserProfileDetails.firstName || "",
     email: userProfileDetails?.getUserProfileDetails.email || "",
     lastName: userProfileDetails?.getUserProfileDetails.lastName || "",
@@ -51,7 +52,9 @@ export default function ProfileSection() {
     dob: userProfileDetails?.getUserProfileDetails.dob || "",
   });
   useEffect(() => {
-    setForm(userProfileDetails?.getUserProfileDetails);
+    if (userProfileDetails?.getUserProfileDetails) {
+      setForm(userProfileDetails.getUserProfileDetails);
+    }
   }, [userProfileDetails]);
 
   // console.log("user", form);
@@ -113,7 +116,7 @@ export default function ProfileSection() {
           <div>
             <label className="block text-sm font-medium mb-2">Email</label>
             <Input
-              value={form?.email}
+              value={form?.email || ""}
               disabled={true}
               type="email"
               placeholder="Your email address"
