@@ -37,8 +37,8 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
   if (sections) {
     // List of dimension-related field names to hide if empty
     const dimensionFields = [
-      "width", "height", "length", "weight",
-      "Width", "Height", "Length", "Weight"
+      "width", "height", "length", "weight", "isFragile",
+      "Width", "Height", "Length", "Weight", "IsFragile"
     ];
 
     // Helper function to check if a value is empty/invalid
@@ -68,9 +68,9 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
             const fieldName = row[0]?.toString().trim() || "";
             const fieldValue = row[1]?.toString().trim() || "";
 
-            // If it's a dimension field, only include it if it has a valid value
+            // Exclude dimension fields entirely
             if (dimensionFields.some(df => df.toLowerCase() === fieldName.toLowerCase())) {
-              return !isEmptyValue(fieldValue);
+              return false;
             }
 
             // Include all other fields
@@ -159,11 +159,10 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
     "height",
     "Length",
     "length",
-    "Weight",
     "weight",
     "IsFragile",
     "isFragile",
-    "isFragile",
+    "isfragile",
   ];
 
   // Filter attributes
@@ -252,10 +251,10 @@ const ShowProductSpecification: React.FC<ShowProductSpecificationProps> = ({
         value: displayValue,
       };
     })
-    .filter(({ key, value }) => {
-      // Filter out dimension fields that have empty/invalid values
+    .filter(({ key }) => {
+      // Exclude dimension fields entirely
       if (dimensionFields.some(df => df.toLowerCase() === key.toLowerCase())) {
-        return value !== "N/A"; // Only include if it has a real value
+        return false;
       }
       return true; // Include all other fields
     });

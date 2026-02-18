@@ -38,18 +38,11 @@ export default function VariantSelector({
         const invalidValues = ["", "-", "0", "false", "null", "undefined"];
 
         return Object.entries(attrs)
-            .filter(([key, values]) => {
+            .filter(([key]) => {
                 const lowerKey = key.toLowerCase();
-                // If it's not a dimension field, keep it
-                if (!dimensionFields.includes(lowerKey)) return true;
-
-                // For dimension fields, check if there's at least one valid value in the set
-                const hasValidValue = Array.from(values).some(val => {
-                    const v = val.toString().trim().toLowerCase();
-                    return !invalidValues.includes(v);
-                });
-
-                return hasValidValue;
+                // Exclude dimension fields entirely
+                if (dimensionFields.includes(lowerKey)) return false;
+                return true;
             })
             .map(([key, values]) => ({
                 key,
