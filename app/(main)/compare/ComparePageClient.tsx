@@ -7,17 +7,66 @@ import CompareHeader from "@/components/compare/CompareHeader";
 import CompareTable from "@/components/compare/CompareTable";
 import CompareSearch from "@/components/compare/CompareSearch";
 import { toast } from "sonner";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getSmartSpecificationMapping } from "@/app/actions/compareActions";
 
 export default function ComparePage() {
     const router = useRouter();
     const { selectedProducts } = useCompareStore();
     const [isMounted, setIsMounted] = useState(false);
+    const [smartMapping, setSmartMapping] = useState<Record<string, string>>({});
+    const [isLoadingMapping, setIsLoadingMapping] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
     }, []);
+
+    // Fetch smart mapping when selected products change
+    useEffect(() => {
+        if (!isMounted || selectedProducts.length === 0) return;
+
+        const fetchMapping = async () => {
+            setIsLoadingMapping(true);
+            try {
+                // Collect all raw keys from selected products
+                const rawKeys = new Set<string>();
+                selectedProducts.forEach(product => {
+                    // Variant attributes
+                    if (product.variants?.[0]?.attributes) {
+                        Object.keys(product.variants[0].attributes).forEach(k => rawKeys.add(k));
+                    }
+                    // Specifications
+                    if (product.variants?.[0]?.specifications) {
+                        product.variants[0].specifications.forEach((s: any) => {
+                            if (s.key) rawKeys.add(s.key);
+                        });
+                    }
+                    // Table rows
+                    if (Array.isArray(product.specificationTable)) {
+                        product.specificationTable.forEach((table: any) => {
+                            if (Array.isArray(table?.rows)) {
+                                table.rows.forEach((row: any) => {
+                                    if (Array.isArray(row) && row[0]) rawKeys.add(row[0]);
+                                });
+                            }
+                        });
+                    }
+                });
+
+                if (rawKeys.size > 0) {
+                    const mapping = await getSmartSpecificationMapping(Array.from(rawKeys));
+                    setSmartMapping(mapping);
+                }
+            } catch (error) {
+                console.error("Failed to fetch smart mapping:", error);
+            } finally {
+                setIsLoadingMapping(false);
+            }
+        };
+
+        fetchMapping();
+    }, [selectedProducts, isMounted]);
 
     // Show loading skeleton or nothing while hydrating
     if (!isMounted) {
@@ -75,7 +124,15 @@ export default function ComparePage() {
                 </div>
 
                 {/* Comparison Table */}
-                <CompareTable />
+                <div className="relative">
+                    {isLoadingMapping && (
+                        <div className="absolute top-0 right-0 z-10 flex items-center gap-2 bg-white/80 dark:bg-gray-900/80 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 shadow-sm backdrop-blur-sm">
+                            <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Optimizing comparison...</span>
+                        </div>
+                    )}
+                    <CompareTable smartMapping={smartMapping} />
+                </div>
             </div>
         </div>
     );

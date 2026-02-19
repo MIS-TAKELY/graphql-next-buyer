@@ -27,18 +27,39 @@ const canonicalKeys: Record<string, string> = {
     'panel': 'screen',
     'resolution': 'screen',
     'displaydetails': 'screen',
+    'colorsupport': 'display_color',
+    'colordepth': 'display_color',
+    'colorgamut': 'display_color',
+    'contrastratio': 'contrast',
+    'staticcontrast': 'contrast',
+    'dynamiccontrastratio': 'contrast',
     'battery': 'power',
     'capacity': 'power',
     'batteryandpower': 'power',
     'os': 'operating system',
     'softwareandos': 'operating system',
+    'imageformats': 'formats',
+    'videoformats': 'formats',
+    'audioformats': 'formats',
+    'macro': 'camera_features',
+    'autofocus': 'camera_features',
+    'ois': 'camera_features',
+    'case': 'box_contents',
+    'inclusion': 'box_contents',
 };
 
-const normalizeKey = (key: string) => {
+const normalizeKey = (key: string, smartMapping?: Record<string, string>) => {
     const normalized = key.toLowerCase()
         .replace(/[^a-z0-9]/g, '')
         .trim();
-    return canonicalKeys[normalized] || normalized;
+
+    // 1. Check static overrides
+    if (canonicalKeys[normalized]) return canonicalKeys[normalized];
+
+    // 2. Check dynamic smart mapping from LLM
+    if (smartMapping && smartMapping[normalized]) return smartMapping[normalized];
+
+    return normalized;
 };
 
 const guessLabel = (value: string) => {
@@ -84,11 +105,20 @@ const canonicalLabels: Record<string, string> = {
     'cpu': 'Processor',
     'gpu': 'Graphics',
     'screen': 'Display',
+    'display_color': 'Display Color',
+    'contrast': 'Contrast',
     'power': 'Battery',
     'operating system': 'OS',
+    'formats': 'Supported Formats',
+    'camera_features': 'Camera Features',
+    'box_contents': 'In the Box',
 };
 
-export default function CompareTable() {
+interface CompareTableProps {
+    smartMapping?: Record<string, string>;
+}
+
+export default function CompareTable({ smartMapping }: CompareTableProps) {
     const { selectedProducts, removeProduct } = useCompareStore();
 
     // Flatten all product data into a unified structure for comparison
@@ -158,7 +188,7 @@ export default function CompareTable() {
             if (attributes) {
                 Object.entries(attributes).forEach(([key, value]) => {
                     if (typeof value === 'string') {
-                        addFeature(normalizeKey(key), key.charAt(0).toUpperCase() + key.slice(1), value);
+                        addFeature(normalizeKey(key, smartMapping), key.charAt(0).toUpperCase() + key.slice(1), value);
                     }
                 });
             }
@@ -166,7 +196,7 @@ export default function CompareTable() {
             // 3. Category Specifications
             if (Array.isArray(product.category?.categorySpecification)) {
                 product.category.categorySpecification.forEach(spec => {
-                    addFeature(normalizeKey(spec.key), spec.label || spec.key, spec.value);
+                    addFeature(normalizeKey(spec.key, smartMapping), spec.label || spec.key, spec.value);
                 });
             }
 
@@ -177,7 +207,7 @@ export default function CompareTable() {
                         table.rows.forEach((row: any) => {
                             if (Array.isArray(row) && row.length >= 2) {
                                 const [key, value] = row;
-                                addFeature(normalizeKey(key), key, value);
+                                addFeature(normalizeKey(key, smartMapping), key, value);
                             }
                         });
                     }
@@ -200,7 +230,7 @@ export default function CompareTable() {
 
                     // Option A: Use explicit key if provided by backend
                     if (specKey && specKey.length > 0 && specKey.length < 50) {
-                        addFeature(normalizeKey(specKey), specKey, specValue);
+                        addFeature(normalizeKey(specKey, smartMapping), specKey, specValue);
                         return;
                     }
 
@@ -210,7 +240,7 @@ export default function CompareTable() {
                         const key = parts[0].trim();
                         const val = parts.slice(1).join(': ').trim();
                         if (key.length > 0 && val.length > 0 && key.length < 50) {
-                            addFeature(normalizeKey(key), key, val);
+                            addFeature(normalizeKey(key, smartMapping), key, val);
                             return;
                         }
                     }
@@ -218,7 +248,7 @@ export default function CompareTable() {
                     // Option C: Try to guess label from value content
                     const guessedLabel = guessLabel(specValue);
                     if (guessedLabel) {
-                        addFeature(normalizeKey(guessedLabel), guessedLabel, specValue);
+                        addFeature(normalizeKey(guessedLabel, smartMapping), guessedLabel, specValue);
                         return;
                     }
 
