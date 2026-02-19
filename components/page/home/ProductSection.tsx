@@ -59,20 +59,32 @@ export default function ProductSection({
   return (
     <section className="mb-8 md:mb-12 bg-card w-full shadow-sm py-6 md:py-8">
       <div className="container-custom">
-        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground">
-          {name}
-        </h2>
-        <div className="relative group">
-          {layout === "horizontal" && showLeft && (
-            <button
-              onClick={() => scroll("left")}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background border shadow-md rounded-full p-2 ml-2 transition-all duration-200 hidden md:flex items-center justify-center backdrop-blur-sm"
-              aria-label="Scroll left"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+            {name}
+          </h2>
+          {layout === "horizontal" && (
+            <div className="hidden md:flex items-center gap-2">
+              <button
+                onClick={() => scroll("left")}
+                disabled={!showLeft}
+                className="p-2 rounded-full border bg-background hover:bg-muted transition-colors disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => scroll("right")}
+                disabled={!showRight}
+                className="p-2 rounded-full border bg-background hover:bg-muted transition-colors disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           )}
-
+        </div>
+        <div className="relative">
           <div
             ref={scrollRef}
             className={
@@ -94,16 +106,6 @@ export default function ProductSection({
               </div>
             ))}
           </div>
-
-          {layout === "horizontal" && showRight && (
-            <button
-              onClick={() => scroll("right")}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background border shadow-md rounded-full p-2 mr-2 transition-all duration-200 hidden md:flex items-center justify-center backdrop-blur-sm"
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-          )}
         </div>
       </div>
     </section>
