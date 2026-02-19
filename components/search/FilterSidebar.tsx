@@ -115,11 +115,6 @@ function DynamicFilter({
                   {option.value}
                 </Label>
               </div>
-              {option.count > 0 && (
-                <span className="text-[10px] text-gray-500 dark:text-gray-400 ml-2">
-                  ({option.count})
-                </span>
-              )}
             </div>
           ))}
         </div>

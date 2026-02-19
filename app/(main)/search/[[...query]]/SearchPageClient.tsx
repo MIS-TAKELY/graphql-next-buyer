@@ -99,47 +99,35 @@ export default function SearchPage() {
 
   // Process filters from backend (new FilterGroup structure)
   const { computedFilters: rawComputedFilters, filterOptions: rawFilterOptions } = useMemo(() => {
+    const finalFilters: any[] = [];
+    const options: { [key: string]: any[] } = {};
+    const seenLabels = new Set<string>();
+
+    const processFilter = (filter: any) => {
+      const normalizedLabel = filter.label?.toLowerCase().trim();
+      if (normalizedLabel && !seenLabels.has(normalizedLabel) && filter.options && filter.options.length > 0) {
+        seenLabels.add(normalizedLabel);
+        finalFilters.push({
+          key: filter.key,
+          label: filter.label,
+          options: filter.options, // Already in { value, count } format
+          type: filter.type || "dropdown",
+        });
+        options[filter.key] = filter.options;
+      }
+    };
+
     // Prioritize AI-driven filters from dynamicSearchData
     if (dynamicSearchData?.filters && dynamicSearchData.filters.length > 0) {
-      const finalFilters: any[] = [];
-      const options: { [key: string]: any[] } = {};
-
-      dynamicSearchData.filters.forEach((filter: any) => {
-        if (filter.options && filter.options.length > 0) {
-          finalFilters.push({
-            key: filter.key,
-            label: filter.label,
-            options: filter.options, // Already in { value, count } format
-            type: filter.type || "dropdown",
-          });
-          options[filter.key] = filter.options;
-        }
-      });
-
-      return { computedFilters: finalFilters, filterOptions: options };
+      dynamicSearchData.filters.forEach(processFilter);
     }
 
     // Process backend filters (new FilterGroup[] structure)
     if (backendFilters && Array.isArray(backendFilters)) {
-      const finalFilters: any[] = [];
-      const options: { [key: string]: any[] } = {};
-
-      backendFilters.forEach((filter: any) => {
-        if (filter.options && filter.options.length > 0) {
-          finalFilters.push({
-            key: filter.key,
-            label: filter.label,
-            options: filter.options, // { value, count }[]
-            type: filter.type || "dropdown",
-          });
-          options[filter.key] = filter.options;
-        }
-      });
-
-      return { computedFilters: finalFilters, filterOptions: options };
+      backendFilters.forEach(processFilter);
     }
 
-    return { computedFilters: [], filterOptions: {} };
+    return { computedFilters: finalFilters, filterOptions: options };
   }, [backendFilters, dynamicSearchData]);
 
   // Persist filters to avoid layout shifts/disappearing sidebar during loading
