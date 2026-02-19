@@ -188,7 +188,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         <p>Hello ${ctx.name || 'there'},</p>
         <p>Your order has been placed successfully on Vanijay and is now being processed.</p>
         <div class="info-box" style="border-left-color: #28a745;">
-          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> ‼️${ctx.orderNumber}</p>
           <p style="margin: 5px 0;"><strong>Total Amount:</strong> NPR ${ctx.total}</p>
           <p style="margin: 5px 0;"><strong>Payment Method:</strong> ${ctx.paymentProvider || 'N/A'}</p>
         </div>
@@ -206,7 +206,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         <p>Hello ${ctx.name || 'there'},</p>
         <p>Your payment has been successfully verified and confirmed.</p>
         <div class="info-box" style="border-left-color: #28a745;">
-          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> ‼️${ctx.orderNumber}</p>
           <p style="margin: 5px 0;"><strong>Amount Paid:</strong> NPR ${ctx.amount}</p>
           <p style="margin: 5px 0;"><strong>Payment Method:</strong> ${ctx.provider}</p>
         </div>
@@ -221,8 +221,8 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         <p>Hello ${ctx.name || 'there'},</p>
         <p>Great news! Your order has been shipped and is on its way to you.</p>
         <div class="info-box">
-          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
-          ${ctx.trackingNumber ? `<p style="margin: 5px 0;"><strong>Tracking Number:</strong> ${ctx.trackingNumber}</p>` : ''}
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> ‼️${ctx.orderNumber}</p>
+          ${ctx.trackingNumber ? `<p style="margin: 5px 0;"><strong>Tracking ID:</strong> ${ctx.trackingNumber}</p>` : ''}
           ${ctx.carrier ? `<p style="margin: 5px 0;"><strong>Carrier:</strong> ${ctx.carrier}</p>` : ''}
         </div>
         <div style="text-align: center;">
@@ -238,7 +238,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         <p>Hello ${ctx.name || 'there'},</p>
         <p>Your order has been successfully delivered. We hope you love your purchase!</p>
         <div class="info-box" style="border-left-color: #28a745;">
-          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> ‼️${ctx.orderNumber}</p>
         </div>
         <p>If you have any issues with your items, you can request a return within the eligible return window.</p>
         <div style="text-align: center;">
@@ -254,7 +254,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         <p>Hello ${ctx.name || 'there'},</p>
         <p>Your order has been cancelled.</p>
         <div class="info-box" style="border-left-color: #dc3545;">
-          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> ‼️${ctx.orderNumber}</p>
           ${ctx.reason ? `<p style="margin: 5px 0;"><strong>Reason:</strong> ${ctx.reason}</p>` : ''}
           ${ctx.refundNote ? `<p style="margin: 5px 0;"><strong>Refund Note:</strong> ${ctx.refundNote}</p>` : ''}
         </div>
@@ -269,7 +269,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         <p>Hello ${ctx.name || 'there'},</p>
         <p>Great news! Your order has been confirmed by the seller and is being prepared for shipment.</p>
         <div class="info-box" style="border-left-color: #28a745;">
-          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> ‼️${ctx.orderNumber}</p>
         </div>
         <p>We'll notify you once your order is on its way.</p>
         <div style="text-align: center;">
@@ -285,7 +285,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         <p>Hello ${ctx.name || 'there'},</p>
         <p>Your order is now being processed and packed for delivery.</p>
         <div class="info-box">
-          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> ‼️${ctx.orderNumber}</p>
         </div>
         <p>We'll let you know as soon as it's shipped!</p>
     `, "Your Order Is Being Processed - Vanijay"),
@@ -298,7 +298,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         <p>Hello ${ctx.name || 'there'},</p>
         <p>Your ${ctx.disputeType === 'CANCEL' ? 'cancellation' : 'return'} request has been submitted and is awaiting review.</p>
         <div class="info-box" style="border-left-color: #ff9800;">
-          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> ‼️${ctx.orderNumber}</p>
           <p style="margin: 5px 0;"><strong>Request Type:</strong> ${ctx.disputeType === 'CANCEL' ? 'Cancellation' : 'Return'}</p>
           <p style="margin: 5px 0;"><strong>Reason:</strong> ${ctx.reason || 'N/A'}</p>
         </div>
@@ -313,7 +313,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         <p>Hello ${ctx.name || 'Seller'},</p>
         <p>A customer has submitted a ${ctx.disputeType === 'CANCEL' ? 'cancellation' : 'return'} request for one of your orders.</p>
         <div class="info-box" style="border-left-color: #dc3545;">
-          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> ‼️${ctx.orderNumber}</p>
           <p style="margin: 5px 0;"><strong>Customer:</strong> ${ctx.customerName || 'N/A'}</p>
           <p style="margin: 5px 0;"><strong>Reason:</strong> ${ctx.reason || 'N/A'}</p>
         </div>
@@ -344,8 +344,8 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         <p>Hello ${ctx.buyerName || 'there'},</p>
         <p>${ctx.message}</p>
         <div class="info-box" style="border-left-color: ${ctx.color || '#007bff'};">
-          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
-          ${ctx.trackingNumber ? `<p style="margin: 5px 0;"><strong>Tracking Number:</strong> ${ctx.trackingNumber}</p>` : ''}
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> ‼️${ctx.orderNumber}</p>
+          ${ctx.trackingNumber ? `<p style="margin: 5px 0;"><strong>Tracking ID:</strong> ${ctx.trackingNumber}</p>` : ''}
           ${ctx.carrier ? `<p style="margin: 5px 0;"><strong>Carrier:</strong> ${ctx.carrier}</p>` : ''}
           ${ctx.cancellationReason ? `<p style="margin: 15px 0 5px 0; color: #dc3545;"><strong>Cancellation Reason:</strong> ${ctx.cancellationReason}</p>` : ''}
         </div>
