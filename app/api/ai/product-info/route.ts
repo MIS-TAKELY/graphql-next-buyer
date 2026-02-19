@@ -11,29 +11,29 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Optimize context: Truncate description and clean up specs/variants to speed up inference
+        // Build a concise system prompt to keep token count low for faster inference
         const truncatedDescription = product.description
-            ? product.description.substring(0, 500) + "..."
+            ? product.description.substring(0, 400)
             : "No description available.";
 
         const specsSnippet = product.specificationTable
-            ? JSON.stringify(product.specificationTable).substring(0, 800) + "..."
-            : "No detailed specifications available.";
+            ? JSON.stringify(product.specificationTable).substring(0, 600)
+            : "No specifications available.";
 
         const variantsSnippet = product.variants
-            ? product.variants.map((v: any) => `${v.name || 'Variant'}: ${JSON.stringify(v.attributes)}`).join(", ").substring(0, 400) + "..."
-            : "No variants available.";
+            ? product.variants
+                .map((v: any) => `${v.name || "Variant"}: ${JSON.stringify(v.attributes)}`)
+                .join(", ")
+                .substring(0, 300)
+            : "No variants.";
 
-        const systemPrompt = `You are an AI Product Assistant for Vanijay (Nepal).
-Help users with details about: ${product.name}.
-Brand: ${typeof product.brand === "string" ? product.brand : product.brand?.name || 'N/A'}
+        const systemPrompt = `You are a concise AI Product Assistant for Vanijay (Nepal).
+Product: ${product.name}
+Brand: ${typeof product.brand === "string" ? product.brand : product.brand?.name || "N/A"}
 Description: ${truncatedDescription}
-Specs/Variants: ${specsSnippet} | ${variantsSnippet}
-
-Instructions:
-1. Be concise (max 2-3 sentences).
-2. Only answer based on these details.
-3. Prices in NPR.`;
+Specs: ${specsSnippet}
+Variants: ${variantsSnippet}
+Rules: Be very concise (2-3 sentences max). Prices in NPR. Only answer based on the given details.`;
 
         const ollamaPayload = {
             model: "qwen2.5:3b",
@@ -41,46 +41,65 @@ Instructions:
                 { role: "system", content: systemPrompt },
                 ...messages,
             ],
-            stream: false,
+            stream: true, // Enable streaming so tokens are sent to browser immediately
         };
 
-        // Use AbortController for a 25-second timeout (to return JSON before Cloudflare 504)
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 25000);
+        // Call Ollama - this returns immediately with a streaming body
+        const ollamaResponse = await fetch("http://ollama:11434/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(ollamaPayload),
+        });
 
-        try {
-            // Note: 'ollama' is the container name on the docker network
-            const response = await fetch("http://ollama:11434/api/chat", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(ollamaPayload),
-                signal: controller.signal,
-            });
-
-            clearTimeout(timeoutId);
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error("Ollama error:", errorText);
-                return NextResponse.json(
-                    { error: "AI model is currently busy or unavailable. Please try again in a moment." },
-                    { status: 503 }
-                );
-            }
-
-            const data = await response.json();
-            return NextResponse.json(data.message);
-        } catch (err: any) {
-            if (err.name === 'AbortError') {
-                return NextResponse.json(
-                    { error: "The AI took too long to respond. Please try a simpler question or try again later." },
-                    { status: 504 }
-                );
-            }
-            throw err;
+        if (!ollamaResponse.ok || !ollamaResponse.body) {
+            return NextResponse.json(
+                { error: "AI model is unavailable. Please try again." },
+                { status: 503 }
+            );
         }
+
+        // Forward Ollama's token stream to the browser as plain text chunks
+        const encoder = new TextEncoder();
+        const decoder = new TextDecoder();
+        const ollamaReader = ollamaResponse.body.getReader();
+
+        const stream = new ReadableStream({
+            async start(controller) {
+                try {
+                    while (true) {
+                        const { done, value } = await ollamaReader.read();
+                        if (done) break;
+
+                        const chunk = decoder.decode(value, { stream: true });
+                        // Ollama sends NDJSON - one JSON object per line
+                        for (const line of chunk.split("\n")) {
+                            if (!line.trim()) continue;
+                            try {
+                                const json = JSON.parse(line);
+                                const token = json?.message?.content;
+                                if (token) {
+                                    controller.enqueue(encoder.encode(token));
+                                }
+                            } catch {
+                                // Skip malformed lines
+                            }
+                        }
+                    }
+                } finally {
+                    controller.close();
+                    ollamaReader.releaseLock();
+                }
+            },
+        });
+
+        return new Response(stream, {
+            headers: {
+                "Content-Type": "text/plain; charset=utf-8",
+                "Transfer-Encoding": "chunked",
+                "Cache-Control": "no-cache",
+                "X-Content-Type-Options": "nosniff",
+            },
+        });
     } catch (error) {
         console.error("AI API Error:", error);
         return NextResponse.json(

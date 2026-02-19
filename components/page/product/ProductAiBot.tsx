@@ -40,6 +40,10 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
         setInput("");
         setIsLoading(true);
 
+        // Add a placeholder for the streaming assistant message
+        const assistantPlaceholder: Message = { role: "assistant", content: "" };
+        setMessages((prev) => [...prev, assistantPlaceholder]);
+
         try {
             const response = await fetch("/api/ai/product-info", {
                 method: "POST",
@@ -50,22 +54,43 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
                 }),
             });
 
-            let data;
-            try {
-                data = await response.json();
-            } catch {
-                throw new Error("Gateway timeout — the AI took too long. Please try again in a few seconds.");
+            if (!response.ok || !response.body) {
+                // Try to read error JSON
+                let errMsg = "Failed to get AI response";
+                try {
+                    const errData = await response.json();
+                    errMsg = errData.error || errMsg;
+                } catch { /* response may be HTML on 504 */ }
+                throw new Error(errMsg);
             }
-            if (!response.ok) {
-                throw new Error(data?.error || "Failed to get AI response");
+
+            // Read the streaming plain-text response and update message in real-time
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let accumulated = "";
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                accumulated += decoder.decode(value, { stream: true });
+                // Update the last message (the assistant placeholder) with the growing text
+                setMessages((prev) => {
+                    const updated = [...prev];
+                    updated[updated.length - 1] = { role: "assistant", content: accumulated };
+                    return updated;
+                });
             }
-            setMessages((prev) => [...prev, { role: "assistant", content: data.content }]);
         } catch (error: any) {
             console.error(error);
-            setMessages((prev) => [
-                ...prev,
-                { role: "assistant", content: error.message || "Sorry, I encountered an error. Please try again later." },
-            ]);
+            // Replace placeholder with error message
+            setMessages((prev) => {
+                const updated = [...prev];
+                updated[updated.length - 1] = {
+                    role: "assistant",
+                    content: error.message || "Sorry, I encountered an error. Please try again later.",
+                };
+                return updated;
+            });
         } finally {
             setIsLoading(false);
         }
