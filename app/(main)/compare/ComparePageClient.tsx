@@ -40,12 +40,6 @@ export default function ComparePage() {
                         });
                     }
 
-                    // 2. Category specifications
-                    if (Array.isArray(product.category?.categorySpecification)) {
-                        product.category.categorySpecification.forEach(s => {
-                            if (s.key && !rawKeysWithValues[s.key]) rawKeysWithValues[s.key] = String(s.value || "-");
-                        });
-                    }
 
                     // 3. Specifications array (including legacy parsing)
                     if (product.variants?.[0]?.specifications) {
