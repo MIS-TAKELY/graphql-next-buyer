@@ -400,6 +400,8 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
 
     }, [selectedProducts, smartMapping]);
 
+    const [showAllSpecs, setShowAllSpecs] = React.useState(false);
+
     if (!selectedProducts.length || !preparedData) return null;
 
     const { productFeatures, commonFeatures, uncommonFeatures, featureLabels } = preparedData;
@@ -431,13 +433,15 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
         </React.Fragment>
     );
 
+    const visibleUncommonFeatures = showAllSpecs ? uncommonFeatures : uncommonFeatures.slice(0, 10);
+
     return (
         <>
             {/* Desktop: Side-by-side table */}
             <div className="hidden md:block overflow-x-auto">
                 <div className="min-w-full inline-block align-middle">
                     <div className="grid gap-4" style={{ gridTemplateColumns: `200px repeat(${selectedProducts.length}, 1fr)` }}>
-
+                        {/* ... (Header, Core Info, etc.) ... */}
                         {/* 1. Header Row (Image, Name, Remove) */}
                         <div className="font-semibold text-gray-700 dark:text-gray-300 flex items-end pb-4">
                             Product
@@ -470,8 +474,6 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
                                 </CardContent>
                             </Card>
                         ))}
-
-                        {/* 2. Core Info (Price, Brand, Rating) - ALWAYS TOP */}
 
                         {/* Price */}
                         <div className="font-medium text-gray-700 dark:text-gray-300 py-3 border-t">Price</div>
@@ -528,9 +530,9 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
                         {/* 3. Section Divider: Common Features */}
                         {commonFeatures.length > 0 && (
                             <>
-                                <div className="col-span-full py-4 mt-4 mb-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg px-4 font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                                <div className="col-span-full py-4 mt-6 mb-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg px-4 font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                                    Common Features
+                                    Common Specifications
                                 </div>
                                 {commonFeatures.map(key => renderFeatureRow(key))}
                             </>
@@ -539,19 +541,30 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
                         {/* 4. Section Divider: Other Features */}
                         {uncommonFeatures.length > 0 && (
                             <>
-                                <div className="col-span-full py-4 mt-4 mb-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg px-4 font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                                    Other Features
+                                <div className="col-span-full py-4 mt-8 mb-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg px-4 font-semibold text-gray-900 dark:text-white flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                        Product Specific Differences
+                                    </div>
+                                    {uncommonFeatures.length > 10 && (
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => setShowAllSpecs(!showAllSpecs)}
+                                            className="text-blue-600 dark:text-blue-400 hover:text-blue-700"
+                                        >
+                                            {showAllSpecs ? "Show Less" : `Show All (${uncommonFeatures.length})`}
+                                        </Button>
+                                    )}
                                 </div>
-                                {uncommonFeatures.map(key => renderFeatureRow(key))}
+                                {visibleUncommonFeatures.map(key => renderFeatureRow(key))}
                             </>
                         )}
-
                     </div>
                 </div>
             </div>
 
-            {/* Mobile View - Stacked Cards (Simplified for now) */}
+            {/* Mobile View - Stacked Cards */}
             <div className="md:hidden space-y-6">
                 {selectedProducts.map(product => (
                     <Card key={product.id} className="relative">
@@ -559,7 +572,7 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
                         <CardContent className="p-4 space-y-4">
                             <div className="flex gap-4">
                                 <div className="relative w-24 h-24 bg-gray-50 rounded shrink-0">
-                                    <Image src={product.images[0]?.url || "/placeholder.svg"} alt={product.name} fill className="object-contain p-1" />
+                                    <Image src={product.images[0]?.url || "/placeholder.svg"} alt={product.name} fill className="object-contain p-1" unoptimized />
                                 </div>
                                 <div>
                                     <h3 className="font-bold text-sm line-clamp-2">{product.name}</h3>
@@ -568,7 +581,7 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
                             </div>
 
                             <div className="border-t pt-2 space-y-2">
-                                {[...commonFeatures, ...uncommonFeatures].slice(0, 5).map(key => {
+                                {[...commonFeatures, ...uncommonFeatures].slice(0, showAllSpecs ? 100 : 8).map(key => {
                                     const val = productFeatures.get(product.id)?.get(key);
                                     if (!val || val === '-') return null;
                                     return (
@@ -578,14 +591,20 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
                                         </div>
                                     )
                                 })}
+                                {(commonFeatures.length + uncommonFeatures.length) > 8 && (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="w-full mt-2"
+                                        onClick={() => setShowAllSpecs(!showAllSpecs)}
+                                    >
+                                        {showAllSpecs ? "Show Less" : "Show All Specifications"}
+                                    </Button>
+                                )}
                             </div>
                         </CardContent>
                     </Card>
                 ))}
-
-                <div className="text-center text-sm text-gray-500 italic">
-                    View on desktop for detailed feature comparison
-                </div>
             </div>
         </>
     );

@@ -29,18 +29,21 @@ export default function ComparePage() {
         const fetchMapping = async () => {
             setIsLoadingMapping(true);
             try {
-                // Collect all raw keys from selected products
-                const rawKeys = new Set<string>();
+                // Collect all raw keys with a representative value
+                const rawKeysWithValues: Record<string, string> = {};
+
                 selectedProducts.forEach(product => {
                     // 1. Variant attributes
                     if (product.variants?.[0]?.attributes) {
-                        Object.keys(product.variants[0].attributes).forEach(k => rawKeys.add(k));
+                        Object.entries(product.variants[0].attributes).forEach(([k, v]) => {
+                            if (!rawKeysWithValues[k]) rawKeysWithValues[k] = String(v);
+                        });
                     }
 
                     // 2. Category specifications
                     if (Array.isArray(product.category?.categorySpecification)) {
                         product.category.categorySpecification.forEach(s => {
-                            if (s.key) rawKeys.add(s.key);
+                            if (s.key && !rawKeysWithValues[s.key]) rawKeysWithValues[s.key] = String(s.value || "-");
                         });
                     }
 
@@ -48,12 +51,13 @@ export default function ComparePage() {
                     if (product.variants?.[0]?.specifications) {
                         product.variants[0].specifications.forEach((s: any) => {
                             if (s.key) {
-                                rawKeys.add(s.key);
+                                if (!rawKeysWithValues[s.key]) rawKeysWithValues[s.key] = String(s.value || "-");
                             } else if (s.value) {
                                 // Try to extract key from "Key: Value"
-                                const parts = s.value.split(/[:\t]\s*| \s*[-–—]\s+/);
+                                const parts = String(s.value).split(/[:\t]\s*| \s*[-–—]\s+/);
                                 if (parts.length >= 2 && parts[0].trim().length < 50) {
-                                    rawKeys.add(parts[0].trim());
+                                    const k = parts[0].trim();
+                                    if (!rawKeysWithValues[k]) rawKeysWithValues[k] = parts.slice(1).join(": ").trim();
                                 }
                             }
                         });
@@ -69,39 +73,50 @@ export default function ComparePage() {
                         tableData.forEach((item: any) => {
                             if (item?.rows && Array.isArray(item.rows)) {
                                 item.rows.forEach((row: any) => {
-                                    if (Array.isArray(row) && row[0]) rawKeys.add(row[0]);
-                                    else if (row?.key) rawKeys.add(row.key);
+                                    if (Array.isArray(row) && row[0]) {
+                                        if (!rawKeysWithValues[row[0]]) rawKeysWithValues[row[0]] = String(row[1] || "-");
+                                    } else if (row?.key) {
+                                        if (!rawKeysWithValues[row.key]) rawKeysWithValues[row.key] = String(row.value || "-");
+                                    }
                                 });
                             } else if (item?.sections && Array.isArray(item.sections)) {
                                 item.sections.forEach((sec: any) => {
                                     if (Array.isArray(sec.rows)) {
                                         sec.rows.forEach((row: any) => {
-                                            if (Array.isArray(row) && row[0]) rawKeys.add(row[0]);
-                                            else if (row?.key) rawKeys.add(row.key);
+                                            if (Array.isArray(row) && row[0]) {
+                                                if (!rawKeysWithValues[row[0]]) rawKeysWithValues[row[0]] = String(row[1] || "-");
+                                            } else if (row?.key) {
+                                                if (!rawKeysWithValues[row.key]) rawKeysWithValues[row.key] = String(row.value || "-");
+                                            }
                                         });
                                     }
                                 });
                             } else if (Array.isArray(item) && item[0]) {
-                                rawKeys.add(item[0]);
+                                if (!rawKeysWithValues[item[0]]) rawKeysWithValues[item[0]] = String(item[1] || "-");
                             } else if (item?.key) {
-                                rawKeys.add(item.key);
+                                if (!rawKeysWithValues[item.key]) rawKeysWithValues[item.key] = String(item.value || "-");
                             }
                         });
                     } else if (tableData && typeof tableData === 'object') {
                         const td = tableData as any;
                         if (Array.isArray(td.rows)) {
                             td.rows.forEach((row: any) => {
-                                if (Array.isArray(row) && row[0]) rawKeys.add(row[0]);
-                                else if (row?.key) rawKeys.add(row.key);
+                                if (Array.isArray(row) && row[0]) {
+                                    if (!rawKeysWithValues[row[0]]) rawKeysWithValues[row[0]] = String(row[1] || "-");
+                                } else if (row?.key) {
+                                    if (!rawKeysWithValues[row.key]) rawKeysWithValues[row.key] = String(row.value || "-");
+                                }
                             });
                         } else {
-                            Object.keys(td).forEach(k => rawKeys.add(k));
+                            Object.entries(td).forEach(([k, v]) => {
+                                if (!rawKeysWithValues[k]) rawKeysWithValues[k] = String(v);
+                            });
                         }
                     }
                 });
 
-                if (rawKeys.size > 0) {
-                    const mapping = await getSmartSpecificationMapping(Array.from(rawKeys));
+                if (Object.keys(rawKeysWithValues).length > 0) {
+                    const mapping = await getSmartSpecificationMapping(rawKeysWithValues);
                     setSmartMapping(mapping);
                 }
             } catch (error) {

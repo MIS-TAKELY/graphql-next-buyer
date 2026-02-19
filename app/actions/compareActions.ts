@@ -6,11 +6,12 @@ import { getCache, setCache } from "@/services/redis.services";
 const CACHE_KEY_PREFIX = "smart_spec_mapping:";
 const CACHE_TTL = 86400 * 7; // 7 days
 
-export async function getSmartSpecificationMapping(rawKeys: string[]): Promise<Record<string, string>> {
+export async function getSmartSpecificationMapping(rawKeysWithValues: Record<string, string>): Promise<Record<string, string>> {
+    const rawKeys = Object.keys(rawKeysWithValues);
     if (!rawKeys || rawKeys.length === 0) return {};
 
     const mapping: Record<string, string> = {};
-    const unknownKeys: string[] = [];
+    const unknownKeysWithValues: Record<string, string> = {};
 
     // 1. Try to get from cache first
     for (const key of rawKeys) {
@@ -20,22 +21,28 @@ export async function getSmartSpecificationMapping(rawKeys: string[]): Promise<R
         if (cached) {
             mapping[normalizedInput] = cached;
         } else {
-            unknownKeys.push(key);
+            unknownKeysWithValues[key] = rawKeysWithValues[key];
         }
     }
 
-    if (unknownKeys.length === 0) return mapping;
+    const keysToMap = Object.keys(unknownKeysWithValues);
+    if (keysToMap.length === 0) return mapping;
 
     // 2. Use LLM to group unknown keys
-    const prompt = `I have a list of product specification keys. Group synonymous or very closely related keys into a single canonical name.
+    const entriesString = Object.entries(unknownKeysWithValues)
+        .map(([k, v]) => `"${k}" (Example: "${v}")`)
+        .join(", ");
+
+    const prompt = `I have a list of product specification keys with example values. Group synonymous or very closely related keys into a single canonical name.
     
-    Keys to group: ${unknownKeys.join(", ")}
+    Keys to group (with context): ${entriesString}
     
     Rules:
-    - Return a JSON object mapping each input key to its canonical name.
+    - Return a JSON object mapping each INPUT KEY to its canonical name.
+    - Use the example values to distinguish between different types of specs (e.g. "Color" vs "Panel Type").
     - IGNORE technical suffixes or modifiers like "(HBM)", "(Typ)", "Peak", "Maximum" when grouping.
-    - Example: {"Brightness (HBM)": "Brightness", "Peak Brightness": "Brightness", "Color Depth": "Display Color", "ize": "Display Size", "Size": "Display Size"}
-    - Focus on categories like Display, Processor, Storage, Memory, Connectivity, etc.
+    - Example: {"Brightness (HBM)": "Brightness", "Peak": "Brightness", "RAM": "Memory", "System RAM": "Memory", "Panel": "Display Type"}
+    - Standardize common names: "Display", "Processor", "Storage", "Memory", "Connectivity", "Battery", "Camera", "Physical Design", etc.
     
     Respond ONLY with the JSON object.`;
 
