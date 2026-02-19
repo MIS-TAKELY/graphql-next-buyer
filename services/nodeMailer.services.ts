@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-import path from "path";
 
 // Create a test account or replace with real credentials.
 const transporter = nodemailer.createTransport({
@@ -35,9 +34,10 @@ type EmailTemplate = {
 };
 
 const getEmailLayout = (content: string, subject: string) => {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com";
-  // Use CID:logo to embed the image directly in the email
-  const logoUrl = `cid:logo`;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.vanijay.com";
+  // Reverted to URL-based logo to avoid "attachment" indicator in Gmail.
+  // Using https://www.vanijay.com as fallback to ensure visibility.
+  const logoUrl = `${appUrl}/final_blue_text_logo_500by500.png`;
 
   return `
     <!DOCTYPE html>
@@ -359,14 +359,7 @@ export const senMail = async (
       subject: template.subject,
       text: template.text(context),
       html: template.html(context),
-      attachments: [
-        {
-          filename: 'logo.png',
-          path: path.join(process.cwd(), 'public', 'final_blue_text_logo_500by500.png'),
-          cid: 'logo'
-        },
-        ...(attachments || [])
-      ],
+      attachments,
     });
 
     console.log("NODEMAILER: Message sent successfully:", info.messageId);
