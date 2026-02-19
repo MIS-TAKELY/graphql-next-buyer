@@ -11,35 +11,29 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Construct a rich system prompt with product context
-        const specs = product.specificationTable
-            ? JSON.stringify(product.specificationTable)
+        // Optimize context: Truncate description and clean up specs/variants to speed up inference
+        const truncatedDescription = product.description
+            ? product.description.substring(0, 500) + "..."
+            : "No description available.";
+
+        const specsSnippet = product.specificationTable
+            ? JSON.stringify(product.specificationTable).substring(0, 800) + "..."
             : "No detailed specifications available.";
 
-        const variants = product.variants
-            ? product.variants.map((v: any) => `${v.name || 'Variant'}: ${JSON.stringify(v.attributes)} - Price: ${v.price}`).join("\n")
+        const variantsSnippet = product.variants
+            ? product.variants.map((v: any) => `${v.name || 'Variant'}: ${JSON.stringify(v.attributes)}`).join(", ").substring(0, 400) + "..."
             : "No variants available.";
 
-        const systemPrompt = `You are an AI Product Assistant for Vanijay, an e-commerce platform in Nepal.
-Your goal is to help users with details about the following product:
-Product Name: ${product.name}
-Description: ${product.description || 'N/A'}
+        const systemPrompt = `You are an AI Product Assistant for Vanijay (Nepal).
+Help users with details about: ${product.name}.
 Brand: ${typeof product.brand === "string" ? product.brand : product.brand?.name || 'N/A'}
-Category: ${product.category?.name || 'N/A'}
-
-Specifications:
-${specs}
-
-Variants:
-${variants}
+Description: ${truncatedDescription}
+Specs/Variants: ${specsSnippet} | ${variantsSnippet}
 
 Instructions:
-1. Be helpful, professional, and concise.
-2. Only answer questions related to this product based on the information provided.
-3. If you don't know the answer, politely suggest the user contact the seller or check the official specs.
-4. Mention that prices are in NPR.
-5. Provide details about specific variants if asked.
-6. Use friendly language suitable for a shopping assistant.`;
+1. Be concise (max 2-3 sentences).
+2. Only answer based on these details.
+3. Prices in NPR.`;
 
         const ollamaPayload = {
             model: "qwen2.5:3b",
@@ -50,9 +44,9 @@ Instructions:
             stream: false,
         };
 
-        // Use AbortController for a 60-second timeout
+        // Use AbortController for a 25-second timeout (to return JSON before Cloudflare 504)
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 60000);
+        const timeoutId = setTimeout(() => controller.abort(), 25000);
 
         try {
             // Note: 'ollama' is the container name on the docker network

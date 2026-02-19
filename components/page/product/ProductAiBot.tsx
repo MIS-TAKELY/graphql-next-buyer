@@ -50,9 +50,14 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
                 }),
             });
 
-            const data = await response.json();
+            let data;
+            try {
+                data = await response.json();
+            } catch {
+                throw new Error("Gateway timeout — the AI took too long. Please try again in a few seconds.");
+            }
             if (!response.ok) {
-                throw new Error(data.error || "Failed to get AI response");
+                throw new Error(data?.error || "Failed to get AI response");
             }
             setMessages((prev) => [...prev, { role: "assistant", content: data.content }]);
         } catch (error: any) {
