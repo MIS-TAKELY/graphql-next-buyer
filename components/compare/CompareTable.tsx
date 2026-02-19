@@ -225,21 +225,6 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
                 });
             }
 
-            // 3. Category Specifications
-            let categorySpecs = product.category?.categorySpecification;
-            if (categorySpecs && typeof categorySpecs === 'string') {
-                try {
-                    categorySpecs = JSON.parse(categorySpecs);
-                } catch (e) {
-                    console.error("Failed to parse categorySpecification:", e);
-                }
-            }
-
-            if (Array.isArray(categorySpecs)) {
-                categorySpecs.forEach(spec => {
-                    addFeature(normalizeKey(spec.key, smartMapping), spec.label || spec.key, spec.value);
-                });
-            }
 
             // 4. Specification Table (Rich Specs)
             // Handle both Array and Stringified JSON or complex nested structures

@@ -37,7 +37,6 @@ export const MAKE_SEARCH_QUERY = gql`
           categorySpecification {
             key
             label
-            value
           }
         }
       }
@@ -82,7 +81,6 @@ export const COMPARE_SEARCH_QUERY = gql`
           categorySpecification {
             key
             label
-            value
           }
         }
         variants {

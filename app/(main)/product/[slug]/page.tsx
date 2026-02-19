@@ -292,13 +292,13 @@ export default async function ProductPage({
     });
   }
 
-  // Add category specific specifications if available
-  if (serializableProduct.category?.categorySpecification && Array.isArray(serializableProduct.category.categorySpecification)) {
-    serializableProduct.category.categorySpecification.forEach((spec: any) => {
+  // Add variant specifications
+  if (serializableProduct.variants?.[0]?.specifications && Array.isArray(serializableProduct.variants[0].specifications)) {
+    serializableProduct.variants[0].specifications.forEach((spec: any) => {
       additionalProperties.push({
         "@type": "PropertyValue",
-        name: spec.label || spec.key,
-        value: spec.value || "N/A",
+        name: spec.key,
+        value: spec.value,
       });
     });
   }

@@ -9,7 +9,6 @@ export interface CompareProduct {
         categorySpecification?: {
             key: string;
             label: string;
-            value?: string;
         }[];
     };
     variants: {
