@@ -50,15 +50,16 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
                 }),
             });
 
-            if (!response.ok) throw new Error("Failed to get AI response");
-
             const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to get AI response");
+            }
             setMessages((prev) => [...prev, { role: "assistant", content: data.content }]);
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             setMessages((prev) => [
                 ...prev,
-                { role: "assistant", content: "Sorry, I encountered an error. Please try again later." },
+                { role: "assistant", content: error.message || "Sorry, I encountered an error. Please try again later." },
             ]);
         } finally {
             setIsLoading(false);

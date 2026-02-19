@@ -50,26 +50,43 @@ Instructions:
             stream: false,
         };
 
-        // Note: 'ollama' is the container name on the docker network
-        const response = await fetch("http://ollama:11434/api/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(ollamaPayload),
-        });
+        // Use AbortController for a 60-second timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error("Ollama error:", errorText);
-            return NextResponse.json(
-                { error: "Failed to get response from AI" },
-                { status: 500 }
-            );
+        try {
+            // Note: 'ollama' is the container name on the docker network
+            const response = await fetch("http://ollama:11434/api/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(ollamaPayload),
+                signal: controller.signal,
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error("Ollama error:", errorText);
+                return NextResponse.json(
+                    { error: "AI model is currently busy or unavailable. Please try again in a moment." },
+                    { status: 503 }
+                );
+            }
+
+            const data = await response.json();
+            return NextResponse.json(data.message);
+        } catch (err: any) {
+            if (err.name === 'AbortError') {
+                return NextResponse.json(
+                    { error: "The AI took too long to respond. Please try a simpler question or try again later." },
+                    { status: 504 }
+                );
+            }
+            throw err;
         }
-
-        const data = await response.json();
-        return NextResponse.json(data.message);
     } catch (error) {
         console.error("AI API Error:", error);
         return NextResponse.json(

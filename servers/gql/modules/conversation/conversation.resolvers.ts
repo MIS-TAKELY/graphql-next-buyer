@@ -218,12 +218,13 @@ export const conversationResolvers = {
       if (existing) {
         if (!existing.isActive) {
           // Reactivate if needed
-          return await prisma.conversation.update({
+          const updated = await prisma.conversation.update({
             where: { id: existing.id },
             data: { isActive: true },
           });
+          return { ...updated, messages: [], unreadCount: 0 };
         }
-        return existing;
+        return { ...existing, messages: [], unreadCount: 0 };
       }
 
       // 2. Create new
@@ -258,6 +259,8 @@ export const conversationResolvers = {
           timeout: 15000,
         }
       );
+
+      return { ...result, messages: [], unreadCount: 0 };
     },
   },
 };
