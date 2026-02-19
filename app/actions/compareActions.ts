@@ -14,6 +14,7 @@ export async function getSmartSpecificationMapping(rawKeys: string[]): Promise<R
 
     // 1. Try to get from cache first
     for (const key of rawKeys) {
+        if (!key || typeof key !== 'string') continue;
         const normalizedInput = key.toLowerCase().replace(/[^a-z0-9]/g, '').trim();
         const cached = await getCache<string>(`${CACHE_KEY_PREFIX}${normalizedInput}`);
         if (cached) {
@@ -44,9 +45,11 @@ export async function getSmartSpecificationMapping(rawKeys: string[]): Promise<R
 
         if (typeof llmMapping === 'object' && llmMapping !== null) {
             for (const [raw, canonical] of Object.entries(llmMapping)) {
+                if (!raw || !canonical || typeof canonical !== 'string') continue;
+
                 // Use strict normalization (strip symbols) to match frontend CompareTable logic
                 const normalizedRaw = raw.toLowerCase().replace(/[^a-z0-9]/g, '').trim();
-                const normalizedCanonical = (canonical as string).toLowerCase().trim();
+                const normalizedCanonical = canonical.toLowerCase().trim();
 
                 mapping[normalizedRaw] = normalizedCanonical;
 
@@ -56,9 +59,10 @@ export async function getSmartSpecificationMapping(rawKeys: string[]): Promise<R
         }
     } catch (error) {
         console.error("Failed to fetch smart mapping from LLM:", error);
-        // Fallback: map unknown keys to themselves to avoid repeated attempts
-        for (const key of unknownKeys) {
-            const normalized = key.toLowerCase().trim();
+    } finally {
+        // 3. Fallback: ensure EVERY input key has a mapping, even if LLM failed or skipped it
+        for (const key of rawKeys) {
+            const normalized = key.toLowerCase().replace(/[^a-z0-9]/g, '').trim();
             if (!mapping[normalized]) {
                 mapping[normalized] = normalized;
             }
