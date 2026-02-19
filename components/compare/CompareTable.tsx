@@ -242,7 +242,7 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
             }
 
             // 4. Specification Table (Rich Specs)
-            // Handle both Array and Stringified JSON
+            // Handle both Array and Stringified JSON or complex nested structures
             let tableData = product.specificationTable;
             if (tableData && typeof tableData === 'string') {
                 try {
@@ -252,40 +252,64 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
                 }
             }
 
-            if (Array.isArray(tableData)) {
-                tableData.forEach((table: any) => {
-                    if (Array.isArray(table?.rows)) {
-                        table.rows.forEach((row: any) => {
-                            if (Array.isArray(row) && row.length >= 2) {
-                                const [key, value] = row;
-                                addFeature(normalizeKey(key, smartMapping), key, value);
-                            }
-                        });
+            const processRows = (rows: any[]) => {
+                if (!Array.isArray(rows)) return;
+                rows.forEach((row: any) => {
+                    if (Array.isArray(row) && row.length >= 2) {
+                        const [key, value] = row;
+                        const specValue = typeof value === 'object' ? JSON.stringify(value) : value;
+                        addFeature(normalizeKey(key, smartMapping), key, specValue);
+                    } else if (typeof row === 'object' && row !== null && 'key' in row && 'value' in row) {
+                        addFeature(normalizeKey(row.key, smartMapping), row.key, row.value);
                     }
                 });
+            };
+
+            if (Array.isArray(tableData)) {
+                (tableData as any[]).forEach((item: any) => {
+                    if (Array.isArray(item?.rows)) {
+                        processRows(item.rows);
+                    } else if (item?.sections && Array.isArray(item.sections)) {
+                        (item.sections as any[]).forEach((sec: any) => processRows(sec.rows));
+                    }
+                    // Fallback for flat array of [key, value] pairs
+                    if (Array.isArray(item) && item.length >= 2 && typeof item[0] === 'string') {
+                        addFeature(normalizeKey(item[0], smartMapping), item[0], item[1]);
+                    }
+                });
+            } else if (tableData && typeof tableData === 'object') {
+                const td = tableData as any;
+                if (Array.isArray(td.rows)) processRows(td.rows);
+                if (Array.isArray(td.sections)) {
+                    (td.sections as any[]).forEach((sec: any) => processRows(sec.rows));
+                }
             }
 
-            // 5. Legacy Features/Specs (Fallback)
+            // 5. Features / Highlights
             if (Array.isArray(product.features) && product.features.length > 0) {
-                features.set('highlights', product.features);
-                allFeatureKeys.add('highlights');
-                featureLabels.set('highlights', 'Highlights');
+                // Filter out empty strings
+                const cleanFeatures = product.features.filter(f => f && f.trim());
+                if (cleanFeatures.length > 0) {
+                    features.set('highlights', cleanFeatures);
+                    allFeatureKeys.add('highlights');
+                    featureLabels.set('highlights', 'Highlights');
+                }
             }
 
-            // Process specifications with smart parsing and guessing
+            // 6. Detailed Specifications Array
             if (Array.isArray(product.variants?.[0]?.specifications)) {
                 product.variants[0].specifications.forEach((spec: any, idx) => {
                     const specValue = spec.value;
                     const specKey = spec.key;
                     if (!specValue) return;
 
-                    // Option A: Use explicit key if provided by backend
+                    // Option A: Use explicit key if provided
                     if (specKey && specKey.length > 0 && specKey.length < 50) {
                         addFeature(normalizeKey(specKey, smartMapping), specKey, specValue);
                         return;
                     }
 
-                    // Option B: Try to parse "Key: Value" or "Key - Value" or "Key\tValue"
+                    // Option B: Try to parse "Key: Value"
                     const parts = specValue.split(/[:\t]\s*| \s*[-–—]\s+/);
                     if (parts.length >= 2) {
                         const key = parts[0].trim();
@@ -296,14 +320,14 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
                         }
                     }
 
-                    // Option C: Try to guess label from value content
+                    // Option C: Guess label
                     const guessedLabel = guessLabel(specValue);
                     if (guessedLabel) {
                         addFeature(normalizeKey(guessedLabel, smartMapping), guessedLabel, specValue);
                         return;
                     }
 
-                    // Option D: Fallback to indexed spec
+                    // Option D: Fallback
                     const compositeKey = `legacy_spec_${idx}`;
                     addFeature(compositeKey, `Specification ${idx + 1}`, specValue);
                 });
@@ -318,8 +342,7 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
 
         // Identify all keys that should be compared as features
         allFeatureKeys.forEach(key => {
-            // Skip identifiers and standard fields handled in header
-            // Note: 'highlights' is now allowed to flow into uncommonFeatures
+            // Skip standard fields handled in header
             if (['price', 'mrp', 'rating', 'reviewCount', 'brand', 'category', 'description'].includes(key)) return;
 
             // Check if every selected product has a valid value for this feature
