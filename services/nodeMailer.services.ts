@@ -161,7 +161,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
           <p style="margin: 0; font-size: 1.1em; font-weight: bold;">Order Summary:</p>
           <p style="margin: 10px 0 0 0;">Total Amount: <strong>NPR ${ctx.total}</strong></p>
         </div>
-        <p>Please log in to your dashboard to process the order as soon as possible.</p>
+        <p>Please log in to your <a href="https://seller.vanijay.com/orders">dashboard</a> to process the order as soon as possible.</p>
         <p style="color: #666; font-size: 0.9em;">Thank you for selling on Vanijay!</p>
     `, "New Order Received! - Vanijay"),
   },
@@ -194,7 +194,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         </div>
         <p>We'll notify you when your order is shipped. You can track your order status in your account.</p>
         <div style="text-align: center;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/account/orders" class="btn">Track Your Order</a>
+          <a href="https://www.vanijay.com/account/orders" class="btn">Track Your Order</a>
         </div>
     `, "Order Placed Successfully! - Vanijay"),
   },
@@ -226,7 +226,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
           ${ctx.carrier ? `<p style="margin: 5px 0;"><strong>Carrier:</strong> ${ctx.carrier}</p>` : ''}
         </div>
         <div style="text-align: center;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/account/orders" class="btn">Track Your Order</a>
+          <a href="https://www.vanijay.com/account/orders" class="btn">Track Your Order</a>
         </div>
     `, "Your Order Has Been Shipped! - Vanijay"),
   },
@@ -242,7 +242,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         </div>
         <p>If you have any issues with your items, you can request a return within the eligible return window.</p>
         <div style="text-align: center;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/account/orders" class="btn" style="background-color: #28a745 !important;">View Order Details</a>
+          <a href="https://www.vanijay.com/account/orders" class="btn" style="background-color: #28a745 !important;">View Order Details</a>
         </div>
     `, "Your Order Has Been Delivered! - Vanijay"),
   },
@@ -273,7 +273,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         </div>
         <p>We'll notify you once your order is on its way.</p>
         <div style="text-align: center;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/account/orders" class="btn">Track Your Order</a>
+          <a href="https://www.vanijay.com/account/orders" class="btn">Track Your Order</a>
         </div>
     `, "Your Order Has Been Confirmed! - Vanijay"),
   },
@@ -317,7 +317,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
           <p style="margin: 5px 0;"><strong>Customer:</strong> ${ctx.customerName || 'N/A'}</p>
           <p style="margin: 5px 0;"><strong>Reason:</strong> ${ctx.reason || 'N/A'}</p>
         </div>
-        <p>Please log in to your dashboard to review and respond to this request promptly.</p>
+        <p>Please log in to your <a href="https://seller.vanijay.com/orders">dashboard</a> to review and respond to this request promptly.</p>
     `, "New Dispute Request Received - Vanijay"),
   },
   RETURN_UPDATE: {
@@ -332,7 +332,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
           ${ctx.rejectionReason ? `<p style="margin: 5px 0;"><strong>Reason:</strong> ${ctx.rejectionReason}</p>` : ''}
         </div>
         <div style="text-align: center;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com'}/account/orders" class="btn" style="background-color: #6f42c1 !important;">View Status</a>
+          <a href="https://www.vanijay.com/account/orders" class="btn" style="background-color: #6f42c1 !important;">View Status</a>
         </div>
     `, "Return Request Update - Vanijay"),
   },
@@ -351,7 +351,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
         </div>
         
         <div style="text-align: center; margin-top: 30px;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com'}/account/orders" class="btn" style="background-color: ${ctx.color || '#007bff'} !important;">Track Your Order</a>
+          <a href="https://www.vanijay.com/account/orders" class="btn" style="background-color: ${ctx.color || '#007bff'} !important;">Track Your Order</a>
         </div>
     `, ctx.title || "Order Update"),
   },

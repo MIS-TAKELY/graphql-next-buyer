@@ -218,7 +218,7 @@ export function notifyBuyerStatusChange(
       whatsappFn = () =>
         sendWhatsAppMessage(
           buyer.phoneNumber!,
-          `✅ Order Confirmed!\nOrder #${orderNumber} has been confirmed by the seller and is being prepared.\n\nTrack at: ${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/account/orders`
+          `✅ Order Confirmed!\nOrder #${orderNumber} has been confirmed by the seller and is being prepared.\n\nTrack at: https://www.vanijay.com/account/orders`
         );
     }
   } else if (newStatus === "PROCESSING") {
@@ -231,7 +231,7 @@ export function notifyBuyerStatusChange(
       whatsappFn = () =>
         sendWhatsAppMessage(
           buyer.phoneNumber!,
-          `⚙️ Order Processing\nOrder #${orderNumber} is now being processed and packed.\n\nTrack at: ${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/account/orders`
+          `⚙️ Order Processing\nOrder #${orderNumber} is now being processed and packed.\n\nTrack at: https://www.vanijay.com/account/orders`
         );
     }
   } else if (newStatus === "SHIPPED") {
@@ -246,7 +246,7 @@ export function notifyBuyerStatusChange(
       whatsappFn = () =>
         sendWhatsAppMessage(
           buyer.phoneNumber!,
-          `📦 Order Shipped!\nOrder #${orderNumber} is on its way.${extra?.trackingNumber ? `\nTracking: ${extra.trackingNumber}` : ""}\n\nTrack at: ${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/account/orders`
+          `📦 Order Shipped!\nOrder #${orderNumber} is on its way.${extra?.trackingNumber ? `\nTracking: ${extra.trackingNumber}` : ""}\n\nTrack at: https://www.vanijay.com/account/orders`
         );
     }
   } else if (newStatus === "DELIVERED") {
@@ -365,7 +365,7 @@ export function notifyReturnUpdate(
         ? () =>
           sendWhatsAppMessage(
             buyer.phoneNumber!,
-            `🔄 Return Update\nOrder #${orderNumber}\nStatus: ${status}${rejectionReason ? `\nReason: ${rejectionReason}` : ""}\n\nView details at: ${process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com"}/account/orders`
+            `🔄 Return Update\nOrder #${orderNumber}\nStatus: ${status}${rejectionReason ? `\nReason: ${rejectionReason}` : ""}\n\nView details at: https://www.vanijay.com/account/orders`
           )
         : undefined,
       inApp: () =>
@@ -442,7 +442,7 @@ export function notifySellerDisputeReceived(
         ? () =>
           sendWhatsAppMessage(
             seller.phoneNumber!,
-            `⚠️ New ${typeLabel} Request\nOrder #${orderNumber}\nCustomer: ${customerName}\nReason: ${reason}\n\nPlease review in your dashboard.`
+            `⚠️ New ${typeLabel} Request\nOrder #${orderNumber}\nCustomer: ${customerName}\nReason: ${reason}\n\nPlease review in your dashboard: https://seller.vanijay.com/orders`
           )
         : undefined,
       inApp: () =>
