@@ -44,6 +44,15 @@ const canonicalKeys: Record<string, string> = {
     'macro': 'camera_features',
     'autofocus': 'camera_features',
     'ois': 'camera_features',
+    'brightness': 'brightness',
+    'brightnesshbm': 'brightness',
+    'peakbrightness': 'brightness',
+    'peak': 'brightness',
+    'refreshrate': 'refresh_rate',
+    'displaysize': 'screen_size',
+    'screensize': 'screen_size',
+    'size': 'screen_size',
+    'ize': 'screen_size',
     'case': 'box_contents',
     'inclusion': 'box_contents',
 };
@@ -107,6 +116,9 @@ const canonicalLabels: Record<string, string> = {
     'screen': 'Display',
     'display_color': 'Display Color',
     'contrast': 'Contrast',
+    'brightness': 'Brightness',
+    'refresh_rate': 'Refresh Rate',
+    'screen_size': 'Display Size',
     'power': 'Battery',
     'operating system': 'OS',
     'formats': 'Supported Formats',
@@ -163,9 +175,15 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
 
                 const existing = features.get(normKey);
                 if (existing !== undefined && existing !== null && typeof value === 'string' && typeof existing === 'string') {
-                    // Avoid exact duplicates
-                    if (!existing.includes(value)) {
-                        features.set(normKey, `${existing}; ${value}`);
+                    // Avoid exact duplicates or redundant substrings during merge
+                    const cleanVal = value.trim();
+                    const cleanExisting = existing.trim();
+
+                    if (cleanExisting === cleanVal) return;
+
+                    const existingParts = cleanExisting.split(/;\s+/);
+                    if (!existingParts.includes(cleanVal)) {
+                        features.set(normKey, `${cleanExisting}; ${cleanVal}`);
                     }
                 } else {
                     features.set(normKey, value);

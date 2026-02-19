@@ -14,7 +14,7 @@ export async function getSmartSpecificationMapping(rawKeys: string[]): Promise<R
 
     // 1. Try to get from cache first
     for (const key of rawKeys) {
-        const normalizedInput = key.toLowerCase().trim();
+        const normalizedInput = key.toLowerCase().replace(/[^a-z0-9]/g, '').trim();
         const cached = await getCache<string>(`${CACHE_KEY_PREFIX}${normalizedInput}`);
         if (cached) {
             mapping[normalizedInput] = cached;
@@ -32,8 +32,8 @@ export async function getSmartSpecificationMapping(rawKeys: string[]): Promise<R
     
     Rules:
     - Return a JSON object mapping each input key to its canonical name.
-    - Example: {"SSD": "Storage", "Hard Drive": "Storage", "Color Depth": "Display Color", "Color Support": "Display Color"}
-    - If a key is unique and doesn't belong to a common group, map it to itself or a simplified version.
+    - IGNORE technical suffixes or modifiers like "(HBM)", "(Typ)", "Peak", "Maximum" when grouping.
+    - Example: {"Brightness (HBM)": "Brightness", "Peak Brightness": "Brightness", "Color Depth": "Display Color", "ize": "Display Size", "Size": "Display Size"}
     - Focus on categories like Display, Processor, Storage, Memory, Connectivity, etc.
     
     Respond ONLY with the JSON object.`;
