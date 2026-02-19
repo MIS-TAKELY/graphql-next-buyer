@@ -16,6 +16,7 @@ import FAQSection from "./FAQSection";
 import FrequentlyBoughtTogether from "./FrequentlyBoughtTogether";
 import RecommendedProducts from "./RecommendedProducts";
 import SellerInfo from "./SellerInfo";
+import ProductAiBot from "./ProductAiBot";
 
 interface ProductPageClientProps {
   product: TProduct | null;
@@ -310,6 +311,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 isOwnProduct={isOwnProduct}
               />
             </div>
+            <ProductAiBot product={product} />
           </div>
         </div>
 
