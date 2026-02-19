@@ -53,6 +53,17 @@ const canonicalKeys: Record<string, string> = {
     'screensize': 'screen_size',
     'size': 'screen_size',
     'ize': 'screen_size',
+    'storage': 'storage',
+    'storageoptions': 'storage',
+    'storagespace': 'storage',
+    'internalstorage': 'storage',
+    'variant': 'variants',
+    'variants': 'variants',
+    'model': 'model',
+    'modelname': 'model',
+    'color': 'color',
+    'colors': 'color',
+    'finish': 'color',
     'case': 'box_contents',
     'inclusion': 'box_contents',
 };
@@ -124,6 +135,9 @@ const canonicalLabels: Record<string, string> = {
     'formats': 'Supported Formats',
     'camera_features': 'Camera Features',
     'box_contents': 'In the Box',
+    'variants': 'Variants',
+    'color': 'Color',
+    'model': 'Model',
 };
 
 interface CompareTableProps {
@@ -212,15 +226,34 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
             }
 
             // 3. Category Specifications
-            if (Array.isArray(product.category?.categorySpecification)) {
-                product.category.categorySpecification.forEach(spec => {
+            let categorySpecs = product.category?.categorySpecification;
+            if (categorySpecs && typeof categorySpecs === 'string') {
+                try {
+                    categorySpecs = JSON.parse(categorySpecs);
+                } catch (e) {
+                    console.error("Failed to parse categorySpecification:", e);
+                }
+            }
+
+            if (Array.isArray(categorySpecs)) {
+                categorySpecs.forEach(spec => {
                     addFeature(normalizeKey(spec.key, smartMapping), spec.label || spec.key, spec.value);
                 });
             }
 
             // 4. Specification Table (Rich Specs)
-            if (Array.isArray(product.specificationTable)) {
-                product.specificationTable.forEach((table: any) => {
+            // Handle both Array and Stringified JSON
+            let tableData = product.specificationTable;
+            if (tableData && typeof tableData === 'string') {
+                try {
+                    tableData = JSON.parse(tableData);
+                } catch (e) {
+                    console.error("Failed to parse specificationTable:", e);
+                }
+            }
+
+            if (Array.isArray(tableData)) {
+                tableData.forEach((table: any) => {
                     if (Array.isArray(table?.rows)) {
                         table.rows.forEach((row: any) => {
                             if (Array.isArray(row) && row.length >= 2) {
@@ -283,11 +316,13 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
         const commonFeatures: string[] = [];
         const uncommonFeatures: string[] = [];
 
+        // Identify all keys that should be compared as features
         allFeatureKeys.forEach(key => {
-            // Skip standard keys that are handled separately in UI
+            // Skip identifiers and standard fields handled in header
+            // Note: 'highlights' is now allowed to flow into uncommonFeatures
             if (['price', 'mrp', 'rating', 'reviewCount', 'brand', 'category', 'description'].includes(key)) return;
 
-            // Check if every selected product has a value for this key
+            // Check if every selected product has a valid value for this feature
             const isCommon = selectedProducts.every(p => {
                 const pFeatures = productFeatures.get(p.id);
                 const val = pFeatures?.get(key);
@@ -301,9 +336,7 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
             }
         });
 
-        // Hierarchical Sort: 
-        // 1. All "Specification N" last
-        // 2. Alphabetical otherwise
+        // Hierarchical Sort
         const sortFn = (a: string, b: string) => {
             const labelA = featureLabels.get(a) || a;
             const labelB = featureLabels.get(b) || b;
@@ -324,7 +357,7 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
             featureLabels
         };
 
-    }, [selectedProducts]);
+    }, [selectedProducts, smartMapping]);
 
     if (!selectedProducts.length || !preparedData) return null;
 
