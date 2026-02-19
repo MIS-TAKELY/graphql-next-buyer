@@ -55,5 +55,6 @@ export async function sendWhatsAppMessage(phone: string, message: string) {
 }
 
 export async function sendWhatsAppOTP(phone: string, otp: string) {
-  return sendWhatsAppMessage(phone, `Your verification code is: ${otp}`);
+  const message = `Your verification code is: ${otp}. ⚠️ Do not share this code with anyone. Vanijay will never ask you for this code. This code expires in 10 minutes.`;
+  return sendWhatsAppMessage(phone, message);
 }
