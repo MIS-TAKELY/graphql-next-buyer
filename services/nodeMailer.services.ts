@@ -35,7 +35,8 @@ type EmailTemplate = {
 
 const getEmailLayout = (content: string, subject: string) => {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com";
-  const logoUrl = `${appUrl}/final_blue_logo_500by500.svg`;
+  // Updated to use .png since SVGs have poor email client support.
+  const logoUrl = `${appUrl}/final_blue_logo_500by500.png`;
 
   return `
     <!DOCTYPE html>
