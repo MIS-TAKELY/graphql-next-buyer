@@ -11,10 +11,34 @@ import { CompareProduct } from "@/types/compare.types";
 import { formatPrice } from "@/lib/utils";
 import { toast } from "sonner";
 
+const canonicalKeys: Record<string, string> = {
+    'ssd': 'storage',
+    'hdd': 'storage',
+    'harddrive': 'storage',
+    'harddisk': 'storage',
+    'rom': 'storage',
+    'storagetype': 'storage',
+    'ram': 'memory',
+    'processor': 'cpu',
+    'chipset': 'cpu',
+    'graphics': 'gpu',
+    'videocard': 'gpu',
+    'display': 'screen',
+    'panel': 'screen',
+    'resolution': 'screen',
+    'displaydetails': 'screen',
+    'battery': 'power',
+    'capacity': 'power',
+    'batteryandpower': 'power',
+    'os': 'operating system',
+    'softwareandos': 'operating system',
+};
+
 const normalizeKey = (key: string) => {
-    return key.toLowerCase()
+    const normalized = key.toLowerCase()
         .replace(/[^a-z0-9]/g, '')
         .trim();
+    return canonicalKeys[normalized] || normalized;
 };
 
 const guessLabel = (value: string) => {
@@ -54,6 +78,16 @@ const guessLabel = (value: string) => {
     return null;
 };
 
+const canonicalLabels: Record<string, string> = {
+    'storage': 'Storage',
+    'memory': 'Memory',
+    'cpu': 'Processor',
+    'gpu': 'Graphics',
+    'screen': 'Display',
+    'power': 'Battery',
+    'operating system': 'OS',
+};
+
 export default function CompareTable() {
     const { selectedProducts, removeProduct } = useCompareStore();
 
@@ -65,6 +99,12 @@ export default function CompareTable() {
         const featureLabels = new Map<string, string>(); // normalizedKey -> display label
 
         const updateFeatureLabel = (normKey: string, label: string) => {
+            // Priority 1: Canonical labels for unified keys
+            if (canonicalLabels[normKey]) {
+                featureLabels.set(normKey, canonicalLabels[normKey]);
+                return;
+            }
+
             const currentLabel = featureLabels.get(normKey);
             // Allow "Specification N" as a baseline if none exists
             if (!currentLabel) {
