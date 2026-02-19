@@ -28,7 +28,7 @@ type TemplateContext = {
 };
 
 type EmailTemplate = {
-  subject: string;
+  subject: string | ((context: TemplateContext) => string);
   text: (context: TemplateContext) => string;
   html: (context: TemplateContext) => string;
 };
@@ -332,9 +332,28 @@ const TEMPLATES: Record<string, EmailTemplate> = {
           ${ctx.rejectionReason ? `<p style="margin: 5px 0;"><strong>Reason:</strong> ${ctx.rejectionReason}</p>` : ''}
         </div>
         <div style="text-align: center;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://vanijay.com'}/account/orders" class="btn" style="background-color: #6f42c1 !important;">View Status</a>
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com'}/account/orders" class="btn" style="background-color: #6f42c1 !important;">View Status</a>
         </div>
     `, "Return Request Update - Vanijay"),
+  },
+  ORDER_STATUS_UPDATE: {
+    subject: (ctx: any) => `${ctx.title || 'Order Update'} - #${ctx.orderNumber}`,
+    text: (ctx: any) => `${ctx.title}: ${ctx.message}. Order #${ctx.orderNumber}`,
+    html: (ctx: any) => getEmailLayout(`
+        <h2 style="color: ${ctx.color || '#007bff'}; margin-top: 0;">${ctx.title}</h2>
+        <p>Hello ${ctx.buyerName || 'there'},</p>
+        <p>${ctx.message}</p>
+        <div class="info-box" style="border-left-color: ${ctx.color || '#007bff'};">
+          <p style="margin: 5px 0;"><strong>Order Number:</strong> #${ctx.orderNumber}</p>
+          ${ctx.trackingNumber ? `<p style="margin: 5px 0;"><strong>Tracking Number:</strong> ${ctx.trackingNumber}</p>` : ''}
+          ${ctx.carrier ? `<p style="margin: 5px 0;"><strong>Carrier:</strong> ${ctx.carrier}</p>` : ''}
+          ${ctx.cancellationReason ? `<p style="margin: 15px 0 5px 0; color: #dc3545;"><strong>Cancellation Reason:</strong> ${ctx.cancellationReason}</p>` : ''}
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://www.vanijay.com'}/account/orders" class="btn" style="background-color: ${ctx.color || '#007bff'} !important;">Track Your Order</a>
+        </div>
+    `, ctx.title || "Order Update"),
   },
 };
 
@@ -356,7 +375,7 @@ export const senMail = async (
     const info = await transporter.sendMail({
       from: '"Vanijay" <mailitttome@gmail.com>',
       to: receiverEmail,
-      subject: template.subject,
+      subject: typeof template.subject === 'function' ? template.subject(context) : template.subject,
       text: template.text(context),
       html: template.html(context),
       attachments,
