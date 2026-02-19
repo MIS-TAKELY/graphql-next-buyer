@@ -267,21 +267,39 @@ export default function CompareTable({ smartMapping }: CompareTableProps) {
 
             if (Array.isArray(tableData)) {
                 (tableData as any[]).forEach((item: any) => {
-                    if (Array.isArray(item?.rows)) {
+                    if (!item) return;
+
+                    // 1. New Multi-Section format: { title, headers, rows }
+                    if (Array.isArray(item.rows)) {
                         processRows(item.rows);
-                    } else if (item?.sections && Array.isArray(item.sections)) {
+                    }
+                    // 2. Format with sections array: { sections: [{ rows }] }
+                    else if (item.sections && Array.isArray(item.sections)) {
                         (item.sections as any[]).forEach((sec: any) => processRows(sec.rows));
                     }
-                    // Fallback for flat array of [key, value] pairs
-                    if (Array.isArray(item) && item.length >= 2 && typeof item[0] === 'string') {
+                    // 3. Flat array of [key, value] pairs: [[key, value], ...]
+                    else if (Array.isArray(item) && item.length >= 2 && typeof item[0] === 'string') {
                         addFeature(normalizeKey(item[0], smartMapping), item[0], item[1]);
+                    }
+                    // 4. Flat array of {key, value} objects: [{key, value}, ...]
+                    else if (typeof item === 'object' && 'key' in item && 'value' in item) {
+                        addFeature(normalizeKey(item.key, smartMapping), item.key, item.value);
                     }
                 });
             } else if (tableData && typeof tableData === 'object') {
                 const td = tableData as any;
-                if (Array.isArray(td.rows)) processRows(td.rows);
-                if (Array.isArray(td.sections)) {
+                // Double check if it's the {headers, rows} format
+                if (Array.isArray(td.rows)) {
+                    processRows(td.rows);
+                } else if (Array.isArray(td.sections)) {
                     (td.sections as any[]).forEach((sec: any) => processRows(sec.rows));
+                } else {
+                    // Simple Object format: { Key: Value }
+                    Object.entries(td).forEach(([key, value]) => {
+                        if (typeof value !== 'function') {
+                            addFeature(normalizeKey(key, smartMapping), key, value);
+                        }
+                    });
                 }
             }
 

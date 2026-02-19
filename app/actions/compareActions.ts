@@ -44,12 +44,13 @@ export async function getSmartSpecificationMapping(rawKeys: string[]): Promise<R
 
         if (typeof llmMapping === 'object' && llmMapping !== null) {
             for (const [raw, canonical] of Object.entries(llmMapping)) {
-                const normalizedRaw = raw.toLowerCase().trim();
+                // Use strict normalization (strip symbols) to match frontend CompareTable logic
+                const normalizedRaw = raw.toLowerCase().replace(/[^a-z0-9]/g, '').trim();
                 const normalizedCanonical = (canonical as string).toLowerCase().trim();
 
                 mapping[normalizedRaw] = normalizedCanonical;
 
-                // Cache the result
+                // Cache the result using the same strict normalization
                 await setCache(`${CACHE_KEY_PREFIX}${normalizedRaw}`, normalizedCanonical, CACHE_TTL);
             }
         }

@@ -32,25 +32,71 @@ export default function ComparePage() {
                 // Collect all raw keys from selected products
                 const rawKeys = new Set<string>();
                 selectedProducts.forEach(product => {
-                    // Variant attributes
+                    // 1. Variant attributes
                     if (product.variants?.[0]?.attributes) {
                         Object.keys(product.variants[0].attributes).forEach(k => rawKeys.add(k));
                     }
-                    // Specifications
-                    if (product.variants?.[0]?.specifications) {
-                        product.variants[0].specifications.forEach((s: any) => {
+
+                    // 2. Category specifications
+                    if (Array.isArray(product.category?.categorySpecification)) {
+                        product.category.categorySpecification.forEach(s => {
                             if (s.key) rawKeys.add(s.key);
                         });
                     }
-                    // Table rows
-                    if (Array.isArray(product.specificationTable)) {
-                        product.specificationTable.forEach((table: any) => {
-                            if (Array.isArray(table?.rows)) {
-                                table.rows.forEach((row: any) => {
-                                    if (Array.isArray(row) && row[0]) rawKeys.add(row[0]);
-                                });
+
+                    // 3. Specifications array (including legacy parsing)
+                    if (product.variants?.[0]?.specifications) {
+                        product.variants[0].specifications.forEach((s: any) => {
+                            if (s.key) {
+                                rawKeys.add(s.key);
+                            } else if (s.value) {
+                                // Try to extract key from "Key: Value"
+                                const parts = s.value.split(/[:\t]\s*| \s*[-–—]\s+/);
+                                if (parts.length >= 2 && parts[0].trim().length < 50) {
+                                    rawKeys.add(parts[0].trim());
+                                }
                             }
                         });
+                    }
+
+                    // 4. Table rows / specificationTable
+                    let tableData = product.specificationTable;
+                    if (typeof tableData === 'string') {
+                        try { tableData = JSON.parse(tableData); } catch (e) { }
+                    }
+
+                    if (Array.isArray(tableData)) {
+                        tableData.forEach((item: any) => {
+                            if (item?.rows && Array.isArray(item.rows)) {
+                                item.rows.forEach((row: any) => {
+                                    if (Array.isArray(row) && row[0]) rawKeys.add(row[0]);
+                                    else if (row?.key) rawKeys.add(row.key);
+                                });
+                            } else if (item?.sections && Array.isArray(item.sections)) {
+                                item.sections.forEach((sec: any) => {
+                                    if (Array.isArray(sec.rows)) {
+                                        sec.rows.forEach((row: any) => {
+                                            if (Array.isArray(row) && row[0]) rawKeys.add(row[0]);
+                                            else if (row?.key) rawKeys.add(row.key);
+                                        });
+                                    }
+                                });
+                            } else if (Array.isArray(item) && item[0]) {
+                                rawKeys.add(item[0]);
+                            } else if (item?.key) {
+                                rawKeys.add(item.key);
+                            }
+                        });
+                    } else if (tableData && typeof tableData === 'object') {
+                        const td = tableData as any;
+                        if (Array.isArray(td.rows)) {
+                            td.rows.forEach((row: any) => {
+                                if (Array.isArray(row) && row[0]) rawKeys.add(row[0]);
+                                else if (row?.key) rawKeys.add(row.key);
+                            });
+                        } else {
+                            Object.keys(td).forEach(k => rawKeys.add(k));
+                        }
                     }
                 });
 
