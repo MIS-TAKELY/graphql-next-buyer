@@ -12,7 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 // IMPORTANT: Import from types/chat
 import { LocalMessage } from "@/types/chat";
-import { File, Loader2, MessageCircle, Paperclip, Send, X } from "lucide-react";
+import { File, Loader2, MessageSquareText, Paperclip, Send, X } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import MessageBubble from "./MessageBubble";
 
@@ -95,7 +95,7 @@ export function ChatModal({
         <div className="px-4 py-3 border-b bg-muted/20 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-              <MessageCircle className="h-5 w-5" />
+              <MessageSquareText className="h-5 w-5" />
             </div>
             <div>
               <DialogTitle className="text-base font-semibold">

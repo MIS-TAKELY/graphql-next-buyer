@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { MessageCircle } from "lucide-react";
+import { MessageSquareText } from "lucide-react";
 import React from "react";
 
 interface MessageButtonProps {
@@ -22,7 +22,7 @@ export function MessageButton({ onClick, disabled }: MessageButtonProps) {
                     aria-label="Message seller"
                     disabled={disabled}
                 >
-                    <MessageCircle className="w-5 h-5" />
+                    <MessageSquareText className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                 </Button>
             </TooltipTrigger>
             <TooltipContent>
