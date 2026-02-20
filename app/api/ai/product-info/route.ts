@@ -39,14 +39,13 @@ export async function POST(req: NextRequest) {
 
         try {
             // Fetch detailed product and category products in parallel to optimize response time
-            // To do this, we need to know the category slug beforehand, which we usually have from clientProduct
             categorySlug = clientProduct.category?.slug;
 
             const queries: Promise<any>[] = [
                 apolloClient.query({
                     query: GET_PRODUCT,
                     variables: { productId: clientProduct.id },
-                    fetchPolicy: "no-cache" // Or "cache-first" if appropriate
+                    fetchPolicy: "no-cache"
                 })
             ];
 
@@ -60,10 +59,15 @@ export async function POST(req: NextRequest) {
                 );
             }
 
-            const results = await Promise.allSettled(queries);
+            // Set a hard 2.5-second timeout on DB fetching so the AI still responds if DB is slow
+            const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("DB_TIMEOUT")), 2500));
+            const results = await Promise.race([
+                Promise.allSettled(queries),
+                timeoutPromise
+            ]) as PromiseSettledResult<any>[];
 
             // Handle Product Query Result
-            if (results[0].status === "fulfilled" && results[0].value.data?.getProduct) {
+            if (results[0]?.status === "fulfilled" && results[0].value.data?.getProduct) {
                 fullProduct = results[0].value.data.getProduct;
                 categorySlug = fullProduct.category?.slug || categorySlug;
                 categoryName = fullProduct.category?.name || categoryName;
@@ -75,46 +79,55 @@ export async function POST(req: NextRequest) {
                     (p: any) => p.slug !== fullProduct.slug && p.slug !== clientProduct.slug
                 );
             } else if (!results[1] && categorySlug && fullProduct.category?.slug !== clientProduct.category?.slug) {
-                // If the deep category slug was found ONLY in fullProduct, we missed the parallel fetch.
-                // Fetch it now (this is a fallback).
-                const { data: categoryData } = await apolloClient.query({
+                // Background fetch deep category if missed (won't block this request if it's slow, so we use race)
+                const fallbackFetch = apolloClient.query({
                     query: GET_CATEGORY_PRODUCTS,
-                    variables: { categorySlug, limit: 10 },
+                    variables: { categorySlug, limit: 8 },
                     fetchPolicy: "no-cache"
                 });
-                if (categoryData?.getProductsByCategory?.products) {
-                    categoryProducts = categoryData.getProductsByCategory.products.filter(
-                        (p: any) => p.slug !== fullProduct.slug && p.slug !== clientProduct.slug
-                    );
-                }
+
+                try {
+                    const categoryDataObj = await Promise.race([fallbackFetch, timeoutPromise]) as any;
+                    if (categoryDataObj?.data?.getProductsByCategory?.products) {
+                        categoryProducts = categoryDataObj.data.getProductsByCategory.products.filter(
+                            (p: any) => p.slug !== fullProduct.slug && p.slug !== clientProduct.slug
+                        );
+                    }
+                } catch (e) { /* ignore fallback errors */ }
             }
         } catch (dbError) {
-            console.error("Error fetching extra context for AI:", dbError);
-            // Fallback to client product if DB fetch fails
+            console.error("Error fetching extra context for AI - proceeding with clientProduct:", dbError);
+            // Fallback to client product if DB fetch fails or times out
         }
 
-        // Build a comprehensive system prompt
+        // Build a comprehensive but COMPACT system prompt to avoid high token evaluation times (which cause 504 Timeouts)
         const descriptionSnippet = fullProduct.description
-            ? fullProduct.description
+            ? fullProduct.description.substring(0, 600) + (fullProduct.description.length > 600 ? "..." : "")
             : "No description available.";
 
-        const specsSnippet = fullProduct.specificationTable
-            ? JSON.stringify(fullProduct.specificationTable)
-            : "No specifications available.";
+        // Format specs cleanly instead of huge JSON strings
+        let mappedSpecs = "No specifications available.";
+        if (fullProduct.specificationTable && Array.isArray(fullProduct.specificationTable)) {
+            mappedSpecs = fullProduct.specificationTable.map((t: any) => {
+                const rows = t.rows || [];
+                return rows.map((r: any) => `${r[0]}: ${r[1]}`).join(", ");
+            }).join(" | ").substring(0, 800);
+        } else if (typeof fullProduct.specificationTable === "object" && fullProduct.specificationTable !== null) {
+            mappedSpecs = JSON.stringify(fullProduct.specificationTable).substring(0, 800);
+        }
 
-        const variantsSnippet = fullProduct.variants
-            ? fullProduct.variants
-                .map((v: any) => `${v.name || "Variant"}: Price NPR ${v.price}, MRP NPR ${v.mrp || v.price}, Stock: ${v.stock}, Attributes: ${JSON.stringify(v.attributes)}, Specs: ${JSON.stringify(v.specifications)}`)
-                .join(" | ")
+        // Compact variants (max 3)
+        const variantsSnippet = fullProduct.variants && fullProduct.variants.length > 0
+            ? fullProduct.variants.slice(0, 3).map((v: any) => `${v.name || "Var"}: NPR ${v.price} (Stock: ${v.stock})`).join(" | ")
             : "No variants listed.";
 
         const featuresSnippet = fullProduct.features && fullProduct.features.length > 0
-            ? fullProduct.features.join(", ")
+            ? fullProduct.features.slice(0, 5).join(", ")
             : "No specific features listed.";
 
-        // Include related products context
+        // Include related products context (limit to 5 to save context)
         const relatedProductsSnippet = categoryProducts.length > 0
-            ? categoryProducts.map(p => `- ${p.name} (Price: NPR ${p.variants?.[0]?.price || 'N/A'})`).join("\n")
+            ? categoryProducts.slice(0, 5).map((p: any) => `- ${p.name} (NPR ${p.variants?.[0]?.price || 'N/A'})`).join("\n")
             : `No related products found in ${categoryName}.`;
 
         const systemPrompt = `You are an expert AI Product Assistant for Vanijay (Nepal).
@@ -126,20 +139,20 @@ Brand: ${typeof fullProduct.brand === "string" ? fullProduct.brand : fullProduct
 Category: ${categoryName}
 Features: ${featuresSnippet}
 Description: ${descriptionSnippet}
-Variants (includes pricing, stock, attributes): ${variantsSnippet}
-Detailed Specifications: ${specsSnippet}
+Variants: ${variantsSnippet}
+Specs: ${mappedSpecs}
 
---- RELATED PRODUCTS IN THE SAME CATEGORY (${categoryName}) ---
+--- RELATED PRODUCTS (${categoryName}) ---
 ${relatedProductsSnippet}
 
 --- INSTRUCTIONS ---
 1. Be helpful, informative, and engaging.
 2. Prices are in Nepalese Rupees (NPR).
-3. If the user asks you to EXPLAIN, COMPARE, or SUGGEST, provide a detailed and well-structured response (you can use bullet points, bold text).
-4. If asked to COMPARE, you can compare the ${fullProduct.name} against the provided Related Products, highlighting price differences and features if available.
-5. If asked to SUGGEST or recommend alternatives, suggest products from the Related Products list.
-6. For simple, quick questions, keep your answer concise (2-4 sentences). But for complex requests ("tell me about", "explain", "why should I buy"), provide comprehensive details using the full product specs and variants provided.
-7. ONLY answer based on the given context. If the information is not in the context, politely state that you do not have that specific information.`;
+3. IF asked to EXPLAIN, COMPARE, or SUGGEST: provide a detailed, well-structured response (use bullets/bold).
+4. IF asked to COMPARE: compare the product against the Related Products, highlighting price/features.
+5. IF asked to SUGGEST: recommend from the Related Products list.
+6. For simple questions, be concise (2-4 sentences). For complex requests, provide comprehensive details based upon specs/variants.
+7. ONLY answer based on the given context. If unknown, state you lack that info. Do not invent details.`;
 
         const ollamaPayload = {
             model: "qwen2.5:3b",
