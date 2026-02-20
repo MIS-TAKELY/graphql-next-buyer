@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
 
         // Build a comprehensive but COMPACT system prompt to avoid high token evaluation times (which cause 504 Timeouts)
         const descriptionSnippet = fullProduct.description
-            ? fullProduct.description.substring(0, 600) + (fullProduct.description.length > 600 ? "..." : "")
+            ? fullProduct.description.substring(0, 400) + (fullProduct.description.length > 400 ? "..." : "")
             : "No description available.";
 
         // Format specs cleanly instead of huge JSON strings
@@ -111,9 +111,9 @@ export async function POST(req: NextRequest) {
             mappedSpecs = fullProduct.specificationTable.map((t: any) => {
                 const rows = t.rows || [];
                 return rows.map((r: any) => `${r[0]}: ${r[1]}`).join(", ");
-            }).join(" | ").substring(0, 800);
+            }).join(" | ").substring(0, 500);
         } else if (typeof fullProduct.specificationTable === "object" && fullProduct.specificationTable !== null) {
-            mappedSpecs = JSON.stringify(fullProduct.specificationTable).substring(0, 800);
+            mappedSpecs = JSON.stringify(fullProduct.specificationTable).substring(0, 500);
         }
 
         // Compact variants (max 3)
@@ -155,10 +155,10 @@ ${relatedProductsSnippet}
 7. ONLY answer based on the given context. If unknown, state you lack that info. Do not invent details.`;
 
         const ollamaPayload = {
-            model: "qwen2.5:3b",
+            model: "qwen2.5:1.5b",
             messages: [
                 { role: "system", content: systemPrompt },
-                ...messages,
+                ...messages.slice(-6), // Keep last 6 messages to reduce context processing
             ],
             stream: true, // Enable streaming so tokens are sent to browser immediately
         };
