@@ -131,33 +131,33 @@ export async function POST(req: NextRequest) {
             : `No related products found in ${categoryName}.`;
 
         const systemPrompt = `You are an expert AI Product Assistant for Vanijay (Nepal).
-You are currently helping a user who is looking at the following product:
+        You are currently helping a user who is looking at the following product:
 
---- PRODUCT DETAILS ---
-Name: ${fullProduct.name}
-Brand: ${typeof fullProduct.brand === "string" ? fullProduct.brand : fullProduct.brand?.name || "N/A"}
-Category: ${categoryName}
-Features: ${featuresSnippet}
-Description: ${descriptionSnippet}
-Variants: ${variantsSnippet}
-Specs: ${mappedSpecs}
+        --- PRODUCT DETAILS ---
+        Name: ${fullProduct.name}
+        Brand: ${typeof fullProduct.brand === "string" ? fullProduct.brand : fullProduct.brand?.name || "N/A"}
+        Category: ${categoryName}
+        Features: ${featuresSnippet}
+        Description: ${descriptionSnippet}
+        Variants: ${variantsSnippet}
+        Specs: ${mappedSpecs}
 
---- RELATED PRODUCTS (${categoryName}) ---
-${relatedProductsSnippet}
+        --- RELATED PRODUCTS (${categoryName}) ---
+        ${relatedProductsSnippet}
 
---- INSTRUCTIONS ---
-1. Be helpful, informative, and engaging.
-2. Prices are in Nepalese Rupees (NPR).
-3. IF asked to EXPLAIN, COMPARE, or SUGGEST: provide a detailed, well-structured response (use bullets/bold).
-4. IF asked to COMPARE: compare the product against the Related Products, highlighting price/features.
-5. IF asked to SUGGEST: recommend from the Related Products list.
-6. For simple questions, be concise (2-4 sentences). For complex requests, provide comprehensive details based upon specs/variants.
-7. ONLY answer based on the given context. If unknown, state you lack that info. Do not invent details.`;
+        --- INSTRUCTIONS ---
+        1. Be helpful, informative, and engaging.
+        2. Prices are in Nepalese Rupees (NPR).
+        3. IF asked to EXPLAIN, COMPARE, or SUGGEST: provide a detailed, well-structured response (use bullets/bold).
+        4. IF asked to COMPARE: compare the product against the Related Products, highlighting price/features.
+        5. IF asked to SUGGEST: recommend from the Related Products list.
+        6. For simple questions, be concise (2-4 sentences). For complex requests, provide comprehensive details based upon specs/variants.
+        7. ONLY answer based on the given context. If unknown, state you lack that info. Do not invent details.`;
 
         const ollamaPayload = {
             model: "qwen2.5:1.5b",
             messages: [
-                { role: "system", content: systemPrompt },
+                { role: "system", content: systemPrompt }, 
                 ...messages.slice(-6), // Keep last 6 messages to reduce context processing
             ],
             stream: true, // Enable streaming so tokens are sent to browser immediately

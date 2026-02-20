@@ -89,7 +89,7 @@ const CartButton = ({ isMobile = false }: CartButtonProps) => {
         Actually, prefetching on hover or just letting it load on idle is fine.
         Standard dynamic import is fine.
       */}
-      {isCartOpen && <CartSheetContent />}
+      <CartSheetContent />
     </Sheet>
   );
 };

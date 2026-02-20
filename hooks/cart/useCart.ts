@@ -21,7 +21,7 @@ export const useCart = () => {
     GET_MY_CART_ITEMS,
     {
       skip: !userId,
-      fetchPolicy: "network-only", // Ensure we get fresh data on mount/login
+      fetchPolicy: "cache-and-network", // Show cached data immediately, then update
       nextFetchPolicy: "cache-first",
     }
   );
