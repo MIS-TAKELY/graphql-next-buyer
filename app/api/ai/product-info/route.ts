@@ -38,38 +38,51 @@ export async function POST(req: NextRequest) {
         let categoryName = clientProduct.category?.name || "its category";
 
         try {
-            // Fetch detailed product
-            const { data: productData } = await apolloClient.query({
-                query: GET_PRODUCT,
-                variables: { productId: clientProduct.id },
-                fetchPolicy: "no-cache"
-            });
+            // Fetch detailed product and category products in parallel to optimize response time
+            // To do this, we need to know the category slug beforehand, which we usually have from clientProduct
+            categorySlug = clientProduct.category?.slug;
 
-            if (productData?.getProduct) {
-                fullProduct = productData.getProduct;
-            }
-
-            // Fetch related products from the same category (specifically sub-sub-category if available)
-            // The product usually falls under a category that might have parents/children.
-            // In the DB, the product is linked to a specific category. Let's trace to the deepest one available in the context.
-            categorySlug = fullProduct.category?.slug || categorySlug;
-            categoryName = fullProduct.category?.name || categoryName;
-
-            // To ensure we choose the last child category (sub-sub category), we might need to check the category object deeply
-            // or just rely on the assigned category being the most specific one. Typically in ecommerce,
-            // the assigned category IS the most specific one. But just in case, we'll use the assigned category's slug.
-            // If the category object provides `children` and they exist, we could try to go deeper, but usually the
-            // associated category on the product *is* the leaf category.
+            const queries: Promise<any>[] = [
+                apolloClient.query({
+                    query: GET_PRODUCT,
+                    variables: { productId: clientProduct.id },
+                    fetchPolicy: "no-cache" // Or "cache-first" if appropriate
+                })
+            ];
 
             if (categorySlug) {
+                queries.push(
+                    apolloClient.query({
+                        query: GET_CATEGORY_PRODUCTS,
+                        variables: { categorySlug, limit: 10 },
+                        fetchPolicy: "no-cache"
+                    })
+                );
+            }
+
+            const results = await Promise.allSettled(queries);
+
+            // Handle Product Query Result
+            if (results[0].status === "fulfilled" && results[0].value.data?.getProduct) {
+                fullProduct = results[0].value.data.getProduct;
+                categorySlug = fullProduct.category?.slug || categorySlug;
+                categoryName = fullProduct.category?.name || categoryName;
+            }
+
+            // Handle Category Query Result
+            if (results[1] && results[1].status === "fulfilled" && results[1].value.data?.getProductsByCategory?.products) {
+                categoryProducts = results[1].value.data.getProductsByCategory.products.filter(
+                    (p: any) => p.slug !== fullProduct.slug && p.slug !== clientProduct.slug
+                );
+            } else if (!results[1] && categorySlug && fullProduct.category?.slug !== clientProduct.category?.slug) {
+                // If the deep category slug was found ONLY in fullProduct, we missed the parallel fetch.
+                // Fetch it now (this is a fallback).
                 const { data: categoryData } = await apolloClient.query({
                     query: GET_CATEGORY_PRODUCTS,
-                    variables: { categorySlug, limit: 10 }, // Fetch a few more to filter out the current product
+                    variables: { categorySlug, limit: 10 },
                     fetchPolicy: "no-cache"
                 });
-
                 if (categoryData?.getProductsByCategory?.products) {
-                    // Filter out the current product from the related list
                     categoryProducts = categoryData.getProductsByCategory.products.filter(
                         (p: any) => p.slug !== fullProduct.slug && p.slug !== clientProduct.slug
                     );
