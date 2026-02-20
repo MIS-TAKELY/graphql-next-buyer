@@ -34,6 +34,8 @@ export async function POST(req: NextRequest) {
         const apolloClient = await getServerApolloClient();
         let fullProduct = clientProduct;
         let categoryProducts: any[] = [];
+        let categorySlug = clientProduct.category?.slug;
+        let categoryName = clientProduct.category?.name || "its category";
 
         try {
             // Fetch detailed product
@@ -50,12 +52,13 @@ export async function POST(req: NextRequest) {
             // Fetch related products from the same category (specifically sub-sub-category if available)
             // The product usually falls under a category that might have parents/children.
             // In the DB, the product is linked to a specific category. Let's trace to the deepest one available in the context.
-            let categorySlug = fullProduct.category?.slug || clientProduct.category?.slug;
+            categorySlug = fullProduct.category?.slug || categorySlug;
+            categoryName = fullProduct.category?.name || categoryName;
 
             // To ensure we choose the last child category (sub-sub category), we might need to check the category object deeply
-            // or just rely on the assigned category being the most specific one. Typically in ecommerce, 
+            // or just rely on the assigned category being the most specific one. Typically in ecommerce,
             // the assigned category IS the most specific one. But just in case, we'll use the assigned category's slug.
-            // If the category object provides `children` and they exist, we could try to go deeper, but usually the 
+            // If the category object provides `children` and they exist, we could try to go deeper, but usually the
             // associated category on the product *is* the leaf category.
 
             if (categorySlug) {
@@ -77,8 +80,8 @@ export async function POST(req: NextRequest) {
             // Fallback to client product if DB fetch fails
         }
 
-        // Build a concise system prompt to keep token count low for faster inference
-        const truncatedDescription = fullProduct.description
+        // Build a comprehensive system prompt
+        const descriptionSnippet = fullProduct.description
             ? fullProduct.description
             : "No description available.";
 
@@ -88,23 +91,42 @@ export async function POST(req: NextRequest) {
 
         const variantsSnippet = fullProduct.variants
             ? fullProduct.variants
-                .map((v: any) => `${v.name || "Variant"}: ${JSON.stringify(v.attributes)}`)
-                .join(", ")
-            : "No variants.";
+                .map((v: any) => `${v.name || "Variant"}: Price NPR ${v.price}, MRP NPR ${v.mrp || v.price}, Stock: ${v.stock}, Attributes: ${JSON.stringify(v.attributes)}, Specs: ${JSON.stringify(v.specifications)}`)
+                .join(" | ")
+            : "No variants listed.";
+
+        const featuresSnippet = fullProduct.features && fullProduct.features.length > 0
+            ? fullProduct.features.join(", ")
+            : "No specific features listed.";
 
         // Include related products context
         const relatedProductsSnippet = categoryProducts.length > 0
-            ? categoryProducts.map(p => `${p.name} (Price: ${p.variants?.[0]?.price || 'N/A'})`).join(", ")
-            : "No related products found in this category.";
+            ? categoryProducts.map(p => `- ${p.name} (Price: NPR ${p.variants?.[0]?.price || 'N/A'})`).join("\n")
+            : `No related products found in ${categoryName}.`;
 
-        const systemPrompt = `You are a concise AI Product Assistant for Vanijay (Nepal).
-Product: ${fullProduct.name}
+        const systemPrompt = `You are an expert AI Product Assistant for Vanijay (Nepal).
+You are currently helping a user who is looking at the following product:
+
+--- PRODUCT DETAILS ---
+Name: ${fullProduct.name}
 Brand: ${typeof fullProduct.brand === "string" ? fullProduct.brand : fullProduct.brand?.name || "N/A"}
-Description: ${truncatedDescription}
-Specs: ${specsSnippet}
-Variants: ${variantsSnippet}
-Related Products in same category: ${relatedProductsSnippet}
-Rules: Be very concise (9-10 sentences max). Prices in NPR. Only answer based on the given details. If asked about similar products, suggest from the Related Products list.`;
+Category: ${categoryName}
+Features: ${featuresSnippet}
+Description: ${descriptionSnippet}
+Variants (includes pricing, stock, attributes): ${variantsSnippet}
+Detailed Specifications: ${specsSnippet}
+
+--- RELATED PRODUCTS IN THE SAME CATEGORY (${categoryName}) ---
+${relatedProductsSnippet}
+
+--- INSTRUCTIONS ---
+1. Be helpful, informative, and engaging.
+2. Prices are in Nepalese Rupees (NPR).
+3. If the user asks you to EXPLAIN, COMPARE, or SUGGEST, provide a detailed and well-structured response (you can use bullet points, bold text).
+4. If asked to COMPARE, you can compare the ${fullProduct.name} against the provided Related Products, highlighting price differences and features if available.
+5. If asked to SUGGEST or recommend alternatives, suggest products from the Related Products list.
+6. For simple, quick questions, keep your answer concise (2-4 sentences). But for complex requests ("tell me about", "explain", "why should I buy"), provide comprehensive details using the full product specs and variants provided.
+7. ONLY answer based on the given context. If the information is not in the context, politely state that you do not have that specific information.`;
 
         const ollamaPayload = {
             model: "qwen2.5:3b",
