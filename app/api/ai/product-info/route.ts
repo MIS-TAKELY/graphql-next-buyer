@@ -1,39 +1,110 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getServerApolloClient } from "@/lib/apollo/apollo-server-client";
+import { GET_PRODUCT } from "@/client/product/product.queries";
+import { gql } from "@apollo/client";
+
+// Define a query to get products by category since GET_PRODUCTS_BY_CATEGORY in product.queries might not exist or be different
+const GET_CATEGORY_PRODUCTS = gql`
+  query GetProductsByCategory($categorySlug: String!, $limit: Int) {
+    getProductsByCategory(categorySlug: $categorySlug, limit: $limit) {
+      products {
+        id
+        name
+        slug
+        variants {
+          price
+        }
+      }
+    }
+  }
+`;
 
 export async function POST(req: NextRequest) {
     try {
-        const { product, messages } = await req.json();
+        const { product: clientProduct, messages } = await req.json();
 
-        if (!product || !messages) {
+        if (!clientProduct || !messages) {
             return NextResponse.json(
                 { error: "Product data and messages are required" },
                 { status: 400 }
             );
         }
 
+        // Fetch full product details from the database using Apollo Server Client
+        const apolloClient = await getServerApolloClient();
+        let fullProduct = clientProduct;
+        let categoryProducts: any[] = [];
+
+        try {
+            // Fetch detailed product
+            const { data: productData } = await apolloClient.query({
+                query: GET_PRODUCT,
+                variables: { productId: clientProduct.id },
+                fetchPolicy: "no-cache"
+            });
+
+            if (productData?.getProduct) {
+                fullProduct = productData.getProduct;
+            }
+
+            // Fetch related products from the same category (specifically sub-sub-category if available)
+            // The product usually falls under a category that might have parents/children.
+            // In the DB, the product is linked to a specific category. Let's trace to the deepest one available in the context.
+            let categorySlug = fullProduct.category?.slug || clientProduct.category?.slug;
+
+            // To ensure we choose the last child category (sub-sub category), we might need to check the category object deeply
+            // or just rely on the assigned category being the most specific one. Typically in ecommerce, 
+            // the assigned category IS the most specific one. But just in case, we'll use the assigned category's slug.
+            // If the category object provides `children` and they exist, we could try to go deeper, but usually the 
+            // associated category on the product *is* the leaf category.
+
+            if (categorySlug) {
+                const { data: categoryData } = await apolloClient.query({
+                    query: GET_CATEGORY_PRODUCTS,
+                    variables: { categorySlug, limit: 10 }, // Fetch a few more to filter out the current product
+                    fetchPolicy: "no-cache"
+                });
+
+                if (categoryData?.getProductsByCategory?.products) {
+                    // Filter out the current product from the related list
+                    categoryProducts = categoryData.getProductsByCategory.products.filter(
+                        (p: any) => p.slug !== fullProduct.slug && p.slug !== clientProduct.slug
+                    );
+                }
+            }
+        } catch (dbError) {
+            console.error("Error fetching extra context for AI:", dbError);
+            // Fallback to client product if DB fetch fails
+        }
+
         // Build a concise system prompt to keep token count low for faster inference
-        const truncatedDescription = product.description
-            ? product.description.substring(0, 400)
+        const truncatedDescription = fullProduct.description
+            ? fullProduct.description
             : "No description available.";
 
-        const specsSnippet = product.specificationTable
-            ? JSON.stringify(product.specificationTable).substring(0, 600)
+        const specsSnippet = fullProduct.specificationTable
+            ? JSON.stringify(fullProduct.specificationTable)
             : "No specifications available.";
 
-        const variantsSnippet = product.variants
-            ? product.variants
+        const variantsSnippet = fullProduct.variants
+            ? fullProduct.variants
                 .map((v: any) => `${v.name || "Variant"}: ${JSON.stringify(v.attributes)}`)
                 .join(", ")
-                .substring(0, 300)
             : "No variants.";
 
+        // Include related products context
+        const relatedProductsSnippet = categoryProducts.length > 0
+            ? categoryProducts.map(p => `${p.name} (Price: ${p.variants?.[0]?.price || 'N/A'})`).join(", ")
+            : "No related products found in this category.";
+
         const systemPrompt = `You are a concise AI Product Assistant for Vanijay (Nepal).
-Product: ${product.name}
-Brand: ${typeof product.brand === "string" ? product.brand : product.brand?.name || "N/A"}
+Product: ${fullProduct.name}
+Brand: ${typeof fullProduct.brand === "string" ? fullProduct.brand : fullProduct.brand?.name || "N/A"}
 Description: ${truncatedDescription}
 Specs: ${specsSnippet}
 Variants: ${variantsSnippet}
-Rules: Be very concise (2-3 sentences max). Prices in NPR. Only answer based on the given details.`;
+Related Products in same category: ${relatedProductsSnippet}
+Rules: Be very concise (9-10 sentences max). Prices in NPR. Only answer based on the given details. If asked about similar products, suggest from the Related Products list.`;
 
         const ollamaPayload = {
             model: "qwen2.5:3b",
