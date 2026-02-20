@@ -118,7 +118,7 @@ export async function POST(req: NextRequest) {
 
         // Compact variants (max 3)
         const variantsSnippet = fullProduct.variants && fullProduct.variants.length > 0
-            ? fullProduct.variants.slice(0, 3).map((v: any) => `${v.name || "Var"}: NPR ${v.price} (Stock: ${v.stock})`).join(" | ")
+            ? fullProduct.variants.slice(0, 3).map((v: any) => `${v.name || "Var"}: NPR ${v.price}`).join(" | ")
             : "No variants listed.";
 
         const featuresSnippet = fullProduct.features && fullProduct.features.length > 0
@@ -213,7 +213,7 @@ ${relatedProductsSnippet}
 
         return new Response(stream, {
             headers: {
-                "Content-Type": "text/plain; charset=utf-8",
+                "Content-Type": "text/plain; charset=utf-8",(Stock: ${v.stock})
                 "Transfer-Encoding": "chunked",
                 "Cache-Control": "no-cache",
                 "X-Content-Type-Options": "nosniff",
