@@ -6,6 +6,7 @@ const publicRoutes = [
   "/api/check-phone",
   "/api/products",
   "/api/graphql",
+  "/api/ai",
   "/cart",
   "/",
   "/search",
