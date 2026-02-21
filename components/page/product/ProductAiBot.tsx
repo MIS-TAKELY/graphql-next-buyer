@@ -15,27 +15,50 @@ interface ProductAiBotProps {
     product: TProduct;
 }
 
-// Renders plain text with basic markdown-like formatting (bold, line breaks)
+function sanitizeHtmlToMarkdown(text: string): string {
+    let result = text;
+    result = result.replace(/<br\s*\/?>/gi, "\n");
+    result = result.replace(/<\/p>/gi, "\n");
+    result = result.replace(/<p[^>]*>/gi, "");
+    result = result.replace(/<(?:strong|b)>(.*?)<\/(?:strong|b)>/gi, "**$1**");
+    result = result.replace(/<(?:em|i)>(.*?)<\/(?:em|i)>/gi, "*$1*");
+    result = result.replace(/<li[^>]*>/gi, "- ");
+    result = result.replace(/<\/li>/gi, "\n");
+    result = result.replace(/<\/?(?:ul|ol|div|span|h[1-6])[^>]*>/gi, "\n");
+    result = result.replace(/<[^>]+>/g, "");
+    result = result.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, " ");
+    result = result.replace(/\n{3,}/g, "\n\n");
+    return result.trim();
+}
+
+function renderInlineMarkdown(text: string): React.ReactNode[] {
+    const parts = text.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((part, j) =>
+        part.startsWith("**") && part.endsWith("**") ? (
+            <strong key={j}>{part.slice(2, -2)}</strong>
+        ) : (
+            <span key={j}>{part}</span>
+        )
+    );
+}
+
 function MessageContent({ content, isStreaming }: { content: string; isStreaming?: boolean }) {
-    // Split by newlines to preserve paragraphs
-    const paragraphs = content.split(/\n+/).filter(Boolean);
+    const sanitized = sanitizeHtmlToMarkdown(content);
+    const lines = sanitized.split(/\n/).filter(Boolean);
 
     return (
         <div className="space-y-1.5 text-[13.5px] leading-relaxed">
-            {paragraphs.map((para, i) => {
-                // Bold: **text**
-                const parts = para.split(/(\*\*[^*]+\*\*)/g);
-                return (
-                    <p key={i}>
-                        {parts.map((part, j) =>
-                            part.startsWith("**") && part.endsWith("**") ? (
-                                <strong key={j}>{part.slice(2, -2)}</strong>
-                            ) : (
-                                part
-                            )
-                        )}
-                    </p>
-                );
+            {lines.map((line, i) => {
+                const bulletMatch = line.match(/^\s*[-*•]\s+(.*)/);
+                if (bulletMatch) {
+                    return (
+                        <div key={i} className="flex gap-1.5 items-start">
+                            <span className="mt-[7px] w-1 h-1 rounded-full bg-current shrink-0" />
+                            <span>{renderInlineMarkdown(bulletMatch[1])}</span>
+                        </div>
+                    );
+                }
+                return <p key={i}>{renderInlineMarkdown(line)}</p>;
             })}
             {isStreaming && (
                 <span className="inline-block w-[2px] h-[14px] bg-current ml-0.5 align-middle animate-[blink_0.8s_step-end_infinite] rounded-full" />
@@ -45,17 +68,13 @@ function MessageContent({ content, isStreaming }: { content: string; isStreaming
 }
 
 export default function ProductAiBot({ product }: ProductAiBotProps) {
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            role: "assistant",
-            content: `Hi! I'm your Vanijay Assistant. I can tell you more about the **${product.name}**. What would you like to know?`,
-        },
-    ]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const abortRef = useRef<AbortController | null>(null);
+    const hasInitialLoaded = useRef(false);
 
     // Auto-scroll to bottom whenever messages change
     useEffect(() => {
@@ -77,12 +96,15 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
         });
     }, []);
 
-    const handleSend = async () => {
-        if (!input.trim() || isLoading) return;
+    const handleSend = async (overrideInput?: string) => {
+        const messageText = overrideInput || input;
+        if (!messageText.trim() && !overrideInput === undefined || isLoading) return;
 
-        const userMessage: Message = { role: "user", content: input };
-        setMessages((prev) => [...prev, userMessage]);
-        setInput("");
+        const userMessage: Message | null = overrideInput ? null : { role: "user", content: messageText };
+        if (userMessage) {
+            setMessages((prev) => [...prev, userMessage]);
+            setInput("");
+        }
         setIsLoading(true);
 
         // Insert streaming placeholder
@@ -96,7 +118,8 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     product,
-                    messages: [...messages, userMessage],
+                    messages: userMessage ? [...messages, userMessage] : messages,
+                    isInitial: !!overrideInput,
                 }),
                 signal: abortRef.current.signal,
             });
@@ -150,9 +173,19 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
         } finally {
             setIsLoading(false);
             abortRef.current = null;
-            inputRef.current?.focus();
+            if (!overrideInput) {
+                inputRef.current?.focus();
+            }
         }
     };
+
+    // Trigger initial load
+    useEffect(() => {
+        if (!hasInitialLoaded.current) {
+            hasInitialLoaded.current = true;
+            handleSend("INITIAL_GREETING");
+        }
+    }, []);
 
     return (
         <div className="mt-8">
@@ -259,7 +292,7 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
                             </button>
                         ) : (
                             <button
-                                onClick={handleSend}
+                                onClick={() => handleSend()}
                                 disabled={!input.trim()}
                                 className="p-1.5 text-primary hover:bg-primary/10 rounded-lg transition-colors disabled:opacity-40 disabled:hover:bg-transparent"
                                 title="Send"

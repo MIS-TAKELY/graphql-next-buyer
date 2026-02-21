@@ -21,7 +21,7 @@ const GET_CATEGORY_PRODUCTS = gql`
 
 export async function POST(req: NextRequest) {
     try {
-        const { product: clientProduct, messages } = await req.json();
+        const { product: clientProduct, messages, isInitial } = await req.json();
 
         if (!clientProduct || !messages) {
             return NextResponse.json(
@@ -148,17 +148,22 @@ export async function POST(req: NextRequest) {
         --- INSTRUCTIONS ---
         1. Be helpful, informative, and engaging.
         2. Prices are in Nepalese Rupees (NPR).
-        3. IF asked to EXPLAIN, COMPARE, or SUGGEST: provide a detailed, well-structured response (use bullets/bold).
-        4. IF asked to COMPARE: compare the product against the Related Products, highlighting price/features.
-        5. IF asked to SUGGEST: recommend from the Related Products list.
-        6. For simple questions, be concise (2-4 sentences). For complex requests, provide comprehensive details based upon specs/variants.
-        7. ONLY answer based on the given context. If unknown, state you lack that info. Do not invent details.`;
+        3. IF isInitial: Proactively greet the user and provide a VERY brief (1-2 sentences) summary of why they should buy this product based on its key features or specs. End with "How can I help you today?".
+        4. IF asked to EXPLAIN, COMPARE, or SUGGEST: provide a detailed, well-structured response (use bullets/bold).
+        5. IF asked to COMPARE: compare the product against the Related Products, highlighting price/features.
+        6. IF asked to SUGGEST: recommend from the Related Products list.
+        7. For simple questions, be concise (2-4 sentences). For complex requests, provide comprehensive details based upon specs/variants.
+        8. ONLY answer based on the given context. If unknown, state you lack that info. Do not invent details.
+        9. NEVER use HTML tags in your response. Use ONLY plain text and markdown formatting (e.g. **bold**, - bullet points, newlines). Do NOT use <b>, <p>, <ul>, <li>, <br>, or any other HTML tags.`;
 
         const ollamaPayload = {
             model: "qwen2.5:1.5b",
             messages: [
-                { role: "system", content: systemPrompt }, 
-                ...messages.slice(-6), // Keep last 6 messages to reduce context processing
+                { role: "system", content: systemPrompt },
+                ...messages.slice(-6).map((m: any) => ({
+                    role: m.role,
+                    content: m.content === "INITIAL_GREETING" ? "Greet me and summarize the product." : m.content
+                })),
             ],
             stream: true, // Enable streaming so tokens are sent to browser immediately
         };
