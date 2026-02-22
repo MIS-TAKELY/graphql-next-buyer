@@ -41,13 +41,41 @@ export const topDealsResolvers = {
 
       console.log(`🧹 Cleaned query: "${topDealAbout}" -> "${cleanedQuery}"`);
 
-      // Step 1: Detect category from the query using AI (use Cleaned Query)
-      const result = await detectCategory(cleanedQuery || topDealAbout);
-      const detectedCategory = result.category;
-      console.log("🎯 Detected category:", detectedCategory);
+      // Step 1a: Try DIRECT exact category name match first (before AI detection)
+      // This ensures "Smart phones" maps exactly to the "Smart phones" category
+      // and avoids AI/Typesense cross-category contamination.
+      let directCategory = await prisma.category.findFirst({
+        where: {
+          OR: [
+            { name: { equals: cleanedQuery, mode: "insensitive" } },
+            { slug: { equals: cleanedQuery.toLowerCase().replace(/\s+/g, "-"), mode: "insensitive" } },
+          ],
+        },
+        select: { id: true, name: true },
+      });
+
+      // Partial match fallback before AI
+      if (!directCategory) {
+        directCategory = await prisma.category.findFirst({
+          where: { name: { contains: cleanedQuery, mode: "insensitive" } },
+          select: { id: true, name: true },
+        });
+      }
+
+      let detectedCategory: string;
+      if (directCategory) {
+        console.log(`✅ Direct category match: "${directCategory.name}" (ID: ${directCategory.id})`);
+        detectedCategory = directCategory.name;
+      } else {
+        // Step 1b: Fall back to AI detection only if direct match fails
+        const result = await detectCategory(cleanedQuery || topDealAbout);
+        detectedCategory = result.category;
+        console.log("🎯 AI Detected category:", detectedCategory);
+      }
 
       // Step 2: Get the detected category from database
-      let category = await prisma.category.findFirst({
+      // If we already found it via direct match, reuse it; otherwise query again.
+      let category = directCategory ?? await prisma.category.findFirst({
         where: {
           OR: [
             {
