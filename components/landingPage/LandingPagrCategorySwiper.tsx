@@ -50,6 +50,15 @@ export default function LandingPagrCategorySwiper({ title, onViewAll, data }: Pr
     });
   }, []);
 
+  // Deduplicate products by category name — show only one card per unique category
+  const seenCategories = new Set<string>();
+  const uniqueProducts = (data?.getTopDealSaveUpTo || []).filter((product: TopDeal) => {
+    const catName = product.product?.category?.name || "Unknown";
+    if (seenCategories.has(catName)) return false;
+    seenCategories.add(catName);
+    return true;
+  });
+
   return (
     <section className="relative py-2 sm:py-4 md:py-6 container-custom bg-card">
       {/* Header */}
@@ -77,7 +86,7 @@ export default function LandingPagrCategorySwiper({ title, onViewAll, data }: Pr
         ref={scrollContainerRef}
         className="flex gap-2 sm:gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide px-2 sm:px-0"
       >
-        {data?.getTopDealSaveUpTo?.map((product: TopDeal, index: number) => (
+        {uniqueProducts.map((product: TopDeal, index: number) => (
           <PlainProductCards key={index} product={product} />
         ))}
         <div className="w-2 sm:w-0 flex-shrink-0" aria-hidden="true" />
