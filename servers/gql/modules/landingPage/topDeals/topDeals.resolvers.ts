@@ -19,10 +19,12 @@ export const topDealsResolvers = {
   Query: {
     getTopDealSaveUpTo: async (
       _: unknown,
-      { topDealAbout, limit }: TopDealsArgs,
+      args: TopDealsArgs,
       ctx: GraphQLContext
     ): Promise<TopDealProduct[]> => {
-      const cacheKey = `top-deals:${topDealAbout.toLowerCase()}:${limit}`;
+      const topDealAbout = args.topDealAbout || "General Deals";
+      const limit = args.limit || 10;
+      const cacheKey = `top_deals:v2:${topDealAbout}:${limit}`;
 
       const cached = await getCache<TopDealProduct[]>(cacheKey);
 
@@ -145,6 +147,10 @@ export const topDealsResolvers = {
           slug: true,
           description: true,
           brand: true,
+          status: true,
+          features: true,
+          specificationTable: true,
+          createdAt: true,
           variants: {
             select: {
               id: true,
@@ -152,6 +158,7 @@ export const topDealsResolvers = {
               price: true,
               mrp: true,
               stock: true,
+              isDefault: true,
               specifications: {
                 select: {
                   key: true,
@@ -167,6 +174,7 @@ export const topDealsResolvers = {
               url: true,
               altText: true,
               sortOrder: true,
+              mediaType: true,
             },
             orderBy: { sortOrder: "asc" },
           },
@@ -182,27 +190,15 @@ export const topDealsResolvers = {
             },
           },
           productOffers: {
-            where: {
-              offer: {
-                isActive: true,
-                startDate: { lte: new Date() },
-                endDate: { gte: new Date() },
-              },
-            },
-            select: {
-              offer: {
-                select: {
-                  id: true,
-                  title: true,
-                  type: true,
-                  value: true,
-                },
-              },
+            include: {
+              offer: true,
             },
           },
           reviews: {
-            where: { status: "APPROVED" },
-            select: { id: true, rating: true },
+            select: {
+              rating: true,
+              comment: true,
+            },
           },
         },
       })) as ProductWithDetails[];
@@ -239,6 +235,10 @@ export const topDealsResolvers = {
               slug: true,
               description: true,
               brand: true,
+              status: true,
+              features: true,
+              specificationTable: true,
+              createdAt: true,
               variants: {
                 select: {
                   id: true,
@@ -246,6 +246,7 @@ export const topDealsResolvers = {
                   price: true,
                   mrp: true,
                   stock: true,
+                  isDefault: true,
                   specifications: {
                     select: {
                       key: true,
@@ -261,6 +262,7 @@ export const topDealsResolvers = {
                   url: true,
                   altText: true,
                   sortOrder: true,
+                  mediaType: true,
                 },
                 orderBy: { sortOrder: "asc" },
               },
@@ -276,27 +278,15 @@ export const topDealsResolvers = {
                 },
               },
               productOffers: {
-                where: {
-                  offer: {
-                    isActive: true,
-                    startDate: { lte: new Date() },
-                    endDate: { gte: new Date() },
-                  },
-                },
-                select: {
-                  offer: {
-                    select: {
-                      id: true,
-                      title: true,
-                      type: true,
-                      value: true,
-                    },
-                  },
+                include: {
+                  offer: true,
                 },
               },
               reviews: {
-                where: { status: "APPROVED" },
-                select: { id: true, rating: true },
+                select: {
+                  rating: true,
+                  comment: true,
+                },
               },
             },
           })) as ProductWithDetails[];
