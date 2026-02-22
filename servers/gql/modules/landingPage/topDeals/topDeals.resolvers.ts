@@ -19,12 +19,10 @@ export const topDealsResolvers = {
   Query: {
     getTopDealSaveUpTo: async (
       _: unknown,
-      args: TopDealsArgs,
+      { topDealAbout, limit }: TopDealsArgs,
       ctx: GraphQLContext
     ): Promise<TopDealProduct[]> => {
-      const topDealAbout = args.topDealAbout || "General Deals";
-      const limit = args.limit || 10;
-      const cacheKey = `top_deals:v2:${topDealAbout}:${limit}`;
+      const cacheKey = `top-deals:${topDealAbout.toLowerCase()}:${limit}`;
 
       const cached = await getCache<TopDealProduct[]>(cacheKey);
 
@@ -147,10 +145,6 @@ export const topDealsResolvers = {
           slug: true,
           description: true,
           brand: true,
-          status: true,
-          features: true,
-          specificationTable: true,
-          createdAt: true,
           variants: {
             select: {
               id: true,
@@ -158,7 +152,6 @@ export const topDealsResolvers = {
               price: true,
               mrp: true,
               stock: true,
-              isDefault: true,
               specifications: {
                 select: {
                   key: true,
@@ -174,7 +167,6 @@ export const topDealsResolvers = {
               url: true,
               altText: true,
               sortOrder: true,
-              mediaType: true,
             },
             orderBy: { sortOrder: "asc" },
           },
@@ -190,15 +182,27 @@ export const topDealsResolvers = {
             },
           },
           productOffers: {
-            include: {
-              offer: true,
+            where: {
+              offer: {
+                isActive: true,
+                startDate: { lte: new Date() },
+                endDate: { gte: new Date() },
+              },
+            },
+            select: {
+              offer: {
+                select: {
+                  id: true,
+                  title: true,
+                  type: true,
+                  value: true,
+                },
+              },
             },
           },
           reviews: {
-            select: {
-              rating: true,
-              comment: true,
-            },
+            where: { status: "APPROVED" },
+            select: { id: true, rating: true },
           },
         },
       })) as ProductWithDetails[];
@@ -235,10 +239,6 @@ export const topDealsResolvers = {
               slug: true,
               description: true,
               brand: true,
-              status: true,
-              features: true,
-              specificationTable: true,
-              createdAt: true,
               variants: {
                 select: {
                   id: true,
@@ -246,7 +246,6 @@ export const topDealsResolvers = {
                   price: true,
                   mrp: true,
                   stock: true,
-                  isDefault: true,
                   specifications: {
                     select: {
                       key: true,
@@ -262,7 +261,6 @@ export const topDealsResolvers = {
                   url: true,
                   altText: true,
                   sortOrder: true,
-                  mediaType: true,
                 },
                 orderBy: { sortOrder: "asc" },
               },
@@ -278,15 +276,27 @@ export const topDealsResolvers = {
                 },
               },
               productOffers: {
-                include: {
-                  offer: true,
+                where: {
+                  offer: {
+                    isActive: true,
+                    startDate: { lte: new Date() },
+                    endDate: { gte: new Date() },
+                  },
+                },
+                select: {
+                  offer: {
+                    select: {
+                      id: true,
+                      title: true,
+                      type: true,
+                      value: true,
+                    },
+                  },
                 },
               },
               reviews: {
-                select: {
-                  rating: true,
-                  comment: true,
-                },
+                where: { status: "APPROVED" },
+                select: { id: true, rating: true },
               },
             },
           })) as ProductWithDetails[];
@@ -295,21 +305,10 @@ export const topDealsResolvers = {
         }
       }
 
-      // Step 7: De-duplicate by ID
-      const seenIds = new Set<string>();
-      const uniqueByIdProducts: ProductWithDetails[] = [];
-
-      for (const p of products) {
-        if (!seenIds.has(p.id)) {
-          seenIds.add(p.id);
-          uniqueByIdProducts.push(p);
-        }
-      }
-
-      console.log(`📦 Retrieved ${uniqueByIdProducts.length} unique product records by ID`);
+      console.log(`📦 Retrieved ${products.length} full product records`);
 
       // Step 8: Calculate deals for each product
-      const productsWithDeals: TopDealProduct[] = uniqueByIdProducts
+      const productsWithDeals: TopDealProduct[] = products
         .map((product): TopDealProduct | null => {
           if (!product.variants?.length) return null;
 
@@ -368,28 +367,14 @@ export const topDealsResolvers = {
             product,
           } as TopDealProduct;
         })
-        .filter((p): p is TopDealProduct => p !== null && p.saveUpTo > 0);
-
-      // Step 9: De-duplicate by Name (Case-insensitive) to ensure diversity
-      // We prioritize products with higher savings if names are identical
-      const nameMap = new Map<string, TopDealProduct>();
-
-      for (const p of productsWithDeals) {
-        const normalizedName = p.name.toLowerCase().trim();
-        const existing = nameMap.get(normalizedName);
-
-        if (!existing || p.saveUpTo > existing.saveUpTo) {
-          nameMap.set(normalizedName, p);
-        }
-      }
-
-      const finalProducts = Array.from(nameMap.values())
+        .filter((p): p is TopDealProduct => p !== null && p.saveUpTo > 0)
+        // Sort by biggest savings (DESC) instead of smallest (ASC)
         .sort((a, b) => b.saveUpTo - a.saveUpTo)
         .slice(0, limit);
 
-      await setCache(cacheKey, finalProducts, 86400);
+      await setCache(cacheKey, productsWithDeals, 86400);
 
-      return finalProducts;
+      return productsWithDeals;
     },
   },
 };

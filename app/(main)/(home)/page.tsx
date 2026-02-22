@@ -102,62 +102,50 @@ export default async function HomePage() {
   );
 }
 
-import { GET_TOP_DEALS } from "@/client/landing/topdeals.query";
-
 async function HomeProductSections() {
   const client = await getServerApolloClient();
+  const CACHE_KEY = CacheService.getProductsListKey();
+  let products: TProduct[] =
+    (await CacheService.get<TProduct[]>(CACHE_KEY)) || [];
 
-  // 1. Fetch Today's Best Deals (Targeting Electronics)
-  // 2. Fetch Top Offers (General Trending/Top Picks)
-  // 3. Keep generic products for Provider if needed by other components
-
-  let bestDeals: TProduct[] = [];
-  let topOffers: TProduct[] = [];
-  let genericProducts: TProduct[] = [];
-
-  try {
-    const [bestDealsRes, topOffersRes, genericRes] = await Promise.all([
-      client.query({
-        query: GET_TOP_DEALS,
-        variables: { topDealAbout: "Electronics", limit: 8 },
-        fetchPolicy: "no-cache"
-      }),
-      client.query({
-        query: GET_TOP_DEALS,
-        variables: { topDealAbout: "Trending Deals", limit: 8 },
-        fetchPolicy: "no-cache"
-      }),
-      client.query({
+  if (products.length === 0) {
+    try {
+      const productsResponse = await client.query({
         query: GET_PRODUCTS_MINIMAL,
         variables: { limit: 24 },
-        fetchPolicy: "no-cache"
-      })
-    ]);
-
-    bestDeals = JSON.parse(JSON.stringify(bestDealsRes.data?.getTopDealSaveUpTo || []));
-    topOffers = JSON.parse(JSON.stringify(topOffersRes.data?.getTopDealSaveUpTo || []));
-    genericProducts = JSON.parse(JSON.stringify(genericRes.data?.getProducts || []));
-  } catch (error) {
-    console.error("Error fetching landing page product sections:", error);
+        fetchPolicy: "no-cache",
+        errorPolicy: "all",
+      });
+      products = productsResponse?.data?.getProducts || [];
+      if (products.length > 0) {
+        await CacheService.set(CACHE_KEY, products, 3600);
+      }
+    } catch (error: any) {
+      console.error("Error fetching products:", error);
+      products = [];
+    }
   }
+
+  const serializableProducts = JSON.parse(JSON.stringify(products));
+  const sharedSlice = serializableProducts.slice(0, 8);
 
   const sections: SectionConfig[] = [
     {
       name: "Today's Best Deals",
-      products: bestDeals.length > 0 ? bestDeals : genericProducts.slice(0, 8),
+      products: sharedSlice,
       count: 8,
       layout: "horizontal",
     },
     {
       name: "Top Offers",
-      products: topOffers.length > 0 ? topOffers : genericProducts.slice(8, 16),
+      products: sharedSlice,
       count: 8,
       layout: "horizontal",
     },
   ];
 
   return (
-    <SSRApolloProvider initialData={{ products: genericProducts }}>
+    <SSRApolloProvider initialData={{ products: serializableProducts }}>
       <div className="py-4 sm:py-6 md:py-8 lg:py-10">
         {sections.map((section) => (
           <ProductSection
