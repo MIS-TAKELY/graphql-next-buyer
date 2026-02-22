@@ -134,32 +134,30 @@ async function HomeProductSections() {
       })
     ]);
 
-    bestDeals = bestDealsRes.data?.getTopDealSaveUpTo || [];
-    topOffers = topOffersRes.data?.getTopDealSaveUpTo || [];
-    genericProducts = genericRes.data?.getProducts || [];
+    bestDeals = JSON.parse(JSON.stringify(bestDealsRes.data?.getTopDealSaveUpTo || []));
+    topOffers = JSON.parse(JSON.stringify(topOffersRes.data?.getTopDealSaveUpTo || []));
+    genericProducts = JSON.parse(JSON.stringify(genericRes.data?.getProducts || []));
   } catch (error) {
     console.error("Error fetching landing page product sections:", error);
   }
 
-  const serializableProducts = JSON.parse(JSON.stringify(genericProducts));
-
   const sections: SectionConfig[] = [
     {
       name: "Today's Best Deals",
-      products: bestDeals.length > 0 ? bestDeals : serializableProducts.slice(0, 8),
+      products: bestDeals.length > 0 ? bestDeals : genericProducts.slice(0, 8),
       count: 8,
       layout: "horizontal",
     },
     {
       name: "Top Offers",
-      products: topOffers.length > 0 ? topOffers : serializableProducts.slice(8, 16),
+      products: topOffers.length > 0 ? topOffers : genericProducts.slice(8, 16),
       count: 8,
       layout: "horizontal",
     },
   ];
 
   return (
-    <SSRApolloProvider initialData={{ products: serializableProducts }}>
+    <SSRApolloProvider initialData={{ products: genericProducts }}>
       <div className="py-4 sm:py-6 md:py-8 lg:py-10">
         {sections.map((section) => (
           <ProductSection
