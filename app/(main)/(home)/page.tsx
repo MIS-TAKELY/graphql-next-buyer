@@ -102,44 +102,57 @@ export default async function HomePage() {
   );
 }
 
+import { GET_TOP_DEALS } from "@/client/landing/topdeals.query";
+
 async function HomeProductSections() {
   const client = await getServerApolloClient();
-  const CACHE_KEY = CacheService.getProductsListKey();
-  let products: TProduct[] =
-    (await CacheService.get<TProduct[]>(CACHE_KEY)) || [];
 
-  if (products.length === 0) {
-    try {
-      const productsResponse = await client.query({
+  // 1. Fetch Today's Best Deals (Targeting Electronics)
+  // 2. Fetch Top Offers (General Trending/Top Picks)
+  // 3. Keep generic products for Provider if needed by other components
+
+  let bestDeals: TProduct[] = [];
+  let topOffers: TProduct[] = [];
+  let genericProducts: TProduct[] = [];
+
+  try {
+    const [bestDealsRes, topOffersRes, genericRes] = await Promise.all([
+      client.query({
+        query: GET_TOP_DEALS,
+        variables: { topDealAbout: "Electronics", limit: 8 },
+        fetchPolicy: "no-cache"
+      }),
+      client.query({
+        query: GET_TOP_DEALS,
+        variables: { topDealAbout: "Trending Deals", limit: 8 },
+        fetchPolicy: "no-cache"
+      }),
+      client.query({
         query: GET_PRODUCTS_MINIMAL,
         variables: { limit: 24 },
-        fetchPolicy: "no-cache",
-        errorPolicy: "all",
-      });
-      products = productsResponse?.data?.getProducts || [];
-      if (products.length > 0) {
-        await CacheService.set(CACHE_KEY, products, 3600);
-      }
-    } catch (error: any) {
-      console.error("Error fetching products:", error);
-      products = [];
-    }
+        fetchPolicy: "no-cache"
+      })
+    ]);
+
+    bestDeals = bestDealsRes.data?.getTopDealSaveUpTo || [];
+    topOffers = topOffersRes.data?.getTopDealSaveUpTo || [];
+    genericProducts = genericRes.data?.getProducts || [];
+  } catch (error) {
+    console.error("Error fetching landing page product sections:", error);
   }
 
-  const serializableProducts = JSON.parse(JSON.stringify(products));
-  const bestDealsSlice = serializableProducts.slice(0, 8);
-  const topOffersSlice = serializableProducts.slice(8, 16);
+  const serializableProducts = JSON.parse(JSON.stringify(genericProducts));
 
   const sections: SectionConfig[] = [
     {
       name: "Today's Best Deals",
-      products: bestDealsSlice,
+      products: bestDeals.length > 0 ? bestDeals : serializableProducts.slice(0, 8),
       count: 8,
       layout: "horizontal",
     },
     {
       name: "Top Offers",
-      products: topOffersSlice,
+      products: topOffers.length > 0 ? topOffers : serializableProducts.slice(8, 16),
       count: 8,
       layout: "horizontal",
     },
