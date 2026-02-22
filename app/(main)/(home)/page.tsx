@@ -131,12 +131,6 @@ async function HomeProductSections() {
 
   const sections: SectionConfig[] = [
     {
-      name: "Today's Best Deals",
-      products: sharedSlice,
-      count: 8,
-      layout: "horizontal",
-    },
-    {
       name: "Top Offers",
       products: sharedSlice,
       count: 8,
@@ -194,7 +188,6 @@ function ProductSectionsSkeleton() {
   return (
     <div className="py-4 sm:py-6 md:py-8 lg:py-10">
       {[
-        { name: "Today's Best Deals", count: 8 },
         { name: "Top Offers", count: 6 },
         { name: "Recommended For You", count: 12 },
       ].map((section, idx) => (
