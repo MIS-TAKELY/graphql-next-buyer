@@ -127,18 +127,19 @@ async function HomeProductSections() {
   }
 
   const serializableProducts = JSON.parse(JSON.stringify(products));
-  const sharedSlice = serializableProducts.slice(0, 8);
+  const bestDealsSlice = serializableProducts.slice(0, 8);
+  const topOffersSlice = serializableProducts.slice(8, 16);
 
   const sections: SectionConfig[] = [
     {
       name: "Today's Best Deals",
-      products: sharedSlice,
+      products: bestDealsSlice,
       count: 8,
       layout: "horizontal",
     },
     {
       name: "Top Offers",
-      products: sharedSlice,
+      products: topOffersSlice,
       count: 8,
       layout: "horizontal",
     },
