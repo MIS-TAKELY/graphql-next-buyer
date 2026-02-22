@@ -305,10 +305,21 @@ export const topDealsResolvers = {
         }
       }
 
-      console.log(`📦 Retrieved ${products.length} full product records`);
+      // Step 7: De-duplicate by ID
+      const seenIds = new Set<string>();
+      const uniqueByIdProducts: ProductWithDetails[] = [];
+
+      for (const p of products) {
+        if (!seenIds.has(p.id)) {
+          seenIds.add(p.id);
+          uniqueByIdProducts.push(p);
+        }
+      }
+
+      console.log(`📦 Retrieved ${uniqueByIdProducts.length} unique product records by ID`);
 
       // Step 8: Calculate deals for each product
-      const productsWithDeals: TopDealProduct[] = products
+      const productsWithDeals: TopDealProduct[] = uniqueByIdProducts
         .map((product): TopDealProduct | null => {
           if (!product.variants?.length) return null;
 
@@ -367,14 +378,28 @@ export const topDealsResolvers = {
             product,
           } as TopDealProduct;
         })
-        .filter((p): p is TopDealProduct => p !== null && p.saveUpTo > 0)
-        // Sort by biggest savings (DESC) instead of smallest (ASC)
+        .filter((p): p is TopDealProduct => p !== null && p.saveUpTo > 0);
+
+      // Step 9: De-duplicate by Name (Case-insensitive) to ensure diversity
+      // We prioritize products with higher savings if names are identical
+      const nameMap = new Map<string, TopDealProduct>();
+
+      for (const p of productsWithDeals) {
+        const normalizedName = p.name.toLowerCase().trim();
+        const existing = nameMap.get(normalizedName);
+
+        if (!existing || p.saveUpTo > existing.saveUpTo) {
+          nameMap.set(normalizedName, p);
+        }
+      }
+
+      const finalProducts = Array.from(nameMap.values())
         .sort((a, b) => b.saveUpTo - a.saveUpTo)
         .slice(0, limit);
 
-      await setCache(cacheKey, productsWithDeals, 86400);
+      await setCache(cacheKey, finalProducts, 86400);
 
-      return productsWithDeals;
+      return finalProducts;
     },
   },
 };
