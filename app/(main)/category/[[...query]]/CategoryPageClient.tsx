@@ -2,8 +2,8 @@
 
 import { useQuery } from "@apollo/client";
 import { GET_PRODUCTS_BY_CATEGORY } from "@/client/category/category.queries";
-import ProductCard from "@/components/search/ProductCard";
-import ProductCardSkeleton from "@/components/search/ProductCardSkeleton";
+import ProductCard from "@/components/page/home/ProductCard";
+import { ProductCardSkeleton } from "@/components/page/home/ProductCardSkeleton";
 import { Button } from "@/components/ui/button";
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { Package } from "lucide-react";
@@ -325,14 +325,14 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
 
           <div className="lg:col-span-3">
             {/* Product List */}
-            <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
               {filteredProducts.map((product: any) => (
                 <ProductCard key={product.id} product={product} />
               ))}
 
               {/* Skeleton Loaders */}
               {(loading || (hasMore && inView)) && (
-                [...Array(4)].map((_, i) => (
+                [...Array(8)].map((_, i) => (
                   <ProductCardSkeleton key={`skeleton-${i}`} />
                 ))
               )}
