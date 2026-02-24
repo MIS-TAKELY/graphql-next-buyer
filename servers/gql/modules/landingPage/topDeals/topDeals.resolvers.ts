@@ -47,9 +47,12 @@ export const topDealsResolvers = {
         where: {
           OR: [
             { name: { equals: cleanedQuery, mode: "insensitive" } },
+            { name: { equals: cleanedQuery.replace(/\s+/g, ""), mode: "insensitive" } },
             { slug: { equals: cleanedQuery.toLowerCase().replace(/\s+/g, "-"), mode: "insensitive" } },
+            { slug: { equals: cleanedQuery.toLowerCase().replace(/\s+/g, ""), mode: "insensitive" } },
           ],
         },
+        orderBy: { products: { _count: 'desc' } }, // Prefer category with more products if multiple match
         select: { id: true, name: true },
       });
 
