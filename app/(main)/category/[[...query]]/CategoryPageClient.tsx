@@ -10,11 +10,7 @@ import { Package } from "lucide-react";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 import Breadcrumb from "@/components/page/product/Breadcrumb";
-import { useProductStore } from "@/store/productStore";
-import { useDynamicSearchFilter } from "@/hooks/dynamicSearchFilter/useDynamicSearchFilter";
-import ActiveFilters from "@/components/search/ActiveFilters";
 import SortBar from "@/components/search/SortBar";
-import FilterSidebar from "@/components/search/FilterSidebar";
 
 interface CategoryPageClientProps {
   params: { query?: string[] };
@@ -28,7 +24,6 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
   // State for accumulated products
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Intersection Observer for infinite scroll
   const { ref, inView } = useInView({
@@ -49,34 +44,14 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
   const category = data?.getProductsByCategory?.category;
   const total = data?.getProductsByCategory?.total || 0;
 
-  // Dynamic Filter Hooks
-  const { dynamicSearchData, dynamicSearchFilterLoading } = useDynamicSearchFilter(category?.name || categorySlug);
-
-  // Zustand Store
-  const {
-    filters: storeFilters,
-    toggleDynamicFilter,
-    togglePriceRange,
-    setMinRating,
-    setFilters,
-    resetFilters,
-  } = useProductStore();
-
-  const {
-    selectedPriceRanges,
-    dynamicFilters,
-    minRating,
-    sort: sortBy,
-  } = storeFilters;
-
-  const setSortBy = (sort: string) => setFilters({ sort });
+  // Sort state
+  const [sortBy, setSortBy] = useState("relevance");
 
   // Effect to handle initial data load and resetting on slug change
   useEffect(() => {
     if (categorySlug) {
       setAllProducts([]);
       setHasMore(true);
-      resetFilters();
     }
   }, [categorySlug]);
 
@@ -133,48 +108,7 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
   const filteredProducts = useMemo(() => {
     if (!Array.isArray(allProducts)) return [];
 
-    let filtered = [...allProducts].filter((product: any) => {
-      const price = product.variants?.[0]?.price || 0;
-
-      const matchesPrice =
-        selectedPriceRanges.length === 0 ||
-        selectedPriceRanges.some((range) => {
-          if (range.endsWith("+")) {
-            const min = parseInt(range);
-            return price >= min;
-          }
-          const [min, max] = range.split("-").map(Number);
-          return price >= min && price <= max;
-        });
-
-      // Calculate average rating
-      const rating =
-        product.reviews?.length > 0
-          ? product.reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0) /
-          product.reviews.length
-          : 0;
-
-      const matchesRating = rating >= minRating;
-
-      const matchesDynamicFilters = Object.entries(dynamicFilters).every(
-        ([key, selectedValues]) => {
-          if ((selectedValues as string[]).length === 0) return true;
-          if (key === "brand") return (selectedValues as string[]).includes(product.brand);
-          if (key === "category")
-            return (selectedValues as string[]).includes(product.category?.name || "");
-
-          return product.variants?.some((variant: any) =>
-            variant.specifications?.some(
-              (spec: any) =>
-                (spec.key === key || spec.name === key) &&
-                (selectedValues as string[]).includes(spec.value)
-            )
-          );
-        }
-      );
-
-      return matchesPrice && matchesRating && matchesDynamicFilters;
-    });
+    let filtered = [...allProducts];
 
     // Sorting
     switch (sortBy) {
@@ -197,13 +131,7 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
     }
 
     return filtered;
-  }, [allProducts, selectedPriceRanges, dynamicFilters, minRating, sortBy]);
-
-  // Reset list when filter definitely changes
-  useEffect(() => {
-    setAllProducts([]);
-    setHasMore(true);
-  }, [selectedPriceRanges, dynamicFilters, minRating]);
+  }, [allProducts, sortBy]);
 
   // Breadcrumb JSON-LD
   const breadcrumbLd = {
@@ -268,13 +196,9 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
               <SortBar
                 sortBy={sortBy}
                 setSortBy={setSortBy}
-                showFilters={mobileFiltersOpen}
-                setShowFilters={setMobileFiltersOpen}
-                activeFiltersCount={
-                  Object.values(dynamicFilters).reduce((sum, v) => sum + (v as string[]).length, 0) +
-                  (minRating > 0 ? 1 : 0) +
-                  selectedPriceRanges.length
-                }
+                showFilters={false}
+                setShowFilters={() => { }}
+                activeFiltersCount={0}
                 itemsPerPage={ITEMS_PER_PAGE}
                 setItemsPerPage={() => { }}
               />
@@ -284,93 +208,52 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
       </div>
 
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <ActiveFilters
-          dynamicFilters={dynamicFilters}
-          minRating={minRating}
-          toggleFilter={toggleDynamicFilter}
-          selectedPriceRanges={selectedPriceRanges}
-          togglePriceRange={togglePriceRange}
-          setMinRating={setMinRating}
-          clearFilters={resetFilters}
-          filterOptions={{}}
-          dynamicSearchData={{
-            category: categorySlug,
-            filters: dynamicSearchData?.filters || [],
-          }}
-        />
+        <div className="w-full">
+          {/* Product List */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredProducts.map((product: any) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="hidden lg:block lg:col-span-1">
-            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6 sticky top-24">
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-4">Filters</h3>
-                <FilterSidebar
-                  showFilters={true}
-                  selectedPriceRanges={selectedPriceRanges}
-                  togglePriceRange={togglePriceRange}
-                  minRating={minRating}
-                  setMinRating={setMinRating}
-                  dynamicFilters={dynamicFilters}
-                  toggleFilter={toggleDynamicFilter}
-                  filterOptions={{}}
-                  dynamicSearchData={{
-                    category: categorySlug,
-                    filters: dynamicSearchData?.filters || [],
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-3">
-            {/* Product List */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
-              {filteredProducts.map((product: any) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-
-              {/* Skeleton Loaders */}
-              {(loading || (hasMore && inView)) && (
-                [...Array(8)].map((_, i) => (
-                  <ProductCardSkeleton key={`skeleton-${i}`} />
-                ))
-              )}
-            </div>
+            {/* Skeleton Loaders */}
+            {(loading || (hasMore && inView)) && (
+              [...Array(8)].map((_, i) => (
+                <ProductCardSkeleton key={`skeleton-${i}`} />
+              ))
+            )}
           </div>
         </div>
+      </div>
 
-        {/* Infinite Scroll Trigger */}
-        <div ref={ref} className="h-20 w-full flex items-center justify-center mt-8">
-          {hasMore && !loading && (
-            <div className="animate-pulse text-muted-foreground text-sm">Loading more products...</div>
-          )}
-        </div>
-
-        {/* No Results State */}
-        {!loading && allProducts.length === 0 && (
-          <div className="text-center py-20 flex flex-col items-center">
-            <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-full mb-4">
-              <Package className="w-12 h-12 text-gray-400" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">No products found</h3>
-            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-              We couldn't find any products in this category.
-            </p>
-            <Link href="/">
-              <Button variant="outline">Browse all Categories</Button>
-            </Link>
-          </div>
-        )}
-
-        {/* End of results */}
-        {!hasMore && allProducts.length > 0 && (
-          <div className="text-center py-10 border-t border-gray-200 dark:border-gray-800 mt-10">
-            <p className="text-muted-foreground text-sm">You have reached the end of the list</p>
-          </div>
+      {/* Infinite Scroll Trigger */}
+      <div ref={ref} className="h-20 w-full flex items-center justify-center mt-8">
+        {hasMore && !loading && (
+          <div className="animate-pulse text-muted-foreground text-sm">Loading more products...</div>
         )}
       </div>
+
+      {/* No Results State */}
+      {!loading && allProducts.length === 0 && (
+        <div className="text-center py-20 flex flex-col items-center">
+          <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-full mb-4">
+            <Package className="w-12 h-12 text-gray-400" />
+          </div>
+          <h3 className="text-xl font-semibold mb-2">No products found</h3>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            We couldn't find any products in this category.
+          </p>
+          <Link href="/">
+            <Button variant="outline">Browse all Categories</Button>
+          </Link>
+        </div>
+      )}
+
+      {/* End of results */}
+      {!hasMore && allProducts.length > 0 && (
+        <div className="text-center py-10 border-t border-gray-200 dark:border-gray-800 mt-10">
+          <p className="text-muted-foreground text-sm">You have reached the end of the list</p>
+        </div>
+      )}
     </div>
   );
 }
-
