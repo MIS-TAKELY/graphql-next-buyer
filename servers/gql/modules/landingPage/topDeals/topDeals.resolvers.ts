@@ -12,7 +12,6 @@ import {
 } from "@/types/topDeals";
 import {
   getAllDescendantCategoryIds,
-  getTopLevelParentCategory,
 } from "./topDeal.helper";
 
 export const topDealsResolvers = {
@@ -121,29 +120,11 @@ export const topDealsResolvers = {
 
       console.log("📂 Detected category:", category.name, "ID:", category.id);
 
-      // Step 3: Get top-level parent category
-      const topLevelCategory = await getTopLevelParentCategory(category.id);
-
-      if (!topLevelCategory) {
-        console.warn(
-          `⚠️ Could not find top-level parent for category "${category.name}"`
-        );
-        return [];
-      }
+      // Step 3: Get all descendant category IDs (including the category itself)
+      const categoryIds = await getAllDescendantCategoryIds(category.id);
 
       console.log(
-        "🔝 Top-level parent category:",
-        topLevelCategory.name,
-        "ID:",
-        topLevelCategory.id
-      );
-
-      // Step 4: Get all descendant category IDs
-      const categoryIds = await getAllDescendantCategoryIds(
-        topLevelCategory.id
-      );
-      console.log(
-        `📊 Searching across ${categoryIds.length} categories (including children)`
+        `📊 Searching across ${categoryIds.length} categories for "${category.name}" (including children)`
       );
 
       // Step 5: Typesense Search within the category hierarchy
