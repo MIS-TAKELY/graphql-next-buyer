@@ -2,14 +2,14 @@
 import { useProductStore } from '@/store/productStore';
 import ActiveFilters from "@/components/search/ActiveFilters";
 import FilterSidebar from "@/components/search/FilterSidebar";
-import Pagination from "@/components/search/Pagination";
 import ProductGrid from "@/components/search/ProductGrid";
 import SearchHeader from "@/components/search/SearchHeader";
 import SortBar from "@/components/search/SortBar";
-import { Filter, useDynamicSearchFilter } from "@/hooks/dynamicSearchFilter/useDynamicSearchFilter";
+import { useDynamicSearchFilter } from "@/hooks/dynamicSearchFilter/useDynamicSearchFilter";
 import { useSearch } from "@/hooks/search/useSearch";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState, useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
 interface Specification {
   key?: string;
@@ -80,6 +80,7 @@ export default function SearchPage() {
     searchProducts,
     backendFilters,
     searchLoading,
+    isFetchingMore,
     page,
     setPage,
     totalPages,
@@ -87,6 +88,17 @@ export default function SearchPage() {
     limit,
     setLimit,
   } = useSearch(query, formattedFilters);
+
+  const { ref, inView } = useInView({
+    threshold: 0,
+    rootMargin: '100px',
+  });
+
+  useEffect(() => {
+    if (inView && !searchLoading && !isFetchingMore && page < totalPages) {
+      setPage(prev => prev + 1);
+    }
+  }, [inView, searchLoading, isFetchingMore, page, totalPages, setPage]);
 
   const {
     selectedPriceRanges,
@@ -162,7 +174,7 @@ export default function SearchPage() {
 
     console.log(`🔍 Client filtering ${searchProducts.length} products from server`);
 
-    let filtered = [...searchProducts].filter((product: SearchProduct) => {
+    const filtered = [...searchProducts].filter((product: SearchProduct) => {
       const price = product.variants[0]?.price || 0;
 
       const matchesPrice =
@@ -363,13 +375,20 @@ export default function SearchPage() {
             <ProductGrid
               products={filteredProducts}
               loading={searchLoading}
+              isFetchingMore={isFetchingMore}
               clearFilters={clearFilters}
             />
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              onPageChange={setPage}
-            />
+            {page < totalPages && (
+              <div ref={ref} className="h-20 flex items-center justify-center">
+                {isFetchingMore && (
+                  <div className="flex gap-2">
+                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                  </div>
+                )}
+              </div>
+            )}
           </main>
         </div>
       </div>

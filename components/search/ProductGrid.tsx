@@ -45,9 +45,15 @@ interface ProductGridProps {
   products: SearchProduct[];
   clearFilters: () => void;
   loading?: boolean;
+  isFetchingMore?: boolean;
 }
 
-export default function ProductGrid({ products, clearFilters, loading = false }: ProductGridProps) {
+export default function ProductGrid({
+  products,
+  clearFilters,
+  loading = false,
+  isFetchingMore = false
+}: ProductGridProps) {
   return (
     <main className="flex-1">
       {loading ? (
@@ -70,11 +76,20 @@ export default function ProductGrid({ products, clearFilters, loading = false }:
           </Button>
         </div>
       ) : (
-        <div className="flex flex-col gap-2 sm:gap-4">
-          {products?.map((product) => (
-            <ProductCard key={product.slug} product={product} />
-          ))}
-        </div>
+        <>
+          <div className="flex flex-col gap-2 sm:gap-4">
+            {products?.map((product) => (
+              <ProductCard key={product.slug} product={product} />
+            ))}
+          </div>
+          {isFetchingMore && (
+            <div className="grid grid-cols-1 gap-4 mt-4">
+              {[...Array(2)].map((_, index) => (
+                <ProductCardSkeleton key={`skeleton-${index}`} />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </main>
   );
