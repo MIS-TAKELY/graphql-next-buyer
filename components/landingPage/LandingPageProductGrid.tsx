@@ -12,6 +12,7 @@ interface ILandingPageProductGrid {
   data: any;
   error?: any;
   forceHorizontal?: boolean; // Force horizontal layout when needed
+  categorySlug?: string;
 }
 
 const LandingPageProductGrid = ({
@@ -19,6 +20,7 @@ const LandingPageProductGrid = ({
   data,
   error,
   forceHorizontal = false,
+  categorySlug,
 }: ILandingPageProductGrid) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -65,9 +67,12 @@ const LandingPageProductGrid = ({
       <div className="rounded-lg overflow-hidden bg-card h-full lg:border lg:border-border">
         {/* Header */}
         <div className="flex justify-between items-center bg-gradient-to-r from-card to-card/95 px-3 sm:px-4">
-          <h2 className="text-lg py-4 sm:text-xl md:text-2xl font-bold text-card-foreground tracking-tight">
+          <Link
+            href={categorySlug ? `/category/${categorySlug}` : `/search?q=${encodeURIComponent(title)}`}
+            className="text-lg py-4 sm:text-xl md:text-2xl font-bold text-card-foreground tracking-tight hover:text-primary transition-colors"
+          >
             {title}
-          </h2>
+          </Link>
         </div>
 
         {/* Desktop View (≥1366px): 2x2 Grid */}
@@ -76,7 +81,7 @@ const LandingPageProductGrid = ({
             {deals.map((deal: any, index: number) => (
               <Link
                 key={index}
-                href={`/search?q=${encodeURIComponent(deal?.name || "")}`}
+                href={categorySlug ? `/category/${categorySlug}` : `/search?q=${encodeURIComponent(deal?.name || "")}`}
                 className="group flex flex-col rounded-lg overflow-hidden
                   border border-border bg-card/50
                   hover:border-primary/40 hover:shadow-md transition-all duration-300 hover:no-underline"
@@ -149,7 +154,7 @@ const LandingPageProductGrid = ({
               {deals.map((deal: any, index: number) => (
                 <Link
                   key={index}
-                  href={`/search?q=${encodeURIComponent(deal?.name || "")}`}
+                  href={categorySlug ? `/category/${categorySlug}` : `/search?q=${encodeURIComponent(deal?.name || "")}`}
                   className="flex-shrink-0 group flex flex-col rounded-lg overflow-hidden
                     border border-border bg-card/50 w-44 sm:w-48 md:w-52
                     hover:border-primary/40 hover:shadow-md transition-all duration-300 hover:no-underline"
@@ -184,7 +189,7 @@ const LandingPageProductGrid = ({
             {deals.map((deal: any, index: number) => (
               <Link
                 key={index}
-                href={`/search?q=${encodeURIComponent(deal?.name || "")}`}
+                href={categorySlug ? `/category/${categorySlug}` : `/search?q=${encodeURIComponent(deal?.name || "")}`}
                 className="group flex flex-col rounded-lg overflow-hidden
                   border border-border bg-card/50
                   hover:border-primary/40 hover:shadow-lg transition-all duration-300 hover:no-underline

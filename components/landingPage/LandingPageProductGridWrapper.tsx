@@ -85,6 +85,7 @@ export const LandingPageProductGridWrapper = async ({
       error={JSON.parse(JSON.stringify(error || null))}
       // Force horizontal layout for the last item when it's alone in a row on md screens
       forceHorizontal={isLast}
+      categorySlug={topDealAbout}
     />
   );
 };
