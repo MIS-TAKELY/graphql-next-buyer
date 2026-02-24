@@ -47,6 +47,9 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
   // Sort state
   const [sortBy, setSortBy] = useState("relevance");
 
+  // Display Name logic (decoded for better UX)
+  const displayName = category?.name || decodeURIComponent(categorySlug).replace(/-/g, ' ');
+
   // Effect to handle initial data load and resetting on slug change
   useEffect(() => {
     if (categorySlug) {
@@ -176,7 +179,7 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
       {/* Hero / Header Section */}
       <Breadcrumb
         category={category}
-        name={category?.name || (categorySlug ? categorySlug.replace(/-/g, ' ') : "Category")}
+        name={displayName}
       />
 
       <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
@@ -184,7 +187,7 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex-1">
               <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight leading-none">
-                {category?.name || <span className="capitalize">{categorySlug.replace(/-/g, ' ')}</span>}
+                <span className="capitalize">{displayName}</span>
               </h1>
 
               <div className="mt-1 text-[10px] sm:text-xs font-medium text-muted-foreground opacity-80">
