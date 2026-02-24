@@ -11,10 +11,11 @@ interface Props {
 
 const PlainProductCards = ({ product }: Props) => {
   const categoryName = product.product?.category?.name || "Unknown";
+  const categorySlug = product.product?.category?.slug || categoryName.toLowerCase().replace(/\s+/g, '-');
 
   return (
     <Link
-      href={`/search?q=${encodeURIComponent(categoryName)}`}
+      href={`/category/${categorySlug}`}
       className="group flex-shrink-0 w-40 xs:w-44 sm:w-48 md:w-52 lg:w-56 snap-start block hover:no-underline"
     >
       {/* Image */}

@@ -35,6 +35,7 @@ export interface TopDeal {
     brand?: string;
     category?: {
       name?: string;
+      slug?: string;
     };
   };
 }

@@ -8,11 +8,12 @@ import { LandingPagrCategorySwiperData, TopDeal } from "./types";
 
 interface Props {
   title: string;
+  categorySlug?: string;
   onViewAll?: () => void;
   data: LandingPagrCategorySwiperData;
 }
 
-export default function LandingPagrCategorySwiper({ title, onViewAll, data }: Props) {
+export default function LandingPagrCategorySwiper({ title, categorySlug, onViewAll, data }: Props) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -65,7 +66,7 @@ export default function LandingPagrCategorySwiper({ title, onViewAll, data }: Pr
       <div className="flex justify-between items-center mb-3">
         {/* ✅ Wrapped Title in a Link */}
         <Link
-          href={`/search?q=${encodeURIComponent(title)}`}
+          href={categorySlug ? `/category/${categorySlug}` : `/search?q=${encodeURIComponent(title)}`}
           className="text-lg py-4 sm:text-xl md:text-2xl font-bold text-card-foreground hover:text-primary transition-colors"
         >
           {title}
