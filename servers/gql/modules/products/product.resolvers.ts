@@ -569,81 +569,44 @@ export const productResolvers = {
       let resultIds = [...sortedIds];
       console.timeEnd("FBT:OrderHistory");
 
-      // 2. LLM + Vector Fallback: If not enough results from history
+      // 2. Vector Search Fallback: If not enough results from history, find semantically related products in DIFFERENT categories
       if (resultIds.length < limit) {
-        console.time("FBT:LLMFallback");
-        /*
+        console.time("FBT:VectorComplementary");
         try {
-          const product = await prisma.product.findUnique({
-            where: { id: productId },
-            select: { name: true, description: true, category: { select: { name: true } } }
-          });
+          const productEmbedding = await prisma.$queryRawUnsafe<any[]>(
+            `SELECT embedding, "categoryId" FROM products WHERE id = $1 AND embedding IS NOT NULL`,
+            productId
+          );
 
-          if (product) {
-            const { callLLM } = await import("@/lib/search/llm");
-            const prompt = `Given the product "${product.name}" in category "${product.category?.name}", list 3 complementary categories of products that are frequently bought with it (e.g., if it's a "Camera", complementary categories might be "Lens", "SD Card", "Tripod"). Return ONLY a JSON array of category names.`;
+          if (productEmbedding.length > 0) {
+            const vecString = typeof productEmbedding[0].embedding === 'string'
+              ? productEmbedding[0].embedding
+              : `[${Array.from(productEmbedding[0].embedding as any).join(',')}]`;
+            const categoryId = productEmbedding[0].categoryId;
 
-            const llmResponse = await callLLM(prompt);
-            const complementaryCategories = JSON.parse(llmResponse);
+            // Find products in different categories that are semantically related
+            const complementaryProducts = await prisma.$queryRawUnsafe<any[]>(
+              `SELECT id FROM products 
+               WHERE id != $1 
+               AND "categoryId" != $2 
+               AND status = 'ACTIVE' 
+               AND embedding IS NOT NULL 
+               ORDER BY embedding <=> $3::vector 
+               LIMIT $4`,
+              productId, categoryId, vecString, limit - resultIds.length
+            );
 
-            if (Array.isArray(complementaryCategories) && complementaryCategories.length > 0) {
-              // Find one top product for each complementary category using vector similarity to the current product
-              const productEmbedding = await prisma.$queryRawUnsafe<any[]>(
-                `SELECT embedding FROM products WHERE id = $1 AND embedding IS NOT NULL`,
-                productId
-              );
-
-              if (productEmbedding.length > 0) {
-                const vecString = typeof productEmbedding[0].embedding === 'string'
-                  ? productEmbedding[0].embedding
-                  : `[${Array.from(productEmbedding[0].embedding as any).join(',')}]`;
-
-                for (const catName of complementaryCategories) {
-                  if (resultIds.length >= limit) break;
-
-                  // Find a product in the suggested category that is semantically related
-                  const suggestedProducts = await prisma.$queryRawUnsafe<any[]>(
-                    `SELECT p.id FROM products p
-                     JOIN categories c ON p."categoryId" = c.id
-                     WHERE p.id != $1 AND p.status = 'ACTIVE' AND p.embedding IS NOT NULL
-                     AND c.name ILIKE $2
-                     ORDER BY p.embedding <=> $3::vector
-                     LIMIT 1`,
-                    productId, `%${catName}%`, vecString
-                  );
-
-                  if (suggestedProducts.length > 0 && !resultIds.includes(suggestedProducts[0].id)) {
-                    resultIds.push(suggestedProducts[0].id);
-                  }
-                }
-              }
-            }
+            const newIds = complementaryProducts.map(p => p.id).filter(id => !resultIds.includes(id));
+            resultIds.push(...newIds);
           }
         } catch (error) {
-          console.error("LLM/Vector fallback for Frequently Bought Together failed:", error);
+          console.error("Vector search for complementary products failed:", error);
         }
-        */
-        console.timeEnd("FBT:LLMFallback");
+        console.timeEnd("FBT:VectorComplementary");
       }
 
-      // 3. Category Fallback: Final fallback if still not enough
-      if (resultIds.length < limit) {
-        console.time("FBT:CategoryFallback");
-        const product = await prisma.product.findUnique({ where: { id: productId }, select: { categoryId: true } });
-        if (product?.categoryId) {
-          const categoryProducts = await prisma.product.findMany({
-            where: {
-              categoryId: product.categoryId,
-              id: { notIn: [productId, ...resultIds] },
-              status: 'ACTIVE'
-            },
-            take: limit - resultIds.length,
-            select: { id: true }
-          });
-          resultIds = [...resultIds, ...categoryProducts.map((p: any) => p.id)];
-        }
-        console.timeEnd("FBT:CategoryFallback");
-      }
+      // No fallback to same category as per user request.
+
 
       if (resultIds.length === 0) {
         console.timeEnd(`getFrequentlyBoughtTogether:${productId}`);
