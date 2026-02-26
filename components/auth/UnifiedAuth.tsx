@@ -18,9 +18,10 @@ interface UnifiedAuthProps {
     initialStep?: AuthStep;
     onClose?: () => void;
     onStepChange?: (step: AuthStep) => void;
+    showCloseButton?: boolean;
 }
 
-export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", onClose, onStepChange }: UnifiedAuthProps) {
+export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", onClose, onStepChange, showCloseButton = true }: UnifiedAuthProps) {
     const { data: session, isPending, refetch } = useSession();
     const [step, setStep] = useState<AuthStep>(initialStep);
 
@@ -890,7 +891,7 @@ export default function UnifiedAuth({ isModal = false, initialStep = "SIGN_IN", 
                 {/* Right Column: Form */}
                 <div className="p-8 md:p-12 flex flex-col justify-center relative">
                     {/* Close Button */}
-                    {isModal && onClose && (
+                    {isModal && onClose && showCloseButton && (
                         <button
                             onClick={onClose}
                             className="absolute top-4 right-4 p-2 rounded-full hover:bg-secondary/80 text-muted-foreground transition-colors"

@@ -39,6 +39,7 @@ export default function GlobalAuthModal() {
                     initialStep={defaultStep}
                     onClose={() => closeModal()}
                     onStepChange={(step) => setCurrentStep(step)}
+                    showCloseButton={false}
                 />
             </DialogContent>
         </Dialog>
