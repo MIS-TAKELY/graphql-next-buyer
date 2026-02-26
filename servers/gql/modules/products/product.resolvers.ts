@@ -527,7 +527,7 @@ export const productResolvers = {
       return views.map((v: any) => v.product);
     },
     getFrequentlyBoughtTogether: async (_: any, { productId, limit = 5 }: { productId: string, limit?: number }) => {
-      const cacheKey = `frequently_bought_together:v2:${productId}:${limit}`;
+      const cacheKey = `frequently_bought_together:v4:${productId}:${limit}`;
       const cached = await getCache<any[]>(cacheKey);
       if (cached) return cached;
 
@@ -538,7 +538,7 @@ export const productResolvers = {
         where: { id: productId },
         select: {
           categoryId: true,
-          category: { select: { parentId: true } }
+          category: { select: { name: true, parentId: true, parent: { select: { name: true } } } }
         }
       });
       const currentCategoryId = currentProduct?.categoryId;
@@ -591,42 +591,85 @@ export const productResolvers = {
       let resultIds = [...sortedIds];
       console.timeEnd("FBT:OrderHistory");
 
-      // 2. Vector Search Fallback: If not enough results from history, find semantically related products in DIFFERENT categories
+      // 2. Complementary Vector Search: Use LLM to generate accessory descriptions, then find matching products
       if (resultIds.length < limit) {
-        console.time("FBT:VectorComplementary");
+        console.time("FBT:ComplementarySearch");
         try {
-          const productEmbedding = await prisma.$queryRawUnsafe<any[]>(
-            `SELECT embedding, "categoryId" FROM products WHERE id = $1 AND embedding IS NOT NULL`,
-            productId
-          );
+          const categoryName = currentProduct?.category?.name || "";
+          const parentCategoryName = currentProduct?.category?.parent?.name || "";
+          let complementaryVec: string | null = null;
 
-          if (productEmbedding.length > 0) {
-            const vecString = typeof productEmbedding[0].embedding === 'string'
-              ? productEmbedding[0].embedding
-              : `[${Array.from(productEmbedding[0].embedding as any).join(',')}]`;
+          // Try to get or generate a complementary embedding for this category
+          if (currentCategoryId && categoryName) {
+            const embeddingCacheKey = `complementary_embedding:v1:${currentCategoryId}`;
+            const cachedVec = await getCache<string>(embeddingCacheKey);
 
-            // Find products in different categories and parent categories
+            if (cachedVec) {
+              complementaryVec = cachedVec;
+            } else {
+              let complementaryText: string | null = null;
+              try {
+                const { callLLM } = await import("@/lib/search/llm");
+                const prompt = `Given a product in the category "${categoryName}"${parentCategoryName ? ` (under "${parentCategoryName}")` : ""}, list 8-10 complementary or accessory products that customers commonly buy together with it. These should NOT be similar or competing products from the same category. Return JSON: {"products": ["item1", "item2", ...]}`;
+                const llmResponse = await callLLM(prompt, "qwen2.5:3b", 10000);
+                const parsed = JSON.parse(llmResponse);
+                if (Array.isArray(parsed.products)) {
+                  complementaryText = parsed.products.join(", ");
+                }
+              } catch (llmError) {
+                console.warn("LLM complementary generation failed, using heuristic:", llmError);
+              }
+
+              if (!complementaryText) {
+                complementaryText = `accessories and add-ons commonly bought with ${categoryName}`;
+              }
+
+              try {
+                const { getEmbedding } = await import("@/lib/search/embedding");
+                const embedding = await getEmbedding(complementaryText);
+                complementaryVec = `[${embedding.join(",")}]`;
+                await setCache(embeddingCacheKey, complementaryVec, 86400); // 24h cache
+              } catch (embedError) {
+                console.error("Embedding generation for complementary text failed:", embedError);
+              }
+            }
+          }
+
+          // Search using complementary embedding, or fall back to product's own embedding
+          let searchVec = complementaryVec;
+          if (!searchVec) {
+            const productEmbedding = await prisma.$queryRawUnsafe<any[]>(
+              `SELECT embedding FROM products WHERE id = $1 AND embedding IS NOT NULL`,
+              productId
+            );
+            if (productEmbedding.length > 0) {
+              searchVec = typeof productEmbedding[0].embedding === 'string'
+                ? productEmbedding[0].embedding
+                : `[${Array.from(productEmbedding[0].embedding as any).join(',')}]`;
+            }
+          }
+
+          if (searchVec) {
+            const excludeIds = [productId, ...resultIds];
             const complementaryProducts = await prisma.$queryRawUnsafe<any[]>(
               `SELECT p.id FROM products p
                JOIN categories c ON p."categoryId" = c.id
-               WHERE p.id != $1 
+               WHERE p.id != ALL($1::text[])
                AND p."categoryId" != ALL($2::text[])
                AND (c."parentId" IS NULL OR c."parentId" != ALL($2::text[]))
                AND p.status = 'ACTIVE' 
                AND p.embedding IS NOT NULL 
                ORDER BY p.embedding <=> $3::vector 
                LIMIT $4`,
-              productId, categoryIdsToExclude, vecString, limit - resultIds.length
+              excludeIds, categoryIdsToExclude, searchVec, limit - resultIds.length
             );
 
-
-            const newIds = complementaryProducts.map(p => p.id).filter(id => !resultIds.includes(id));
-            resultIds.push(...newIds);
+            resultIds.push(...complementaryProducts.map(p => p.id));
           }
         } catch (error) {
-          console.error("Vector search for complementary products failed:", error);
+          console.error("Complementary product search failed:", error);
         }
-        console.timeEnd("FBT:VectorComplementary");
+        console.timeEnd("FBT:ComplementarySearch");
       }
 
 
