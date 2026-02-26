@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { NotificationListener } from "@/components/common/NotificationListener";
 import AuthGate from "@/components/auth/AuthGate";
 import GlobalAuthModal from "@/components/auth/GlobalAuthModal";
+import MediaContextGuard from "@/components/common/MediaContextGuard";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -124,6 +125,7 @@ export default function RootLayout({
           <Toaster position="top-right" duration={2500} richColors closeButton />
           <NotificationListener />
           <GlobalAuthModal />
+          <MediaContextGuard />
         </ApolloWrapper>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "G-R7VFCZNSEQ"} />
         <script
