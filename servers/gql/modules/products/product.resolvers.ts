@@ -527,13 +527,25 @@ export const productResolvers = {
       return views.map((v: any) => v.product);
     },
     getFrequentlyBoughtTogether: async (_: any, { productId, limit = 5 }: { productId: string, limit?: number }) => {
-      const cacheKey = `frequently_bought_together:v1:${productId}:${limit}`;
+      const cacheKey = `frequently_bought_together:v2:${productId}:${limit}`;
       const cached = await getCache<any[]>(cacheKey);
       if (cached) return cached;
 
       console.time(`getFrequentlyBoughtTogether:${productId}`);
-      // 1. Try Order History (Existing Logic)
+      // 1. Try Order History
       console.time("FBT:OrderHistory");
+      const currentProduct = await prisma.product.findUnique({
+        where: { id: productId },
+        select: {
+          categoryId: true,
+          category: { select: { parentId: true } }
+        }
+      });
+      const currentCategoryId = currentProduct?.categoryId;
+      const currentParentCategoryId = currentProduct?.category?.parentId;
+
+      const categoryIdsToExclude = [currentCategoryId, currentParentCategoryId].filter(Boolean) as string[];
+
       const orders = await prisma.order.findMany({
         where: {
           items: { some: { variant: { productId } } },
@@ -544,7 +556,11 @@ export const productResolvers = {
           items: {
             include: {
               variant: {
-                select: { productId: true }
+                include: {
+                  product: {
+                    select: { id: true, categoryId: true, category: { select: { parentId: true } } }
+                  }
+                }
               }
             }
           }
@@ -554,9 +570,15 @@ export const productResolvers = {
       const frequencyMap = new Map<string, number>();
       orders.forEach((order: any) => {
         order.items.forEach((item: any) => {
-          if (item?.variant?.productId && item.variant.productId !== productId) {
-            const pid = item.variant.productId;
-            frequencyMap.set(pid, (frequencyMap.get(pid) || 0) + 1);
+          const product = item?.variant?.product;
+          if (product && product.id !== productId) {
+            const isSameCategory = product.categoryId && categoryIdsToExclude.includes(product.categoryId);
+            const isSameParentCategory = product.category?.parentId && categoryIdsToExclude.includes(product.category.parentId);
+
+            if (!isSameCategory && !isSameParentCategory) {
+              const pid = product.id;
+              frequencyMap.set(pid, (frequencyMap.get(pid) || 0) + 1);
+            }
           }
         });
       });
@@ -582,19 +604,21 @@ export const productResolvers = {
             const vecString = typeof productEmbedding[0].embedding === 'string'
               ? productEmbedding[0].embedding
               : `[${Array.from(productEmbedding[0].embedding as any).join(',')}]`;
-            const categoryId = productEmbedding[0].categoryId;
 
-            // Find products in different categories that are semantically related
+            // Find products in different categories and parent categories
             const complementaryProducts = await prisma.$queryRawUnsafe<any[]>(
-              `SELECT id FROM products 
-               WHERE id != $1 
-               AND "categoryId" != $2 
-               AND status = 'ACTIVE' 
-               AND embedding IS NOT NULL 
-               ORDER BY embedding <=> $3::vector 
+              `SELECT p.id FROM products p
+               JOIN categories c ON p."categoryId" = c.id
+               WHERE p.id != $1 
+               AND p."categoryId" != ALL($2::text[])
+               AND (c."parentId" IS NULL OR c."parentId" != ALL($2::text[]))
+               AND p.status = 'ACTIVE' 
+               AND p.embedding IS NOT NULL 
+               ORDER BY p.embedding <=> $3::vector 
                LIMIT $4`,
-              productId, categoryId, vecString, limit - resultIds.length
+              productId, categoryIdsToExclude, vecString, limit - resultIds.length
             );
+
 
             const newIds = complementaryProducts.map(p => p.id).filter(id => !resultIds.includes(id));
             resultIds.push(...newIds);
@@ -605,8 +629,8 @@ export const productResolvers = {
         console.timeEnd("FBT:VectorComplementary");
       }
 
-      // No fallback to same category as per user request.
 
+      // No fallback to same category as per user request.
 
       if (resultIds.length === 0) {
         console.timeEnd(`getFrequentlyBoughtTogether:${productId}`);
@@ -641,6 +665,7 @@ export const productResolvers = {
       await setCache(cacheKey, result, 3600); // 1 hour cache
       return result;
     },
+
     getProductsByIds: async (_: any, { ids }: { ids: string[] }) => {
       if (!ids || ids.length === 0) return [];
 
