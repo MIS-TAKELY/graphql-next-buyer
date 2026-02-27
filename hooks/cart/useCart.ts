@@ -2,6 +2,7 @@
 
 import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART_QUANTITY } from "@/client/cart/cart.mutations";
 import { GET_MY_CART_ITEMS } from "@/client/cart/cart.queries";
+import { GET_PRODUCTS_BY_IDS } from "@/client/product/product.queries";
 import { CartItem, useCartStore } from "@/store/cartStore";
 import { useMutation, useQuery } from "@apollo/client";
 import { useSession } from "@/lib/auth-client";
@@ -25,6 +26,17 @@ export const useCart = () => {
       nextFetchPolicy: "cache-first",
     }
   );
+
+  // Guest Cart Sync: Refresh product data for unauthenticated users
+  const guestProductIds = useMemo(() => {
+    return !userId ? cartItems.map(item => item.id) : [];
+  }, [userId, cartItems]);
+
+  const { data: guestProductsData } = useQuery(GET_PRODUCTS_BY_IDS, {
+    variables: { ids: guestProductIds },
+    skip: !!userId || guestProductIds.length === 0,
+    fetchPolicy: "network-only",
+  });
 
   // Log fetch error
   useEffect(() => {
@@ -54,6 +66,33 @@ export const useCart = () => {
     // If we logout, we should probably clear or handle anonymous. 
     // For now, let's just sync when we have data.
   }, [userId, serverCartData, setCart]);
+
+  // Sync guest data from server to local store
+  useEffect(() => {
+    if (!userId && guestProductsData?.getProductsByIds) {
+      const updatedItems = cartItems.map(item => {
+        const freshProduct = guestProductsData.getProductsByIds.find((p: any) => p.id === item.id);
+        if (freshProduct) {
+          const freshVariant = freshProduct.variants?.find((v: any) => v.id === item.variantId);
+          if (freshVariant) {
+            return {
+              ...item,
+              price: freshVariant.price,
+              stock: freshVariant.stock,
+              comparePrice: freshVariant.mrp,
+            };
+          }
+        }
+        return item;
+      });
+
+      // Only update if there's an actual change to avoid infinite loops or unnecessary renders
+      const hasChanged = JSON.stringify(updatedItems) !== JSON.stringify(cartItems);
+      if (hasChanged) {
+        setCart(updatedItems);
+      }
+    }
+  }, [userId, guestProductsData, cartItems, setCart]);
 
 
   const [addToCartMutation] = useMutation(ADD_TO_CART, {

@@ -41,7 +41,7 @@ const CartItem = ({
     ? Math.round(((comparePrice - price) / comparePrice) * 100)
     : 0;
 
-  const isOutOfStock = (stock || 0) <= 0;
+  const isOutOfStock = Number(stock || 0) <= 0;
 
   return (
     <Card className={`overflow-hidden bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 shadow-sm ${selected ? "border-orange-500 dark:border-orange-400 ring-1 ring-orange-500 dark:ring-orange-400" : ""}`}>

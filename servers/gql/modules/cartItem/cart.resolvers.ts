@@ -98,7 +98,7 @@ export const cartItemResolvers = {
         });
 
         // Cache with reasonable TTL
-        await setCache(cacheKey, myCart, 180); // 3 minutes
+        await setCache(cacheKey, myCart, 30); // Reduced to 30 seconds for faster stock updates
         return myCart;
       } catch (error: any) {
         console.error("Error fetching user cart:", error);
