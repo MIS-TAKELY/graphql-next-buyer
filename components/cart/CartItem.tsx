@@ -20,7 +20,7 @@ const CartItem = ({
 }: {
   item: CartItemType;
   updateQuantity: (variantId: string, newQuantity: number) => void;
-  removeItem: (productId: string, variantId: string) => void;
+  removeItem: (variantId: string, productId: string) => void;
   selected?: boolean;
   onToggle?: (variantId: string) => void;
 }) => {
@@ -100,7 +100,7 @@ const CartItem = ({
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7 -mt-1 -mr-1 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
-                onClick={() => removeItem(productId, variantId)}
+                onClick={() => removeItem(variantId, productId)}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>

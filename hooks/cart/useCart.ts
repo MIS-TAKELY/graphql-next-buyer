@@ -57,6 +57,7 @@ export const useCart = () => {
 
 
   const [addToCartMutation] = useMutation(ADD_TO_CART, {
+    refetchQueries: [{ query: GET_MY_CART_ITEMS }],
     onError(error) {
       console.error("Add to cart mutation failed:", error);
       toast.error("Failed to add to cart. Please try again.");
@@ -67,6 +68,7 @@ export const useCart = () => {
   });
 
   const [removeFromCartMutation] = useMutation(REMOVE_FROM_CART, {
+    refetchQueries: [{ query: GET_MY_CART_ITEMS }],
     onError(error) {
       toast.error("Failed to remove from cart");
       refetch();
@@ -74,6 +76,7 @@ export const useCart = () => {
   });
 
   const [updateQuantityMutation] = useMutation(UPDATE_CART_QUANTITY, {
+    refetchQueries: [{ query: GET_MY_CART_ITEMS }],
     onError(error) {
       toast.error("Failed to update quantity");
       refetch();
