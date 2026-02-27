@@ -66,7 +66,12 @@ export default function FrequentlyBoughtTogether({
             const promises = selectedProducts.map((p) => {
                 const variant = p.variants?.find((v) => v.isDefault) || p.variants?.[0];
                 if (variant) {
-                    return addToCart(variant.id, p.id, 1);
+                    return addToCart(variant.id, p.id, 1, {
+                        name: p.name,
+                        image: p.images?.[0]?.url || "/placeholder.svg",
+                        price: Number(variant.price || 0),
+                        slug: p.slug
+                    });
                 }
                 return Promise.resolve();
             });

@@ -43,7 +43,12 @@ export default function ProductCard({ product }: ProductCardProps) {
     if (checkIsInCart(product.id)) {
       removeFromCart(product.variants[0].id, product.id);
     } else {
-      addToCart(product.variants[0].id, product.id, 1);
+      addToCart(product.variants[0].id, product.id, 1, {
+        name: product.name,
+        image: defaultImage || "/placeholder.svg",
+        price: Number(currentPrice || 0),
+        slug: product.slug,
+      });
     }
   };
 
