@@ -9,6 +9,7 @@ interface ProductActionsProps {
   variantId: string;
   quantity?: number;
   inStock: boolean;
+  stock?: number;
   className?: string;
   showBuyNow?: boolean;
   showAddToCart?: boolean;
@@ -27,6 +28,7 @@ export function ProductActions({
   variantId,
   quantity = 1,
   inStock,
+  stock,
   className = "",
   showBuyNow = true,
   showAddToCart = true,
@@ -66,6 +68,7 @@ export function ProductActions({
             variantId={variantId}
             quantity={quantity}
             inStock={inStock}
+            stock={stock}
             onAddSuccess={onAddSuccess}
             onRemoveSuccess={onRemoveSuccess}
             onError={onError}

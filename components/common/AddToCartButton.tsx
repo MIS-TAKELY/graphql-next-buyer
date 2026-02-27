@@ -9,6 +9,7 @@ interface AddToCartButtonProps {
   variantId?: string;
   quantity?: number;
   inStock?: boolean;
+  stock?: number;
   className?: string;
   size?: "sm" | "default" | "lg";
   variant?:
@@ -35,6 +36,7 @@ export function AddToCartButton({
   variantId,
   quantity = 1,
   inStock,
+  stock,
   className = "",
   size = "sm",
   variant,
@@ -73,6 +75,7 @@ export function AddToCartButton({
           image: productImage || "/placeholder.svg",
           price: price || 0,
           slug,
+          stock,
         });
         onAddSuccess?.();
       }

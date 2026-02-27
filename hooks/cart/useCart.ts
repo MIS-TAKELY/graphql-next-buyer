@@ -85,7 +85,7 @@ export const useCart = () => {
       variantId: string,
       productId: string,
       quantity: number = 1,
-      productDetails?: { name: string; image: string; price: number; slug?: string }
+      productDetails?: { name: string; image: string; price: number; slug?: string; stock?: number }
     ) => {
       setLoading(true);
 
@@ -100,6 +100,7 @@ export const useCart = () => {
         image: productDetails?.image || "/placeholder.svg",
         price: productDetails?.price || 0,
         slug: productDetails?.slug,
+        stock: productDetails?.stock,
       };
 
       try {

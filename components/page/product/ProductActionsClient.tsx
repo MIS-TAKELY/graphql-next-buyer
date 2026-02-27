@@ -18,6 +18,7 @@ interface ProductActionsClientProps {
   productSlug: string;
   variantId: string;
   inStock: boolean;
+  stock?: number;
   product?: Partial<TProduct>;
 }
 
@@ -26,6 +27,7 @@ export function ProductActionsClient({
   productSlug,
   variantId,
   inStock,
+  stock,
   product,
 }: ProductActionsClientProps) {
   const { isInWishlist, handleAddToWishlist, handleRemoveFromWishlist } =
@@ -111,6 +113,7 @@ export function ProductActionsClient({
         variantId={variantId}
         quantity={quantity}
         inStock={inStock}
+        stock={stock}
         productName={product?.name}
         productImage={product?.images?.[0]?.url}
         productPrice={product?.variants?.[0]?.price ? parseFloat(product.variants[0].price.toString()) : 0}

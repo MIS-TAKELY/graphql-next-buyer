@@ -267,6 +267,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 productSlug={product.slug}
                 variantId={currentVariant?.id || ""}
                 inStock={inStock}
+                stock={currentVariant ? Number(currentVariant.stock) : 0}
                 product={product}
               />
             </div>
@@ -345,6 +346,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           productSlug={product.slug}
           variantId={currentVariant?.id || ""}
           inStock={inStock}
+          stock={currentVariant ? Number(currentVariant.stock) : 0}
           product={product}
         />
       </div>
