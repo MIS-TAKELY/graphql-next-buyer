@@ -2,7 +2,7 @@
 
 import { TProduct } from "@/types/product";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, Bot, User, Sparkles, StopCircle } from "lucide-react";
+import { Send, Bot, User, Sparkles, StopCircle, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Message {
@@ -14,6 +14,8 @@ interface Message {
 interface ProductAiBotProps {
     product: TProduct;
 }
+
+const STORAGE_KEY_PREFIX = "vanijay_ai_chat_";
 
 function sanitizeHtmlToMarkdown(text: string): string {
     let result = text;
@@ -76,6 +78,42 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
     const abortRef = useRef<AbortController | null>(null);
     const hasInitialLoaded = useRef(false);
 
+    const storageKey = `${STORAGE_KEY_PREFIX}${product.id}`;
+
+    // Load messages from localStorage on mount
+    useEffect(() => {
+        const stored = localStorage.getItem(storageKey);
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored) as Message[];
+                if (parsed.length > 0) {
+                    // Ensure isStreaming is false for all reloaded messages
+                    const cleaned = parsed.map(m => ({ ...m, isStreaming: false }));
+                    setMessages(cleaned);
+                    hasInitialLoaded.current = true;
+                }
+            } catch (err) {
+                console.error("Failed to parse stored chat:", err);
+            }
+        }
+    }, [storageKey]);
+
+    // Save messages to localStorage when they change
+    useEffect(() => {
+        if (messages.length > 0) {
+            // Don't save if there's an empty assistant message (just started generating)
+            // or filter out streaming status
+            const toStore = messages.map(m => ({
+                role: m.role,
+                content: m.content
+            })).filter(m => m.content.trim() !== "");
+
+            if (toStore.length > 0) {
+                localStorage.setItem(storageKey, JSON.stringify(toStore));
+            }
+        }
+    }, [messages, storageKey]);
+
     // Auto-scroll to bottom whenever messages change
     useEffect(() => {
         if (scrollRef.current) {
@@ -96,9 +134,19 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
         });
     }, []);
 
+    const clearChat = useCallback(() => {
+        if (confirm("Are you sure you want to clear this chat history?")) {
+            localStorage.removeItem(storageKey);
+            setMessages([]);
+            hasInitialLoaded.current = false;
+            // Trigger greeting again
+            handleSend("INITIAL_GREETING");
+        }
+    }, [storageKey]);
+
     const handleSend = async (overrideInput?: string) => {
         const messageText = overrideInput || input;
-        if (!messageText.trim() && !overrideInput === undefined || isLoading) return;
+        if (!messageText.trim() && overrideInput === undefined || isLoading) return;
 
         const userMessage: Message | null = overrideInput ? null : { role: "user", content: messageText };
         if (userMessage) {
@@ -211,16 +259,25 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
                         <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-green-500 border border-background" />
                     </div>
                     <span className="text-sm font-medium text-foreground">Vanijay Assistant</span>
-                    {isLoading && (
-                        <span className="ml-auto flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                            <span className="flex gap-0.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:0ms]" />
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:150ms]" />
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:300ms]" />
+                    <div className="ml-auto flex items-center gap-2">
+                        {isLoading && (
+                            <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                                <span className="flex gap-0.5">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:0ms]" />
+                                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:150ms]" />
+                                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:300ms]" />
+                                </span>
+                                Generating
                             </span>
-                            Generating
-                        </span>
-                    )}
+                        )}
+                        <button
+                            onClick={clearChat}
+                            className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                            title="Clear conversation"
+                        >
+                            <Trash2 size={16} />
+                        </button>
+                    </div>
                 </div>
 
                 {/* Messages */}
