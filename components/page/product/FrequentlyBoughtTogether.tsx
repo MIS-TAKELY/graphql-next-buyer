@@ -70,7 +70,8 @@ export default function FrequentlyBoughtTogether({
                         name: p.name,
                         image: p.images?.[0]?.url || "/placeholder.svg",
                         price: Number(variant.price || 0),
-                        slug: p.slug
+                        slug: p.slug,
+                        stock: Number(variant.stock || 0)
                     });
                 }
                 return Promise.resolve();

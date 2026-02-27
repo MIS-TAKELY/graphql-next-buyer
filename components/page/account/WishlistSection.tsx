@@ -127,6 +127,7 @@ export default function WishlistSection() {
                     productImage={item.product?.images?.[0]?.url}
                     price={item.product?.variants?.[0]?.price}
                     slug={item.product?.slug}
+                    stock={Number(item.product?.variants?.[0]?.stock || 0)}
                   />
 
                   <Button

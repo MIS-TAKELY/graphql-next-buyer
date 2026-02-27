@@ -55,6 +55,7 @@ export const useCartStore = create<CartStore>()(
           const existingItem = updatedItems[existingItemIndex];
           updatedItems[existingItemIndex] = {
             ...existingItem,
+            ...newItem, // Merge all new metadata (price, image, name, stock, etc.)
             quantity: existingItem.quantity + newItem.quantity,
           };
           set({ items: updatedItems });

@@ -48,6 +48,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         image: defaultImage || "/placeholder.svg",
         price: Number(currentPrice || 0),
         slug: product.slug,
+        stock: Number(defaultVariant?.stock || 0),
       });
     }
   };
