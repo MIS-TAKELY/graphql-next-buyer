@@ -9,6 +9,8 @@ import { useCart } from "@/hooks/cart/useCart";
 import { ShoppingBag, AlertTriangle } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "@/lib/auth-client";
+import { useAuthModal } from "@/store/authModalStore";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,6 +35,8 @@ export default function CartPage() {
     selectAll,
     setSelected,
   } = useCart();
+  const { data: session } = useSession();
+  const { openModal } = useAuthModal();
 
   const [showStockError, setShowStockError] = useState(false);
 
@@ -70,6 +74,12 @@ export default function CartPage() {
 
     if (hasOutOfStock) {
       setShowStockError(true);
+      return;
+    }
+
+    if (!session) {
+      openModal("SIGN_IN");
+      toast.info("Please sign in to proceed to checkout");
       return;
     }
 
