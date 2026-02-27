@@ -189,14 +189,28 @@ export async function POST(req: NextRequest) {
 
         const stream = new ReadableStream({
             async start(controller) {
+                let buffer = "";
                 try {
                     while (true) {
                         const { done, value } = await ollamaReader.read();
-                        if (done) break;
+                        if (done) {
+                            // Process any remaining buffer
+                            if (buffer.trim()) {
+                                try {
+                                    const json = JSON.parse(buffer);
+                                    const token = json?.message?.content;
+                                    if (token) controller.enqueue(encoder.encode(token));
+                                } catch { /* ignore final partial */ }
+                            }
+                            break;
+                        }
 
-                        const chunk = decoder.decode(value, { stream: true });
-                        // Ollama sends NDJSON - one JSON object per line
-                        for (const line of chunk.split("\n")) {
+                        buffer += decoder.decode(value, { stream: true });
+                        const lines = buffer.split("\n");
+                        // Keep the last partial line in the buffer
+                        buffer = lines.pop() || "";
+
+                        for (const line of lines) {
                             if (!line.trim()) continue;
                             try {
                                 const json = JSON.parse(line);
@@ -205,7 +219,7 @@ export async function POST(req: NextRequest) {
                                     controller.enqueue(encoder.encode(token));
                                 }
                             } catch {
-                                // Skip malformed lines
+                                // Skip genuinely malformed lines but preserve progress
                             }
                         }
                     }

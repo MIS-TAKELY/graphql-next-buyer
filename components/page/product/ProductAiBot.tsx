@@ -80,29 +80,9 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
 
     const storageKey = `${STORAGE_KEY_PREFIX}${product.id}`;
 
-    // Load messages from localStorage on mount
-    useEffect(() => {
-        const stored = localStorage.getItem(storageKey);
-        if (stored) {
-            try {
-                const parsed = JSON.parse(stored) as Message[];
-                if (parsed.length > 0) {
-                    // Ensure isStreaming is false for all reloaded messages
-                    const cleaned = parsed.map(m => ({ ...m, isStreaming: false }));
-                    setMessages(cleaned);
-                    hasInitialLoaded.current = true;
-                }
-            } catch (err) {
-                console.error("Failed to parse stored chat:", err);
-            }
-        }
-    }, [storageKey]);
-
     // Save messages to localStorage when they change
     useEffect(() => {
         if (messages.length > 0) {
-            // Don't save if there's an empty assistant message (just started generating)
-            // or filter out streaming status
             const toStore = messages.map(m => ({
                 role: m.role,
                 content: m.content
@@ -124,7 +104,6 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
     const stopGeneration = useCallback(() => {
         abortRef.current?.abort();
         setIsLoading(false);
-        // Mark the last message as no longer streaming
         setMessages((prev) => {
             const updated = [...prev];
             if (updated.length > 0) {
@@ -138,15 +117,17 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
         if (confirm("Are you sure you want to clear this chat history?")) {
             localStorage.removeItem(storageKey);
             setMessages([]);
-            hasInitialLoaded.current = false;
-            // Trigger greeting again
+            hasInitialLoaded.current = true; // Stay in initialized state
             handleSend("INITIAL_GREETING");
         }
     }, [storageKey]);
 
     const handleSend = async (overrideInput?: string) => {
         const messageText = overrideInput || input;
-        if (!messageText.trim() && overrideInput === undefined || isLoading) return;
+        if ((!messageText.trim() && overrideInput === undefined) || isLoading) return;
+
+        // Capture current state to avoid closure issues
+        const historySnapshot = messages;
 
         const userMessage: Message | null = overrideInput ? null : { role: "user", content: messageText };
         if (userMessage) {
@@ -155,7 +136,8 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
         }
         setIsLoading(true);
 
-        // Insert streaming placeholder
+        const messagesForAi = userMessage ? [...historySnapshot, userMessage] : historySnapshot;
+
         setMessages((prev) => [...prev, { role: "assistant", content: "", isStreaming: true }]);
 
         abortRef.current = new AbortController();
@@ -166,14 +148,14 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     product,
-                    messages: userMessage ? [...messages, userMessage] : messages,
+                    messages: messagesForAi,
                     isInitial: !!overrideInput,
                 }),
                 signal: abortRef.current.signal,
             });
 
             if (!response.ok || !response.body) {
-                let errMsg = "Failed to get AI response";
+                let errMsg = "AI Assistant is currently busy. Please try again in a moment.";
                 try {
                     const errData = await response.json();
                     errMsg = errData.error || errMsg;
@@ -191,31 +173,38 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
                 accumulated += decoder.decode(value, { stream: true });
                 setMessages((prev) => {
                     const updated = [...prev];
-                    updated[updated.length - 1] = {
-                        role: "assistant",
-                        content: accumulated,
-                        isStreaming: true,
-                    };
+                    if (updated.length > 0) {
+                        updated[updated.length - 1] = {
+                            role: "assistant",
+                            content: accumulated,
+                            isStreaming: true,
+                        };
+                    }
                     return updated;
                 });
             }
 
-            // Mark streaming complete
             setMessages((prev) => {
                 const updated = [...prev];
-                updated[updated.length - 1] = { role: "assistant", content: accumulated, isStreaming: false };
+                if (updated.length > 0) {
+                    updated[updated.length - 1] = { role: "assistant", content: accumulated, isStreaming: false };
+                }
                 return updated;
             });
         } catch (error: any) {
-            if (error.name === "AbortError") return; // User stopped — already handled
+            if (error.name === "AbortError") return;
             console.error(error);
             setMessages((prev) => {
                 const updated = [...prev];
-                updated[updated.length - 1] = {
-                    role: "assistant",
-                    content: error.message || "Sorry, I ran into an error. Please try again.",
-                    isStreaming: false,
-                };
+                if (updated.length > 0) {
+                    updated[updated.length - 1] = {
+                        role: "assistant",
+                        content: error.message === "Failed to fetch"
+                            ? "I'm having trouble connecting to the server. Please check your internet or try again later."
+                            : (error.message || "Sorry, I ran into an error. Please try again."),
+                        isStreaming: false,
+                    };
+                }
                 return updated;
             });
         } finally {
@@ -227,13 +216,26 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
         }
     };
 
-    // Trigger initial load
+    // Unified initialization: Load history OR Greeting
     useEffect(() => {
-        if (!hasInitialLoaded.current) {
-            hasInitialLoaded.current = true;
-            handleSend("INITIAL_GREETING");
+        if (hasInitialLoaded.current) return;
+        hasInitialLoaded.current = true;
+
+        const stored = localStorage.getItem(storageKey);
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored) as Message[];
+                if (parsed.length > 0) {
+                    setMessages(parsed.map(m => ({ ...m, isStreaming: false })));
+                    return;
+                }
+            } catch (err) {
+                console.error("Failed to parse stored chat:", err);
+            }
         }
-    }, []);
+
+        handleSend("INITIAL_GREETING");
+    }, [storageKey]);
 
     return (
         <div className="mt-8">
