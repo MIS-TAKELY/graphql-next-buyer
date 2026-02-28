@@ -34,7 +34,7 @@ export async function getCached<T>(key: string): Promise<T | null> {
  */
 export async function setCached<T>(key: string, value: T, ttl: number = 3600): Promise<void> {
     try {
-        await redis.set(key, value, { ex: ttl });
+        await redis.setex(key, ttl, typeof value === 'string' ? value : JSON.stringify(value));
         console.log(`✅ Cached: ${key} (TTL: ${ttl}s)`);
     } catch (error) {
         console.error(`❌ Redis SET error for key ${key}:`, error);

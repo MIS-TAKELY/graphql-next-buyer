@@ -39,7 +39,7 @@ export class CacheService {
      */
     static async set(key: string, value: any, ttlSeconds: number = DEFAULT_TTL): Promise<void> {
         try {
-            await redis.set(key, value, { ex: ttlSeconds });
+            await redis.setex(key, ttlSeconds, typeof value === 'string' ? value : JSON.stringify(value));
         } catch (error: any) {
             if (process.env.NODE_ENV === "production") {
                 const isDynamicError = error?.message?.includes("Dynamic server usage") ||

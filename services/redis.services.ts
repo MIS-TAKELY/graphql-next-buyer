@@ -3,7 +3,7 @@ import redisConfig from "@/config/redis";
 export async function setCache(key: string, value: any, ttlSeconds = 3600) {
   if (!redisConfig.redis) return;
   try {
-    await redisConfig.redis.set(key, JSON.stringify(value), { ex: ttlSeconds });
+    await redisConfig.redis.setex(key, ttlSeconds, JSON.stringify(value));
   } catch (err) {
     console.error(`[Redis] Error setting cache for key ${key}:`, err);
   }
