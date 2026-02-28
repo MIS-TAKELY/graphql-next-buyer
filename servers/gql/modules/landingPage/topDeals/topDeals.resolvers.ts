@@ -137,7 +137,7 @@ export const topDealsResolvers = {
         q: cleanedQuery || '*',
         query_by: 'name,brand,description,categoryName',
         filter_by: `status:=ACTIVE && categoryId:[${categoryIds.join(',')}]`,
-        per_page: 50,
+        per_page: 100,
       };
 
       let searchResult = await typesenseClient.collections('products').documents().search(searchParams);
@@ -319,70 +319,110 @@ export const topDealsResolvers = {
 
       console.log(`📦 Retrieved ${products.length} full product records`);
 
-      // Step 8: Calculate deals for each product
-      const productsWithDeals: TopDealProduct[] = products
-        .map((product): TopDealProduct | null => {
-          if (!product.variants?.length) return null;
+      // Step 8: Get immediate child categories for diversification
+      const immediateChildren = await prisma.category.findMany({
+        where: { parentId: category.id, isActive: true },
+        select: { id: true, name: true },
+      });
 
-          const variantsWithDeals: VariantWithDeals[] = product.variants.map(
-            (variant) => {
-              const price = Number(variant.price);
-              const mrp = Number(variant.mrp);
-              let finalPrice = price;
-              let discountAmount = mrp - price;
-              let discountPercentage =
-                mrp > 0 ? ((mrp - price) / mrp) * 100 : 0;
+      // Map each descendant to its immediate child (the branch it belongs to)
+      const branchMap: Record<string, string> = {};
+      branchMap[category.id] = category.id; // Root category itself is a branch
 
-              const offer = product.productOffers?.[0]?.offer;
-              if (offer) {
-                if (offer.type === "PERCENTAGE") {
-                  const offerDiscount = (price * Number(offer.value)) / 100;
-                  finalPrice = price - offerDiscount;
-                  discountAmount += offerDiscount;
-                } else if (offer.type === "FIXED_AMOUNT") {
-                  finalPrice = Math.max(0, price - Number(offer.value));
-                  discountAmount += Number(offer.value);
-                }
-                discountPercentage = mrp > 0 ? (discountAmount / mrp) * 100 : 0;
+      for (const child of immediateChildren) {
+        const descendants = await getAllDescendantCategoryIds(child.id);
+        descendants.forEach(id => {
+          branchMap[id] = child.id;
+        });
+      }
+
+      // Step 9: Calculate deals and group by branch
+      const branchGroups: Record<string, TopDealProduct[]> = {};
+
+      products.forEach((product) => {
+        if (!product.variants?.length) return;
+
+        const variantsWithDeals: VariantWithDeals[] = product.variants.map(
+          (variant) => {
+            const price = Number(variant.price);
+            const mrp = Number(variant.mrp);
+            let finalPrice = price;
+            let discountAmount = mrp - price;
+            let discountPercentage = mrp > 0 ? ((mrp - price) / mrp) * 100 : 0;
+
+            const offer = product.productOffers?.[0]?.offer;
+            if (offer) {
+              if (offer.type === "PERCENTAGE") {
+                const offerDiscount = (price * Number(offer.value)) / 100;
+                finalPrice = price - offerDiscount;
+                discountAmount += offerDiscount;
+              } else if (offer.type === "FIXED_AMOUNT") {
+                finalPrice = Math.max(0, price - Number(offer.value));
+                discountAmount += Number(offer.value);
               }
-
-              return {
-                ...variant,
-                finalPrice: Math.round(finalPrice * 100) / 100,
-                discountAmount: Math.round(discountAmount * 100) / 100,
-                discountPercentage: Math.round(discountPercentage),
-              } as VariantWithDeals;
+              discountPercentage = mrp > 0 ? (discountAmount / mrp) * 100 : 0;
             }
-          );
 
-          const bestVariant = variantsWithDeals.reduce((best, current) =>
-            current.discountPercentage > best.discountPercentage
-              ? current
-              : best
-          );
+            return {
+              ...variant,
+              finalPrice: Math.round(finalPrice * 100) / 100,
+              discountAmount: Math.round(discountAmount * 100) / 100,
+              discountPercentage: Math.round(discountPercentage),
+            } as VariantWithDeals;
+          }
+        );
 
-          const avgRating =
-            product.reviews.length > 0
-              ? product.reviews.reduce((sum, r) => sum + r.rating, 0) /
-              product.reviews.length
-              : 0;
+        const bestVariant = variantsWithDeals.reduce((best, current) =>
+          current.discountPercentage > best.discountPercentage ? current : best
+        );
 
-          return {
-            ...product,
-            name: product.name,
-            imageUrl: product.images[0]?.url || null,
-            imageAltText: product.images[0]?.altText || null,
-            saveUpTo: bestVariant.discountAmount,
-            discountPercentage: bestVariant.discountPercentage,
-            avgRating: Math.round(avgRating * 10) / 10,
-            variants: variantsWithDeals,
-            product,
-          } as TopDealProduct;
-        })
-        .filter((p): p is TopDealProduct => p !== null && p.saveUpTo > 0)
-        // Sort by biggest savings (DESC) instead of smallest (ASC)
-        .sort((a, b) => b.saveUpTo - a.saveUpTo)
-        .slice(0, limit);
+        if (bestVariant.discountAmount <= 0) return;
+
+        const avgRating =
+          product.reviews.length > 0
+            ? product.reviews.reduce((sum, r) => sum + r.rating, 0) /
+            product.reviews.length
+            : 0;
+
+        const dealProduct = {
+          ...product,
+          name: product.name,
+          imageUrl: product.images[0]?.url || null,
+          imageAltText: product.images[0]?.altText || null,
+          saveUpTo: bestVariant.discountAmount,
+          discountPercentage: bestVariant.discountPercentage,
+          avgRating: Math.round(avgRating * 10) / 10,
+          variants: variantsWithDeals,
+          product,
+        } as TopDealProduct;
+
+        const branchId = branchMap[product.category?.id || ""] || category.id;
+        if (!branchGroups[branchId]) branchGroups[branchId] = [];
+        branchGroups[branchId].push(dealProduct);
+      });
+
+      // Sort products within each branch by biggest savings
+      Object.keys(branchGroups).forEach(branchId => {
+        branchGroups[branchId].sort((a, b) => b.saveUpTo - a.saveUpTo);
+      });
+
+      // Diversified Round-Robin Selection
+      const productsWithDeals: TopDealProduct[] = [];
+      const branchIds = Object.keys(branchGroups);
+      let addedAny = true;
+      let pass = 0;
+
+      while (productsWithDeals.length < limit && addedAny) {
+        addedAny = false;
+        for (const branchId of branchIds) {
+          if (branchGroups[branchId][pass]) {
+            productsWithDeals.push(branchGroups[branchId][pass]);
+            addedAny = true;
+            if (productsWithDeals.length === limit) break;
+          }
+        }
+        pass++;
+      }
 
       await setCache(cacheKey, productsWithDeals, 86400);
 
