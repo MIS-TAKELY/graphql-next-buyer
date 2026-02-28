@@ -6,6 +6,7 @@ export const topDealsTypeDefs = gql`
     imageAltText: String!
     saveUpTo: Float!
     name: String!
+    category: Category!
     product: Product
   }
 

@@ -7,6 +7,11 @@ export const GET_TOP_DEALS = gql`
       name
       imageUrl
       imageAltText
+      category {
+        id
+        name
+        slug
+      }
       product {
         brand
         category {
