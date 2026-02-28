@@ -21,7 +21,7 @@ export const topDealsResolvers = {
       { topDealAbout, limit }: TopDealsArgs,
       ctx: GraphQLContext
     ): Promise<TopDealProduct[]> => {
-      const cacheKey = `top-deals:${topDealAbout.toLowerCase()}:${limit}`;
+      const cacheKey = `top-deals-v2:${topDealAbout.toLowerCase()}:${limit}`;
 
       const cached = await getCache<TopDealProduct[]>(cacheKey);
 
@@ -319,15 +319,28 @@ export const topDealsResolvers = {
 
       console.log(`📦 Retrieved ${products.length} full product records`);
 
-      // Step 8: Get immediate child categories for diversification
-      const immediateChildren = await prisma.category.findMany({
-        where: { parentId: category.id, isActive: true },
-        select: { id: true, name: true },
+      // Step 8: Find the depth where the category splits into branches
+      let currentRootId = category.id;
+      let immediateChildren = await prisma.category.findMany({
+        where: { parentId: currentRootId, isActive: true },
+        select: { id: true, name: true, _count: { select: { children: true } } },
       });
+
+      // Drill down if there's only one child and that child has children
+      while (immediateChildren.length === 1 && immediateChildren[0]._count.children > 0) {
+        console.log(`👇 Drilling down from ${currentRootId} to ${immediateChildren[0].id} (${immediateChildren[0].name})`);
+        currentRootId = immediateChildren[0].id;
+        immediateChildren = await prisma.category.findMany({
+          where: { parentId: currentRootId, isActive: true },
+          select: { id: true, name: true, _count: { select: { children: true } } },
+        });
+      }
+
+      console.log(`📂 For category root ${currentRootId}, found ${immediateChildren.length} immediate children for diversification`);
 
       // Map each descendant to its immediate child (the branch it belongs to)
       const branchMap: Record<string, string> = {};
-      branchMap[category.id] = category.id; // Root category itself is a branch
+      branchMap[currentRootId] = currentRootId; // Branch root itself is a branch
 
       for (const child of immediateChildren) {
         const descendants = await getAllDescendantCategoryIds(child.id);
@@ -396,7 +409,7 @@ export const topDealsResolvers = {
           product,
         } as TopDealProduct;
 
-        const branchId = branchMap[product.category?.id || ""] || category.id;
+        const branchId = branchMap[product.category?.id || ""] || currentRootId;
         if (!branchGroups[branchId]) branchGroups[branchId] = [];
         branchGroups[branchId].push(dealProduct);
       });
