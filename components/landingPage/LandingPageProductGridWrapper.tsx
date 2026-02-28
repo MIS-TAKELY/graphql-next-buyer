@@ -43,6 +43,7 @@ export const LandingPageProductGridWrapper = async ({
           imageUrl: p.images?.[0]?.url,
           imageAltText: p.images?.[0]?.altText || p.name,
           saveUpTo,
+          category: p.category,
           product: p
         };
       });

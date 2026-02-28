@@ -120,6 +120,7 @@ export const PRODUCT_CARD_FRAGMENT = gql`
     category {
       id
       name
+      slug
       categorySpecification {
         key
         label
