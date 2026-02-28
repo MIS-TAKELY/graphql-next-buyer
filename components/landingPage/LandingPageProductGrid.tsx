@@ -81,7 +81,7 @@ const LandingPageProductGrid = ({
             {deals.map((deal: any, index: number) => (
               <Link
                 key={index}
-                href={categorySlug ? `/category/${categorySlug}` : `/search?q=${encodeURIComponent(deal?.name || "")}`}
+                href={deal?.category?.slug ? `/category/${deal.category.slug}` : `/search?q=${encodeURIComponent(deal?.name || "")}`}
                 className="group flex flex-col rounded-lg overflow-hidden
                   border border-border bg-card/50
                   hover:border-primary/40 hover:shadow-md transition-all duration-300 hover:no-underline"
@@ -154,7 +154,7 @@ const LandingPageProductGrid = ({
               {deals.map((deal: any, index: number) => (
                 <Link
                   key={index}
-                  href={categorySlug ? `/category/${categorySlug}` : `/search?q=${encodeURIComponent(deal?.name || "")}`}
+                  href={deal?.category?.slug ? `/category/${deal.category.slug}` : `/search?q=${encodeURIComponent(deal?.name || "")}`}
                   className="flex-shrink-0 group flex flex-col rounded-lg overflow-hidden
                     border border-border bg-card/50 w-44 sm:w-48 md:w-52
                     hover:border-primary/40 hover:shadow-md transition-all duration-300 hover:no-underline"
@@ -189,7 +189,7 @@ const LandingPageProductGrid = ({
             {deals.map((deal: any, index: number) => (
               <Link
                 key={index}
-                href={categorySlug ? `/category/${categorySlug}` : `/search?q=${encodeURIComponent(deal?.name || "")}`}
+                href={deal?.category?.slug ? `/category/${deal.category.slug}` : `/search?q=${encodeURIComponent(deal?.name || "")}`}
                 className="group flex flex-col rounded-lg overflow-hidden
                   border border-border bg-card/50
                   hover:border-primary/40 hover:shadow-lg transition-all duration-300 hover:no-underline

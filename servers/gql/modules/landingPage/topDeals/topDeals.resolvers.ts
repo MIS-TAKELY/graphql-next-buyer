@@ -400,6 +400,12 @@ export const topDealsResolvers = {
         const dealProduct = {
           ...product,
           name: product.name,
+          category: {
+            id: product.category?.id || "",
+            name: product.category?.name || "",
+            slug: product.category?.slug || "",
+            children: product.category?.children || [],
+          },
           imageUrl: product.images[0]?.url || null,
           imageAltText: product.images[0]?.altText || null,
           saveUpTo: bestVariant.discountAmount,

@@ -43,6 +43,7 @@ export interface ProductWithDetails {
   category: {
     id: string;
     name: string;
+    slug: string;
     children: Array<{
       name: string;
     }>;
@@ -74,6 +75,7 @@ export interface TopDealProduct {
   category: {
     id: string;
     name: string;
+    slug: string;
     children: Array<{
       name: string;
     }>;
