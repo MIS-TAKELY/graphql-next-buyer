@@ -1,8 +1,18 @@
-import { Redis } from "@upstash/redis";
+const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
-export const redis = new Redis({
-    // Grab these from your Upstash Redis dashboard
-    url: process.env.UPSTASH_REDIS_REST_URL!,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
+let redisClient: any;
 
+if (typeof window === "undefined" && process.env.NEXT_RUNTIME !== "edge") {
+    const IORedis = require("ioredis");
+    redisClient = new IORedis(REDIS_URL);
+} else {
+    // Edge runtime fallback
+    redisClient = {
+        get: async () => null,
+        set: async () => { },
+        setex: async () => { },
+        del: async () => { },
+    } as any;
+}
+
+export const redis = redisClient;

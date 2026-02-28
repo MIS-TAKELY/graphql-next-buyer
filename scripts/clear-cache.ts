@@ -1,14 +1,10 @@
-
-import { Redis } from "@upstash/redis";
+import Redis from "ioredis";
 import * as dotenv from "dotenv";
 
 dotenv.config();
 
-// Re-create the redis client locally since we can't easily import from @/lib/redis
-const redis = new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL!,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
+const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
+const redis = new Redis(REDIS_URL);
 
 async function main() {
     const slug = "samsung-galaxy-s25-ultra-5g-smartphone-200mp-camera-ai-features-s-pen-long-battery-life";
