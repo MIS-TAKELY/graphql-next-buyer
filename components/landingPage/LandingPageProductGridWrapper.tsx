@@ -51,7 +51,7 @@ export const LandingPageProductGridWrapper = async ({
 
     } else {
       // Fallback to top deals logic
-      const CACHE_KEY = CacheService.generateKey("top-deals", `${topDealAbout}-limit-4`);
+      const CACHE_KEY = CacheService.generateKey("top-deals-v2", `${topDealAbout}-limit-4`);
       const cachedData = await CacheService.get<any>(CACHE_KEY);
 
       if (cachedData) {

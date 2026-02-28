@@ -14,7 +14,7 @@ const LandingPagrCategorySwiperWrapper = async ({ title, category }: Props) => {
   let data: LandingPagrCategorySwiperData | undefined;
 
   try {
-    const CACHE_KEY = CacheService.generateKey("category-swiper", category);
+    const CACHE_KEY = CacheService.generateKey("category-swiper-v2", category);
     const cachedData = await CacheService.get<LandingPagrCategorySwiperData>(CACHE_KEY);
 
     if (cachedData) {
