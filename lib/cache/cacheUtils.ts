@@ -22,7 +22,16 @@ export function generateCacheKey(searchTerm: string, prefix: string = "filter:in
 export async function getCached<T>(key: string): Promise<T | null> {
     try {
         const cached = await redis.get(key);
-        return cached as T | null;
+        if (!cached) return null;
+
+        if (typeof cached === "string") {
+            try {
+                return JSON.parse(cached) as T;
+            } catch (e) {
+                return cached as unknown as T;
+            }
+        }
+        return cached as T;
     } catch (error) {
         console.error(`❌ Redis GET error for key ${key}:`, error);
         return null;

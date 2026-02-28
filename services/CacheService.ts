@@ -12,8 +12,17 @@ export class CacheService {
         try {
             const data = await redis.get(key);
             if (!data) return null;
-            // Redis clients might return the object directly if it's JSON, 
-            // but Upstash Redis REST client usually handles JSON parsing automatically.
+
+            // ioredis returns the raw string from Redis.
+            // We need to parse it if it's a JSON string.
+            if (typeof data === "string") {
+                try {
+                    return JSON.parse(data) as T;
+                } catch (e) {
+                    // If parsing fails, return as is (e.g., if it's just a plain string)
+                    return data as unknown as T;
+                }
+            }
             return data as T;
         } catch (error: any) {
             // In Next.js 15, certain fetch calls (like those used by Upstash Redis REST)
