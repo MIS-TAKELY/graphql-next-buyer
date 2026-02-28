@@ -113,7 +113,7 @@ export const useCartT = () => {
   const myCartItems = useMemo(() => {
     if (userId) {
       // Logged-in: Use server data
-      if (!myCartItemsIds?.getMyCart) return new Set<string>();
+      if (!myCartItemsIds?.getMyCart || !Array.isArray(myCartItemsIds.getMyCart)) return new Set<string>();
       return new Set(
         myCartItemsIds.getMyCart
           .map((item: any) => item?.variant?.product?.id)
@@ -121,6 +121,7 @@ export const useCartT = () => {
       );
     }
     // Anonymous: Use localStorage data
+    if (!Array.isArray(anonymousCart)) return new Set<string>();
     return new Set(
       anonymousCart
         ?.map((item) => item?.variant?.product?.id)

@@ -13,8 +13,13 @@ export const cartItemResolvers = {
         // Use cache with longer TTL
         const cached = await getCache(cacheKey);
         if (cached) {
-          console.log("⚡ Returning carts from Redis");
-          return cached;
+          if (Array.isArray(cached)) {
+            console.log("⚡ Returning carts from Redis");
+            return cached;
+          } else {
+            console.warn(`⚠️ Cached data for ${cacheKey} is not an array. Clearing cache.`);
+            await delCache(cacheKey);
+          }
         }
 
         // Simplified query - only essential data
@@ -65,8 +70,13 @@ export const cartItemResolvers = {
         // Use cache
         const cached = await getCache(cartItemResolvers.Query.getMyCart.name === 'getMyCart' ? cacheKey : cacheKey); // Dummy check to match structure if needed
         if (cached) {
-          console.log("⚡ Returning myCart from Redis");
-          return cached;
+          if (Array.isArray(cached)) {
+            console.log("⚡ Returning myCart from Redis");
+            return cached;
+          } else {
+            console.warn(`⚠️ Cached data for ${cacheKey} is not an array. Clearing cache.`);
+            await delCache(cacheKey);
+          }
         }
 
         // Minimal query for better performance

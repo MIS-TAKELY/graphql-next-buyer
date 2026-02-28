@@ -47,7 +47,7 @@ export const useCart = () => {
 
   // Sync server data to store
   useEffect(() => {
-    if (userId && serverCartData?.getMyCart) {
+    if (userId && serverCartData?.getMyCart && Array.isArray(serverCartData.getMyCart)) {
       const mappedItems: CartItem[] = serverCartData.getMyCart.map((item: any) => ({
         id: item.variant.product.id,
         name: item.variant.product.name,

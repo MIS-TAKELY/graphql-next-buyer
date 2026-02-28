@@ -2,7 +2,7 @@ import { Prisma } from "../../../../../app/generated/prisma";
 import { detectCategory } from "@/filter/detectCategory";
 import { prisma } from "../../../../../lib/db/prisma";
 import { GraphQLContext } from "@/servers/gql/context";
-import { getCache, setCache } from "@/services/redis.services";
+import { delCache, getCache, setCache } from "@/services/redis.services";
 import {
   ProductIdWithSimilarity,
   ProductWithDetails,
@@ -26,8 +26,13 @@ export const topDealsResolvers = {
       const cached = await getCache<TopDealProduct[]>(cacheKey);
 
       if (cached) {
-        console.log(`⚡ Returning cached Top Deals for ${topDealAbout}`);
-        return cached;
+        if (Array.isArray(cached)) {
+          console.log(`⚡ Returning cached Top Deals for ${topDealAbout}`);
+          return cached;
+        } else {
+          console.warn(`⚠️ Cached data for ${cacheKey} is not an array. Clearing cache.`);
+          await delCache(cacheKey);
+        }
       }
 
       // CLEAN THE QUERY: Remove "Best Deals on", "Top Offers", etc.
