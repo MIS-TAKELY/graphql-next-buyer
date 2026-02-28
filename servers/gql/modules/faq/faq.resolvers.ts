@@ -1,5 +1,5 @@
 import { prisma } from "../../../../lib/db/prisma";
-import { realtime } from "@/lib/realtime";
+import { pusher } from "@/lib/realtime";
 
 export const faqResolvers = {
     Query: {
@@ -46,7 +46,7 @@ export const faqResolvers = {
 
             // Emit Realtime Event
             try {
-                await realtime.channel(`product:${productId}:faq`).emit("faq.newQuestion", {
+                await pusher.trigger(`product-${productId}-faq`, "faq.newQuestion", {
                     id: question.id,
                     productId: question.productId,
                     content: question.content,

@@ -1,6 +1,6 @@
 // lib/notifications.ts
 import { prisma } from "../lib/db/prisma";
-import { realtime } from "@/lib/realtime";
+import { pusher } from "@/lib/realtime";
 
 type NotificationType = "NEW_MESSAGE" | "NEW_ORDER" | "ORDER_STATUS" | "SYSTEM";
 
@@ -34,16 +34,14 @@ export async function createAndPushNotification({
   // 2. Push via Upstash Realtime (private channel per user)
 
   try {
-    await realtime
-      .channel(`user:${userId}`)
-      .emit("notification.newNotification", {
-        id: notification.id,
-        title,
-        body,
-        type,
-        createdAt: notification.createdAt.toISOString(),
-        isRead: false,
-      });
+    await pusher.trigger(`user-${userId}`, "notification.newNotification", {
+      id: notification.id,
+      title,
+      body,
+      type,
+      createdAt: notification.createdAt.toISOString(),
+      isRead: false,
+    });
   } catch (error) {
     console.error("Failed to push realtime notification:", error);
   }

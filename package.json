@@ -37,8 +37,7 @@
     "@radix-ui/react-tooltip": "latest",
     "@react-hook/media-query": "latest",
     "@types/qrcode.react": "^1.0.5",
-    "@upstash/realtime": "latest",
-    "@upstash/redis": "^1.36.0",
+    "@upstash/redis": "^1.36.3",
     "axios": "latest",
     "better-auth": "^1.4.7",
     "class-variance-authority": "latest",
@@ -49,6 +48,7 @@
     "graphql": "^16.12.0",
     "graphql-tag": "latest",
     "graphql-yoga": "latest",
+    "ioredis": "^5.10.0",
     "lucide-react": "latest",
     "neppayments": "^2.0.6",
     "next": "16.1.0",
@@ -56,6 +56,9 @@
     "nodemailer": "latest",
     "openai": "latest",
     "pg": "^8.13.1",
+    "prisma": "^7.2.0",
+    "pusher": "^5.3.2",
+    "pusher-js": "^8.4.0",
     "qrcode.react": "^4.2.0",
     "react": "latest",
     "react-dom": "latest",
@@ -69,8 +72,7 @@
     "tailwindcss-animate": "latest",
     "typesense": "^2.1.0",
     "zod": "latest",
-    "zustand": "latest",
-    "prisma": "^7.2.0"
+    "zustand": "latest"
   },
   "devDependencies": {
     "@eslint/eslintrc": "latest",

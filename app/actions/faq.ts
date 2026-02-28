@@ -4,7 +4,7 @@ import { prisma } from "../../lib/db/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { realtime } from "@/lib/realtime";
+import { pusher } from "@/lib/realtime";
 
 export async function askQuestion(productId: string, content: string) {
     console.log("[FAQ] Starting askQuestion", { productId, content });
@@ -60,7 +60,7 @@ export async function askQuestion(productId: string, content: string) {
         console.log("[FAQ] Path revalidated, returning question");
 
         try {
-            await realtime.channel(`product:${productId}:faq`).emit("faq.newQuestion", {
+            await pusher.trigger(`product-${productId}-faq`, "faq.newQuestion", {
                 id: question.id,
                 productId: question.productId,
                 content: question.content,

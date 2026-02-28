@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useApolloClient } from "@apollo/client";
 import { ASK_QUESTION, GET_PRODUCT_QUESTIONS } from "@/client/faq/faq.queries";
 import { NewAnswerPayload } from "@/lib/realtime";
-import { useRealtime } from "@upstash/realtime/client";
+import { useRealtime } from "@/lib/usePusherRealtime";
 import { useCallback, useMemo } from "react";
 import { toast } from "sonner";
 

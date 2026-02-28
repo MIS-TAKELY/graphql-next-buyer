@@ -2,7 +2,7 @@ import { prisma } from "@/lib/db/prisma";
 import { senMail } from "@/services/nodeMailer.services";
 import { sendWhatsAppMessage } from "@/lib/whatsapp";
 import { createAndPushNotification } from "@/lib/notification";
-import { realtime } from "@/lib/realtime";
+import { pusher } from "@/lib/realtime";
 
 interface BuyerInfo {
   id: string;
@@ -133,7 +133,7 @@ export function notifySellerNewOrder(
           type: "NEW_ORDER",
         }),
       realtime: () =>
-        realtime.channel(`user:${seller.id}`).emit("order.newOrder", {
+        pusher.trigger(`user-${seller.id}`, "order.newOrder", {
           sellerId: seller.id,
           sellerOrderId,
           buyerOrderId,
@@ -292,7 +292,7 @@ export function notifyBuyerStatusChange(
           type: "ORDER_STATUS",
         }),
       realtime: () =>
-        realtime.channel(`user:${buyer.id}`).emit("order.statusChanged", {
+        pusher.trigger(`user-${buyer.id}`, "order.statusChanged", {
           sellerId: "",
           sellerOrderId,
           buyerOrderId,

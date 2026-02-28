@@ -17,7 +17,7 @@ import {
     useMutation,
 } from "@apollo/client";
 import { useSession } from "@/lib/auth-client";
-import { useRealtime } from "@upstash/realtime/client";
+import { useRealtime } from "@/lib/usePusherRealtime";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
