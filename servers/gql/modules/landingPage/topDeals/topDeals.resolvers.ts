@@ -186,6 +186,7 @@ export const topDealsResolvers = {
             select: {
               id: true,
               name: true,
+              slug: true,
               children: {
                 select: {
                   name: true,
@@ -280,6 +281,7 @@ export const topDealsResolvers = {
                 select: {
                   id: true,
                   name: true,
+                  slug: true,
                   children: {
                     select: {
                       name: true,
