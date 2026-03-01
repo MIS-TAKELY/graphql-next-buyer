@@ -37,6 +37,10 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
   // Track which slug the current data belongs to — prevents stale Apollo cached
   // data from a previously visited category from populating this category's products.
   const activeSlugRef = useRef(categorySlug);
+  // Tracks whether we've populated the initial product list for the current slug.
+  // Using a ref avoids including it in effect dependency arrays (which would cause loops).
+  const initializedRef = useRef(false);
+
   useEffect(() => {
     activeSlugRef.current = categorySlug;
   }, [categorySlug]);
@@ -49,8 +53,9 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
     },
     skip: !categorySlug,
     notifyOnNetworkStatusChange: true,
-    // Always fetch fresh on first load for a new slug — prevents stale cache bleeding
-    fetchPolicy: 'cache-and-network',
+    // network-only prevents the double-render (cached result first, then network)
+    // that caused loading to flicker true→false and skeletons to flash.
+    fetchPolicy: 'network-only',
   });
 
   const category = data?.getProductsByCategory?.category;
@@ -62,36 +67,36 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
   // Display Name logic (decoded for better UX)
   const displayName = category?.name || decodeURIComponent(categorySlug).replace(/-/g, ' ');
 
-  // Effect to handle slug change: reset state immediately
+  // Effect to handle slug change: reset state and the initialized guard
   useEffect(() => {
     if (categorySlug) {
       setAllProducts([]);
       setHasMore(true);
+      initializedRef.current = false;
     }
   }, [categorySlug]);
 
   // Populate products only when the returned data belongs to the CURRENT slug.
-  // Without this guard, Apollo's cached results from previously visited categories
-  // fire this effect (since allProducts resets to [] on slug change), polluting
-  // the current page with wrong products.
+  // Uses initializedRef instead of allProducts.length === 0 to avoid the
+  // feedback loop: setAllProducts → allProducts.length changes → effect re-runs
+  // → Apollo re-fetches → loading flickers → skeleton glitch.
   useEffect(() => {
     const returnedSlug = data?.getProductsByCategory?.category?.slug;
-    const queryVarSlug = categorySlug;
 
-    // Only accept data that belongs to the active slug
+    // Only accept data that belongs to the active slug, and only once per slug
     if (
       data?.getProductsByCategory?.products &&
-      allProducts.length === 0 &&
-      // Guard: returned category slug must match current slug (case-insensitive)
+      !initializedRef.current &&
       returnedSlug &&
-      returnedSlug.toLowerCase() === queryVarSlug.toLowerCase()
+      returnedSlug.toLowerCase() === categorySlug.toLowerCase()
     ) {
+      initializedRef.current = true;
       const newProducts = data.getProductsByCategory.products;
       console.log(`Initial load: fetched ${newProducts.length} products for "${returnedSlug}"`);
       setAllProducts(newProducts);
       setHasMore(newProducts.length >= ITEMS_PER_PAGE);
     }
-  }, [data, allProducts.length, categorySlug]);
+  }, [data, categorySlug]);
 
   // Handle Loading More — reads slug from ref to ensure it's always current
   const loadMore = useCallback(() => {
