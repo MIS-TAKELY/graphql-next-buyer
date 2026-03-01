@@ -9,6 +9,7 @@ services:
     env_file: .env
     depends_on:
       - db
+      - soketi
 
   db:
     container_name: vanijay_buyer_seller_database
@@ -22,6 +23,18 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "127.0.0.1:5432:5432" # Expose to localhost if needed for local tools, strictly optional
+
+  soketi:
+    container_name: vanijay_soketi
+    image: quay.io/soketi/soketi:1.6-16-debian
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6001:6001"
+    environment:
+      SOKETI_DEBUG: "1"
+      SOKETI_DEFAULT_APP_ID: "vanijay-app"
+      SOKETI_DEFAULT_APP_KEY: "vanijay-key"
+      SOKETI_DEFAULT_APP_SECRET: "vanijay-secret"
 
 volumes:
   postgres_data:
