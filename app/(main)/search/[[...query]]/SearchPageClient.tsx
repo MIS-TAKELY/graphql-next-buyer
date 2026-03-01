@@ -196,9 +196,11 @@ export default function SearchPage() {
       const matchesDynamicFilters = Object.entries(dynamicFilters).every(
         ([key, selectedValues]) => {
           if ((selectedValues as string[]).length === 0) return true;
+          // Skip 'category' client-side — already handled server-side by Typesense.
+          // Applying it client-side causes a race condition where the AI filter
+          // returns a stale/wrong category and wipes out valid search results.
+          if (key === "category") return true;
           if (key === "brand") return (selectedValues as string[]).includes(product.brand);
-          if (key === "category")
-            return (selectedValues as string[]).includes(product.category?.name || "");
           if (key === "delivery_options")
             return product.deliveryOptions?.some((opt) =>
               (selectedValues as string[]).includes(opt.title)

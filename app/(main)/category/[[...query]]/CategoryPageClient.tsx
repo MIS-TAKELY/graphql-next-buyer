@@ -19,7 +19,10 @@ interface CategoryPageClientProps {
 const ITEMS_PER_PAGE = 20;
 
 export default function CategoryPageClient({ params }: CategoryPageClientProps) {
-  const categorySlug = params.query?.[params.query.length - 1] || "";
+  const rawSlug = params.query?.[params.query.length - 1] || "";
+  // Decode URI components (e.g. %26 → &) to match DB slugs.
+  // Case-insensitive matching is handled server-side in the resolver.
+  const categorySlug = decodeURIComponent(rawSlug);
 
   // State for accumulated products
   const [allProducts, setAllProducts] = useState<any[]>([]);

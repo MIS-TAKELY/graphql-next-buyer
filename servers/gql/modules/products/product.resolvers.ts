@@ -155,12 +155,16 @@ export const productResolvers = {
 
       return product;
     },
-    getProductsByCategory: async (_: any, { categorySlug, limit = 50, offset = 0, maxPrice }: { categorySlug: string; limit?: number; offset?: number; maxPrice?: number }) => {
-      if (!categorySlug) throw new Error("Category slug is required");
+    getProductsByCategory: async (_: any, { categorySlug: rawCategorySlug, limit = 50, offset = 0, maxPrice }: { categorySlug: string; limit?: number; offset?: number; maxPrice?: number }) => {
+      if (!rawCategorySlug) throw new Error("Category slug is required");
 
-      // First, find the category and recursively get all descendants
-      const category = await prisma.category.findUnique({
-        where: { slug: categorySlug },
+      // Use the slug as-is from the URL (already decoded by the client)
+      const categorySlug = rawCategorySlug;
+
+      // Find category with case-insensitive slug match to handle URL casing differences
+      // e.g. "Refrigerators-&-Freezers" in DB vs "refrigerators-&-freezers" in URL
+      const category = await prisma.category.findFirst({
+        where: { slug: { equals: categorySlug, mode: 'insensitive' } },
         include: {
           children: {
             include: {
