@@ -34,6 +34,13 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
     rootMargin: "100px",
   });
 
+  // Track which slug the current data belongs to — prevents stale Apollo cached
+  // data from a previously visited category from populating this category's products.
+  const activeSlugRef = useRef(categorySlug);
+  useEffect(() => {
+    activeSlugRef.current = categorySlug;
+  }, [categorySlug]);
+
   const { data, loading, error, fetchMore } = useQuery(GET_PRODUCTS_BY_CATEGORY, {
     variables: {
       categorySlug,
@@ -42,6 +49,8 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
     },
     skip: !categorySlug,
     notifyOnNetworkStatusChange: true,
+    // Always fetch fresh on first load for a new slug — prevents stale cache bleeding
+    fetchPolicy: 'cache-and-network',
   });
 
   const category = data?.getProductsByCategory?.category;
@@ -53,7 +62,7 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
   // Display Name logic (decoded for better UX)
   const displayName = category?.name || decodeURIComponent(categorySlug).replace(/-/g, ' ');
 
-  // Effect to handle initial data load and resetting on slug change
+  // Effect to handle slug change: reset state immediately
   useEffect(() => {
     if (categorySlug) {
       setAllProducts([]);
@@ -61,30 +70,47 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
     }
   }, [categorySlug]);
 
-  // Effect to populate initial data when it arrives
+  // Populate products only when the returned data belongs to the CURRENT slug.
+  // Without this guard, Apollo's cached results from previously visited categories
+  // fire this effect (since allProducts resets to [] on slug change), polluting
+  // the current page with wrong products.
   useEffect(() => {
-    if (data?.getProductsByCategory?.products && allProducts.length === 0) {
+    const returnedSlug = data?.getProductsByCategory?.category?.slug;
+    const queryVarSlug = categorySlug;
+
+    // Only accept data that belongs to the active slug
+    if (
+      data?.getProductsByCategory?.products &&
+      allProducts.length === 0 &&
+      // Guard: returned category slug must match current slug (case-insensitive)
+      returnedSlug &&
+      returnedSlug.toLowerCase() === queryVarSlug.toLowerCase()
+    ) {
       const newProducts = data.getProductsByCategory.products;
-      console.log(`Initial load: fetched ${newProducts.length} products`);
+      console.log(`Initial load: fetched ${newProducts.length} products for "${returnedSlug}"`);
       setAllProducts(newProducts);
       setHasMore(newProducts.length >= ITEMS_PER_PAGE);
     }
-  }, [data, allProducts.length]);
+  }, [data, allProducts.length, categorySlug]);
 
-  // Handle Loading More
+  // Handle Loading More — reads slug from ref to ensure it's always current
   const loadMore = useCallback(() => {
-    if (loading || !hasMore || !categorySlug || allProducts.length === 0) return;
+    const currentSlug = activeSlugRef.current;
+    if (loading || !hasMore || !currentSlug || allProducts.length === 0) return;
 
     const newOffset = allProducts.length;
-    console.log(`Fetching more products... offset: ${newOffset}, slug: ${categorySlug}`);
+    console.log(`Fetching more products... offset: ${newOffset}, slug: ${currentSlug}`);
 
     fetchMore({
       variables: {
-        categorySlug,
+        categorySlug: currentSlug,
         offset: newOffset,
         limit: ITEMS_PER_PAGE,
       },
     }).then((fetchMoreResult) => {
+      // Double-check the slug is still current (user may have navigated away)
+      if (activeSlugRef.current !== currentSlug) return;
+
       const newProducts = fetchMoreResult?.data?.getProductsByCategory?.products || [];
       console.log(`FetchMore: fetched ${newProducts.length} products`);
 
@@ -101,7 +127,7 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
     }).catch(err => {
       console.error("fetchMore error:", err);
     });
-  }, [allProducts.length, fetchMore, hasMore, loading, categorySlug]);
+  }, [allProducts.length, fetchMore, hasMore, loading]);
 
   // Trigger load more when in view
   useEffect(() => {
