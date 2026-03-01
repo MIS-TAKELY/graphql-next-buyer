@@ -34,7 +34,7 @@ export async function createAndPushNotification({
   // 2. Push via Upstash Realtime (private channel per user)
 
   try {
-    await pusher.trigger(`user:${userId}`, "notification.newNotification", {
+    await pusher.trigger(`user-${userId}`, "notification.newNotification", {
       id: notification.id,
       title,
       body,

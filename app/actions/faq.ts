@@ -60,7 +60,7 @@ export async function askQuestion(productId: string, content: string) {
         console.log("[FAQ] Path revalidated, returning question");
 
         try {
-            await pusher.trigger(`product:${productId}:faq`, "faq.newQuestion", {
+            await pusher.trigger(`product-${productId}-faq`, "faq.newQuestion", {
                 id: question.id,
                 productId: question.productId,
                 content: question.content,

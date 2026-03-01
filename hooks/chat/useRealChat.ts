@@ -425,8 +425,8 @@ export const useRealChat = (
     // Unified Realtime Subscription
     useRealtime({
         channels: [
-            conversationId ? `conversation:${conversationId}` : undefined,
-            userId ? `user:${userId}` : undefined
+            conversationId ? `conversation-${conversationId}` : undefined,
+            userId ? `user-${userId}` : undefined
         ].filter(Boolean) as string[],
         event: "message.newMessage",
         onData: (payload: any) => {

@@ -19,7 +19,7 @@ export function NotificationListener() {
 
     // Correctly call the hook at the top level
     useRealtime({
-        channels: userId ? [`user:${userId}`] : [],
+        channels: userId ? [`user-${userId}`] : [],
         event: "message.newMessage",
         onData: (payload: any) => {
             const sentAt = new Date(payload.sentAt || payload.createdAt || Date.now());
@@ -51,7 +51,7 @@ export function NotificationListener() {
     });
 
     useRealtime({
-        channels: userId ? [`user:${userId}`] : [],
+        channels: userId ? [`user-${userId}`] : [],
         event: "order.orderUpdated",
         onData: (payload: any) => {
             console.log("[NotificationListener] Order updated:", payload);

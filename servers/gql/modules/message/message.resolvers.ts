@@ -223,8 +223,8 @@ export const messageResolvers = {
         };
 
         try {
-          console.log(`[BACKEND] 📤 Publishing message to conversation channel: conversation:${conversationId}`);
-          await pusher.trigger(`conversation:${conversationId}`, "message.newMessage", realtimePayload);
+          console.log(`[BACKEND] 📤 Publishing message to conversation channel: conversation-${conversationId}`);
+          await pusher.trigger(`conversation-${conversationId}`, "message.newMessage", realtimePayload);
 
           const participantIds = new Set<string>();
           if (conversation.sender?.id) {
@@ -247,10 +247,10 @@ export const messageResolvers = {
               console.log(`[BACKEND] ⏭️  Skipping user ID: ${userId} (${userId === user.id ? 'is sender' : 'invalid'})`);
               continue;
             }
-            console.log(`[BACKEND] 📤 Publishing message to user channel: user:${userId}`);
+            console.log(`[BACKEND] 📤 Publishing message to user channel: user-${userId}`);
 
             userEmits.push(
-              pusher.trigger(`user:${userId}`, "message.newMessage", realtimePayload)
+              pusher.trigger(`user-${userId}`, "message.newMessage", realtimePayload)
                 .then(() => { }) // Promise<void> cast equivalent
                 .catch((error) => {
                   console.error(

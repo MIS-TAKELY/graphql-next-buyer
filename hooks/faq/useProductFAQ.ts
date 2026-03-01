@@ -115,7 +115,7 @@ export function useProductFAQ(productId: string) {
     }, [client, productId]);
 
     useRealtime({
-        channels: [`product:${productId}:faq`],
+        channels: [`product-${productId}-faq`],
         event: "faq.newAnswer",
         onData: handleNewAnswer,
     });

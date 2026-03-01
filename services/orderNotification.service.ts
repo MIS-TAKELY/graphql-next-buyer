@@ -133,7 +133,7 @@ export function notifySellerNewOrder(
           type: "NEW_ORDER",
         }),
       realtime: () =>
-        pusher.trigger(`user:${seller.id}`, "order.newOrder", {
+        pusher.trigger(`user-${seller.id}`, "order.newOrder", {
           sellerId: seller.id,
           sellerOrderId,
           buyerOrderId,
@@ -292,7 +292,7 @@ export function notifyBuyerStatusChange(
           type: "ORDER_STATUS",
         }),
       realtime: () =>
-        pusher.trigger(`user:${buyer.id}`, "order.statusChanged", {
+        pusher.trigger(`user-${buyer.id}`, "order.statusChanged", {
           sellerId: "",
           sellerOrderId,
           buyerOrderId,
