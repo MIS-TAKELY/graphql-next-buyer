@@ -1,73 +1,79 @@
 // components/page/home/DynamicSections.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ProductSection from "./ProductSection";
 import { TProduct } from "@/types/product";
 import { useQuery } from "@apollo/client";
-import { GET_PRODUCTS_MINIMAL, GET_RECENTLY_VIEWED, GET_RECOMMENDED_PRODUCTS } from "@/client/product/product.queries";
+import {
+    GET_PRODUCTS_MINIMAL,
+    GET_RECENTLY_VIEWED,
+    GET_RECOMMENDED_PRODUCTS,
+} from "@/client/product/product.queries";
 import { useSession } from "@/lib/auth-client";
 
 export default function DynamicSections() {
-    const [isMounted, setIsMounted] = useState(false);
     const [recentlyViewedIds, setRecentlyViewedIds] = useState<string[]>([]);
-    const [recommendations, setRecommendations] = useState<TProduct[]>([]);
+    // Use a ref to track if we've read localStorage yet (avoids 2nd render flash)
+    const localStorageRead = useRef(false);
 
     const { data: session } = useSession();
+    const isLoggedIn = !!session?.user;
 
     // Fetch recently viewed from API if logged in
     const { data: recentData } = useQuery(GET_RECENTLY_VIEWED, {
-        skip: !session?.user,
-        fetchPolicy: "network-only"
+        skip: !isLoggedIn,
+        fetchPolicy: "cache-first",
     });
 
-    // Fetch limited products for fallback recommendations
-    const { data, loading, error } = useQuery(GET_PRODUCTS_MINIMAL, {
-        variables: { limit: 12 }
+    // Fetch limited products for fallback recommendations (cache-first: reuse SSR data when available)
+    const { data: allProductsData } = useQuery(GET_PRODUCTS_MINIMAL, {
+        variables: { limit: 12 },
+        fetchPolicy: "cache-first",
     });
-    const allProducts = (data?.getProducts || []) as TProduct[];
+    const allProducts = useMemo(
+        () => (allProductsData?.getProducts || []) as TProduct[],
+        [allProductsData]
+    );
 
+    // Read localStorage only once, only for guests
     useEffect(() => {
-        setIsMounted(true);
-    }, []);
-
-    useEffect(() => {
-        if (!session?.user) {
-            // Load recently viewed IDs from localStorage if guest
+        if (isLoggedIn || localStorageRead.current) return;
+        localStorageRead.current = true;
+        try {
             const stored = localStorage.getItem("recentlyViewed");
-            if (stored) {
-                try {
-                    setRecentlyViewedIds(JSON.parse(stored));
-                } catch (e) {
-                    console.error("Failed to parse recently viewed items", e);
-                }
-            }
+            if (stored) setRecentlyViewedIds(JSON.parse(stored));
+        } catch (e) {
+            console.error("Failed to parse recently viewed items", e);
         }
-    }, [session?.user]);
+    }, [isLoggedIn]);
 
-    // personalized recommendations
+    // Personalized recommendations
     const { data: recData } = useQuery(GET_RECOMMENDED_PRODUCTS, {
-        variables: { productId: null }, // Landing page context
-        // skip: !session?.user // Optional: skip if guest, but backend handles guest fallback too
+        variables: { productId: null },
+        fetchPolicy: "cache-first",
     });
 
-    useEffect(() => {
-        if (recData?.getRecommendedProducts) {
-            setRecommendations(recData.getRecommendedProducts);
-        } else if (allProducts.length > 0 && recommendations.length === 0) {
-            // Fallback to random if query returns empty (e.g. loading or error)
-            // ... existing shuffle logic can stay as a last resort ...
-            const available = allProducts.filter((p: any) => !recentlyViewedIds.includes(p.id));
-            const shuffled = [...available].sort(() => 0.5 - Math.random());
-            setRecommendations(shuffled.slice(0, 8));
+    const recommendations = useMemo<TProduct[]>(() => {
+        if (recData?.getRecommendedProducts?.length) {
+            return recData.getRecommendedProducts;
         }
+        if (allProducts.length > 0) {
+            const available = allProducts.filter((p) => !recentlyViewedIds.includes(p.id));
+            return [...available].sort(() => 0.5 - Math.random()).slice(0, 8);
+        }
+        return [];
     }, [recData, allProducts, recentlyViewedIds]);
 
-    const recentlyViewedProducts = session?.user
-        ? (recentData?.getRecentlyViewed || [])
-        : allProducts.filter((p: any) => recentlyViewedIds.includes(p.id));
+    const recentlyViewedProducts = useMemo<TProduct[]>(
+        () =>
+            isLoggedIn
+                ? (recentData?.getRecentlyViewed || [])
+                : allProducts.filter((p) => recentlyViewedIds.includes(p.id)),
+        [isLoggedIn, recentData, allProducts, recentlyViewedIds]
+    );
 
-    if (!isMounted) return null;
+    // Don't render until we have something to show
     if (recentlyViewedProducts.length === 0 && recommendations.length === 0) return null;
 
     return (

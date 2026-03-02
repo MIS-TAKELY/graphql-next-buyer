@@ -27,6 +27,9 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
   // State for accumulated products
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
+  // Track which slug we have products loaded for, so we can detect when a
+  // navigation happens and seamlessly swap without blanking the grid.
+  const loadedSlugRef = useRef("");
 
   // Intersection Observer for infinite scroll
   const { ref, inView } = useInView({
@@ -43,6 +46,9 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
 
   useEffect(() => {
     activeSlugRef.current = categorySlug;
+    // Reset initializedRef immediately on slug change so the data effect below
+    // accepts the next response even though allProducts is not yet cleared.
+    initializedRef.current = false;
   }, [categorySlug]);
 
   const { data, loading, error, fetchMore } = useQuery(GET_PRODUCTS_BY_CATEGORY, {
@@ -53,10 +59,16 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
     },
     skip: !categorySlug,
     notifyOnNetworkStatusChange: true,
-    // network-only prevents the double-render (cached result first, then network)
-    // that caused loading to flicker true→false and skeletons to flash.
-    fetchPolicy: 'network-only',
+    // cache-and-network: serves cached result immediately (no skeleton flash on
+    // repeat visits) while still refreshing in the background.
+    // Previously was 'network-only' which forced a loading skeleton on every visit.
+    fetchPolicy: 'cache-and-network',
   });
+
+  // isInitialLoading: true only when the grid is empty AND a network request is
+  // in-flight for this slug. This is different from `loading` which is also true
+  // during fetchMore / pagination calls — we don't want the big skeleton then.
+  const isInitialLoading = loading && allProducts.length === 0;
 
   const category = data?.getProductsByCategory?.category;
   const total = data?.getProductsByCategory?.total || 0;
@@ -67,23 +79,13 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
   // Display Name logic (decoded for better UX)
   const displayName = category?.name || decodeURIComponent(categorySlug).replace(/-/g, ' ');
 
-  // Effect to handle slug change: reset state and the initialized guard
-  useEffect(() => {
-    if (categorySlug) {
-      setAllProducts([]);
-      setHasMore(true);
-      initializedRef.current = false;
-    }
-  }, [categorySlug]);
-
-  // Populate products only when the returned data belongs to the CURRENT slug.
-  // Uses initializedRef instead of allProducts.length === 0 to avoid the
-  // feedback loop: setAllProducts → allProducts.length changes → effect re-runs
-  // → Apollo re-fetches → loading flickers → skeleton glitch.
+  // Populate products when the returned data belongs to the CURRENT slug.
+  // KEY FIX: We do NOT clear allProducts immediately on slug change.
+  // Instead we let the old products stay visible until the new slug's data
+  // arrives. Once it does, we atomically replace them — no empty-grid flash.
   useEffect(() => {
     const returnedSlug = data?.getProductsByCategory?.category?.slug;
 
-    // Only accept data that belongs to the active slug, and only once per slug
     if (
       data?.getProductsByCategory?.products &&
       !initializedRef.current &&
@@ -91,8 +93,9 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
       returnedSlug.toLowerCase() === categorySlug.toLowerCase()
     ) {
       initializedRef.current = true;
+      loadedSlugRef.current = returnedSlug.toLowerCase();
       const newProducts = data.getProductsByCategory.products;
-      console.log(`Initial load: fetched ${newProducts.length} products for "${returnedSlug}"`);
+      // Replace — not append — to atomically swap from old-slug products to new.
       setAllProducts(newProducts);
       setHasMore(newProducts.length >= ITEMS_PER_PAGE);
     }
@@ -252,8 +255,8 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
               <ProductCard key={product.id} product={product} />
             ))}
 
-            {/* Skeleton Loaders */}
-            {(loading || (hasMore && inView)) && (
+            {/* Skeleton Loaders: only during initial load, NOT during fetchMore/pagination */}
+            {isInitialLoading && (
               [...Array(8)].map((_, i) => (
                 <ProductCardSkeleton key={`skeleton-${i}`} />
               ))
@@ -270,7 +273,7 @@ export default function CategoryPageClient({ params }: CategoryPageClientProps) 
       </div>
 
       {/* No Results State */}
-      {!loading && allProducts.length === 0 && (
+      {!isInitialLoading && !loading && allProducts.length === 0 && (
         <div className="text-center py-20 flex flex-col items-center">
           <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-full mb-4">
             <Package className="w-12 h-12 text-gray-400" />

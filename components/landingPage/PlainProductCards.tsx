@@ -1,4 +1,5 @@
 "use client";
+import { memo, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
@@ -9,9 +10,24 @@ interface Props {
   product: TopDeal;
 }
 
-const PlainProductCards = ({ product }: Props) => {
+const PlainProductCards = memo(function PlainProductCards({ product }: Props) {
   const categoryName = product.product?.category?.name || "Unknown";
-  const categorySlug = product.product?.category?.slug || categoryName.toLowerCase().replace(/\s+/g, '-');
+  const categorySlug = useMemo(
+    () =>
+      product.product?.category?.slug ||
+      categoryName.toLowerCase().replace(/\s+/g, "-"),
+    [product.product?.category?.slug, categoryName]
+  );
+
+  const saveUpToFormatted = useMemo(
+    () =>
+      product.saveUpTo
+        ? typeof product.saveUpTo === "number"
+          ? formatPrice(product.saveUpTo)
+          : product.saveUpTo
+        : null,
+    [product.saveUpTo]
+  );
 
   return (
     <Link
@@ -36,17 +52,16 @@ const PlainProductCards = ({ product }: Props) => {
         <p className="text-xs xs:text-sm sm:text-base md:text-lg text-card-foreground line-clamp-1">
           {categoryName}
         </p>
-        {product.saveUpTo && (
+        {saveUpToFormatted && (
           <p className="text-xs xs:text-sm sm:text-base text-price font-semibold mt-1">
-            Save up to{" "}
-            {typeof product.saveUpTo === "number"
-              ? formatPrice(product.saveUpTo)
-              : product.saveUpTo}
+            Save up to {saveUpToFormatted}
           </p>
         )}
       </div>
     </Link>
   );
-};
+});
+
+PlainProductCards.displayName = "PlainProductCards";
 
 export default PlainProductCards;

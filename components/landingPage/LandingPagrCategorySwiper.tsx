@@ -1,7 +1,8 @@
 
 "use client";
+import { memo } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import PlainProductCards from "./PlainProductCards";
 import { LandingPagrCategorySwiperData, TopDeal } from "./types";
@@ -13,7 +14,12 @@ interface Props {
   data: LandingPagrCategorySwiperData;
 }
 
-export default function LandingPagrCategorySwiper({ title, categorySlug, onViewAll, data }: Props) {
+const LandingPagrCategorySwiper = memo(function LandingPagrCategorySwiper({
+  title,
+  categorySlug,
+  onViewAll,
+  data,
+}: Props) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -29,44 +35,49 @@ export default function LandingPagrCategorySwiper({ title, categorySlug, onViewA
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    const handleScroll = () => checkScrollability();
     checkScrollability();
-
-    container.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", checkScrollability);
+    container.addEventListener("scroll", checkScrollability, { passive: true });
+    window.addEventListener("resize", checkScrollability, { passive: true });
 
     return () => {
-      container.removeEventListener("scroll", handleScroll);
+      container.removeEventListener("scroll", checkScrollability);
       window.removeEventListener("resize", checkScrollability);
     };
   }, [checkScrollability]);
 
   const scroll = useCallback((direction: "left" | "right") => {
     if (!scrollContainerRef.current) return;
-    const container = scrollContainerRef.current;
     const scrollAmount = window.innerWidth < 768 ? 180 : 220;
-    container.scrollBy({
+    scrollContainerRef.current.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth",
     });
   }, []);
 
+  const scrollLeft = useCallback(() => scroll("left"), [scroll]);
+  const scrollRight = useCallback(() => scroll("right"), [scroll]);
+
   // Deduplicate products by category name — show only one card per unique category
-  const seenCategories = new Set<string>();
-  const uniqueProducts = (data?.getTopDealSaveUpTo || []).filter((product: TopDeal) => {
-    const catName = product.product?.category?.name || "Unknown";
-    if (seenCategories.has(catName)) return false;
-    seenCategories.add(catName);
-    return true;
-  });
+  const uniqueProducts = useMemo(() => {
+    const seenCategories = new Set<string>();
+    return (data?.getTopDealSaveUpTo || []).filter((product: TopDeal) => {
+      const catName = product.product?.category?.name || "Unknown";
+      if (seenCategories.has(catName)) return false;
+      seenCategories.add(catName);
+      return true;
+    });
+  }, [data]);
+
+  const href = categorySlug
+    ? `/category/${categorySlug}`
+    : `/search?q=${encodeURIComponent(title)}`;
 
   return (
     <section className="relative py-2 sm:py-4 md:py-6 container-custom bg-card">
       {/* Header */}
       <div className="flex justify-between items-center mb-3">
-        {/* ✅ Wrapped Title in a Link */}
         <Link
-          href={categorySlug ? `/category/${categorySlug}` : `/search?q=${encodeURIComponent(title)}`}
+          href={href}
           className="text-lg py-4 sm:text-xl md:text-2xl font-bold text-card-foreground hover:text-primary transition-colors"
         >
           {title}
@@ -95,7 +106,7 @@ export default function LandingPagrCategorySwiper({ title, categorySlug, onViewA
 
       {/* Scroll Buttons */}
       <button
-        onClick={() => scroll("left")}
+        onClick={scrollLeft}
         disabled={!canScrollLeft}
         className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-card p-1 border border-border shadow-sm"
         aria-label="Scroll left"
@@ -103,7 +114,7 @@ export default function LandingPagrCategorySwiper({ title, categorySlug, onViewA
         <ChevronLeft className="text-card-foreground" />
       </button>
       <button
-        onClick={() => scroll("right")}
+        onClick={scrollRight}
         disabled={!canScrollRight}
         className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-card p-1 border border-border shadow-sm"
         aria-label="Scroll right"
@@ -112,4 +123,8 @@ export default function LandingPagrCategorySwiper({ title, categorySlug, onViewA
       </button>
     </section>
   );
-}
+});
+
+LandingPagrCategorySwiper.displayName = "LandingPagrCategorySwiper";
+
+export default LandingPagrCategorySwiper;

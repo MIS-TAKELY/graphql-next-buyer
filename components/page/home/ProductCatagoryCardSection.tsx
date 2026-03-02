@@ -3,7 +3,7 @@
 import { categories as defaultCategories } from "@/data/catagory";
 import Link from "next/link";
 import { memo } from "react";
-import * as Icons from "lucide-react";
+import { LayoutGrid } from "lucide-react";
 
 type Props = {
   categories?: any[];
@@ -62,7 +62,7 @@ const ProductCategoryCardSection = memo(({ categories = defaultCategories }: Pro
                             "
                         />
                       ) : (
-                        <Icons.LayoutGrid
+                        <LayoutGrid
                           className="
                               text-white
                               w-5 xs:w-6 sm:w-7 md:w-6 lg:w-7 xl:w-8

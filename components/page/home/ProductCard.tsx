@@ -1,6 +1,6 @@
 "use client";
 
-import React, { MouseEvent } from "react";
+import React, { memo, useCallback, useMemo, MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import SmartMedia from "@/components/ui/SmartMedia";
@@ -12,7 +12,6 @@ import { useCart } from "@/hooks/cart/useCart";
 import { formatPrice } from "@/lib/utils";
 import { useWishlist } from "@/hooks/wishlist/useWishlist";
 import { useSession } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
 import { useCompareStore } from "@/store/compareStore";
 import { useAuthModal } from "@/store/authModalStore";
 import { getProductUrl } from "@/lib/productUtils";
@@ -24,99 +23,141 @@ interface ProductCardProps {
   product: TProduct;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
   const { addToCart, checkIsInCart, removeFromCart } = useCart();
-  const defaultVariant = product.variants?.find((v) => v.isDefault) || product.variants?.[0];
+  const { isInWishlist, handleAddToWishlist, handleRemoveFromWishlist } = useWishlist();
+  const { data: session } = useSession();
+  const { openModal } = useAuthModal();
+  const { addProduct, removeProduct, isSelected } = useCompareStore();
+
+  const defaultVariant = useMemo(
+    () => product.variants?.find((v) => v.isDefault) || product.variants?.[0],
+    [product.variants]
+  );
   const currentPrice = defaultVariant?.price;
   const originalPrice = defaultVariant?.mrp;
 
   // Select image: Prefer PRIMARY, fallback to any non-PROMOTIONAL/non-VIDEO, fallback to first
-  const defaultImage =
-    product.images?.find((img) => img.mediaType === "PRIMARY")?.url ||
-    product.images?.find((img) => img.mediaType !== "PROMOTIONAL" && img.mediaType !== "VIDEO")?.url ||
-    product.images?.[0]?.url;
+  const defaultImage = useMemo(
+    () =>
+      product.images?.find((img) => img.mediaType === "PRIMARY")?.url ||
+      product.images?.find(
+        (img) => img.mediaType !== "PROMOTIONAL" && img.mediaType !== "VIDEO"
+      )?.url ||
+      product.images?.[0]?.url,
+    [product.images]
+  );
 
-  const handleCartAction = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!product.variants?.[0]) return;
+  const discount = useMemo(
+    () =>
+      currentPrice && originalPrice && Number(originalPrice) > Number(currentPrice)
+        ? Math.round(
+          ((Number(originalPrice) - Number(currentPrice)) / Number(originalPrice)) * 100
+        )
+        : 0,
+    [currentPrice, originalPrice]
+  );
 
-    if (checkIsInCart(product.id)) {
-      removeFromCart(product.variants[0].id, product.id);
-    } else {
-      addToCart(product.variants[0].id, product.id, 1, {
-        name: product.name,
-        image: defaultImage || "/placeholder.svg",
-        price: Number(currentPrice || 0),
-        slug: product.slug,
-        stock: Number(defaultVariant?.stock || 0),
-      });
-    }
-  };
+  const averageRating = useMemo(
+    () =>
+      product.reviews && product.reviews.length > 0
+        ? product.reviews.reduce((sum, r) => sum + (r.rating || 0), 0) /
+        product.reviews.length
+        : 0,
+    [product.reviews]
+  );
 
-  const { isInWishlist, handleAddToWishlist, handleRemoveFromWishlist } = useWishlist();
-  const { data: session } = useSession();
-  const userId = session?.user?.id;
-  const router = useRouter();
-  const { openModal } = useAuthModal();
+  const isNew = useMemo(
+    () =>
+      !averageRating &&
+      !!product.createdAt &&
+      differenceInDays(new Date(), new Date(product.createdAt)) <= 30,
+    [averageRating, product.createdAt]
+  );
 
-  const checkIsWishlisted = (id: string) => isInWishlist(id);
-
-  const handleWishlistAction = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (!userId) {
-      openModal();
-      return;
-    }
-
-    if (checkIsWishlisted(product.id)) {
-      await handleRemoveFromWishlist(product.id);
-      toast.success("Removed from wishlist");
-    } else {
-      await handleAddToWishlist(product.id, product);
-      toast.success("Added to wishlist");
-    }
-  };
-
-  // Comparison store
-  const { addProduct, removeProduct, isSelected } = useCompareStore();
+  const isInCart = checkIsInCart(product.id);
+  const isWishlisted = isInWishlist(product.id);
   const selected = isSelected(product.id);
+  const userId = session?.user?.id;
 
-  const handleCompareToggle = (e: MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const productUrl = useMemo(
+    () => getProductUrl({ slug: product.slug, id: product.id }),
+    [product.slug, product.id]
+  );
 
-    if (selected) {
-      removeProduct(product.id);
-      toast.success("Removed from comparison");
-    } else {
-      const added = addProduct(product as any);
-      if (added) {
-        toast.success("Added to comparison");
+  const brandName = useMemo(
+    () => (typeof product.brand === "string" ? product.brand : product.brand?.name || "Generic"),
+    [product.brand]
+  );
+
+  const handleCartAction = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      if (!product.variants?.[0]) return;
+
+      if (isInCart) {
+        removeFromCart(product.variants[0].id, product.id);
       } else {
-        toast.error("Maximum 4 products can be compared");
+        addToCart(product.variants[0].id, product.id, 1, {
+          name: product.name,
+          image: defaultImage || "/placeholder.svg",
+          price: Number(currentPrice || 0),
+          slug: product.slug,
+          stock: Number(defaultVariant?.stock || 0),
+        });
       }
-    }
-  };
+    },
+    [isInCart, product, defaultImage, currentPrice, defaultVariant, addToCart, removeFromCart]
+  );
 
-  const discount =
-    currentPrice && originalPrice && Number(originalPrice) > Number(currentPrice)
-      ? Math.round(((Number(originalPrice) - Number(currentPrice)) / Number(originalPrice)) * 100)
-      : 0;
+  const handleWishlistAction = useCallback(
+    async (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-  const averageRating =
-    product.reviews && product.reviews.length > 0
-      ? product.reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / product.reviews.length
-      : 0;
+      if (!userId) {
+        openModal();
+        return;
+      }
 
-  const isNew = !averageRating && product.createdAt && differenceInDays(new Date(), new Date(product.createdAt)) <= 30;
+      if (isWishlisted) {
+        await handleRemoveFromWishlist(product.id);
+        toast.success("Removed from wishlist");
+      } else {
+        await handleAddToWishlist(product.id, product);
+        toast.success("Added to wishlist");
+      }
+    },
+    [userId, isWishlisted, product, openModal, handleRemoveFromWishlist, handleAddToWishlist]
+  );
+
+  const handleCompareToggle = useCallback(
+    (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (selected) {
+        removeProduct(product.id);
+        toast.success("Removed from comparison");
+      } else {
+        const added = addProduct(product as any);
+        if (added) {
+          toast.success("Added to comparison");
+        } else {
+          toast.error("Maximum 4 products can be compared");
+        }
+      }
+    },
+    [selected, product, removeProduct, addProduct]
+  );
 
   return (
     <div className="block w-full h-full relative group">
-      <Link href={getProductUrl({ slug: product.slug, id: product.id })} className="block h-full">
-        <Card className={`transition-all duration-300 bg-white dark:bg-gray-900 border-none shadow-none rounded-xl h-full flex flex-col overflow-hidden min-h-[260px] p-0 ${selected ? "ring-2 ring-blue-500 border-blue-500" : ""
-          }`}>
+      <Link href={productUrl} className="block h-full">
+        <Card
+          className={`transition-all duration-300 bg-white dark:bg-gray-900 border-none shadow-none rounded-xl h-full flex flex-col overflow-hidden min-h-[260px] p-0 ${selected ? "ring-2 ring-blue-500 border-blue-500" : ""
+            }`}
+        >
           <CardContent className="p-0 flex flex-col h-full">
             {/* Image Section - Fixed Aspect Ratio */}
             <div className="relative w-full aspect-[3/2] bg-gray-50 dark:bg-gray-800 flex-shrink-0 overflow-hidden">
@@ -140,7 +181,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             <div className="flex-1 flex flex-col p-2 sm:p-2.5 gap-1">
               {/* Brand */}
               <div className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wider font-medium">
-                {typeof product.brand === 'string' ? product.brand : product.brand?.name || 'Generic'}
+                {brandName}
               </div>
 
               {/* Title */}
@@ -177,10 +218,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                 )}
               </div>
 
-              {/* Free Delivery - Optional, can toggle based on product data if available */}
-              <div className="text-[10px] text-green-600 font-medium">
-                Free delivery
-              </div>
+              {/* Free Delivery */}
+              <div className="text-[10px] text-green-600 font-medium">Free delivery</div>
             </div>
           </CardContent>
         </Card>
@@ -191,26 +230,25 @@ export default function ProductCard({ product }: ProductCardProps) {
         <Button
           size="icon"
           variant="secondary"
-          className={`h-8 w-8 rounded-full shadow-sm bg-white/95 hover:bg-white ${checkIsWishlisted(product.id) ? "text-red-500" : "text-gray-600"}`}
+          className={`h-8 w-8 rounded-full shadow-sm bg-white/95 hover:bg-white ${isWishlisted ? "text-red-500" : "text-gray-600"
+            }`}
           onClick={handleWishlistAction}
         >
-          <Heart className={`h-4 w-4 ${checkIsWishlisted(product.id) ? "fill-current" : ""}`} />
+          <Heart className={`h-4 w-4 ${isWishlisted ? "fill-current" : ""}`} />
         </Button>
         <Button
           size="icon"
           variant="secondary"
-          className={`h-8 w-8 rounded-full shadow-sm bg-white/95 hover:bg-white ${checkIsInCart(product.id) ? "text-green-600" : "text-gray-600"}`}
+          className={`h-8 w-8 rounded-full shadow-sm bg-white/95 hover:bg-white ${isInCart ? "text-green-600" : "text-gray-600"
+            }`}
           onClick={handleCartAction}
         >
-          {checkIsInCart(product.id) ? <Check className="h-4 w-4" /> : <ShoppingCart className="h-4 w-4" />}
+          {isInCart ? <Check className="h-4 w-4" /> : <ShoppingCart className="h-4 w-4" />}
         </Button>
       </div>
 
       {/* Compare Checkbox */}
-      <div
-        className="absolute bottom-1 right-1 z-10"
-        onClick={handleCompareToggle}
-      >
+      <div className="absolute bottom-1 right-1 z-10" onClick={handleCompareToggle}>
         <div className="flex items-center gap-1.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded border border-border shadow-sm px-2 py-1 hover:bg-background transition-colors cursor-pointer">
           <Checkbox
             id={`compare-${product.id}`}
@@ -227,4 +265,8 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
     </div>
   );
-}
+});
+
+ProductCard.displayName = "ProductCard";
+
+export default ProductCard;
