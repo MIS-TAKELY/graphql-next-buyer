@@ -80,11 +80,38 @@ const Footer = () => {
       <div className="container-custom">
         {/* Row 1: Brand, Navigation, and Socials - Perfectly Balanced First Line */}
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-x-8 gap-y-12 mb-20 pb-16 border-b border-border/40 items-start">
-          <div className="md:col-span-1 lg:col-span-2">
-            <h3 className="font-bold text-4xl tracking-tighter text-foreground mb-2">Vanijay</h3>
-            <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/60">
-              Premium Commerce
-            </p>
+          <div className="md:col-span-1 lg:col-span-2 space-y-8">
+            <div>
+              <h3 className="font-bold text-4xl tracking-tighter text-foreground mb-2">Vanijay</h3>
+              <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/60">
+                Premium Commerce
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <span className="text-[9px] uppercase tracking-widest font-bold text-muted-foreground/40">In Partnership with</span>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-4 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                {initiatives.map((item, index) => (
+                  <Link
+                    key={index}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-transform hover:scale-110"
+                    title={`${item.name}: ${item.tagline}`}
+                  >
+                    <div className="relative h-6 w-16">
+                      <Image
+                        src={item.logo}
+                        alt={item.name}
+                        fill
+                        className={`object-contain ${item.className || ""}`}
+                      />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="space-y-6">
@@ -154,31 +181,6 @@ const Footer = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Initiatives Section */}
-        <div className="border-t border-border/40 py-12 mb-10">
-          <div className="flex flex-wrap justify-center items-center gap-x-16 gap-y-10 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-700">
-            {initiatives.map((item, index) => (
-              <Link
-                key={index}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-transform hover:scale-105"
-                title={`${item.name}: ${item.tagline}`}
-              >
-                <div className="relative h-12 w-32">
-                  <Image
-                    src={item.logo}
-                    alt={item.name}
-                    fill
-                    className={`object-contain ${item.className || ""}`}
-                  />
-                </div>
-              </Link>
-            ))}
-          </div>
         </div>
 
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
