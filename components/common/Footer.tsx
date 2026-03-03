@@ -36,6 +36,29 @@ const initiatives = [
   },
 ];
 
+const contactDepartments = [
+  {
+    email: "hello@vanijay.com",
+    label: "Support",
+    purposes: ["Support", "Orders", "Returns", "Refunds", "General queries", "Order tracking", "Complaints", "After-sales support"],
+  },
+  {
+    email: "business@vanijay.com",
+    label: "Sales",
+    purposes: ["Sales", "Product inquiries", "Bulk purchase", "Wholesale inquiries"],
+  },
+  {
+    email: "money@vanijay.com",
+    label: "Accounts",
+    purposes: ["Accounts", "Finance", "Billing", "Payment reconciliation", "Vendor invoices"],
+  },
+  {
+    email: "ops@vanijay.com",
+    label: "Admin",
+    purposes: ["System notifications", "Platform emails", "Payment alerts", "Hosting / domain", "Social logins"],
+  },
+];
+
 const Footer = () => {
   return (
     <footer className="bg-muted text-muted-foreground pt-12 md:pt-16 pb-8 border-t border-border">
@@ -80,6 +103,32 @@ const Footer = () => {
               <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
               <li><Link href="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</Link></li>
             </ul>
+          </div>
+        </div>
+
+        {/* Contact info grid */}
+        <div className="border-t border-border/50 pt-10 mb-12">
+          <h3 className="font-semibold text-foreground mb-6">Contact Us</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {contactDepartments.map((dept, index) => (
+              <div key={index} className="space-y-2">
+                <h4 className="font-medium text-foreground text-sm flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  {dept.label}
+                </h4>
+                <a
+                  href={`mailto:${dept.email}`}
+                  className="text-primary text-sm font-semibold hover:underline block"
+                >
+                  {dept.email}
+                </a>
+                <ul className="text-xs space-y-1 opacity-80">
+                  {dept.purposes.map((p, i) => (
+                    <li key={i}>{p}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 
