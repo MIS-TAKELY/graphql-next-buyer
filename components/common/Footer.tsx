@@ -78,44 +78,67 @@ const Footer = () => {
   return (
     <footer className="bg-muted text-muted-foreground pt-20 pb-10 border-t border-border/60">
       <div className="container-custom">
-        {/* Brand & Socials - Top Row Wide */}
-        <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-16 pb-16 border-b border-border/40">
-          <div className="space-y-4">
+        {/* Row 1: Brand, Navigation, and Socials - Filling the first line properly */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-16 pb-12 border-b border-border/40">
+          <div className="col-span-2 lg:col-span-2">
             <h3 className="font-bold text-3xl tracking-tight text-foreground">Vanijay</h3>
-            <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-sm">
-              Connecting you to quality products with trust and efficiency. Your premier destination for seamless commerce.
-            </p>
           </div>
-          <div className="flex items-center gap-6">
-            <Link href="https://www.facebook.com/VanijayEnterprises" className="hover:text-primary transition-all hover:-translate-y-1 duration-300"><Facebook className="w-6 h-6" /></Link>
-            <Link href="https://www.instagram.com/vanijay_enterprises" className="hover:text-primary transition-all hover:-translate-y-1 duration-300"><Instagram className="w-6 h-6" /></Link>
-            <Link href="https://x.com/Vanijay_Ent" className="hover:text-primary transition-all hover:-translate-y-1 duration-300"><Twitter className="w-6 h-6" /></Link>
-            <Link href="https://www.tiktok.com/@vanijay_enterprises" className="hover:text-primary transition-all hover:-translate-y-1 duration-300"><Music4 className="w-6 h-6" /></Link>
+
+          <div className="space-y-4">
+            <h3 className="text-[11px] uppercase tracking-widest font-bold text-foreground/50">Company</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
+              <li><Link href="/careers" className="hover:text-primary transition-colors">Careers</Link></li>
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-[11px] uppercase tracking-widest font-bold text-foreground/50">Support</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/returns-policy" className="hover:text-primary transition-colors">Returns & Refunds</Link></li>
+              <li><Link href="/shipping-policy" className="hover:text-primary transition-colors">Shipping Info</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-[11px] uppercase tracking-widest font-bold text-foreground/50">Legal</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/terms-conditions" className="hover:text-primary transition-colors">Terms of Service</Link></li>
+            </ul>
+          </div>
+
+          <div className="flex items-start gap-4 lg:justify-end pt-1">
+            <Link href="https://www.facebook.com/VanijayEnterprises" className="hover:text-primary transition-all hover:-translate-y-1"><Facebook className="w-5 h-5" /></Link>
+            <Link href="https://www.instagram.com/vanijay_enterprises" className="hover:text-primary transition-all hover:-translate-y-1"><Instagram className="w-5 h-5" /></Link>
+            <Link href="https://x.com/Vanijay_Ent" className="hover:text-primary transition-all hover:-translate-y-1"><Twitter className="w-5 h-5" /></Link>
+            <Link href="https://www.tiktok.com/@vanijay_enterprises" className="hover:text-primary transition-all hover:-translate-y-1"><Music4 className="w-5 h-5" /></Link>
           </div>
         </div>
 
-        {/* Contact Departments Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 mb-20">
+        {/* Row 2: Department Details - Using the full width to show all details clearly */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 mb-20">
           {contactDepartments.map((dept, idx) => (
             <div key={idx} className="space-y-6">
               <div className="space-y-2">
-                <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-primary/80 block">
+                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary/80 block">
                   {dept.label}
                 </span>
                 <a
                   href={`mailto:${dept.email}`}
-                  className="group flex items-center gap-2 text-foreground font-semibold text-base hover:text-primary transition-colors"
+                  className="group flex items-center gap-2 text-foreground font-semibold text-[15px] hover:text-primary transition-colors"
                 >
                   <Mail className="w-4 h-4" />
                   {dept.email}
                 </a>
               </div>
               <div>
-                <h4 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground/40 mb-3">For</h4>
-                <ul className="space-y-2">
+                <h4 className="text-[9px] uppercase tracking-wider font-bold text-muted-foreground/30 mb-3 border-b border-border/20 pb-1">For</h4>
+                <ul className={`grid gap-x-4 gap-y-2 ${dept.label === "Support" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-1" : "grid-cols-1"}`}>
                   {dept.purposes.map((purpose, pIdx) => (
-                    <li key={pIdx} className="text-[13px] text-muted-foreground/70 flex items-center gap-2">
-                      <span className="w-1 h-1 rounded-full bg-border" />
+                    <li key={pIdx} className="text-[12px] text-muted-foreground/70 flex items-start gap-2">
+                      <span className="w-1 h-1 rounded-full bg-border mt-1.5 shrink-0" />
                       {purpose}
                     </li>
                   ))}
@@ -123,33 +146,6 @@ const Footer = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 py-12 border-t border-border/40 mb-12">
-          <div>
-            <h3 className="text-xs uppercase tracking-widest font-bold text-foreground/70 mb-6">Company</h3>
-            <ul className="space-y-4 text-[15px]">
-              <li><Link href="/about" className="hover:text-primary transition-colors flex items-center gap-2 group">About Us <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
-              <li><Link href="/careers" className="hover:text-primary transition-colors flex items-center gap-2 group">Careers <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-xs uppercase tracking-widest font-bold text-foreground/70 mb-6">Customer Care</h3>
-            <ul className="space-y-4 text-[15px]">
-              <li><Link href="/returns-policy" className="hover:text-primary transition-colors flex items-center gap-2 group">Returns & Refunds <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
-              <li><Link href="/shipping-policy" className="hover:text-primary transition-colors flex items-center gap-2 group">Shipping Info <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
-              <li><Link href="/contact" className="hover:text-primary transition-colors flex items-center gap-2 group">Contact Support <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
-            </ul>
-          </div>
-          <div className="col-span-2 md:col-span-1">
-            <h3 className="text-xs uppercase tracking-widest font-bold text-foreground/70 mb-6">Policies</h3>
-            <ul className="space-y-4 text-[15px] flex flex-wrap md:flex-col gap-x-8 gap-y-4">
-              <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms-conditions" className="hover:text-primary transition-colors">Terms of Service</Link></li>
-              <li><Link href="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</Link></li>
-            </ul>
-          </div>
         </div>
 
         {/* Initiatives Section */}
