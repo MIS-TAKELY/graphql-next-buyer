@@ -88,29 +88,26 @@ const Footer = () => {
               </p>
             </div>
 
-            <div className="space-y-4">
-              <span className="text-[9px] uppercase tracking-widest font-bold text-muted-foreground/40">In Partnership with</span>
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-4 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                {initiatives.map((item, index) => (
-                  <Link
-                    key={index}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="transition-transform hover:scale-110"
-                    title={`${item.name}: ${item.tagline}`}
-                  >
-                    <div className="relative h-6 w-16">
-                      <Image
-                        src={item.logo}
-                        alt={item.name}
-                        fill
-                        className={`object-contain ${item.className || ""}`}
-                      />
-                    </div>
-                  </Link>
-                ))}
-              </div>
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-6 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+              {initiatives.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-transform hover:scale-110"
+                  title={`${item.name}: ${item.tagline}`}
+                >
+                  <div className="relative h-10 w-24">
+                    <Image
+                      src={item.logo}
+                      alt={item.name}
+                      fill
+                      className={`object-contain ${item.className || ""}`}
+                    />
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
 
