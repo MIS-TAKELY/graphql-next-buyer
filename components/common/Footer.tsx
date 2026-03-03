@@ -20,6 +20,7 @@ const initiatives = [
     tagline: "Stay safe Online",
     url: "https://www.unicef.org/nepal/online-safety-resources",
     logo: "/English.png.webp",
+    className: "brightness-0 opacity-60", // Make it black and semi-transparent to match others
   },
   {
     name: "ICIMOD",
@@ -99,7 +100,7 @@ const Footer = () => {
                     src={item.logo}
                     alt={item.name}
                     fill
-                    className="object-contain"
+                    className={`object-contain ${item.className || ""}`}
                   />
                 </div>
               </Link>
