@@ -61,15 +61,20 @@ const LandingPagrCategorySwiper = memo(function LandingPagrCategorySwiper({
   const uniqueProducts = useMemo(() => {
     const seenCategories = new Set<string>();
     return (data?.getTopDealSaveUpTo || []).filter((product: TopDeal) => {
-      const catName = product.product?.category?.name || "Unknown";
+      const catName = product.category?.name || product.product?.category?.name || "Unknown";
       if (seenCategories.has(catName)) return false;
       seenCategories.add(catName);
       return true;
     });
   }, [data]);
 
-  const href = categorySlug
-    ? `/category/${categorySlug}`
+  const slugFromProduct = useMemo(() => {
+    const firstProduct = uniqueProducts[0];
+    return firstProduct?.category?.slug || firstProduct?.product?.category?.slug;
+  }, [uniqueProducts]);
+
+  const href = categorySlug || slugFromProduct
+    ? `/category/${categorySlug || slugFromProduct}`
     : `/search?q=${encodeURIComponent(title)}`;
 
   return (

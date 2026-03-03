@@ -11,11 +11,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function useBuyNow() {
-  const [step, setStep] = useState<"address" | "payment" | "summary">(
+  const [step, setStep] = useState<"address" | "delivery" | "payment" | "summary">(
     "address"
   );
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
+  const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState<any>(null);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<any>(null);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
@@ -28,7 +29,7 @@ export function useBuyNow() {
 
   const handleAddressSaved = (newAddress: any) => {
     setSelectedAddress(newAddress);
-    setStep("payment");
+    setStep("delivery");
     setShowAddressForm(false);
   };
 
@@ -38,7 +39,7 @@ export function useBuyNow() {
   };
 
   const handleUseDefaultAddress = () => {
-    setStep("payment");
+    setStep("delivery");
   };
 
   const handleSelectAddress = (address: any) => {
@@ -47,6 +48,11 @@ export function useBuyNow() {
 
   const handlePaymentMethodSelect = (method: any) => {
     setSelectedPaymentMethod(method);
+  };
+
+  const handleDeliveryMethodSelect = (method: any) => {
+    setSelectedDeliveryMethod(method);
+    setStep("payment");
   };
 
   const handlePaymentSubmit = async (paymentData: any) => {
@@ -282,11 +288,16 @@ export function useBuyNow() {
     setStep("payment");
   };
 
+  const handleBackToDelivery = () => {
+    setStep("delivery");
+  };
+
   return {
     step,
     selectedAddress,
     showAddressForm,
     selectedPaymentMethod,
+    selectedDeliveryMethod,
     isProcessingPayment,
     setSelectedAddress,
     setShowAddressForm,
@@ -294,10 +305,12 @@ export function useBuyNow() {
     handleAddressCancel,
     handleUseDefaultAddress,
     handleSelectAddress,
+    handleDeliveryMethodSelect,
     handlePaymentMethodSelect,
     handlePaymentSubmit,
     handleInitiateFonepay,
     handleBackToAddress,
+    handleBackToDelivery,
     handleBackToPayment,
   };
 }

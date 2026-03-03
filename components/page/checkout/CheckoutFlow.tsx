@@ -8,6 +8,7 @@ import { BuyNowHeader } from "@/components/page/buy-now/BuyNowHeader";
 import { BuyNowSteps } from "@/components/page/buy-now/BuyNowSteps";
 import { PaymentStep } from "@/components/page/buy-now/PaymentStep";
 import { OrderSummary } from "@/components/page/checkout/OrderSummary";
+import { DeliveryMethodStep } from "./DeliveryMethodStep";
 import { useBuyNow } from "@/hooks/buy-now/useBuyNow";
 import { useCart } from "@/hooks/cart/useCart";
 import { formatPrice } from "@/lib/utils";
@@ -56,10 +57,13 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
         handleAddressCancel,
         handleUseDefaultAddress,
         handleSelectAddress,
+        handleDeliveryMethodSelect,
         handlePaymentMethodSelect,
         handlePaymentSubmit,
         handleInitiateFonepay,
         handleBackToAddress,
+        handleBackToDelivery,
+        selectedDeliveryMethod,
     } = useBuyNow();
 
     // EFFECT: Sync the visual `currentStep` with the logical `step` from useBuyNow
@@ -68,11 +72,14 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
             case "address":
                 setCurrentStep(1);
                 break;
-            case "payment":
+            case "delivery":
                 setCurrentStep(2);
                 break;
-            case "summary":
+            case "payment":
                 setCurrentStep(3);
+                break;
+            case "summary":
+                setCurrentStep(4);
                 break;
             default:
                 setCurrentStep(1);
@@ -317,6 +324,18 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
                         )
                     )}
 
+                    {step === "delivery" && (
+                        <DeliveryMethodStep
+                            deliveryOptions={isFromCart
+                                ? [] // Could aggregate options from all products, but for now seller-specific options are per-product
+                                : (product?.deliveryOptions || [])
+                            }
+                            selectedMethod={selectedDeliveryMethod}
+                            onSelect={handleDeliveryMethodSelect}
+                            onBack={handleBackToAddress}
+                        />
+                    )}
+
                     {step === "payment" && (
                         <PaymentStep
                             selectedAddress={selectedAddress}
@@ -337,7 +356,7 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
                                                     : paymentData.method,
                                         paymentMethodId: selectedPaymentMethod?.id ?? null,
                                         items: orderItemsForSummary, // Pass full cart items
-                                        shippingMethod: "STANDARD",
+                                        shippingMethod: selectedDeliveryMethod?.title || "STANDARD",
                                     });
                                 } else {
                                     // Existing single-product logic
@@ -364,7 +383,7 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
                                 if (isFromCart) {
                                     return await handleInitiateFonepay({
                                         items: orderItemsForSummary,
-                                        shippingMethod: "STANDARD",
+                                        shippingMethod: selectedDeliveryMethod?.title || "STANDARD",
                                     });
                                 } else {
                                     const selectedVariant = variantId
@@ -374,11 +393,11 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
                                     return await handleInitiateFonepay({
                                         variantId: selectedVariant?.id,
                                         quantity,
-                                        shippingMethod: "STANDARD",
+                                        shippingMethod: selectedDeliveryMethod?.title || "STANDARD",
                                     });
                                 }
                             }}
-                            onBackToAddress={handleBackToAddress}
+                            onBackToAddress={handleBackToDelivery}
                         />
                     )}
                 </div>
@@ -392,7 +411,7 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
                             <OrderSummary
                                 items={orderItemsForSummary}
                                 subtotal={cartSubtotal} // From cart calc
-                                shipping={0}
+                                shipping={shipping}
                                 tax={0}
                                 total={orderAmount}
                                 formatPrice={formatPrice}
@@ -404,8 +423,8 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
                         // Existing single-product OrderSummary
                         <OrderSummary
                             items={orderItemsForSummary}
-                            subtotal={orderAmount}
-                            shipping={0}
+                            subtotal={subtotal}
+                            shipping={shipping}
                             tax={0}
                             total={orderAmount}
                             formatPrice={formatPrice}

@@ -11,12 +11,13 @@ interface Props {
 }
 
 const PlainProductCards = memo(function PlainProductCards({ product }: Props) {
-  const categoryName = product.product?.category?.name || "Unknown";
+  const categoryName = product.category?.name || product.product?.category?.name || "Unknown";
   const categorySlug = useMemo(
     () =>
+      product.category?.slug ||
       product.product?.category?.slug ||
       categoryName.toLowerCase().replace(/\s+/g, "-"),
-    [product.product?.category?.slug, categoryName]
+    [product.category?.slug, product.product?.category?.slug, categoryName]
   );
 
   const saveUpToFormatted = useMemo(

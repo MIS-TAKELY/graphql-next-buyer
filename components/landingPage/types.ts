@@ -38,6 +38,11 @@ export interface TopDeal {
       slug?: string;
     };
   };
+  category?: {
+    id?: string;
+    name?: string;
+    slug?: string;
+  };
 }
 
 export interface LandingPagrCategorySwiperData {

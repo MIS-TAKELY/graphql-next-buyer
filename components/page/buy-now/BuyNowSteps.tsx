@@ -4,9 +4,9 @@ import { CreditCard, Truck } from "lucide-react";
 
 export function BuyNowSteps({ currentStep }: { currentStep: number }) {
   const steps = [
-    { id: 1, name: "Shipping", icon: Truck },
-    { id: 2, name: "Payment", icon: CreditCard },
-    // { id: 3, name: "Review", icon: ShieldCheck },
+    { id: 1, name: "Address", icon: Truck },
+    { id: 2, name: "Delivery", icon: Truck },
+    { id: 3, name: "Payment", icon: CreditCard },
   ];
 
   return (
