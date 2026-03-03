@@ -76,70 +76,78 @@ const contactDepartments = [
 
 const Footer = () => {
   return (
-    <footer className="bg-muted text-muted-foreground pt-20 pb-10 border-t border-border/60">
+    <footer className="bg-muted text-muted-foreground pt-24 pb-12 border-t border-border/60">
       <div className="container-custom">
-        {/* Row 1: Brand, Navigation, and Socials - Filling the first line properly */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-16 pb-12 border-b border-border/40">
-          <div className="col-span-2 lg:col-span-2">
-            <h3 className="font-bold text-3xl tracking-tight text-foreground">Vanijay</h3>
+        {/* Row 1: Brand, Navigation, and Socials - Perfectly Balanced First Line */}
+        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-x-8 gap-y-12 mb-20 pb-16 border-b border-border/40 items-start">
+          <div className="md:col-span-1 lg:col-span-2">
+            <h3 className="font-bold text-4xl tracking-tighter text-foreground mb-2">Vanijay</h3>
+            <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/60">
+              Premium Commerce
+            </p>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-[11px] uppercase tracking-widest font-bold text-foreground/50">Company</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
-              <li><Link href="/careers" className="hover:text-primary transition-colors">Careers</Link></li>
+          <div className="space-y-6">
+            <h3 className="text-[11px] uppercase tracking-widest font-bold text-foreground/40 border-l border-primary/30 pl-3">Company</h3>
+            <ul className="space-y-3 text-[14px]">
+              <li><Link href="/about" className="hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200">About Us</Link></li>
+              <li><Link href="/careers" className="hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200">Careers</Link></li>
             </ul>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-[11px] uppercase tracking-widest font-bold text-foreground/50">Support</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/returns-policy" className="hover:text-primary transition-colors">Returns & Refunds</Link></li>
-              <li><Link href="/shipping-policy" className="hover:text-primary transition-colors">Shipping Info</Link></li>
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
+          <div className="space-y-6">
+            <h3 className="text-[11px] uppercase tracking-widest font-bold text-foreground/40 border-l border-primary/30 pl-3">Customer Care</h3>
+            <ul className="space-y-3 text-[14px]">
+              <li><Link href="/returns-policy" className="hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200">Returns & Refunds</Link></li>
+              <li><Link href="/shipping-policy" className="hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200">Shipping Info</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200">Contact Us</Link></li>
             </ul>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-[11px] uppercase tracking-widest font-bold text-foreground/50">Legal</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms-conditions" className="hover:text-primary transition-colors">Terms of Service</Link></li>
+          <div className="space-y-6">
+            <h3 className="text-[11px] uppercase tracking-widest font-bold text-foreground/40 border-l border-primary/30 pl-3">Legal</h3>
+            <ul className="space-y-3 text-[14px]">
+              <li><Link href="/privacy-policy" className="hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200">Privacy Policy</Link></li>
+              <li><Link href="/terms-conditions" className="hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200">Terms of Service</Link></li>
             </ul>
           </div>
 
-          <div className="flex items-start gap-4 lg:justify-end pt-1">
-            <Link href="https://www.facebook.com/VanijayEnterprises" className="hover:text-primary transition-all hover:-translate-y-1"><Facebook className="w-5 h-5" /></Link>
-            <Link href="https://www.instagram.com/vanijay_enterprises" className="hover:text-primary transition-all hover:-translate-y-1"><Instagram className="w-5 h-5" /></Link>
-            <Link href="https://x.com/Vanijay_Ent" className="hover:text-primary transition-all hover:-translate-y-1"><Twitter className="w-5 h-5" /></Link>
-            <Link href="https://www.tiktok.com/@vanijay_enterprises" className="hover:text-primary transition-all hover:-translate-y-1"><Music4 className="w-5 h-5" /></Link>
+          <div className="flex items-center gap-5 lg:justify-end pt-1">
+            <Link href="https://www.facebook.com/VanijayEnterprises" className="w-10 h-10 rounded-full border border-border/60 flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"><Facebook className="w-4 h-4" /></Link>
+            <Link href="https://www.instagram.com/vanijay_enterprises" className="w-10 h-10 rounded-full border border-border/60 flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"><Instagram className="w-4 h-4" /></Link>
+            <Link href="https://x.com/Vanijay_Ent" className="w-10 h-10 rounded-full border border-border/60 flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"><Twitter className="w-4 h-4" /></Link>
+            <Link href="https://www.tiktok.com/@vanijay_enterprises" className="w-10 h-10 rounded-full border border-border/60 flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"><Music4 className="w-4 h-4" /></Link>
           </div>
         </div>
 
-        {/* Row 2: Department Details - Using the full width to show all details clearly */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 mb-20">
+        {/* Row 2: Department Details - Optimized for White Space and Balance */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-16 gap-y-20 mb-24">
           {contactDepartments.map((dept, idx) => (
-            <div key={idx} className="space-y-6">
-              <div className="space-y-2">
-                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary/80 block">
+            <div key={idx} className="space-y-8 group">
+              <div className="space-y-3">
+                <span className="text-[10px] uppercase tracking-[0.25em] font-bold text-primary block transition-colors group-hover:text-foreground">
                   {dept.label}
                 </span>
                 <a
                   href={`mailto:${dept.email}`}
-                  className="group flex items-center gap-2 text-foreground font-semibold text-[15px] hover:text-primary transition-colors"
+                  className="flex items-center gap-3 text-foreground font-bold text-[17px] hover:text-primary transition-all duration-300"
                 >
-                  <Mail className="w-4 h-4" />
+                  <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                    <Mail className="w-4 h-4 text-primary" />
+                  </div>
                   {dept.email}
                 </a>
               </div>
-              <div>
-                <h4 className="text-[9px] uppercase tracking-wider font-bold text-muted-foreground/30 mb-3 border-b border-border/20 pb-1">For</h4>
-                <ul className={`grid gap-x-4 gap-y-2 ${dept.label === "Support" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-1" : "grid-cols-1"}`}>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-[9px] uppercase tracking-widest font-black text-muted-foreground/30">FOR</span>
+                  <div className="h-px bg-border/40 flex-1" />
+                </div>
+                <ul className={`grid gap-x-6 gap-y-3 ${dept.label === "Support" ? "grid-cols-2 lg:grid-cols-1 xl:grid-cols-2" : "grid-cols-1"}`}>
                   {dept.purposes.map((purpose, pIdx) => (
-                    <li key={pIdx} className="text-[12px] text-muted-foreground/70 flex items-start gap-2">
-                      <span className="w-1 h-1 rounded-full bg-border mt-1.5 shrink-0" />
-                      {purpose}
+                    <li key={pIdx} className="text-[13px] text-muted-foreground/80 flex items-start gap-2.5 group/item cursor-default">
+                      <span className="w-1.5 h-1.5 rounded-full border border-primary/40 mt-1.5 shrink-0 group-hover/item:bg-primary transition-colors" />
+                      <span className="group-hover/item:text-foreground transition-colors">{purpose}</span>
                     </li>
                   ))}
                 </ul>
