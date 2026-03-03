@@ -1,5 +1,39 @@
 import { Facebook, Instagram, Twitter, Linkedin, Music4 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+
+const initiatives = [
+  {
+    name: "UNDP Nepal",
+    tagline: "Youth leading Nepal's green future",
+    url: "https://www.undp.org/nepal",
+    logo: "/UNDP-Vanijay-1.webp",
+  },
+  {
+    name: "U-Report Nepal",
+    tagline: "Your voice, amplified",
+    url: "https://nepal.ureport.in/",
+    logo: "/U-Report_Logo_EN.png",
+  },
+  {
+    name: "UNICEF Nepal",
+    tagline: "Stay safe Online",
+    url: "https://www.unicef.org/nepal/online-safety-resources",
+    logo: "/English.png.webp",
+  },
+  {
+    name: "ICIMOD",
+    tagline: "Protecting our mountains, securing our future",
+    url: "https://www.icimod.org/",
+    logo: "/ICIMOD-Vanijay.webp",
+  },
+  {
+    name: "CWIN Nepal",
+    tagline: "Every child deserves a childhood",
+    url: "https://cwin.org.np/",
+    logo: "/CWIN-Nepal-Vanijay.webp",
+  },
+];
 
 const Footer = () => {
   return (
@@ -45,6 +79,31 @@ const Footer = () => {
               <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
               <li><Link href="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</Link></li>
             </ul>
+          </div>
+        </div>
+
+        {/* Initiatives Section */}
+        <div className="border-t border-border/50 py-10 mb-8">
+          <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-8 grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100">
+            {initiatives.map((item, index) => (
+              <Link
+                key={index}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-transform hover:scale-105"
+                title={`${item.name}: ${item.tagline}`}
+              >
+                <div className="relative h-12 w-32">
+                  <Image
+                    src={item.logo}
+                    alt={item.name}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
 
