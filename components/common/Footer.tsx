@@ -75,57 +75,59 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Links Columns */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Company</h3>
-            <ul className="space-y-3 text-sm">
-              <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
-              <li><Link href="/careers" className="hover:text-primary transition-colors">Careers</Link></li>
-            </ul>
+          {/* Company Column */}
+          <div className="space-y-6">
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Company</h3>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
+                <li><Link href="/careers" className="hover:text-primary transition-colors">Careers</Link></li>
+              </ul>
+            </div>
+            <div className="pt-2 border-t border-border/30">
+              <h4 className="text-sm font-semibold text-foreground mb-1">Sales</h4>
+              <a href="mailto:business@vanijay.com" className="text-xs text-primary font-medium hover:underline block mb-2">business@vanijay.com</a>
+              <p className="text-[10px] leading-tight opacity-70">Sales, Product inquiries, Bulk purchase, Wholesale inquiries</p>
+            </div>
           </div>
 
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Support</h3>
-            <ul className="space-y-3 text-sm">
-              <li><Link href="/returns-policy" className="hover:text-primary transition-colors">Cancellation & Returns</Link></li>
-              <li><Link href="/shipping-policy" className="hover:text-primary transition-colors">Shipping Info</Link></li>
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
-            </ul>
+          {/* Support Column */}
+          <div className="space-y-6">
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Support</h3>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/returns-policy" className="hover:text-primary transition-colors">Cancellation & Returns</Link></li>
+                <li><Link href="/shipping-policy" className="hover:text-primary transition-colors">Shipping Info</Link></li>
+                <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
+              </ul>
+            </div>
+            <div className="pt-2 border-t border-border/30">
+              <h4 className="text-sm font-semibold text-foreground mb-1">Support</h4>
+              <a href="mailto:hello@vanijay.com" className="text-xs text-primary font-medium hover:underline block mb-2">hello@vanijay.com</a>
+              <p className="text-[10px] leading-tight opacity-70">Orders, Returns, Refunds, General queries, Tracking, After-sales</p>
+            </div>
           </div>
 
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Legal</h3>
-            <ul className="space-y-3 text-sm">
-              <li><Link href="/terms-conditions" className="hover:text-primary transition-colors">Terms of Service</Link></li>
-              <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</Link></li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Contact info grid */}
-        <div className="border-t border-border/50 pt-8 mb-8">
-          <h3 className="font-semibold text-foreground mb-4">Contact Us</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {contactDepartments.map((dept, index) => (
-              <div key={index} className="space-y-2">
-                <h4 className="font-medium text-foreground text-sm flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                  {dept.label}
-                </h4>
-                <a
-                  href={`mailto:${dept.email}`}
-                  className="text-primary text-sm font-semibold hover:underline block"
-                >
-                  {dept.email}
-                </a>
-                <ul className="text-xs space-y-1 opacity-80">
-                  {dept.purposes.map((p, i) => (
-                    <li key={i}>{p}</li>
-                  ))}
-                </ul>
+          {/* Legal/Admin Column */}
+          <div className="space-y-6">
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Legal</h3>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/terms-conditions" className="hover:text-primary transition-colors">Terms of Service</Link></li>
+                <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</Link></li>
+              </ul>
+            </div>
+            <div className="pt-2 border-t border-border/30 grid grid-cols-2 gap-4">
+              <div>
+                <h4 className="text-[11px] font-semibold text-foreground mb-1">Accounts</h4>
+                <a href="mailto:money@vanijay.com" className="text-[10px] text-primary font-medium hover:underline block">money@vanijay.com</a>
               </div>
-            ))}
+              <div>
+                <h4 className="text-[11px] font-semibold text-foreground mb-1">Admin</h4>
+                <a href="mailto:ops@vanijay.com" className="text-[10px] text-primary font-medium hover:underline block">ops@vanijay.com</a>
+              </div>
+            </div>
           </div>
         </div>
 
