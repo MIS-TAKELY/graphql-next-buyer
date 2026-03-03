@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Twitter, Linkedin, Music4 } from "lucide-react";
+import { Facebook, Instagram, Twitter, Linkedin, Music4, Mail, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -61,79 +61,107 @@ const contactDepartments = [
 
 const Footer = () => {
   return (
-    <footer className="bg-muted text-muted-foreground pt-8 pb-6 border-t border-border">
+    <footer className="bg-muted text-muted-foreground pt-16 pb-10 border-t border-border/60">
       <div className="container-custom">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 mb-20">
           {/* Brand Column */}
-          <div className="space-y-4">
-            <h3 className="font-bold text-lg text-foreground">Vanijay</h3>
-            <div className="flex items-center gap-4 pt-2">
-              <Link href="https://www.facebook.com/VanijayEnterprises" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Facebook className="w-5 h-5" /></Link>
-              <Link href="https://www.instagram.com/vanijay_enterprises" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Instagram className="w-5 h-5" /></Link>
-              <Link href="https://x.com/Vanijay_Ent" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Twitter className="w-5 h-5" /></Link>
-              <Link href="https://www.tiktok.com/@vanijay_enterprises" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Music4 className="w-5 h-5" /></Link>
+          <div className="flex flex-col justify-between h-full">
+            <div className="space-y-6">
+              <h3 className="font-bold text-2xl tracking-tight text-foreground">Vanijay</h3>
+              <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-[240px]">
+                Connecting you to quality products with trust and efficiency.
+              </p>
+            </div>
+            <div className="flex items-center gap-5 pt-8">
+              <Link href="https://www.facebook.com/VanijayEnterprises" className="hover:text-primary transition-all hover:-translate-y-1 duration-300"><Facebook className="w-5 h-5" /></Link>
+              <Link href="https://www.instagram.com/vanijay_enterprises" className="hover:text-primary transition-all hover:-translate-y-1 duration-300"><Instagram className="w-5 h-5" /></Link>
+              <Link href="https://x.com/Vanijay_Ent" className="hover:text-primary transition-all hover:-translate-y-1 duration-300"><Twitter className="w-5 h-5" /></Link>
+              <Link href="https://www.tiktok.com/@vanijay_enterprises" className="hover:text-primary transition-all hover:-translate-y-1 duration-300"><Music4 className="w-5 h-5" /></Link>
             </div>
           </div>
 
           {/* Company Column */}
-          <div className="space-y-6">
+          <div className="space-y-10">
             <div>
-              <h3 className="font-semibold text-foreground mb-4">Company</h3>
-              <ul className="space-y-3 text-sm">
-                <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
-                <li><Link href="/careers" className="hover:text-primary transition-colors">Careers</Link></li>
+              <h3 className="text-xs uppercase tracking-widest font-bold text-foreground/70 mb-6">Company</h3>
+              <ul className="space-y-4 text-[15px]">
+                <li><Link href="/about" className="hover:text-primary transition-colors flex items-center gap-2 group">About Us <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
+                <li><Link href="/careers" className="hover:text-primary transition-colors flex items-center gap-2 group">Careers <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
               </ul>
             </div>
-            <div className="pt-2 border-t border-border/30">
-              <h4 className="text-sm font-semibold text-foreground mb-1">Sales</h4>
-              <a href="mailto:business@vanijay.com" className="text-xs text-primary font-medium hover:underline block mb-2">business@vanijay.com</a>
-              <p className="text-[10px] leading-tight opacity-70">Sales, Product inquiries, Bulk purchase, Wholesale inquiries</p>
+
+            <div className="pt-8 border-t border-border/40">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-primary/80 mb-3 block">Sales Division</span>
+              <a href="mailto:business@vanijay.com" className="group flex flex-col gap-1">
+                <div className="flex items-center gap-2 text-foreground font-semibold text-sm group-hover:text-primary transition-colors">
+                  <Mail className="w-3.5 h-3.5" />
+                  business@vanijay.com
+                </div>
+                <p className="text-[11px] leading-relaxed text-muted-foreground/60 pl-5">
+                  Bulk purchases, inquiries & wholesale
+                </p>
+              </a>
             </div>
           </div>
 
           {/* Support Column */}
-          <div className="space-y-6">
+          <div className="space-y-10">
             <div>
-              <h3 className="font-semibold text-foreground mb-4">Support</h3>
-              <ul className="space-y-3 text-sm">
-                <li><Link href="/returns-policy" className="hover:text-primary transition-colors">Cancellation & Returns</Link></li>
-                <li><Link href="/shipping-policy" className="hover:text-primary transition-colors">Shipping Info</Link></li>
-                <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
+              <h3 className="text-xs uppercase tracking-widest font-bold text-foreground/70 mb-6">Customer Care</h3>
+              <ul className="space-y-4 text-[15px]">
+                <li><Link href="/returns-policy" className="hover:text-primary transition-colors flex items-center gap-2 group">Returns & Refunds <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
+                <li><Link href="/shipping-policy" className="hover:text-primary transition-colors flex items-center gap-2 group">Shipping Info <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
+                <li><Link href="/contact" className="hover:text-primary transition-colors flex items-center gap-2 group">Contact Support <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
               </ul>
             </div>
-            <div className="pt-2 border-t border-border/30">
-              <h4 className="text-sm font-semibold text-foreground mb-1">Support</h4>
-              <a href="mailto:hello@vanijay.com" className="text-xs text-primary font-medium hover:underline block mb-2">hello@vanijay.com</a>
-              <p className="text-[10px] leading-tight opacity-70">Orders, Returns, Refunds, General queries, Tracking, After-sales</p>
+
+            <div className="pt-8 border-t border-border/40">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-primary/80 mb-3 block">Global Support</span>
+              <a href="mailto:hello@vanijay.com" className="group flex flex-col gap-1">
+                <div className="flex items-center gap-2 text-foreground font-semibold text-sm group-hover:text-primary transition-colors">
+                  <Mail className="w-3.5 h-3.5" />
+                  hello@vanijay.com
+                </div>
+                <p className="text-[11px] leading-relaxed text-muted-foreground/60 pl-5">
+                  Orders, tracking & general queries
+                </p>
+              </a>
             </div>
           </div>
 
-          {/* Legal/Admin Column */}
-          <div className="space-y-6">
+          {/* Administration & Legal */}
+          <div className="space-y-10">
             <div>
-              <h3 className="font-semibold text-foreground mb-4">Legal</h3>
-              <ul className="space-y-3 text-sm">
-                <li><Link href="/terms-conditions" className="hover:text-primary transition-colors">Terms of Service</Link></li>
+              <h3 className="text-xs uppercase tracking-widest font-bold text-foreground/70 mb-6">Policies</h3>
+              <ul className="space-y-4 text-[15px]">
                 <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms-conditions" className="hover:text-primary transition-colors">Terms of Service</Link></li>
                 <li><Link href="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</Link></li>
               </ul>
             </div>
-            <div className="pt-2 border-t border-border/30 grid grid-cols-2 gap-4">
-              <div>
-                <h4 className="text-[11px] font-semibold text-foreground mb-1">Accounts</h4>
-                <a href="mailto:money@vanijay.com" className="text-[10px] text-primary font-medium hover:underline block">money@vanijay.com</a>
+
+            <div className="pt-8 border-t border-border/40 space-y-4">
+              <div className="group">
+                <span className="text-[10px] uppercase tracking-wider font-bold text-foreground/50 mb-1 block text-right">Finance</span>
+                <a href="mailto:money@vanijay.com" className="flex items-center justify-end gap-2 text-foreground font-semibold text-xs hover:text-primary transition-colors">
+                  money@vanijay.com
+                  <Mail className="w-3 h-3" />
+                </a>
               </div>
-              <div>
-                <h4 className="text-[11px] font-semibold text-foreground mb-1">Admin</h4>
-                <a href="mailto:ops@vanijay.com" className="text-[10px] text-primary font-medium hover:underline block">ops@vanijay.com</a>
+              <div className="group">
+                <span className="text-[10px] uppercase tracking-wider font-bold text-foreground/50 mb-1 block text-right">Operations</span>
+                <a href="mailto:ops@vanijay.com" className="flex items-center justify-end gap-2 text-foreground font-semibold text-xs hover:text-primary transition-colors">
+                  ops@vanijay.com
+                  <Mail className="w-3 h-3" />
+                </a>
               </div>
             </div>
           </div>
         </div>
 
         {/* Initiatives Section */}
-        <div className="border-t border-border/50 py-8 mb-6">
-          <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6 grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100">
+        <div className="border-t border-border/40 py-12 mb-10">
+          <div className="flex flex-wrap justify-center items-center gap-x-16 gap-y-10 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-700">
             {initiatives.map((item, index) => (
               <Link
                 key={index}
