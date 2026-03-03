@@ -61,15 +61,12 @@ const contactDepartments = [
 
 const Footer = () => {
   return (
-    <footer className="bg-muted text-muted-foreground pt-12 md:pt-16 pb-8 border-t border-border">
+    <footer className="bg-muted text-muted-foreground pt-8 pb-6 border-t border-border">
       <div className="container-custom">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-8">
           {/* Brand Column */}
           <div className="space-y-4">
             <h3 className="font-bold text-lg text-foreground">Vanijay</h3>
-            <p className="text-sm max-w-xs leading-relaxed">
-              Experience the best in e-commerce with our premium selection of products. Quality, trust, and speed delivered to your doorstep.
-            </p>
             <div className="flex items-center gap-4 pt-2">
               <Link href="https://www.facebook.com/VanijayEnterprises" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Facebook className="w-5 h-5" /></Link>
               <Link href="https://www.instagram.com/vanijay_enterprises" className="hover:text-primary transition-colors hover:scale-110 transform duration-200"><Instagram className="w-5 h-5" /></Link>
@@ -107,8 +104,8 @@ const Footer = () => {
         </div>
 
         {/* Contact info grid */}
-        <div className="border-t border-border/50 pt-10 mb-12">
-          <h3 className="font-semibold text-foreground mb-6">Contact Us</h3>
+        <div className="border-t border-border/50 pt-8 mb-8">
+          <h3 className="font-semibold text-foreground mb-4">Contact Us</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {contactDepartments.map((dept, index) => (
               <div key={index} className="space-y-2">
@@ -133,8 +130,8 @@ const Footer = () => {
         </div>
 
         {/* Initiatives Section */}
-        <div className="border-t border-border/50 py-10 mb-8">
-          <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-8 grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100">
+        <div className="border-t border-border/50 py-8 mb-6">
+          <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6 grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100">
             {initiatives.map((item, index) => (
               <Link
                 key={index}
