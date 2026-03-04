@@ -10,6 +10,15 @@ import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+const mapShippingMethodToEnum = (method?: string | null) => {
+  if (!method) return "STANDARD";
+  const m = method.toUpperCase();
+  if (m.includes("EXPRESS")) return "EXPRESS";
+  if (m.includes("OVERNIGHT")) return "OVERNIGHT";
+  if (m.includes("SAME DAY") || m.includes("SAME_DAY")) return "SAME_DAY";
+  return "STANDARD";
+};
+
 export function useBuyNow() {
   const [step, setStep] = useState<"address" | "delivery" | "payment" | "summary">(
     "address"
@@ -95,7 +104,7 @@ export function useBuyNow() {
                 phoneNumber: selectedAddress?.phoneNumber || "",
               },
               billingAddress: null,
-              shippingMethod: paymentData.shippingMethod ?? "STANDARD",
+              shippingMethod: mapShippingMethodToEnum(paymentData.shippingMethod),
               paymentProvider,
             },
           ];
@@ -126,7 +135,7 @@ export function useBuyNow() {
                   phoneNumber: selectedAddress?.phoneNumber || "",
                 },
                 billingAddress: null,
-                shippingMethod: paymentData.shippingMethod ?? "STANDARD",
+                shippingMethod: mapShippingMethodToEnum(paymentData.shippingMethod),
                 paymentProvider,
               },
             ],
@@ -229,7 +238,7 @@ export function useBuyNow() {
             phoneNumber: selectedAddress?.phoneNumber || "",
           },
           billingAddress: null,
-          shippingMethod: paymentData.shippingMethod ?? "STANDARD",
+          shippingMethod: mapShippingMethodToEnum(paymentData.shippingMethod),
           paymentProvider: "FONEPAY",
         }];
 
@@ -255,7 +264,7 @@ export function useBuyNow() {
               phoneNumber: selectedAddress?.phoneNumber || "",
             },
             billingAddress: null,
-            shippingMethod: paymentData.shippingMethod ?? "STANDARD",
+            shippingMethod: mapShippingMethodToEnum(paymentData.shippingMethod),
             paymentProvider: "FONEPAY",
           }],
         };
