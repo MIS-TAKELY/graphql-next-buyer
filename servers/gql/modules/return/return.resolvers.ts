@@ -19,7 +19,7 @@ export const returnResolvers = {
                 skip: offset,
                 take: limit,
                 include: {
-                    items: { include: { orderItem: { include: { variant: { include: { product: true } } } } } },
+                    items: { include: { orderItem: { include: { variant: { include: { product: { include: { images: true, seller: { include: { sellerProfile: { include: { pickupAddress: true } } } } } } } } } } } },
                     order: true,
                 },
             });
@@ -29,7 +29,7 @@ export const returnResolvers = {
             const returnRequest = await prisma.return.findUnique({
                 where: { id },
                 include: {
-                    items: { include: { orderItem: { include: { variant: { include: { product: true } } } } } },
+                    items: { include: { orderItem: { include: { variant: { include: { product: { include: { images: true, seller: { include: { sellerProfile: { include: { pickupAddress: true } } } } } } } } } } } },
                     order: true,
                     user: true,
                 },
@@ -81,7 +81,7 @@ export const returnResolvers = {
                 skip: offset,
                 take: limit,
                 include: {
-                    items: { include: { orderItem: { include: { variant: { include: { product: true } } } } } },
+                    items: { include: { orderItem: { include: { variant: { include: { product: { include: { images: true, seller: { include: { sellerProfile: { include: { pickupAddress: true } } } } } } } } } } } },
                     order: true,
                     user: true,
                 },
@@ -226,7 +226,7 @@ export const returnResolvers = {
             const returnRequest = await prisma.return.findUnique({
                 where: { id: returnId },
                 include: {
-                    items: { include: { orderItem: { include: { variant: { include: { product: true } } } } } },
+                    items: { include: { orderItem: { include: { variant: { include: { product: { include: { images: true, seller: { include: { sellerProfile: { include: { pickupAddress: true } } } } } } } } } } } },
                     order: true,
                     user: { select: { id: true, email: true, firstName: true, lastName: true, phoneNumber: true } },
                 }

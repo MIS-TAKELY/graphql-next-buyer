@@ -47,6 +47,7 @@ import { searchTypeDef } from "./modules/search/search.typeDef";
 import { sellerOrderResolvers } from "./modules/sellerOrder/sellerOrder.resolvers";
 import { sellerOrderTypeDefs } from "./modules/sellerOrder/sellerOrder.typeDefs";
 import { sellerOrderItemTypeDefs } from "./modules/sellerOrderItem/sellerOrderItem.typeDefs";
+import { sellerProfileResolvers } from "./modules/sellerProfile/sellerProfile.resolvers";
 import { sellerProfileTypeDefs } from "./modules/sellerProfile/sellerProfile.typeDefs";
 import { shipmentTypeDefs } from "./modules/shipment/shipment.typeDefs";
 import { userResolvers } from "./modules/user/user.resolvers";
@@ -156,6 +157,7 @@ const resolvers = mergeResolvers([
   productNotificationResolvers,
   seoPageResolvers,
   sellerOrderResolvers,
+  sellerProfileResolvers,
 ]);
 
 export const schema = makeExecutableSchema({ typeDefs, resolvers });
