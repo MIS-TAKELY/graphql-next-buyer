@@ -21,6 +21,20 @@ export const GET_MY_RETURNS = gql`
               images {
                 url
               }
+              seller {
+                sellerProfile {
+                  shopName
+                  address {
+                    line1
+                    line2
+                    city
+                    state
+                    postalCode
+                    country
+                    phoneNumber
+                  }
+                }
+              }
             }
           }
         }
@@ -67,6 +81,20 @@ export const GET_RETURN_DETAILS = gql`
               name
               images {
                 url
+              }
+              seller {
+                sellerProfile {
+                  shopName
+                  address {
+                    line1
+                    line2
+                    city
+                    state
+                    postalCode
+                    country
+                    phoneNumber
+                  }
+                }
               }
             }
           }

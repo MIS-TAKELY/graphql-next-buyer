@@ -9,8 +9,9 @@ import {
     Package, Calendar, RotateCcw, ChevronRight, Clock,
     CheckCircle2, AlertCircle, Truck, Search, Info,
     Undo2, ArrowLeft, MapPin, Receipt, CreditCard,
-    XCircle
+    XCircle, Printer
 } from "lucide-react";
+import ReturnLabelPreview from "@/components/page/account/ReturnLabelPreview";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -210,8 +211,20 @@ function ReturnDetailsSheet({ ret }: { ret: any }) {
                             {cancelling ? "Cancelling..." : "Cancel Return Request"}
                         </Button>
                     )}
+
+                    {(ret.status === "APPROVED" || ret.status === "ACCEPTED") && (
+                        <Button
+                            variant="outline"
+                            className="w-full h-11 rounded-xl text-sm font-bold border-2 border-primary text-primary flex items-center justify-center gap-2 hover:bg-primary/5"
+                            onClick={() => window.print()}
+                        >
+                            <Printer className="w-4 h-4" />
+                            Print Return Label
+                        </Button>
+                    )}
                 </div>
             </SheetContent>
+            <ReturnLabelPreview ret={ret} />
         </Sheet>
     );
 }
