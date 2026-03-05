@@ -17,6 +17,7 @@ import {
   User,
 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import IMEPay from "@/assets/payments-walltes-logo/IME-Pay.png";
 import Esewa from "@/assets/payments-walltes-logo/esewa.png";
@@ -109,11 +110,11 @@ export function PaymentForm({
           setOrderId((result as any).orderId);
         }
       } else if (result.error) {
-        alert(result.error);
+        toast.error(result.error);
       }
     } catch (error: any) {
       console.error("Failed to initiate Fonepay:", error);
-      alert("Failed to initiate Fonepay payment");
+      toast.error("Failed to initiate Fonepay payment");
     } finally {
       setIsInitiating(false);
     }
@@ -222,6 +223,12 @@ export function PaymentForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("form data-->", formData)
+
+    if (paymentMethod.type === "card") {
+      toast.error("Please select a payment method");
+      return;
+    }
+
     if (paymentMethod.type === "CASH_ON_DELIVERY") {
       onSubmit({ method: paymentMethod.type });
       return;

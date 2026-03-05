@@ -9,6 +9,7 @@ import {
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const mapShippingMethodToEnum = (method?: string | null) => {
   if (!method) return "STANDARD";
@@ -167,7 +168,7 @@ export function useBuyNow() {
         if (data.verifyFonepayPayment.success) {
           router.push(`/payment/success/?orderId=${orderIds[0]}`);
         } else {
-          alert(data.verifyFonepayPayment.message || "Payment verification failed");
+          toast.error(data.verifyFonepayPayment.message || "Payment verification failed");
         }
         return;
       }
@@ -197,7 +198,7 @@ export function useBuyNow() {
             form.submit();
             return;
           } else {
-            alert(
+            toast.error(
               esewaResult.data.initiateEsewaPayment.error ||
               "Payment initiation failed"
             );
@@ -210,7 +211,7 @@ export function useBuyNow() {
       console.error("Order completion failed:", e);
       // Try to get specific error message from GraphQL error
       const errorMessage = e.graphQLErrors?.[0]?.message || e.message || "Failed to complete order";
-      alert(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsProcessingPayment(false);
     }
