@@ -257,7 +257,10 @@ export const searchResolvers = {
 
         // 4. Fetch full data
         const products = await prisma.product.findMany({
-          where: { id: { in: paginatedIds } },
+          where: {
+            id: { in: paginatedIds },
+            status: 'ACTIVE'
+          },
           include: {
             variants: { include: { specifications: true } },
             images: { orderBy: { sortOrder: "asc" } },
@@ -315,7 +318,8 @@ export const searchResolvers = {
           query_by: 'name,brand,categoryName',
           prefix: true,
           per_page: 10,
-          include_fields: 'name,brand,categoryName'
+          include_fields: 'name,brand,categoryName',
+          filter_by: 'status:=ACTIVE'
         });
 
         const suggestions = new Set<string>();
