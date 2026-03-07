@@ -312,7 +312,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 isOwnProduct={isOwnProduct}
               />
             </div>
-            <ProductAiBot product={product} />
+            <ProductAiBot product={product} user={session?.user} />
           </div>
         </div>
 

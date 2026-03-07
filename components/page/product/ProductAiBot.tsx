@@ -13,6 +13,7 @@ interface Message {
 
 interface ProductAiBotProps {
     product: TProduct;
+    user?: any;
 }
 
 const STORAGE_KEY_PREFIX = "vanijay_ai_chat_";
@@ -69,7 +70,7 @@ function MessageContent({ content, isStreaming }: { content: string; isStreaming
     );
 }
 
-export default function ProductAiBot({ product }: ProductAiBotProps) {
+export default function ProductAiBot({ product, user }: ProductAiBotProps) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -150,6 +151,7 @@ export default function ProductAiBot({ product }: ProductAiBotProps) {
                     product,
                     messages: messagesForAi,
                     isInitial: !!overrideInput,
+                    user,
                 }),
                 signal: abortRef.current.signal,
             });

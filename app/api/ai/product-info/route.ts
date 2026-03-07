@@ -21,7 +21,7 @@ const GET_CATEGORY_PRODUCTS = gql`
 
 export async function POST(req: NextRequest) {
     try {
-        const { product: clientProduct, messages, isInitial } = await req.json();
+        const { product: clientProduct, messages, isInitial, user } = await req.json();
 
         if (!clientProduct || !messages) {
             return NextResponse.json(
@@ -130,6 +130,11 @@ export async function POST(req: NextRequest) {
             ? categoryProducts.slice(0, 5).map((p: any) => `- ${p.name} (NPR ${p.variants?.[0]?.price || 'N/A'})`).join("\n")
             : `No related products found in ${categoryName}.`;
 
+        const userName = user?.name || (user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : null);
+        const greetingContext = userName
+            ? `IF isInitial: Proactively greet the user calling them by their name (${userName}) and provide a VERY brief (1-2 sentences) summary of why they should buy this product based on its key features or specs. End with "How can I help you today?".`
+            : `IF isInitial: Proactively greet the user and provide a VERY brief (1-2 sentences) summary of why they should buy this product based on its key features or specs. End with "How can I help you today?".`;
+
         const systemPrompt = `You are an expert AI Product Assistant for Vanijay (Nepal).
         You are currently helping a user who is looking at the following product:
 
@@ -148,13 +153,16 @@ export async function POST(req: NextRequest) {
         --- INSTRUCTIONS ---
         1. Be helpful, informative, and engaging.
         2. Prices are in Nepalese Rupees (NPR).
-        3. IF isInitial: Proactively greet the user and provide a VERY brief (1-2 sentences) summary of why they should buy this product based on its key features or specs. End with "How can I help you today?".
-        4. IF asked to EXPLAIN, COMPARE, or SUGGEST: provide a detailed, well-structured response (use bullets/bold).
-        5. IF asked to COMPARE: compare the product against the Related Products, highlighting price/features.
-        6. IF asked to SUGGEST: recommend from the Related Products list.
-        7. For simple questions, be concise (2-4 sentences). For complex requests, provide comprehensive details based upon specs/variants.
-        8. ONLY answer based on the given context. If unknown, state you lack that info. Do not invent details.
-        9. NEVER use HTML tags in your response. Use ONLY plain text and markdown formatting (e.g. **bold**, - bullet points, newlines). Do NOT use <b>, <p>, <ul>, <li>, <br>, or any other HTML tags.`;
+        3. ${greetingContext}
+        4. ONLY answer queries related to the product or product-related things. Refuse answering any query which is not related to the product.
+        5. DO NOT ever suggest or mention any other e-commerce site names of Nepal or international (e.g., Daraz, Flipkart, Sastodeal, Amazon, Hukut, etc.).
+        6. If the answer of the query can be answered using Yes/No, prioritize saying Yes/No instead of a long answer. Only answer long if required.
+        7. IF asked to EXPLAIN, COMPARE, or SUGGEST: provide a detailed, well-structured response (use bullets/bold).
+        8. IF asked to COMPARE: compare the product against the Related Products, highlighting price/features.
+        9. IF asked to SUGGEST: recommend from the Related Products list.
+        10. For simple questions, be concise (2-4 sentences). For complex requests, provide comprehensive details based upon specs/variants.
+        11. ONLY answer based on the given context. If unknown, state you lack that info. Do not invent details.
+        12. NEVER use HTML tags in your response. Use ONLY plain text and markdown formatting (e.g. **bold**, - bullet points, newlines). Do NOT use <b>, <p>, <ul>, <li>, <br>, or any other HTML tags.`;
 
         const ollamaPayload = {
             model: "qwen2.5:1.5b",
