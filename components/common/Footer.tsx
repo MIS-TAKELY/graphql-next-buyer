@@ -1,31 +1,38 @@
 import { Facebook, Instagram } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const initiatives = [
   {
     name: "UNDP",
     tagline: "Youth leading Nepal's green future",
     url: "https://www.undp.org/nepal",
+    logo: "/UNDP-Vanijay-1.webp",
   },
   {
     name: "U-Report",
     tagline: "Your voice, amplified",
     url: "https://nepal.ureport.in/",
+    logo: "/U-Report_Logo_EN.png",
   },
   {
     name: "UNICEF",
     tagline: "Stay safe Online",
     url: "https://www.unicef.org/nepal/online-safety-resources",
+    logo: "/unicef.webp",
+    className: "invert dark:invert-0",
   },
   {
     name: "ICIMOD",
     tagline: "Protecting our mountains, securing our future",
     url: "https://www.icimod.org/",
+    logo: "/ICIMOD-Vanijay.webp",
   },
   {
     name: "CWIN",
     tagline: "Every child deserves a childhood",
     url: "https://cwin.org.np/",
+    logo: "/CWIN-Nepal-Vanijay.webp",
   },
 ];
 
@@ -79,16 +86,17 @@ const Footer = () => {
         <div className="flex flex-col lg:flex-row justify-between gap-10 lg:gap-6 mb-12 sm:mb-16 items-start">
 
           {/* Logo & Tagline */}
-          <div className="w-full lg:w-[22%] space-y-4">
-            <div className="flex items-center gap-3 text-foreground">
-              <div className="w-7 h-7 bg-[#111827] dark:bg-zinc-100 text-white dark:text-zinc-900 rounded flex items-center justify-center font-bold text-sm">
-                V
-              </div>
-              <span className="text-base font-bold tracking-tight">Vanijay</span>
-              {/* <span className="border border-border/70 rounded-full px-2 py-0.5 text-[8px] font-bold text-muted-foreground tracking-widest uppercase">
-                Multi-Vendor
-              </span> */}
-            </div>
+          <div className="w-full lg:w-[22%] space-y-4 lg:border-r lg:border-border/40 lg:pr-8">
+            <Link href="/" className="flex items-center text-foreground w-fit block">
+              <Image
+                src="/final_blue_text_500by500.svg"
+                alt="Vanijay"
+                width={140}
+                height={40}
+                className="w-auto h-8 lg:h-10"
+                priority
+              />
+            </Link>
             <p className="text-muted-foreground/80 text-[13px] leading-relaxed max-w-[260px]">
               An online shopping marketplace in Nepal, connecting verified sellers with customers nationwide. We provide a free platform offering the latest electronics, fashion, sports gear, and everyday essentials. We provide digital and cash payment options, timely delivery, and a top-choice e-commerce interface for Nepalese consumers.
             </p>
@@ -140,7 +148,7 @@ const Footer = () => {
           <div className="w-full lg:w-[22%] lg:border-l lg:border-border/40 lg:pl-8 space-y-10">
             <div className="space-y-5">
               <h4 className="text-[11px] font-bold tracking-widest uppercase text-foreground/80">Partners</h4>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 items-center">
                 {initiatives.map((item, index) => (
                   <Link
                     key={index}
@@ -148,9 +156,19 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     title={`${item.name}: ${item.tagline}`}
-                    className="border border-border/60 hover:border-border px-3 py-1.5 rounded text-[10px] text-muted-foreground/80 hover:text-foreground transition-all uppercase tracking-wide"
+                    className="border border-border/60 hover:border-border p-1.5 rounded flex items-center justify-center min-h-[36px] bg-white/10 dark:bg-white text-[10px] text-muted-foreground/80 hover:text-foreground transition-all"
                   >
-                    {item.name}
+                    {item.logo ? (
+                      <Image
+                        src={item.logo}
+                        alt={item.name}
+                        width={80}
+                        height={30}
+                        className={`h-6 w-auto object-contain ${item.className || ""}`}
+                      />
+                    ) : (
+                      <span className="uppercase tracking-wide font-bold px-1.5 dark:text-black">{item.name}</span>
+                    )}
                   </Link>
                 ))}
               </div>
