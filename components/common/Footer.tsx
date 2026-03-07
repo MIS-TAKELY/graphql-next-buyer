@@ -33,17 +33,17 @@ const contactDepartments = [
   {
     email: "hello@vanijay.com",
     label: "Customer Support",
-    color: "text-sky-500 hover:text-sky-600",
+    // color: "text-sky-500 hover:text-sky-600",
   },
   {
     email: "business@vanijay.com",
     label: "Business Inquiries",
-    color: "text-purple-500 hover:text-purple-600",
+    // color: "text-purple-500 hover:text-purple-600",
   },
   {
     email: "money@vanijay.com",
     label: "Finance & Payments",
-    color: "text-emerald-500 hover:text-emerald-600",
+    // color: "text-emerald-500 hover:text-emerald-600",
   },
 ];
 
@@ -85,12 +85,12 @@ const Footer = () => {
                 V
               </div>
               <span className="text-base font-bold tracking-tight">Vanijay</span>
-              <span className="border border-border/70 rounded-full px-2 py-0.5 text-[8px] font-bold text-muted-foreground tracking-widest uppercase">
+              {/* <span className="border border-border/70 rounded-full px-2 py-0.5 text-[8px] font-bold text-muted-foreground tracking-widest uppercase">
                 Multi-Vendor
-              </span>
+              </span> */}
             </div>
             <p className="text-muted-foreground/80 text-[13px] leading-relaxed max-w-[260px]">
-              Global marketplace connecting buyers, sellers &amp; partners.
+              An online shopping marketplace in Nepal, connecting verified sellers with customers nationwide. We provide a free platform offering the latest electronics, fashion, sports gear, and everyday essentials. We provide digital and cash payment options, timely delivery, and a top-choice e-commerce interface for Nepalese consumers.
             </p>
           </div>
 
@@ -128,7 +128,7 @@ const Footer = () => {
               {contactDepartments.map((dept, idx) => (
                 <div key={idx} className="flex flex-col gap-1.5">
                   <span className="text-muted-foreground/60 text-[11px]">{dept.label}</span>
-                  <a href={`mailto:${dept.email}`} className={`font-medium transition-colors ${dept.color}`}>
+                  <a href={`mailto:${dept.email}`} className={`font-medium transition-colors `}>
                     {dept.email}
                   </a>
                 </div>
@@ -181,13 +181,13 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] text-muted-foreground/60 border-t border-border/30 pt-6">
           <p>&copy; {new Date().getFullYear()} Vanijay Marketplace Inc. All rights reserved.</p>
 
-          <div className="flex flex-wrap items-center justify-center gap-2">
+          {/* <div className="flex flex-wrap items-center justify-center gap-2">
             {['Visa', 'Mastercard', 'PayPal', 'Stripe', 'UPI'].map((method) => (
               <span key={method} className="border border-border/40 rounded px-2.5 py-1 text-[9px] uppercase tracking-wide font-medium bg-background">
                 {method}
               </span>
             ))}
-          </div>
+          </div> */}
 
           <p>Available in 40+ countries</p>
         </div>
