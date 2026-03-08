@@ -65,7 +65,6 @@ export const productResolvers = {
           images: { orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }] },
           reviews: true,
           category: { include: { children: true, parent: true } },
-          paymentMethods: true,
           wishlistItems: true,
         },
         orderBy: { createdAt: "desc" },
@@ -141,7 +140,6 @@ export const productResolvers = {
               parent: { select: { id: true, name: true } },
             },
           },
-          paymentMethods: true,
           productOffers: {
             include: {
               offer: true,
@@ -234,7 +232,6 @@ export const productResolvers = {
           images: { orderBy: [{ mediaType: 'asc' }, { sortOrder: 'asc' }] },
           reviews: { select: { id: true, rating: true } },
           category: { include: { parent: true } },
-          paymentMethods: true,
           productOffers: { include: { offer: true } },
         },
         orderBy: { createdAt: 'desc' },
