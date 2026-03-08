@@ -14,6 +14,7 @@ export interface CartItem {
   slug?: string;
   maxQuantity?: number;
   deliveryCharge?: number;
+  paymentMethods?: string[];
 }
 
 interface CartStore {

@@ -20,6 +20,7 @@ interface ProductActionsProps {
   productName?: string;
   productImage?: string;
   productPrice?: number;
+  paymentMethods?: string[];
 }
 
 export function ProductActions({
@@ -39,6 +40,7 @@ export function ProductActions({
   productName,
   productImage,
   productPrice,
+  paymentMethods,
 }: ProductActionsProps) {
   if (!showBuyNow && !showAddToCart) {
     return null;
@@ -76,6 +78,7 @@ export function ProductActions({
             productImage={productImage}
             price={productPrice}
             slug={productSlug}
+            paymentMethods={paymentMethods}
           />
         )}
       </div>

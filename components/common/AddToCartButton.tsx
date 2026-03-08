@@ -29,6 +29,7 @@ interface AddToCartButtonProps {
   productImage?: string;
   price?: number;
   slug?: string;
+  paymentMethods?: string[];
 }
 
 export function AddToCartButton({
@@ -50,6 +51,7 @@ export function AddToCartButton({
   productImage,
   price,
   slug,
+  paymentMethods,
 }: AddToCartButtonProps) {
   const { checkIsInCart, addToCart, removeFromCart, cartLoading, loading } =
     useCart();
@@ -76,6 +78,7 @@ export function AddToCartButton({
           price: price || 0,
           slug,
           stock,
+          paymentMethods,
         });
         onAddSuccess?.();
       }

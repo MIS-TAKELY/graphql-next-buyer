@@ -431,6 +431,7 @@ model Product {
   warranty                   Warranty[]
   wishlistItems              WishlistItem[]
   deliveryCharge             Decimal                @default(0) @db.Decimal(12, 2)
+  paymentMethods             PaymentMethodType[]    @default([CREDIT_CARD, DEBIT_CARD, UPI, NET_BANKING, WALLET, CASH_ON_DELIVERY])
 
   @@index([slug, sellerId])
   @@index([soldCount(sort: Desc), averageRating(sort: Desc)], map: "idx_products_sold_rating")

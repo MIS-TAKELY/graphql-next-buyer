@@ -390,7 +390,8 @@ exports.Prisma.ProductScalarFieldEnum = {
   pros: 'pros',
   cons: 'cons',
   affiliateLink: 'affiliateLink',
-  deliveryCharge: 'deliveryCharge'
+  deliveryCharge: 'deliveryCharge',
+  paymentMethods: 'paymentMethods'
 };
 
 exports.Prisma.ProductVariantScalarFieldEnum = {
@@ -918,6 +919,15 @@ exports.ProductStatus = exports.$Enums.ProductStatus = {
   DISCONTINUED: 'DISCONTINUED'
 };
 
+exports.PaymentMethodType = exports.$Enums.PaymentMethodType = {
+  CREDIT_CARD: 'CREDIT_CARD',
+  DEBIT_CARD: 'DEBIT_CARD',
+  UPI: 'UPI',
+  NET_BANKING: 'NET_BANKING',
+  WALLET: 'WALLET',
+  CASH_ON_DELIVERY: 'CASH_ON_DELIVERY'
+};
+
 exports.MediaType = exports.$Enums.MediaType = {
   PRIMARY: 'PRIMARY',
   PROMOTIONAL: 'PROMOTIONAL'
@@ -931,15 +941,6 @@ exports.OrderStatus = exports.$Enums.OrderStatus = {
   DELIVERED: 'DELIVERED',
   CANCELLED: 'CANCELLED',
   RETURNED: 'RETURNED'
-};
-
-exports.PaymentMethodType = exports.$Enums.PaymentMethodType = {
-  CREDIT_CARD: 'CREDIT_CARD',
-  DEBIT_CARD: 'DEBIT_CARD',
-  UPI: 'UPI',
-  NET_BANKING: 'NET_BANKING',
-  WALLET: 'WALLET',
-  CASH_ON_DELIVERY: 'CASH_ON_DELIVERY'
 };
 
 exports.PaymentStatus = exports.$Enums.PaymentStatus = {

@@ -110,6 +110,7 @@ export interface IProducts {
   specificationTable?: { key: string; value: string }[];
   specificationDisplayFormat?: 'table' | 'bullet' | 'custom_table';
   deliveryCharge?: number;
+  paymentMethods?: string[];
   metaTitle?: string;
   metaDescription?: string;
   keywords?: string[];

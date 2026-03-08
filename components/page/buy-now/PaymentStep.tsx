@@ -14,6 +14,7 @@ interface PaymentStepProps {
   onPaymentSubmit: (paymentData: any) => void;
   onBackToAddress: () => void;
   onInitiateFonepay?: () => Promise<{ success: boolean; qrValue?: string; error?: string }>;
+  allowedTypes?: string[];
 }
 
 export function PaymentStep({
@@ -25,6 +26,7 @@ export function PaymentStep({
   onPaymentSubmit,
   onBackToAddress,
   onInitiateFonepay,
+  allowedTypes,
 }: PaymentStepProps) {
   if (!selectedAddress) return null;
 
@@ -43,6 +45,7 @@ export function PaymentStep({
         <PaymentMethodSelector
           onSelect={onPaymentMethodSelect}
           selected={selectedPaymentMethod}
+          allowedTypes={allowedTypes}
         />
         <PaymentForm
           paymentMethod={

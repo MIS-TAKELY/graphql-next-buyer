@@ -13,6 +13,14 @@ export const productTypeDefs = gql`
     BUY_X_GET_Y
     FREE_SHIPPING
   }
+  enum PaymentMethodType {
+    CREDIT_CARD
+    DEBIT_CARD
+    UPI
+    NET_BANKING
+    WALLET
+    CASH_ON_DELIVERY
+  }
   scalar DateTime
   scalar JSON
 
@@ -42,6 +50,7 @@ export const productTypeDefs = gql`
     features: [String]
     specificationTable: JSON
     deliveryCharge: Float
+    paymentMethods: [PaymentMethodType!]
     metaTitle: String
     metaDescription: String
     keywords: [String]

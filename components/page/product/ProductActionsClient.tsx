@@ -20,6 +20,7 @@ interface ProductActionsClientProps {
   inStock: boolean;
   stock?: number;
   product?: Partial<TProduct>;
+  paymentMethods?: string[];
 }
 
 export function ProductActionsClient({
@@ -29,6 +30,7 @@ export function ProductActionsClient({
   inStock,
   stock,
   product,
+  paymentMethods,
 }: ProductActionsClientProps) {
   const { isInWishlist, handleAddToWishlist, handleRemoveFromWishlist } =
     useWishlist();
@@ -117,6 +119,7 @@ export function ProductActionsClient({
         productName={product?.name}
         productImage={product?.images?.[0]?.url}
         productPrice={product?.variants?.[0]?.price ? parseFloat(product.variants[0].price.toString()) : 0}
+        paymentMethods={paymentMethods}
       />
       <div className="flex w-full gap-2 sm:gap-4 justify-between">
         <div className="flex-none flex justify-center items-center">

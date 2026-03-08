@@ -147,7 +147,8 @@ const Footer = () => {
           {/* PARTNERS & FOLLOW */}
           <div className="w-full lg:w-[22%] lg:border-l lg:border-border/40 lg:pl-8 space-y-10">
             <div className="space-y-5">
-              <h4 className="text-[11px] font-bold tracking-widest uppercase text-foreground/80">Partners</h4>
+              <h4 className="text-[11px] font-bold tracking-widest uppercase text-foreground/80">Supported Initiatives
+</h4>
               <div className="flex flex-wrap gap-2 items-center">
                 {initiatives.map((item, index) => (
                   <Link
@@ -175,7 +176,7 @@ const Footer = () => {
             </div>
 
             <div className="space-y-5">
-              <h4 className="text-[11px] font-bold tracking-widest uppercase text-foreground/80">Follow</h4>
+              <h4 className="text-[11px] font-bold tracking-widest uppercase text-foreground/80">Social</h4>
               <div className="flex items-center gap-3">
                 <Link href="https://www.facebook.com/VanijayEnterprises" className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:bg-primary/5 hover:text-primary hover:border-primary/50 transition-all duration-300">
                   <Facebook className="w-3.5 h-3.5" />

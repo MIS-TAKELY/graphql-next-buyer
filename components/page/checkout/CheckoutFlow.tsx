@@ -157,6 +157,32 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
 
     const { subtotal, shipping, tax, total: orderAmount } = calculateOrderAmount();
 
+    // NEW: Calculate allowed payment methods based on product requirements
+    const getAllowedPaymentMethods = () => {
+        let methods: string[] | null = null;
+
+        if (isFromCart) {
+            if (selectedItems.length > 0) {
+                selectedItems.forEach((item) => {
+                    const itemMethods = item.paymentMethods || [];
+                    if (itemMethods.length > 0) {
+                        if (methods === null) {
+                            methods = [...itemMethods];
+                        } else {
+                            methods = methods.filter((m) => itemMethods.includes(m));
+                        }
+                    }
+                });
+            }
+        } else if (product?.paymentMethods?.length > 0) {
+            methods = [...product.paymentMethods];
+        }
+
+        return methods;
+    };
+
+    const allowedPaymentMethods = getAllowedPaymentMethods();
+
     // UPDATED: Map cart items to OrderItem[] for OrderSummary (if from cart)
     const selectedVariant = !isFromCart && product?.variants
         ? (variantId
@@ -343,6 +369,7 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
                             orderAmount={orderAmount}
                             isProcessingPayment={isProcessingPayment}
                             onPaymentMethodSelect={handlePaymentMethodSelect}
+                            allowedTypes={allowedPaymentMethods || undefined}
                             onPaymentSubmit={(paymentData: any) => {
                                 if (isFromCart) {
                                     // NEW: Pass cart items to handlePaymentSubmit (update your hook/mutation to accept array)

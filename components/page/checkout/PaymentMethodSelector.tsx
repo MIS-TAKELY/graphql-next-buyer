@@ -18,6 +18,7 @@ interface PaymentMethod {
 interface PaymentMethodSelectorProps {
   onSelect: (method: PaymentMethod) => void;
   selected: PaymentMethod | null;
+  allowedTypes?: string[];
 }
 
 const paymentMethods: PaymentMethod[] = [
@@ -66,7 +67,12 @@ const paymentMethods: PaymentMethod[] = [
 export function PaymentMethodSelector({
   onSelect,
   selected,
+  allowedTypes,
 }: PaymentMethodSelectorProps) {
+  const filteredMethods = allowedTypes
+    ? paymentMethods.filter((m) => allowedTypes.includes(m.type))
+    : paymentMethods;
+
   const handleMethodSelect = (method: PaymentMethod) => {
     onSelect(method);
   };
@@ -74,11 +80,13 @@ export function PaymentMethodSelector({
   return (
     <div className="space-y-4">
       <div className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-        Choose your preferred payment method
+        {filteredMethods.length === 0
+          ? "No payment methods available for the selected products."
+          : "Choose your preferred payment method"}
       </div>
 
       <div className="grid gap-4">
-        {paymentMethods.map((method) => {
+        {filteredMethods.map((method) => {
           const Icon = method.icon;
           const isSelected = selected?.id === method.id;
 
@@ -86,8 +94,8 @@ export function PaymentMethodSelector({
             <Card
               key={method.id}
               className={`cursor-pointer transition-all duration-200 hover:shadow-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 ${isSelected
-                  ? "ring-2 ring-blue-500 dark:ring-blue-400 bg-blue-50 dark:bg-blue-900/20"
-                  : "hover:border-gray-400 dark:hover:border-gray-500"
+                ? "ring-2 ring-blue-500 dark:ring-blue-400 bg-blue-50 dark:bg-blue-900/20"
+                : "hover:border-gray-400 dark:hover:border-gray-500"
                 }`}
               onClick={() => handleMethodSelect(method)}
             >
@@ -136,8 +144,8 @@ export function PaymentMethodSelector({
                               <span
                                 key={provider}
                                 className={`text-xs px-2 py-1 rounded ${isSelected
-                                    ? "bg-blue-200 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200"
-                                    : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                                  ? "bg-blue-200 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200"
+                                  : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
                                   }`}
                               >
                                 {provider}
@@ -146,8 +154,8 @@ export function PaymentMethodSelector({
                           {method.providers.length > 4 && (
                             <span
                               className={`text-xs px-2 py-1 rounded ${isSelected
-                                  ? "bg-blue-200 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200"
-                                  : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                                ? "bg-blue-200 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200"
+                                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
                                 }`}
                             >
                               +{method.providers.length - 4} more

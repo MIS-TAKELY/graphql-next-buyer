@@ -60,6 +60,7 @@ export const useCart = () => {
         stock: item.variant.stock, // maximizing utility
         slug: item.variant.product.slug,
         deliveryCharge: item.variant.product.deliveryCharge,
+        paymentMethods: item.variant.product.paymentMethods,
       }));
       setCart(mappedItems);
     }
@@ -127,7 +128,7 @@ export const useCart = () => {
       variantId: string,
       productId: string,
       quantity: number = 1,
-      productDetails?: { name: string; image: string; price: number; slug?: string; stock?: number }
+      productDetails?: { name: string; image: string; price: number; slug?: string; stock?: number; paymentMethods?: string[] }
     ) => {
       setLoading(true);
 
@@ -143,6 +144,7 @@ export const useCart = () => {
         price: productDetails?.price || 0,
         slug: productDetails?.slug,
         stock: productDetails?.stock,
+        paymentMethods: productDetails?.paymentMethods,
       };
 
       try {

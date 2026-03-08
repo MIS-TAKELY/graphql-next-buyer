@@ -9,6 +9,7 @@ export const PRODUCT_FIELDS_FRAGMENT = gql`
     status
     brand
     deliveryCharge
+    paymentMethods
     images {
       id
       url
@@ -116,6 +117,7 @@ export const PRODUCT_CARD_FRAGMENT = gql`
         value
       }
     }
+    paymentMethods
     specificationTable
     category {
       id

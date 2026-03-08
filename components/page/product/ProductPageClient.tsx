@@ -269,6 +269,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 inStock={inStock}
                 stock={currentVariant ? Number(currentVariant.stock) : 0}
                 product={product}
+                paymentMethods={product.paymentMethods}
               />
             </div>
           </div>
