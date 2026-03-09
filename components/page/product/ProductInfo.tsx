@@ -166,6 +166,17 @@ const ProductInfo = memo(function ProductInfo({
         )}
       </div>
 
+      {/* Taxes & Shipping notice */}
+      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-green-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span>
+          <span className="font-medium text-foreground/80">Taxes &amp; shipping included</span>
+          &nbsp;·&nbsp;No surprises at checkout
+        </span>
+      </div>
+
       {/* Variant Selector */}
       <VariantSelector
         variants={variants}
