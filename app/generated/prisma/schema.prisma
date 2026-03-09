@@ -1029,19 +1029,20 @@ model ReturnItem {
 }
 
 model SeoPage {
-  id              String   @id @default(cuid())
-  categoryId      String
-  priceThreshold  Int
-  urlPath         String   @unique
-  metaTitle       String?
-  metaDescription String?
-  structuredData  Json?
-  lastGeneratedAt DateTime @default(now())
-  isIndexed       Boolean  @default(false)
-  isStale         Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now()) @updatedAt
-  category        Category @relation(fields: [categoryId], references: [id], map: "seo_pages_categoryid_fkey")
+  id               String   @id @default(cuid())
+  categoryId       String
+  priceThreshold   Int
+  urlPath          String   @unique
+  metaTitle        String?
+  metaDescription  String?
+  structuredData   Json?
+  lastGeneratedAt  DateTime @default(now())
+  isIndexed        Boolean  @default(false)
+  isStale          Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now()) @updatedAt
+  category         Category @relation(fields: [categoryId], references: [id], map: "seo_pages_categoryid_fkey")
+  pinnedProductIds String[] @default([])
 
   @@index([urlPath], map: "seo_pages_urlpath_idx")
   @@map("seo_pages")

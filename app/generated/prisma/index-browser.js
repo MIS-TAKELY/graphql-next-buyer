@@ -821,7 +821,8 @@ exports.Prisma.SeoPageScalarFieldEnum = {
   isIndexed: 'isIndexed',
   isStale: 'isStale',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  pinnedProductIds: 'pinnedProductIds'
 };
 
 exports.Prisma.SortOrder = {

@@ -31,18 +31,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             return {};
         }
 
-        // Fetch first few products to get images for OG tags
-        const productsData = await client.query({
-            query: GET_PRODUCTS_BY_CATEGORY,
-            variables: {
-                categorySlug: seoPage.category.slug,
-                limit: 5,
-                offset: 0,
-                maxPrice: seoPage.priceThreshold
-            }
-        });
+        const hasPinnedProducts = seoPage.pinnedProducts && seoPage.pinnedProducts.length > 0;
+        let products = seoPage.pinnedProducts || [];
 
-        const products = productsData?.data?.getProductsByCategory?.products || [];
+        if (!hasPinnedProducts) {
+            // Fetch first few products to get images for OG tags
+            const productsData = await client.query({
+                query: GET_PRODUCTS_BY_CATEGORY,
+                variables: {
+                    categorySlug: seoPage.category.slug,
+                    limit: 5,
+                    offset: 0,
+                    maxPrice: seoPage.priceThreshold
+                }
+            });
+            products = productsData?.data?.getProductsByCategory?.products || [];
+        }
         const ogImages = products
             .map((p: any) => p.images?.[0]?.url)
             .filter(Boolean)
@@ -90,18 +94,22 @@ export default async function DynamicSeoPage({ params }: PageProps) {
             notFound();
         }
 
-        // Fetch initial products for server-side structured data
-        const productsData = await client.query({
-            query: GET_PRODUCTS_BY_CATEGORY,
-            variables: {
-                categorySlug: seoPage.category.slug,
-                limit: 10,
-                offset: 0,
-                maxPrice: seoPage.priceThreshold
-            }
-        });
+        const hasPinnedProducts = seoPage.pinnedProducts && seoPage.pinnedProducts.length > 0;
+        let initialProducts = seoPage.pinnedProducts || [];
 
-        const initialProducts = productsData?.data?.getProductsByCategory?.products || [];
+        if (!hasPinnedProducts) {
+            // Fetch initial products for server-side structured data
+            const productsData = await client.query({
+                query: GET_PRODUCTS_BY_CATEGORY,
+                variables: {
+                    categorySlug: seoPage.category.slug,
+                    limit: 10,
+                    offset: 0,
+                    maxPrice: seoPage.priceThreshold
+                }
+            });
+            initialProducts = productsData?.data?.getProductsByCategory?.products || [];
+        }
 
         return <SeoPageClient seoPage={seoPage} initialProducts={initialProducts} />;
     } catch (e) {

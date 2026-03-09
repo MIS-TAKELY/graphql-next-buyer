@@ -11,6 +11,8 @@ export const seoPageTypeDefs = gql`
     structuredData: JSON
     lastGeneratedAt: DateTime
     category: Category!
+    pinnedProductIds: [String!]
+    pinnedProducts: [Product!]
   }
 
   extend type Query {

@@ -2,17 +2,14 @@
 
 import { useQuery } from "@apollo/client";
 import { GET_PRODUCTS_BY_CATEGORY } from "@/client/category/category.queries";
-import ProductCard from "@/components/search/ProductCard";
-import ProductCardSkeleton from "@/components/search/ProductCardSkeleton";
+import ProductCard from "@/components/page/home/ProductCard";
+import { ProductCardSkeleton } from "@/components/page/home/ProductCardSkeleton";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Package } from "lucide-react";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 import Breadcrumb from "@/components/page/product/Breadcrumb";
-import { useProductStore } from "@/store/productStore";
-import { useDynamicSearchFilter } from "@/hooks/dynamicSearchFilter/useDynamicSearchFilter";
-import ActiveFilters from "@/components/search/ActiveFilters";
 import SortBar from "@/components/search/SortBar";
 
 interface SeoPageClientProps {
@@ -22,55 +19,11 @@ interface SeoPageClientProps {
 
 const ITEMS_PER_PAGE = 20;
 
-import FilterSidebar from "@/components/search/FilterSidebar";
-
 export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPageClientProps) {
+    const hasPinnedProducts = Boolean(seoPage.pinnedProducts && seoPage.pinnedProducts.length > 0);
     const [allProducts, setAllProducts] = useState<any[]>(initialProducts);
-    const [hasMore, setHasMore] = useState(true);
-    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-
-    // Dynamic Filter Hooks
-    const { dynamicSearchData, dynamicSearchFilterLoading } = useDynamicSearchFilter(seoPage.metaTitle || seoPage.category.name);
-
-    // Zustand Store
-    const {
-        filters: storeFilters,
-        toggleDynamicFilter,
-        togglePriceRange,
-        setMinRating,
-        setFilters,
-        resetFilters,
-    } = useProductStore();
-
-    const {
-        selectedPriceRanges,
-        dynamicFilters,
-        minRating,
-        sort: sortBy,
-    } = storeFilters;
-
-    const setSortBy = (sort: string) => setFilters({ sort });
-
-    const getMaxPrice = useCallback(() => {
-        if (selectedPriceRanges.length === 0) return seoPage.priceThreshold;
-        let max = 0;
-        let hasUnlimited = false;
-        selectedPriceRanges.forEach(r => {
-            if (r.includes('+')) hasUnlimited = true;
-            const parts = r.split('-');
-            if (parts.length === 2) {
-                const v = parseInt(parts[1]);
-                if (v > max) max = v;
-            } else if (r.startsWith('0-')) {
-                const v = parseInt(r.split('-')[1]);
-                if (v > max) max = v;
-            }
-        });
-        if (hasUnlimited) return undefined;
-        return max > 0 ? (seoPage.priceThreshold ? Math.min(max, seoPage.priceThreshold) : max) : seoPage.priceThreshold;
-    }, [selectedPriceRanges, seoPage.priceThreshold]);
-
-    const effectiveMaxPrice = getMaxPrice();
+    const [hasMore, setHasMore] = useState(!hasPinnedProducts);
+    const [sortBy, setSortBy] = useState("relevance");
 
     const { ref, inView } = useInView({
         threshold: 0,
@@ -82,24 +35,22 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
             categorySlug: seoPage.category.slug,
             limit: ITEMS_PER_PAGE,
             offset: 0,
-            maxPrice: effectiveMaxPrice
+            maxPrice: seoPage.priceThreshold
         },
+        skip: hasPinnedProducts,
         notifyOnNetworkStatusChange: true,
+        fetchPolicy: 'cache-and-network',
     });
 
     useEffect(() => {
         if (!loading && data?.getProductsByCategory?.products) {
             const newProducts = data.getProductsByCategory.products;
-            setAllProducts(newProducts);
+            if (allProducts.length === 0 || allProducts.length === initialProducts.length) {
+                setAllProducts(newProducts);
+            }
             setHasMore(newProducts.length >= ITEMS_PER_PAGE);
         }
-    }, [data, loading]); // Remove effectiveMaxPrice from dependencies to avoid stale updates
-
-    // Reset list when filter definitely changes
-    useEffect(() => {
-        setAllProducts([]);
-        setHasMore(true);
-    }, [effectiveMaxPrice, dynamicFilters, minRating]);
+    }, [data, loading]);
 
     const loadMore = useCallback(() => {
         if (loading || !hasMore || allProducts.length === 0) return;
@@ -109,18 +60,22 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
                 categorySlug: seoPage.category.slug,
                 offset: allProducts.length,
                 limit: ITEMS_PER_PAGE,
-                maxPrice: effectiveMaxPrice
+                maxPrice: seoPage.priceThreshold
             },
         }).then((res) => {
             const newProducts = res?.data?.getProductsByCategory?.products || [];
             if (newProducts.length === 0) {
                 setHasMore(false);
             } else {
-                setAllProducts(prev => [...prev, ...newProducts]);
+                setAllProducts(prev => {
+                    const existingIds = new Set(prev.map(p => p.id));
+                    const uniqueNewProducts = newProducts.filter((p: any) => !existingIds.has(p.id));
+                    return [...prev, ...uniqueNewProducts];
+                });
                 setHasMore(newProducts.length >= ITEMS_PER_PAGE);
             }
         });
-    }, [allProducts.length, fetchMore, hasMore, loading, seoPage, effectiveMaxPrice]);
+    }, [allProducts.length, fetchMore, hasMore, loading, seoPage.category.slug, seoPage.priceThreshold]);
 
     useEffect(() => {
         if (inView && hasMore && !loading && allProducts.length > 0) {
@@ -131,59 +86,7 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
     const filteredProducts = useMemo(() => {
         if (!Array.isArray(allProducts) || allProducts.length === 0) return [];
 
-        // Early return if no filters applied
-        const hasFilters = selectedPriceRanges.length > 0 ||
-            minRating > 0 ||
-            Object.values(dynamicFilters).some(v => v.length > 0);
-
-        let filtered = hasFilters ? allProducts.filter((product: any) => {
-            // Price filter with early return
-            if (selectedPriceRanges.length > 0) {
-                const price = product.variants?.[0]?.price || 0;
-                const matchesPrice = selectedPriceRanges.some((range) => {
-                    if (range.endsWith("+")) {
-                        const min = parseInt(range);
-                        return price >= min;
-                    }
-                    const [min, max] = range.split("-").map(Number);
-                    return price >= min && price <= max;
-                });
-                if (!matchesPrice) return false;
-            }
-
-            // Rating filter with early return
-            if (minRating > 0) {
-                const rating = product.reviews?.length > 0
-                    ? product.reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0) / product.reviews.length
-                    : 0;
-                if (rating < minRating) return false;
-            }
-
-            // Dynamic filters with early return
-            const dynamicFilterEntries = Object.entries(dynamicFilters);
-            if (dynamicFilterEntries.length > 0) {
-                for (const [key, selectedValues] of dynamicFilterEntries) {
-                    if ((selectedValues as string[]).length === 0) continue;
-
-                    if (key === "brand") {
-                        if (!(selectedValues as string[]).includes(product.brand)) return false;
-                    } else if (key === "category") {
-                        if (!(selectedValues as string[]).includes(product.category?.name || "")) return false;
-                    } else {
-                        const hasMatch = product.variants?.some((variant: any) =>
-                            variant.specifications?.some(
-                                (spec: any) =>
-                                    (spec.key === key || spec.name === key) &&
-                                    (selectedValues as string[]).includes(spec.value)
-                            )
-                        );
-                        if (!hasMatch) return false;
-                    }
-                }
-            }
-
-            return true;
-        }) : [...allProducts];
+        let filtered = [...allProducts];
 
         // Sorting
         if (sortBy && sortBy !== "relevance") {
@@ -208,9 +111,9 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
         }
 
         return filtered;
-    }, [allProducts, selectedPriceRanges, dynamicFilters, minRating, sortBy]);
+    }, [allProducts, sortBy]);
 
-    const total = data?.getProductsByCategory?.total || initialProducts.length || 0;
+    const total = data?.getProductsByCategory?.total || (hasPinnedProducts ? seoPage.pinnedProducts.length : (allProducts.length || initialProducts.length));
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vanijay.com";
 
@@ -227,7 +130,7 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
             .join(' ');
     };
 
-    const displayTitle = formatUrlTitle(seoPage.urlPath);
+    const displayTitle = seoPage.metaTitle || formatUrlTitle(seoPage.urlPath);
 
     // Breadcrumb JSON-LD
     const breadcrumbLd = {
@@ -298,10 +201,10 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
                 <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-3">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex-1">
-                            <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight text-left leading-none">
-                                {displayTitle}
+                            <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight leading-none">
+                                <span className="capitalize">{displayTitle}</span>
                             </h1>
-                            <div className="mt-1 text-[10px] sm:text-xs font-medium text-muted-foreground opacity-80 text-left">
+                            <div className="mt-1 text-[10px] sm:text-xs font-medium text-muted-foreground opacity-80">
                                 Showing {filteredProducts.length} of {total} products
                             </div>
                         </div>
@@ -309,13 +212,9 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
                             <SortBar
                                 sortBy={sortBy}
                                 setSortBy={setSortBy}
-                                showFilters={mobileFiltersOpen}
-                                setShowFilters={setMobileFiltersOpen}
-                                activeFiltersCount={
-                                    Object.values(dynamicFilters).reduce((sum, v) => sum + (v as string[]).length, 0) +
-                                    (minRating > 0 ? 1 : 0) +
-                                    selectedPriceRanges.length
-                                }
+                                showFilters={false}
+                                setShowFilters={() => { }}
+                                activeFiltersCount={0}
                                 itemsPerPage={ITEMS_PER_PAGE}
                                 setItemsPerPage={() => { }}
                             />
@@ -325,84 +224,52 @@ export default function SeoPageClient({ seoPage, initialProducts = [] }: SeoPage
             </div>
 
             <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <ActiveFilters
-                    dynamicFilters={dynamicFilters}
-                    minRating={minRating}
-                    toggleFilter={toggleDynamicFilter}
-                    selectedPriceRanges={selectedPriceRanges}
-                    togglePriceRange={togglePriceRange}
-                    setMinRating={setMinRating}
-                    clearFilters={resetFilters}
-                    filterOptions={{}}
-                    dynamicSearchData={{
-                        category: seoPage.category.slug,
-                        filters: dynamicSearchData?.filters || [],
-                    }}
-                />
+                <div className="w-full">
+                    {/* Product List */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {filteredProducts.map((product: any) => (
+                            <ProductCard key={product.id} product={product} />
+                        ))}
 
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                    {/* Sidebar */}
-                    <div className="hidden lg:block lg:col-span-1">
-                        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6 sticky top-24">
-                            <div className="mb-6">
-                                <h3 className="text-lg font-semibold mb-4">Filters</h3>
-                                <FilterSidebar
-                                    showFilters={true}
-                                    selectedPriceRanges={selectedPriceRanges}
-                                    togglePriceRange={togglePriceRange}
-                                    minRating={minRating}
-                                    setMinRating={setMinRating}
-                                    dynamicFilters={dynamicFilters}
-                                    toggleFilter={toggleDynamicFilter}
-                                    filterOptions={{}}
-                                    dynamicSearchData={{
-                                        category: seoPage.category.slug,
-                                        filters: dynamicSearchData?.filters || [],
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Product Grid */}
-                    <div className="lg:col-span-3">
-                        <div className={`flex flex-col gap-6 transition-opacity duration-300 ${(loading && filteredProducts.length === 0) ? 'opacity-50' : 'opacity-100'}`}>
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product: any) => (
-                                    <ProductCard key={product.id} product={product} />
-                                ))
-                            ) : (
-                                loading && [...Array(4)].map((_, i) => (
-                                    <ProductCardSkeleton key={`skeleton-initial-${i}`} />
-                                ))
-                            )}
-
-                            {!loading && hasMore && inView && filteredProducts.length > 0 && (
-                                [...Array(4)].map((_, i) => (
-                                    <ProductCardSkeleton key={`skeleton-more-${i}`} />
-                                ))
-                            )}
-                        </div>
-
-                        <div ref={ref} className="h-20 w-full flex items-center justify-center mt-12" />
-
-                        {!loading && allProducts.length === 0 && !data?.getProductsByCategory?.products?.length && (
-                            <div className="text-center py-24 flex flex-col items-center col-span-full">
-                                <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-full mb-6">
-                                    <Package className="w-16 h-16 text-gray-400" />
-                                </div>
-                                <h3 className="text-2xl font-bold mb-3">No deals found today</h3>
-                                <p className="text-muted-foreground mb-8 max-w-md mx-auto text-lg">
-                                    We're currently updating our selection. Check back soon for the best {seoPage.category.name} under your budget!
-                                </p>
-                                <Link href="/">
-                                    <Button size="lg">Explore Home</Button>
-                                </Link>
-                            </div>
+                        {/* Skeleton Loaders: only during initial load, NOT during fetchMore/pagination */}
+                        {loading && allProducts.length === 0 && (
+                            [...Array(8)].map((_, i) => (
+                                <ProductCardSkeleton key={`skeleton-${i}`} />
+                            ))
                         )}
                     </div>
                 </div>
             </div>
+
+            {/* Infinite Scroll Trigger */}
+            <div ref={ref} className="h-20 w-full flex items-center justify-center mt-8">
+                {hasMore && !loading && (
+                    <div className="animate-pulse text-muted-foreground text-sm">Loading more products...</div>
+                )}
+            </div>
+
+            {/* No Results State */}
+            {!loading && allProducts.length === 0 && (
+                <div className="text-center py-20 flex flex-col items-center">
+                    <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-full mb-4">
+                        <Package className="w-12 h-12 text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">No products found</h3>
+                    <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                        We couldn't find any products in this category matching the criteria.
+                    </p>
+                    <Link href="/">
+                        <Button variant="outline">Browse all Categories</Button>
+                    </Link>
+                </div>
+            )}
+
+            {/* End of results */}
+            {!hasMore && allProducts.length > 0 && (
+                <div className="text-center py-10 border-t border-gray-200 dark:border-gray-800 mt-10">
+                    <p className="text-muted-foreground text-sm">You have reached the end of the list</p>
+                </div>
+            )}
         </div>
     );
 }

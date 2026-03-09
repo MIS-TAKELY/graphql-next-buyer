@@ -1042,6 +1042,7 @@ model SeoPage {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now()) @updatedAt
   category        Category @relation(fields: [categoryId], references: [id], map: "seo_pages_categoryid_fkey")
+  pinnedProductIds String[] @default([])
 
   @@index([urlPath], map: "seo_pages_urlpath_idx")
   @@map("seo_pages")

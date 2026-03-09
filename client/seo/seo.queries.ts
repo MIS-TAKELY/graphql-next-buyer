@@ -16,6 +16,48 @@ export const GET_SEO_PAGE_BY_PATH = gql`
         slug
         description
       }
+      pinnedProductIds
+      pinnedProducts {
+        id
+        name
+        slug
+        brand
+        description
+        status
+        images {
+          id
+          url
+          altText
+          mediaType
+        }
+        variants {
+          id
+          price
+          mrp
+          stock
+          isDefault
+          specifications {
+            key
+            value
+          }
+        }
+        reviews {
+          id
+          rating
+        }
+        category {
+          id
+          name
+        }
+        productOffers {
+          id
+          offer {
+            type
+            value
+            isActive
+          }
+        }
+      }
     }
   }
 `;
