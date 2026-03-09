@@ -110,8 +110,8 @@ const Footer = () => {
               <div className="space-y-4">
                 <h4 className="text-[11px] font-bold tracking-widest uppercase text-foreground/80 border-b border-border/40 pb-2">Company</h4>
                 <ul className="space-y-3 text-[13px] font-medium text-muted-foreground/80">
-                  <li><Link href="/about" className="hover:text-primary transition-colors block">About Us</Link></li>
-                  <li><Link href="/careers" className="hover:text-primary transition-colors block">Careers</Link></li>
+                  <li><Link href="/about" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors block">About Us</Link></li>
+                  <li><Link href="/careers" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors block">Careers</Link></li>
                 </ul>
               </div>
 
@@ -119,8 +119,8 @@ const Footer = () => {
               <div className="space-y-4">
                 <h4 className="text-[11px] font-bold tracking-widest uppercase text-foreground/80 border-b border-border/40 pb-2">Support</h4>
                 <ul className="space-y-3 text-[13px] font-medium text-muted-foreground/80">
-                  <li><Link href="/returns-policy" className="hover:text-primary transition-colors block">Returns &amp; Refunds</Link></li>
-                  <li><Link href="/shipping-policy" className="hover:text-primary transition-colors block">Shipping Info</Link></li>
+                  <li><Link href="/returns-policy" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors block">Returns &amp; Refunds</Link></li>
+                  <li><Link href="/shipping-policy" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors block">Shipping Info</Link></li>
                 </ul>
               </div>
 
@@ -128,8 +128,8 @@ const Footer = () => {
               <div className="space-y-4">
                 <h4 className="text-[11px] font-bold tracking-widest uppercase text-foreground/80 border-b border-border/40 pb-2">Legal</h4>
                 <ul className="space-y-3 text-[13px] font-medium text-muted-foreground/80">
-                  <li><Link href="/privacy-policy" className="hover:text-primary transition-colors block">Privacy Policy</Link></li>
-                  <li><Link href="/terms-conditions" className="hover:text-primary transition-colors block">Terms of Service</Link></li>
+                  <li><Link href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors block">Privacy Policy</Link></li>
+                  <li><Link href="/terms-conditions" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors block">Terms of Service</Link></li>
                 </ul>
               </div>
             </div>
@@ -167,16 +167,16 @@ const Footer = () => {
             <div className="space-y-4 flex flex-col items-center">
               <h4 className="text-[11px] font-bold tracking-widest uppercase text-foreground/80">Social</h4>
               <div className="flex items-center gap-3 justify-center">
-                <Link href="https://www.facebook.com/VanijayEnterprises" className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:bg-primary/5 hover:text-primary hover:border-primary/50 transition-all duration-300">
+                <Link href="https://www.facebook.com/VanijayEnterprises" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:bg-primary/5 hover:text-primary hover:border-primary/50 transition-all duration-300">
                   <Facebook className="w-3.5 h-3.5" />
                 </Link>
-                <Link href="https://www.instagram.com/vanijay_enterprises" className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:bg-primary/5 hover:text-primary hover:border-primary/50 transition-all duration-300">
+                <Link href="https://www.instagram.com/vanijay_enterprises" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:bg-primary/5 hover:text-primary hover:border-primary/50 transition-all duration-300">
                   <Instagram className="w-3.5 h-3.5" />
                 </Link>
-                <Link href="https://x.com/Vanijay_Ent" className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:bg-primary/5 hover:text-primary hover:border-primary/50 transition-all duration-300">
+                <Link href="https://x.com/Vanijay_Ent" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:bg-primary/5 hover:text-primary hover:border-primary/50 transition-all duration-300">
                   <XIcon className="w-3.5 h-3.5" />
                 </Link>
-                <Link href="https://www.tiktok.com/@vanijay_enterprises" className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:bg-primary/5 hover:text-primary hover:border-primary/50 transition-all duration-300">
+                <Link href="https://www.tiktok.com/@vanijay_enterprises" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-muted-foreground hover:bg-primary/5 hover:text-primary hover:border-primary/50 transition-all duration-300">
                   <TikTokIcon className="w-3.5 h-3.5" />
                 </Link>
               </div>
