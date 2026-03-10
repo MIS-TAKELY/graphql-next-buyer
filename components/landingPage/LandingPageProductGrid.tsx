@@ -72,7 +72,7 @@ const LandingPageProductGrid = memo(function LandingPageProductGrid({
 
   return (
     <div className="w-full">
-      <div className="rounded-lg overflow-hidden bg-card h-full">
+      <div className="rounded-lg overflow-hidden bg-card h-full lg:border lg:border-border">
         {/* Header */}
         <div className="flex justify-between items-center bg-gradient-to-r from-card to-card/95 px-3 sm:px-4">
           <Link
