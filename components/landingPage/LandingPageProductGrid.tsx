@@ -72,7 +72,7 @@ const LandingPageProductGrid = memo(function LandingPageProductGrid({
 
   return (
     <div className="w-full">
-      <div className="rounded-lg overflow-hidden bg-card h-full lg:border lg:border-border">
+      <div className="rounded-lg overflow-hidden bg-card h-full">
         {/* Header */}
         <div className="flex justify-between items-center bg-gradient-to-r from-card to-card/95 px-3 sm:px-4">
           <Link
@@ -152,7 +152,7 @@ const LandingPageProductGrid = memo(function LandingPageProductGrid({
                 compact
               />
             ))}
-          </div>
+          </div>j
         </div>
       </div>
     </div>
@@ -187,8 +187,8 @@ const DealCard = memo(function DealCard({
   return (
     <Link
       href={href}
-      className={`group flex flex-col rounded-lg overflow-hidden border border-border bg-card/50
-        hover:border-primary/40 hover:shadow-md transition-all duration-300 hover:no-underline
+      className={`group flex flex-col rounded-lg overflow-hidden bg-card/50
+        hover:shadow-md transition-all duration-300 hover:no-underline
         ${compact ? "active:scale-[0.98]" : ""} ${className}`}
     >
       <div className="relative w-full aspect-square overflow-hidden bg-muted">
