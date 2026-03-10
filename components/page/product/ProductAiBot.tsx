@@ -2,8 +2,18 @@
 
 import { TProduct } from "@/types/product";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, Bot, User, Sparkles, StopCircle, Trash2 } from "lucide-react";
+import { Send, Bot, User, Sparkles, StopCircle, Trash2, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface Message {
     role: "user" | "assistant";
@@ -78,6 +88,7 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [isClearModalOpen, setIsClearModalOpen] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const abortRef = useRef<AbortController | null>(null);
@@ -119,12 +130,11 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
     }, []);
 
     const clearChat = useCallback(() => {
-        if (confirm("Are you sure you want to clear this chat history?")) {
-            localStorage.removeItem(storageKey);
-            setMessages([]);
-            hasInitialLoaded.current = true; // Stay in initialized state
-            handleSend("INITIAL_GREETING");
-        }
+        setIsClearModalOpen(false);
+        localStorage.removeItem(storageKey);
+        setMessages([]);
+        hasInitialLoaded.current = true; // Stay in initialized state
+        handleSend("INITIAL_GREETING");
     }, [storageKey]);
 
     const handleSend = async (overrideInput?: string) => {
@@ -247,8 +257,14 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
         <div className="mt-8">
             {/* Section Header */}
             <div className="flex items-center gap-2.5 mb-4">
-                <div className="p-1.5 rounded-lg bg-primary/10">
-                    <Sparkles className="w-4 h-4 text-primary" />
+                <div className="p-1.5 rounded-lg bg-primary/10 flex items-center justify-center overflow-hidden">
+                    <Image 
+                        src="/final_blue_logo_500by500.svg" 
+                        alt="AI Assistant" 
+                        width={20} 
+                        height={20} 
+                        className="object-contain"
+                    />
                 </div>
                 <h3 className="text-base font-semibold text-foreground tracking-tight">AI Product Assistant</h3>
                 <span className="ml-auto text-[10px] text-muted-foreground px-2 py-0.5 rounded-full border border-border bg-muted">
@@ -263,8 +279,14 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                 {/* Header bar */}
                 <div className="flex items-center gap-2.5 px-6 py-4 border-b border-border/50 shrink-0">
                     <div className="flex items-center gap-2">
-                        <div className="p-1.5 rounded-lg bg-primary/10">
-                            <Sparkles className="w-4 h-4 text-primary" />
+                        <div className="p-1.5 rounded-lg bg-primary/10 flex items-center justify-center overflow-hidden">
+                            <Image 
+                                src="/final_blue_logo_500by500.svg" 
+                                alt="AI Assistant" 
+                                width={18} 
+                                height={18} 
+                                className="object-contain"
+                            />
                         </div>
                         <span className="text-sm font-semibold text-foreground tracking-tight">Vanijay AI Assistant</span>
                     </div>
@@ -280,7 +302,7 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                             </span>
                         )}
                         <button
-                            onClick={clearChat}
+                            onClick={() => setIsClearModalOpen(true)}
                             className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full transition-all"
                             title="Clear conversation"
                         >
@@ -307,10 +329,21 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                             <div className={cn(
                                 "w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-border/50",
                                 msg.role === "assistant"
-                                    ? "bg-gradient-to-tr from-primary/20 to-primary/5 text-primary"
+                                    ? "bg-gradient-to-tr from-primary/20 to-primary/5 text-primary border-primary/20"
                                     : "bg-secondary text-foreground"
                             )}>
-                                {msg.role === "assistant" ? <Sparkles size={16} className="animate-pulse" /> : <User size={16} />}
+                                {msg.role === "assistant" ? (
+                                    <div className="relative w-5 h-5">
+                                        <Image 
+                                            src="/final_blue_logo_500by500.svg" 
+                                            alt="AI" 
+                                            fill 
+                                            className={cn("object-contain", msg.isStreaming && "animate-pulse")}
+                                        />
+                                    </div>
+                                ) : (
+                                    <User size={16} />
+                                )}
                             </div>
 
                             {/* Content */}
@@ -388,6 +421,44 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                     </p>
                 </div>
             </div>
+
+            {/* Clear Chat Confirmation Modal */}
+            <Dialog open={isClearModalOpen} onOpenChange={setIsClearModalOpen}>
+                <DialogContent className="sm:max-w-[400px] p-0 overflow-hidden border-none shadow-2xl">
+                    <div className="p-6">
+                        <div className="flex items-center gap-4 mb-4">
+                            <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center shrink-0">
+                                <AlertTriangle className="w-6 h-6 text-destructive" />
+                            </div>
+                            <div>
+                                <DialogTitle className="text-lg font-semibold text-foreground">
+                                    Clear Chat History?
+                                </DialogTitle>
+                                <DialogDescription className="text-sm text-muted-foreground mt-1">
+                                    This will permanently delete your current conversation with the assistant.
+                                </DialogDescription>
+                            </div>
+                        </div>
+                        
+                        <div className="flex gap-3 mt-6">
+                            <Button
+                                variant="outline"
+                                onClick={() => setIsClearModalOpen(false)}
+                                className="flex-1 h-11 font-medium rounded-xl border-border/50 hover:bg-muted transition-colors"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="destructive"
+                                onClick={clearChat}
+                                className="flex-1 h-11 font-medium rounded-xl shadow-lg shadow-destructive/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                            >
+                                Yes, Clear Chat
+                            </Button>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
