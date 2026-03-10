@@ -50,21 +50,25 @@ function MessageContent({ content, isStreaming }: { content: string; isStreaming
     const lines = sanitized.split(/\n/).filter(Boolean);
 
     return (
-        <div className="space-y-1.5 text-[13.5px] leading-relaxed">
+        <div className="space-y-4 text-[14px] leading-relaxed text-foreground/90">
             {lines.map((line, i) => {
                 const bulletMatch = line.match(/^\s*[-*•]\s+(.*)/);
                 if (bulletMatch) {
                     return (
-                        <div key={i} className="flex gap-1.5 items-start">
-                            <span className="mt-[7px] w-1 h-1 rounded-full bg-current shrink-0" />
-                            <span>{renderInlineMarkdown(bulletMatch[1])}</span>
+                        <div key={i} className="flex gap-3 items-start animate-in fade-in slide-in-from-left-1 duration-300">
+                            <span className="mt-[7.5px] w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 shadow-sm" />
+                            <span className="flex-1">{renderInlineMarkdown(bulletMatch[1])}</span>
                         </div>
                     );
                 }
-                return <p key={i}>{renderInlineMarkdown(line)}</p>;
+                return (
+                    <p key={i} className="animate-in fade-in slide-in-from-bottom-1 duration-300">
+                        {renderInlineMarkdown(line)}
+                    </p>
+                );
             })}
             {isStreaming && (
-                <span className="inline-block w-[2px] h-[14px] bg-current ml-0.5 align-middle animate-[blink_0.8s_step-end_infinite] rounded-full" />
+                <span className="inline-block w-[2px] h-[15px] bg-primary/60 ml-1.5 align-middle animate-pulse rounded-full shadow-sm" />
             )}
         </div>
     );
@@ -253,30 +257,31 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
             </div>
 
             {/* Chat Container */}
-            <div className="border border-border rounded-2xl overflow-hidden flex flex-col bg-background shadow-sm"
-                style={{ height: 420 }}>
+            <div className="border border-border rounded-2xl overflow-hidden flex flex-col bg-background shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+                style={{ height: 500 }}>
 
                 {/* Header bar */}
-                <div className="flex items-center gap-2.5 px-4 py-2.5 bg-primary/5 border-b border-primary/10 shrink-0">
-                    <div className="relative">
-                        <Bot className="w-5 h-5 text-primary" />
-                        <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-green-500 border border-background" />
+                <div className="flex items-center gap-2.5 px-6 py-4 border-b border-border/50 shrink-0">
+                    <div className="flex items-center gap-2">
+                        <div className="p-1.5 rounded-lg bg-primary/10">
+                            <Sparkles className="w-4 h-4 text-primary" />
+                        </div>
+                        <span className="text-sm font-semibold text-foreground tracking-tight">Vanijay AI Assistant</span>
                     </div>
-                    <span className="text-sm font-medium text-foreground">Vanijay Assistant</span>
-                    <div className="ml-auto flex items-center gap-2">
+                    <div className="ml-auto flex items-center gap-3">
                         {isLoading && (
-                            <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                                <span className="flex gap-0.5">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:0ms]" />
-                                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:150ms]" />
-                                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:300ms]" />
+                            <span className="flex items-center gap-2 text-[11px] font-medium text-primary animate-pulse">
+                                <span className="flex gap-1">
+                                    <span className="w-1 h-1 rounded-full bg-current" />
+                                    <span className="w-1 h-1 rounded-full bg-current" />
+                                    <span className="w-1 h-1 rounded-full bg-current" />
                                 </span>
-                                Generating
+                                Thinking...
                             </span>
                         )}
                         <button
                             onClick={clearChat}
-                            className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                            className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full transition-all"
                             title="Clear conversation"
                         >
                             <Trash2 size={16} />
@@ -287,83 +292,99 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                 {/* Messages */}
                 <div
                     ref={scrollRef}
-                    className="flex-1 overflow-y-auto px-4 py-4 space-y-4"
-                    style={{ scrollbarWidth: "thin" }}
+                    className="flex-1 overflow-y-auto px-6 py-6 space-y-8"
+                    style={{ scrollbarWidth: "none" }}
                 >
                     {messages.map((msg, i) => (
                         <div
                             key={i}
                             className={cn(
-                                "flex gap-2.5 max-w-[88%] group",
-                                msg.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"
+                                "flex gap-4 max-w-full group animate-in fade-in slide-in-from-bottom-2 duration-300",
+                                msg.role === "user" ? "flex-row-reverse" : "flex-row"
                             )}
                         >
                             {/* Avatar */}
                             <div className={cn(
-                                "w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5",
+                                "w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-border/50",
                                 msg.role === "assistant"
-                                    ? "bg-primary/10 text-primary"
+                                    ? "bg-gradient-to-tr from-primary/20 to-primary/5 text-primary"
                                     : "bg-secondary text-foreground"
                             )}>
-                                {msg.role === "assistant" ? <Bot size={14} /> : <User size={14} />}
+                                {msg.role === "assistant" ? <Sparkles size={16} className="animate-pulse" /> : <User size={16} />}
                             </div>
 
-                            {/* Bubble */}
+                            {/* Content */}
                             <div className={cn(
-                                "rounded-2xl px-3.5 py-2.5 shadow-sm",
-                                msg.role === "assistant"
-                                    ? "bg-muted text-foreground rounded-tl-sm border border-border"
-                                    : "bg-primary text-primary-foreground rounded-tr-sm"
+                                "flex flex-col gap-1.5",
+                                msg.role === "user" ? "items-end max-w-[85%]" : "items-start max-w-[90%]"
                             )}>
-                                {msg.content === "" && msg.isStreaming ? (
-                                    // Initial loading dots before first token
-                                    <div className="flex gap-1 items-center py-1">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce [animation-delay:0ms]" />
-                                        <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce [animation-delay:150ms]" />
-                                        <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce [animation-delay:300ms]" />
-                                    </div>
-                                ) : (
-                                    <MessageContent content={msg.content} isStreaming={msg.isStreaming} />
-                                )}
+                                <div className={cn(
+                                    "text-sm leading-relaxed",
+                                    msg.role === "user" 
+                                        ? "bg-primary text-primary-foreground px-4 py-2.5 rounded-2xl rounded-tr-none shadow-sm" 
+                                        : "text-foreground pt-1"
+                                )}>
+                                    {msg.content === "" && msg.isStreaming ? (
+                                        <div className="flex gap-1.5 items-center py-2">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-bounce [animation-delay:0ms]" />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-bounce [animation-delay:150ms]" />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-bounce [animation-delay:300ms]" />
+                                        </div>
+                                    ) : (
+                                        <MessageContent content={msg.content} isStreaming={msg.isStreaming} />
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ))}
                 </div>
 
                 {/* Input Area */}
-                <div className="px-3 pb-3 pt-2 border-t border-border bg-background shrink-0">
-                    <div className="flex items-center gap-2 bg-muted rounded-xl border border-border px-3 py-1.5 focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10 transition-all">
-                        <input
-                            ref={inputRef}
-                            type="text"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
-                            placeholder="Ask anything about this product…"
-                            disabled={isLoading}
-                            className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none py-1 disabled:opacity-60"
-                        />
-                        {isLoading ? (
-                            <button
-                                onClick={stopGeneration}
-                                className="p-1.5 text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-                                title="Stop generating"
-                            >
-                                <StopCircle size={17} />
-                            </button>
-                        ) : (
-                            <button
-                                onClick={() => handleSend()}
-                                disabled={!input.trim()}
-                                className="p-1.5 text-primary hover:bg-primary/10 rounded-lg transition-colors disabled:opacity-40 disabled:hover:bg-transparent"
-                                title="Send"
-                            >
-                                <Send size={17} />
-                            </button>
-                        )}
+                <div className="p-4 bg-background border-t border-border/50 shrink-0">
+                    <div className="relative flex items-end gap-2 group">
+                        <div className="flex-1 relative">
+                            <textarea
+                                rows={1}
+                                value={input}
+                                onChange={(e) => {
+                                    setInput(e.target.value);
+                                    e.target.style.height = "auto";
+                                    e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleSend();
+                                    }
+                                }}
+                                placeholder="Message Vanijay Assistant..."
+                                disabled={isLoading}
+                                className="w-full bg-muted/50 text-[13.5px] text-foreground placeholder:text-muted-foreground/70 focus:outline-none py-3.5 pl-5 pr-12 rounded-[26px] disabled:opacity-60 resize-none border border-border/50 focus:border-primary/30 focus:bg-background focus:ring-4 focus:ring-primary/5 transition-all min-h-[48px] max-h-[120px]"
+                            />
+                            <div className="absolute right-2 bottom-1.5">
+                                {isLoading ? (
+                                    <button
+                                        onClick={stopGeneration}
+                                        className="p-2 text-destructive hover:bg-destructive/10 rounded-full transition-all shadow-sm bg-background border border-border/50"
+                                        title="Stop generating"
+                                    >
+                                        <StopCircle size={18} />
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => handleSend()}
+                                        disabled={!input.trim()}
+                                        className="p-2 text-primary-foreground bg-primary hover:bg-primary/90 rounded-full transition-all shadow-md disabled:opacity-0 disabled:scale-90 scale-100"
+                                        title="Send message"
+                                    >
+                                        <Send size={18} />
+                                    </button>
+                                )}
+                            </div>
+                        </div>
                     </div>
-                    <p className="text-[10px] text-muted-foreground mt-1.5 text-center">
-                        AI-generated content may contain inaccuracies.
+                    <p className="text-[10px] text-muted-foreground/60 mt-3 text-center font-medium tracking-wide uppercase">
+                        AI may provide inaccurate info.
                     </p>
                 </div>
             </div>
