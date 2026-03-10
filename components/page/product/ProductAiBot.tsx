@@ -90,7 +90,7 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [isClearModalOpen, setIsClearModalOpen] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
     const abortRef = useRef<AbortController | null>(null);
     const hasInitialLoaded = useRef(false);
 
@@ -374,10 +374,11 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
 
                 {/* Input Area */}
                 <div className="p-4 bg-background border-t border-border/50 shrink-0">
-                    <div className="relative flex items-end gap-2 group">
-                        <div className="flex-1 relative">
+                    <div className="relative group">
+                        <div className="flex items-end gap-2 bg-muted/50 border border-border/50 rounded-[26px] p-1.5 transition-all focus-within:border-primary/30 focus-within:bg-background focus-within:ring-4 focus-within:ring-primary/5">
                             <textarea
                                 rows={1}
+                                ref={inputRef}
                                 value={input}
                                 onChange={(e) => {
                                     setInput(e.target.value);
@@ -392,25 +393,25 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                                 }}
                                 placeholder="Message Vanijay Assistant..."
                                 disabled={isLoading}
-                                className="w-full bg-muted/50 text-[13.5px] text-foreground placeholder:text-muted-foreground/70 focus:outline-none py-3.5 pl-5 pr-12 rounded-[26px] disabled:opacity-60 resize-none border border-border/50 focus:border-primary/30 focus:bg-background focus:ring-4 focus:ring-primary/5 transition-all min-h-[48px] max-h-[120px]"
+                                className="flex-1 bg-transparent text-[13.5px] text-foreground placeholder:text-muted-foreground/70 focus:outline-none py-2 px-3.5 disabled:opacity-60 resize-none min-h-[36px] max-h-[120px]"
                             />
-                            <div className="absolute right-2.5 bottom-[7px]">
+                            <div className="flex items-center justify-center pr-1 pb-1">
                                 {isLoading ? (
                                     <button
                                         onClick={stopGeneration}
-                                        className="p-2 text-destructive hover:bg-destructive/10 rounded-full transition-all shadow-sm bg-background border border-border/50"
+                                        className="w-10 h-10 flex items-center justify-center text-white bg-gradient-to-tr from-destructive to-[#ff6b6b] hover:opacity-90 rounded-full transition-all shadow-lg shadow-destructive/20"
                                         title="Stop generating"
                                     >
-                                        <StopCircle size={18} />
+                                        <StopCircle size={20} />
                                     </button>
                                 ) : (
                                     <button
                                         onClick={() => handleSend()}
                                         disabled={!input.trim()}
-                                        className="p-2 text-white bg-gradient-to-tr from-[#0040c7] to-[#149df3] hover:opacity-90 rounded-full transition-all shadow-lg disabled:opacity-0 disabled:scale-90 scale-100 flex items-center justify-center"
+                                        className="w-10 h-10 flex items-center justify-center text-white bg-gradient-to-tr from-[#0040c7] to-[#149df3] hover:opacity-90 rounded-full transition-all shadow-lg disabled:opacity-0 disabled:scale-90 scale-100"
                                         title="Send message"
                                     >
-                                        <Send size={18} className="translate-x-[1px] -translate-y-[1px]" />
+                                        <Send size={18} className="translate-x-[1px] -translate-y-[0.5px]" />
                                     </button>
                                 )}
                             </div>
