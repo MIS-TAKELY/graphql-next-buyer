@@ -394,7 +394,7 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                                 disabled={isLoading}
                                 className="w-full bg-muted/50 text-[13.5px] text-foreground placeholder:text-muted-foreground/70 focus:outline-none py-3.5 pl-5 pr-12 rounded-[26px] disabled:opacity-60 resize-none border border-border/50 focus:border-primary/30 focus:bg-background focus:ring-4 focus:ring-primary/5 transition-all min-h-[48px] max-h-[120px]"
                             />
-                            <div className="absolute right-2 bottom-1.5">
+                            <div className="absolute right-2.5 bottom-[7px]">
                                 {isLoading ? (
                                     <button
                                         onClick={stopGeneration}
@@ -407,10 +407,10 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                                     <button
                                         onClick={() => handleSend()}
                                         disabled={!input.trim()}
-                                        className="p-2 text-primary-foreground bg-primary hover:bg-primary/90 rounded-full transition-all shadow-md disabled:opacity-0 disabled:scale-90 scale-100"
+                                        className="p-2 text-white bg-gradient-to-tr from-[#0040c7] to-[#149df3] hover:opacity-90 rounded-full transition-all shadow-lg disabled:opacity-0 disabled:scale-90 scale-100 flex items-center justify-center"
                                         title="Send message"
                                     >
-                                        <Send size={18} />
+                                        <Send size={18} className="translate-x-[1px] -translate-y-[1px]" />
                                     </button>
                                 )}
                             </div>
