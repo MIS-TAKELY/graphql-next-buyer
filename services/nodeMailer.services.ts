@@ -113,7 +113,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
   },
   VERIFICATION_OTP: {
     subject: "Your Verification Code - Vanijay",
-    text: (ctx) => `Your verification code is: ${ctx.otp}. Do not share this code with anyone.`,
+    text: (ctx) => `OTP: ${ctx.otp}\nSharing is caring—except this. Don't be a hero.`,
     html: (ctx) => getEmailLayout(`
         <h2 style="color: #333; margin-top: 0;">Verification Code</h2>
         <p>Hello ${ctx.name || 'there'},</p>
@@ -122,7 +122,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
           <span class="otp-code">${ctx.otp}</span>
         </div>
         <p style="color: #d9534f; font-weight: bold; margin: 20px 0; text-align: center;">
-          ⚠️ Do not share this code with anyone. Vanijay will never ask you for this code.
+          Sharing is caring—except this. Don't be a hero.
         </p>
         <p style="color: #666; font-size: 0.9em; margin-top: 10px;">This code will expire in 10 minutes. If you didn't request this, please ignore this email.</p>
     `, "Your Verification Code - Vanijay"),
@@ -142,7 +142,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
   },
   PASSWORD_RESET_OTP: {
     subject: "Your Password Reset Code - Vanijay",
-    text: (ctx) => `Your password reset code is: ${ctx.otp}. Do not share this code with anyone.`,
+    text: (ctx) => `OTP: ${ctx.otp}\nSharing is caring—except this. Don't be a hero.`,
     html: (ctx) => getEmailLayout(`
         <h2 style="color: #333; margin-top: 0;">Password Reset Code</h2>
         <p>Hello ${ctx.name || 'there'},</p>
@@ -151,7 +151,7 @@ const TEMPLATES: Record<string, EmailTemplate> = {
           <span class="otp-code">${ctx.otp}</span>
         </div>
         <p style="color: #d9534f; font-weight: bold; margin: 20px 0; text-align: center;">
-          ⚠️ Do not share this code with anyone. Vanijay will never ask you for this code.
+          Sharing is caring—except this. Don't be a hero.
         </p>
         <p style="color: #666; font-size: 0.9em; margin-top: 10px;">This code will expire in 10 minutes. If you didn't request a password reset, please ignore this email.</p>
     `, "Your Password Reset Code - Vanijay"),
