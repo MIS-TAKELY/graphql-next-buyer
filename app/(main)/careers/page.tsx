@@ -89,7 +89,7 @@ export default function CareersPage() {
                         </p>
                     </div>
                     <div className="pt-4">
-                        <Link href="/" className="text-primary hover:underline font-medium">
+                        <Link href="/" className="text-blue-600 hover:underline font-medium">
                             &larr; Back to Home
                         </Link>
                     </div>
@@ -103,11 +103,11 @@ export default function CareersPage() {
             <div className="max-w-2xl mx-auto space-y-12">
                 <div className="text-center space-y-4">
                     <div className="flex justify-center">
-                        <div className="bg-primary/10 p-4 rounded-full">
-                            <Briefcase className="w-12 h-12 text-primary" />
+                        <div className="bg-blue-600/10 p-4 rounded-full">
+                            <Briefcase className="w-12 h-12 text-blue-600" />
                         </div>
                     </div>
-                    <h1 className="text-4xl font-extrabold text-primary">Careers at Vanijay</h1>
+                    <h1 className="text-4xl font-extrabold text-blue-600">Careers at Vanijay</h1>
                     <p className="text-xl text-muted-foreground">
                         Join us in building the future of commerce in Nepal.
                     </p>
@@ -176,7 +176,7 @@ export default function CareersPage() {
                             <Label>Upload CV (PDF or Image, max 5MB)</Label>
                             <div
                                 onClick={() => fileInputRef.current?.click()}
-                                className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all ${selectedFile ? 'border-green-500 bg-green-50/10' : 'border-border hover:border-primary hover:bg-muted/50'
+                                className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all ${selectedFile ? 'border-green-500 bg-green-50/10' : 'border-border hover:border-blue-600 hover:bg-muted/50'
                                     }`}
                             >
                                 {selectedFile ? (
@@ -202,7 +202,7 @@ export default function CareersPage() {
 
                         <Button
                             type="submit"
-                            className="w-full h-12 text-lg font-bold"
+                            className="w-full h-12 text-lg font-bold bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl"
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? (
@@ -220,7 +220,7 @@ export default function CareersPage() {
                 <div className="text-center">
                     <Link
                         href="/"
-                        className="text-primary hover:underline font-medium transition-colors"
+                        className="text-blue-600 hover:underline font-medium transition-colors"
                     >
                         &larr; Back to Home
                     </Link>
