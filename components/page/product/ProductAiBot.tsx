@@ -55,12 +55,12 @@ function renderInlineMarkdown(text: string): React.ReactNode[] {
     );
 }
 
-function MessageContent({ content, isStreaming }: { content: string; isStreaming?: boolean }) {
+function MessageContent({ content, isStreaming, className }: { content: string; isStreaming?: boolean; className?: string }) {
     const sanitized = sanitizeHtmlToMarkdown(content);
     const lines = sanitized.split(/\n/).filter(Boolean);
 
     return (
-        <div className="space-y-4 text-[14px] leading-relaxed text-foreground/90">
+        <div className={cn("space-y-4 text-[14px] leading-relaxed", className)}>
             {lines.map((line, i) => {
                 const bulletMatch = line.match(/^\s*[-*•]\s+(.*)/);
                 if (bulletMatch) {
@@ -364,7 +364,11 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                                             <span className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-bounce [animation-delay:300ms]" />
                                         </div>
                                     ) : (
-                                        <MessageContent content={msg.content} isStreaming={msg.isStreaming} />
+                                        <MessageContent 
+                                            content={msg.content} 
+                                            isStreaming={msg.isStreaming} 
+                                            className={msg.role === "user" ? "text-white" : "text-foreground/90"}
+                                        />
                                     )}
                                 </div>
                             </div>
