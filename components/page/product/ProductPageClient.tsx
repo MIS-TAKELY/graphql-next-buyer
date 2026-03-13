@@ -16,7 +16,6 @@ import FAQSection from "./FAQSection";
 import FrequentlyBoughtTogether from "./FrequentlyBoughtTogether";
 import RecommendedProducts from "./RecommendedProducts";
 import SellerInfo from "./SellerInfo";
-import ProductAiBot from "./ProductAiBot";
 
 interface ProductPageClientProps {
   product: TProduct | null;
@@ -284,6 +283,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
               variants={product.variants || []}
               selectedAttributes={selectedAttributes}
               onAttributeSelect={handleAttributeSelect}
+              user={session?.user}
             />
             <div className="space-y-4">
               <ProductReviews
@@ -313,7 +313,6 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 isOwnProduct={isOwnProduct}
               />
             </div>
-            <ProductAiBot product={product} user={session?.user} />
           </div>
         </div>
 

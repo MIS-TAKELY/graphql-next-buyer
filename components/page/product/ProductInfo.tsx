@@ -8,6 +8,7 @@ import ShowProductSpecification from "./ShowProductSpecification";
 import { formatPrice } from "@/lib/utils";
 import VariantSelector from "./VariantSelector";
 import SmartMedia from "@/components/ui/SmartMedia";
+import ProductAiBot from "./ProductAiBot";
 
 interface ProductInfoProps {
   product: TProduct;
@@ -17,6 +18,7 @@ interface ProductInfoProps {
   variants: any[];
   selectedAttributes: Record<string, string>;
   onAttributeSelect: (key: string, value: string) => void;
+  user?: any;
 }
 
 const ProductInfo = memo(function ProductInfo({
@@ -27,6 +29,7 @@ const ProductInfo = memo(function ProductInfo({
   variants,
   selectedAttributes,
   onAttributeSelect,
+  user,
 }: ProductInfoProps) {
 
 
@@ -259,6 +262,7 @@ const ProductInfo = memo(function ProductInfo({
           </section>
         )
       }
+      <ProductAiBot product={product} user={user} />
     </div >
   );
 });
