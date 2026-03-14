@@ -337,6 +337,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         title="Recommended for You"
       />
 
+      {/* Spacer for mobile to ensure footer content is visible above the sticky bar */}
+      <div className="h-28 lg:hidden" />
+
       {/* Sticky Mobile Buy Now Bar - Full width, Amazon/Flipkart style */}
       <div className="lg:hidden sticky-bottom-bar">
         <ProductActionsClient
