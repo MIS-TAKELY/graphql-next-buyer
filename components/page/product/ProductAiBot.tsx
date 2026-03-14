@@ -266,7 +266,10 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                         className="object-contain"
                     />
                 </div> */}
-                <span className="ml-auto text-[10px] text-muted-foreground px-2 py-0.5 rounded-full border border-border bg-muted">
+                <span className="ml-auto text-[10px] text-muted-foPrivacy￼English (US) 
+23
+ 
+Mbpsreground px-2 py-0.5 rounded-full border border-border bg-muted">
                     Beta
                 </span>
             </div>

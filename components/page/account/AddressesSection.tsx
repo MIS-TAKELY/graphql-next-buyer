@@ -1,7 +1,7 @@
 "use client"
 import { useQuery } from "@apollo/client";
 import { AlertCircle, MapPin, Plus } from "lucide-react";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 import { GET_ADDRESS_OF_USER } from "@/client/address/address.queries";
 import { AddAddressForm } from "@/components/address";
@@ -39,21 +39,16 @@ interface AddressesSectionProps {
 
 const AddressesSection = React.memo<AddressesSectionProps>(() => {
   const [showAddForm, setShowAddForm] = useState(false);
-  const [addresses, setLocalAddresses] = useState<BaseAddress[]>([]);
 
   // Query addresses
   const { data, loading, error, refetch } = useQuery(GET_ADDRESS_OF_USER);
 
-  // Sync data to local state
-  useEffect(() => {
-    if (data?.getAddressOfUser) {
-      setLocalAddresses(data.getAddressOfUser);
-    }
-  }, [data]);
+  // Get addresses from data
+  const addresses = useMemo(() => data?.getAddressOfUser || [], [data]);
 
   // Memoized values
   const sortedAddresses = useMemo(() => {
-    return [...addresses].sort((a, b) => {
+    return [...addresses].sort((a: BaseAddress, b: BaseAddress) => {
       // Default addresses first
       if (a.isDefault && !b.isDefault) return -1;
       if (!a.isDefault && b.isDefault) return 1;
@@ -73,8 +68,7 @@ const AddressesSection = React.memo<AddressesSectionProps>(() => {
 
   // Event handlers
   const handleAddAddress = useCallback(
-    (newAddress: BaseAddress) => {
-      setLocalAddresses((prev) => [newAddress, ...prev]);
+    () => {
       setShowAddForm(false);
       refetch();
     },
@@ -82,20 +76,14 @@ const AddressesSection = React.memo<AddressesSectionProps>(() => {
   );
 
   const handleUpdateAddress = useCallback(
-    (updatedAddress: BaseAddress) => {
-      setLocalAddresses((prev) =>
-        prev.map((addr) =>
-          addr.id === updatedAddress.id ? updatedAddress : addr
-        )
-      );
+    () => {
       refetch();
     },
     [refetch]
   );
 
   const handleDeleteAddress = useCallback(
-    (addressId: string) => {
-      setLocalAddresses((prev) => prev.filter((addr) => addr.id !== addressId));
+    () => {
       refetch();
     },
     [refetch]
