@@ -171,7 +171,7 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
             });
 
             if (!response.ok || !response.body) {
-                let errMsg = "AI Assistant is currently busy. Please try again in a moment.";
+                let errMsg = "Assistant is currently busy. Please try again in a moment.";
                 try {
                     const errData = await response.json();
                     errMsg = errData.error || errMsg;
@@ -260,13 +260,12 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                 <div className="p-1.5 rounded-lg bg-primary/10 flex items-center justify-center overflow-hidden">
                     <Image 
                         src="/final_blue_logo_500by500.svg" 
-                        alt="AI Assistant" 
+                        alt="Assistant" 
                         width={20} 
                         height={20} 
                         className="object-contain"
                     />
                 </div>
-                <h3 className="text-base font-semibold text-foreground tracking-tight">AI Product Assistant</h3>
                 <span className="ml-auto text-[10px] text-muted-foreground px-2 py-0.5 rounded-full border border-border bg-muted">
                     Beta
                 </span>
@@ -282,13 +281,12 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                         <div className="p-1.5 rounded-lg bg-primary/10 flex items-center justify-center overflow-hidden">
                             <Image 
                                 src="/final_blue_logo_500by500.svg" 
-                                alt="AI Assistant" 
+                                alt="Assistant" 
                                 width={18} 
                                 height={18} 
                                 className="object-contain"
                             />
                         </div>
-                        <span className="text-sm font-semibold text-foreground tracking-tight">Vanijay AI Assistant</span>
                     </div>
                     <div className="ml-auto flex items-center gap-3">
                         {isLoading && (
@@ -395,7 +393,7 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                                         handleSend();
                                     }
                                 }}
-                                placeholder="Message Vanijay Assistant..."
+                                placeholder="Message Assistant..."
                                 disabled={isLoading}
                                 className="flex-1 bg-transparent text-[13.5px] text-foreground placeholder:text-muted-foreground/70 focus:outline-none py-2 px-3.5 disabled:opacity-60 resize-none min-h-[36px] max-h-[120px]"
                             />
