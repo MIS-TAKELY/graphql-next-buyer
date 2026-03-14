@@ -588,6 +588,7 @@ model Payment {
   esewaRefId    String?        @unique
   productCode   String?
   signature     String?
+  receiptUrl    String?
   verifiedAt    DateTime?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt

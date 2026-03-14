@@ -64,6 +64,8 @@ export const orderTypeDefs = gql`
     couponCode: String
     paymentProvider: String!
     paymentMethodId: ID
+    transactionId: String
+    receiptUrl: String
     idempotencyKey: String
   }
   enum DisputeStatus {

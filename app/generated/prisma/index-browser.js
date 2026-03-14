@@ -494,6 +494,7 @@ exports.Prisma.PaymentScalarFieldEnum = {
   esewaRefId: 'esewaRefId',
   productCode: 'productCode',
   signature: 'signature',
+  receiptUrl: 'receiptUrl',
   verifiedAt: 'verifiedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

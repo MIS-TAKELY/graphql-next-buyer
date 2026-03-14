@@ -69,6 +69,8 @@ export interface OrderInput {
   billingAddress?: AddressInput | null;
   paymentProvider: PaymentProvider;
   paymentMethodId?: string | null;
+  transactionId?: string | null;
+  receiptUrl?: string | null;
   shippingMethod: ShippingMethod;
   idempotencyKey?: string | null;
 }
@@ -298,6 +300,8 @@ export const orderResolvers = {
                       status: "PENDING",
                       provider: orderInput.paymentProvider,
                       methodId: orderInput.paymentMethodId ?? null,
+                      transactionId: orderInput.transactionId || undefined,
+                      receiptUrl: orderInput.receiptUrl ?? null,
                       productCode: "",
                     },
                   },

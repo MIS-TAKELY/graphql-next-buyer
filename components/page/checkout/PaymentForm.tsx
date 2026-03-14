@@ -87,6 +87,7 @@ export function PaymentForm({
     bankName: "",
     walletProvider: "",
     transactionId: "",
+    receiptUrl: "",
   });
 
   const [qrValue, setQrValue] = useState<string | null>(null);
@@ -190,6 +191,10 @@ export function PaymentForm({
 
     if (!formData.walletProvider) {
       newErrors.walletProvider = "Please select wallet provider";
+    }
+
+    if (formData.walletProvider && !formData.transactionId) {
+      newErrors.transactionId = "Transaction ID is mandatory for wallet payments";
     }
 
     return newErrors;
@@ -564,49 +569,92 @@ export function PaymentForm({
               )}
             </div>
 
-            {(formData.walletProvider === "PhonePe" || formData.walletProvider === "Phonepe") && (
-              <div className="mt-6 space-y-4 border-t pt-4">
-                {!qrValue ? (
-                  <Button
-                    type="button"
-                    onClick={handlePhonePayInitiation}
-                    disabled={isInitiating}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-                  >
-                    {isInitiating ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Generating QR...
-                      </>
-                    ) : (
-                      "Generate Dynamic QR"
-                    )}
-                  </Button>
-                ) : (
-                  <div className="flex flex-col items-center gap-4 bg-white p-4 rounded-lg shadow-inner">
-                    <p className="text-sm font-medium text-gray-700">Scan this QR with any Fonepay supported app</p>
-                    <div className="p-2 bg-white border-2 border-gray-100 rounded-xl">
-                      <QRCodeSVG value={qrValue} size={220} />
-                    </div>
-                    <div className="w-full space-y-4">
-                      <div className="bg-blue-50 p-3 rounded-lg text-xs text-blue-700">
-                        <strong>Note:</strong> This is a dynamic EMVCo QR code. You can scan it directly using your mobile banking app or the Fonepay app.
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2 text-gray-900">
-                          Enter Transaction ID *
-                        </label>
-                        <Input
-                          type="text"
-                          value={formData.transactionId}
-                          onChange={(e) => handleInputChange("transactionId", e.target.value)}
-                          placeholder="Transaction ID from PhonePe"
-                          className="bg-gray-50 border-gray-300"
-                        />
-                      </div>
+            {formData.walletProvider && (
+              <div className="mt-6 space-y-6 border-t pt-6 bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="flex flex-col items-center gap-4">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white text-center">
+                    Scan this QR code with your {formData.walletProvider} app to pay
+                  </p>
+                  <div className="p-3 bg-white rounded-2xl shadow-lg border-4 border-gray-100 dark:border-gray-800">
+                    {/* 
+                      Assuming static QR images are stored in /payments-qr/
+                      If not found, it will fallback to the alt text or a placeholder
+                    */}
+                    <div className="relative w-48 h-48 bg-gray-100 dark:bg-gray-800 flex items-center justify-center rounded-lg overflow-hidden">
+                      <Image
+                        src={`/payments-qr/${formData.walletProvider.toLowerCase().replace(/\s+/g, "")}.png`}
+                        alt={`${formData.walletProvider} QR Code`}
+                        fill
+                        className="object-contain"
+                        onError={(e) => {
+                          // Fallback to a placeholder or generic QR if file is missing
+                          const target = e.target as HTMLImageElement;
+                          target.src = "https://placehold.co/400x400?text=Scan+to+Pay";
+                        }}
+                      />
                     </div>
                   </div>
-                )}
+                  <div className="text-center space-y-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Total Amount to Pay:</p>
+                    <p className="text-xl font-bold text-blue-600 dark:text-blue-400">{formatPrice(amount)}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white">
+                      Reference / Transaction Code (Mandatory) *
+                    </label>
+                    <Input
+                      type="text"
+                      value={formData.transactionId}
+                      onChange={(e) => handleInputChange("transactionId", e.target.value)}
+                      placeholder="Enter the code from your payment receipt"
+                      className={`bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white ${errors.transactionId ? "border-red-500" : ""}`}
+                    />
+                    {errors.transactionId && (
+                      <p className="text-red-500 text-xs mt-1">{errors.transactionId}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white">
+                      Payment Receipt / PDF (Optional)
+                    </label>
+                    <div className="flex items-center gap-4">
+                       <Input
+                        type="file"
+                        accept="image/*,.pdf"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            try {
+                              const { uploadToCloudinary } = await import("@/servers/utils/uploadToCloudinary");
+                              const res = await uploadToCloudinary(file);
+                              handleInputChange("receiptUrl", res.url);
+                              toast.success("Receipt uploaded successfully");
+                            } catch (err) {
+                              toast.error("Failed to upload receipt");
+                              console.error(err);
+                            }
+                          }
+                        }}
+                        className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
+                      />
+                      {formData.receiptUrl && (
+                        <CheckCircle className="h-6 w-6 text-green-500 shrink-0" />
+                      )}
+                    </div>
+                    <p className="text-[10px] text-gray-400 mt-1">Max 5MB • JPG, PNG, PDF</p>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg flex gap-3">
+                  <AlertCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0" />
+                  <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
+                    Once you've made the payment, please enter the transaction code and click "Pay" to place your order. Our team will verify the payment manually.
+                  </p>
+                </div>
               </div>
             )}
           </div>

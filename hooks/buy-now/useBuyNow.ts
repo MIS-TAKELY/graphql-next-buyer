@@ -107,6 +107,8 @@ export function useBuyNow() {
               billingAddress: null,
               shippingMethod: mapShippingMethodToEnum(paymentData.shippingMethod),
               paymentProvider,
+              transactionId: paymentData.transactionId,
+              receiptUrl: paymentData.receiptUrl,
             },
           ];
 
@@ -138,6 +140,8 @@ export function useBuyNow() {
                 billingAddress: null,
                 shippingMethod: mapShippingMethodToEnum(paymentData.shippingMethod),
                 paymentProvider,
+                transactionId: paymentData.transactionId,
+                receiptUrl: paymentData.receiptUrl,
               },
             ],
           };
@@ -173,39 +177,8 @@ export function useBuyNow() {
         return;
       }
 
-      if (paymentProvider === "ESEWA") {
-        for (const id of orderIds) {
-          const esewaResult = await initiateEsewaPayment({
-            variables: { orderId: id },
-          });
-
-          if (esewaResult.data.initiateEsewaPayment.success) {
-            const form = document.createElement("form");
-            form.method = "POST";
-            form.action = esewaResult.data.initiateEsewaPayment.paymentUrl;
-
-            Object.entries(
-              esewaResult.data.initiateEsewaPayment.paymentData
-            ).forEach(([key, value]) => {
-              const input = document.createElement("input");
-              input.type = "hidden";
-              input.name = key;
-              input.value = value as string;
-              form.appendChild(input);
-            });
-
-            document.body.appendChild(form);
-            form.submit();
-            return;
-          } else {
-            toast.error(
-              esewaResult.data.initiateEsewaPayment.error ||
-              "Payment initiation failed"
-            );
-          }
-        }
-      }
-
+      // Redirection for ESEWA removed as it's now a manual verification flow
+      
       setStep("summary");
     } catch (e: any) {
       console.error("Order completion failed:", e);
