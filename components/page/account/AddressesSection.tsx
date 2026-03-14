@@ -62,7 +62,7 @@ const AddressesSection = React.memo<AddressesSectionProps>(() => {
 
   const hasAddresses = useMemo(() => addresses.length > 0, [addresses]);
   const defaultAddress = useMemo(
-    () => addresses.find((addr) => addr.isDefault),
+    () => addresses.find((addr: BaseAddress) => addr.isDefault),
     [addresses]
   );
 
