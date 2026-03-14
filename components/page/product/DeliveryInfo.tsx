@@ -1,22 +1,12 @@
-import { Truck, RotateCcw, Shield } from "lucide-react";
-import { IDeliveryOption, IWarranty, IReturnPolicy } from "@/types/product";
+import { RotateCcw, Shield } from "lucide-react";
+import { IWarranty, IReturnPolicy } from "@/types/product";
 
 interface DeliveryInfoProps {
   warranty?: IWarranty[];
   returnPolicy?: IReturnPolicy[];
-  deliveryOptions?: IDeliveryOption[];
-  deliveryCharge?: number;
 }
 
-export default function DeliveryInfo({ warranty, returnPolicy, deliveryOptions, deliveryCharge }: DeliveryInfoProps) {
-  // Determine delivery text
-  const charge = deliveryCharge ?? 0;
-  const deliveryText = deliveryOptions && deliveryOptions.length > 0
-    ? Number(charge) > 0
-      ? `Delivery Charge: रु ${charge}`
-      : "Free Delivery"
-    : "No free delivery";
-
+export default function DeliveryInfo({ warranty, returnPolicy }: DeliveryInfoProps) {
   // Determine return policy text
   const currentReturnPolicy = returnPolicy && returnPolicy.length > 0 ? returnPolicy[0] : null;
   const returnText = currentReturnPolicy
@@ -33,12 +23,7 @@ export default function DeliveryInfo({ warranty, returnPolicy, deliveryOptions, 
 
   return (
     <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 space-y-3 my-4 overflow-hidden h-full">
-      <div className="flex items-start gap-3">
-        <Truck className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
-        <span className="text-sm text-gray-900 dark:text-white leading-tight break-words">
-          {deliveryText}
-        </span>
-      </div>
+
       <div className="flex items-start gap-3">
         <RotateCcw className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
         <span className="text-sm text-gray-900 dark:text-white leading-tight break-words">
