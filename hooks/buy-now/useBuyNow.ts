@@ -159,27 +159,8 @@ export function useBuyNow() {
         return;
       }
 
-      if (paymentProvider === "FONEPAY") {
-        const { data } = await verifyFonepay({
-          variables: {
-            orderId: orderIds[0],
-            transactionId: paymentData.transactionId,
-            signature: paymentData.signature || "",
-            amount: paymentData.amount || "0",
-          },
-        });
-
-        if (data.verifyFonepayPayment.success) {
-          router.push(`/payment/success/?orderId=${orderIds[0]}`);
-        } else {
-          toast.error(data.verifyFonepayPayment.message || "Payment verification failed");
-        }
-        return;
-      }
-
-      // Redirection for ESEWA removed as it's now a manual verification flow
-      
-      setStep("summary");
+      // Redirection for manual verification flow
+      router.push(`/payment/success/?orderId=${orderIds[0]}`);
     } catch (e: any) {
       console.error("Order completion failed:", e);
       // Try to get specific error message from GraphQL error
