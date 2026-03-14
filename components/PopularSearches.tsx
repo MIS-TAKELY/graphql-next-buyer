@@ -19,7 +19,17 @@ interface Category {
     keywords: Keyword[];
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = async (url: string) => {
+    const res = await fetch(url);
+    if (!res.ok) {
+        const error = new Error('An error occurred while fetching the data.');
+        // Attach extra info to the error object.
+        (error as any).info = await res.json();
+        (error as any).status = res.status;
+        throw error;
+    }
+    return res.json();
+};
 
 const PopularSearches = () => {
     const { data, error, isLoading } = useSWR<Category[]>('/api/popular-searches', fetcher, {
@@ -29,7 +39,7 @@ const PopularSearches = () => {
 
     if (error) return null; // Error fallback: hide section
     if (isLoading) return <PopularSearchesSkeleton />;
-    if (!data || data.length === 0) return null;
+    if (!data || !Array.isArray(data) || data.length === 0) return null;
 
     return (
         <section className="w-full py-8 bg-muted/30 border-t mx-auto px-4 sm:px-6 lg:px-8">

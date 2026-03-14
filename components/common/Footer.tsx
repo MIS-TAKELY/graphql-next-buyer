@@ -97,7 +97,7 @@ const Footer = () => {
                 priority
               />
             </Link>
-            <p className="text-muted-foreground/80 text-[13px] leading-relaxed max-w-[240px]">
+            <p className="text-muted-foreground/80 text-[13px] leading-relaxed lg:max-w-[240px]">
               An online shopping marketplace in Nepal, connecting verified sellers with customers nationwide. We provide a free platform offering the latest electronics, fashion, sports gear, and everyday essentials. We provide digital and cash payment options, timely delivery, and a top-choice e-commerce interface for Nepalese consumers.
             </p>
           </div>
@@ -105,7 +105,7 @@ const Footer = () => {
           {/* Pillar 2: Links, Initiatives, and Social */}
           <div className="w-full lg:w-[60%] flex flex-col gap-12 lg:border-l lg:border-r lg:border-border/40 lg:px-8">
             {/* Row 1: Link Columns */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
               {/* COMPANY */}
               <div className="space-y-4">
                 <h4 className="text-[11px] font-bold tracking-widest uppercase text-foreground/80 border-b border-border/40 pb-2">Company</h4>
@@ -131,6 +131,21 @@ const Footer = () => {
                   <li><Link href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors block">Privacy Policy</Link></li>
                   <li><Link href="/terms-conditions" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors block">Terms of Service</Link></li>
                 </ul>
+              </div>
+            </div>
+
+            {/* Mobile Contact Section - Repositioned */}
+            <div className="lg:hidden space-y-5">
+              <h4 className="text-[11px] font-bold tracking-widest uppercase text-foreground/80 border-b border-border/40 pb-2">Contact</h4>
+              <div className="flex flex-col gap-6 text-[13px]">
+                {contactDepartments.map((dept, idx) => (
+                  <div key={idx} className="flex flex-col gap-1.5">
+                    <span className="text-muted-foreground/60 text-[11px]">{dept.label}</span>
+                    <a href={`mailto:${dept.email}`} className="font-medium transition-colors hover:text-primary">
+                      {dept.email}
+                    </a>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -183,8 +198,8 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Pillar 3: Contact */}
-          <div className="w-full lg:w-[20%] space-y-5">
+          {/* Pillar 3: Contact (Desktop only) */}
+          <div className="hidden lg:block w-full lg:w-[20%] space-y-5">
             <h4 className="text-[11px] font-bold tracking-widest uppercase text-foreground/80 border-b border-border/40 pb-2">Contact</h4>
             <div className="flex flex-col gap-6 text-[13px]">
               {contactDepartments.map((dept, idx) => (
