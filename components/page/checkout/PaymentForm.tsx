@@ -31,7 +31,7 @@ const walletLogos: Record<string, any> = {
   esewa: Esewa,
   imepay: IMEPay,
   khalti: Khalti,
-  phonepe: Esewa, // Using Esewa as placeholder if PhonePe logo not found, or add it
+  fonepay: Esewa, // Using Esewa as placeholder if Fonepay logo not found, or add it
 };
 
 const INITIATE_FONEPAY_PAYMENT = gql`
@@ -479,16 +479,21 @@ export function PaymentForm({
                     }`}
                 >
                   <option value="">Choose your bank</option>
-                  <option value="sbi">State Bank of India</option>
-                  <option value="hdfc">HDFC Bank</option>
-                  <option value="icici">ICICI Bank</option>
-                  <option value="axis">Axis Bank</option>
-                  <option value="kotak">Kotak Mahindra Bank</option>
-                  <option value="pnb">Punjab National Bank</option>
-                  <option value="canara">Canara Bank</option>
-                  <option value="bob">Bank of Baroda</option>
-                  <option value="union">Union Bank of India</option>
-                  <option value="yes">Yes Bank</option>
+                  <option value="nabil">Nabil Bank</option>
+                  <option value="nimb">Nepal Investment Mega Bank (NIMB)</option>
+                  <option value="global_ime">Global IME Bank</option>
+                  <option value="prabhu">Prabhu Bank</option>
+                  <option value="siddhartha">Siddhartha Bank</option>
+                  <option value="everest">Everest Bank</option>
+                  <option value="kumari">Kumari Bank</option>
+                  <option value="laxmi_sunrise">Laxmi Sunrise Bank</option>
+                  <option value="sanima">Sanima Bank</option>
+                  <option value="machhapuchhre">Machhapuchhre Bank</option>
+                  <option value="citizens">Citizens Bank International</option>
+                  <option value="prime">Prime Commercial Bank</option>
+                  <option value="nic_asia">NIC Asia Bank</option>
+                  <option value="standard_chartered">Standard Chartered Bank Nepal</option>
+                  <option value="himalayan">Himalayan Bank Ltd.</option>
                 </select>
                 <Building2 className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
