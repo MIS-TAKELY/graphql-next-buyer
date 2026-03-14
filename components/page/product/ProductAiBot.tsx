@@ -257,7 +257,7 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
         <div className="mt-8">
             {/* Section Header */}
             <div className="flex items-center gap-2.5 mb-4">
-                <div className="p-1.5 rounded-lg bg-primary/10 flex items-center justify-center overflow-hidden">
+                {/* <div className="p-1.5 rounded-lg bg-primary/10 flex items-center justify-center overflow-hidden">
                     <Image 
                         src="/final_blue_logo_500by500.svg" 
                         alt="Assistant" 
@@ -265,7 +265,7 @@ export default function ProductAiBot({ product, user }: ProductAiBotProps) {
                         height={20} 
                         className="object-contain"
                     />
-                </div>
+                </div> */}
                 <span className="ml-auto text-[10px] text-muted-foreground px-2 py-0.5 rounded-full border border-border bg-muted">
                     Beta
                 </span>
