@@ -37,9 +37,6 @@ const provinceOptions = NEPAL_PROVINCES.map((province) => ({
 // Memoized country options
 const countryOptions = [
   { value: "NP", label: "Nepal" },
-  { value: "IN", label: "India" },
-  { value: "CN", label: "China" },
-  { value: "BD", label: "Bangladesh" },
 ];
 
 export const AddressFieldGroup = React.memo<AddressFieldGroupProps>(
