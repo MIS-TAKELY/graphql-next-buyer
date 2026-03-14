@@ -72,14 +72,11 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
             case "address":
                 setCurrentStep(1);
                 break;
-            case "delivery":
+            case "payment":
                 setCurrentStep(2);
                 break;
-            case "payment":
-                setCurrentStep(3);
-                break;
             case "summary":
-                setCurrentStep(4);
+                setCurrentStep(3);
                 break;
             default:
                 setCurrentStep(1);
@@ -350,17 +347,7 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
                         )
                     )}
 
-                    {step === "delivery" && (
-                        <DeliveryMethodStep
-                            deliveryOptions={isFromCart
-                                ? [] // Could aggregate options from all products, but for now seller-specific options are per-product
-                                : (product?.deliveryOptions || [])
-                            }
-                            selectedMethod={selectedDeliveryMethod}
-                            onSelect={handleDeliveryMethodSelect}
-                            onBack={handleBackToAddress}
-                        />
-                    )}
+
 
                     {step === "payment" && (
                         <PaymentStep
@@ -424,7 +411,7 @@ export function CheckoutFlow({ isCartOverride = false }: CheckoutFlowProps) {
                                     });
                                 }
                             }}
-                            onBackToAddress={handleBackToDelivery}
+                            onBackToAddress={handleBackToAddress}
                         />
                     )}
                 </div>

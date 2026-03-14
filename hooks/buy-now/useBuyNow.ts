@@ -39,7 +39,7 @@ export function useBuyNow() {
 
   const handleAddressSaved = (newAddress: any) => {
     setSelectedAddress(newAddress);
-    setStep("delivery");
+    setStep("payment");
     setShowAddressForm(false);
   };
 
@@ -49,7 +49,7 @@ export function useBuyNow() {
   };
 
   const handleUseDefaultAddress = () => {
-    setStep("delivery");
+    setStep("payment");
   };
 
   const handleSelectAddress = (address: any) => {
@@ -299,7 +299,7 @@ export function useBuyNow() {
   };
 
   const handleBackToDelivery = () => {
-    setStep("delivery");
+    setStep("address");
   };
 
   return {
