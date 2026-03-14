@@ -73,14 +73,18 @@ export const useAddressMutations = (): UseAddressMutationsReturn => {
   const createAddress = useCallback(
     async (data: AddressFormData): Promise<MutationResult<BaseAddress>> => {
       try {
+        // Strip out any potentially extra fields that might cause 400 error
+        const { type, label, line1, line2, city, state, country, postalCode, phoneNumber, isDefault } = data;
+        const cleanData = { type, label, line1, line2, city, state, country, postalCode, phoneNumber, isDefault };
+
         const result = await addAddressMutation({
-          variables: { input: data },
+          variables: { input: cleanData },
           optimisticResponse: {
             addAddress: {
               __typename: "Address",
               id: `temp-${Date.now()}`,
               userId: "temp-user",
-              ...data,
+              ...cleanData,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
             },
@@ -90,16 +94,18 @@ export const useAddressMutations = (): UseAddressMutationsReturn => {
         if (result.data?.addAddress) {
           // Backend returns boolean, so we return the form data as success response
           return {
-            data: { ...data, id: `temp-${Date.now()}` } as BaseAddress,
+            data: { ...cleanData, id: `temp-${Date.now()}` } as BaseAddress,
             success: true,
           };
         } else {
           throw new Error("Failed to create address");
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error creating address:", error);
+        // Extract better error message if available
+        const errorMessage = error.graphQLErrors?.[0]?.message || error.message || "Failed to create address";
         return {
-          error: error as Error,
+          error: new Error(errorMessage),
           success: false,
         };
       }
@@ -115,16 +121,33 @@ export const useAddressMutations = (): UseAddressMutationsReturn => {
       try {
         const { id, ...updateData } = data;
 
+        // Strip out fields that are NOT in UpdateAddressInput
+        // Specifically avoid userId, createdAt, updatedAt, __typename, etc.
+        const { type, label, line1, line2, city, state, country, postalCode, phoneNumber, isDefault } = updateData as any;
+        const cleanUpdateData = {
+            id,
+            ...(type && { type }),
+            ...(label !== undefined && { label }),
+            ...(line1 && { line1 }),
+            ...(line2 !== undefined && { line2 }),
+            ...(city && { city }),
+            ...(state && { state }),
+            ...(country && { country }),
+            ...(postalCode && { postalCode }),
+            ...(phoneNumber !== undefined && { phoneNumber }),
+            ...(isDefault !== undefined && { isDefault })
+        };
+
         const result = await updateAddressMutation({
           variables: {
-            input: { id, ...updateData },
+            input: cleanUpdateData,
           },
           optimisticResponse: {
             updateAddress: {
               __typename: "Address",
               id,
               userId: "temp-user",
-              ...updateData,
+              ...cleanUpdateData,
               updatedAt: new Date().toISOString(),
             },
           },
@@ -139,10 +162,12 @@ export const useAddressMutations = (): UseAddressMutationsReturn => {
         } else {
           throw new Error("Failed to update address");
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error updating address:", error);
+        // Extract better error message if available
+        const errorMessage = error.graphQLErrors?.[0]?.message || error.message || "Failed to update address";
         return {
-          error: error as Error,
+          error: new Error(errorMessage),
           success: false,
         };
       }
