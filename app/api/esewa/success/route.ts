@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Update payment in database
-    const payment = await prisma.payment.findUnique({
+    const payment = await prisma.payment.findFirst({
       where: {
         transactionId: decodedData.transaction_uuid,
       },

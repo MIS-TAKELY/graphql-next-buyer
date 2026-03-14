@@ -77,7 +77,7 @@ export const paymentResolvers = {
         const isValid = verifyEsewaSignature(decodedData);
         if (!isValid) throw new Error("Invalid eSewa signature");
 
-        const payment = await prisma.payment.findUnique({
+        const payment = await prisma.payment.findFirst({
           where: { transactionId: decodedData.transaction_uuid },
           include: { order: true },
         });
@@ -205,7 +205,7 @@ export const paymentResolvers = {
       try {
         if (!context.user) throw new Error("Authentication required");
 
-        const payment = await prisma.payment.findUnique({
+        const payment = await prisma.payment.findFirst({
           where: { transactionId },
           include: { order: true },
         });
