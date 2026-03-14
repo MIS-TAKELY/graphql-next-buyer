@@ -8,7 +8,6 @@ import { BuyNowHeader } from "@/components/page/buy-now/BuyNowHeader";
 import { BuyNowSteps } from "@/components/page/buy-now/BuyNowSteps";
 import { PaymentStep } from "@/components/page/buy-now/PaymentStep";
 import { OrderSummary } from "@/components/page/checkout/OrderSummary";
-import { DeliveryMethodStep } from "./DeliveryMethodStep";
 import { useBuyNow } from "@/hooks/buy-now/useBuyNow";
 import { useCart } from "@/hooks/cart/useCart";
 import { formatPrice } from "@/lib/utils";
