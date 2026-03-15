@@ -146,6 +146,16 @@ const Footer = () => {
                     </a>
                   </div>
                 ))}
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-muted-foreground/60 text-[11px]">Address</span>
+                  <span className="font-medium">Koshi, Sunsari, Itahari</span>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-muted-foreground/60 text-[11px]">Phone/WhatsApp</span>
+                  <a href="tel:9761012813" className="font-medium transition-colors hover:text-primary">
+                    9761012813
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -210,6 +220,16 @@ const Footer = () => {
                   </a>
                 </div>
               ))}
+              <div className="flex flex-col gap-1.5">
+                <span className="text-muted-foreground/60 text-[11px]">Address</span>
+                <span className="font-medium">Koshi, Sunsari, Itahari</span>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-muted-foreground/60 text-[11px]">Phone/WhatsApp</span>
+                <a href="tel:9761012813" className="font-medium transition-colors hover:text-primary">
+                  9761012813
+                </a>
+              </div>
             </div>
           </div>
 
