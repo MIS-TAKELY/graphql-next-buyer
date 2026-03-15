@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import SmartMedia from "@/components/ui/SmartMedia";
-import { getProductUrl } from "@/lib/productUtils";
+import { getProductUrl, getDefaultProductImage } from "@/lib/productUtils";
 
 interface FrequentlyBoughtTogetherProps {
     currentProduct: TProduct;
@@ -68,7 +68,7 @@ export default function FrequentlyBoughtTogether({
                 if (variant) {
                     return addToCart(variant.id, p.id, 1, {
                         name: p.name,
-                        image: p.images?.[0]?.url || "/placeholder.svg",
+                        image: getDefaultProductImage(p.images),
                         price: Number(variant.price || 0),
                         slug: p.slug,
                         stock: Number(variant.stock || 0)
@@ -95,7 +95,7 @@ export default function FrequentlyBoughtTogether({
                         {allProductsInBundle.map((product, index) => {
                             const variant = product.variants?.find((v) => v.isDefault) || product.variants?.[0];
                             const isSelected = selectedIds.includes(product.id);
-                            const image = product.images?.[0]?.url;
+                            const image = getDefaultProductImage(product.images);
 
                             return (
                                 <div key={product.id} className="flex items-center gap-4 sm:gap-6">

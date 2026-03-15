@@ -14,7 +14,7 @@ import { useWishlist } from "@/hooks/wishlist/useWishlist";
 import { useSession } from "@/lib/auth-client";
 import { useCompareStore } from "@/store/compareStore";
 import { useAuthModal } from "@/store/authModalStore";
-import { getProductUrl } from "@/lib/productUtils";
+import { getProductUrl, getDefaultProductImage } from "@/lib/productUtils";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { differenceInDays } from "date-fns";
@@ -37,14 +37,9 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
   const currentPrice = defaultVariant?.price;
   const originalPrice = defaultVariant?.mrp;
 
-  // Select image: Prefer PRIMARY, fallback to any non-PROMOTIONAL/non-VIDEO, fallback to first
+  // Select image: Use consistently sorted logic via getDefaultProductImage
   const defaultImage = useMemo(
-    () =>
-      product.images?.find((img) => img.mediaType === "PRIMARY")?.url ||
-      product.images?.find(
-        (img) => img.mediaType !== "PROMOTIONAL" && img.mediaType !== "VIDEO"
-      )?.url ||
-      product.images?.[0]?.url,
+    () => getDefaultProductImage(product.images),
     [product.images]
   );
 

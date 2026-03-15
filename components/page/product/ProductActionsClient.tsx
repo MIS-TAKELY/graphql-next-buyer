@@ -12,6 +12,7 @@ import { ChatModal } from "@/components/page/chat/ChatModal";
 import { useCompareStore } from "@/store/compareStore";
 import { toast } from "sonner";
 import { useAuthModal } from "@/store/authModalStore";
+import { getDefaultProductImage } from "@/lib/productUtils";
 
 interface ProductActionsClientProps {
   productId: string;
@@ -117,7 +118,7 @@ export function ProductActionsClient({
         inStock={inStock}
         stock={stock}
         productName={product?.name}
-        productImage={product?.images?.[0]?.url}
+        productImage={getDefaultProductImage(product?.images)}
         productPrice={product?.variants?.[0]?.price ? parseFloat(product.variants[0].price.toString()) : 0}
         paymentMethods={paymentMethods}
       />

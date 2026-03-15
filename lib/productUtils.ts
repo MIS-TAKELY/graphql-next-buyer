@@ -1,7 +1,29 @@
-
 export function getProductUrl(product: { slug: string; id: string }) {
     // Format: /product/slug-pid
     return `/product/${product.slug}-p${product.id}`;
+}
+
+export function getDefaultProductImage(images?: any[]): string {
+    if (!images || !Array.isArray(images) || images.length === 0) {
+        return "/placeholder.svg";
+    }
+    
+    // Sort by sortOrder to match the Product Gallery exactly, 
+    // but if sortOrders are identical, prefer PRIMARY over PROMOTIONAL.
+    const sorted = [...images].sort((a: any, b: any) => {
+        const orderDiff = (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
+        if (orderDiff !== 0) return orderDiff;
+        
+        // Secondary sort: push PROMOTIONAL and VIDEO down if sortOrders are equal
+        const aIsPromo = a.mediaType === 'PROMOTIONAL' || a.mediaType === 'VIDEO';
+        const bIsPromo = b.mediaType === 'PROMOTIONAL' || b.mediaType === 'VIDEO';
+        if (aIsPromo && !bIsPromo) return 1;
+        if (!aIsPromo && bIsPromo) return -1;
+        
+        return 0;
+    });
+    
+    return sorted[0]?.url || "/placeholder.svg";
 }
 
 export function extractProductIdFromSlug(slug: string): string | null {

@@ -9,7 +9,7 @@ import { formatPrice } from "@/lib/utils";
 import { useCompareStore } from "@/store/compareStore";
 import { toast } from "sonner";
 import { MouseEvent } from "react";
-import { getProductUrl } from "@/lib/productUtils";
+import { getProductUrl, getDefaultProductImage } from "@/lib/productUtils";
 
 interface Specification {
   key?: string;
@@ -99,16 +99,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="relative w-[120px] xs:w-[140px] sm:w-[180px] md:w-[220px] shrink-0 bg-gray-50 dark:bg-gray-800/50 p-3 flex items-center justify-center">
           <div className="relative w-full h-full aspect-square md:aspect-[4/3]">
             <Image
-              src={
-                (product.images.find(img => (img as any).mediaType === 'PRIMARY') ||
-                  product.images.find(img => (img as any).mediaType !== 'PROMOTIONAL') ||
-                  product.images[0])?.url || "/placeholder.svg"
-              }
-              alt={
-                (product.images.find(img => (img as any).mediaType === 'PRIMARY') ||
-                  product.images.find(img => (img as any).mediaType !== 'PROMOTIONAL') ||
-                  product.images[0])?.altText || product.name
-              }
+              src={getDefaultProductImage(product.images)}
+              alt={product.images[0]?.altText || product.name}
               fill
               sizes="(max-width: 640px) 120px, (max-width: 768px) 180px, 220px"
               className="object-contain mix-blend-multiply dark:mix-blend-normal transition-transform duration-500 group-hover:scale-105"
